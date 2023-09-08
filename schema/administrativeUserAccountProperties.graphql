@@ -1,0 +1,49 @@
+extend type Query {
+    "Get all administrative user account minimum properties : logonMaxAllowableAttempts, logonLockoutTime, logonSessionExpiry, logonInactivityPeriod"
+    administrativeUserAccountProperties : [AdministrativeUserAccountProperty!]!
+}
+
+extend type Mutation {
+    """
+    Create or update existing Administrative User Account Minimum cluster properties.
+    If Administrative User Account Minimum cluster property with the given name does not exist, one will be created, otherwise the existing one will be updated.
+    This returns the list of entities created and/or updated.
+    Below are the allowed Administrative User Account Minimum properties
+    logonMaxAllowableAttempts : Logon attempts must be between 1 and 20
+    logonLockoutTime : Lockout period must be between 1 and 86400 seconds
+    logonSessionExpiry : Expiry period must be between 1 and 86400 seconds
+    logonInactivityPeriod : Inactivity period must be between 1 and 365 days
+    """
+    setAdministrativeUserAccountProperties(input: [AdministrativeUserAccountPropertyInput!]!): AdministrativeUserAccountPropertiesPayload!
+
+}
+
+"An Administrative User Account Minimum Property"
+type AdministrativeUserAccountProperty {
+    "The administrative user account minimum property unique identifier"
+    goid: ID
+    "The name of administrative user account minimum property"
+    name: String!
+    "The value of the administrative user account minimum property"
+    value: String!
+    "Ignored at creation time but can be used to compare bundle with gw state"
+    checksum : String
+}
+
+"The inputs sent with the setClusterProperty Mutation"
+input AdministrativeUserAccountPropertyInput {
+    "The administrative user account minimum property unique identifier"
+    goid: ID
+    "The name of administrative user account minimum property"
+    name: String!
+    "The value of the administrative user account minimum property"
+    value: String!
+    "Ignored at creation time but can be used to compare bundle with gw state"
+    checksum : String
+}
+
+type AdministrativeUserAccountPropertiesPayload implements EntityMutationsPayload {
+    status: [EntityMutationStatus!]!
+    detailedStatus: [EntityMutationDetailedStatus!]!
+    administrativeUserAccountProperties: [AdministrativeUserAccountProperty]!
+}

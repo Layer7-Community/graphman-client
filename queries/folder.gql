@@ -1,0 +1,98 @@
+query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = false, $includeDirectDependencies: Boolean = false) {
+    
+    webApiServicesByFolderPath (folderPath: $folderPath) {
+        {{WebApiService:-policy}}
+        policy {
+            xml
+            allDependencies @include (if: $includeAllDependencies) {
+                {{PolicyDependency:-policyFragments,encassConfigs}}
+            }
+			directDependencies @include (if: $includeDirectDependencies) {
+                {{PolicyDependency:-policyFragments,encassConfigs}}
+            }
+        }
+    }
+	
+    soapServicesByFolderPath (folderPath: $folderPath) {
+        {{SoapService:-policy}}
+        policy {
+            xml
+            allDependencies @include (if: $includeAllDependencies) {
+                {{PolicyDependency:-policyFragments,encassConfigs}}
+            }
+			directDependencies @include (if: $includeDirectDependencies) {
+                {{PolicyDependency:-policyFragments,encassConfigs}}
+            }
+        }
+    }
+	
+	internalWebApiServicesByFolderPath (folderPath: $folderPath) {
+        {{WebApiService:-policy}}
+        policy {
+            xml
+            allDependencies @include (if: $includeAllDependencies) {
+                {{PolicyDependency:-policyFragments,encassConfigs}}
+            }
+			directDependencies @include (if: $includeDirectDependencies) {
+                {{PolicyDependency:-policyFragments,encassConfigs}}
+            }
+        }
+    }
+	
+    internalSoapServicesByFolderPath (folderPath: $folderPath) {
+        {{SoapService:-policy}}
+        policy {
+            xml
+            allDependencies @include (if: $includeAllDependencies) {
+                {{PolicyDependency:-policyFragments,encassConfigs}}
+            }
+			directDependencies @include (if: $includeDirectDependencies) {
+                {{PolicyDependency:-policyFragments,encassConfigs}}
+            }
+        }
+    }
+	
+	encassConfigsByFolderPath (folderPath: $folderPath) {
+        {{EncassConfig}}
+    }
+	
+	globalPoliciesByFolderPath (folderPath: $folderPath) {
+        {{GlobalPolicy:-policy}}
+        policy {
+            xml
+            allDependencies @include (if: $includeAllDependencies) {
+                {{PolicyDependency:-policyFragments,encassConfigs}}
+            }
+			directDependencies @include (if: $includeDirectDependencies) {
+                {{PolicyDependency:-policyFragments,encassConfigs}}
+            }
+        }
+    }
+
+	backgroundTaskPoliciesByFolderPath (folderPath: $folderPath) {
+        {{BackgroundTaskPolicy:-policy}}
+        policy {
+            xml
+            allDependencies @include (if: $includeAllDependencies) {
+                {{PolicyDependency:-policyFragments,encassConfigs}}
+            }
+			directDependencies @include (if: $includeDirectDependencies) {
+                {{PolicyDependency:-policyFragments,encassConfigs}}
+            }
+        }
+    }
+	
+	policyFragmentsByFolderPath (folderPath: $folderPath) {
+        {{PolicyFragment:-policy}}
+        policy {
+            xml
+            allDependencies @include (if: $includeAllDependencies) {
+                {{PolicyDependency:-policyFragments,encassConfigs}}
+            }
+			directDependencies @include (if: $includeDirectDependencies) {
+                {{PolicyDependency:-policyFragments,encassConfigs}}
+            }
+        }
+    }
+	
+}

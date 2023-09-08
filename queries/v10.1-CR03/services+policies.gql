@@ -1,0 +1,23 @@
+query servicesPolicies {
+    webApiServices {
+        {{WebApiService}}
+    }
+    soapServices {
+        {{SoapService}}
+    }
+	internalWebApiServices {
+        {{InternalWebApiService}}
+    }
+    internalSoapServices {
+        {{InternalSoapService}}
+    }
+	globalPolicies {
+        {{GlobalPolicy}}
+    }
+    backgroundTaskPolicies {
+        {{BackgroundTaskPolicy}}
+    }
+	policyFragments {
+        {{PolicyFragment}}
+    }
+}

@@ -1,0 +1,23 @@
+extend type Query {
+    "Get all cluster nodes information"
+    clusterInfo : ClusterInfo!
+}
+
+type ClusterInfo {
+    "cluster Name"
+    name : String
+    "cluster Nodes Info"
+    nodes : [ClusterNodeInfo!]!
+}
+
+type ClusterNodeInfo {
+    "cluster node id"
+    nodeId : String!
+    "cluster node name"
+    name : String!
+    "cluster node IP Address"
+    address : String!
+    "cluster node uptime"
+    uptime : Int!
+}
+

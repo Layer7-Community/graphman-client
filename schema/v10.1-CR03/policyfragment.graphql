@@ -1,0 +1,198 @@
+extend type Query {
+    "Get all policy fragments"
+    policyFragments : [PolicyFragment!]!
+    "Get policy fragment by name"
+    policyFragmentByName(name: String!) : PolicyFragment
+    "Get policy fragments inside a folder"
+    policyFragmentsByFolderPath(folderPath: String!) : [PolicyFragment!]!
+    "Get policy fragment by goid"
+    policyFragmentByGoid(goid: ID!) : PolicyFragment
+    "Get policy fragment by guid"
+    policyFragmentByGuid(guid: ID!) : PolicyFragment
+    "Get all global policies"
+    globalPolicies : [GlobalPolicy!]!
+    "Get global policy by tag"
+    globalPolicyByTag(tag: String!) : GlobalPolicy
+    "Get global policies inside a folder"
+    globalPoliciesByFolderPath(folderPath: String!) : [GlobalPolicy!]!
+}
+
+extend type Mutation {
+    "Create or update policy fragments"
+    setPolicyFragments(input: [PolicyFragmentInput!]!) : PolicyFragmentsPayload!
+    "Delete policy fragments"
+    deletePolicyFragments(names: [String!]!) : PolicyFragmentsPayload!
+    "Create or update global policies"
+    setGlobalPolicies(input: [GlobalPolicyInput!]!) : GlobalPoliciesPayload!
+    "Delete global policies"
+    deleteGlobalPolicies(tags: [String!]!) : GlobalPoliciesPayload!
+}
+
+"""
+A Global policy
+"""
+type GlobalPolicy {
+    "The goid for this policy"
+    goid : ID!
+    "The guid for this policy"
+    guid : ID!
+    "The name of the policy (policies are unique by name)"
+    name: String!
+    """
+    Global policy tag. Possible values are :
+      message-completed
+      message-received
+      post-security
+      post-service
+      pre-security
+      pre-service
+    """
+    tag: String!
+    "The configuration checksum"
+    checksum: String!
+
+    "The folder path where this policy is located"
+    folderPath: String!
+    "The actual policy and dependencies"
+    policy: Policy!
+}
+
+ """
+ A policy fragment that can be included in another policy
+ """
+ type PolicyFragment {
+    "The goid for this policy"
+    goid : ID!
+    "The guid for this policy"
+    guid : ID!
+    "The name of the policy (policies are unique by name)"
+    name: String!
+    "The configuration checksum"
+    checksum: String!
+
+    "The folder path to the policy"
+    folderPath: String!
+    soap: Boolean
+    "The actual policy and dependencies"
+    policy: Policy!
+ }
+
+ """
+ Wrapper for the policy XML and the dependencies they include
+ """
+ type Policy {
+    "The policy XML"
+    xml: String!
+    "Entities that are directly referred to inside the policy XML"
+    directDependencies: PolicyDependency
+    "Entities that are directly referred to inside the policy XML in addition to ones in policy dependencies. More than second level, this keep going as deep as needed until no dependencies are found"
+    allDependencies: PolicyDependency
+ }
+
+ """
+ Policy Dependency contains all dependencies that may be referred to from the policy XML this is associated with
+ """
+ type PolicyDependency {
+    "Active Connectors (SFTP, MQ Native, Kafka)"
+    activeConnectors: [ActiveConnector]
+    "Cassandra connections"
+    cassandraConnections: [CassandraConnection]
+    "Cluster properties"
+    clusterProperties : [ClusterProperty]
+    "DTDs in global resources"
+    dtds: [Dtd]
+    "Email Listeners"
+    emailListeners: [EmailListener]
+    "Encass Configs"
+    encassConfigs : [EncassConfig]
+    "Federated identity provider configurations"
+    fips : [Fip]
+    "Federated identity provider groups"
+    fipGroups : [FipGroup]
+    "Federated identity provider users"
+    fipUsers : [FipUser]
+    "Internal idp groups"
+    internalGroups : [InternalGroup]
+    "Internal idp users"
+    internalUsers : [InternalUser]
+    "JDBC connections"
+    jdbcConnections: [JdbcConnection]
+    "JMS destinations"
+    jmsDestinations: [JmsDestination]
+    "Private Keys"
+    keys : [Key]
+    "Ldap identity provider configurations"
+    ldaps : [Ldap]
+    "Listen Ports"
+    listenPorts: [ListenPort]
+    "Policy Fragments"
+    policyFragments : [PolicyFragment]
+    "Schemas in global resources"
+    schemas: [Schema]
+    secrets : [Secret]
+    "Server module files (signed modular or custom assertions)"
+    serverModuleFiles: [ServerModuleFile]
+    "Siteminder Configurations"
+    smConfigs: [SMConfig]
+    "Trusted certificates"
+    trustedCerts : [Certificate]
+ }
+
+ input PolicyInput {
+   "The policy xml"
+   xml: String!
+ }
+
+ input PolicyFragmentInput {
+   "The internal entity unique identifier"
+   goid: ID
+   "The folder path where to create this policy.  If the path does not exist, it will be created"
+   folderPath: String!
+   "The name of the policy. Policies are unique by name."
+   name: String!
+   "The guid for this service, if none provided, assigned at creation"
+   guid : ID
+   "The policy"
+   policy: PolicyInput!
+   soap: Boolean = false
+   "Ignored at creation time but can be used to compare bundle with gw state"
+   checksum : String
+ }
+
+input GlobalPolicyInput {
+    "The name of the policy. Policies are unique by name."
+    name: String!
+    "The folder path where to create this policy.  If the path does not exist, it will be created"
+    folderPath: String!
+    "The goid for this policy"
+    goid : ID
+    "The guid for this service, if none provided, assigned at creation"
+    guid : ID
+    """
+    Global policy tag. Possible values are :
+      message-completed
+      message-received
+      post-security
+      post-service
+      pre-security
+      pre-service
+    """
+    tag: String!
+    "The policy"
+    policy: PolicyInput!
+    soap: Boolean = false
+    "Ignored at creation time but can be used to compare bundle with gw state"
+    checksum : String
+}
+
+ type PolicyFragmentsPayload implements EntityMutationsPayload {
+   status: [EntityMutationStatus!]!
+   detailedStatus: [EntityMutationDetailedStatus!]!
+   policyFragments: [PolicyFragment]!
+ }
+
+type GlobalPoliciesPayload implements EntityMutationsPayload {
+    status: [EntityMutationStatus!]!
+    detailedStatus: [EntityMutationDetailedStatus!]!
+    globalPolicies: [GlobalPolicy]!
+}

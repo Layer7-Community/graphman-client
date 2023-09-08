@@ -1,0 +1,57 @@
+extend type Query {
+  "Get all cluster properties"
+  clusterProperties : [ClusterProperty!]!
+  "Get the cluster property with the given name"
+  clusterPropertyByName(name : String!) : ClusterProperty
+}
+
+extend type Mutation {
+  """
+  Create or update existing cluster properties.  If a cluster property with the given name does not
+  exist, one will be created, otherwise the existing one will be updated. This returns the list of
+  entities created and/or updated
+  """
+  setClusterProperties(input: [ClusterPropertyInput!]!): ClusterPropertiesPayload!
+
+  "Delete existing cluster properties"
+  deleteClusterProperties(names: [String!]!): ClusterPropertiesPayload!
+}
+
+"Cluster properties are used to set global properties"
+type ClusterProperty {
+    "The goid for the cluster property"
+    goid : ID!
+    "The cluster property name"
+    name : String!
+    "The configuration checksum of this cluster prop"
+    checksum: String!
+
+    "The cluster property description"
+    description : String
+    "Whether this is a hidden property"
+    hiddenProperty : Boolean!
+    "The cluster property value"
+    value : String!
+}
+
+"The inputs sent with the setClusterProperty Mutation"
+input ClusterPropertyInput {
+    "The internal entity unique identifier"
+    goid: ID
+  "The name of the cluster property"
+  name: String!
+  "The value of the cluster property to set"
+  value: String!
+  "The cluster property description"
+  description : String
+  "Whether this is a hidden property. (Note that, this field has no effect on the mutation)"
+  hiddenProperty : Boolean
+  "Ignored at creation time but can be used to compare bundle with gw state"
+  checksum : String
+}
+
+type ClusterPropertiesPayload implements EntityMutationsPayload {
+    status: [EntityMutationStatus!]!
+    detailedStatus: [EntityMutationDetailedStatus!]!
+    clusterProperties: [ClusterProperty]!
+}

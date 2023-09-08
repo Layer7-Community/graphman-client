@@ -1,0 +1,12 @@
+"An RFC-3339 compliant date time scalar that accepts string values like `1996-12-19T16:39:57-08:00`"
+scalar DateTime
+
+"An Integer that MUST be greater than or equal to zero"
+scalar NonNegativeInt
+
+"An Integer that MUST be greater than zero"
+scalar PositiveInt
+
+#"A File part information from the multi-part message"
+#"This scalar implementation is partial, hence commenting for now"
+#scalar FilePart

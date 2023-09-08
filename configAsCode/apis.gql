@@ -1,0 +1,13 @@
+query apis {
+    webApiServicesByFolderPath (folderPath: "/myApis") {
+        name
+        checksum
+        resolutionPath
+        folderPath
+        policy {
+            xml
+        }
+        enabled
+        methodsAllowed
+    }
+}

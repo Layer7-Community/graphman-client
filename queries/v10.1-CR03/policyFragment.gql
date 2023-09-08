@@ -1,0 +1,14 @@
+query policyFragmentByName ($name: String!, $includeDirectDependencies: Boolean = false, $includeAllDependencies: Boolean = false) {
+    policyFragmentByName (name: $name) {
+        {{PolicyFragment:-policy}}
+        policy {
+            xml
+            directDependencies @include (if: $includeDirectDependencies) {
+                {{PolicyDependency}}
+            }
+            allDependencies @include (if: $includeAllDependencies) {
+                {{PolicyDependency}}
+            }
+        }
+    }
+}

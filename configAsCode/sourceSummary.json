@@ -1,0 +1,159 @@
+{
+  "policyFragments": [
+    {
+      "name": "ABC Rules",
+      "guid": "e513b52b-7d41-416f-9906-17f8e12b6d6a",
+      "checksum": "65edacba2db2db217a151babf928b7a4156f53d1"
+    },
+    {
+      "name": "Generic API Template",
+      "guid": "a9f7163b-d17a-42e8-9b75-855ca6f67c08",
+      "checksum": "6474b5f05bfd7b2f95160bb1a2ec485f0ca4aa58"
+    },
+    {
+      "name": "enforcePlan",
+      "guid": "7079ed73-1730-4679-bdc0-6cc56b9fb4bc",
+      "checksum": "62d71506c3202070f7ac908bebee9f405d3103f7"
+    },
+    {
+      "name": "lookupSubscriptions",
+      "guid": "0303de0b-1ce7-46f3-bef4-95e4ebe8de5d",
+      "checksum": "f214b6b5c2727532ecf717639c600ecc1e0ada17"
+    },
+    {
+      "name": "sub_abc",
+      "guid": "3b1c8451-6af9-4983-ae6b-1f7e795ab571",
+      "checksum": "d0f492210b9a25e3b2ee6b8b4d44dd80bd8afa8c"
+    },
+    {
+      "name": "sub_def",
+      "guid": "a88d82dd-e024-4c22-a6db-a8fc91e8b105",
+      "checksum": "1a3c8fc993aac159479b0ee613e8ba34448dd09a"
+    },
+    {
+      "name": "sub_ghi",
+      "guid": "e15a5669-0bf8-4873-97e4-d21464a7fe42",
+      "checksum": "edc661caecbcfabba3ab7b8095708d8a07419f81"
+    }
+  ],
+  "webApiServices": [
+    {
+      "resolutionPath": "/api1",
+      "checksum": "cbfdb2a991d89355611316c234a0b74f2893b520"
+    },
+    {
+      "resolutionPath": "/api2",
+      "checksum": "6cf73875eaed085c52749fc1313814d656ce830e"
+    },
+    {
+      "resolutionPath": "/testheaders",
+      "checksum": "dcfe493225ad1a7ce9c7b80a2618263d8c8e07d1"
+    }
+  ],
+  "clusterProperties": [
+    {
+      "name": "a",
+      "checksum": "e0aa4e7fb2a69405c8aec3e242a8f7c99e4c9a76"
+    },
+    {
+      "name": "b",
+      "checksum": "4fb1b8f250ed3782550700032926578fd8397cbf"
+    },
+    {
+      "name": "cluster.hostname",
+      "checksum": "8c1e5bcdf1beb7e1907aecff7666376e12c049c5"
+    },
+    {
+      "name": "keyStore.defaultSsl.alias",
+      "checksum": "3c2adb85c6f0d55e9aef665eef59dbcb95153fad"
+    },
+    {
+      "name": "myDemoConfigVal",
+      "checksum": "638693aa29ba0cd8aa4bb9d63335cf687f72a482"
+    },
+    {
+      "name": "plan_a_members",
+      "checksum": "01a1090a23b93bc038cfd4e6d47a7af8f3323de5"
+    },
+    {
+      "name": "plan_b_members",
+      "checksum": "6b998d54ca0d825bf26d83e5a0c79e59d0cebc2e"
+    },
+    {
+      "name": "plan_c_members",
+      "checksum": "271431a9bcd48317f325ebccad8e49deedf18f82"
+    }
+  ],
+  "trustedCerts": [
+    {
+      "name": "New trusted cert",
+      "subjectDn": "cn=*.tesla.com,o=tesla\\, inc.,l=palo alto,st=california,c=us",
+      "checksum": "a365254617c3151a282af375d1fc4814d85d6556"
+    },
+    {
+      "name": "www.broadcom.com",
+      "subjectDn": "cn=www.broadcom.com,o=broadcom inc,l=san jose,st=california,c=us",
+      "checksum": "1866cef9812889ec2518d0f41bf84612d4399241"
+    }
+  ],
+  "jdbcConnections": [
+    {
+      "name": "mydb",
+      "checksum": "be2776008b1427eb266f7afa97533f19a0644a1c"
+    }
+  ],
+  "internalUsers": [
+    {
+      "name": "admin",
+      "checksum": "7948c59f1eaae99db93b874de0f83b2e5f138011",
+      "goid": "00000000000000000000000000000003"
+    }
+  ],
+  "keys": [
+    {
+      "alias": "blah",
+      "checksum": "171c8376f9f9c32c679e2cf7217803450b483b43"
+    },
+    {
+      "alias": "ssl",
+      "checksum": "45512210dd8f2d0c4e1305f7ac4ea72bc1dd2449"
+    }
+  ],
+  "secrets": [
+    {
+      "name": "mydb",
+      "checksum": "102430f89d5176902322e6cb3067caca13277ab4"
+    },
+    {
+      "name": "newpasswd",
+      "checksum": "adc4e218ef2a199ffa402b3ca88d1dee1ce8902a"
+    }
+  ],
+  "jmsDestinations": [
+    {
+      "name": "eventsOut",
+      "checksum": "f8c6a0108c998495a5a78d1223129cb0f053f54d"
+    }
+  ],
+  "globalPolicies": [
+    {
+      "name": "globalReceived",
+      "tag": "message-received",
+      "guid": "400cae20-08dd-4e46-b2ea-919b25f40321",
+      "checksum": "f3dee39c1f53331075a75748c972ace25f61001b"
+    }
+  ],
+  "backgroundTaskPolicies": [
+    {
+      "name": "dailySync",
+      "guid": "5fde4fb4-72b4-4435-a564-fd1b9990f494",
+      "checksum": "9df836578cc2356f84ad61e83534a6c85181edf0"
+    }
+  ],
+  "scheduledTasks": [
+    {
+      "name": "My Daily Clean and Sync",
+      "checksum": "02ebea211860a78a09f5f1c0ef56809b64fbd57c"
+    }
+  ]
+}

@@ -1,0 +1,733 @@
+query myFramework {
+    policyFragmentsByFolderPath (folderPath: "/bootstrapableFramework") {
+        name
+        folderPath
+        checksum
+        policy {
+            xml
+            allDependencies {
+                policyFragments {
+                    name
+                    checksum
+                    folderPath
+                    guid
+                    policy {
+                        xml
+                    }
+                }
+                encassConfigs {
+                    name
+                    checksum
+                    policyName
+                    guid
+                    encassArgs {
+                        name
+                        type
+                        ordinal
+                        guiLabel
+                        guiPrompt
+                    }
+                    encassResults {
+                        name
+                        type
+                    }
+                }
+                trustedCerts {
+                    name
+                    thumbprintSha1
+                    checksum
+                    certBase64
+                    verifyHostname
+                    trustAnchor
+                    trustedFor
+                    revocationCheckPolicyType
+                }
+                clusterProperties {
+                    name
+                    checksum
+                    value
+                }
+                jdbcConnections {
+                    name
+                    checksum
+                    driverClass
+                    jdbcUrl
+                    enabled
+                    username
+                    password
+                    minPoolSize
+                    maxPoolSize
+                    properties {
+                        name
+                        value
+                    }
+                }
+                schemas {
+                    systemId
+                    checksum
+                    targetNs
+                    description
+                    content
+                }
+                dtds {
+                    systemId
+                    checksum
+                    publicId
+                    description
+                    content
+                }
+                fips {
+                    name
+                    checksum
+                    goid
+                    enableCredentialTypeX509
+                    enableCredentialTypeSaml
+                    certificateReferences {
+                        thumbprintSha1
+                    }
+                }
+                ldapIdps {
+                    name
+                    goid
+                    ldapUrls
+                    ldapsClientAuthEnabled
+                    ldapsClientKeyAlias
+                    searchBase
+                    writable
+                    bindDn
+                    bindPassword
+                    userMappings {
+                        objClass
+                        nameAttrName
+                        loginAttrName
+                        passwdAttrName
+                        firstNameAttrName
+                        lastNameAttrName
+                        emailNameAttrName
+                        kerberosAttrName
+                        kerberosEnterpriseAttrName
+                        userCertAttrName
+                        passwdType {
+                            val
+                        }
+                    }
+                    groupMappings {
+                        objClass
+                        nameAttrName
+                        memberAttrName
+                        memberStrategy {
+                            val
+                        }
+                    }
+                    checksum
+                }
+                internalGroups {
+                    name
+                    checksum
+                    goid
+                    description
+                }
+                fipGroups {
+                    name
+                    providerName
+                    checksum
+                    goid
+                    description
+                }
+                internalUsers {
+                    name
+                    goid
+                    checksum
+                    memberOf {
+                        name
+                    }
+                    login
+                    password
+                    firstName
+                    lastName
+                    email
+                    certBase64
+                }
+                fipUsers {
+                    name
+                    providerName
+                    checksum
+                    goid
+                    subjectDn
+                    memberOf {
+                        name
+                    }
+                    login
+                    firstName
+                    lastName
+                    email
+                    certBase64
+                }
+                keys {
+                    alias
+                    checksum
+                    goid
+                    p12
+                }
+                secrets {
+                    name
+                    secretType
+                    checksum
+                    goid
+                    variableReferencable
+                    secret
+                    description
+                }
+                cassandraConnections {
+                    goid
+                    name
+                    keyspace
+                    contactPoints
+                    port
+                    username
+                    securePassword
+                    sslEnabled
+                    cipherSuites
+                    properties {
+                        name
+                        value
+                    }
+                    checksum
+                }
+                jmsDestinations {
+                    goid
+                    connectionGoid
+                    name
+                    direction
+                    providerType
+                    initialContextFactoryClassname
+                    connectionFactoryName
+                    jndiUrl
+                    jndiUsername
+                    jndiPassword
+                    template
+                    enabled
+                    jndiSslDetails {
+                        sslEnabled
+                        sslForAuthenticationOnly
+                        sslVerifyServerCertificate
+                        sslVerifyServerHostname
+                        sslClientKeyAlias
+                    }
+                    destinationType
+                    destinationName
+                    destinationUsername
+                    destinationPassword
+                    destinationSslDetails {
+                        sslEnabled
+                        sslForAuthenticationOnly
+                        sslVerifyServerCertificate
+                        sslVerifyServerHostname
+                        sslClientKeyAlias
+                    }
+                    template
+                    enabled
+                    properties {
+                        name
+                        value
+                    }
+                    checksum
+                }
+            }
+        }
+        guid
+    }
+    globalPolicies {
+        name
+        tag
+        folderPath
+        policy {
+            xml
+            allDependencies {
+                policyFragments {
+                    name
+                    checksum
+                    folderPath
+                    guid
+                    policy {
+                        xml
+                    }
+                }
+                encassConfigs {
+                    name
+                    checksum
+                    policyName
+                    guid
+                    encassArgs {
+                        name
+                        type
+                        ordinal
+                        guiLabel
+                        guiPrompt
+                    }
+                    encassResults {
+                        name
+                        type
+                    }
+                }
+                trustedCerts {
+                    name
+                    thumbprintSha1
+                    checksum
+                    certBase64
+                    verifyHostname
+                    trustAnchor
+                    trustedFor
+                    revocationCheckPolicyType
+                }
+                clusterProperties {
+                    name
+                    checksum
+                    value
+                }
+                jdbcConnections {
+                    name
+                    checksum
+                    driverClass
+                    jdbcUrl
+                    enabled
+                    username
+                    password
+                    minPoolSize
+                    maxPoolSize
+                    properties {
+                        name
+                        value
+                    }
+                }
+                schemas {
+                    systemId
+                    checksum
+                    targetNs
+                    description
+                    content
+                }
+                dtds {
+                    systemId
+                    checksum
+                    publicId
+                    description
+                    content
+                }
+                fips {
+                    name
+                    checksum
+                    goid
+                    enableCredentialTypeX509
+                    enableCredentialTypeSaml
+                    certificateReferences {
+                        thumbprintSha1
+                    }
+                }
+                ldapIdps {
+                    name
+                    goid
+                    ldapUrls
+                    ldapsClientAuthEnabled
+                    ldapsClientKeyAlias
+                    searchBase
+                    writable
+                    bindDn
+                    bindPassword
+                    userMappings {
+                        objClass
+                        nameAttrName
+                        loginAttrName
+                        passwdAttrName
+                        firstNameAttrName
+                        lastNameAttrName
+                        emailNameAttrName
+                        kerberosAttrName
+                        kerberosEnterpriseAttrName
+                        userCertAttrName
+                        passwdType {
+                            val
+                        }
+                    }
+                    groupMappings {
+                        objClass
+                        nameAttrName
+                        memberAttrName
+                        memberStrategy {
+                            val
+                        }
+                    }
+                    checksum
+                }
+                internalGroups {
+                    name
+                    checksum
+                    goid
+                    description
+                }
+                fipGroups {
+                    name
+                    providerName
+                    checksum
+                    goid
+                    description
+                }
+                internalUsers {
+                    name
+                    goid
+                    checksum
+                    memberOf {
+                        name
+                    }
+                    login
+                    password
+                    firstName
+                    lastName
+                    email
+                    certBase64
+                }
+                fipUsers {
+                    name
+                    providerName
+                    checksum
+                    goid
+                    subjectDn
+                    memberOf {
+                        name
+                    }
+                    login
+                    firstName
+                    lastName
+                    email
+                    certBase64
+                }
+                keys {
+                    alias
+                    checksum
+                    goid
+                    p12
+                }
+                secrets {
+                    name
+                    secretType
+                    checksum
+                    goid
+                    variableReferencable
+                    secret
+                    description
+                }
+                cassandraConnections {
+                    goid
+                    name
+                    keyspace
+                    contactPoints
+                    port
+                    username
+                    securePassword
+                    sslEnabled
+                    cipherSuites
+                    properties {
+                        name
+                        value
+                    }
+                    checksum
+                }
+                jmsDestinations {
+                    goid
+                    connectionGoid
+                    name
+                    direction
+                    providerType
+                    initialContextFactoryClassname
+                    connectionFactoryName
+                    jndiUrl
+                    jndiUsername
+                    jndiPassword
+                    template
+                    enabled
+                    jndiSslDetails {
+                        sslEnabled
+                        sslForAuthenticationOnly
+                        sslVerifyServerCertificate
+                        sslVerifyServerHostname
+                        sslClientKeyAlias
+                    }
+                    destinationType
+                    destinationName
+                    destinationUsername
+                    destinationPassword
+                    destinationSslDetails {
+                        sslEnabled
+                        sslForAuthenticationOnly
+                        sslVerifyServerCertificate
+                        sslVerifyServerHostname
+                        sslClientKeyAlias
+                    }
+                    template
+                    enabled
+                    properties {
+                        name
+                        value
+                    }
+                    checksum
+                }
+            }
+        }
+        guid
+        goid
+        checksum
+    }
+    scheduledTasks {
+        goid
+        name
+        policyName
+        jobType
+        cronExpression
+        executeOnSingleNode
+        executeOnCreation
+        executionDate
+        status
+        runAsUser
+        runAsUserProviderName
+        checksum
+    }
+    backgroundTaskPolicies {
+        name
+        folderPath
+        goid
+        guid
+        policy {
+            xml
+            allDependencies {
+                policyFragments {
+                    name
+                    checksum
+                    folderPath
+                    guid
+                    policy {
+                        xml
+                    }
+                }
+                encassConfigs {
+                    name
+                    checksum
+                    policyName
+                    guid
+                    encassArgs {
+                        name
+                        type
+                        ordinal
+                        guiLabel
+                        guiPrompt
+                    }
+                    encassResults {
+                        name
+                        type
+                    }
+                }
+                trustedCerts {
+                    name
+                    thumbprintSha1
+                    checksum
+                    certBase64
+                    verifyHostname
+                    trustAnchor
+                    trustedFor
+                    revocationCheckPolicyType
+                }
+                clusterProperties {
+                    name
+                    checksum
+                    value
+                }
+                jdbcConnections {
+                    name
+                    checksum
+                    driverClass
+                    jdbcUrl
+                    enabled
+                    username
+                    password
+                    minPoolSize
+                    maxPoolSize
+                    properties {
+                        name
+                        value
+                    }
+                }
+                schemas {
+                    systemId
+                    checksum
+                    targetNs
+                    description
+                    content
+                }
+                dtds {
+                    systemId
+                    checksum
+                    publicId
+                    description
+                    content
+                }
+                fips {
+                    name
+                    checksum
+                    goid
+                    enableCredentialTypeX509
+                    enableCredentialTypeSaml
+                    certificateReferences {
+                        thumbprintSha1
+                    }
+                }
+                ldapIdps {
+                    name
+                    goid
+                    ldapUrls
+                    ldapsClientAuthEnabled
+                    ldapsClientKeyAlias
+                    searchBase
+                    writable
+                    bindDn
+                    bindPassword
+                    userMappings {
+                        objClass
+                        nameAttrName
+                        loginAttrName
+                        passwdAttrName
+                        firstNameAttrName
+                        lastNameAttrName
+                        emailNameAttrName
+                        kerberosAttrName
+                        kerberosEnterpriseAttrName
+                        userCertAttrName
+                        passwdType {
+                            val
+                        }
+                    }
+                    groupMappings {
+                        objClass
+                        nameAttrName
+                        memberAttrName
+                        memberStrategy {
+                            val
+                        }
+                    }
+                    checksum
+                }
+                internalGroups {
+                    name
+                    checksum
+                    goid
+                    description
+                }
+                fipGroups {
+                    name
+                    providerName
+                    checksum
+                    goid
+                    description
+                }
+                internalUsers {
+                    name
+                    goid
+                    checksum
+                    memberOf {
+                        name
+                    }
+                    login
+                    password
+                    firstName
+                    lastName
+                    email
+                    certBase64
+                }
+                fipUsers {
+                    name
+                    providerName
+                    checksum
+                    goid
+                    subjectDn
+                    memberOf {
+                        name
+                    }
+                    login
+                    firstName
+                    lastName
+                    email
+                    certBase64
+                }
+                keys {
+                    alias
+                    checksum
+                    goid
+                    p12
+                }
+                secrets {
+                    name
+                    secretType
+                    checksum
+                    goid
+                    variableReferencable
+                    secret
+                    description
+                }
+                cassandraConnections {
+                    goid
+                    name
+                    keyspace
+                    contactPoints
+                    port
+                    username
+                    securePassword
+                    sslEnabled
+                    cipherSuites
+                    properties {
+                        name
+                        value
+                    }
+                    checksum
+                }
+                jmsDestinations {
+                    goid
+                    connectionGoid
+                    name
+                    direction
+                    providerType
+                    initialContextFactoryClassname
+                    connectionFactoryName
+                    jndiUrl
+                    jndiUsername
+                    jndiPassword
+                    template
+                    enabled
+                    jndiSslDetails {
+                        sslEnabled
+                        sslForAuthenticationOnly
+                        sslVerifyServerCertificate
+                        sslVerifyServerHostname
+                        sslClientKeyAlias
+                    }
+                    destinationType
+                    destinationName
+                    destinationUsername
+                    destinationPassword
+                    destinationSslDetails {
+                        sslEnabled
+                        sslForAuthenticationOnly
+                        sslVerifyServerCertificate
+                        sslVerifyServerHostname
+                        sslClientKeyAlias
+                    }
+                    template
+                    enabled
+                    properties {
+                        name
+                        value
+                    }
+                    checksum
+                }
+            }
+        }
+        checksum
+    }
+}

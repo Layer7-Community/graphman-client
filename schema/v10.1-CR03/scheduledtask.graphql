@@ -1,0 +1,133 @@
+extend type Query {
+    "Retrieves all scheduled tasks"
+    scheduledTasks: [ScheduledTask!]!
+    "Retrieves all background task policies"
+    backgroundTaskPolicies: [BackgroundTaskPolicy!]!
+    "Retrieves a scheduled task by name"
+    scheduledTaskByName(name: String!): ScheduledTask
+    "Retrieves a background task policy by name"
+    backgroundTaskPolicyByName(name: String!): BackgroundTaskPolicy
+    "Retrieves background task policies by folder path"
+    backgroundTaskPoliciesByFolderPath(folderPath: String!): [BackgroundTaskPolicy!]!
+}
+
+extend type Mutation {
+    "Creates or updates one or more scheduled tasks"
+    setScheduledTasks(input: [ScheduledTaskInput!]!): ScheduledTasksPayload!
+    "Creates or updates one or more background task policies"
+    setBackgroundTaskPolicies(input: [BackgroundTaskPolicyInput!]!): BackgroundTaskPoliciesPayload!
+    "Deletes one or more existing scheduled tasks"
+    deleteScheduledTasks(names: [String!]!) : ScheduledTasksPayload!
+    "Deletes an existing background task policy"
+    deleteBackgroundTaskPolicies(names: [String!]!) : BackgroundTaskPoliciesPayload!
+}
+
+"Defines a current status of a given scheduled task"
+enum JobStatus {
+    SCHEDULED
+    COMPLETED
+    DISABLED
+}
+
+"Defines a scheduled task type"
+enum JobType {
+    ONE_TIME
+    RECURRING
+}
+
+"A scheduled task"
+type ScheduledTask {
+    "The internal entity unique identifier"
+    goid: ID!
+    "The name of the scheduled task"
+    name: String!
+    "The configuration checksum"
+    checksum: String!
+
+    "The name of the policy for scheduled task"
+    policyName: String!
+    "Scheduled task type"
+    jobType: JobType!
+    "The cron job expression"
+    cronExpression: String
+    "Whether to execute on single node"
+    executeOnSingleNode: Boolean!
+    "Whether to execute the RECURRING task now?"
+    executeOnCreation: Boolean!
+    "Execution date of a ONE_TIME task"
+    executionDate: DateTime
+    "The scheduled task status"
+    status: JobStatus!
+    runAsUser: String
+    runAsUserProviderName: String
+}
+
+"A background task policy that is associated with a scheduled task to be run"
+type BackgroundTaskPolicy {
+    "The internal entity unique identifier"
+    goid: ID!
+    "The internal entity unique identifier"
+    guid: ID!
+    "The name of the background task policy"
+    name: String!
+    "The configuration checksum"
+    checksum: String!
+
+    "The folder path of the background task policy"
+    folderPath: String!
+    soap: Boolean
+    "The background task policy"
+    policy: Policy!
+}
+
+input ScheduledTaskInput {
+  "The internal entity unique identifier"
+  goid: ID
+  "The name of the scheduled task"
+  name: String!
+  "The name of the policy for scheduled task"
+  policyName: String!
+  jobType: JobType!
+  "The cron job expression"
+  cronExpression: String
+  "Whether to execute on single node"
+  executeOnSingleNode: Boolean!
+  "Whether to execute the RECURRING task now?"
+  executeOnCreation: Boolean!
+  "Specify a future execution date for a ONE_TIME task"
+  executionDate: DateTime
+  "The scheduled task status"
+  status: JobStatus = SCHEDULED
+  runAsUser: String
+  runAsUserProviderName: String
+  "The configuration checksum"
+  checksum: String
+}
+
+input BackgroundTaskPolicyInput {
+  "The internal entity unique identifier"
+  goid: ID
+  "The name of the background task policy"
+  name: String!
+  "The internal entity unique identifier"
+  guid: ID
+  "The folder path background task policy"
+  folderPath: String!
+  "The background task policy"
+  policy: PolicyInput!
+  soap: Boolean
+  "The configuration checksum"
+  checksum: String
+}
+
+type ScheduledTasksPayload implements EntityMutationsPayload {
+    status: [EntityMutationStatus!]!
+    detailedStatus: [EntityMutationDetailedStatus!]!
+    scheduledTasks: [ScheduledTask]!
+}
+
+type BackgroundTaskPoliciesPayload implements EntityMutationsPayload {
+    status: [EntityMutationStatus!]!
+    detailedStatus: [EntityMutationDetailedStatus!]!
+    backgroundTaskPolicies: [BackgroundTaskPolicy]!
+}

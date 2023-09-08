@@ -1,0 +1,105 @@
+extend type Query {
+    "Get all Server module files"
+    serverModuleFiles : [ServerModuleFile!]!
+    "Get Server module file by name"
+    serverModuleFileByName(name: String!) : ServerModuleFile
+}
+
+extend type Mutation {
+    """
+    Sets Server module files. Updating the existing server module file is unsupported.
+    """
+    setServerModuleFiles(
+        input: [ServerModuleFileInput!]!): ServerModuleFilesPayload
+
+    """
+    Deletes Server module files.
+    """
+    deleteServerModuleFiles(
+        "The names of the Server module file to delete"
+        names: [String!]!): ServerModuleFilesPayload
+}
+
+enum ModuleType {
+    MODULAR_ASSERTION
+    CUSTOM_ASSERTION
+}
+
+"A Server module file"
+type ServerModuleFile {
+    "The goid for the Server module file"
+    goid: ID!
+    "The Server module name"
+    name: String!
+    "The configuration checksum of this Server module file"
+    checksum: String!
+
+    "The Server module type"
+    moduleType: ModuleType!
+    "The Server module SHA256 digest value"
+    moduleSha256: String!
+    "The Server module signature"
+    signature: String!
+    "The base64 encoded signer certificate"
+    signerCertBase64: String!
+    "The Server module file properties"
+    properties: [EntityProperty!]!
+
+    "The Server module file state per node in the cluster"
+    moduleStates: [ServerModuleFileState!]!
+    moduleStateSummary: ServerModuleFileStateSummary!
+    "The dummy field, is used to get the Server module file content in separate part"
+    filePartName: String!
+}
+
+type ServerModuleFileStateSummary {
+    state: ModuleStateSummary!
+    description: String
+}
+
+type ServerModuleFileState {
+    nodeId: String!
+    nodeName: String!
+    state: ModuleState!
+    description: String
+}
+
+enum ModuleStateSummary {
+    LOADING
+    LOADED
+    ERROR
+}
+
+enum ModuleState {
+    UPLOADED
+    ACCEPTED
+    REJECTED
+    LOADED
+    ERROR
+}
+
+input ServerModuleFileInput {
+    "The internal entity unique identifier"
+    goid: ID
+    "The Server module name"
+    name: String!
+    "The Server module type"
+    moduleType: ModuleType
+    "The Server module SHA256 digest value"
+    moduleSha256: String
+    "The Server module signature"
+    signature: String
+    "The base64 encoded signer certificate"
+    signerCertBase64: String
+    "The Server module file properties"
+    properties: [EntityPropertyInput!]
+    "Ignored at creation time but can be used to compare bundle with gw state"
+    checksum: String
+}
+
+type ServerModuleFilesPayload implements EntityMutationsPayload {
+    status: [EntityMutationStatus!]!
+    detailedStatus: [EntityMutationDetailedStatus!]!
+    "The created Server module files."
+    serverModuleFiles: [ServerModuleFile]!
+}

@@ -1,0 +1,124 @@
+extend type Query {
+    "Retrieves all trusted certificates"
+    trustedCerts : [Certificate!]!
+    "Retrieves a list of trusted certificates with the matching subject dn"
+    trustedCertsByDn(subjectDn : String!) : [Certificate]!
+    "The trusted certificate associated with this unique thumbprint"
+    trustedCertByThumbprint(thumbprintSha1: String!) : Certificate
+}
+
+extend type Mutation {
+    """
+    Create or update trusted certificates.
+    If a certificate with the same sha1 thumbprint already exist, it will be updated.
+    """
+    setTrustedCerts(input: [TrustedCertInput!]!): TrustedCertsPayload!
+
+    "Delete an existing certificates"
+    deleteTrustedCerts(thumbprintSha1s: [String!]!): TrustedCertsPayload!
+}
+
+"Input sent with createTrustedCert mutation"
+input TrustedCertInput {
+    "The internal entity unique identifier"
+    goid: ID
+    "The name of the trusted certificate"
+    name: String!
+    "The base 64 encoded string of the certificate"
+    certBase64: String!
+    "Whether to perform hostname verification with this certificate"
+    verifyHostname: Boolean!
+    "Whether this certificate is a trust anchor"
+    trustAnchor: Boolean!
+    "What the certificate is trusted for"
+    trustedFor: [TrustedForType!]!
+    "The revocation check policy type"
+    revocationCheckPolicyType : PolicyUsageType!
+    "The name of revocation policy.  Required if revocationCheckPolicyType is PolicyUsageType.SPECIFIED"
+    revocationCheckPolicyName : String
+    "The Subject DN of this certificate. (Note that, this field has no effect on the mutation)"
+    subjectDn : String
+    "The start date of the validity period. (Note that, this field has no effect on the mutation)"
+    notBefore : String
+    "the end date of the validity period. (Note that, this field has no effect on the mutation)"
+    notAfter : String
+    "The sha1 thumbprint of the certificate. (Note that, this field has no effect on the mutation)"
+    thumbprintSha1 : String
+    "Ignored at creation time but can be used to compare bundle with gw state"
+    checksum : String
+}
+
+"An certificate that is trusted by the Gateway"
+type Certificate {
+    "The goid for this certificate"
+    goid : ID!
+    "The name"
+    name: String!
+    "The Subject DN of this certificate"
+    subjectDn : String!
+    "The sha1 thumbprint of the certificate"
+    thumbprintSha1 : String!
+    "The configuration checksum of this trusted certificate"
+    checksum: String!
+
+    "Whether to perform hostname verification with this certificate"
+    verifyHostname : Boolean!
+    "Whether this certificate is a trust anchor"
+    trustAnchor : Boolean!
+    "The certificate is trusted for"
+    trustedFor : [TrustedForType!]!
+    "The revocation check policy type"
+    revocationCheckPolicyType : PolicyUsageType!
+    "The specified revocation policy"
+    revocationCheckPolicy : RevocationCheckPolicy
+
+    "The start date of the validity period"
+    notBefore : DateTime!
+    "the end date of the validity period"
+    notAfter : DateTime!
+    "The base 64 encoded string of this certificate"
+    certBase64 : String!
+}
+
+"A revocation check policy for certificates"
+type RevocationCheckPolicy {
+    "The goid for this revocation check policy"
+    goid : ID!
+    "The name for this revocation check policy"
+    name : String!
+}
+
+enum PolicyUsageType {
+    "Do not perform revocation check"
+    NONE
+    "Use the default revocation check policy"
+    USE_DEFAULT
+    "Use the specified revocation check policy"
+    SPECIFIED
+}
+
+"Defines what a certificate is trusted for"
+enum TrustedForType {
+    "Is trusted as an SSL server cert"
+    SSL
+    "Is trusted as a CA that signs SSL server certs"
+    SIGNING_SERVER_CERTS
+    "Is trusted as a CA that signs SSL client certs"
+    SIGNING_CLIENT_CERTS
+    "Is trusted to sign SAML tokens"
+    SAML_ISSUER
+    "Is trusted as a SAML attesting entity"
+    SAML_ATTESTING_ENTITY
+}
+
+enum CertificateValidationType {
+    CERTIFICATE_ONLY
+    PATH_VALIDATION
+    REVOCATION
+}
+
+type TrustedCertsPayload implements EntityMutationsPayload {
+    status: [EntityMutationStatus!]!
+    detailedStatus: [EntityMutationDetailedStatus!]!
+    trustedCerts: [Certificate]!
+}

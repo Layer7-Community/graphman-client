@@ -1,0 +1,62 @@
+mutation applyBundle (
+    $clusterProperties: [ClusterPropertyInput!]!=[],
+    $webApiServices: [WebApiServiceInput!]!=[],
+    $encassConfigs:[EncassConfigInput!]!=[],
+    $trustedCerts:[TrustedCertInput!]!=[],
+    $dtds:[DtdInput!]!=[],
+    $schemas:[SchemaInput!]!=[],
+    $jdbcConnections:[JdbcConnectionInput!]!=[],
+    $soapServices:[SoapServiceInput!]!=[],
+    $policyFragments: [PolicyFragmentInput!]!=[],
+    $fips:[FipInput!]!=[],
+    $ldaps:[LdapInput!]!=[],
+    $fipGroups:[FipGroupInput!]!=[],
+    $internalGroups:[InternalGroupInput!]!=[],
+    $fipUsers:[FipUserInput!]!=[],
+    $internalUsers:[InternalUserInput!]!=[],
+    $keys: [KeyInput!]!=[],
+    $secrets: [SecretInput!]!=[],
+    $cassandraConnections:[CassandraConnectionInput!]!=[],
+    $jmsDestinations:[JmsDestinationInput!]!=[],
+    $internalWebApiServices: [WebApiServiceInput!]!=[],
+    $internalSoapServices:[SoapServiceInput!]!=[],
+    $emailListeners: [EmailListenerInput!]!=[],
+    $listenPorts: [ListenPortInput!]!=[],
+    $activeConnectors: [ActiveConnectorInput!]!=[],
+    $smConfigs: [SMConfigInput!]!=[],
+    $globalPolicies:[GlobalPolicyInput!]!=[],
+    $backgroundTaskPolicies:[BackgroundTaskPolicyInput!]!=[],
+    $scheduledTasks:[ScheduledTaskInput!]!=[],
+    $serverModuleFiles:[ServerModuleFileInput!]!=[]) {
+        setServerModuleFiles(input: $serverModuleFiles){serverModuleFiles{goid} detailedStatus {status description}}
+        setClusterProperties (input: $clusterProperties){clusterProperties {goid} detailedStatus {status description}}
+        setTrustedCerts (input: $trustedCerts){trustedCerts {goid} detailedStatus {status description}}
+        setSecrets (input: $secrets){secrets{name} detailedStatus {status description}}
+        setSchemas (input: $schemas){schemas {goid} detailedStatus {status description}}
+        setDtds (input: $dtds){dtds {goid} detailedStatus {status description}}
+        setJdbcConnections (input: $jdbcConnections){jdbcConnections {goid} detailedStatus {status description}}
+        setFips (input: $fips){fips{goid} detailedStatus {status description}}
+        setLdaps (input: $ldaps){ldaps{goid} detailedStatus {status description}}
+        setFipGroups (input: $fipGroups){fipGroups{goid} detailedStatus {status description}}
+        setInternalGroups (input: $internalGroups){internalGroups{goid} detailedStatus {status description}}
+        setFipUsers (input: $fipUsers){fipUsers{goid} detailedStatus {status description}}
+        setInternalUsers (input: $internalUsers){internalUsers{goid} detailedStatus {status description}}
+        setCassandraConnections (input: $cassandraConnections){cassandraConnections {goid} detailedStatus {status description}}
+        setJmsDestinations (input: $jmsDestinations){jmsDestinations {goid} detailedStatus {status description}}
+        setSMConfigs (input: $smConfigs){smConfigs {goid} detailedStatus {status description}}
+        setPolicyFragments (input: $policyFragments){policyFragments {goid} detailedStatus {status description}}
+        setEncassConfigs (input: $encassConfigs){encassConfigs {goid} detailedStatus {status description}}
+        setGlobalPolicies (input: $globalPolicies){globalPolicies {goid} detailedStatus {status description}}
+        setBackgroundTaskPolicies (input: $backgroundTaskPolicies){backgroundTaskPolicies {goid} detailedStatus {status description}}
+        setWebApiServices (input: $webApiServices){webApiServices {goid} detailedStatus {status description}}
+        setSoapServices (input: $soapServices){soapServices {goid} detailedStatus {status description}}
+        setInternalWebApiServices (input: $internalWebApiServices){internalWebApiServices {goid} detailedStatus {status description}}
+        setInternalSoapServices (input: $internalSoapServices){internalSoapServices {goid} detailedStatus {status description}}
+        setEmailListeners (input: $emailListeners){emailListeners {goid} detailedStatus {status description}}
+        setListenPorts (input: $listenPorts){listenPorts {goid} detailedStatus {status description}}
+        setActiveConnectors (input: $activeConnectors){activeConnectors {goid} detailedStatus {status description}}
+        setScheduledTasks (input: $scheduledTasks){scheduledTasks {goid} detailedStatus {status description}}
+
+        # Keys must be mutated at the end
+        setKeys (input: $keys) {keys {alias} detailedStatus {status description}}
+}

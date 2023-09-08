@@ -1,0 +1,4 @@
+{
+  "query": "{{globalPolicies+scheduledTasks.gql}}",
+  "variables": {}
+}

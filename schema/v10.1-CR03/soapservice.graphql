@@ -1,0 +1,164 @@
+extend type Query {
+    "Get all soap services"
+    soapServices : [SoapService]!
+    "Get all Internal soap services"
+    internalSoapServices : [InternalSoapService]!
+    "Get soap services by name"
+    soapServicesByName(name: String!) : [SoapService]!
+    "Get soap service by name. Returns none if more than one are found."
+    soapServiceByName(name: String!) : SoapService
+    "Get Internal soap service by name. Returns none if more than one are found."
+    internalSoapServiceByName(name: String!) : InternalSoapService
+    "Get soap services inside a folder"
+    soapServicesByFolderPath(folderPath: String!) : [SoapService]!
+    "Get Internal soap services inside a folder"
+    internalSoapServicesByFolderPath(folderPath: String!) : [InternalSoapService]!
+    "Get soap service by goid"
+    soapServiceByGoid(goid: ID!) : SoapService
+    "Get soap service by resolver"
+    soapServiceByResolver(resolver: SoapServiceResolverInput!) : SoapService
+}
+
+extend type Mutation {
+    "Create or update soap services"
+    setSoapServices(input: [SoapServiceInput!]!) : SoapServicesPayload
+    "Create or update Internal soap services"
+    setInternalSoapServices(input: [SoapServiceInput!]!) : InternalSoapServicesPayload
+    "Delete existing soap services given their resolution details"
+    deleteSoapServices(resolvers: [SoapServiceResolverInput!]!) : SoapServicesPayload
+    "Delete existing Internal soap services given their resolution details"
+    deleteInternalSoapServices(resolvers: [SoapServiceResolverInput!]!) : InternalSoapServicesPayload
+}
+
+enum SoapVersion {
+    SOAP_1_1
+    SOAP_1_2
+    UNKNOWN
+}
+
+"A Soap service published on the Layer7 Gateway"
+type SoapService implements PublishedService {
+    "The goid for this service"
+    goid : ID!
+    "The name of the service"
+    name: String!
+    "The resolution path to the service"
+    resolutionPath: String
+    "Soap service resolvers"
+    resolvers: SoapResolvers!
+    "The configuration checksum"
+    checksum: String!
+
+    "Whether or not the published service is enabled"
+    enabled: Boolean!
+    "The folder path to the service"
+    folderPath: String!
+    "Which SOAP version"
+    soapVersion: SoapVersion!
+    "Which http methods are allowed if not just POST"
+    methodsAllowed: [HttpMethod!]!
+    tracingEnabled: Boolean!
+    wssProcessingEnabled: Boolean!
+    "Allow requests intended for operations not supported by the WSDL"
+    laxResolution: Boolean
+    properties: [EntityProperty!]
+
+    "The WSDL of the soap service"
+    wsdl: String!
+    "The policy and dependencies"
+    policy: Policy!
+}
+
+"A Soap service published on the Layer7 Gateway"
+type InternalSoapService implements PublishedService {
+    "The goid for this service"
+    goid : ID!
+    "The name of the service"
+    name: String!
+    "The resolution path to the service"
+    resolutionPath: String
+    "Soap service resolvers"
+    resolvers: SoapResolvers!
+    "The configuration checksum"
+    checksum: String!
+
+    "Whether or not the published service is enabled"
+    enabled: Boolean!
+    "The folder path to the service"
+    folderPath: String!
+    "Which SOAP version"
+    soapVersion: SoapVersion!
+    "Which http methods are allowed if not just POST"
+    methodsAllowed: [HttpMethod!]!
+    tracingEnabled: Boolean!
+    wssProcessingEnabled: Boolean!
+    "Allow requests intended for operations not supported by the WSDL"
+    laxResolution: Boolean
+    properties: [EntityProperty!]
+
+    "The WSDL of the soap service"
+    wsdl: String!
+    "The policy and dependencies"
+    policy: Policy!
+}
+
+" Must have minimum (1 soapAction + baseUri) OR resolutionPath. You can have both too. "
+type SoapResolvers {
+    "The soap actions referred to in the wsdl"
+    soapActions: [String!]!
+    "Base uri from the wsdl of the service. This is used for service resolution"
+    baseUri: String
+    "The resolution path to the service if not default /ssg/soap"
+    resolutionPath: String
+}
+
+" Must have minimum (1 soapAction + baseUri) OR resolutionPath. You can have both too. "
+input SoapServiceResolverInput {
+   "One of the SoapAction of the service to resolved. This must be specified along with a base ns from the WSDL"
+   soapAction: String
+   "Base uri from the wsdl of the service. Use this alongside the soapaction property to resolve a soap service without resolutionUri"
+   baseUri: String
+   "The resolution path of the service if that is how the soap service is resolved"
+   resolutionPath: String
+}
+
+input SoapServiceInput {
+    "The internal entity unique identifier"
+    goid: ID
+   "The folder path where to create this service.  If the path does not exist, it will be created"
+   folderPath: String!
+   "The name of the service"
+   name: String!
+   "The WSDL of the soap service"
+   wsdl: String!
+   "The resolution path of the service"
+   resolutionPath: String
+   "The policy"
+   policy: PolicyInput!
+   "Whether the service is enabled (optional, default true)"
+   enabled: Boolean = true
+   "The http methods allowed for this service"
+   methodsAllowed: [HttpMethod!]!
+   "Which SOAP version"
+   soapVersion: SoapVersion = UNKNOWN
+   "Whether or not the gateway should process incoming ws-security soap headers"
+   wssProcessingEnabled: Boolean!
+   tracingEnabled: Boolean = false
+   "Allow requests intended for operations not supported by the WSDL"
+   laxResolution: Boolean = false
+   properties: [EntityPropertyInput!]
+   "Ignored at creation time but can be used to compare bundle with gw state"
+    checksum : String
+}
+
+type SoapServicesPayload implements EntityMutationsPayload {
+  status: [EntityMutationStatus!]!
+  detailedStatus: [EntityMutationDetailedStatus!]!
+  soapServices: [SoapService]!
+}
+
+type InternalSoapServicesPayload implements EntityMutationsPayload {
+    status: [EntityMutationStatus!]!
+    detailedStatus: [EntityMutationDetailedStatus!]!
+    internalSoapServices: [InternalSoapService]!
+}

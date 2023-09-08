@@ -1,0 +1,4 @@
+{
+  "query": "{{sysinfo.gql}}",
+  "variables": {}
+}

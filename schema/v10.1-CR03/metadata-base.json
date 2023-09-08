@@ -1,0 +1,226 @@
+{
+  "types": {
+    "ActiveConnector": {
+      "pluralMethod": "activeConnectors",
+      "singularMethod": "activeConnectorByName",
+      "idField": "name",
+      "prefix": "activeConnector"
+    },
+    "BackgroundTaskPolicy": {
+      "pluralMethod": "backgroundTaskPolicies",
+      "singularMethod": "backgroundTaskPolicyByName",
+      "idField": "name",
+      "prefix": "backgroundTaskPolic"
+    },
+    "CassandraConnection": {
+      "pluralMethod": "cassandraConnections",
+      "singularMethod": "cassandraConnectionByName",
+      "idField": "name",
+      "prefix": "cassandraConnection"
+    },
+    "Certificate": {
+      "pluralMethod": "trustedCerts",
+      "singularMethod": "trustedCertByThumbprint",
+      "idField": "thumbprintSha1",
+      "idFields": ["name", "subjectDn", "thumbprintSha1"],
+      "prefix": "trustedCert"
+    },
+    "ClusterProperty": {
+      "pluralMethod": "clusterProperties",
+      "singularMethod": "clusterPropertyByName",
+      "idField": "name",
+      "prefix": "clusterPropert"
+    },
+    "Dtd": {
+      "pluralMethod": "dtds",
+      "singularMethod": "dtdBySystemId",
+      "idField": "systemId",
+      "prefix": "dtd"
+    },
+    "EmailListener": {
+      "pluralMethod": "emailListeners",
+      "singularMethod": "emailListenerByName",
+      "idField": "name",
+      "prefix": "emailListener"
+    },
+    "EncassConfig": {
+      "pluralMethod": "encassConfigs",
+      "singularMethod": "encassConfigByName",
+      "idField": "name",
+      "prefix": "encassConfig"
+    },
+    "Fip": {
+      "pluralMethod": "fips",
+      "singularMethod": "fipByName",
+      "idField": "name",
+      "prefix": "fip"
+    },
+    "FipGroup": {
+      "pluralMethod": "fipGroups",
+      "singularMethod": "fipGroupByName",
+      "idField": "name",
+      "idFields": [
+        "name",
+        "providerName"
+      ],
+      "prefix": "fipGroup"
+    },
+    "FipUser": {
+      "pluralMethod": "fipUsers",
+      "singularMethod": "fipUserByName",
+      "idField": "name",
+      "idFields": [
+        "name",
+        "providerName"
+      ],
+      "prefix": "fipUser"
+    },
+    "GlobalPolicy": {
+      "pluralMethod": "globalPolicies",
+      "singularMethod": "globalPolicyByTag",
+      "idField": "tag",
+      "idFields": ["name", "tag"],
+      "prefix": "globalPolic"
+    },
+    "InternalGroup": {
+      "pluralMethod": "internalGroups",
+      "singularMethod": "internalGroupByName",
+      "idField": "name",
+      "prefix": "internalGroup"
+    },
+    "InternalSoapService": {
+      "pluralMethod": "internalSoapServices",
+      "singularMethod": "internalSoapServiceByResolutionPath",
+      "idField": "resolutionPath",
+      "prefix": "internalSoapService"
+    },
+    "InternalUser": {
+      "pluralMethod": "internalUsers",
+      "singularMethod": "internalUserByLogin",
+      "idField": "login",
+      "idFields": ["name", "login"],
+      "prefix": "internalUser"
+    },
+    "InternalWebApiService": {
+      "pluralMethod": "internalWebApiServices",
+      "singularMethod": "internalWebApiServiceByResolutionPath",
+      "idField": "resolutionPath",
+      "idFields": ["name", "resolutionPath"],
+      "prefix": "internalWebApiService"
+    },
+    "JdbcConnection": {
+      "pluralMethod": "jdbcConnections",
+      "singularMethod": "jdbcConnectionByName",
+      "idField": "name",
+      "prefix": "jdbcConnection"
+    },
+    "JmsDestination": {
+      "pluralMethod": "jmsDestinations",
+      "singularMethod": "jmsDestinationByName",
+      "idField": "name",
+      "idFields": ["connectionGoid", "name", "direction", "providerType"],
+      "prefix": "jmsDestination"
+    },
+    "Key": {
+      "pluralMethod": "keys",
+      "singularMethod": "keyByAlias",
+      "idField": "alias",
+      "idFields": ["keystoreId", "alias"],
+      "prefix": "key"
+    },
+    "Ldap": {
+      "pluralMethod": "ldaps",
+      "singularMethod": "ldapByName",
+      "idField": "name",
+      "prefix": "ldap"
+    },
+    "ListenPort": {
+      "pluralMethod": "listenPorts",
+      "singularMethod": "listenPortByName",
+      "idField": "name",
+      "prefix": "listenPort"
+    },
+    "PolicyFragment": {
+      "pluralMethod": "policyFragments",
+      "singularMethod": "policyFragmentByName",
+      "idField": "name",
+      "prefix": "policyFragment"
+    },
+    "RevocationCheckPolicy": {
+      "pluralMethod": "revocationCheckPolicies",
+      "singularMethod": "revocationCheckPolicyByName",
+      "idField": "name",
+      "prefix": "revocationCheckPolic"
+    },
+    "SMConfig": {
+      "pluralMethod": "smConfigs",
+      "singularMethod": "smConfigByName",
+      "idField": "name",
+      "prefix": "smConfig"
+    },
+    "ScheduledTask": {
+      "pluralMethod": "scheduledTasks",
+      "singularMethod": "scheduledTaskByName",
+      "idField": "name",
+      "prefix": "scheduledTask"
+    },
+    "Schema": {
+      "pluralMethod": "schemas",
+      "singularMethod": "schemaBySystemId",
+      "idField": "systemId",
+      "prefix": "schema"
+    },
+    "Secret": {
+      "pluralMethod": "secrets",
+      "singularMethod": "secretByName",
+      "idField": "name",
+      "prefix": "secret"
+    },
+    "ServerModuleFile": {
+      "pluralMethod": "serverModuleFiles",
+      "singularMethod": "serverModuleFileByName",
+      "idField": "name",
+      "prefix": "serverModuleFile"
+    },
+    "SoapService": {
+      "pluralMethod": "soapServices",
+      "singularMethod": "soapServiceByResolver",
+      "idField": "resolvers",
+      "idFieldEx": "resolvers { {{SoapResolvers}} }",
+      "idFields": ["name", "resolutionPath", "resolvers { {{SoapResolvers}} }"],
+      "prefix": "soapService"
+    },
+    "WebApiService": {
+      "pluralMethod": "webApiServices",
+      "singularMethod": "webApiServiceByResolutionPath",
+      "idField": "resolutionPath",
+      "idFields": ["name", "resolutionPath"],
+      "prefix": "webApiService"
+    }
+  },
+  "parserHints": {
+    "excludedDataTypes": [
+      "String",
+      "NonEmptyString",
+      "Boolean",
+      "ID",
+      "PositiveInt",
+      "NonNegativeInt",
+      "Int",
+      "DateTime"
+    ],
+    "excludedFields": {
+      "Policy": "directDependencies,allDependencies",
+      "InternalUser": "memberOf",
+      "InternalGroup": "members",
+      "FipUser": "memberOf",
+      "FipGroup": "members",
+      "ServerModuleFile": "filePartName",
+      "EmailListener": "hardwiredService",
+      "ListenPort": "hardwiredService",
+      "ActiveConnector": "hardwiredService"
+    }
+  },
+  "enumTypes": [],
+  "pluralMethods": {}
+}

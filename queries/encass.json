@@ -1,0 +1,7 @@
+{
+  "query": "{{encass.gql}}",
+  "variables": {
+    "name": "?",
+    "policyName": "?"
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "query": "{{services+policies.gql}}",
+  "variables": {}
+}

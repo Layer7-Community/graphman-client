@@ -1,0 +1,1 @@
+The graphql schema implemented by graphman is provided for reference only

@@ -1,0 +1,11 @@
+query systemAdministration {
+    administrativeUserAccountProperties {
+        {{AdministrativeUserAccountProperty}}
+    }
+    passwordPolicies {
+        {{PasswordPolicy}}
+    }
+    serviceResolutionConfigs {
+        {{ServiceResolutionConfig}}
+    }
+}

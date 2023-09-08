@@ -1,0 +1,6 @@
+{
+  "query": "{{soapService.gql}}",
+  "variables": {
+    "resolver": {}
+  }
+}

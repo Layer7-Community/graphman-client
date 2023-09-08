@@ -1,0 +1,96 @@
+extend type Query {
+    "Get all Cassandra Connections"
+    cassandraConnections : [CassandraConnection!]!
+    "Get Cassandra Connection by name"
+    cassandraConnectionByName(name: String!) : CassandraConnection
+    "Get Cassandra Connection by goid"
+    cassandraConnectionByGoid(goid: ID!) : CassandraConnection
+}
+
+extend type Mutation {
+    """
+    Create or update Cassandra connections.
+    If Cassandra connection with the same name exist, the Cassandra connection will be updated.
+    If no Cassandra connection with the name exist, a new Cassandra connection will be created.
+    """
+    setCassandraConnections(input: [CassandraConnectionInput!]!): CassandraConnectionsPayload!
+
+    """
+    Deletes Cassandra connections.
+    """
+    deleteCassandraConnections(
+        "The names of the Cassandra connection to delete"
+        names: [String!]!): CassandraConnectionsPayload!
+}
+
+enum CassandraCompression {
+    NONE
+    LZ4
+}
+
+"A Cassandra Connection"
+type CassandraConnection {
+    "The goid for the Cassandra Connection"
+    goid : ID!
+    "The Cassandra Connection name"
+    name : String!
+    "The configuration checksum of this Cassandra connection"
+    checksum: String!
+
+    "Whether this Cassandra connection is enabled"
+    enabled: Boolean!
+    "The Cassandra keyspace name"
+    keyspace: String!
+    "The Cassandra connection points"
+    contactPoints : [String!]!
+    "The Cassandra server port"
+    port: PositiveInt!
+    "The Cassandra connection compression type"
+    compression: CassandraCompression!
+    "The username"
+    username: String
+    "The secure password reference."
+    securePasswordName: String
+    "Whether this Cassandra connection is SSL enabled"
+    sslEnabled: Boolean!
+    "Cipher suites used for SSL connection"
+    cipherSuites: [String!]
+    "The Cassandra connection properties"
+    properties: [EntityProperty!]
+}
+
+input CassandraConnectionInput {
+    "The internal entity unique identifier"
+    goid: ID
+    "The Cassandra Connection name"
+    name : String!
+    "The Cassandra keyspace name"
+    keyspace: String! = ""
+    "The Cassandra connection points"
+    contactPoints : [String!]!
+    "The Cassandra server port"
+    port: PositiveInt!
+    "The username"
+    username: String! = ""
+    "The secure password reference."
+    securePasswordName: String
+    "The Cassandra connection compression type"
+    compression: CassandraCompression = NONE
+    "Whether this Cassandra connection is SSL enabled"
+    sslEnabled: Boolean!
+    "Cipher suites used for SSL connection"
+    cipherSuites: [String!]
+    "Whether this Cassandra connection is enabled"
+    enabled: Boolean!
+    "The Cassandra connection properties"
+    properties: [EntityPropertyInput!]
+    "Ignored at creation time but can be used to compare bundle with gw state"
+    checksum : String
+}
+
+type CassandraConnectionsPayload implements EntityMutationsPayload {
+    status: [EntityMutationStatus!]!
+    detailedStatus: [EntityMutationDetailedStatus!]!
+    "The mutated Cassandra connections."
+    cassandraConnections: [CassandraConnection]!
+}

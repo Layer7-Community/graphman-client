@@ -1,0 +1,108 @@
+extend type Query {
+    "Get all RevocationCheckPolicies"
+    revocationCheckPolicies: [RevocationCheckPolicy!]!
+    "Get the RevocationCheckPolicy by name"
+    revocationCheckPolicyByName(name : String!) : RevocationCheckPolicy
+}
+
+extend type Mutation {
+    """
+    Create or update existing revocation check policies.
+    Match is carried by name. If match is found, it will be updated. Otherwise, it will be created.
+    """
+    setRevocationCheckPolicies(input: [RevocationCheckPolicyInput!]!): RevocationCheckPoliciesPayload!
+
+    "Delete existing revocation policies. Match is carried by name."
+    deleteRevocationCheckPolicies(names: [String!]!): RevocationCheckPoliciesPayload!
+}
+
+enum CertRevocationCheckPropertyType {
+    "Type for checking against a CRL from a URL contained in an X.509 Certificate"
+    CRL_FROM_CERTIFICATE
+    "Type for checking against a CRL from a specified URL"
+    CRL_FROM_URL
+    "Type for OCSP check against a responder URL contained in an X.509 Certificate"
+    OCSP_FROM_CERTIFICATE
+    "Type for OCSP check against a specified responder URL"
+    OCSP_FROM_URL
+}
+
+enum OcspNonceUsage {
+    "To include nonce in OCSP requests"
+    INCLUDE_NONCE
+    "Do not include nonce in OCSP requests"
+    EXCLUDE_NONCE
+    "Let pkix.ocsp.useNonce cluster wide property decide"
+    USE_NONCE_CONDITIONALLY
+}
+
+type RevocationCheckPolicyItem {
+    "Type for Checking OCSP or CRL"
+    type: CertRevocationCheckPropertyType!
+    "If the CRL from URL or OCSP from URL option was selected, enter the URL"
+    url: String
+    "If user permitting the entity that issued the certificate"
+    allowIssuerSignature: Boolean!
+    "Whether to include a nonce in OCSP request"
+    nonceUsage: OcspNonceUsage
+    "The sha1 thumbprint of the certificate"
+    signerThumbprintSha1s: [String!]
+}
+
+type RevocationCheckPolicy {
+    "The goid for this revocation check policy"
+    goid : ID!
+    "Name that describes the revocation checking policy"
+    name: String!
+    "The configuration checksum of this Revocation check policy"
+    checksum : String!
+    "Use as default revocation check policy"
+    defaultPolicy: Boolean!
+    "Succeed if revocation status is unknown"
+    defaultSuccess: Boolean!
+    "Continue processing if server is unavailable"
+    continueOnServerUnavailable: Boolean!
+    "Certificate revocation check properties"
+    revocationCheckPolicyItems: [RevocationCheckPolicyItem!]!
+}
+
+type RevocationCheckPoliciesPayload implements EntityMutationsPayload {
+    status: [EntityMutationStatus!]!
+    detailedStatus: [EntityMutationDetailedStatus!]!
+    revocationCheckPolicies: [RevocationCheckPolicy]!
+}
+
+input RevocationCheckPolicyItemInput {
+    "Type for Checking OCSP or CRL"
+    type: CertRevocationCheckPropertyType!
+    """
+    If the CRL from URL or OCSP from URL option was selected, enter the URL Otherwise provide regex.
+    CRL_FROM_CERTIFICATE &  OCSP_FROM_CERTIFICATE options uses URL Regex &
+    CRL_FROM_URL & OCSP_FROM_URL options uses URLs.
+    This is caller's responsibility to provide valid URL or Regex, Graphman won't validate it.
+    """
+    url: String!
+    "If user permitting the entity that issued the certificate"
+    allowIssuerSignature: Boolean!
+    "Whether to include a nonce in OCSP request, default is to set INCLUDE_NONCE"
+    nonceUsage: OcspNonceUsage = INCLUDE_NONCE
+    "The sha1 thumbprint of the certificate"
+    signerThumbprintSha1s: [String]
+}
+
+input RevocationCheckPolicyInput {
+    "The goid for this revocation check policy"
+    goid : ID
+    "Name that describes the revocation checking policy"
+    name: String!
+    "Ignored at creation time but can be used to compare bundle with gw state"
+    checksum : String
+    "Use as default revocation check policy"
+    defaultPolicy: Boolean!
+    "Succeed if revocation status is unknown"
+    defaultSuccess: Boolean!
+    "Continue processing if server is unavailable"
+    continueOnServerUnavailable: Boolean!
+    "Certificate revocation check properties"
+    revocationCheckPolicyItems: [RevocationCheckPolicyItemInput!]!
+}

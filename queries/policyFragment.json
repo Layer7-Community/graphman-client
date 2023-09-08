@@ -1,0 +1,6 @@
+{
+  "query": "{{policyFragment.gql}}",
+  "variables": {
+    "name": "?"
+  }
+}

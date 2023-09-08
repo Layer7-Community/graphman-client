@@ -1,0 +1,74 @@
+extend type Query {
+  "Get all active connectors"
+  activeConnectors: [ActiveConnector!]!
+  "Get the active connector by name"
+  activeConnectorByName(name : String!) : ActiveConnector
+  "Get the active connectors by type"
+  activeConnectorsByType(connectorType : ActiveConnectorType!) : [ActiveConnector!]!
+}
+
+extend type Mutation {
+  """
+  Create or update existing active connector.
+  Match is carried by name. If match is found, it will be updated. Otherwise, it will be created.
+  """
+  setActiveConnectors(input: [ActiveConnectorInput!]!): ActiveConnectorsPayload!
+
+  "Delete existing active connector. Match is carried by name."
+  deleteActiveConnectors(names: [String!]!): ActiveConnectorsPayload!
+}
+
+enum ActiveConnectorType {
+    KAFKA
+    SFTP_POLLING_LISTENER
+    MQ_NATIVE
+}
+
+type ActiveConnector {
+    "The goid for the active connector"
+    goid : ID!
+    "The active connector name"
+    name : String!
+    "The configuration checksum of this active connector"
+    checksum : String!
+
+    "Whether this active connector is enabled"
+    enabled : Boolean!
+    "The active connector type - KAFKA, SFTP_POLLING_LISTENER, MQ_NATIVE"
+    connectorType: ActiveConnectorType!
+    "The name of the published service hardwired to the active connector"
+    hardwiredServiceName: String
+    "The active connector Properties"
+    properties: [EntityProperty!]
+    "The advanced properties for active connector"
+    advancedProperties: [EntityProperty!]
+
+    "The published service hardwired to the active connector"
+    hardwiredService: HardwiredService
+}
+
+input ActiveConnectorInput {
+    "The internal entity unique identifier"
+    goid: ID
+    "The active connector name"
+    name: String!
+    "Whether this active connector is enabled"
+    enabled: Boolean!
+    "The active connector type - KAFKA, SFTP_POLLING_LISTENER, MQ_NATIVE"
+    connectorType: ActiveConnectorType!
+    "The name of the published service hardwired to the active connector"
+    hardwiredServiceName: String
+    "The active connector properties"
+    properties: [EntityPropertyInput!]
+    "The advanced properties for active connector"
+    advancedProperties: [EntityPropertyInput!]
+    "Ignored at creation time but can be used to compare bundle with gw state"
+    checksum : String
+}
+
+type ActiveConnectorsPayload implements EntityMutationsPayload {
+    status: [EntityMutationStatus!]!
+    detailedStatus: [EntityMutationDetailedStatus!]!
+    "The mutated active connectors"
+    activeConnectors: [ActiveConnector]!
+}

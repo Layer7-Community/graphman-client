@@ -1,0 +1,390 @@
+{
+  "policyFragments": [
+    {
+      "goid": "84449671abe2a5b143051dbdfdf7e6db",
+      "guid": "e513b52b-7d41-416f-9906-17f8e12b6d6a",
+      "name": "ABC Rules",
+      "folderPath": "/bootstrapableFramework/rules",
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"JHtnYXRld2F5LmF9\"/>\n            <L7p:VariableToSet stringValue=\"a\"/>\n        </L7p:SetVariable>\n        <wsp:OneOrMore wsp:Usage=\"Required\">\n            <L7p:TrueAssertion/>\n            <L7p:Include>\n                <L7p:PolicyGuid stringValue=\"3b1c8451-6af9-4983-ae6b-1f7e795ab571\"/>\n            </L7p:Include>\n            <L7p:Include>\n                <L7p:PolicyGuid stringValue=\"a88d82dd-e024-4c22-a6db-a8fc91e8b105\"/>\n            </L7p:Include>\n            <L7p:Include>\n                <L7p:PolicyGuid stringValue=\"e15a5669-0bf8-4873-97e4-d21464a7fe42\"/>\n            </L7p:Include>\n        </wsp:OneOrMore>\n    </wsp:All>\n</wsp:Policy>\n"
+      },
+      "checksum": "65edacba2db2db217a151babf928b7a4156f53d1"
+    },
+    {
+      "goid": "e5cd57980c53d67b99eca6189e2e4db6",
+      "guid": "a9f7163b-d17a-42e8-9b75-855ca6f67c08",
+      "name": "Generic API Template",
+      "folderPath": "/bootstrapableFramework",
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:Include>\n            <L7p:PolicyGuid stringValue=\"7079ed73-1730-4679-bdc0-6cc56b9fb4bc\"/>\n        </L7p:Include>\n        <L7p:Include>\n            <L7p:PolicyGuid stringValue=\"e513b52b-7d41-416f-9906-17f8e12b6d6a\"/>\n        </L7p:Include>\n    </wsp:All>\n</wsp:Policy>\n"
+      },
+      "checksum": "6474b5f05bfd7b2f95160bb1a2ec485f0ca4aa58"
+    },
+    {
+      "goid": "e5cd57980c53d67b99eca6189e2e4cd4",
+      "guid": "7079ed73-1730-4679-bdc0-6cc56b9fb4bc",
+      "name": "enforcePlan",
+      "folderPath": "/bootstrapableFramework",
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"JHtyZXF1ZXN0Lmh0dHAuaGVhZGVyLmNsaWVudC1pZH0=\"/>\n            <L7p:VariableToSet stringValue=\"client_id\"/>\n        </L7p:SetVariable>\n        <wsp:OneOrMore wsp:Usage=\"Required\">\n            <L7p:ComparisonAssertion>\n                <L7p:CaseSensitive booleanValue=\"false\"/>\n                <L7p:Expression1 stringValue=\"${client_id}\"/>\n                <L7p:Operator operatorNull=\"null\"/>\n                <L7p:Predicates predicates=\"included\">\n                    <L7p:item stringLength=\"included\">\n                        <L7p:Max intValue=\"-1\"/>\n                        <L7p:Min intValue=\"1\"/>\n                    </L7p:item>\n                </L7p:Predicates>\n            </L7p:ComparisonAssertion>\n            <L7p:SetVariable>\n                <L7p:Base64Expression stringValue=\"dW5rbm93bg==\"/>\n                <L7p:VariableToSet stringValue=\"client_id\"/>\n            </L7p:SetVariable>\n        </wsp:OneOrMore>\n        <L7p:Include>\n            <L7p:PolicyGuid stringValue=\"0303de0b-1ce7-46f3-bef4-95e4ebe8de5d\"/>\n        </L7p:Include>\n        <wsp:OneOrMore wsp:Usage=\"Required\">\n            <wsp:All wsp:Usage=\"Required\">\n                <L7p:ComparisonAssertion>\n                    <L7p:Expression1 stringValue=\"${applicableSubscription}\"/>\n                    <L7p:Expression2 stringValue=\"plan_a\"/>\n                    <L7p:Predicates predicates=\"included\">\n                        <L7p:item binary=\"included\">\n                            <L7p:RightValue stringValue=\"plan_a\"/>\n                        </L7p:item>\n                    </L7p:Predicates>\n                </L7p:ComparisonAssertion>\n                <L7p:RateLimit>\n                    <L7p:CounterName stringValue=\"PRESET(f2938766ae65d198)${request.clientid}\"/>\n                </L7p:RateLimit>\n            </wsp:All>\n            <wsp:All wsp:Usage=\"Required\">\n                <L7p:ComparisonAssertion>\n                    <L7p:Expression1 stringValue=\"${applicableSubscription}\"/>\n                    <L7p:Expression2 stringValue=\"plan_b\"/>\n                    <L7p:Predicates predicates=\"included\">\n                        <L7p:item binary=\"included\">\n                            <L7p:RightValue stringValue=\"plan_b\"/>\n                        </L7p:item>\n                    </L7p:Predicates>\n                </L7p:ComparisonAssertion>\n                <L7p:RateLimit>\n                    <L7p:CounterName stringValue=\"PRESET(f2938766ae65d198)${request.clientid}\"/>\n                    <L7p:MaxRequestsPerSecond stringValue=\"1000\"/>\n                </L7p:RateLimit>\n            </wsp:All>\n            <wsp:All wsp:Usage=\"Required\">\n                <L7p:ComparisonAssertion>\n                    <L7p:Expression1 stringValue=\"${applicableSubscription}\"/>\n                    <L7p:Expression2 stringValue=\"plan_c\"/>\n                    <L7p:Predicates predicates=\"included\">\n                        <L7p:item binary=\"included\">\n                            <L7p:RightValue stringValue=\"plan_c\"/>\n                        </L7p:item>\n                    </L7p:Predicates>\n                </L7p:ComparisonAssertion>\n                <L7p:RateLimit>\n                    <L7p:CounterName stringValue=\"PRESET(f2938766ae65d198)${request.clientid}\"/>\n                    <L7p:MaxRequestsPerSecond stringValue=\"5000\"/>\n                </L7p:RateLimit>\n            </wsp:All>\n            <L7p:RateLimit>\n                <L7p:CounterName stringValue=\"PRESET(fcb93974a1ca8f42)${request.clientid}\"/>\n                <L7p:MaxRequestsPerSecond stringValue=\"10\"/>\n                <L7p:ShapeRequests booleanValue=\"true\"/>\n            </L7p:RateLimit>\n        </wsp:OneOrMore>\n        <L7p:HardcodedResponse>\n            <L7p:Base64ResponseBody stringValue=\"ewogICJjbGllbnQiIDogIiR7Y2xpZW50X2lkfSIsCiAgInBsYW4iIDogIiR7YXBwbGljYWJsZVN1YnNjcmlwdGlvbn0iLAogICJzZXJ2aWNlIiA6ICIke3NlcnZpY2Vfc3BlY2lmaWNfdmFyfSIsCiAgIm15RGVtb0NvbmZpZ1ZhbCIgOiAiJHtnYXRld2F5Lm15RGVtb0NvbmZpZ1ZhbH0iCn0=\"/>\n            <L7p:ResponseContentType stringValue=\"application/json; charset=UTF-8\"/>\n        </L7p:HardcodedResponse>\n        <L7p:ExportVariables>\n            <L7p:ExportedVars stringArrayValue=\"included\">\n                <L7p:item stringValue=\"applicableSubscription\"/>\n                <L7p:item stringValue=\"client_id\"/>\n            </L7p:ExportedVars>\n        </L7p:ExportVariables>\n    </wsp:All>\n</wsp:Policy>\n"
+      },
+      "checksum": "62d71506c3202070f7ac908bebee9f405d3103f7"
+    },
+    {
+      "goid": "e5cd57980c53d67b99eca6189e2e46d5",
+      "guid": "0303de0b-1ce7-46f3-bef4-95e4ebe8de5d",
+      "name": "lookupSubscriptions",
+      "folderPath": "/bootstrapableFramework",
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"dW5rbm93bg==\"/>\n            <L7p:VariableToSet stringValue=\"applicableSubscription\"/>\n        </L7p:SetVariable>\n        <wsp:OneOrMore wsp:Usage=\"Required\">\n            <wsp:All wsp:Usage=\"Required\">\n                <L7p:ComparisonAssertion>\n                    <L7p:Expression1 stringValue=\"${gateway.plan_a_members}\"/>\n                    <L7p:Expression2 stringValue=\"${client_id}\"/>\n                    <L7p:Operator operator=\"CONTAINS\"/>\n                    <L7p:Predicates predicates=\"included\">\n                        <L7p:item binary=\"included\">\n                            <L7p:Operator operator=\"CONTAINS\"/>\n                            <L7p:RightValue stringValue=\"${client_id}\"/>\n                        </L7p:item>\n                    </L7p:Predicates>\n                </L7p:ComparisonAssertion>\n                <L7p:SetVariable>\n                    <L7p:Base64Expression stringValue=\"cGxhbl9h\"/>\n                    <L7p:VariableToSet stringValue=\"applicableSubscription\"/>\n                </L7p:SetVariable>\n            </wsp:All>\n            <wsp:All wsp:Usage=\"Required\">\n                <L7p:ComparisonAssertion>\n                    <L7p:Expression1 stringValue=\"${gateway.plan_b_members}\"/>\n                    <L7p:Expression2 stringValue=\"${client_id}\"/>\n                    <L7p:Operator operator=\"CONTAINS\"/>\n                    <L7p:Predicates predicates=\"included\">\n                        <L7p:item binary=\"included\">\n                            <L7p:Operator operator=\"CONTAINS\"/>\n                            <L7p:RightValue stringValue=\"${client_id}\"/>\n                        </L7p:item>\n                    </L7p:Predicates>\n                </L7p:ComparisonAssertion>\n                <L7p:SetVariable>\n                    <L7p:Base64Expression stringValue=\"cGxhbl9i\"/>\n                    <L7p:VariableToSet stringValue=\"applicableSubscription\"/>\n                </L7p:SetVariable>\n            </wsp:All>\n            <wsp:All wsp:Usage=\"Required\">\n                <L7p:ComparisonAssertion>\n                    <L7p:Expression1 stringValue=\"${gateway.plan_c_members}\"/>\n                    <L7p:Expression2 stringValue=\"${client_id}\"/>\n                    <L7p:Operator operator=\"CONTAINS\"/>\n                    <L7p:Predicates predicates=\"included\">\n                        <L7p:item binary=\"included\">\n                            <L7p:Operator operator=\"CONTAINS\"/>\n                            <L7p:RightValue stringValue=\"${client_id}\"/>\n                        </L7p:item>\n                    </L7p:Predicates>\n                </L7p:ComparisonAssertion>\n                <L7p:SetVariable>\n                    <L7p:Base64Expression stringValue=\"cGxhbl9j\"/>\n                    <L7p:VariableToSet stringValue=\"applicableSubscription\"/>\n                </L7p:SetVariable>\n            </wsp:All>\n            <L7p:TrueAssertion/>\n        </wsp:OneOrMore>\n        <L7p:ExportVariables>\n            <L7p:ExportedVars stringArrayValue=\"included\">\n                <L7p:item stringValue=\"applicableSubscription\"/>\n            </L7p:ExportedVars>\n        </L7p:ExportVariables>\n    </wsp:All>\n</wsp:Policy>\n"
+      },
+      "checksum": "f214b6b5c2727532ecf717639c600ecc1e0ada17"
+    },
+    {
+      "goid": "012ce653ed64a2f429d3907b248a6a2c",
+      "guid": "3b1c8451-6af9-4983-ae6b-1f7e795ab571",
+      "name": "sub_abc",
+      "folderPath": "/bootstrapableFramework/rules/ABC",
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:HttpRoutingAssertion>\n            <L7p:KeyAlias stringValue=\"blah\"/>\n            <L7p:NonDefaultKeystoreId goidValue=\"00000000000000000000000000000002\"/>\n            <L7p:ProtectedServiceUrl stringValue=\"https://blah\"/>\n            <L7p:ProxyPassword stringValueNull=\"null\"/>\n            <L7p:ProxyUsername stringValueNull=\"null\"/>\n            <L7p:RequestHeaderRules httpPassthroughRuleSet=\"included\">\n                <L7p:ForwardAll booleanValue=\"true\"/>\n                <L7p:Rules httpPassthroughRules=\"included\">\n                    <L7p:item httpPassthroughRule=\"included\">\n                        <L7p:Name stringValue=\"Cookie\"/>\n                    </L7p:item>\n                    <L7p:item httpPassthroughRule=\"included\">\n                        <L7p:Name stringValue=\"SOAPAction\"/>\n                    </L7p:item>\n                </L7p:Rules>\n            </L7p:RequestHeaderRules>\n            <L7p:RequestParamRules httpPassthroughRuleSet=\"included\">\n                <L7p:ForwardAll booleanValue=\"true\"/>\n                <L7p:Rules httpPassthroughRules=\"included\"/>\n            </L7p:RequestParamRules>\n            <L7p:ResponseHeaderRules httpPassthroughRuleSet=\"included\">\n                <L7p:ForwardAll booleanValue=\"true\"/>\n                <L7p:Rules httpPassthroughRules=\"included\">\n                    <L7p:item httpPassthroughRule=\"included\">\n                        <L7p:Name stringValue=\"Set-Cookie\"/>\n                    </L7p:item>\n                </L7p:Rules>\n            </L7p:ResponseHeaderRules>\n            <L7p:SamlAssertionVersion intValue=\"2\"/>\n            <L7p:TlsTrustedCertGoids goidArrayValue=\"included\">\n                <L7p:item goidValue=\"84449671abe2a5b143051dbdfdf7e704\"/>\n            </L7p:TlsTrustedCertGoids>\n            <L7p:TlsTrustedCertNames stringArrayValue=\"included\">\n                <L7p:item stringValue=\"www.broadcom.com\"/>\n            </L7p:TlsTrustedCertNames>\n            <L7p:UsesDefaultKeyStore booleanValue=\"false\"/>\n        </L7p:HttpRoutingAssertion>\n        <L7p:JdbcQuery>\n            <L7p:ConnectionName stringValue=\"mydb\"/>\n            <L7p:ConvertVariablesToStrings booleanValue=\"false\"/>\n            <L7p:SqlQuery stringValue=\"select amazing from awesome;\"/>\n        </L7p:JdbcQuery>\n        <L7p:JmsRoutingAssertion>\n            <L7p:EndpointName stringValue=\"eventsOut\"/>\n            <L7p:EndpointOid goidValue=\"84449671abe2a5b143051dbdfdf81d57\"/>\n            <L7p:RequestJmsMessagePropertyRuleSet jmsMessagePropertyRuleSet=\"included\">\n                <L7p:Rules jmsMessagePropertyRuleArray=\"included\"/>\n            </L7p:RequestJmsMessagePropertyRuleSet>\n            <L7p:ResponseJmsMessagePropertyRuleSet jmsMessagePropertyRuleSet=\"included\">\n                <L7p:Rules jmsMessagePropertyRuleArray=\"included\"/>\n            </L7p:ResponseJmsMessagePropertyRuleSet>\n        </L7p:JmsRoutingAssertion>\n    </wsp:All>\n</wsp:Policy>\n"
+      },
+      "checksum": "d0f492210b9a25e3b2ee6b8b4d44dd80bd8afa8c"
+    },
+    {
+      "goid": "012ce653ed64a2f429d3907b248a6a47",
+      "guid": "a88d82dd-e024-4c22-a6db-a8fc91e8b105",
+      "name": "sub_def",
+      "folderPath": "/bootstrapableFramework/rules/DEF",
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:HttpRoutingAssertion>\n            <L7p:KeyAlias stringValue=\"blah\"/>\n            <L7p:NonDefaultKeystoreId goidValue=\"00000000000000000000000000000002\"/>\n            <L7p:ProtectedServiceUrl stringValue=\"https://blah\"/>\n            <L7p:ProxyPassword stringValueNull=\"null\"/>\n            <L7p:ProxyUsername stringValueNull=\"null\"/>\n            <L7p:RequestHeaderRules httpPassthroughRuleSet=\"included\">\n                <L7p:ForwardAll booleanValue=\"true\"/>\n                <L7p:Rules httpPassthroughRules=\"included\">\n                    <L7p:item httpPassthroughRule=\"included\">\n                        <L7p:Name stringValue=\"Cookie\"/>\n                    </L7p:item>\n                    <L7p:item httpPassthroughRule=\"included\">\n                        <L7p:Name stringValue=\"SOAPAction\"/>\n                    </L7p:item>\n                </L7p:Rules>\n            </L7p:RequestHeaderRules>\n            <L7p:RequestParamRules httpPassthroughRuleSet=\"included\">\n                <L7p:ForwardAll booleanValue=\"true\"/>\n                <L7p:Rules httpPassthroughRules=\"included\"/>\n            </L7p:RequestParamRules>\n            <L7p:ResponseHeaderRules httpPassthroughRuleSet=\"included\">\n                <L7p:ForwardAll booleanValue=\"true\"/>\n                <L7p:Rules httpPassthroughRules=\"included\">\n                    <L7p:item httpPassthroughRule=\"included\">\n                        <L7p:Name stringValue=\"Set-Cookie\"/>\n                    </L7p:item>\n                </L7p:Rules>\n            </L7p:ResponseHeaderRules>\n            <L7p:SamlAssertionVersion intValue=\"2\"/>\n            <L7p:TlsTrustedCertGoids goidArrayValue=\"included\">\n                <L7p:item goidValue=\"84449671abe2a5b143051dbdfdf7e704\"/>\n            </L7p:TlsTrustedCertGoids>\n            <L7p:TlsTrustedCertNames stringArrayValue=\"included\">\n                <L7p:item stringValue=\"www.broadcom.com\"/>\n            </L7p:TlsTrustedCertNames>\n            <L7p:UsesDefaultKeyStore booleanValue=\"false\"/>\n        </L7p:HttpRoutingAssertion>\n    </wsp:All>\n</wsp:Policy>\n"
+      },
+      "checksum": "1a3c8fc993aac159479b0ee613e8ba34448dd09a"
+    },
+    {
+      "goid": "012ce653ed64a2f429d3907b248a6a61",
+      "guid": "e15a5669-0bf8-4873-97e4-d21464a7fe42",
+      "name": "sub_ghi",
+      "folderPath": "/bootstrapableFramework/rules/GHI",
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:HttpRoutingAssertion>\n            <L7p:KeyAlias stringValue=\"blah\"/>\n            <L7p:NonDefaultKeystoreId goidValue=\"00000000000000000000000000000002\"/>\n            <L7p:ProtectedServiceUrl stringValue=\"https://blah\"/>\n            <L7p:ProxyPassword stringValueNull=\"null\"/>\n            <L7p:ProxyUsername stringValueNull=\"null\"/>\n            <L7p:RequestHeaderRules httpPassthroughRuleSet=\"included\">\n                <L7p:ForwardAll booleanValue=\"true\"/>\n                <L7p:Rules httpPassthroughRules=\"included\">\n                    <L7p:item httpPassthroughRule=\"included\">\n                        <L7p:Name stringValue=\"Cookie\"/>\n                    </L7p:item>\n                    <L7p:item httpPassthroughRule=\"included\">\n                        <L7p:Name stringValue=\"SOAPAction\"/>\n                    </L7p:item>\n                </L7p:Rules>\n            </L7p:RequestHeaderRules>\n            <L7p:RequestParamRules httpPassthroughRuleSet=\"included\">\n                <L7p:ForwardAll booleanValue=\"true\"/>\n                <L7p:Rules httpPassthroughRules=\"included\"/>\n            </L7p:RequestParamRules>\n            <L7p:ResponseHeaderRules httpPassthroughRuleSet=\"included\">\n                <L7p:ForwardAll booleanValue=\"true\"/>\n                <L7p:Rules httpPassthroughRules=\"included\">\n                    <L7p:item httpPassthroughRule=\"included\">\n                        <L7p:Name stringValue=\"Set-Cookie\"/>\n                    </L7p:item>\n                </L7p:Rules>\n            </L7p:ResponseHeaderRules>\n            <L7p:SamlAssertionVersion intValue=\"2\"/>\n            <L7p:TlsTrustedCertGoids goidArrayValue=\"included\">\n                <L7p:item goidValue=\"84449671abe2a5b143051dbdfdf7e704\"/>\n            </L7p:TlsTrustedCertGoids>\n            <L7p:TlsTrustedCertNames stringArrayValue=\"included\">\n                <L7p:item stringValue=\"www.broadcom.com\"/>\n            </L7p:TlsTrustedCertNames>\n            <L7p:UsesDefaultKeyStore booleanValue=\"false\"/>\n        </L7p:HttpRoutingAssertion>\n    </wsp:All>\n</wsp:Policy>\n"
+      },
+      "checksum": "edc661caecbcfabba3ab7b8095708d8a07419f81"
+    }
+  ],
+  "webApiServices": [
+    {
+      "goid": "84449671abe2a5b143051dbdfdf7e685",
+      "guid": "eab8697a-885a-4f0d-97ff-aee4c11bf948",
+      "name": "Rest Api 1",
+      "resolutionPath": "/api1",
+      "folderPath": "/myApis",
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"aGVsbG8gYXBpIDE=\"/>\n            <L7p:VariableToSet stringValue=\"service_specific_var\"/>\n        </L7p:SetVariable>\n        <L7p:Include>\n            <L7p:PolicyGuid stringValue=\"a9f7163b-d17a-42e8-9b75-855ca6f67c08\"/>\n        </L7p:Include>\n    </wsp:All>\n</wsp:Policy>\n"
+      },
+      "enabled": true,
+      "methodsAllowed": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "checksum": "cbfdb2a991d89355611316c234a0b74f2893b520"
+    },
+    {
+      "goid": "84449671abe2a5b143051dbdfdf7e716",
+      "guid": "de0c8d33-f787-4e87-83ff-6c747fe52a34",
+      "name": "Rest Api 2",
+      "resolutionPath": "/api2",
+      "folderPath": "/myApis",
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"aGVsbG8gYXBpIDIgaGVsbG8=\"/>\n            <L7p:VariableToSet stringValue=\"service_specific_var\"/>\n        </L7p:SetVariable>\n        <L7p:Include>\n            <L7p:PolicyGuid stringValue=\"a9f7163b-d17a-42e8-9b75-855ca6f67c08\"/>\n        </L7p:Include>\n    </wsp:All>\n</wsp:Policy>\n"
+      },
+      "enabled": true,
+      "methodsAllowed": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "checksum": "6cf73875eaed085c52749fc1313814d656ce830e"
+    },
+    {
+      "goid": "982cc1ee7369c6ca5a7ae1e4ad8ba399",
+      "guid": "1780053a-7dc9-49e2-9e51-71882737f0ab",
+      "name": "test headers",
+      "resolutionPath": "/testheaders",
+      "folderPath": "/myApis",
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:HardcodedResponse>\n            <L7p:Base64ResponseBody stringValue=\"aGVhZGVycwoke3JlcXVlc3QuaHR0cC5hbGxoZWFkZXJ2YWx1ZXN9\"/>\n            <L7p:ResponseContentType stringValue=\"text/plain; charset=UTF-8\"/>\n        </L7p:HardcodedResponse>\n    </wsp:All>\n</wsp:Policy>\n"
+      },
+      "enabled": true,
+      "methodsAllowed": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "checksum": "dcfe493225ad1a7ce9c7b80a2618263d8c8e07d1"
+    }
+  ],
+  "clusterProperties": [
+    {
+      "goid": "84449671abe2a5b143051dbdfdf7e5f3",
+      "name": "a",
+      "value": "a",
+      "description": "a cwp",
+      "hiddenProperty": false,
+      "checksum": "e0aa4e7fb2a69405c8aec3e242a8f7c99e4c9a76"
+    },
+    {
+      "goid": "84449671abe2a5b143051dbdfdf7e5f9",
+      "name": "b",
+      "value": "b",
+      "description": "another cwp",
+      "hiddenProperty": false,
+      "checksum": "4fb1b8f250ed3782550700032926578fd8397cbf"
+    },
+    {
+      "goid": "0000000000000000fffffffffff5519f",
+      "name": "cluster.hostname",
+      "value": "mycompany.host.com",
+      "description": "External hostname for the cluster",
+      "hiddenProperty": false,
+      "checksum": "8c1e5bcdf1beb7e1907aecff7666376e12c049c5"
+    },
+    {
+      "goid": "730e0f584c2fe9c603469107bca2e7f8",
+      "name": "keyStore.defaultSsl.alias",
+      "value": "00000000000000000000000000000002:SSL",
+      "description": "Keystore ID and alias of default SSL key, colon delimited.  A keystore ID of -1 means \"unspecified\".",
+      "hiddenProperty": true,
+      "checksum": "3c2adb85c6f0d55e9aef665eef59dbcb95153fad"
+    },
+    {
+      "goid": "982cc1ee7369c6ca5a7ae1e4ad866070",
+      "name": "myDemoConfigVal",
+      "value": "suspiciousLlama",
+      "description": "",
+      "hiddenProperty": false,
+      "checksum": "638693aa29ba0cd8aa4bb9d63335cf687f72a482"
+    },
+    {
+      "goid": "e5cd57980c53d67b99eca6189e2e4596",
+      "name": "plan_a_members",
+      "value": "123, 456, 789",
+      "description": "",
+      "hiddenProperty": false,
+      "checksum": "01a1090a23b93bc038cfd4e6d47a7af8f3323de5"
+    },
+    {
+      "goid": "e5cd57980c53d67b99eca6189e2e512d",
+      "name": "plan_b_members",
+      "value": "abc, def, ghi",
+      "description": "",
+      "hiddenProperty": false,
+      "checksum": "6b998d54ca0d825bf26d83e5a0c79e59d0cebc2e"
+    },
+    {
+      "goid": "e5cd57980c53d67b99eca6189e2e5133",
+      "name": "plan_c_members",
+      "value": "ABC, DEF, GHI",
+      "description": "",
+      "hiddenProperty": false,
+      "checksum": "271431a9bcd48317f325ebccad8e49deedf18f82"
+    }
+  ],
+  "trustedCerts": [
+    {
+      "goid": "84449671abe2a5b143051dbdfdf7e704",
+      "name": "www.broadcom.com",
+      "subjectDn": "cn=www.broadcom.com,o=broadcom inc,l=san jose,st=california,c=us",
+      "notBefore": "2022-09-30T00:00:00Z",
+      "notAfter": "2023-10-03T23:59:59Z",
+      "verifyHostname": false,
+      "trustAnchor": false,
+      "trustedFor": [
+        "SSL"
+      ],
+      "certBase64": "MIIMGDCCCwCgAwIBAgIQCFzxURT785R9/UPbTX7ORDANBgkqhkiG9w0BAQsFADBPMQswCQYDVQQG\r\nEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMSkwJwYDVQQDEyBEaWdpQ2VydCBUTFMgUlNBIFNI\r\nQTI1NiAyMDIwIENBMTAeFw0yMjA5MzAwMDAwMDBaFw0yMzEwMDMyMzU5NTlaMGcxCzAJBgNVBAYT\r\nAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMREwDwYDVQQHEwhTYW4gSm9zZTEVMBMGA1UEChMMQnJv\r\nYWRjb20gSW5jMRkwFwYDVQQDExB3d3cuYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC\r\nAQ8AMIIBCgKCAQEAx5PTGYEX4KAhFGEBmXPZ1DHoOcPKJMtcdUV0vGJ2Y1PmPznr+O5OODc+tvx9\r\n6GwNfmzj/aZOLY+qlDD1AWSVcjI/8XPSh1itGlkAKuzvvruPhhh9/9YxKGvUVF743ZiuER21wxNN\r\ne+Tp8+NYtiYm2Xad0c5m3I5yABhupgXVlFevS5Gwsn3Q9jFssbpeAOH//Ey4VRaxHgd0F3ugE7Vk\r\nCYtQwDJ+r1S+gA3PKPekovYVr5Nfg7vsVfkcBXApTaocdYtFRZ+kmqw0LpCk2XtTN64FnEUk+083\r\n18W+vlKNbO6Q13ZTI8DrIkOa1e6yuMll+mnM+5VbetEzEIYl+hHblwIDAQABo4II1jCCCNIwHwYD\r\nVR0jBBgwFoAUt2ui6qiqhIx56rTaD5iyxZV2ufQwHQYDVR0OBBYEFB2Dc/8UDZ5nNcxXDqh26srg\r\nCbNcMIIFfwYDVR0RBIIFdjCCBXKCEHd3dy5icm9hZGNvbS5jb22CDGJyb2FkY29tLmNvbYILYnJv\r\nYWRjb20uY26CD3d3dy5icm9hZGNvbS5jboIPanAuYnJvYWRjb20uY29tghNzdGF0aWMuYnJvYWRj\r\nb20uY29tghJlcnJvci5icm9hZGNvbS5jb22CE3dlYmFwcC5icm9hZGNvbS5jb22CD2dvLmJyb2Fk\r\nY29tLmNvbYIbc3ltYW50ZWMtYmxvZ3MuYnJvYWRjb20uY29tghIqLmF3cy5icm9hZGNvbS5jb22C\r\nDWF2YWdvdGVjaC5jb22CEXd3dy5hdmFnb3RlY2guY29tggxhdmFnb3RlY2guY26CEHd3dy5hdmFn\r\nb3RlY2guY26CD2F2YWdvdGVjaC5jby5qcIITd3d3LmF2YWdvdGVjaC5jby5qcIIMc3ltYW50ZWMu\r\nY29tgg4qLnN5bWFudGVjLmNvbYIRc3ltYW50ZWMuaG9sZGluZ3OCEyouc3ltYW50ZWMuaG9sZGlu\r\nZ3OCDnN5bWFudGVjLm5pbmphghAqLnN5bWFudGVjLm5pbmphggxzeW1hbnRlYy5wcm+CDiouc3lt\r\nYW50ZWMucHJvgg1zeW1hbnRlYy50ZWNogg8qLnN5bWFudGVjLnRlY2iCFnN5bWFudGVjc2VjdXJl\r\nc2l0ZS5jb22CGCouc3ltYW50ZWNzZWN1cmVzaXRlLmNvbYIWc3ltYW50ZWNzZWN1cmVzaXRlLm5l\r\ndIIYKi5zeW1hbnRlY3NlY3VyZXNpdGUubmV0ghBzeW1hbnRlY3NzbC5hc2lhghIqLnN5bWFudGVj\r\nc3NsLmFzaWGCDnN5bWFudGVjc3NsLmZyghAqLnN5bWFudGVjc3NsLmZyghRzeW1hbnRlY3Zlcmlz\r\naWduLmNvbYIWKi5zeW1hbnRlY3ZlcmlzaWduLmNvbYIQc3ltYW50ZWMuY2FyZWVyc4ISKi5zeW1h\r\nbnRlYy5jYXJlZXJzggxzZWN1cml0eS5jb22CDiouc2VjdXJpdHkuY29tghBmb2l0LWZveGNvbm4u\r\nY29tghIqLmZvaXQtZm94Y29ubi5jb22CBmNhLmNvbYIIKi5jYS5jb22CC2Jyb2NhZGUuY29tgg0q\r\nLmJyb2NhZGUuY29tggpyZWxhcmMuY29tggwqLnJlbGFyYy5jb22CGGNvbm5lY3RpbmdldmVyeXRo\r\naW5nLmNvbYIaKi5jb25uZWN0aW5nZXZlcnl0aGluZy5jb22CD2JheWR5bmFtaWNzLmNvbYIRKi5i\r\nYXlkeW5hbWljcy5jb22CDGJsdWVjb2F0LmNvbYIOKi5ibHVlY29hdC5jb22CDWJsdWUtY29hdC5j\r\nb22CDyouYmx1ZS1jb2F0LmNvbYIMYmx1ZWNvYXQubmV0gg4qLmJsdWVjb2F0Lm5ldIIWYmx1ZWNv\r\nYXR1c2VyZ3JvdXAuaW5mb4IYKi5ibHVlY29hdHVzZXJncm91cC5pbmZvghlkYXRhbGVha2FnZXBy\r\nb3RlY3Rpb24uY29tghsqLmRhdGFsZWFrYWdlcHJvdGVjdGlvbi5jb22CG2RhdGEtbGVha2FnZS1w\r\ncm90ZWN0aW9uLmNvbYIdKi5kYXRhLWxlYWthZ2UtcHJvdGVjdGlvbi5jb22CC2x1bWluYXRlLmlv\r\ngg0qLmx1bWluYXRlLmlvghJzb2xhcmFuZXR3b3Jrcy5uZXSCFCouc29sYXJhbmV0d29ya3MubmV0\r\nghNzb2xlcmEtbmV0d29ya3MuY29tghUqLnNvbGVyYS1uZXR3b3Jrcy5jb22CD21lc3NhZ2VsYWJz\r\nLmNvbYIRKi5tZXNzYWdlbGFicy5jb22CFWNtc2dvbGl2ZS5icm9hZGNvbS5jbjAOBgNVHQ8BAf8E\r\nBAMCBaAwHQYDVR0lBBYwFAYIKwYBBQUHAwEGCCsGAQUFBwMCMIGPBgNVHR8EgYcwgYQwQKA+oDyG\r\nOmh0dHA6Ly9jcmwzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydFRMU1JTQVNIQTI1NjIwMjBDQTEtNC5j\r\ncmwwQKA+oDyGOmh0dHA6Ly9jcmw0LmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydFRMU1JTQVNIQTI1NjIw\r\nMjBDQTEtNC5jcmwwPgYDVR0gBDcwNTAzBgZngQwBAgIwKTAnBggrBgEFBQcCARYbaHR0cDovL3d3\r\ndy5kaWdpY2VydC5jb20vQ1BTMH8GCCsGAQUFBwEBBHMwcTAkBggrBgEFBQcwAYYYaHR0cDovL29j\r\nc3AuZGlnaWNlcnQuY29tMEkGCCsGAQUFBzAChj1odHRwOi8vY2FjZXJ0cy5kaWdpY2VydC5jb20v\r\nRGlnaUNlcnRUTFNSU0FTSEEyNTYyMDIwQ0ExLTEuY3J0MAkGA1UdEwQCMAAwggF+BgorBgEEAdZ5\r\nAgQCBIIBbgSCAWoBaAB3AOg+0No+9QY1MudXKLyJa8kD08vREWvs62nhd31tBr1uAAABg4/5VfMA\r\nAAQDAEgwRgIhAJtRcWgyhY+7bjR5WPKDZxfLUz+bQ/yhPF/Er4q2nujsAiEAgydR48fvuHFpSTsP\r\nJNvViUfoymIHFUvfW/1RZw/+uc4AdgCzc3cH4YRQ+GOG1gWp3BEJSnktsWcMC4fc8AMOeTalmgAA\r\nAYOP+VZDAAAEAwBHMEUCIDZ1PE5SqDHCvkt9PjZkBoRO08bJyOISgsLk5I90/oR0AiEApB9HoHfI\r\naYLpr8GbYIlQcESzCQO2xh/W24ce59l2HiAAdQC3Pvsk35xNunXyOcW6WPRsXfxCz3qfNcSeHQmB\r\nJe20mQAAAYOP+VYAAAAEAwBGMEQCID+RDYZ+IfBCLCdHDE9kNW2T30rnRfUdb39eJHDEIU68AiBL\r\n+QCycw7g4Ki2YxM2+ZBhs7gIS2Iak2kl0Q2GppJbMTANBgkqhkiG9w0BAQsFAAOCAQEAAd6IZW+X\r\n4mDdK0Pke/HdA1qwUtb2XKczocx0Q+kuOpy1fWaQuCa4pPdT0ERdK7kfSrbjxefdF2MMu3vN45MH\r\ntIE3AxdkltHfCYHksuaA/hJ1VcYf897O3zCk+X3Ndhgh7e8V6KeTGnqwovDL11VV2/gIDzprfu6d\r\nYW17iYCVct6CHJGx2obNxsRYQPXDSJuokKxBLloK5I13V9E52u9WKd87Ajwzmak5P/pC8gQFH29W\r\nriWc/GNDHcGYjXQRV1kJdxaYttjxl1O02zkudGfQbqkNHo0puzAXdmsAYpQFQSBiiSilS7nhHksk\r\nxt0N6fHyIzAt0Nhi0pC+boFnp2wHxQ==",
+      "thumbprintSha1": "4w230rgczdepEDjkuO8gYsOfyTU=",
+      "revocationCheckPolicyType": "USE_DEFAULT",
+      "checksum": "1866cef9812889ec2518d0f41bf84612d4399241"
+    },
+    {
+      "goid": "982cc1ee7369c6ca5a7ae1e4ad86dc6b",
+      "name": "New trusted cert",
+      "subjectDn": "cn=*.tesla.com,o=tesla\\, inc.,l=palo alto,st=california,c=us",
+      "notBefore": "2021-05-17T00:00:00Z",
+      "notAfter": "2022-05-25T23:59:59Z",
+      "verifyHostname": true,
+      "trustAnchor": true,
+      "trustedFor": [
+        "SIGNING_SERVER_CERTS"
+      ],
+      "certBase64": "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",
+      "thumbprintSha1": "iZJ/xtwDDv+gic0J9idwO9XqYVw=",
+      "revocationCheckPolicyType": "USE_DEFAULT",
+      "checksum": "a365254617c3151a282af375d1fc4814d85d6556"
+    }
+  ],
+  "jdbcConnections": [
+    {
+      "goid": "84449671abe2a5b143051dbdfdf7e762",
+      "name": "mydb",
+      "driverClass": "com.l7tech.jdbc.mysql.MySQLDriver",
+      "jdbcUrl": "jdbc://mydb/mydb",
+      "enabled": true,
+      "username": "hello",
+      "password": "${secpass.mydb.plaintext}",
+      "minPoolSize": 4,
+      "maxPoolSize": 15,
+      "properties": [
+        {
+          "name": "EnableCancelTimeout",
+          "value": "true"
+        }
+      ],
+      "checksum": "be2776008b1427eb266f7afa97533f19a0644a1c"
+    }
+  ],
+  "internalUsers": [
+    {
+      "name": "admin",
+      "goid": "00000000000000000000000000000003",
+      "memberOf": [],
+      "login": "admin",
+      "password": "$6$xyFANHYsChCYu0Fv$COGYI3sps6b0k/3bwkcQveUGmPZCpmoPYIfSekMGvm9OtZnJUoSMencFv2uxqY0c.YM6EZTdHsYon3zXc74lH1",
+      "enabled": true,
+      "checksum": "7948c59f1eaae99db93b874de0f83b2e5f138011"
+    }
+  ],
+  "keys": [
+    {
+      "alias": "blah",
+      "subjectDn": "CN=blah",
+      "goid": "00000000000000000000000000000002:blah",
+      "checksum": "171c8376f9f9c32c679e2cf7217803450b483b43",
+      "keyType": "RSA",
+      "certChain": [
+        "-----BEGIN CERTIFICATE-----\nMIIC4zCCAcugAwIBAgIJAICHWJ5sfMqYMA0GCSqGSIb3DQEBDAUAMA8xDTALBgNVBAMTBGJsYWgw\r\nHhcNMjIxMjA3MjEwMTA3WhcNMjcxMjA2MjEwMTA3WjAPMQ0wCwYDVQQDEwRibGFoMIIBIjANBgkq\r\nhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArUNLzXqu0jOO/2alPWxsyScMIOXGdrEmvqrz5cAmZQhP\r\n2uk2KtLxO7Ot68R5VvS6W2g+hEqiTDTle8LdVImpD8j8Ps6mTliYItIhTa1v61fia83ymtq7SZRJ\r\nUdKZYRu4DngNoxeitG04yHCCENxP/UmHdqtiLyPMwvtQcDcy4C/2HfWrD84A2VSB2DcxWNBPfvLB\r\nA30r5YYJgSDxCS7vBXTBHVxfN6RoT5D8oosSRUbLkVTwYsWZDfBeKXLMjuZvfLasaQYCG44fhZyU\r\nBGSOujTlhzO/vmp5LrqNveoum0eL+noPHWS5scR+sCdUg58B55dxIWOP9zq1Le6N7QugpQIDAQAB\r\no0IwQDAdBgNVHQ4EFgQULO+q9L/e/jIfDcttLyUHY2H4smMwHwYDVR0jBBgwFoAULO+q9L/e/jIf\r\nDcttLyUHY2H4smMwDQYJKoZIhvcNAQEMBQADggEBAALpCw29ASRYjIc7iwJtIhLmGDew4dPxMeT8\r\nGdbAHKtU4f55HCDv/7x1g2Z3AiwQo7C75QiQLIDhkthCMhJWcWk+8OqnqCSl6AiWRFEwBrZOnaFX\r\nzGU6+kWChBBvpgvHhwVWJ/v5NSuLlkddLQRlcFoO+LRNhZgZX1nsxlhg6zH6il0o4Cx9Hnsoxaxn\r\nL3gbQszTRGfpGTTsP1161J/WnLqP4Jh4Fu1FAAJLyMdeYcFDRClzmNyDIZK3VHTmsx91p49PF1zX\r\nJ9yU6+DTzKb62jUfIIkOaqF6RHqz1EExwpG3Jil8j+GpoonzRO3MJRPKYXF9/zcepszHOSCkLs+W\r\nl5o=\n-----END CERTIFICATE-----\n"
+      ],
+      "p12": "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"
+    },
+    {
+      "alias": "ssl",
+      "subjectDn": "CN=gateway-dev",
+      "goid": "00000000000000000000000000000002:ssl",
+      "checksum": "45512210dd8f2d0c4e1305f7ac4ea72bc1dd2449",
+      "keyType": "RSA",
+      "certChain": [
+        "-----BEGIN CERTIFICATE-----\nMIIC8TCCAdmgAwIBAgIJALZ6UdN1VPCmMA0GCSqGSIb3DQEBDAUAMBYxFDASBgNVBAMTC2dhdGV3\r\nYXktZGV2MB4XDTIyMTIwNzIwNDIxOFoXDTMyMTIwNDIwNDIxOFowFjEUMBIGA1UEAxMLZ2F0ZXdh\r\neS1kZXYwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCY3daIhVtWtaS1/7vg/dKkvrPP\r\n3qjJx3iSs/9EBLrN1WWVZVb8Zz+RPlhPG2yxVnOmeLDCp1X0pALIhrfBbT0T+LMKM4ADHGSD25Hl\r\n9mnR8S1MeXB8dDhbOT72SRfBRJ3CdRnsj3B4H06IYCTWBTHXkv9O0CH7EqqkhEvoTGG7UCGbnM1S\r\n1Nwvoxh+qVxHYHCVCytSG7OWcV2oGBKx9bssmhD6vklz9HE1MOonYVYLwVR5aZ2C+bi/IjOAsOEc\r\nTkJu7t1iStVUTdCvkm4b8EvqyNROnaKQf5UOYWSNwPBx+sjwFDyE6lA5PW1y9u1ymE+zbF2alv0D\r\nXNg/m4BgAkafAgMBAAGjQjBAMB0GA1UdDgQWBBSdfPhS5USM2EjGzrt/a6TMgIUhoTAfBgNVHSME\r\nGDAWgBSdfPhS5USM2EjGzrt/a6TMgIUhoTANBgkqhkiG9w0BAQwFAAOCAQEAirppOS9w/eK/PdHT\r\npTMr704GZ3jsCVmiSNa+0d0/fZAFX3iPrbS9lv4sQgW1c2HLQ5jo18ZS255SDvcqV3e5UUiM2x1z\r\nCCrliYFAqV7aN1ojJn8ClmK7gNVqeULB/hveF3df+PUV87ybTzCVBmhDW3TVf9uztMcWiS0m+FG8\r\ncU4eXP7W2X4KRaOf0ljDAoyAuX0+H1HsE1xeKcUqMOTwffGo9VqE8fFRDLxmYVwRAh7EBa3VRdF7\r\nF10O988byKmnX8JNNwD3MOkJSzhVkoFXHEVfUtULM5ETD+KcVVbcQDKxHgA224lYAHgtqfuUeekp\r\nFSRNtbM+OHeMdF5r8CN6Tg==\n-----END CERTIFICATE-----\n"
+      ],
+      "p12": "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"
+    }
+  ],
+  "secrets": [
+    {
+      "name": "mydb",
+      "secretType": "PASSWORD",
+      "goid": "84449671abe2a5b143051dbdfdf7e76e",
+      "checksum": "102430f89d5176902322e6cb3067caca13277ab4",
+      "variableReferencable": true,
+      "secret": "U2FsdGVkX1+eEwI1Ur8S+cQtw0jyLxfBC786vfUNwBQ=",
+      "description": "mydb creds"
+    },
+    {
+      "name": "newpasswd",
+      "secretType": "PASSWORD",
+      "goid": "012ce653ed64a2f429d3907b248a6782",
+      "checksum": "adc4e218ef2a199ffa402b3ca88d1dee1ce8902a",
+      "variableReferencable": true,
+      "secret": "U2FsdGVkX1/e5EGloue/ttJx4kcu5cBxlrAFDFtcddw=",
+      "description": "hello"
+    }
+  ],
+  "jmsDestinations": [
+    {
+      "goid": "84449671abe2a5b143051dbdfdf81d57",
+      "connectionGoid": "84449671abe2a5b143051dbdfdf81d55",
+      "name": "eventsOut",
+      "direction": "OUTBOUND",
+      "providerType": "WEBLOGIC JMS",
+      "initialContextFactoryClassname": "a",
+      "connectionFactoryName": "n",
+      "jndiUrl": "b",
+      "jndiSslDetails": {
+        "sslEnabled": false,
+        "sslForAuthenticationOnly": false,
+        "sslVerifyServerCertificate": false,
+        "sslVerifyServerHostname": false
+      },
+      "destinationType": "QUEUE",
+      "destinationName": "d",
+      "destinationSslDetails": {
+        "sslEnabled": false,
+        "sslForAuthenticationOnly": false,
+        "sslVerifyServerCertificate": false,
+        "sslVerifyServerHostname": false
+      },
+      "template": false,
+      "enabled": true,
+      "properties": [
+        {
+          "name": "outbound.poolType",
+          "value": "SESSION"
+        },
+        {
+          "name": "outbound.replyType",
+          "value": "AUTOMATIC"
+        },
+        {
+          "name": "outbound.messageFormat",
+          "value": "AUTOMATIC"
+        },
+        {
+          "name": "outbound.useMessageIdForCorrelation",
+          "value": "false"
+        }
+      ],
+      "checksum": "f8c6a0108c998495a5a78d1223129cb0f053f54d"
+    }
+  ],
+  "globalPolicies": [
+    {
+      "name": "globalReceived",
+      "folderPath": "/bootstrapableFramework/utils",
+      "goid": "84449671abe2a5b143051dbdfdf81d31",
+      "guid": "400cae20-08dd-4e46-b2ea-919b25f40321",
+      "tag": "message-received",
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:CommentAssertion>\n            <L7p:Comment stringValue=\"Policy Fragment: globalReceived\"/>\n        </L7p:CommentAssertion>\n        <wsp:OneOrMore wsp:Usage=\"Required\">\n            <L7p:TrueAssertion/>\n            <L7p:JmsRoutingAssertion>\n                <L7p:EndpointName stringValue=\"eventsOut\"/>\n                <L7p:EndpointOid goidValue=\"84449671abe2a5b143051dbdfdf81d57\"/>\n                <L7p:RequestJmsMessagePropertyRuleSet jmsMessagePropertyRuleSet=\"included\">\n                    <L7p:Rules jmsMessagePropertyRuleArray=\"included\"/>\n                </L7p:RequestJmsMessagePropertyRuleSet>\n                <L7p:ResponseJmsMessagePropertyRuleSet jmsMessagePropertyRuleSet=\"included\">\n                    <L7p:Rules jmsMessagePropertyRuleArray=\"included\"/>\n                </L7p:ResponseJmsMessagePropertyRuleSet>\n            </L7p:JmsRoutingAssertion>\n        </wsp:OneOrMore>\n    </wsp:All>\n</wsp:Policy>\n"
+      },
+      "checksum": "f3dee39c1f53331075a75748c972ace25f61001b"
+    }
+  ],
+  "backgroundTaskPolicies": [
+    {
+      "name": "dailySync",
+      "folderPath": "/bootstrapableFramework/utils",
+      "guid": "5fde4fb4-72b4-4435-a564-fd1b9990f494",
+      "goid": "84449671abe2a5b143051dbdfdf81d07",
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <wsp:OneOrMore wsp:Usage=\"Required\">\n            <L7p:TrueAssertion/>\n            <wsp:All wsp:Usage=\"Required\">\n                <L7p:Include>\n                    <L7p:PolicyGuid stringValue=\"e513b52b-7d41-416f-9906-17f8e12b6d6a\"/>\n                </L7p:Include>\n                <L7p:JavaScript>\n                    <L7p:ExecutionTimeout stringValue=\"\"/>\n                    <L7p:Name stringValue=\"hello\"/>\n                    <L7p:Script stringValue=\"var a = 0;\"/>\n                </L7p:JavaScript>\n            </wsp:All>\n        </wsp:OneOrMore>\n    </wsp:All>\n</wsp:Policy>\n"
+      },
+      "checksum": "9df836578cc2356f84ad61e83534a6c85181edf0"
+    }
+  ],
+  "scheduledTasks": [
+    {
+      "name": "My Daily Clean and Sync",
+      "policyName": "dailySync",
+      "jobType": "RECURRING",
+      "cronExpression": "0 0 0 */1 * ?",
+      "executeOnSingleNode": false,
+      "executeOnCreation": false,
+      "status": "SCHEDULED",
+      "goid": "84449671abe2a5b143051dbdfdf81e01",
+      "checksum": "02ebea211860a78a09f5f1c0ef56809b64fbd57c"
+    }
+  ]
+}

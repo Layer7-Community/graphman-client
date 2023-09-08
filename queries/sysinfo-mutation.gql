@@ -1,0 +1,8 @@
+mutation applyBundle (
+    $administrativeUserAccountProperties: [AdministrativeUserAccountPropertyInput!]!=[],
+    $passwordPolicies: [PasswordPolicyInput!]!=[],
+    $serviceResolutionConfigs:[ServiceResolutionConfigInput!]!=[]) {
+        setAdministrativeUserAccountProperties(input: $administrativeUserAccountProperties) {administrativeUserAccountProperties {goid} detailedStatus {status description}}
+        setPasswordPolicies(input: $passwordPolicies) {passwordPolicies {goid} detailedStatus {status description}}
+        setServiceResolutionConfigs(input: $serviceResolutionConfigs) {serviceResolutionConfigs {goid} detailedStatus {status description}}
+}

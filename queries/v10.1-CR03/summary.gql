@@ -1,0 +1,96 @@
+query summary {
+    webApiServices {
+        {{WebApiService:summary}}
+    }
+    soapServices {
+        {{SoapService:summary}}
+    }
+    internalWebApiServices {
+        {{InternalWebApiService:summary}}
+    }
+    internalSoapServices {
+        {{InternalSoapService:summary}}
+    }
+    encassConfigs {
+        {{EncassConfig:summary}}
+    }
+    globalPolicies {
+        {{GlobalPolicy:summary}}
+    }
+    backgroundTaskPolicies {
+        {{BackgroundTaskPolicy:summary}}
+    }
+    policyFragments {
+        {{PolicyFragment:summary}}
+    }
+    
+    activeConnectors {
+        {{ActiveConnector:summary}}
+    }
+    cassandraConnections {
+        {{CassandraConnection:summary}}
+    }
+    clusterProperties {
+        {{ClusterProperty:summary}}
+    }
+    dtds {
+        {{Dtd:summary}}
+    }
+    emailListeners {
+        {{EmailListener:summary}}
+    }
+    fips {
+        {{Fip:summary}}
+    }
+    fipGroups {
+        {{FipGroup:summary}}
+    }
+    fipUsers {
+        {{FipUser:summary}}
+    }
+    internalDtds {
+        {{Dtd:summary}}
+    }
+    internalGroups {
+        {{InternalGroup:summary}}
+    }
+    internalSchemas {
+        {{Schema:summary}}
+    }
+    internalUsers {
+        {{InternalUser:summary}}
+    }
+    jdbcConnections {
+        {{JdbcConnection:summary}}
+    }
+    jmsDestinations {
+        {{JmsDestination:summary}}
+    }
+    keys {
+        {{Key:summary}}
+    }
+    ldaps {
+        {{Ldap:summary}}
+    }
+    listenPorts {
+        {{ListenPort:summary}}
+    }
+    scheduledTasks {
+        {{ScheduledTask:summary}}
+    }
+    schemas {
+        {{Schema:summary}}
+    }
+    secrets {
+        {{Secret:summary}}
+    }
+    serverModuleFiles {
+        {{ServerModuleFile:summary}}
+    }
+    smConfigs {
+        {{SMConfig:summary}}
+    }
+    trustedCerts {
+        {{Certificate:summary}}
+    }
+}

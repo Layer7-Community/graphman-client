@@ -1,0 +1,55 @@
+extend type Query {
+    "Get Service Resolution Config"
+    serviceResolutionConfig : ServiceResolutionConfig!
+    "Get Service Resolution Configs"
+    serviceResolutionConfigs : [ServiceResolutionConfig!]!
+}
+
+input ServiceResolutionConfigInput {
+    "The internal entity unique identifier"
+    goid : ID
+    "Ignored at creation time but can be used to compare bundle with gw state"
+    checksum : String
+    "Only Services with a resolution path are accessible"
+    resolutionPathRequired : Boolean!
+    "Resolution paths are case sensitive"
+    resolutionPathCaseSensitive : Boolean!
+    "Allow resolution by L7-Original-URL header"
+    useL7OriginalUrl : Boolean!
+    "Allow resolution by Service GOID/OID in URLs"
+    useServiceGoid : Boolean!
+    "Use SOAP action"
+    useSoapAction : Boolean!
+    "Use SOAP body child namespace"
+    useSoapBodyChildNamespace : Boolean!
+}
+
+extend type Mutation {
+    "Update Service Resolution Configs"
+    setServiceResolutionConfigs(input : [ServiceResolutionConfigInput!]!) : ServiceResolutionConfigsPayLoad!
+}
+
+type ServiceResolutionConfigsPayLoad {
+    status: [EntityMutationStatus!]!
+    detailedStatus: [EntityMutationDetailedStatus!]!
+    serviceResolutionConfigs: [ServiceResolutionConfig]!
+}
+
+type ServiceResolutionConfig {
+    "The internal entity unique identifier"
+    goid : ID!
+    "The configuration checksum"
+    checksum : String!
+    "Only Services with a resolution path are accessible"
+    resolutionPathRequired : Boolean!
+    "Resolution paths are case sensitive"
+    resolutionPathCaseSensitive : Boolean!
+    "Allow resolution by L7-Original-URL header"
+    useL7OriginalUrl : Boolean!
+    "Allow resolution by Service GOID/OID in URLs"
+    useServiceGoid : Boolean!
+    "Use SOAP action"
+    useSoapAction : Boolean!
+    "Use SOAP body child namespace"
+    useSoapBodyChildNamespace : Boolean!
+}

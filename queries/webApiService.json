@@ -1,0 +1,6 @@
+{
+  "query": "{{webApiService.gql}}",
+  "variables": {
+    "resolutionPath": "?"
+  }
+}

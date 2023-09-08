@@ -1,0 +1,7 @@
+query serverModuleFileByName($name: String!, $includeModuleFilePart: Boolean = false) {
+    serverModuleFileByName(name: $name) {
+        {{ServerModuleFile:-filePartName}}
+        filePartName @include (if: $includeModuleFilePart)
+        checksum
+    }
+}

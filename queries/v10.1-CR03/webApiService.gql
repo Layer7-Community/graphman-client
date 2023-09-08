@@ -1,0 +1,14 @@
+query webApiServiceByResolutionPath ($resolutionPath: String!, $includeDirectDependencies: Boolean = false, $includeAllDependencies: Boolean = false) {
+    webApiServiceByResolutionPath (resolutionPath: $resolutionPath) {
+        {{WebApiService:-policy}}
+        policy {
+            xml
+            directDependencies @include (if: $includeDirectDependencies) {
+                {{PolicyDependency}}
+            }
+            allDependencies @include (if: $includeAllDependencies) {
+                {{PolicyDependency}}
+            }
+        }
+    }
+}
