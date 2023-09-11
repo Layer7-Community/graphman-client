@@ -90,7 +90,10 @@ function diffEntities(leftEntities, rightEntities, resultEntities, resultBundle,
     leftEntities.forEach(left => {
         const matchingEntity = butils.findMatchingEntity(rightEntities, left);
 
-        if (!matchingEntity || matchingEntity.checksum !== left.checksum) {
+        if (!matchingEntity) {
+            utils.info("  selecting " + butils.entityDisplayName(left));
+            resultEntities.push(left);
+        } else if (matchingEntity.checksum != null && matchingEntity.checksum !== left.checksum) { // if matchingEntity.checksum is not present, we assume user explicitely wants to ignore same entity that have different value
             utils.info("  selecting " + butils.entityDisplayName(left));
             resultEntities.push(left);
         }
