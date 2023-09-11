@@ -263,6 +263,37 @@ config entities in a bundle). To perform this operation, use the diff command:
 ./graphman.sh diff --input tooBig.json --input whatToCut.json --output trimmed.json
 ```
 
+If you wish to subtract entities from whatToCut.json even if they are different from tooBig.json
+you can remove from checksum property in whatToCut.json. For example if whatToCut.json contains:
+
+```
+{
+    "keys": [
+        {
+            "alias": "ssl"
+        }
+    ],
+    "listenPorts": [
+        {
+            "name": "Default HTTP (8080)"
+        },
+        {
+            "name": "Default HTTPS (8443)"
+        },
+        {
+            "name": "Default HTTPS (9443)"
+        },
+        {
+            "name": "Node HTTPS (2124)"
+        }
+    ]
+}
+```
+
+Then the subtract command will always remove the default ssl key and default listednPorts no matter their
+value in the source.
+
+
 ## Using the Graphman combine command
 
 You can combine two configuration bundles using the combine command:
