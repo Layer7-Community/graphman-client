@@ -1,0 +1,4 @@
+{
+  "query": "{{plansCWPs.gql}}",
+  "variables": {}
+}

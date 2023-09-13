@@ -2,22 +2,25 @@ query plans {
     clusterPropertyByNameA: clusterPropertyByName (name: "plan_a_members") {
         goid
         name
-        value
-        hiddenProperty
+        checksum
         description
+        hiddenProperty
+        value
     }
     clusterPropertyByNameB:  clusterPropertyByName (name: "plan_b_members") {
         goid
         name
-        value
-        hiddenProperty
+        checksum
         description
+        hiddenProperty
+        value
     }
     clusterPropertyByNameC:  clusterPropertyByName (name: "plan_c_members") {
         goid
         name
-        value
-        hiddenProperty
+        checksum
         description
+        hiddenProperty
+        value
     }
 }
