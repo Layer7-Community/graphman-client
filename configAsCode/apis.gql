@@ -1,13 +1,16 @@
 query apis {
     webApiServicesByFolderPath (folderPath: "/myApis") {
+        goid
         name
-        checksum
         resolutionPath
+        checksum
         folderPath
         policy {
             xml
         }
         enabled
         methodsAllowed
+        tracingEnabled
+        wssProcessingEnabled
     }
 }
