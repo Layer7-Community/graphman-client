@@ -37,9 +37,12 @@ let type1Exploder = (function () {
     return {
         explode: function (bundle, outputDir) {
             Object.entries(bundle).forEach(([key, entities]) => {
-                if (entities.length) {
+                if (Array.isArray(entities) && entities.length) {
                     utils.info(`exploding ${key}`);
                     entities.forEach(item => writeEntity(outputDir, key, item));
+                } else if (key === "properties") {
+                    utils.info(`capturing ${key} to bundle-properties.json`);
+                    utils.writeFile(`${outputDir}/bundle-properties.json`, entities);
                 }
             });
         }

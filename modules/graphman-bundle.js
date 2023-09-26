@@ -29,7 +29,7 @@ module.exports = {
         if (Array.isArray(bundle)) {
             bundle.sort(comparator);
         } else {
-            Object.keys(bundle).forEach(key => {
+            Object.keys(bundle).filter(key => Array.isArray(bundle[key])).forEach(key => {
                 bundle[key].sort(comparator);
             });
         }
@@ -37,20 +37,20 @@ module.exports = {
         return bundle;
     },
 
-    sanitize: function (bundle, use, excludeGoids) {
+    sanitize: function (bundle, use, options) {
         use = use || this.EXPORT_USE;
 
         if (use === this.EXPORT_USE) {
-            return exportSanitizer.sanitize(bundle, !excludeGoids);
+            return exportSanitizer.sanitize(bundle, options);
         } else if (use === this.IMPORT_USE) {
-            return importSanitizer.sanitize(bundle, !excludeGoids);
+            return importSanitizer.sanitize(bundle, options);
         } else {
             utils.warn("incorrect [use] specified for bundle sanitization: " + use);
         }
     },
 
     removeDuplicates: function (bundle) {
-        Object.keys(bundle).forEach(key => {
+        Object.keys(bundle).filter(key => Array.isArray(bundle[key])).forEach(key => {
             const list = [];
             bundle[key].forEach(item => {
                 if (!this.findMatchingEntity(list, item)) list.push(item);
@@ -66,7 +66,7 @@ module.exports = {
         if (!filter || !filter.by) return;
         if (!filter.equals && !filter.startsWith && !filter.endsWith && !filter.contains) return;
 
-        Object.keys(bundle).forEach(key => {
+        Object.keys(bundle).filter(key => Array.isArray(bundle[key])).forEach(key => {
             const list = [];
             bundle[key].forEach(item => {
                 let match = item.hasOwnProperty(filter.by);
@@ -178,67 +178,100 @@ function matchSoapResolvers(left, right) {
 
 let exportSanitizer = function () {
     return {
-        sanitize: function (bundle, includeGoids) {
-            const result = {};
-            sanitizeBundle(bundle, result, includeGoids);
+        sanitize: function (bundle, options) {
+            const result = {mappings: {}, dependencyMappings: {}};
+            sanitizeBundle(bundle, result, options);
+
+            const mappings = result.mappings;
+            const dependencyMappings = result.dependencyMappings;
+            delete result.mappings;
+            delete result.dependencyMappings;
+
+            if (!result.properties) result.properties = {};
+            result.properties.mappings = normalizedMappings(mappings, dependencyMappings);
+
             return result;
         },
     };
 
-    function sanitizeKey (key) {
-        if (SCHEMA_METADATA.pluralMethods[key]) return key;
+    function typeInfoFromVariableBundleName (key) {
+        let typeName = SCHEMA_METADATA.pluralMethods[key];
+        if (typeName) return SCHEMA_METADATA.types[typeName];
 
         const types = Object.values(SCHEMA_METADATA.types);
 
         for (var item of types) {
             if (item.prefix && key.startsWith(item.prefix)) {
-                return item.pluralMethod;
+                return item;
             }
         }
 
         return null;
     }
 
-    function sanitizeBundle(obj, result, includeGoids) {
-        sanitizeBundleInternal(obj, result, includeGoids);
-        Object.keys(obj).forEach(key => {
+    function sanitizeBundle(obj, result, options) {
+        sanitizeBundleInternal(obj, result, options, false);
+        Object.keys(result).filter(key => Array.isArray(result[key])).forEach(key => {
             if (result[key] && result[key].length === 0) {
                 delete result[key];
             }
         });
     }
 
-    function sanitizeBundleInternal(obj, result, includeGoids) {
+    function sanitizeBundleInternal(obj, result, options, dependencies) {
         Object.keys(obj).forEach(key => {
-            const sanitizedKey = sanitizeKey(key);
-            const goidRequired = GOID_PLURAL_METHODS.includes(key);
+            const typeInfo = typeInfoFromVariableBundleName(key);
+            const sanitizedKey = typeInfo ? typeInfo.pluralMethod : null;
+            const goidRequired = GOID_PLURAL_METHODS.includes(key) || (!options.excludeGoids);
 
             if (sanitizedKey) {
                 if (!result[sanitizedKey]) result[sanitizedKey] = [];
+                if (!result.mappings[sanitizedKey]) result.mappings[sanitizedKey] = [];
+                if (!result.dependencyMappings[sanitizedKey]) result.dependencyMappings[sanitizedKey] = [];
 
                 if (Array.isArray(obj[key])) {
                     if (obj[key].length) utils.info(`sanitizing ${key} to ${sanitizedKey}`);
-                    obj[key].forEach(item => result[sanitizedKey].push(sanitizeEntity(item, result, goidRequired || includeGoids)));
+                    obj[key].forEach(item => {
+                        const entity = sanitizeEntity(item, result, typeInfo, options, dependencies, goidRequired);
+                        addEntity(entity, result, typeInfo, options, dependencies, sanitizedKey);
+                    });
                 } else {
                     utils.info(`sanitizing ${key} to ${sanitizedKey}`);
-                    result[sanitizedKey].push(sanitizeEntity(obj[key], result, goidRequired || includeGoids));
+                    const entity = sanitizeEntity(obj[key], result, typeInfo, options, dependencies, goidRequired);
+                    addEntity(entity, result, typeInfo, options, dependencies, sanitizedKey);
                 }
+            } else if (key === 'properties') {
+                result[key] = obj[key];
             } else {
                 utils.warn(`unrecognized key (${key}) with the bundle`);
             }
         });
     }
 
-    function sanitizeEntity(obj, result, goidRequired) {
+    function addEntity(entity, result, typeInfo, options, dependencies, sanitizedKey) {
+        if (dependencies && options.excludeDependencies) {
+            utils.info(`excluding the dependency ${sanitizedKey} - ${entity[typeInfo.idField]}`);
+            result.dependencyMappings[sanitizedKey].push(entity.mappingInstruction);
+        } else {
+            result[sanitizedKey].push(entity);
+            result.mappings[sanitizedKey].push(entity.mappingInstruction);
+        }
+
+        delete entity.mappingInstruction;
+    }
+
+    function sanitizeEntity(obj, result, typeInfo, options, dependencies, goidRequired) {
+        obj.mappingInstruction = createMappingInstruction(obj, typeInfo, options, dependencies);
+
         if (obj.policy && obj.policy.allDependencies) {
             utils.info(`expanding ${obj.name} policy (all) dependencies`);
-            sanitizeBundleInternal(obj.policy.allDependencies, result, goidRequired);
+            sanitizeBundleInternal(obj.policy.allDependencies, result, options, true);
             delete obj.policy.allDependencies;
         }
 
         if (obj.policy && obj.policy.directDependencies) {
             utils.info(`expanding ${obj.name} policy (direct) dependencies`);
-            sanitizeBundleInternal(obj.policy.directDependencies, result, goidRequired);
+            sanitizeBundleInternal(obj.policy.directDependencies, result, options, true);
             delete obj.policy.directDependencies;
         }
 
@@ -247,13 +280,83 @@ let exportSanitizer = function () {
 
         return obj;
     }
+
+    function createMappingInstruction(obj, typeInfo, options, dependencies) {
+        typeInfo = SCHEMA_METADATA.bundleTypes[typeInfo.pluralMethod];
+        const actions = options.mappingActions[typeInfo.bundleName] || options.mappingActions['default'];
+        const instruction = {action: dependencies ? actions[1] : actions[0]};
+
+        instruction[typeInfo.identityField] = obj[typeInfo.identityField];
+        typeInfo.identityFields.forEach(field => instruction[field] = obj[field]);
+
+        if (dependencies) instruction['dep'] = true;
+        if (options.excludeDependencies) {
+            instruction['action'] = 'NEW_OR_EXISTING';
+            instruction['nodef'] = true;
+            instruction['failOnNew'] = true;
+        }
+
+        return instruction;
+    }
+
+    function normalizedMappings(mappings, dependencyMappings) {
+        removeDuplicateInstructions(mappings);
+
+        Object.keys(mappings).forEach(key => {
+            let entityMappings = mappings[key];
+            let dependencyEntityMappings = dependencyMappings[key];
+            if (dependencyEntityMappings) {
+                dependencyEntityMappings.forEach(item => {
+                    if (!isDuplicateMatchingInstruction(entityMappings, item, SCHEMA_METADATA.bundleTypes[key])) {
+                        entityMappings.push(item);
+                    }
+                });
+            }
+
+            if (entityMappings.length === 0) {
+                delete mappings[key];
+            }
+        });
+
+
+        return mappings;
+    }
+
+    function removeDuplicateInstructions(mappings) {
+        Object.keys(mappings).forEach(key => {
+            let entityMappings = mappings[key];
+            const list = [];
+            entityMappings.forEach(item => {
+                if (!isDuplicateMatchingInstruction(list, item, SCHEMA_METADATA.bundleTypes[key])) list.push(item);
+            });
+            mappings[key] = list;
+        });
+    }
+
+    function isDuplicateMatchingInstruction(list, ele, typeInfo) {
+        for (var item of list) {
+            if (ele[typeInfo.identityField] === item[typeInfo.identityField]) {
+                if (typeInfo.identityFields.length === 0) return true;
+
+                for (var field of typeInfo.identityFields) {
+                    if (ele[field] !== item[field]) return false;
+                }
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
 }();
 
 let importSanitizer = function () {
     return {
-        sanitize: function (bundle, includeGoids) {
-            Object.keys(bundle).forEach(key => {
+        sanitize: function (bundle, options) {
+            Object.keys(bundle).filter(key => Array.isArray(bundle[key])).forEach(key => {
                 const goidRequired = GOID_PLURAL_METHODS.includes(key);
+                const includeGoids = !options.excludeGoids;
                 utils.info("inspecting " + key);
                 if (Array.isArray(bundle[key])) {
                     bundle[key].forEach(item => sanitizeEntity(item, key, goidRequired || includeGoids));

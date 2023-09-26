@@ -34,7 +34,7 @@ function combine(left, right) { // right takes the precedence
     Object.keys(left).forEach(key => {
         result[key] = right[key] || left[key];
 
-        if (left[key]) {
+        if (Array.isArray(left[key])) {
             left[key].forEach(item => {
                 if (!butils.findMatchingEntity(result[key], item)) {
                     result[key].push(item);

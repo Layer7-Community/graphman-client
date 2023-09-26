@@ -29,10 +29,12 @@ if (CONFIG.defaultSchemaVersion !== CONFIG.schemaVersion && QUERIES_DIR === util
 }
 
 module.exports = {
-    build: function (queryId, variables) {
+    build: function (queryId, variables, options) {
         const [queryIdPrefix, queryIdSuffix] = queryId.split(":");
         const queryFilename = `${QUERIES_DIR}/${queryIdPrefix}.json`;
         const gql = utils.existsFile(queryFilename) ? utils.readFile(queryFilename) : buildQuery(queryIdPrefix, queryIdSuffix);
+
+        options = options || {};
 
         // look for specific version of query if exists
         if (queryIdSuffix) {
@@ -40,11 +42,11 @@ module.exports = {
                 utils.existsFile(`${QUERIES_DIR}/${queryIdPrefix}-${queryIdSuffix}.gql`)) {
                 gql.query = `{{${queryIdPrefix}-${queryIdSuffix}.gql}}`;
             } else if (queryIdSuffix === "full") {
-                variables.includeAllDependencies = true;
+                options.includeAllDependencies = variables.includeAllDependencies = true;
             } else if (queryIdSuffix === "partial") {
-                variables.includeDirectDependencies = true;
+                options.includeDirectDependencies = variables.includeDirectDependencies = true;
             } else if (queryIdSuffix === "summary") {
-                variables.summary = true;
+                options.summary = variables.summary = true;
             } else {
                 utils.info("ignoring the suffix: " + queryIdSuffix);
             }
@@ -55,6 +57,7 @@ module.exports = {
         });
         gql.query = expandQuery(gql.query);
         gql.variables = Object.assign(gql.variables || {}, variables);
+        gql.options = options;
 
         return gql;
     },
