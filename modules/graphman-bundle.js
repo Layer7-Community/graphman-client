@@ -354,7 +354,7 @@ let exportSanitizer = function () {
 let importSanitizer = function () {
     return {
         sanitize: function (bundle, options) {
-            Object.keys(bundle).filter(key => Array.isArray(bundle[key])).forEach(key => {
+            Object.keys(bundle).forEach(key => {
                 const goidRequired = GOID_PLURAL_METHODS.includes(key);
                 const includeGoids = !options.excludeGoids;
                 utils.info("inspecting " + key);
@@ -363,7 +363,7 @@ let importSanitizer = function () {
                     if (bundle[key].length === 0) {
                         delete bundle[key];
                     }
-                } else {
+                } else if (key !== "properties") {
                     sanitizeEntity(bundle[key], key, goidRequired || includeGoids);
                 }
             });

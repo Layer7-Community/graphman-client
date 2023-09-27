@@ -11,7 +11,7 @@ module.exports = {
         let bundle = utils.readFile(params.input);
 
         if (params.normalize) {
-            bundle = butils.sanitize(bundle, butils.IMPORT_USE, params.excludeGoids);
+            bundle = butils.sanitize(bundle, butils.IMPORT_USE, {excludeGoids: params.excludeGoids});
             butils.removeDuplicates(bundle);
         }
 
@@ -25,7 +25,7 @@ module.exports = {
         delete bundle.goidMappings;
         delete bundle.guidMappings;
 
-        Object.keys(bundle).forEach(key => {
+        Object.keys(bundle).filter(key => Array.isArray(bundle[key])).forEach(key => {
             utils.info("inspecting " + key);
             if (goidMappings.length) reviseEntities(bundle[key], goidMappings);
             if (guidMappings.length) reviseEntities(bundle[key], guidMappings);

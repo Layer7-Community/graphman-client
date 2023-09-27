@@ -27,7 +27,7 @@ module.exports = {
         }
 
         const request = graphman.request(config.targetGateway);
-        const inputBundle = butils.sanitize(utils.readFile(params.input), butils.IMPORT_USE, params.excludeGoids);
+        const inputBundle = butils.sanitize(utils.readFile(params.input), butils.IMPORT_USE, {excludeGoids: params.excludeGoids});
         butils.removeDuplicates(inputBundle);
 
         const using = params.using ? params.using : 'mutation';
