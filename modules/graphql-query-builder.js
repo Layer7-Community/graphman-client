@@ -34,6 +34,11 @@ module.exports = {
         const queryFilename = `${QUERIES_DIR}/${queryIdPrefix}.json`;
         const gql = utils.existsFile(queryFilename) ? utils.readFile(queryFilename) : buildQuery(queryIdPrefix, queryIdSuffix);
 
+        if (!variables.policyAsYaml) {
+            SCHEMA_METADATA.types["PolicyAsYaml"].fields = ["xml"];
+            SCHEMA_METADATA.types["PolicyAsYaml"].summaryFields = ["xml"];
+        }
+
         // look for specific version of query if exists
         if (queryIdSuffix) {
             if (gql.query === `{{${queryIdPrefix}.gql}}` &&

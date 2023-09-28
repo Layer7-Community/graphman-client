@@ -1,5 +1,9 @@
 {
   "types": {
+    "PolicyAsYaml": {
+      "fields": ["yaml"],
+      "summaryFields": ["yaml"]
+    },
     "AdministrativeUserAccountProperty": {
       "pluralMethod": "administrativeUserAccountProperties",
       "singularMethod": "administrativeUserAccountProperties",

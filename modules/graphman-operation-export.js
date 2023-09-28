@@ -60,6 +60,8 @@ module.exports = {
         console.log("        # use this option to choose the matching criteria to filter the exported entities.");
         console.log("      --excludeGoids");
         console.log("        # use this option to exclude Goids from the exported bundled entities.");
+        console.log("      --policyAsYaml");
+        console.log("        # use this option to export policy in YAML format.");
         console.log("      --sourceGateway.*");
         console.log("        # use this option(s) to override the source gateway details from the graphman configuration");
     }
@@ -70,5 +72,9 @@ function adjustParameters(params) {
     params.variables = params.variables || {};
     if (params.using && (params.using === "encass" || params.using.startsWith("encass:")) && params.variables) {
         params.variables.policyName = params.variables.policyName || params.variables.name;
+    }
+
+    if (params.policyAsYaml) {
+        params.variables.policyAsYaml = true;
     }
 }

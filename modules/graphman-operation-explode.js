@@ -57,6 +57,10 @@ let type1Exploder = (function () {
         const filename = utils.safeName(displayName) + fileSuffix;
         utils.info(`  ${displayName}`);
         const targetDir = entity.folderPath ? utils.safePath(dir, "tree", entity.folderPath) : utils.path(dir, key);
+        if (entity.policy && entity.policy.yaml) {
+            utils.writeFile(`${targetDir}/${filename}.yaml`, entity.policy.yaml);
+            entity.policy.yaml = `{${filename}.yaml}`;
+        }
         utils.writeFile(`${targetDir}/${filename}.json`, entity);
     }
 })();

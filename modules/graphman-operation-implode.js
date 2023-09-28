@@ -72,7 +72,14 @@ let type1Imploder = (function () {
         Object.entries(butils.ENTITY_TYPE_PLURAL_TAG_FRIENDLY_NAME).forEach(([key, value]) => {
             if (filename.endsWith(`.${value}.json`)) {
                 if (!bundle[key]) bundle[key] = [];
-                bundle[key].push(utils.readFile(`${dir}/${filename}`));
+                let entity = utils.readFile(`${dir}/${filename}`);
+                if (entity.policy && entity.policy.yaml) {
+                    const yamlFilename = entity.policy.yaml;
+                    if (yamlFilename.endsWith(".yaml")) {
+                        entity.policy.yaml = utils.readFile(`${dir}/${yamlFilename}`);
+                    }
+                }
+                bundle[key].push(entity);
             }
         });
     }
