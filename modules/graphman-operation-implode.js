@@ -40,6 +40,11 @@ let type1Imploder = (function () {
                 }
             });
 
+            const propertiesFile = utils.path(inputDir, 'bundle-properties.json');
+            if (utils.existsFile(propertiesFile)) {
+                bundle['properties'] = utils.readFile(propertiesFile);
+            }
+
             return bundle;
         }
     };

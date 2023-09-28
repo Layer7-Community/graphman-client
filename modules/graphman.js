@@ -120,7 +120,7 @@ module.exports = {
                 } else {
                     utils.info("unexpected graphman http response");
                     utils.info(data);
-                    callback({error: data, data: {}});
+                    callback({errors: "no valid response from graphman"});
                 }
             });
         });

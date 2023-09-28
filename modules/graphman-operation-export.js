@@ -29,6 +29,10 @@ module.exports = {
                     POST_BUNDLE_EXTN.call(data, parts);
                     utils.writeResult(params.output, butils.sort(data));
                     if (parts) utils.writePartsResult(utils.parentPath(params.output), parts);
+
+                    if (data.errors) {
+                        utils.warn("errors detected", data.errors);
+                    }
                 } else {
                     utils.info("unexpected data", data);
                 }
@@ -59,10 +63,16 @@ module.exports = {
         console.log("        # use this option to filter the exported entities by some field.");
         console.log("      --filter.equals|startsWith|endsWith|contains");
         console.log("        # use this option to choose the matching criteria to filter the exported entities.");
-        console.log("      --mappingAction <action>");
-        console.log("      --mappingAction <action:dependencyAction>");
-        console.log("      --mappingAction <action:dependencyAction:bundleName>");
-        console.log("        # mapping action for the specified class of entities. This option can be repeatable for every class of entities.");
+
+        console.log("      --bundleDefaultAction <action>");
+        console.log("        # default mapping action at the bundle level.");
+        console.log("      --mappingAction <entity-type-plural-tag>:<action>");
+        console.log("        # mapping action for the specified class of entities. This option can be repeatable.");
+        console.log("      --defaultMappingAction <entity-type-plural-tag>:<action>");
+        console.log("        # default mapping action for the specified class of entities. This option can be repeatable.");
+        console.log("      --dependencyMappingAction <entity-type-plural-tag>:<action>");
+        console.log("        # dependency mapping action for the specified class of entities. This option can be repeatable.");
+
         console.log("      --excludeDependencies");
         console.log("        # use this option to exclude dependency entities from the exported bundled entities.");
         console.log("      --excludeGoids");
@@ -89,21 +99,17 @@ function adjustParameters(params) {
 
     params.options.bundleDefaultAction = params.bundleDefaultAction || "NEW_OR_UPDATE";
     params.options.bundleMappingsLevel = params.bundleMappingsLevel || "0";
-    params.options.mappingActions = {'default': [params.options.bundleDefaultAction, params.options.bundleDefaultAction]};
-
-    if (params.mappingAction) {
-        mappingActions = Array.isArray(params.mappingAction) ? params.mappingAction : [params.mappingAction];
-        mappingActions.forEach(item => {
-            const tokens = item.split(/:/);
-            if (tokens.length === 1) {
-                params.options.mappingActions['default'] = [tokens[0], tokens[0]]; // action
-            } else if (tokens.length === 2) {
-                params.options.mappingActions['default'] = [tokens[0], tokens[1]]; // action:dependencyAction
-            } else if (tokens.length >= 3) {
-                params.options.mappingActions[tokens[2]] = [tokens[0], tokens[1]]; // action:dependencyAction:bundleName
-            }
-        });
-    }
+    params.options.mappingActions = utils.mappingActions(
+        params.defaultMappingAction,
+        params.mappingAction,
+        params.dependencyMappingAction,
+        params.options.bundleDefaultAction
+    );
+    params.options.mappingActions['default'] = {
+        defaultAction: params.options.bundleDefaultAction,
+        action: params.options.bundleDefaultAction,
+        dependencyAction: params.options.bundleDefaultAction
+    };
 
     if (params.excludeDependencies) {
         params.options.excludeDependencies = true;

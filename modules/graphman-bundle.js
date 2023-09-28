@@ -62,6 +62,42 @@ module.exports = {
         });
     },
 
+    overrideMappings: function (bundle, options) {
+        const properties = bundle.properties = bundle.properties || {};
+        const mappings = properties.mappings = properties.mappings || {};
+
+        if (options.bundleDefaultAction) properties.defaultAction = options.bundleDefaultAction;
+        if (options.mappingActions) {
+            Object.keys(options.mappingActions).forEach(key => {
+                const overrideActions = options.mappingActions[key];
+                const status = {defaultMapping: false, dependencyMapping: false, mapping: false};
+                if (!mappings[key]) mappings[key] = [];
+
+                mappings[key].forEach(item => {
+                    if (item["default"]) {
+                        status.defaultMapping = true;
+                        item.action = overrideActions.defaultAction || item.action;
+                    } else if (item["dep"]) {
+                        status.dependencyMapping = true;
+                        item.action = overrideActions.dependencyAction || item.action;
+                    } else {
+                        status.mapping = true;
+                        item.action = overrideActions.action || item.action;
+                    }
+                });
+
+                if (overrideActions.defaultAction && !status.defaultMapping) {
+                    utils.info(`populating default mapping action for ${key}`);
+                    mappings[key] = [{'default': true, action: overrideActions.defaultAction}].concat(mappings[key]);
+                }
+
+                if (status.defaultMapping) utils.info(`overriding default mapping action for ${key} to ${overrideActions.defaultAction}`);
+                if (status.mapping) utils.info(`overriding mapping action for ${key} to ${overrideActions.action}`);
+                if (status.dependencyMapping) utils.info(`overriding dependency mapping action for ${key} to ${overrideActions.dependencyAction}`);
+            });
+        }
+    },
+
     filter: function (bundle, filter) {
         if (!filter || !filter.by) return;
         if (!filter.equals && !filter.startsWith && !filter.endsWith && !filter.contains) return;
@@ -284,16 +320,19 @@ let exportSanitizer = function () {
     function createMappingInstruction(obj, typeInfo, options, dependencies) {
         typeInfo = SCHEMA_METADATA.bundleTypes[typeInfo.pluralMethod];
         const actions = options.mappingActions[typeInfo.bundleName] || options.mappingActions['default'];
-        const instruction = {action: dependencies ? actions[1] : actions[0]};
+        const instruction = {action: dependencies ? actions.dependencyAction || actions.action : actions.action};
 
         instruction[typeInfo.identityField] = obj[typeInfo.identityField];
         typeInfo.identityFields.forEach(field => instruction[field] = obj[field]);
 
-        if (dependencies) instruction['dep'] = true;
-        if (options.excludeDependencies) {
-            instruction['action'] = 'NEW_OR_EXISTING';
-            instruction['nodef'] = true;
-            instruction['failOnNew'] = true;
+        if (dependencies) {
+            if (options.excludeDependencies) {
+                instruction['action'] = 'NEW_OR_EXISTING';
+                instruction['nodef'] = true;
+                instruction['failOnNew'] = true;
+            }
+
+            instruction['dep'] = true;
         }
 
         return instruction;

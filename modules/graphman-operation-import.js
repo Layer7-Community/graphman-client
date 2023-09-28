@@ -30,6 +30,16 @@ module.exports = {
         const inputBundle = butils.sanitize(utils.readFile(params.input), butils.IMPORT_USE, {excludeGoids: params.excludeGoids});
         butils.removeDuplicates(inputBundle);
 
+        const mappingActions = utils.mappingActions(
+            params.defaultMappingAction,
+            params.mappingAction,
+            params.dependencyMappingAction
+        );
+        butils.overrideMappings(inputBundle, {
+            bundleDefaultAction: params.bundleDefaultAction,
+            mappingActions: mappingActions
+        });
+
         const using = params.using ? params.using : 'mutation';
         const revisedBundle = params.revise ? opRevise.revise(inputBundle) : inputBundle;
 
@@ -51,6 +61,15 @@ module.exports = {
 
     usage: function () {
         console.log("    import [--using <query-id>] --input <input-file> [--variables.<name> <value>,...] [--output <output-file>] [<options>]");
+        console.log("      --bundleDefaultAction <action>");
+        console.log("        # default mapping action at the bundle level.");
+        console.log("      --mappingAction <entity-type-plural-tag>:<action>");
+        console.log("        # mapping action for the specified class of entities. This option can be repeatable.");
+        console.log("      --defaultMappingAction <entity-type-plural-tag>:<action>");
+        console.log("        # default mapping action for the specified class of entities. This option can be repeatable.");
+        console.log("      --dependencyMappingAction <entity-type-plural-tag>:<action>");
+        console.log("        # dependency mapping action for the specified class of entities. This option can be repeatable.");
+
         console.log("      --excludeGoids");
         console.log("        # use this option to exclude Goids from the importing bundled entities.");
         console.log("      --targetGateway.*");

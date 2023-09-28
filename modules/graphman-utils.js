@@ -207,5 +207,42 @@ module.exports = {
 
     extension: function (ref) {
         return this.existsFile(MODULES_DIR + "/extn/" + ref + ".js") ? require("./extn/" + ref) : {call: function () {}};
+    },
+
+    mappingActions: function (defaultMappingActions, mappingActions, dependencyMappingActions, defaultAction) {
+        const normalizeArray = function (obj) {
+            if (!obj) return [];
+            if (!Array.isArray(obj)) return [obj];
+            return obj;
+        }
+
+        defaultMappingActions = normalizeArray(defaultMappingActions);
+        mappingActions = normalizeArray(mappingActions);
+        dependencyMappingActions = normalizeArray(dependencyMappingActions);
+
+        const result = {};
+
+        defaultMappingActions.map(item => item.split(/:/)).filter(tokens => tokens.length >= 2).forEach(tokens => {
+            result[tokens[0]] = result[tokens[0]] || {};
+            result[tokens[0]].defaultAction = tokens[1];
+        });
+
+        mappingActions.map(item => item.split(/:/)).filter(tokens => tokens.length >= 2).forEach(tokens => {
+            result[tokens[0]] = result[tokens[0]] || {};
+            result[tokens[0]].action = tokens[1];
+        });
+
+        dependencyMappingActions.map(item => item.split(/:/)).filter(tokens => tokens.length >= 2).forEach(tokens => {
+            result[tokens[0]] = result[tokens[0]] || {};
+            result[tokens[0]].dependencyAction = tokens[1];
+        });
+
+        if (defaultAction) {
+            Object.keys(result).forEach(key => {
+                result[key].action = result[key].action || defaultAction;
+            });
+        }
+
+        return result;
     }
 }
