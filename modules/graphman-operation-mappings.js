@@ -27,7 +27,7 @@ module.exports = {
             mappingActions: mappingActions
         });
 
-        utils.writeResult(params.output, data.properties);
+        utils.writeResult(params.output, data);
     },
 
     usage: function () {
