@@ -1,0 +1,4 @@
+{
+  "query": "{{install-bundle.gql}}",
+  "variables": {}
+}

@@ -74,6 +74,8 @@ module.exports = {
             body: body || {}
         };
 
+        if (gateway.forceDelete) req.path = req.path + "?forceDelete=" + gateway.forceDelete;
+
         if (gateway.username && gateway.password) {
             req.auth = gateway.username + ":" + gateway.password;
         } else if (gateway.keyFilename && gateway.certFilename) {
