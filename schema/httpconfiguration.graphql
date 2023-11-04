@@ -1,0 +1,144 @@
+extend type Query {
+    "Get all http configuration"
+    httpConfigurations : [HttpConfiguration!]!
+    "Get the http configuration with the given host"
+    httpConfigurationsByHost(host : String!) : [HttpConfiguration!]!
+}
+extend type Mutation {
+    "Create or update existing http configuration."
+    setHttpConfigurations(input: [HttpConfigurationInput!]!): HttpConfigurationsPayload!
+
+    "Delete existing http configuration"
+    deleteHttpConfigurations(input: [HttpConfigurationPartialInput!]!): HttpConfigurationsPayload!
+}
+type HttpConfiguration {
+    "The goid for the http configuration"
+    goid : ID!
+    "The host of the http configuration"
+    host: String!
+    "The port of the http configuration"
+    port: Int!
+    "The protocol of the http configuration"
+    protocol : HttpScheme!
+    "The path of the http configuration"
+    path : String
+    "The configuration checksum of this http configuration"
+    checksum : String!
+    "The username of the http configuration"
+    username : String
+    "The securePasswordName of the http configuration"
+    securePasswordName : String
+    "The ntlmHost of the http configuration"
+    ntlmHost : String
+    "The ntlmDomain of the http configuration"
+    ntlmDomain : String
+    "The tlsVersion of the http configuration"
+    tlsVersion : String
+    "The tlsKeyUse of the http configuration"
+    tlsKeyUse : EntityFieldOption!
+    "The tlsKeystoreId of the http configuration"
+    tlsKeystoreId : String
+    "The tlsKeyAlias of the http configuration"
+    tlsKeyAlias : String
+    "The tlsCipherSuites of the http configuration"
+    tlsCipherSuites : [String!]
+    "The connectTimeout of the http configuration"
+    connectTimeout : Int
+    "The readTimeout of the http configuration"
+    readTimeout : Int
+    "The followRedirects of the http configuration"
+    followRedirects : Boolean
+    "The proxyUse of the http configuration"
+    proxyUse : EntityFieldOption!
+    "The HttpProxyConfiguration of the http configuration"
+    proxyConfiguration : HttpProxyConfiguration
+}
+
+enum HttpScheme {
+    HTTP
+    HTTPS
+    ANY
+}
+
+type HttpProxyConfiguration {
+    "The proxyHost of the http proxy configuration"
+    host : String
+    "The proxyPort of the http proxy configuration"
+    port : Int
+    "The proxyUsername of the http proxy configuration"
+    username : String
+    "The securePasswordName of the http proxy configuration"
+    securePasswordName : String
+}
+input HttpConfigurationInput{
+    "The goid for the http configuration"
+    goid : ID
+    "The host of the http configuration"
+    host: String!
+    "The port of the http configuration"
+    port: Int!
+    "The protocol of the http configuration"
+    protocol : HttpScheme!
+    "The path of the http configuration"
+    path : String
+    "The username of the http configuration"
+    username : String
+    "The securePasswordName of the http configuration"
+    securePasswordName : String
+    "The ntlmHost of the http configuration"
+    ntlmHost : String
+    "The ntlmDomain of the http configuration"
+    ntlmDomain : String
+    "The tlsVersion of the http configuration"
+    tlsVersion : String
+    "The tlsKeyUse of the http configuration"
+    tlsKeyUse : EntityFieldOption
+    "The tlsKeystoreId of the http configuration"
+    tlsKeystoreId : String
+    "The tlsKeyAlias of the http configuration"
+    tlsKeyAlias : String
+    "The tlsCipherSuites of the http configuration"
+    tlsCipherSuites : [String!]
+    "The connectTimeout of the http configuration"
+    connectTimeout : Int
+    "The readTimeout of the http configuration"
+    readTimeout : Int
+    "The followRedirects of the http configuration"
+    followRedirects : Boolean
+    "The proxyUse of the http configuration"
+    proxyUse : EntityFieldOption
+    "The HttpProxyConfiguration of the http configuration"
+    proxyConfiguration : HttpProxyConfigurationInput
+    "Ignored at creation time but can be used to compare bundle with gw state"
+    checksum : String
+}
+
+type HttpConfigurationsPayload implements EntityMutationsPayload{
+    status: [EntityMutationStatus!]!
+    detailedStatus: [EntityMutationDetailedStatus!]!
+    httpConfigurations: [HttpConfiguration]!
+}
+
+input HttpProxyConfigurationInput {
+    "The proxyHost of the http proxy configuration"
+    host : String
+    "The proxyPort of the http proxy configuration"
+    port : Int
+    "The proxyUsername of the http proxy configuration"
+    username : String
+    "The securePasswordName of the http proxy configuration"
+    securePasswordName : String
+}
+
+ input HttpConfigurationPartialInput{
+     "The goid for the http configuration"
+     goid : ID
+     "The host of the http configuration"
+     host: String!
+     "The port of the http configuration"
+     port: Int!
+     "The protocol of the http configuration"
+     protocol : HttpScheme!
+     "The path of the http configuration"
+     path : String
+ }

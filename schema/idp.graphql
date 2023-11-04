@@ -99,6 +99,28 @@ type InternalGroup {
     members : [InternalUser!]!
 }
 
+" A user in the internal identity provider "
+type InternalUser {
+    goid : ID!
+    name : String
+    login : String!
+    checksum : String!
+
+    enabled : Boolean!
+    "The hashed password of the user if defined"
+    password : String
+    "A client-side certificate associated with this user to use for pki type authentication"
+    certBase64 : String
+    firstName : String
+    lastName : String
+    email : String
+
+    " List of groups this is member of "
+    memberOf : [InternalGroup!]!
+
+    # possible future expansion expiration, accountExpiration
+}
+
 input InternalGroupInput {
     name : String!
     "If provided, will try to honour at creation time"
@@ -109,7 +131,7 @@ input InternalGroupInput {
 }
 
 input InternalUserInput {
-    name : String!
+    name : String
     "If provided, will try to honour at creation time"
     goid : ID
     "The list of internal group names that this user is member of. If you pass empty array, will reset memberships. If absent, does not affect memberships for current users."
@@ -122,12 +144,15 @@ input InternalUserInput {
     firstName : String
     lastName : String
     email : String
+    "Is user enabled or not!"
+    enabled : Boolean
     "Ignored at creation time but can be used to compare bundle with gw state"
     checksum : String
 }
 
 input MembershipInput {
-    name : String!
+    "The name of group to which the membership is defined"
+    name: String!
 }
 
 input FipUserInput {
@@ -157,28 +182,6 @@ input FipGroupInput {
     description : String
     "Ignored at creation time but can be used to compare bundle with gw state"
     checksum : String
-}
-
-" A user in the internal identity provider "
-type InternalUser {
-    goid : ID!
-    name : String!
-    login : String
-    checksum : String!
-
-    enabled : Boolean!
-    "The hashed password of the user if defined"
-    password : String
-    "A client-side certificate associated with this user to use for pki type authentication"
-    certBase64 : String
-    firstName : String
-    lastName : String
-    email : String
-
-    " List of groups this is member of "
-    memberOf : [InternalGroup!]!
-
-    # possible future expansion expiration, accountExpiration
 }
 
 " A group defined in a federated identity provider"

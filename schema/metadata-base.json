@@ -246,6 +246,45 @@
                 "resolutionPath"
             ],
             "prefix": "webApiService"
+        },
+        "HttpConfiguration": {
+            "pluralMethod": "httpConfigurations",
+            "singularMethod": "httpConfigurationsByHost",
+            "idField": "host",
+            "idFields": [
+                "host",
+                "port",
+                "protocol",
+                "path"
+            ],
+            "prefix": "httpConfiguration"
+        },
+        "LogSink": {
+            "pluralMethod": "logSinks",
+            "singularMethod": "logSinkByName",
+            "idField": "name",
+            "idFields": [
+                "name"
+            ],
+            "prefix": "logSink"
+        },
+        "CustomKeyValue": {
+            "pluralMethod": "customKeyValues",
+            "singularMethod": "customKeyValueByKey",
+            "idField": "key",
+            "idFields": [
+                "key"
+            ],
+            "prefix": "customKeyValue"
+        },
+        "Folder": {
+            "pluralMethod": "folders",
+            "singularMethod": "folderByPath",
+            "idField": "path",
+            "idFields": [
+                "path"
+            ],
+            "prefix": "folder"
         }
     },
     "parserHints": {
@@ -306,7 +345,11 @@
         {"bundleName": "smConfigs", "typeName": "SMConfig", "identityField": "name", "identityFields": [], "summaryFields": ["goid", "name", "checksum"], "fields": []},
         {"bundleName": "soapServices", "typeName": "SoapService", "identityField": "resolutionPath", "identityFields": ["resolutionPath", "resolvers"], "summaryFields": ["goid", "guid", "name", "resolutionPath", "resolvers", "checksum"], "fields": []},
         {"bundleName": "trustedCerts", "typeName": "TrustedCert", "identityField": "thumbprintSha1", "identityFields": [], "summaryFields": ["goid", "name", "thumbprintSha1", "checksum"], "fields": []},
-        {"bundleName": "webApiServices", "typeName": "WebApiService", "identityField": "resolutionPath", "identityFields": [], "summaryFields": ["goid", "guid", "name", "resolutionPath", "checksum"], "fields": []}
+        {"bundleName": "webApiServices", "typeName": "WebApiService", "identityField": "resolutionPath", "identityFields": [], "summaryFields": ["goid", "guid", "name", "resolutionPath", "checksum"], "fields": []},
+        {"bundleName": "httpConfigurations", "typeName": "HttpConfiguration", "identityField": "host", "identityFields": ["host", "port", "protocol", "path"], "summaryFields": ["goid", "host", "port", "protocol", "path", "checksum"], "fields": []},
+        {"bundleName": "logSinks", "typeName": "LogSink", "identityField": "name", "identityFields": [], "summaryFields": ["goid", "name", "checksum"], "fields": []},
+        {"bundleName": "customKeyValues", "typeName": "CustomKeyValue", "identityField": "key", "identityFields": [], "summaryFields": ["goid", "key", "checksum"], "fields": []},
+        {"bundleName": "folders", "typeName": "Folder", "identityField": "path", "identityFields": [], "summaryFields": ["goid", "path", "checksum"], "fields": []}
     ],
 
     "extendedTypeInfos": [
@@ -318,7 +361,7 @@
         {"typeName": "InternalUser", "queryExcludedFields": [], "exportExcludedFields": ["members:-name"], "importExcludedFields": ["members:-name"]},
         {"typeName": "ListenPort", "queryExcludedFields": ["hardwiredService"], "exportExcludedFields": [], "importExcludedFields": ["hardwiredService"]},
         {"typeName": "Policy", "queryExcludedFields": ["directDependencies", "allDependencies"], "exportExcludedFields": [], "importExcludedFields": []},
-        {"typeName": "TrustedCert", "queryExcludedFields": [], "exportExcludedFields": [], "importExcludedFields": "revocationCheckPolicy"},
+        {"typeName": "TrustedCert", "queryExcludedFields": [], "exportExcludedFields": [], "importExcludedFields": ["revocationCheckPolicy"]},
         {"typeName": "ServerModuleFile", "queryExcludedFields": ["filePartName"], "exportExcludedFields": [], "importExcludedFields": ["filePartName", "moduleStates", "moduleStateSummary"]}
     ],
 

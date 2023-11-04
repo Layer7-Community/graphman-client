@@ -99,6 +99,8 @@ type GlobalPolicy {
     cassandraConnections: [CassandraConnection]
     "Cluster properties"
     clusterProperties : [ClusterProperty]
+    "Custom key values"
+    customKeyValues: [CustomKeyValue]
     "DTDs in global resources"
     dtds: [Dtd]
     "Email Listeners"
