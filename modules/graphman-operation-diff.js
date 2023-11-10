@@ -40,9 +40,11 @@ module.exports = {
                         Object.assign(renewedBundle, item);
                     });
 
+                    renewedBundle.properties = leftBundle.properties;
                     utils.writeResult(params.output, butils.sort(renewedBundle));
                 });
             } else {
+                diffBundle.properties = leftBundle.properties;
                 utils.writeResult(params.output, butils.sort(diffBundle));
             }
         });
@@ -75,11 +77,13 @@ function readBundle(gateway, file) {
 
 function diff(leftBundle, rightBundle, resultBundle) {
     Object.keys(leftBundle).forEach(key => {
-        utils.info("inspecting " + key);
-        resultBundle[key] = resultBundle[key]||[];
-        diffEntities(leftBundle[key], rightBundle[key]||[], resultBundle[key], resultBundle, key);
-        if (resultBundle[key].length === 0) {
-            delete resultBundle[key];
+        if (Array.isArray(leftBundle[key])) {
+            utils.info("inspecting " + key);
+            resultBundle[key] = resultBundle[key]||[];
+            diffEntities(leftBundle[key], rightBundle[key]||[], resultBundle[key], resultBundle, key);
+            if (resultBundle[key].length === 0) {
+                delete resultBundle[key];
+            }
         }
     });
 

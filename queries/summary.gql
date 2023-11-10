@@ -96,4 +96,13 @@ query summary {
     trustedCerts {
         {{Certificate:summary}}
     }
+    logSinks {
+        {{LogSink:summary}}
+    }
+    httpConfigurations {
+        {{HttpConfiguration:summary}}
+    }
+    customKeyValues {
+        {{CustomKeyValue:summary}}
+    }
 }
