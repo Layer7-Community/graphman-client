@@ -438,6 +438,9 @@ let importSanitizer = function () {
                 delete entity.moduleStates;
                 delete entity.moduleStateSummary;
             }
+        } else if (enity.hardwiredService) {
+            utils.info(`removing hardwiredService field from ${pluralMethod} ${entity.name}`);
+            delete entity.hardwiredService;
         }
     }
 }();
