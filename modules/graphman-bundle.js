@@ -223,8 +223,15 @@ let exportSanitizer = function () {
             delete result.mappings;
             delete result.dependencyMappings;
 
-            if (!result.properties) result.properties = {};
-            result.properties.mappings = normalizedMappings(mappings, dependencyMappings);
+            if (!result.properties) result.properties = {"defaultAction": "NEW_OR_UPDATE"};
+
+            if (options.normalizeMappings) {
+                result.properties.mappings = normalizedMappings(mappings, dependencyMappings);
+            }
+
+            if (result.properties.mappings && Object.keys(result.properties.mappings).length === 0) {
+                delete result.properties.mappings;
+            }
 
             return result;
         },
@@ -414,49 +421,22 @@ let importSanitizer = function () {
     function sanitizeEntity(entity, pluralMethod, goidRequired) {
         if (!goidRequired) delete entity.goid;
 
-        if (pluralMethod === "webApiServices" || pluralMethod === "soapServices" || pluralMethod === "internalWebApiServices" || pluralMethod === "internalSoapServices") {
-            if (entity.resolvers && !entity.resolutionPath) entity.resolutionPath = entity.resolvers.resolutionPath;
-            if (entity.guid || entity.resolvers) {
-                utils.info(`removing guid|resolvers field(s) from service ${entity.name}/${entity.resolutionPath}`);
-                delete entity.guid;
-                delete entity.resolvers;
-            }
-        } else if (pluralMethod === "internalGroups" || pluralMethod === "internalUsers") {
-            if (entity.members || entity.enabled) {
-                utils.info(`removing members|enabled field(s) from internalGroups|internalUsers ${entity.name}`);
+        if (pluralMethod === "internalGroups") {
+            if (entity.members) {
+                utils.info(`removing members field(s) from internalGroups ${entity.name}`);
                 delete entity.members;
-                delete entity.enabled;
             }
-
-            if (entity.memberOf) {
-                entity.memberOf.forEach(item => {
-                    delete item.goid;
-                    delete item.description;
-                    delete item.checksum;
-                });
+        } else if (pluralMethod === "fipGroups") {
+            if (entity.members) {
+                utils.info(`removing members field(s) from fipGroups ${entity.name}`);
+                delete entity.members;
             }
         } else if (pluralMethod === "serverModuleFiles") {
             if (entity.filePartName||entity.moduleStates||entity.moduleStateSummary) {
-                utils.info(`removing filePartName|moduleStates|moduleStateSummary field(s) from server module file ${entity.name}`);
+                utils.info(`removing filePartName|moduleStates|moduleStateSummary field(s) from serverModuleFiles ${entity.name}`);
                 delete entity.filePartName;
                 delete entity.moduleStates;
                 delete entity.moduleStateSummary;
-            }
-        } else if (pluralMethod === "emailListeners" || pluralMethod === "listenPorts" || pluralMethod === "activeConnectors") {
-            if (entity.hardwiredService) {
-                utils.info(`removing hardwiredService fields from ${entity.name}`);
-                delete entity.hardwiredService;
-            }
-        } else if (pluralMethod === "trustedCerts") {
-            if (entity.revocationCheckPolicy) {
-                utils.info(`removing revocationCheckPolicy fields from ${entity.name}`);
-                entity.revocationCheckPolicyName = entity.revocationCheckPolicy.name;
-                delete entity.revocationCheckPolicy;
-            }
-        } else if (pluralMethod ==="passwordPolicies" || pluralMethod === "serviceResolutionConfigs") {
-            if (entity.checksum) {
-                utils.info(`removing checksum field`);
-                delete entity.checksum;
             }
         }
     }

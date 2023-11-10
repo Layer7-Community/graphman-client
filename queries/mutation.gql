@@ -32,7 +32,8 @@ mutation installBundle (
     $smConfigs: [SMConfigInput!]!=[],
     $soapServices:[SoapServiceInput!]!=[],
     $trustedCerts:[TrustedCertInput!]!=[],
-    $webApiServices: [WebApiServiceInput!]!=[]) {
+    $webApiServices: [WebApiServiceInput!]!=[],
+    $folders: [FolderInput!]!=[]) {
     setServerModuleFiles(input: $serverModuleFiles){detailedStatus {action status description source {name value} target {name value}}}
     setClusterProperties (input: $clusterProperties){detailedStatus {action status description source {name value} target {name value}}}
     setServiceResolutionConfigs (input: $serviceResolutionConfigs){detailedStatus {action status description source {name value} target {name value}}}
@@ -67,6 +68,7 @@ mutation installBundle (
     setListenPorts (input: $listenPorts){detailedStatus {action status description source {name value} target {name value}}}
     setActiveConnectors (input: $activeConnectors){detailedStatus {action status description source {name value} target {name value}}}
     setScheduledTasks (input: $scheduledTasks){detailedStatus {action status description source {name value} target {name value}}}
+    setFolders (input: $folders){detailedStatus {action status description source {name value} target {name value}}}
 
     # Keys must be mutated at the end
     setKeys (input: $keys) {detailedStatus {action status description source {name value} target {name value}}}

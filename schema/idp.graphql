@@ -134,7 +134,7 @@ input InternalUserInput {
     name : String
     "If provided, will try to honour at creation time"
     goid : ID
-    "The list of internal group names that this user is member of. If you pass empty array, will reset memberships. If absent, does not affect memberships for current users."
+    "The list of internal group details (names) that this user is member of. If you pass empty array, will reset memberships. If absent, does not affect memberships for current users."
     memberOf : [MembershipInput!]
     login : String!
     "You can either pass in the hashed password which comes back in queries or the raw passwd directly"
@@ -153,6 +153,10 @@ input InternalUserInput {
 input MembershipInput {
     "The name of group to which the membership is defined"
     name: String!
+    goid : ID
+    description : String
+    providerName : String
+    checksum : String
 }
 
 input FipUserInput {
@@ -161,7 +165,7 @@ input FipUserInput {
     goid : ID
     " The name of the FiP this user is defined as part of "
     providerName : String!
-    "The list of fip group names that this user is member of. If you pass empty array, will reset memberships. If absent, does not affect memberships for current user."
+    "The list of fip group details (names) that this user is member of. If you pass empty array, will reset memberships. If absent, does not affect memberships for current user."
     memberOf : [MembershipInput!]
     login : String
     subjectDn : String

@@ -66,6 +66,12 @@ module.exports = {
 
         console.log("      --bundleDefaultAction <action>");
         console.log("        # default mapping action at the bundle level.");
+
+        console.log("      --bundleMappingsLevel <0|1|2>");
+        console.log("        # use this option to have entity mappings at the specified level. Here, 0=no mappings, 1=entity level, 2=all entities");
+
+        console.log("      --normalizeMappings");
+        console.log("        # use this option to normalize mappings at entity level.");
         console.log("      --mappingAction <entity-type-plural-tag>:<action>");
         console.log("        # mapping action for the specified class of entities. This option can be repeatable.");
         console.log("      --defaultMappingAction <entity-type-plural-tag>:<action>");
@@ -117,6 +123,10 @@ function adjustParameters(params) {
 
     if (params.excludeGoids) {
         params.options.excludeGoids = true;
+    }
+
+    if (params.normalizeMappings) {
+        params.options.normalizeMappings = true;
     }
 }
 

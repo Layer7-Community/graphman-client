@@ -11,10 +11,10 @@ extend type Mutation {
     If Log Sink with the same name exist, the Log Sink will be updated.
     If no Log Sink with the name exist, a new Log Sink will be created.
     """
-    setLogSinks(input: [LogSinkInput!]!): logSinksPayload!
+    setLogSinks(input: [LogSinkInput!]!): LogSinksPayload!
 
     "Delete existing log sinks. Match is carried by name."
-    deleteLogSinks(names: [String!]!): logSinksPayload!
+    deleteLogSinks(names: [String!]!): LogSinksPayload!
 }
 
 type LogSink {
@@ -37,7 +37,7 @@ type LogSink {
     "defines syslog host list"
     syslogHosts: [String!]
     "defines list of Log sink filters"
-    filters: [LogSinkFilter!]!
+    filters: [LogSinkFilter!]
     "defines list of log Sink properties"
     properties: [EntityProperty!]!
 }
@@ -49,10 +49,10 @@ input LogSinkInput {
     name: String!
     "description of log sink"
     description: String
-    "defines whether its a file based log Or sysLog"
+    "defines whether its a file based log or sysLog"
     type: LogSinkType!
     "Whether this log sink is enabled"
-    enabled: Boolean
+    enabled: Boolean!
     "defines the severity threshold of log Sink"
     severity: LogSeverityThreshold!
     "defines list of categories"
@@ -95,20 +95,20 @@ enum LogSinkCategory{
 "Indicate the long sink filter, consist of a type and list of values"
 type LogSinkFilter {
     "defines the type of log sink"
-    type: String
+    type: String!
     "defines the list of values"
-    values: [String]
+    values: [String!]!
 }
 
 "Indicate the long sink filter, consist of a type and list of values"
 input LogSinkFilterInput {
     "defines the type of log sink"
-    type: String
+    type: String!
     "defines the list of values"
-    values: [String]
+    values: [String!]!
 }
 
-type logSinksPayload implements EntityMutationsPayload {
+type LogSinksPayload implements EntityMutationsPayload {
     status: [EntityMutationStatus!]!
     detailedStatus: [EntityMutationDetailedStatus!]!
     logSinks: [LogSink]!
