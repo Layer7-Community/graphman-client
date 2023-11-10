@@ -24,26 +24,30 @@ mutation installBundle (
     $policyFragments: [PolicyFragmentInput!]!=[],
     $revocationCheckPolicies:[RevocationCheckPolicyInput!]!=[],
     $scheduledTasks:[ScheduledTaskInput!]!=[],
+    $logSinks: [LogSinkInput!]!=[],
     $schemas:[SchemaInput!]!=[],
     $secrets: [SecretInput!]!=[],
     $httpConfigurations: [HttpConfigurationInput!]!=[],
+    $customKeyValues: [CustomKeyValueInput!]!=[],
     $serverModuleFiles:[ServerModuleFileInput!]!=[],
     $serviceResolutionConfigs:[ServiceResolutionConfigInput!]!=[],
+    $folders: [FolderInput!]!=[],
     $smConfigs: [SMConfigInput!]!=[],
     $soapServices:[SoapServiceInput!]!=[],
     $trustedCerts:[TrustedCertInput!]!=[],
-    $webApiServices: [WebApiServiceInput!]!=[],
-    $folders: [FolderInput!]!=[]) {
+    $webApiServices: [WebApiServiceInput!]!=[]) {
     setServerModuleFiles(input: $serverModuleFiles){detailedStatus {action status description source {name value} target {name value}}}
     setClusterProperties (input: $clusterProperties){detailedStatus {action status description source {name value} target {name value}}}
     setServiceResolutionConfigs (input: $serviceResolutionConfigs){detailedStatus {action status description source {name value} target {name value}}}
     setPasswordPolicies (input: $passwordPolicies){detailedStatus {action status description source {name value} target {name value}}}
     setAdministrativeUserAccountProperties (input: $administrativeUserAccountProperties){detailedStatus {action status description source {name value} target {name value}}}
 
+    setFolders(input: $folders){detailedStatus {action status description source {name value} target {name value}}}
     setRevocationCheckPolicies (input: $revocationCheckPolicies){detailedStatus {action status description source {name value} target {name value}}}
     setTrustedCerts (input: $trustedCerts){detailedStatus {action status description source {name value} target {name value}}}
     setSecrets (input: $secrets){detailedStatus {action status description source {name value} target {name value}}}
     setHttpConfigurations(input: $httpConfigurations){detailedStatus {action status description source {name value} target {name value}}}
+    setCustomKeyValues(input: $customKeyValues){detailedStatus {action status description source {name value} target {name value}}}
     setSchemas (input: $schemas){detailedStatus {action status description source {name value} target {name value}}}
     setDtds (input: $dtds){detailedStatus {action status description source {name value} target {name value}}}
     setJdbcConnections (input: $jdbcConnections){detailedStatus {action status description source {name value} target {name value}}}
@@ -68,7 +72,7 @@ mutation installBundle (
     setListenPorts (input: $listenPorts){detailedStatus {action status description source {name value} target {name value}}}
     setActiveConnectors (input: $activeConnectors){detailedStatus {action status description source {name value} target {name value}}}
     setScheduledTasks (input: $scheduledTasks){detailedStatus {action status description source {name value} target {name value}}}
-    setFolders (input: $folders){detailedStatus {action status description source {name value} target {name value}}}
+    setLogSinks(input: $logSinks){detailedStatus {action status description source {name value} target {name value}}}
 
     # Keys must be mutated at the end
     setKeys (input: $keys) {detailedStatus {action status description source {name value} target {name value}}}
