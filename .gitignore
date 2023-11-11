@@ -9,3 +9,4 @@ target.properties
 schema/metadata.json
 schema/**/metadata.json
 output/*
+node_modules/*

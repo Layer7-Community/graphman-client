@@ -1,17 +1,16 @@
 {
-  "sourceGateway": {
-    "address": "https://localhost:8443/graphman",
-    "username": "admin",
-    "password": "7layer",
-    "rejectUnauthorized": false,
-    "passphrase": "7layer"
-  },
-
-  "targetGateway": {
-    "address": "https://localhost:8443/graphman",
-    "username": "admin",
-    "password": "7layer",
-    "rejectUnauthorized": false,
-    "passphrase": "7layer"
-  }
+    "sourceGateway": {
+        "address": "https://localhost:8443/graphman",
+        "username": "admin",
+        "password": "7layer",
+        "rejectUnauthorized": false,
+        "passphrase": "7layer"
+    },
+    "targetGateway": {
+        "address": "https://localhost:8443/graphman",
+        "username": "admin",
+        "password": "7layer",
+        "rejectUnauthorized": false,
+        "passphrase": "7layer"
+    }
 }
