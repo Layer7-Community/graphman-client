@@ -17,19 +17,19 @@ module.exports = {
         args.push("--output");
         args.push(outputFile);
 
-        fs.unlinkSync(outputFile);
+        if (fs.existsSync(outputFile)) fs.unlinkSync(outputFile);
         cp.execFileSync(execFile, args);
 
         return JSON.parse(fs.readFileSync(outputFile));
     },
 
-    expectArrayObject: function(obj) {
+    expectArray: function (actual) {
         return {
-            shouldContain: function (items) {
-                let expectItems = items.map(item => expect.objectContaining(item));
-                expect(obj).toEqual(expect.arrayContaining(expectItems));
+            toContainEqual: function (...expected) {
+                const expectObj = expect(actual);
+                expected.forEach(item => expectObj.toContainEqual(expect.objectContaining(item)));
             }
-        };
+        }
     },
     
     readFileAsJson: function (path) {
