@@ -74,7 +74,13 @@ module.exports = {
             body: body || {}
         };
 
-        if (gateway.forceDelete) req.path = req.path + "?forceDelete=" + gateway.forceDelete;
+        let queryString = "";
+        if (gateway.forceDelete) queryString += "&forceDelete=" + gateway.forceDelete;
+        if (gateway.deletionStrategy) queryString += "&deletionStrategy=" + gateway.deletionStrategy;
+        if (gateway.mutationsErrorStrategy) queryString += "&mutationsErrorStrategy=" + gateway.mutationsErrorStrategy;
+        if (queryString.length > 0) {
+            req.path = req.path + "?" + queryString.substring(1);
+        }
 
         if (gateway.username && gateway.password) {
             req.auth = gateway.username + ":" + gateway.password;

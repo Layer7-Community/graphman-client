@@ -1,0 +1,60 @@
+{
+    "administrativeUserAccountProperties": [
+        {
+            "goid": "0000000000000000ffffffffffffffff",
+            "name": "logonInactivityPeriod",
+            "value": "35",
+            "checksum": "dc6f409e88b849ded8517a8daf2c9f00f82845cc"
+        },
+        {
+            "goid": "0000000000000000ffffffffffffffff",
+            "name": "logonLockoutTime",
+            "value": "1200",
+            "checksum": "b331b56887d71e5bc07ef8dbbe4cbcf79f91bea3"
+        },
+        {
+            "goid": "0000000000000000ffffffffffffffff",
+            "name": "logonMaxAllowableAttempts",
+            "value": "5",
+            "checksum": "84b9b38f5611fde83ae3fe4836677b84d380ea0f"
+        },
+        {
+            "goid": "0000000000000000ffffffffffffffff",
+            "name": "logonSessionExpiry",
+            "value": "30",
+            "checksum": "b699080f20a9aa118f7d4773192e5197ef283c92"
+        }
+    ],
+    "serviceResolutionConfigs": [
+        {
+            "goid": "0000000000000000fffffffffffffffe",
+            "checksum": "efbd759da20071f09149d804959dbdc18f543894",
+            "resolutionPathRequired": true,
+            "resolutionPathCaseSensitive": true,
+            "useL7OriginalUrl": true,
+            "useServiceGoid": true,
+            "useSoapAction": false,
+            "useSoapBodyChildNamespace": true
+        }
+    ],
+
+    "passwordPolicies": [
+        {
+            "goid": "0000000000000000fffffffffffffffe",
+            "checksum": "b428d37b59a6eb4729022980c8641159f898cf76",
+            "forcePasswordChangeNewUser": false,
+            "noRepeatingCharacters": false,
+            "minPasswordLength": 5,
+            "maxPasswordLength": -1,
+            "upperMinimum": -1,
+            "lowerMinimum": -1,
+            "numberMinimum": -1,
+            "symbolMinimum": -1,
+            "nonNumericMinimum": -1,
+            "charDiffMinimum": -1,
+            "repeatFrequency": -1,
+            "passwordExpiry": -1,
+            "allowableChangesPerDay": false
+        }
+    ]
+}

@@ -1,0 +1,2281 @@
+{
+    "activeConnectors": [
+        {
+            "name": "custom-kafka-producer",
+            "enabled": false,
+            "connectorType": "KAFKA",
+            "properties": [
+                {
+                    "name": "privateKeyAlias",
+                    "value": "some-key"
+                },
+                {
+                    "name": "producer.idempotence",
+                    "value": "true"
+                },
+                {
+                    "name": "bootstrapServers",
+                    "value": "some-host,some-other-host"
+                },
+                {
+                    "name": "producer.retries",
+                    "value": ""
+                },
+                {
+                    "name": "role",
+                    "value": "producer"
+                },
+                {
+                    "name": "enableTls",
+                    "value": "true"
+                },
+                {
+                    "name": "keyStoreGoid",
+                    "value": "00000000000000000000000000000002"
+                },
+                {
+                    "name": "producer.acknowledgement",
+                    "value": "all"
+                },
+                {
+                    "name": "tlsVersion",
+                    "value": "TLSv1.2"
+                },
+                {
+                    "name": "tlsCipherSuites",
+                    "value": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDH_RSA_WITH_AES_256_GCM_SHA384,TLS_DHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDH_RSA_WITH_AES_128_GCM_SHA256,TLS_DHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_DHE_RSA_WITH_AES_256_CBC_SHA256,TLS_DHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA384,TLS_ECDH_RSA_WITH_AES_256_CBC_SHA384,TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDH_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA,TLS_ECDH_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA,TLS_ECDH_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_RSA_WITH_AES_128_CBC_SHA"
+                },
+                {
+                    "name": "username",
+                    "value": "some-user"
+                },
+                {
+                    "name": "authType",
+                    "value": "PLAIN"
+                },
+                {
+                    "name": "securePasswordName",
+                    "value": "some-pwd"
+                }
+            ],
+            "advancedProperties": [
+                {
+                    "name": "some-prop",
+                    "value": "some-value"
+                }
+            ]
+        },
+        {
+            "name": "custom-mq-inbound-connection",
+            "enabled": false,
+            "connectorType": "MQ_NATIVE",
+            "hardwiredServiceName": "some-backend-service",
+            "properties": [
+                {
+                    "name": "inboundAcknowledgementType",
+                    "value": "ON_COMPLETION"
+                },
+                {
+                    "name": "isInbound",
+                    "value": "true"
+                },
+                {
+                    "name": "isSslKeystoreUsed",
+                    "value": "true"
+                },
+                {
+                    "name": "inboundFailedQueueName",
+                    "value": "some-failure-queue"
+                },
+                {
+                    "name": "isCopyCorrelationIdFromRequest",
+                    "value": "false"
+                },
+                {
+                    "name": "channel",
+                    "value": "SYSTEM.DEF.SVRCONN"
+                },
+                {
+                    "name": "requestSizeLimit",
+                    "value": "2048"
+                },
+                {
+                    "name": "targetQueueName",
+                    "value": "some-queue"
+                },
+                {
+                    "name": "inboundGetMessageOptions",
+                    "value": "5678"
+                },
+                {
+                    "name": "inboundIsReplyQueuePutMessageOptionsUsed",
+                    "value": "true"
+                },
+                {
+                    "name": "inboundIsGetMessageOptionsUsed",
+                    "value": "true"
+                },
+                {
+                    "name": "queueManagerName",
+                    "value": "some-queue-manager"
+                },
+                {
+                    "name": "isSslEnabled",
+                    "value": "true"
+                },
+                {
+                    "name": "inboundIsFailedQueuePutMessageOptionsUsed",
+                    "value": "true"
+                },
+                {
+                    "name": "replyType",
+                    "value": "REPLY_SPECIFIED_QUEUE"
+                },
+                {
+                    "name": "specifiedReplyQueueName",
+                    "value": "some-reply-queue"
+                },
+                {
+                    "name": "numberOfSacToCreate",
+                    "value": "12"
+                },
+                {
+                    "name": "contentType",
+                    "value": "application/x-www-form-urlencoded"
+                },
+                {
+                    "name": "cipherSuite",
+                    "value": "TLS_DHE_RSA_WITH_AES_128_CBC_SHA"
+                },
+                {
+                    "name": "hostName",
+                    "value": "some-host"
+                },
+                {
+                    "name": "port",
+                    "value": "1234"
+                },
+                {
+                    "name": "inboundIsFailedQueueUsed",
+                    "value": "true"
+                },
+                {
+                    "name": "inboundIsOpenOptionsUsed",
+                    "value": "true"
+                },
+                {
+                    "name": "isQueueCredentialRequired",
+                    "value": "true"
+                },
+                {
+                    "name": "outboundIsReplyQueueGetMessageOptionsUsed",
+                    "value": "false"
+                },
+                {
+                    "name": "inboundOpenOptions",
+                    "value": "1234"
+                },
+                {
+                    "name": "inboundReplyQueuePutMessageOptions",
+                    "value": "2345"
+                },
+                {
+                    "name": "username",
+                    "value": "some-user"
+                },
+                {
+                    "name": "inboundFailedQueuePutMessageOptions",
+                    "value": "1234"
+                },
+                {
+                    "name": "securePasswordName",
+                    "value": "some-pwd"
+                }
+            ],
+            "advancedProperties": []
+        },
+        {
+            "name": "custom-mq-outbound-connection",
+            "enabled": false,
+            "connectorType": "MQ_NATIVE",
+            "properties": [
+                {
+                    "name": "isInbound",
+                    "value": "false"
+                },
+                {
+                    "name": "isSslKeystoreUsed",
+                    "value": "true"
+                },
+                {
+                    "name": "outboundReplyQueueGetMessageOptions",
+                    "value": "1234"
+                },
+                {
+                    "name": "isCopyCorrelationIdFromRequest",
+                    "value": "true"
+                },
+                {
+                    "name": "channel",
+                    "value": "SYSTEM.DEF.SVRCONN"
+                },
+                {
+                    "name": "targetQueueName",
+                    "value": "some-queue"
+                },
+                {
+                    "name": "inboundIsReplyQueuePutMessageOptionsUsed",
+                    "value": "false"
+                },
+                {
+                    "name": "inboundIsGetMessageOptionsUsed",
+                    "value": "false"
+                },
+                {
+                    "name": "queueManagerName",
+                    "value": "some-queue-manager"
+                },
+                {
+                    "name": "isSslEnabled",
+                    "value": "true"
+                },
+                {
+                    "name": "inboundIsFailedQueuePutMessageOptionsUsed",
+                    "value": "false"
+                },
+                {
+                    "name": "outboundMessageFormat",
+                    "value": "AUTOMATIC"
+                },
+                {
+                    "name": "outboundConnectionPoolMaxIdle",
+                    "value": "5"
+                },
+                {
+                    "name": "replyType",
+                    "value": "REPLY_SPECIFIED_QUEUE"
+                },
+                {
+                    "name": "specifiedReplyQueueName",
+                    "value": "some-reply-queue"
+                },
+                {
+                    "name": "cipherSuite",
+                    "value": "TLS_AES_256_GCM_SHA384"
+                },
+                {
+                    "name": "outboundConnectionPoolMaxWait",
+                    "value": "1"
+                },
+                {
+                    "name": "hostName",
+                    "value": "some-host"
+                },
+                {
+                    "name": "port",
+                    "value": "1234"
+                },
+                {
+                    "name": "sslKeystoreAlias",
+                    "value": "ssl"
+                },
+                {
+                    "name": "outboundIsTemplateQueue",
+                    "value": "false"
+                },
+                {
+                    "name": "inboundIsOpenOptionsUsed",
+                    "value": "false"
+                },
+                {
+                    "name": "isQueueCredentialRequired",
+                    "value": "true"
+                },
+                {
+                    "name": "outboundIsReplyQueueGetMessageOptionsUsed",
+                    "value": "true"
+                },
+                {
+                    "name": "sslKeystoreId",
+                    "value": "00000000000000000000000000000002"
+                },
+                {
+                    "name": "outboundConnectionPoolMaxActive",
+                    "value": "10"
+                },
+                {
+                    "name": "username",
+                    "value": "some-user"
+                },
+                {
+                    "name": "securePasswordName",
+                    "value": "some-pwd"
+                }
+            ],
+            "advancedProperties": []
+        },
+        {
+            "name": "custom-sftp-polling-listener",
+            "enabled": false,
+            "connectorType": "SFTP_POLLING_LISTENER",
+            "hardwiredServiceName": "some-backend-service",
+            "properties": [
+                {
+                    "name": "contentType",
+                    "value": "application/json; charset=utf-8"
+                },
+                {
+                    "name": "deleteOnReceive",
+                    "value": "true"
+                },
+                {
+                    "name": "pollInterval",
+                    "value": "160"
+                },
+                {
+                    "name": "directory",
+                    "value": "some-directory"
+                },
+                {
+                    "name": "host",
+                    "value": "some-host"
+                },
+                {
+                    "name": "port",
+                    "value": "22"
+                },
+                {
+                    "name": "requestSizeLimit",
+                    "value": "2048"
+                },
+                {
+                    "name": "fileNamePattern",
+                    "value": "some-file-filter"
+                },
+                {
+                    "name": "username",
+                    "value": "some-user"
+                },
+                {
+                    "name": "useDefaultKexAlgorithms",
+                    "value": "true"
+                },
+                {
+                    "name": "enableRespMessages",
+                    "value": "true"
+                },
+                {
+                    "name": "securePasswordKeyName",
+                    "value": "some-pwd"
+                }
+            ],
+            "advancedProperties": [
+                {
+                    "name": "some-prop",
+                    "value": "some-value"
+                }
+            ]
+        },
+        {
+            "name": "some-kafka-producer",
+            "enabled": false,
+            "connectorType": "KAFKA",
+            "properties": [
+                {
+                    "name": "producer.idempotence",
+                    "value": "false"
+                },
+                {
+                    "name": "bootstrapServers",
+                    "value": "some-host,some-other-host"
+                },
+                {
+                    "name": "enableTls",
+                    "value": "false"
+                },
+                {
+                    "name": "keyStoreGoid",
+                    "value": "0000000000000000ffffffffffffffff"
+                },
+                {
+                    "name": "producer.retries",
+                    "value": ""
+                },
+                {
+                    "name": "role",
+                    "value": "producer"
+                },
+                {
+                    "name": "producer.acknowledgement",
+                    "value": "0"
+                },
+                {
+                    "name": "username",
+                    "value": ""
+                }
+            ]
+        },
+        {
+            "name": "some-mq-inbound-connection",
+            "enabled": false,
+            "connectorType": "MQ_NATIVE",
+            "properties": [
+                {
+                    "name": "inboundAcknowledgementType",
+                    "value": "AUTOMATIC"
+                },
+                {
+                    "name": "isInbound",
+                    "value": "true"
+                },
+                {
+                    "name": "hostName",
+                    "value": "some-host"
+                },
+                {
+                    "name": "port",
+                    "value": "1234"
+                },
+                {
+                    "name": "inboundIsFailedQueueUsed",
+                    "value": "false"
+                },
+                {
+                    "name": "isCopyCorrelationIdFromRequest",
+                    "value": "true"
+                },
+                {
+                    "name": "channel",
+                    "value": "SYSTEM.DEF.SVRCONN"
+                },
+                {
+                    "name": "inboundIsOpenOptionsUsed",
+                    "value": "false"
+                },
+                {
+                    "name": "targetQueueName",
+                    "value": "some-queue"
+                },
+                {
+                    "name": "inboundIsReplyQueuePutMessageOptionsUsed",
+                    "value": "false"
+                },
+                {
+                    "name": "isQueueCredentialRequired",
+                    "value": "false"
+                },
+                {
+                    "name": "inboundIsGetMessageOptionsUsed",
+                    "value": "false"
+                },
+                {
+                    "name": "queueManagerName",
+                    "value": "some-queue-manager"
+                },
+                {
+                    "name": "outboundIsReplyQueueGetMessageOptionsUsed",
+                    "value": "false"
+                },
+                {
+                    "name": "isSslEnabled",
+                    "value": "false"
+                },
+                {
+                    "name": "inboundIsFailedQueuePutMessageOptionsUsed",
+                    "value": "false"
+                },
+                {
+                    "name": "replyType",
+                    "value": "REPLY_AUTOMATIC"
+                }
+            ],
+            "advancedProperties": []
+        },
+        {
+            "name": "some-mq-outbound-connection",
+            "enabled": false,
+            "connectorType": "MQ_NATIVE",
+            "properties": [
+                {
+                    "name": "isInbound",
+                    "value": "false"
+                },
+                {
+                    "name": "hostName",
+                    "value": "some-host"
+                },
+                {
+                    "name": "port",
+                    "value": "1234"
+                },
+                {
+                    "name": "channel",
+                    "value": "SYSTEM.DEF.SVRCONN"
+                },
+                {
+                    "name": "outboundIsTemplateQueue",
+                    "value": "false"
+                },
+                {
+                    "name": "inboundIsOpenOptionsUsed",
+                    "value": "false"
+                },
+                {
+                    "name": "targetQueueName",
+                    "value": "some-queue"
+                },
+                {
+                    "name": "inboundIsReplyQueuePutMessageOptionsUsed",
+                    "value": "false"
+                },
+                {
+                    "name": "isQueueCredentialRequired",
+                    "value": "false"
+                },
+                {
+                    "name": "inboundIsGetMessageOptionsUsed",
+                    "value": "false"
+                },
+                {
+                    "name": "queueManagerName",
+                    "value": "some-queue-manager"
+                },
+                {
+                    "name": "outboundIsReplyQueueGetMessageOptionsUsed",
+                    "value": "false"
+                },
+                {
+                    "name": "isSslEnabled",
+                    "value": "false"
+                },
+                {
+                    "name": "inboundIsFailedQueuePutMessageOptionsUsed",
+                    "value": "false"
+                },
+                {
+                    "name": "outboundMessageFormat",
+                    "value": "AUTOMATIC"
+                },
+                {
+                    "name": "replyType",
+                    "value": "REPLY_NONE"
+                }
+            ],
+            "advancedProperties": []
+        },
+        {
+            "name": "some-sftp-polling-listener",
+            "enabled": false,
+            "connectorType": "SFTP_POLLING_LISTENER",
+            "properties": [
+                {
+                    "name": "username",
+                    "value": "some-user"
+                },
+                {
+                    "name": "contentType",
+                    "value": "text/xml; charset=utf-8"
+                },
+                {
+                    "name": "deleteOnReceive",
+                    "value": "false"
+                },
+                {
+                    "name": "pollInterval",
+                    "value": "60"
+                },
+                {
+                    "name": "directory",
+                    "value": "some-directory"
+                },
+                {
+                    "name": "host",
+                    "value": "some-host"
+                },
+                {
+                    "name": "useDefaultKexAlgorithms",
+                    "value": "true"
+                },
+                {
+                    "name": "enableRespMessages",
+                    "value": "true"
+                },
+                {
+                    "name": "port",
+                    "value": "22"
+                },
+                {
+                    "name": "securePasswordName",
+                    "value": "some-pwd"
+                }
+            ]
+        }
+    ],
+
+    "backgroundTaskPolicies": [
+        {
+            "guid": "2120e6e1-8908-5c63-b8ab-6aeb5fbd97f2",
+            "name": "some-backgroundtask-policy",
+            "folderPath": "/graphman-tests/backgroundTaskPolicies",
+            "soap": false,
+            "policy": {
+                "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:AuditAssertion/>\n        <L7p:AuditDetailAssertion>\n            <L7p:Detail stringValue=\"Hello from schedule task-1!\"/>\n        </L7p:AuditDetailAssertion>\n    </wsp:All>\n</wsp:Policy>\n"
+            }
+        },
+        {
+            "guid": "2120e6e1-8908-6c63-b8ab-6aeb5fbd97f2",
+            "name": "some-other-backgroundtask-policy",
+            "folderPath": "/graphman-tests/backgroundTaskPolicies",
+            "soap": false,
+            "policy": {
+                "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:AuditAssertion/>\n        <L7p:AuditDetailAssertion>\n            <L7p:Detail stringValue=\"Hello from schedule task-2!\"/>\n        </L7p:AuditDetailAssertion>\n    </wsp:All>\n</wsp:Policy>\n"
+            }
+        }
+    ],
+
+    "cassandraConnections": [
+        {
+            "name": "some-cassandra-connection",
+            "enabled": true,
+            "keyspace": "some-keyspace",
+            "contactPoints": [
+                "some-contact-point1",
+                "some-contact-point2"
+            ],
+            "port": 9042,
+            "compression": "NONE",
+            "username": "",
+            "sslEnabled": false
+        },
+        {
+            "name": "some-other-cassandra-connection",
+            "enabled": true,
+            "keyspace": "some-keyspace",
+            "contactPoints": [
+                "some-contact-point1",
+                "some-contact-point2"
+            ],
+            "port": 9042,
+            "compression": "LZ4",
+            "username": "some-user",
+            "securePasswordName": "some-pwd",
+            "sslEnabled": true,
+            "cipherSuites": [
+                "TLS_AES_128_GCM_SHA256",
+                "TLS_AES_256_GCM_SHA384"
+            ],
+            "properties": [
+                {
+                    "name": "keepAlive",
+                    "value": "true"
+                },
+                {
+                    "name": "readTimeoutMillis",
+                    "value": "12000"
+                }
+            ]
+        }
+    ],
+
+    "clusterProperties": [
+        {
+            "goid": "4c2752779997ae0109fee535b212e21b",
+            "name": "greetings",
+            "checksum": "52c966172677c386a1ab81a84e3cb0486c7db1f4",
+            "description": "",
+            "hiddenProperty": false,
+            "value": "Hello, World!"
+        },
+        {
+            "goid": "90fad4db3a40b94ce88a9c4650d447fb",
+            "name": "some-cwp",
+            "checksum": "15efa8c44f1cca94bc4514d6ef90b7b5b01e5569",
+            "description": "some cluster property",
+            "hiddenProperty": false,
+            "value": "some-value"
+        },
+        {
+            "goid": "90fad4db3a40b94ce88a9c4650d447fd",
+            "name": "some-other-cwp",
+            "checksum": "cdc66fb93b8c97af467f0419526559b0f5dead30",
+            "description": "",
+            "hiddenProperty": false,
+            "value": "some-other-value"
+        }
+    ],
+
+    "customKeyValues": [
+        {
+            "goid": "625162d38c16b323dd0d9212a151fd13",
+            "key": "HYD",
+            "checksum": "162552abcbe0a717b55dbebc737aa2546591d877",
+            "value": "SGkgU2hpdmFtIHRlc3RpbmcgUmVzdG1hbiBBcGk="
+        },
+        {
+            "goid": "919ea9f8edaa57670b4bc3249aa325e8",
+            "key": "BNGLR",
+            "checksum": "5c78229f426fcd90ed0f75bf03b7e3585e28581b",
+            "value": "VGVzdGluZyBrZXkgdmFsdWUgYm5nbHI="
+        }
+    ],
+
+    "emailListeners": [
+        {
+            "name": "some-other-email-listener",
+            "enabled": false,
+            "serverType": "IMAP",
+            "hostname": "some-host",
+            "port": 1993,
+            "folder": "some-folder",
+            "deleteOnReceive": true,
+            "username": "some-user",
+            "password": "${secpass.some-pwd.plaintext}",
+            "hardwiredServiceName": "some-backend-service",
+            "sslEnabled": true,
+            "pollInterval": 120,
+            "sizeLimit": 2048
+        },
+        {
+            "name": "some-pop3-email-listener",
+            "enabled": false,
+            "serverType": "POP3",
+            "hostname": "some-email-host",
+            "port": 110,
+            "folder": "INBOX",
+            "deleteOnReceive": false,
+            "username": "some-user",
+            "password": "JEw3RXYwMiR6pMoHCPGpb5DhQnSLlnFu7QfRDo7je27hPqgOUTUxNg==",
+            "sslEnabled": false,
+            "pollInterval": 60
+        }
+    ],
+
+    "encassConfigs": [
+        {
+            "guid": "5047edc8-9df8-4e57-9e75-74221139c520",
+            "name": "some-encass",
+            "policyName": "some-encass-policy",
+            "encassArgs": [
+                {
+                    "name": "some-binary-arg",
+                    "type": "BINARY",
+                    "ordinal": 8,
+                    "guiPrompt": false
+                },
+                {
+                    "name": "some-bool-arg",
+                    "type": "BOOLEAN",
+                    "ordinal": 7,
+                    "guiPrompt": true,
+                    "guiLabel": "boolean"
+                },
+                {
+                    "name": "some-cert-arg",
+                    "type": "CERTIFICATE",
+                    "ordinal": 2,
+                    "guiPrompt": true,
+                    "guiLabel": "certificate"
+                },
+                {
+                    "name": "some-datetime-arg",
+                    "type": "DATE_TIME",
+                    "ordinal": 9,
+                    "guiPrompt": false
+                },
+                {
+                    "name": "some-decimal-arg",
+                    "type": "DECIMAL",
+                    "ordinal": 4,
+                    "guiPrompt": true,
+                    "guiLabel": "decimal"
+                },
+                {
+                    "name": "some-float-arg",
+                    "type": "FLOAT",
+                    "ordinal": 5,
+                    "guiPrompt": true,
+                    "guiLabel": "float"
+                },
+                {
+                    "name": "some-int-arg",
+                    "type": "INTEGER",
+                    "ordinal": 3,
+                    "guiPrompt": true,
+                    "guiLabel": "integer"
+                },
+                {
+                    "name": "some-msg-arg",
+                    "type": "MESSAGE",
+                    "ordinal": 10,
+                    "guiPrompt": false
+                },
+                {
+                    "name": "some-string-arg",
+                    "type": "STRING",
+                    "ordinal": 1,
+                    "guiPrompt": true,
+                    "guiLabel": "string arg"
+                },
+                {
+                    "name": "some-xml-arg",
+                    "type": "ELEMENT",
+                    "ordinal": 6,
+                    "guiPrompt": false
+                }
+            ],
+            "encassResults": [
+                {
+                    "name": "some-binary-result",
+                    "type": "BINARY"
+                },
+                {
+                    "name": "some-blob-result",
+                    "type": "BLOB"
+                },
+                {
+                    "name": "some-bool-result",
+                    "type": "BOOLEAN"
+                },
+                {
+                    "name": "some-cert-result",
+                    "type": "CERTIFICATE"
+                },
+                {
+                    "name": "some-clob-result",
+                    "type": "CLOB"
+                },
+                {
+                    "name": "some-datetime-result",
+                    "type": "DATE_TIME"
+                },
+                {
+                    "name": "some-decimal-result",
+                    "type": "DECIMAL"
+                },
+                {
+                    "name": "some-float-result",
+                    "type": "FLOAT"
+                },
+                {
+                    "name": "some-int-result",
+                    "type": "INTEGER"
+                },
+                {
+                    "name": "some-msg-result",
+                    "type": "MESSAGE"
+                },
+                {
+                    "name": "some-string-result",
+                    "type": "STRING"
+                },
+                {
+                    "name": "some-unknown-result",
+                    "type": "UNKNOWN"
+                },
+                {
+                    "name": "some-xml-result",
+                    "type": "ELEMENT"
+                }
+            ],
+            "properties": [
+                {
+                    "name": "allowTracing",
+                    "value": "false"
+                },
+                {
+                    "name": "paletteFolder",
+                    "value": "accessControl"
+                },
+                {
+                    "name": "passMetricsToParent",
+                    "value": "false"
+                }
+            ]
+        },
+        {
+            "goid": "ff70c6a442043ef12e74f4eb13ccb8c5",
+            "guid": "3acd132d-0b6a-4508-9a14-55b858651f2f",
+            "name": "some-other-encass",
+            "checksum": "6694860f2c0371cedc4071cf79418eaf34bf1c49",
+            "description": "some othe encass",
+            "policyName": "some-other-encass",
+            "encassArgs": [
+                {
+                    "name": "input1",
+                    "type": "STRING",
+                    "ordinal": 1,
+                    "guiPrompt": true,
+                    "guiLabel": "Input1"
+                },
+                {
+                    "name": "input2",
+                    "type": "STRING",
+                    "ordinal": 2,
+                    "guiPrompt": true,
+                    "guiLabel": "Input2"
+                }
+            ],
+            "encassResults": [
+                {
+                    "name": "output",
+                    "type": "STRING"
+                }
+            ],
+            "properties": [
+                {
+                    "name": "allowTracing",
+                    "value": "false"
+                },
+                {
+                    "name": "paletteFolder",
+                    "value": "policyLogic"
+                },
+                {
+                    "name": "passMetricsToParent",
+                    "value": "false"
+                }
+            ]
+        }
+    ],
+
+    "globalPolicies": [
+        {
+            "guid": "3a2ec320-fbb6-43ad-bef3-4cc303cb35b5",
+            "name": "msg-completed",
+            "tag": "message-completed",
+            "folderPath": "/graphman-tests/globalPolicies",
+            "policy": {
+                "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:CommentAssertion>\n            <L7p:Comment stringValue=\"Policy Fragment: msg-completed\"/>\n        </L7p:CommentAssertion>\n        <L7p:AuditDetailAssertion>\n            <L7p:Detail stringValue=\"hello from ${policy.name}\"/>\n            <L7p:LoggingOnly booleanValue=\"true\"/>\n        </L7p:AuditDetailAssertion>\n        <L7p:Include>\n            <L7p:PolicyGuid stringValue=\"c662b16f-5b23-49d1-b34c-5924697cf038\"/>\n            <L7p:PolicyName stringValue=\"some-global-fragment\"/>\n        </L7p:Include>\n        <L7p:AuditDetailAssertion>\n            <L7p:Detail stringValue=\"processing ${request.url} is completed\"/>\n            <L7p:Level stringValue=\"WARNING\"/>\n        </L7p:AuditDetailAssertion>\n    </wsp:All>\n</wsp:Policy>\n"
+            }
+        },
+        {
+            "guid": "b8740af1-4e6f-4238-b091-d5392f41b789",
+            "name": "msg-received",
+            "tag": "message-received",
+            "folderPath": "/graphman-tests/globalPolicies",
+            "policy": {
+                "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:CommentAssertion>\n            <L7p:Comment stringValue=\"Policy Fragment: msg-received\"/>\n        </L7p:CommentAssertion>\n        <L7p:AuditDetailAssertion>\n            <L7p:Detail stringValue=\"processing ${request.url}\"/>\n            <L7p:Level stringValue=\"WARNING\"/>\n        </L7p:AuditDetailAssertion>\n        <L7p:AuditDetailAssertion>\n            <L7p:Detail stringValue=\"hello from ${policy.name}\"/>\n            <L7p:LoggingOnly booleanValue=\"true\"/>\n        </L7p:AuditDetailAssertion>\n        <L7p:Include>\n            <L7p:PolicyGuid stringValue=\"c662b16f-5b23-49d1-b34c-5924697cf038\"/>\n            <L7p:PolicyName stringValue=\"some-global-fragment\"/>\n        </L7p:Include>\n    </wsp:All>\n</wsp:Policy>\n"
+            }
+        }
+    ],
+
+    "internalWebApiServices": [{
+        "name" : "some-internal-webapi-service",
+        "folderPath" : "/graphman-tests/internalWebApiServices",
+        "resolutionPath": "/some-internal-webapi",
+        "methodsAllowed": [
+            "GET",
+            "POST",
+            "PUT",
+            "DELETE"
+        ],
+        "enabled": true,
+        "policy": {
+            "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:Include>\n            <L7p:Enabled booleanValue=\"false\"/>\n            <L7p:PolicyGuid stringValue=\"1871928d-c4a3-4456-ab50-b86d3230c908\"/>\n        </L7p:Include>\n        <L7p:Include>\n            <L7p:PolicyGuid stringValue=\"553fcf5f-d0a8-4cde-8b6a-a24644d241d0\"/>\n        </L7p:Include>\n        <L7p:HardcodedResponse>\n            <L7p:Base64ResponseBody stringValue=\"ewogInJvbGVzIiA6ICIke3JvbGVzfSIKfQ==\"/>\n            <L7p:ResponseContentType stringValue=\"application/json; charset=UTF-8\"/>\n        </L7p:HardcodedResponse>\n    </wsp:All>\n</wsp:Policy>\n"
+        }
+    }],
+
+    "internalSoapServices": [{
+        "name": "some-internal-soap-service",
+        "folderPath": "/graphman-tests/internalSoapServices",
+        "resolutionPath" : "/some-internal-soap",
+        "wsdl": "<definitions targetNamespace=\"http://warehouse.acme.com/ws\" xmlns=\"http://schemas.xmlsoap.org/wsdl/\" xmlns:http=\"http://schemas.xmlsoap.org/wsdl/http/\" xmlns:mime=\"http://schemas.xmlsoap.org/wsdl/mime/\" xmlns:s=\"http://www.w3.org/2001/XMLSchema\" xmlns:s0=\"http://warehouse.acme.com/ws\" xmlns:soap=\"http://schemas.xmlsoap.org/wsdl/soap/\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:tm=\"http://microsoft.com/wsdl/mime/textMatching/\">\n  <types>\n    <s:schema elementFormDefault=\"qualified\" targetNamespace=\"http://warehouse.acme.com/ws\">\n      <s:element name=\"listProducts\">\n        <s:complexType/>\n      </s:element>\n      <s:element name=\"listProductsResponse\">\n        <s:complexType>\n          <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"0\" name=\"listProductsResult\" type=\"s0:ArrayOfProductListHeader\"/>\n          </s:sequence>\n        </s:complexType>\n      </s:element>\n      <s:complexType name=\"ArrayOfProductListHeader\">\n        <s:sequence>\n          <s:element maxOccurs=\"unbounded\" minOccurs=\"0\" name=\"ProductListHeader\" nillable=\"true\" type=\"s0:ProductListHeader\"/>\n        </s:sequence>\n      </s:complexType>\n      <s:complexType name=\"ProductListHeader\">\n        <s:sequence>\n          <s:element maxOccurs=\"1\" minOccurs=\"0\" name=\"productName\" type=\"s:string\"/>\n          <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productId\" type=\"s:long\"/>\n        </s:sequence>\n      </s:complexType>\n      <s:element name=\"getProductDetails\">\n        <s:complexType>\n          <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productid\" type=\"s:long\"/>\n          </s:sequence>\n        </s:complexType>\n      </s:element>\n      <s:element name=\"getProductDetailsResponse\">\n        <s:complexType>\n          <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"0\" name=\"getProductDetailsResult\" type=\"s0:ProductDetails\"/>\n          </s:sequence>\n        </s:complexType>\n      </s:element>\n      <s:complexType name=\"ProductDetails\">\n        <s:complexContent mixed=\"false\">\n          <s:extension base=\"s0:ProductListHeader\">\n            <s:sequence>\n              <s:element maxOccurs=\"1\" minOccurs=\"0\" name=\"description\" type=\"s:string\"/>\n              <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n              <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"inStock\" type=\"s:boolean\"/>\n            </s:sequence>\n          </s:extension>\n        </s:complexContent>\n      </s:complexType>\n      <s:element name=\"placeOrder\">\n        <s:complexType>\n          <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productid\" type=\"s:long\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"amount\" type=\"s:long\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountid\" type=\"s:long\"/>\n          </s:sequence>\n        </s:complexType>\n      </s:element>\n      <s:element name=\"placeOrderResponse\">\n        <s:complexType>\n          <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"placeOrderResult\" type=\"s:long\"/>\n          </s:sequence>\n        </s:complexType>\n      </s:element>\n      <s:element name=\"currentOrders\">\n        <s:complexType>\n          <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountid\" type=\"s:long\"/>\n          </s:sequence>\n        </s:complexType>\n      </s:element>\n      <s:element name=\"currentOrdersResponse\">\n        <s:complexType>\n          <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"0\" name=\"currentOrdersResult\" type=\"s0:ArrayOfOrder\"/>\n          </s:sequence>\n        </s:complexType>\n      </s:element>\n      <s:complexType name=\"ArrayOfOrder\">\n        <s:sequence>\n          <s:element maxOccurs=\"unbounded\" minOccurs=\"0\" name=\"Order\" nillable=\"true\" type=\"s0:Order\"/>\n        </s:sequence>\n      </s:complexType>\n      <s:complexType name=\"Order\">\n        <s:sequence>\n          <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"date\" type=\"s:dateTime\"/>\n          <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountId\" type=\"s:long\"/>\n          <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productId\" type=\"s:long\"/>\n          <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"amount\" type=\"s:long\"/>\n          <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n          <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"confirmationId\" type=\"s:long\"/>\n        </s:sequence>\n      </s:complexType>\n    </s:schema>\n  </types>\n  <message name=\"listProductsSoapIn\">\n    <part element=\"s0:listProducts\" name=\"parameters\"/>\n  </message>\n  <message name=\"listProductsSoapOut\">\n    <part element=\"s0:listProductsResponse\" name=\"parameters\"/>\n  </message>\n  <message name=\"getProductDetailsSoapIn\">\n    <part element=\"s0:getProductDetails\" name=\"parameters\"/>\n  </message>\n  <message name=\"getProductDetailsSoapOut\">\n    <part element=\"s0:getProductDetailsResponse\" name=\"parameters\"/>\n  </message>\n  <message name=\"placeOrderSoapIn\">\n    <part element=\"s0:placeOrder\" name=\"parameters\"/>\n  </message>\n  <message name=\"placeOrderSoapOut\">\n    <part element=\"s0:placeOrderResponse\" name=\"parameters\"/>\n  </message>\n  <message name=\"currentOrdersSoapIn\">\n    <part element=\"s0:currentOrders\" name=\"parameters\"/>\n  </message>\n  <message name=\"currentOrdersSoapOut\">\n    <part element=\"s0:currentOrdersResponse\" name=\"parameters\"/>\n  </message>\n  <portType name=\"WarehouseSoap\">\n    <operation name=\"listProducts\">\n      <input message=\"s0:listProductsSoapIn\"/>\n      <output message=\"s0:listProductsSoapOut\"/>\n    </operation>\n    <operation name=\"getProductDetails\">\n      <input message=\"s0:getProductDetailsSoapIn\"/>\n      <output message=\"s0:getProductDetailsSoapOut\"/>\n    </operation>\n    <operation name=\"placeOrder\">\n      <input message=\"s0:placeOrderSoapIn\"/>\n      <output message=\"s0:placeOrderSoapOut\"/>\n    </operation>\n    <operation name=\"currentOrders\">\n      <input message=\"s0:currentOrdersSoapIn\"/>\n      <output message=\"s0:currentOrdersSoapOut\"/>\n    </operation>\n  </portType>\n  <binding name=\"WarehouseSoap\" type=\"s0:WarehouseSoap\">\n    <soap:binding style=\"document\" transport=\"http://schemas.xmlsoap.org/soap/http\"/>\n    <operation name=\"listProducts\">\n      <soap:operation soapAction=\"http://warehouse.acme.com/ws/listProducts\" style=\"document\"/>\n      <input>\n        <soap:body use=\"literal\"/>\n      </input>\n      <output>\n        <soap:body use=\"literal\"/>\n      </output>\n    </operation>\n    <operation name=\"getProductDetails\">\n      <soap:operation soapAction=\"http://warehouse.acme.com/ws/getProductDetails\" style=\"document\"/>\n      <input>\n        <soap:body use=\"literal\"/>\n      </input>\n      <output>\n        <soap:body use=\"literal\"/>\n      </output>\n    </operation>\n    <operation name=\"placeOrder\">\n      <soap:operation soapAction=\"http://warehouse.acme.com/ws/placeOrder\" style=\"document\"/>\n      <input>\n        <soap:body use=\"literal\"/>\n      </input>\n      <output>\n        <soap:body use=\"literal\"/>\n      </output>\n    </operation>\n    <operation name=\"currentOrders\">\n      <soap:operation soapAction=\"http://warehouse.acme.com/ws/currentOrders\" style=\"document\"/>\n      <input>\n        <soap:body use=\"literal\"/>\n      </input>\n      <output>\n        <soap:body use=\"literal\"/>\n      </output>\n    </operation>\n  </binding>\n  <service name=\"Warehouse\">\n    <port binding=\"s0:WarehouseSoap\" name=\"WarehouseSoap\">\n      <soap:address location=\"http://hugh/ACMEWarehouseWS/Service1.asmx\"/>\n    </port>\n  </service>\n</definitions>",
+
+        "wssProcessingEnabled": true,
+        "enabled": true,
+        "methodsAllowed": [
+            "POST"
+        ],
+        "policy": {
+            "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:SchemaValidation>\n            <L7p:ResourceInfo staticResourceInfo=\"included\">\n                <L7p:Document stringValueReference=\"inline\"><![CDATA[<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<s:schema elementFormDefault=\"qualified\"\n    targetNamespace=\"http://warehouse.acme.com/ws\"\n    xmlns:http=\"http://schemas.xmlsoap.org/wsdl/http/\"\n    xmlns:mime=\"http://schemas.xmlsoap.org/wsdl/mime/\"\n    xmlns:s=\"http://www.w3.org/2001/XMLSchema\"\n    xmlns:s0=\"http://warehouse.acme.com/ws\"\n    xmlns:soap=\"http://schemas.xmlsoap.org/wsdl/soap/\"\n    xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:tm=\"http://microsoft.com/wsdl/mime/textMatching/\">\n    <s:element name=\"listProducts\">\n        <s:complexType/>\n    </s:element>\n    <s:element name=\"listProductsResponse\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"0\"\n                    name=\"listProductsResult\" type=\"s0:ArrayOfProductListHeader\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:complexType name=\"ArrayOfProductListHeader\">\n        <s:sequence>\n            <s:element maxOccurs=\"unbounded\" minOccurs=\"0\"\n                name=\"ProductListHeader\" nillable=\"true\" type=\"s0:ProductListHeader\"/>\n        </s:sequence>\n    </s:complexType>\n    <s:complexType name=\"ProductListHeader\">\n        <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"0\" name=\"productName\" type=\"s:string\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productId\" type=\"s:long\"/>\n        </s:sequence>\n    </s:complexType>\n    <s:element name=\"getProductDetails\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productid\" type=\"s:long\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:element name=\"getProductDetailsResponse\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"0\"\n                    name=\"getProductDetailsResult\" type=\"s0:ProductDetails\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:complexType name=\"ProductDetails\">\n        <s:complexContent mixed=\"false\">\n            <s:extension base=\"s0:ProductListHeader\">\n                <s:sequence>\n                    <s:element maxOccurs=\"1\" minOccurs=\"0\"\n                        name=\"description\" type=\"s:string\"/>\n                    <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n                    <s:element maxOccurs=\"1\" minOccurs=\"1\"\n                        name=\"inStock\" type=\"s:boolean\"/>\n                </s:sequence>\n            </s:extension>\n        </s:complexContent>\n    </s:complexType>\n    <s:element name=\"placeOrder\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productid\" type=\"s:long\"/>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"amount\" type=\"s:long\"/>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountid\" type=\"s:long\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:element name=\"placeOrderResponse\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\"\n                    name=\"placeOrderResult\" type=\"s:long\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:element name=\"currentOrders\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountid\" type=\"s:long\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:element name=\"currentOrdersResponse\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"0\"\n                    name=\"currentOrdersResult\" type=\"s0:ArrayOfOrder\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:complexType name=\"ArrayOfOrder\">\n        <s:sequence>\n            <s:element maxOccurs=\"unbounded\" minOccurs=\"0\" name=\"Order\"\n                nillable=\"true\" type=\"s0:Order\"/>\n        </s:sequence>\n    </s:complexType>\n    <s:complexType name=\"Order\">\n        <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"date\" type=\"s:dateTime\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountId\" type=\"s:long\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productId\" type=\"s:long\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"amount\" type=\"s:long\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"confirmationId\" type=\"s:long\"/>\n        </s:sequence>\n    </s:complexType>\n</s:schema>\n]]></L7p:Document>\n                <L7p:OriginalUrl stringValue=\"file:/Users/flascelles/Documents/soap/Warehouse_WSDL.wsdl#.xsd1\"/>\n            </L7p:ResourceInfo>\n            <L7p:Target target=\"REQUEST\"/>\n        </L7p:SchemaValidation>\n        <L7p:SchemaValidation>\n            <L7p:ResourceInfo globalResourceInfo=\"included\">\n                <L7p:Id stringValue=\"http://warehouse.io/mywarehouse\"/>\n            </L7p:ResourceInfo>\n            <L7p:Target target=\"REQUEST\"/>\n        </L7p:SchemaValidation>\n        <L7p:HttpRoutingAssertion>\n            <L7p:ProtectedServiceUrl stringValue=\"http://hugh/ACMEWarehouseWS/Service1.asmx\"/>\n            <L7p:RequestHeaderRules httpPassthroughRuleSet=\"included\">\n                <L7p:Rules httpPassthroughRules=\"included\">\n                    <L7p:item httpPassthroughRule=\"included\">\n                        <L7p:Name stringValue=\"Cookie\"/>\n                    </L7p:item>\n                    <L7p:item httpPassthroughRule=\"included\">\n                        <L7p:Name stringValue=\"SOAPAction\"/>\n                    </L7p:item>\n                </L7p:Rules>\n            </L7p:RequestHeaderRules>\n            <L7p:RequestParamRules httpPassthroughRuleSet=\"included\">\n                <L7p:ForwardAll booleanValue=\"true\"/>\n                <L7p:Rules httpPassthroughRules=\"included\"/>\n            </L7p:RequestParamRules>\n            <L7p:ResponseHeaderRules httpPassthroughRuleSet=\"included\">\n                <L7p:Rules httpPassthroughRules=\"included\">\n                    <L7p:item httpPassthroughRule=\"included\">\n                        <L7p:Name stringValue=\"Set-Cookie\"/>\n                    </L7p:item>\n                </L7p:Rules>\n            </L7p:ResponseHeaderRules>\n        </L7p:HttpRoutingAssertion>\n    </wsp:All>\n</wsp:Policy>\n"
+        }
+    }],
+
+    "schemas": [
+        {
+            "systemId": "http://warehouse.io/mywarehouse/some-schema",
+            "targetNs": "http://warehouse.acme.com/ws",
+            "description": "some schema",
+            "content": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<s:schema elementFormDefault=\"qualified\"\n    targetNamespace=\"http://warehouse.acme.com/ws\"\n    xmlns:http=\"http://schemas.xmlsoap.org/wsdl/http/\"\n    xmlns:mime=\"http://schemas.xmlsoap.org/wsdl/mime/\"\n    xmlns:s=\"http://www.w3.org/2001/XMLSchema\"\n    xmlns:s0=\"http://warehouse.acme.com/ws\"\n    xmlns:soap=\"http://schemas.xmlsoap.org/wsdl/soap/\"\n    xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:tm=\"http://microsoft.com/wsdl/mime/textMatching/\">\n    <s:element name=\"listProducts\">\n        <s:complexType/>\n    </s:element>\n    <s:element name=\"listProductsResponse\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"0\"\n                    name=\"listProductsResult\" type=\"s0:ArrayOfProductListHeader\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:complexType name=\"ArrayOfProductListHeader\">\n        <s:sequence>\n            <s:element maxOccurs=\"unbounded\" minOccurs=\"0\"\n                name=\"ProductListHeader\" nillable=\"true\" type=\"s0:ProductListHeader\"/>\n        </s:sequence>\n    </s:complexType>\n    <s:complexType name=\"ProductListHeader\">\n        <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"0\" name=\"productName\" type=\"s:string\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productId\" type=\"s:long\"/>\n        </s:sequence>\n    </s:complexType>\n    <s:element name=\"getProductDetails\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productid\" type=\"s:long\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:element name=\"getProductDetailsResponse\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"0\"\n                    name=\"getProductDetailsResult\" type=\"s0:ProductDetails\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:complexType name=\"ProductDetails\">\n        <s:complexContent mixed=\"false\">\n            <s:extension base=\"s0:ProductListHeader\">\n                <s:sequence>\n                    <s:element maxOccurs=\"1\" minOccurs=\"0\"\n                        name=\"description\" type=\"s:string\"/>\n                    <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n                    <s:element maxOccurs=\"1\" minOccurs=\"1\"\n                        name=\"inStock\" type=\"s:boolean\"/>\n                </s:sequence>\n            </s:extension>\n        </s:complexContent>\n    </s:complexType>\n    <s:element name=\"placeOrder\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productid\" type=\"s:long\"/>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"amount\" type=\"s:long\"/>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountid\" type=\"s:long\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:element name=\"placeOrderResponse\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\"\n                    name=\"placeOrderResult\" type=\"s:long\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:element name=\"currentOrders\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountid\" type=\"s:long\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:element name=\"currentOrdersResponse\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"0\"\n                    name=\"currentOrdersResult\" type=\"s0:ArrayOfOrder\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:complexType name=\"ArrayOfOrder\">\n        <s:sequence>\n            <s:element maxOccurs=\"unbounded\" minOccurs=\"0\" name=\"Order\"\n                nillable=\"true\" type=\"s0:Order\"/>\n        </s:sequence>\n    </s:complexType>\n    <s:complexType name=\"Order\">\n        <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"date\" type=\"s:dateTime\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountId\" type=\"s:long\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productId\" type=\"s:long\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"amount\" type=\"s:long\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"confirmationId\" type=\"s:long\"/>\n        </s:sequence>\n    </s:complexType>\n</s:schema>\n"
+        },
+        {
+            "systemId": "http://warehouse.io/mywarehouse/some-other-schema",
+            "targetNs": "http://warehouse.acme.com/ws",
+            "content": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<s:schema elementFormDefault=\"qualified\"\n    targetNamespace=\"http://warehouse.acme.com/ws\"\n    xmlns:http=\"http://schemas.xmlsoap.org/wsdl/http/\"\n    xmlns:mime=\"http://schemas.xmlsoap.org/wsdl/mime/\"\n    xmlns:s=\"http://www.w3.org/2001/XMLSchema\"\n    xmlns:s0=\"http://warehouse.acme.com/ws\"\n    xmlns:soap=\"http://schemas.xmlsoap.org/wsdl/soap/\"\n    xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:tm=\"http://microsoft.com/wsdl/mime/textMatching/\">\n    <s:element name=\"listProducts\">\n        <s:complexType/>\n    </s:element>\n    <s:element name=\"listProductsResponse\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"0\"\n                    name=\"listProductsResult\" type=\"s0:ArrayOfProductListHeader\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:complexType name=\"ArrayOfProductListHeader\">\n        <s:sequence>\n            <s:element maxOccurs=\"unbounded\" minOccurs=\"0\"\n                name=\"ProductListHeader\" nillable=\"true\" type=\"s0:ProductListHeader\"/>\n        </s:sequence>\n    </s:complexType>\n    <s:complexType name=\"ProductListHeader\">\n        <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"0\" name=\"productName\" type=\"s:string\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productId\" type=\"s:long\"/>\n        </s:sequence>\n    </s:complexType>\n    <s:element name=\"getProductDetails\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productid\" type=\"s:long\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:element name=\"getProductDetailsResponse\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"0\"\n                    name=\"getProductDetailsResult\" type=\"s0:ProductDetails\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:complexType name=\"ProductDetails\">\n        <s:complexContent mixed=\"false\">\n            <s:extension base=\"s0:ProductListHeader\">\n                <s:sequence>\n                    <s:element maxOccurs=\"1\" minOccurs=\"0\"\n                        name=\"description\" type=\"s:string\"/>\n                    <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n                    <s:element maxOccurs=\"1\" minOccurs=\"1\"\n                        name=\"inStock\" type=\"s:boolean\"/>\n                </s:sequence>\n            </s:extension>\n        </s:complexContent>\n    </s:complexType>\n    <s:element name=\"placeOrder\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productid\" type=\"s:long\"/>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"amount\" type=\"s:long\"/>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountid\" type=\"s:long\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:element name=\"placeOrderResponse\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\"\n                    name=\"placeOrderResult\" type=\"s:long\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:element name=\"currentOrders\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountid\" type=\"s:long\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:element name=\"currentOrdersResponse\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"0\"\n                    name=\"currentOrdersResult\" type=\"s0:ArrayOfOrder\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:complexType name=\"ArrayOfOrder\">\n        <s:sequence>\n            <s:element maxOccurs=\"unbounded\" minOccurs=\"0\" name=\"Order\"\n                nillable=\"true\" type=\"s0:Order\"/>\n        </s:sequence>\n    </s:complexType>\n    <s:complexType name=\"Order\">\n        <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"date\" type=\"s:dateTime\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountId\" type=\"s:long\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productId\" type=\"s:long\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"amount\" type=\"s:long\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"confirmationId\" type=\"s:long\"/>\n        </s:sequence>\n    </s:complexType>\n</s:schema>\n"
+        }
+    ],
+
+    "dtds": [
+        {
+            "systemId": "http://example.org/some-dtd",
+            "publicId": "some-dtd",
+            "description": "some dtd",
+            "content": "<!DOCTYPE note\n[\n<!ELEMENT note (to,from,heading,body)>\n<!ELEMENT to (#PCDATA)>\n<!ELEMENT from (#PCDATA)>\n<!ELEMENT heading (#PCDATA)>\n<!ELEMENT body (#PCDATA)>\n]>"
+        },
+        {
+            "systemId": "http://example.org/some-other-dtd",
+            "publicId": "some-other-dtd",
+            "description": "some other dtd",
+            "content": "<!DOCTYPE note\n[\n<!ELEMENT note (to,from,heading,body)>\n<!ELEMENT to (#PCDATA)>\n<!ELEMENT from (#PCDATA)>\n<!ELEMENT heading (#PCDATA)>\n<!ELEMENT body (#PCDATA)>\n]>"
+        }
+    ],
+
+    "httpConfigurations": [
+        {
+            "goid": "fd1ee586f3501534dc2bf9c8ad5f28ee",
+            "host": "some-http-config",
+            "protocol": "ANY",
+            "checksum": "566399fb911bd7df96f2924eab5a9e2aed6cd454",
+            "tlsKeyUse": "DEFAULT",
+            "connectTimeout": -1,
+            "readTimeout": -1,
+            "followRedirects": false,
+            "proxyUse": "DEFAULT"
+        },
+        {
+            "goid": "fd1ee586f3501534dc2bf9c8ad5f28f3",
+            "host": "some-other-http-config",
+            "protocol": "ANY",
+            "checksum": "623808509830a3a2317ea56bc6de2e8f47facd44",
+            "username": "some-user",
+            "securePasswordName": "some-pwd",
+            "tlsVersion": "TLSv1.2",
+            "tlsKeyUse": "CUSTOM",
+            "tlsKeystoreId": "00000000000000000000000000000002",
+            "tlsKeyAlias": "ssl",
+            "connectTimeout": -1,
+            "readTimeout": -1,
+            "followRedirects": false,
+            "proxyUse": "CUSTOM",
+            "proxyConfiguration": {
+                "host": "some-proxy",
+                "port": 1234
+            }
+        }
+    ],
+
+    "logSinks": [
+        {
+            "goid": "d1525b9387e52c44f49843b2d6e60421",
+            "name": "some-other-syslog",
+            "checksum": "4fe8a2091deb937a784cc4e56d83bb3d1d78e07d",
+            "description": "",
+            "type": "SYSLOG",
+            "enabled": false,
+            "severity": "INFO",
+            "categories": [
+                "AUDIT",
+                "LOG"
+            ],
+            "syslogHosts": [
+                "example:1234",
+                "ex1:2345"
+            ],
+            "filters": [
+                {
+                    "type": "service-id",
+                    "values": [
+                        "dc0f8eccaaf65c90ce9e4675de7ef330",
+                        "09a4e26acdd56e23c1d6a3ef91926be0"
+                    ]
+                },
+                {
+                    "type": "listen-port-id",
+                    "values": [
+                        "7ca3785cde01762a88713e657cb65f2b"
+                    ]
+                },
+                {
+                    "type": "user-id",
+                    "values": [
+                        "0000000000000000fffffffffffffffe:00000000000000000000000000000003"
+                    ]
+                },
+                {
+                    "type": "logger-name",
+                    "values": [
+                        "vcb"
+                    ]
+                },
+                {
+                    "type": "folder-id",
+                    "values": [
+                        "09a4e26acdd56e23c1d6a3ef91926bd7"
+                    ]
+                }
+            ],
+            "properties": [
+                {
+                    "name": "syslog.protocol",
+                    "value": "SSL"
+                },
+                {
+                    "name": "syslog.format",
+                    "value": "STANDARD"
+                },
+                {
+                    "name": "syslog.timezone",
+                    "value": "ART"
+                },
+                {
+                    "name": "syslog.ssl.keystore.id",
+                    "value": "00000000000000000000000000000002"
+                },
+                {
+                    "name": "syslog.facility",
+                    "value": "2"
+                },
+                {
+                    "name": "syslog.charSet",
+                    "value": "UTF-8"
+                },
+                {
+                    "name": "syslog.ssl.key.alias",
+                    "value": "ssl"
+                },
+                {
+                    "name": "syslog.logHostname",
+                    "value": "true"
+                },
+                {
+                    "name": "syslog.ssl.clientAuth",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "goid": "d1525b9387e52c44f49843b2d6e60418",
+            "name": "some-ssg",
+            "checksum": "b2e562a2a832f03fa5a5f250d1ae2fcbf32a74b6",
+            "description": "Main log",
+            "type": "FILE",
+            "enabled": false,
+            "severity": "INFO",
+            "categories": [
+                "AUDIT",
+                "LOG"
+            ],
+            "properties": [
+                {
+                    "name": "file.logCount",
+                    "value": "10"
+                },
+                {
+                    "name": "file.maxSize",
+                    "value": "20000"
+                },
+                {
+                    "name": "file.interval",
+                    "value": "DAILY"
+                },
+                {
+                    "name": "file.rolling",
+                    "value": "false"
+                },
+                {
+                    "name": "file.format",
+                    "value": "STANDARD"
+                }
+            ]
+        }
+    ],
+
+    "jdbcConnections": [
+        {
+            "name": "some-jdbc-connection",
+            "enabled": true,
+            "driverClass": "com.mysql.jdbc.Driver",
+            "jdbcUrl": "jdbc:mysql://some-host:3306/some-db",
+            "username": "",
+            "password": "",
+            "minPoolSize": 3,
+            "maxPoolSize": 15,
+            "properties": [
+                {
+                    "name": "EnableCancelTimeout",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "name": "some-other-jdbc-connection",
+            "enabled": true,
+            "driverClass": "com.mysql.jdbc.Driver",
+            "jdbcUrl": "jdbc:mysql://some-host:3306/some-db",
+            "username": "some-user",
+            "password": "JEw3RXYwMiSYdiDXf0GfXyx7xuyVqWlE8yY/G1juFZr9NQTNL2WkYg==",
+            "minPoolSize": 3,
+            "maxPoolSize": 15,
+            "properties": [
+                {
+                    "name": "EnableCancelTimeout",
+                    "value": "true"
+                }
+            ]
+        }
+    ],
+
+    "jmsDestinations": [
+        {
+            "name": "jms-in",
+            "direction": "INBOUND",
+            "providerType": "GENERIC JMS",
+            "enabled": false,
+            "template": false,
+            "initialContextFactoryClassname": "initial-context-factory",
+            "connectionFactoryName": "connection-factory",
+            "jndiUrl": "jndi://url",
+            "jndiSslDetails": {
+                "sslEnabled": false,
+                "sslForAuthenticationOnly": false,
+                "sslVerifyServerCertificate": false,
+                "sslVerifyServerHostname": false
+            },
+            "destinationType": "QUEUE",
+            "destinationName": "queue-destination",
+            "destinationSslDetails": {
+                "sslEnabled": false,
+                "sslForAuthenticationOnly": false,
+                "sslVerifyServerCertificate": false,
+                "sslVerifyServerHostname": false
+            },
+            "properties": [
+                {
+                    "name": "inbound.acknowledgementType",
+                    "value": "AUTOMATIC"
+                },
+                {
+                    "name": "inbound.replyType",
+                    "value": "AUTOMATIC"
+                },
+                {
+                    "name": "inbound.dedicatedConsumerSize",
+                    "value": "1"
+                },
+                {
+                    "name": "inbound.requestMaxSize",
+                    "value": "-1"
+                },
+                {
+                    "name": "inbound.useMessageIdForCorrelation",
+                    "value": "false"
+                },
+                {
+                    "name": "inbound.acknowledgmentType",
+                    "value": "AUTOMATIC"
+                }
+            ]
+        },
+        {
+            "name": "jms-in-mq-customized",
+            "direction": "INBOUND",
+            "providerType": "WEBSPHERE MQ OVER LDAP",
+            "enabled": false,
+            "template": false,
+            "initialContextFactoryClassname": "initial-context-factory",
+            "connectionFactoryName": "connection-factory",
+            "jndiUrl": "jndi://url",
+            "jndiSslDetails": {
+                "sslEnabled": false,
+                "sslForAuthenticationOnly": false,
+                "sslVerifyServerCertificate": false,
+                "sslVerifyServerHostname": false
+            },
+            "destinationType": "TOPIC",
+            "destinationName": "topic-destination",
+            "destinationSslDetails": {
+                "sslEnabled": true,
+                "sslForAuthenticationOnly": false,
+                "sslVerifyServerCertificate": false,
+                "sslVerifyServerHostname": false,
+                "sslClientKeyAlias": "<DEFAULT>"
+            },
+            "properties": [
+                {
+                    "name": "inbound.contentTypeSource",
+                    "value": "FREEFORM"
+                },
+                {
+                    "name": "inbound.failureDestination",
+                    "value": "failed-requests-queue"
+                },
+                {
+                    "name": "inbound.acknowledgementType",
+                    "value": "AUTOMATIC"
+                },
+                {
+                    "name": "inbound.replyType",
+                    "value": "REPLY_TO_OTHER"
+                },
+                {
+                    "name": "inbound.contentTypeValueOrProperty",
+                    "value": "application/json"
+                },
+                {
+                    "name": "inbound.soapActionMessageProperty",
+                    "value": "soap-action-property"
+                },
+                {
+                    "name": "inbound.replyTo",
+                    "value": "reply-queue"
+                },
+                {
+                    "name": "inbound.requestMaxSize",
+                    "value": "12345"
+                },
+                {
+                    "name": "inbound.useMessageIdForCorrelation",
+                    "value": "true"
+                },
+                {
+                    "name": "inbound.acknowledgmentType",
+                    "value": "ON_COMPLETION"
+                },
+                {
+                    "name": "hello",
+                    "value": "world"
+                },
+                {
+                    "name": "who",
+                    "value": "am I?"
+                }
+            ]
+        },
+        {
+            "name": "jms-out",
+            "direction": "OUTBOUND",
+            "providerType": "GENERIC JMS",
+            "enabled": false,
+            "template": false,
+            "initialContextFactoryClassname": "initial-context-factory",
+            "connectionFactoryName": "connection-factory",
+            "jndiUrl": "jndi://url",
+            "jndiSslDetails": {
+                "sslEnabled": false,
+                "sslForAuthenticationOnly": false,
+                "sslVerifyServerCertificate": false,
+                "sslVerifyServerHostname": false
+            },
+            "destinationType": "QUEUE",
+            "destinationName": "queue-destination",
+            "destinationSslDetails": {
+                "sslEnabled": false,
+                "sslForAuthenticationOnly": false,
+                "sslVerifyServerCertificate": false,
+                "sslVerifyServerHostname": false
+            },
+            "properties": [
+                {
+                    "name": "outbound.poolType",
+                    "value": "SESSION"
+                },
+                {
+                    "name": "outbound.replyType",
+                    "value": "AUTOMATIC"
+                },
+                {
+                    "name": "outbound.messageFormat",
+                    "value": "AUTOMATIC"
+                },
+                {
+                    "name": "outbound.useMessageIdForCorrelation",
+                    "value": "false"
+                }
+            ]
+        },
+        {
+            "name": "jms-out-tibco-customized",
+            "direction": "OUTBOUND",
+            "providerType": "TIBCO EMS",
+            "enabled": false,
+            "template": false,
+            "initialContextFactoryClassname": "initial-context-factory",
+            "connectionFactoryName": "connection-factory",
+            "jndiUrl": "jndi://url",
+            "jndiUsername": "jndi-user",
+            "jndiPassword": "JEw3RXYwMiQfcws5nHaVONkmxL7vysdPauDUm8QyXPnocowf0T4WRg==",
+            "jndiSslDetails": {
+                "sslEnabled": true,
+                "sslForAuthenticationOnly": true,
+                "sslVerifyServerCertificate": true,
+                "sslVerifyServerHostname": false,
+                "sslClientKeyAlias": "00000000000000000000000000000002:ssl"
+            },
+            "destinationType": "TOPIC",
+            "destinationName": "topic-destination",
+            "destinationUsername": "dest-user",
+            "destinationPassword": "JEw3RXYwMiRAL0dFRODuVpoUrJNMDHXRzwx1yAG2IPcBWqIlAo0ASQ==",
+            "destinationSslDetails": {
+                "sslEnabled": true,
+                "sslForAuthenticationOnly": false,
+                "sslVerifyServerCertificate": true,
+                "sslVerifyServerHostname": true,
+                "sslClientKeyAlias": "00000000000000000000000000000002:ssl"
+            },
+            "properties": [
+                {
+                    "name": "outbound.poolType",
+                    "value": "CONNECTION"
+                },
+                {
+                    "name": "outbound.poolMinIdleItems",
+                    "value": "12"
+                },
+                {
+                    "name": "outbound.poolMaxSize",
+                    "value": "123"
+                },
+                {
+                    "name": "outbound.poolItemWaitingTime",
+                    "value": "12345"
+                },
+                {
+                    "name": "outbound.replyType",
+                    "value": "REPLY_TO_OTHER"
+                },
+                {
+                    "name": "outbound.messageFormat",
+                    "value": "ALWAYS_TEXT"
+                },
+                {
+                    "name": "outbound.replyTo",
+                    "value": "reply-queue"
+                },
+                {
+                    "name": "outbound.useMessageIdForCorrelation",
+                    "value": "true"
+                },
+                {
+                    "name": "hello",
+                    "value": "world"
+                },
+                {
+                    "name": "who",
+                    "value": "am I?"
+                }
+            ]
+        },
+        {
+            "name": "jms-out-weblogic-customized",
+            "direction": "OUTBOUND",
+            "providerType": "WEBLOGIC JMS",
+            "enabled": false,
+            "template": false,
+            "initialContextFactoryClassname": "initial-context-factory",
+            "connectionFactoryName": "connection-factory",
+            "jndiUrl": "jndi://url",
+            "jndiUsername": "jndi-user",
+            "jndiPassword": "JEw3RXYwMiTNMWnn7l/KzfEccfn1a0xj7tD2agJH3vshclc7RCc/LA==",
+            "jndiSslDetails": {
+                "sslEnabled": false,
+                "sslForAuthenticationOnly": false,
+                "sslVerifyServerCertificate": false,
+                "sslVerifyServerHostname": false
+            },
+            "destinationType": "QUEUE",
+            "destinationName": "queue-destination",
+            "destinationUsername": "dest-user",
+            "destinationPassword": "JEw3RXYwMiRj9Knqi0IpVBsF6TcoFGOfwiKD0kDhNGfRGDxjjAc06Q==",
+            "destinationSslDetails": {
+                "sslEnabled": false,
+                "sslForAuthenticationOnly": false,
+                "sslVerifyServerCertificate": false,
+                "sslVerifyServerHostname": false
+            },
+            "properties": [
+                {
+                    "name": "outbound.poolType",
+                    "value": "SESSION"
+                },
+                {
+                    "name": "outbound.poolMaxSize",
+                    "value": "123"
+                },
+                {
+                    "name": "outbound.poolMaxIdleItems",
+                    "value": "12"
+                },
+                {
+                    "name": "outbound.poolItemWaitingTime",
+                    "value": "12345"
+                },
+                {
+                    "name": "outbound.replyType",
+                    "value": "NO_REPLY"
+                },
+                {
+                    "name": "outbound.messageFormat",
+                    "value": "ALWAYS_BINARY"
+                },
+                {
+                    "name": "outbound.useMessageIdForCorrelation",
+                    "value": "false"
+                }
+            ]
+        },
+        {
+            "name": "jms-mq",
+            "direction": "INBOUND",
+            "providerType": "WEBSPHERE MQ OVER LDAP",
+            "enabled": false,
+            "template": false,
+            "initialContextFactoryClassname": "initial-context-factory",
+            "connectionFactoryName": "connection-factory",
+            "jndiUrl": "jndi://url",
+            "jndiSslDetails": {
+                "sslEnabled": false,
+                "sslForAuthenticationOnly": false,
+                "sslVerifyServerCertificate": false,
+                "sslVerifyServerHostname": false
+            },
+            "destinationType": "TOPIC",
+            "destinationName": "topic-destination",
+            "destinationSslDetails": {
+                "sslEnabled": true,
+                "sslForAuthenticationOnly": false,
+                "sslVerifyServerCertificate": false,
+                "sslVerifyServerHostname": false,
+                "sslClientKeyAlias": "<DEFAULT>"
+            },
+            "properties": [
+                {
+                    "name": "inbound.contentTypeSource",
+                    "value": "FREEFORM"
+                },
+                {
+                    "name": "inbound.acknowledgementType",
+                    "value": "AUTOMATIC"
+                },
+                {
+                    "name": "inbound.replyType",
+                    "value": "REPLY_TO_OTHER"
+                },
+                {
+                    "name": "inbound.contentTypeValueOrProperty",
+                    "value": "application/json"
+                },
+                {
+                    "name": "inbound.soapActionMessageProperty",
+                    "value": "soap-action-property"
+                },
+                {
+                    "name": "inbound.replyTo",
+                    "value": "reply-queue"
+                },
+                {
+                    "name": "inbound.requestMaxSize",
+                    "value": "12345"
+                },
+                {
+                    "name": "inbound.useMessageIdForCorrelation",
+                    "value": "true"
+                },
+                {
+                    "name": "inbound.acknowledgmentType",
+                    "value": "ON_COMPLETION"
+                },
+                {
+                    "name": "hello",
+                    "value": "world"
+                },
+                {
+                    "name": "who",
+                    "value": "am I?"
+                }
+            ]
+        },
+        {
+            "name": "jms-mq",
+            "direction": "OUTBOUND",
+            "providerType": "WEBSPHERE MQ OVER LDAP",
+            "enabled": false,
+            "template": false,
+            "initialContextFactoryClassname": "initial-context-factory",
+            "connectionFactoryName": "connection-factory",
+            "jndiUrl": "jndi://url",
+            "jndiSslDetails": {
+                "sslEnabled": false,
+                "sslForAuthenticationOnly": false,
+                "sslVerifyServerCertificate": false,
+                "sslVerifyServerHostname": false
+            },
+            "destinationType": "TOPIC",
+            "destinationName": "topic-destination",
+            "destinationSslDetails": {
+                "sslEnabled": true,
+                "sslForAuthenticationOnly": false,
+                "sslVerifyServerCertificate": false,
+                "sslVerifyServerHostname": false,
+                "sslClientKeyAlias": "<DEFAULT>"
+            },
+            "properties": [
+                {
+                    "name": "outbound.poolType",
+                    "value": "SESSION"
+                },
+                {
+                    "name": "outbound.replyType",
+                    "value": "AUTOMATIC"
+                },
+                {
+                    "name": "outbound.messageFormat",
+                    "value": "AUTOMATIC"
+                },
+                {
+                    "name": "outbound.useMessageIdForCorrelation",
+                    "value": "false"
+                },
+                {
+                    "name": "inbound.acknowledgmentType",
+                    "value": "ON_COMPLETION"
+                },
+                {
+                    "name": "hello",
+                    "value": "world"
+                },
+                {
+                    "name": "who",
+                    "value": "am I?"
+                }
+            ]
+        }
+    ],
+
+    "keys": [
+        {
+            "goid": "00000000000000000000000000000002:some-key",
+            "keystoreId": "00000000000000000000000000000002",
+            "alias": "some-key",
+            "checksum": "f651ebc090f77d54fcbfc626d28bb8c0bae63f0f",
+            "keyType": "RSA",
+            "subjectDn": "CN=some-key",
+            "p12": "MIIJ7wIBAzCCCagGCSqGSIb3DQEHAaCCCZkEggmVMIIJkTCCBWUGCSqGSIb3DQEHAaCCBVYEggVSMIIFTjCCBUoGCyqGSIb3DQEMCgECoIIE8zCCBO8wKQYKKoZIhvcNAQwBAzAbBBQo6EIIy4hSUPsS3y4JTkmbM0zODwIDAMNQBIIEwKb+XdxmqocSUdN0rfCWJHyzzaUOhcKky9NVCRIFxy9lj3gB6n0F0WVf03KeJDmcIhBV/8wxB4zEyD/dUITsmNqXkFy9CE1F80vZG0ssqF9nXz1hrkEAtwQeg3AmCv4PsBjWIKELGejj0oxUSP0oBVRJPINFtl3O1ZAlIiXJ6XLyPuVz9ilTDV8A/0xkOsczfNPLcpKMh3FS6y+4AHTU+pefEaa1ETS+qZuXHKNFStX8OAyW/8hj4BCpfNou4/bjDCLfCRASL0P0VMp5g4lrXye6XEv4bQYZrqGIk3PG1x2pZGU1tgrlAOY9UgDPyswxtJ7VNG+yL7w9SDOf3SWClePFm1Lp7K4TtK3sf+Dq6ZyMv/nNb/7nPq0CKiKm7SHaNlwtl6yynjHsbisBSJDEJiVk6rHqNh8kfa1Um8eW2Jw4+SfY50G2l1fDk+G3/WlQvM4cQ9HowFkEa5B7ztw4muwKqz3WJWzcRAlzxDXx4IQIcKcMPe8dkimMHlTynmdwYOBkGWNMxRHshhpM2tW13eb1lYT+2HolRCXZt6bFW3HcNNJa/CsLsGNiVyixrmdAUIzTD+h/mbFSAj7AIgWMq3fgw8uZt7OXoSMpFWIhWJ2B6yUyfzoBm8ZxpFTXV1sYXC3sx6NzMNqVCxPbGTWzLMmf61RpXYe1pe99XixzORt5qrt7ltPo7NBh5GcmuSgT8OiEuqonCqSu+vg4fDaVIU2mskVkTlwz5WLc3tl4RpuNc7ZufkVfve0CE4GS9RvCkBnB//xVFD2Oa6YNIQjAFCHu9Bgl85ibkwrJ+SI4T4Geo4xlJqUUQ3ABVgBQOHuY6Cz3kNQ69WgMcM7VkfxQOrNnpKnp5QMDlwQHJ2ipXVEaqLMd8jyQvGFgdLhfe9HwJLp0iVb0xIyG52WsoZYYckMLs/K+kvZnyCk9vq2iJqYVTqnQiC1WWv9UCH6PVlY0/kVWJ4yHouDzplrX7ATNYVflw9UyTB8U6jxN2gMZk2hhWPf09RThO9dEcbskhx8CQZ4pDHY4AHwcWSMM/brTzU5aHL+UlMwBEbochU8GVdACvqIbMpaFTa1DDhr077HI3X3GmIst9HrkYgodTM0w4hypROHu5QBU7IKhHik1lnzln8wnhJ9uFGqUeXVzl4kT2qRlQFcgqY/XUlusDadQ+NK6UCPeHFjSqvhqSM1NqGjNii5icD9lA/TucGfh59v9V9T9Wg5HMkPvIZWpI4fQz6DT9CjRJ6jiAvA1l97hyJhzm+nLSvo00hV53Y/goWJqKYYE13gbg0tGJqkHneiQHQybl3yQHhLVRVGDA3TDWphTSyIvsp/D+Kfh6y/ALkAWPnl8aAiz96CfkQfeccri/AAx4G9TQInwB11lOAvP+KumwqioMPXe9HsHKJdsk7Fk5jhoVuwZ+YzNAHgxywt5PVA4pWgWrCkDklDUhkXMeu3a25SV0jNmjRYBna8aHY4rJC/cWcEzdVcKSheMbAEbz2ddaSLNwVjFNvWqQfYWF7pXIH0AhOjzDU97bLzxf5LEPExf2zCdg6qLXutDBZIOBqCc6qKuZ+A/SBVkBBg49xK4WxLVDnlRn7xOsItHSdPe96FMjUJI5DNzlUm/l4GHQRgxRDAfBgkqhkiG9w0BCRQxEh4QAHMAbwBtAGUALQBrAGUAeTAhBgkqhkiG9w0BCRUxFAQSVGltZSAxNjkzMzIwNDY3ODc2MIIEJAYJKoZIhvcNAQcGoIIEFTCCBBECAQAwggQKBgkqhkiG9w0BBwEwKQYKKoZIhvcNAQwBBjAbBBRsgbN52mOYln/nZaVjH4w47c2mhQIDAMNQgIID0ObIM6foDl6/IoSfBectj3T43gKVyuycPSgd+iNFvUBnt/EepvAFCddI73BrzN4otqjAuV4aT2m3mHCuHc8WUa8Bdty8/25vh63iD4YTxEr2CgJ5vWFjbd+DN/SlHxqEw6u9wNROabJ4qsBXgM/bJ25UTtWOzfmnX4e9IGsZx42E0dvdS6ZzZEYxzL1lE7NyA4kJJKtN/dW4GIqKcHyEWNvn2BmrJj0a9AEQPDTflR5QON2sVmn7fJ7PpnGdyjuUXaSnQevF/erAyhKFWi3foBlMOwHuCd8Rhqh/srmuKe9tIOj0ggWjjRCm3skk2BL0rM4eb6WRVZCnfgt6VH1gK5XqW61KXHYHOG5x1w8/2uxFa9OUb78RocWD09VpN0SS1TftEB8bmoNSSXQYHPMvpqvYtCRmDA80bO9RmHeGyCU0CJoGshRKXEPR4bj7SWHi667t2lsaGlYPAM+xfDJIo9Q25gqncDRaNxK4bJmtmajchSmCqEPQGjZ12DQQYGeGkBzRpTtKbofjZq67gy0SmY4+mI89DIBstYb1J3t/et68WKeDw7aUTy8jlMak6FKScTp7lxmpsNHFMU4spw9arFAmwkCFhs/uw+85gsRda+iBjkBaFBE6pbQ4neQOvIUn/SKQRlA9ynzlaEdyQXK40v0dSwbqMWevdkk3akIukVTNwhZdGLsjO3hvapqTedA1gmZuVEOjp5GzGziGo1VLeehEb4csrsT1Fi47Xd/l81cCZMntQ80x3X8zDo3bQmO6Rt4G1T9YXk7v8p2lkqXj68wNaW2ZaB4PgwKZD25ZH15seeogiJV4fxt2U5xgrsKF5WYwmDqdoiBwisI1k750t68/V0h0FifdvgOb4XGRAzcuyzZEMOe00NDmQLF9PJzPRGLxD+/O6+tYew5BEUozGURUDGfcPhusSXgBmb9ukKPVHeZ1D9RirQBXmlT6w6BRPida3/r1WGCc9lQ6Vcitrm5lJmv8cAG8opGQaJzhtIEr0vOK1SADS8xjDLGtnN2W1pGiF2ZQw6pDLnDcv7qozhK9jUKkB+CdPX39/lQJ2MJJyuYAPZ7C4YA8akV1X3TtdND2sjmIU+A1XAOKXxgmuLWyXereA6ipSsbjp0IbOPiyHxw2nP7UWnOHO6gcMY/U/TEOmPr20Hgt0VrmAPNs2k/amntpkYq9WNPhbj9PkJPwLM5TOGWt0dFvEiQi/GS+lxnzLvbL3BJLMohxdWuF3eVLFN26Pi/OOLLLxZZQ8ZQXnqgdb9jFKX7nviIrGDetMaDvbKvWGILAMzOfZ0CM9rcwPjAhMAkGBSsOAwIaBQAEFBzX6GA9TAq9/lO/MA4j6SHSV8f7BBTI6xh7HRuo3i3sD3gTxZ1BI5GGeAIDAYag",
+            "certChain": [
+                "-----BEGIN CERTIFICATE-----\nMIIDUjCCAgagAwIBAgIIFKJccs47bWswQQYJKoZIhvcNAQEKMDSgDzANBglghkgBZQMEAgEFAKEc\r\nMBoGCSqGSIb3DQEBCDANBglghkgBZQMEAgEFAKIDAgEgMBMxETAPBgNVBAMTCHNvbWUta2V5MB4X\r\nDTIzMDgyOTEzNDUzNFoXDTI4MDgyNzEzNDUzNFowEzERMA8GA1UEAxMIc29tZS1rZXkwggEiMA0G\r\nCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCE1GJvmrYz8GJfrRuZvkYdcZXq3lJScEUKx1rThnOE\r\nV1JAjF03NEeYWWdJ5tniV66AVkr+hBzVXDeL0VQum/3HhAkjyyywL8AvAWi5lCyE88lDnoA+Z3le\r\nnTGamYpCM5m5DE4e5WPku4hMnkV/0/uMBhq8j9neB+kHbhA6/XIB4ifyDTgdhFgKOqgEbrpvrzNX\r\nr1ouaVCSHodfl1boLVLlHCjWQyDbPIpvy5tVOut4qwWeGNnmTRqzPEn0FvODOdYtUHehy5/qP8pa\r\nPEDw86pHj5VBz3L/ZA3rMBmY8lp2qqZZpvL9DWRjWNrkB3cMSJQQTzyz2/oZCLJMM8jDhBH/AgMB\r\nAAGjQjBAMB0GA1UdDgQWBBSR8MObgDadKArVRNFxFHzliPpddjAfBgNVHSMEGDAWgBSR8MObgDad\r\nKArVRNFxFHzliPpddjBBBgkqhkiG9w0BAQowNKAPMA0GCWCGSAFlAwQCAQUAoRwwGgYJKoZIhvcN\r\nAQEIMA0GCWCGSAFlAwQCAQUAogMCASADggEBAIHlIZTz1bWxWgqtISf0+icsIyOoVSI+rFL4R1QC\r\nG8gCYp/OsrLgaV9JX73idpv+lITkpyC9uHqJnJwkhO86VDaZC1vxYElUcOXwFU8QHWo+jtTyQMLk\r\nAgMi/Z/SonY8uvVU2jpvKYBCzbqtaI2+hOrVD/SO4rtA96z+9P8iXkiAry6fFqZ0VcE1e+f6SSkH\r\n/8U8LjvN3Z4ah6Z+6wyEp8CptV/6hvz6BU0+JgtM/kyhVTC4xM6OItl+uvvhgElrk5VQ5QAytuH1\r\ncBv9bMwouz7h8YAHJK6ojr4TnajM0iHFTmI5o/vkAwlCicY+DiMuNQtgykWeimaaOub0A0nMUK4=\n-----END CERTIFICATE-----\n"
+            ]
+        },
+        {
+            "goid": "00000000000000000000000000000002:some-other-key",
+            "keystoreId": "00000000000000000000000000000002",
+            "alias": "some-other-key",
+            "checksum": "052b3f0d44b5d0256a99f813712517e385bfc89f",
+            "keyType": "EC",
+            "subjectDn": "CN=some-other-key",
+            "p12": "MIIDWAIBAzCCAxEGCSqGSIb3DQEHAaCCAwIEggL+MIIC+jCB3wYJKoZIhvcNAQcBoIHRBIHOMIHLMIHIBgsqhkiG9w0BDAoBAqBnMGUwKQYKKoZIhvcNAQwBAzAbBBROwuhgu7oraRxSHtIdNL+N25I8JwIDAMNQBDiOndImZXnbX+ECsFNJcu1ZHhyY2fTjsYYwF+JjDHCTZXKFy+oNp1PUSqs+wPmF4BUJzaSwRR0J9TFQMCsGCSqGSIb3DQEJFDEeHhwAcwBvAG0AZQAtAG8AdABoAGUAcgAtAGsAZQB5MCEGCSqGSIb3DQEJFTEUBBJUaW1lIDE2OTMzMjA0NjgxMzUwggIUBgkqhkiG9w0BBwagggIFMIICAQIBADCCAfoGCSqGSIb3DQEHATApBgoqhkiG9w0BDAEGMBsEFL2ag/pJUrT99l64MWKMYA39lbgaAgMAw1CAggHAHSkTbRx4tWjU6ViRKQ/gaNYxHwVTxlgvyKJa7cifcbSKDFbpiZYGPDSJC0aAReSvhR4qlgfHqZpkVOkIOSLK2zCYswg4YoCa83kFdIwvz1WTxD7RKR3dUi7ocS4Ls6x/lXzMXCrm37+UZN209tJFZGGlInkA4OKm63oA25YX8sKA/tH+oTyi77O+mF9q2BUipyV88xuSeX9feKThmOvidALbYjwLFN9v7hk+VWiTX14xqFbJ8bvucQ811DYYlIcxFgo2TIoDrfhjqkdSKLt5tLfHRz19TM0PbR7azgIl5JNjyXGuFS2A4HY3/GUsd3/BIhFCcmMN3tLBr/88ygCheDGCzqxaMwmVbnu94sTSXI2KazfL3Y5BRNdJAaAP/It3MrnBtxUnuwRTxFjrKJW0j+2859Q7QAk+QXJPQ4G+DKzZMNI5bMPA8v7QVu0Rp0zpCCmS5kVi54u9xU3zS8avEJdFFWsiOXdkcYl8g73vcXTM+5001L67LWfNUbGrqeX2MkyItgiBeDLpU0227grKLMYucxspe9ORFwSXFN/6VRlGg9MmcgIZ9+CfJQ8JXYOvnCcHsody2mYPYzgdaaxV/zA+MCEwCQYFKw4DAhoFAAQUwhX9ZS64/d/pU+moTyHYJLgJ420EFDEv0GtkJuEf264qksj6f8XufYaGAgMBhqA=",
+            "certChain": [
+                "-----BEGIN CERTIFICATE-----\nMIIBODCB96ADAgECAggBupX1VMu/MzAKBggqhkjOPQQDAjAZMRcwFQYDVQQDEw5zb21lLW90aGVy\r\nLWtleTAeFw0yMzA4MjkxMzQ3MjZaFw0yODA4MjcxMzQ3MjZaMBkxFzAVBgNVBAMTDnNvbWUtb3Ro\r\nZXIta2V5MEAwEAYHKoZIzj0CAQYFK4EEAAEDLAAEA0tp6jZBJ7KUOFAhkEs4kF91843jB+kwSpEc\r\njECM3PGw22XQ8kFH0jyXo0IwQDAdBgNVHQ4EFgQUIDiuNmGM6NM1wdgO5/20w/OdbHIwHwYDVR0j\r\nBBgwFoAUIDiuNmGM6NM1wdgO5/20w/OdbHIwCgYIKoZIzj0EAwIDMAAwLQIVASz2Nk/p1vQOXQ6O\r\nNmaH5bLFFUfYAhRADeUSczVqSx0bcD9sRwgTBAiVEg==\n-----END CERTIFICATE-----\n"
+            ]
+        }
+    ],
+
+    "listenPorts": [
+        {
+            "name": "some-listen-port (18443)",
+            "enabled": false,
+            "protocol": "HTTPS",
+            "port": 18443,
+            "enabledFeatures": [
+                "PUBLISHED_SERVICE_MESSAGE_INPUT",
+                "POLICY_MANAGER_ACCESS",
+                "POLICY_DOWNLOAD_SERVICE",
+                "PING_SERVICE",
+                "WS_TRUST_SECURITY_TOKEN_SERVICE",
+                "CERTIFICATE_SIGNING_SERVICE",
+                "PASSWORD_CHANGING_SERVICE",
+                "WSDL_DOWNLOAD_SERVICE",
+                "SNMP_QUERY_SERVICE",
+                "BUILT_IN_SERVICES"
+            ],
+            "tlsSettings": {
+                "clientAuthentication": "OPTIONAL",
+                "tlsVersions": [
+                    "TLSv1.2",
+                    "TLSv1.3"
+                ],
+                "useCipherSuitesOrder": true
+            },
+            "properties": [
+                {
+                    "name": "enableWebSocket",
+                    "value": "false"
+                },
+                {
+                    "name": "useExtendedFtpCommandSet",
+                    "value": "false"
+                }
+            ]
+        },
+        {
+            "name": "some-other-listen-port (28443)",
+            "enabled": false,
+            "protocol": "HTTPS",
+            "port": 28443,
+            "hardwiredServiceName": "some-backend-service",
+            "enabledFeatures": [
+                "PUBLISHED_SERVICE_MESSAGE_INPUT",
+                "POLICY_MANAGER_ACCESS",
+                "POLICY_DOWNLOAD_SERVICE",
+                "PING_SERVICE",
+                "WS_TRUST_SECURITY_TOKEN_SERVICE",
+                "CERTIFICATE_SIGNING_SERVICE",
+                "PASSWORD_CHANGING_SERVICE",
+                "WSDL_DOWNLOAD_SERVICE",
+                "SNMP_QUERY_SERVICE",
+                "BUILT_IN_SERVICES"
+            ],
+            "tlsSettings": {
+                "clientAuthentication": "REQUIRED",
+                "keystoreId": "00000000000000000000000000000002",
+                "keyAlias": "some-host",
+                "tlsVersions": [
+                    "TLSv1.2",
+                    "TLSv1.3"
+                ],
+                "useCipherSuitesOrder": true
+            },
+            "properties": [
+                {
+                    "name": "threadPoolSize",
+                    "value": "32"
+                },
+                {
+                    "name": "enableWebSocket",
+                    "value": "true"
+                },
+                {
+                    "name": "overrideContentType",
+                    "value": "application/json; charset=utf-8"
+                },
+                {
+                    "name": "useExtendedFtpCommandSet",
+                    "value": "false"
+                },
+                {
+                    "name": "requestSizeLimit",
+                    "value": "2048"
+                }
+            ]
+        }
+    ],
+
+    "policyFragments": [
+        {
+            "goid": "8ab5d466fb9c623b9f1d9182daedeff4",
+            "guid": "ffe348a7-8255-4c3b-ba18-021ec626dd0d",
+            "name": "some-inner-policy-fragment",
+            "checksum": "6669918b08f00b069859c885ce46871192badeff",
+            "folderPath": "/policyFragments",
+            "soap": false,
+            "policy": {
+                "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"JHtzb21lLW91dHB1dH0sICJoZWxsbyBmcm9tICR7cG9saWN5Lm5hbWV9Ig==\"/>\n            <L7p:VariableToSet stringValue=\"some-output\"/>\n        </L7p:SetVariable>\n    </wsp:All>\n</wsp:Policy>\n"
+            }
+        },
+        {
+            "goid": "8ab5d466fb9c623b9f1d9182daedeff8",
+            "guid": "57e20954-e6c7-479e-ba68-09c987fef748",
+            "name": "some-policy-fragment",
+            "checksum": "12f9602b9f3540dff883bb1fdef6c8b16b5a741e",
+            "folderPath": "/policyFragments",
+            "soap": false,
+            "policy": {
+                "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:CommentAssertion>\n            <L7p:Comment stringValue=\"Policy Fragment: some-policy-fragment\"/>\n        </L7p:CommentAssertion>\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"JHtzb21lLW91dHB1dH0sICJoZWxsbyBmcm9tICR7cG9saWN5Lm5hbWV9Ig==\"/>\n            <L7p:VariableToSet stringValue=\"some-output\"/>\n        </L7p:SetVariable>\n        <L7p:Include>\n            <L7p:PolicyGuid stringValue=\"ffe348a7-8255-4c3b-ba18-021ec626dd0d\"/>\n            <L7p:PolicyName stringValue=\"some-inner-policy-fragment\"/>\n        </L7p:Include>\n    </wsp:All>\n</wsp:Policy>\n"
+            }
+        },
+        {
+            "guid": "605f1143-005c-4e19-8aa9-9238f665f1ec",
+            "name": "some-encass-policy",
+            "folderPath": "/graphman-tests/encassConfigs",
+            "soap": false,
+            "policy": {
+                "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:CommentAssertion>\n            <L7p:Comment stringValue=\"Policy Fragment: some-policy\"/>\n        </L7p:CommentAssertion>\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"JHtzb21lLXN0cmluZy1hcmd9\"/>\n            <L7p:VariableToSet stringValue=\"some-string-result\"/>\n        </L7p:SetVariable>\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"JHtzb21lLWludC1hcmd9\"/>\n            <L7p:VariableToSet stringValue=\"some-int-result\"/>\n        </L7p:SetVariable>\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"JHtzb21lLWRlY2ltYWwtYXJnfQ==\"/>\n            <L7p:VariableToSet stringValue=\"some-decimal-result\"/>\n        </L7p:SetVariable>\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"JHtzb21lLWZsb2F0LWFyZ30=\"/>\n            <L7p:VariableToSet stringValue=\"some-float-result\"/>\n        </L7p:SetVariable>\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"JHtzb21lLWJvb2wtYXJnfQ==\"/>\n            <L7p:VariableToSet stringValue=\"some-bool-result\"/>\n        </L7p:SetVariable>\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"JHtzb21lLWJpbmFyeS1hcmd9\"/>\n            <L7p:VariableToSet stringValue=\"some-binary-result\"/>\n        </L7p:SetVariable>\n    </wsp:All>\n</wsp:Policy>\n"
+            }
+        },
+        {
+            "guid": "264423e9-0695-4dde-9eb6-4d94f51d6536",
+            "name": "some-other-encass",
+            "folderPath": "/graphman-tests/encassConfigs",
+            "soap": false,
+            "policy": {
+                "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:CommentAssertion>\n            <L7p:Comment stringValue=\"Policy Fragment: some-other-encass\"/>\n        </L7p:CommentAssertion>\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"JHtpbnB1dDF9JHtpbnB1dDJ9\"/>\n            <L7p:VariableToSet stringValue=\"output\"/>\n        </L7p:SetVariable>\n    </wsp:All>\n</wsp:Policy>\n"
+            }
+        }
+    ],
+
+    "revocationCheckPolicies": [
+        {
+            "name": "SampleRevocPolicy",
+            "defaultPolicy": true,
+            "defaultSuccess": false,
+            "continueOnServerUnavailable": false,
+            "revocationCheckPolicyItems": [
+                {
+                    "type": "CRL_FROM_URL",
+                    "url": "https://test.com",
+                    "allowIssuerSignature": true,
+                    "nonceUsage": "EXCLUDE_NONCE"
+                },
+                {
+                    "type": "CRL_FROM_CERTIFICATE",
+                    "url": ".*",
+                    "allowIssuerSignature": false,
+                    "nonceUsage": "INCLUDE_NONCE"
+                },
+                {
+                    "type": "OCSP_FROM_URL",
+                    "url": "https://ocspfromurl.com/",
+                    "allowIssuerSignature": true,
+                    "nonceUsage": "USE_NONCE_CONDITIONALLY"
+                }
+            ]
+        }
+    ],
+
+    "scheduledTasks": [
+        {
+            "name": "some-backgroundtask",
+            "policyName": "some-backgroundtask-policy",
+            "jobType": "RECURRING",
+            "cronExpression": "0 0 */1 * * ?",
+            "executeOnSingleNode": false,
+            "executeOnCreation": true,
+            "status": "SCHEDULED"
+        },
+        {
+            "name": "some-other-backgroundtask",
+            "policyName": "some-other-backgroundtask-policy",
+            "jobType": "ONE_TIME",
+            "executeOnSingleNode": true,
+            "executeOnCreation": false,
+            "executionDate": "2022-11-16T11:42:16+05:30",
+            "runAsUser": "admin",
+            "runAsUserProviderName": "Internal Identity Provider"
+        }
+    ],
+
+    "secrets": [
+        {
+            "name": "some-secret",
+            "description": "",
+            "secret": "JEw3RXYwMiTL3CCAXsTJE82In+1F83TaBw1ngTN/H+hXhbf2tZLgXg==",
+            "secretType": "PASSWORD",
+            "variableReferencable": true
+        },
+        {
+            "name": "some-other-secret",
+            "description": "openssl compatible",
+            "secret": "JEw3RXYwMiQR955PvgQBlQIdECpIoOwvRuQKLBAAhXYlPWyjV1FFNQ==",
+            "secretType": "PASSWORD",
+            "variableReferencable": true
+        },
+        {
+            "name": "some-pwd",
+            "description": "some-description",
+            "secret": "JEw3RXYwMiRl9P1rkBDjp9tuz1yFuuqjPX7a8TPap3KrLjsO0EsoHw==",
+            "secretType": "PASSWORD",
+            "variableReferencable": true
+        }
+    ],
+
+    "smConfigs": [
+        {
+            "name": "some-smconfig",
+            "enabled": true,
+            "agentHost": "some-smhost",
+            "agentIP": "127.0.0.1",
+            "agentHostConfig": "DefaultHostSettings",
+            "agentSecret": "Y2hhbmdlaXQ=",
+            "cryptoMode": "MIGRATE",
+            "ipCheckEnabled": false,
+            "updateSSOToken": false,
+            "clusterFailoverThreshold": 50,
+            "nonClusterFailover": false,
+            "username": "some-user",
+            "securePasswordName": "some-pwd",
+            "properties": [
+                {
+                    "name": "server.0.0.accounting.port",
+                    "value": "44441"
+                },
+                {
+                    "name": "server.0.0.timeout",
+                    "value": "60"
+                },
+                {
+                    "name": "server.0.0.connection.step",
+                    "value": "1"
+                },
+                {
+                    "name": "server.0.0.authorization.port",
+                    "value": "44443"
+                },
+                {
+                    "name": "server.0.0.connection.min",
+                    "value": "1"
+                },
+                {
+                    "name": "server.0.0.connection.max",
+                    "value": "3"
+                },
+                {
+                    "name": "server.0.0.address",
+                    "value": "apimsm128compat.lvn.broadcom.net"
+                },
+                {
+                    "name": "server.0.0.authentication.port",
+                    "value": "44442"
+                }
+            ]
+        }
+    ],
+
+    "soapServices": [
+        {
+            "name": "some soap service",
+            "folderPath": "/graphman-tests/soapServices",
+            "resolutionPath" : "/some-soap",
+			"resolvers": {
+				"soapActions": [
+				  "http://warehouse.acme.com/ws/listProducts",
+				  "http://warehouse.acme.com/ws/getProductDetails",
+				  "http://warehouse.acme.com/ws/placeOrder",
+				  "http://warehouse.acme.com/ws/currentOrders"
+				],
+				"baseUri": "http://warehouse.acme.com/ws",
+				"resolutionPath": "/some-soap"
+			  },
+            "wsdl": "<definitions targetNamespace=\"http://warehouse.acme.com/ws\" xmlns=\"http://schemas.xmlsoap.org/wsdl/\" xmlns:http=\"http://schemas.xmlsoap.org/wsdl/http/\" xmlns:mime=\"http://schemas.xmlsoap.org/wsdl/mime/\" xmlns:s=\"http://www.w3.org/2001/XMLSchema\" xmlns:s0=\"http://warehouse.acme.com/ws\" xmlns:soap=\"http://schemas.xmlsoap.org/wsdl/soap/\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:tm=\"http://microsoft.com/wsdl/mime/textMatching/\">\n  <types>\n    <s:schema elementFormDefault=\"qualified\" targetNamespace=\"http://warehouse.acme.com/ws\">\n      <s:element name=\"listProducts\">\n        <s:complexType/>\n      </s:element>\n      <s:element name=\"listProductsResponse\">\n        <s:complexType>\n          <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"0\" name=\"listProductsResult\" type=\"s0:ArrayOfProductListHeader\"/>\n          </s:sequence>\n        </s:complexType>\n      </s:element>\n      <s:complexType name=\"ArrayOfProductListHeader\">\n        <s:sequence>\n          <s:element maxOccurs=\"unbounded\" minOccurs=\"0\" name=\"ProductListHeader\" nillable=\"true\" type=\"s0:ProductListHeader\"/>\n        </s:sequence>\n      </s:complexType>\n      <s:complexType name=\"ProductListHeader\">\n        <s:sequence>\n          <s:element maxOccurs=\"1\" minOccurs=\"0\" name=\"productName\" type=\"s:string\"/>\n          <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productId\" type=\"s:long\"/>\n        </s:sequence>\n      </s:complexType>\n      <s:element name=\"getProductDetails\">\n        <s:complexType>\n          <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productid\" type=\"s:long\"/>\n          </s:sequence>\n        </s:complexType>\n      </s:element>\n      <s:element name=\"getProductDetailsResponse\">\n        <s:complexType>\n          <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"0\" name=\"getProductDetailsResult\" type=\"s0:ProductDetails\"/>\n          </s:sequence>\n        </s:complexType>\n      </s:element>\n      <s:complexType name=\"ProductDetails\">\n        <s:complexContent mixed=\"false\">\n          <s:extension base=\"s0:ProductListHeader\">\n            <s:sequence>\n              <s:element maxOccurs=\"1\" minOccurs=\"0\" name=\"description\" type=\"s:string\"/>\n              <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n              <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"inStock\" type=\"s:boolean\"/>\n            </s:sequence>\n          </s:extension>\n        </s:complexContent>\n      </s:complexType>\n      <s:element name=\"placeOrder\">\n        <s:complexType>\n          <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productid\" type=\"s:long\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"amount\" type=\"s:long\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountid\" type=\"s:long\"/>\n          </s:sequence>\n        </s:complexType>\n      </s:element>\n      <s:element name=\"placeOrderResponse\">\n        <s:complexType>\n          <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"placeOrderResult\" type=\"s:long\"/>\n          </s:sequence>\n        </s:complexType>\n      </s:element>\n      <s:element name=\"currentOrders\">\n        <s:complexType>\n          <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountid\" type=\"s:long\"/>\n          </s:sequence>\n        </s:complexType>\n      </s:element>\n      <s:element name=\"currentOrdersResponse\">\n        <s:complexType>\n          <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"0\" name=\"currentOrdersResult\" type=\"s0:ArrayOfOrder\"/>\n          </s:sequence>\n        </s:complexType>\n      </s:element>\n      <s:complexType name=\"ArrayOfOrder\">\n        <s:sequence>\n          <s:element maxOccurs=\"unbounded\" minOccurs=\"0\" name=\"Order\" nillable=\"true\" type=\"s0:Order\"/>\n        </s:sequence>\n      </s:complexType>\n      <s:complexType name=\"Order\">\n        <s:sequence>\n          <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"date\" type=\"s:dateTime\"/>\n          <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountId\" type=\"s:long\"/>\n          <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productId\" type=\"s:long\"/>\n          <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"amount\" type=\"s:long\"/>\n          <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n          <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"confirmationId\" type=\"s:long\"/>\n        </s:sequence>\n      </s:complexType>\n    </s:schema>\n  </types>\n  <message name=\"listProductsSoapIn\">\n    <part element=\"s0:listProducts\" name=\"parameters\"/>\n  </message>\n  <message name=\"listProductsSoapOut\">\n    <part element=\"s0:listProductsResponse\" name=\"parameters\"/>\n  </message>\n  <message name=\"getProductDetailsSoapIn\">\n    <part element=\"s0:getProductDetails\" name=\"parameters\"/>\n  </message>\n  <message name=\"getProductDetailsSoapOut\">\n    <part element=\"s0:getProductDetailsResponse\" name=\"parameters\"/>\n  </message>\n  <message name=\"placeOrderSoapIn\">\n    <part element=\"s0:placeOrder\" name=\"parameters\"/>\n  </message>\n  <message name=\"placeOrderSoapOut\">\n    <part element=\"s0:placeOrderResponse\" name=\"parameters\"/>\n  </message>\n  <message name=\"currentOrdersSoapIn\">\n    <part element=\"s0:currentOrders\" name=\"parameters\"/>\n  </message>\n  <message name=\"currentOrdersSoapOut\">\n    <part element=\"s0:currentOrdersResponse\" name=\"parameters\"/>\n  </message>\n  <portType name=\"WarehouseSoap\">\n    <operation name=\"listProducts\">\n      <input message=\"s0:listProductsSoapIn\"/>\n      <output message=\"s0:listProductsSoapOut\"/>\n    </operation>\n    <operation name=\"getProductDetails\">\n      <input message=\"s0:getProductDetailsSoapIn\"/>\n      <output message=\"s0:getProductDetailsSoapOut\"/>\n    </operation>\n    <operation name=\"placeOrder\">\n      <input message=\"s0:placeOrderSoapIn\"/>\n      <output message=\"s0:placeOrderSoapOut\"/>\n    </operation>\n    <operation name=\"currentOrders\">\n      <input message=\"s0:currentOrdersSoapIn\"/>\n      <output message=\"s0:currentOrdersSoapOut\"/>\n    </operation>\n  </portType>\n  <binding name=\"WarehouseSoap\" type=\"s0:WarehouseSoap\">\n    <soap:binding style=\"document\" transport=\"http://schemas.xmlsoap.org/soap/http\"/>\n    <operation name=\"listProducts\">\n      <soap:operation soapAction=\"http://warehouse.acme.com/ws/listProducts\" style=\"document\"/>\n      <input>\n        <soap:body use=\"literal\"/>\n      </input>\n      <output>\n        <soap:body use=\"literal\"/>\n      </output>\n    </operation>\n    <operation name=\"getProductDetails\">\n      <soap:operation soapAction=\"http://warehouse.acme.com/ws/getProductDetails\" style=\"document\"/>\n      <input>\n        <soap:body use=\"literal\"/>\n      </input>\n      <output>\n        <soap:body use=\"literal\"/>\n      </output>\n    </operation>\n    <operation name=\"placeOrder\">\n      <soap:operation soapAction=\"http://warehouse.acme.com/ws/placeOrder\" style=\"document\"/>\n      <input>\n        <soap:body use=\"literal\"/>\n      </input>\n      <output>\n        <soap:body use=\"literal\"/>\n      </output>\n    </operation>\n    <operation name=\"currentOrders\">\n      <soap:operation soapAction=\"http://warehouse.acme.com/ws/currentOrders\" style=\"document\"/>\n      <input>\n        <soap:body use=\"literal\"/>\n      </input>\n      <output>\n        <soap:body use=\"literal\"/>\n      </output>\n    </operation>\n  </binding>\n  <service name=\"Warehouse\">\n    <port binding=\"s0:WarehouseSoap\" name=\"WarehouseSoap\">\n      <soap:address location=\"http://hugh/ACMEWarehouseWS/Service1.asmx\"/>\n    </port>\n  </service>\n</definitions>",
+
+            "wssProcessingEnabled": true,
+            "methodsAllowed": [
+                "POST"
+            ],
+            "policy": {
+                "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:SchemaValidation>\n            <L7p:ResourceInfo staticResourceInfo=\"included\">\n                <L7p:Document stringValueReference=\"inline\"><![CDATA[<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<s:schema elementFormDefault=\"qualified\"\n    targetNamespace=\"http://warehouse.acme.com/ws\"\n    xmlns:http=\"http://schemas.xmlsoap.org/wsdl/http/\"\n    xmlns:mime=\"http://schemas.xmlsoap.org/wsdl/mime/\"\n    xmlns:s=\"http://www.w3.org/2001/XMLSchema\"\n    xmlns:s0=\"http://warehouse.acme.com/ws\"\n    xmlns:soap=\"http://schemas.xmlsoap.org/wsdl/soap/\"\n    xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:tm=\"http://microsoft.com/wsdl/mime/textMatching/\">\n    <s:element name=\"listProducts\">\n        <s:complexType/>\n    </s:element>\n    <s:element name=\"listProductsResponse\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"0\"\n                    name=\"listProductsResult\" type=\"s0:ArrayOfProductListHeader\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:complexType name=\"ArrayOfProductListHeader\">\n        <s:sequence>\n            <s:element maxOccurs=\"unbounded\" minOccurs=\"0\"\n                name=\"ProductListHeader\" nillable=\"true\" type=\"s0:ProductListHeader\"/>\n        </s:sequence>\n    </s:complexType>\n    <s:complexType name=\"ProductListHeader\">\n        <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"0\" name=\"productName\" type=\"s:string\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productId\" type=\"s:long\"/>\n        </s:sequence>\n    </s:complexType>\n    <s:element name=\"getProductDetails\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productid\" type=\"s:long\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:element name=\"getProductDetailsResponse\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"0\"\n                    name=\"getProductDetailsResult\" type=\"s0:ProductDetails\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:complexType name=\"ProductDetails\">\n        <s:complexContent mixed=\"false\">\n            <s:extension base=\"s0:ProductListHeader\">\n                <s:sequence>\n                    <s:element maxOccurs=\"1\" minOccurs=\"0\"\n                        name=\"description\" type=\"s:string\"/>\n                    <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n                    <s:element maxOccurs=\"1\" minOccurs=\"1\"\n                        name=\"inStock\" type=\"s:boolean\"/>\n                </s:sequence>\n            </s:extension>\n        </s:complexContent>\n    </s:complexType>\n    <s:element name=\"placeOrder\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productid\" type=\"s:long\"/>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"amount\" type=\"s:long\"/>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountid\" type=\"s:long\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:element name=\"placeOrderResponse\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\"\n                    name=\"placeOrderResult\" type=\"s:long\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:element name=\"currentOrders\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountid\" type=\"s:long\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:element name=\"currentOrdersResponse\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"0\"\n                    name=\"currentOrdersResult\" type=\"s0:ArrayOfOrder\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:complexType name=\"ArrayOfOrder\">\n        <s:sequence>\n            <s:element maxOccurs=\"unbounded\" minOccurs=\"0\" name=\"Order\"\n                nillable=\"true\" type=\"s0:Order\"/>\n        </s:sequence>\n    </s:complexType>\n    <s:complexType name=\"Order\">\n        <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"date\" type=\"s:dateTime\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountId\" type=\"s:long\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productId\" type=\"s:long\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"amount\" type=\"s:long\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"confirmationId\" type=\"s:long\"/>\n        </s:sequence>\n    </s:complexType>\n</s:schema>\n]]></L7p:Document>\n                <L7p:OriginalUrl stringValue=\"file:/Users/flascelles/Documents/soap/Warehouse_WSDL.wsdl#.xsd1\"/>\n            </L7p:ResourceInfo>\n            <L7p:Target target=\"REQUEST\"/>\n        </L7p:SchemaValidation>\n        <L7p:SchemaValidation>\n            <L7p:ResourceInfo globalResourceInfo=\"included\">\n                <L7p:Id stringValue=\"http://warehouse.io/mywarehouse\"/>\n            </L7p:ResourceInfo>\n            <L7p:Target target=\"REQUEST\"/>\n        </L7p:SchemaValidation>\n        <L7p:HttpRoutingAssertion>\n            <L7p:ProtectedServiceUrl stringValue=\"http://hugh/ACMEWarehouseWS/Service1.asmx\"/>\n            <L7p:RequestHeaderRules httpPassthroughRuleSet=\"included\">\n                <L7p:Rules httpPassthroughRules=\"included\">\n                    <L7p:item httpPassthroughRule=\"included\">\n                        <L7p:Name stringValue=\"Cookie\"/>\n                    </L7p:item>\n                    <L7p:item httpPassthroughRule=\"included\">\n                        <L7p:Name stringValue=\"SOAPAction\"/>\n                    </L7p:item>\n                </L7p:Rules>\n            </L7p:RequestHeaderRules>\n            <L7p:RequestParamRules httpPassthroughRuleSet=\"included\">\n                <L7p:ForwardAll booleanValue=\"true\"/>\n                <L7p:Rules httpPassthroughRules=\"included\"/>\n            </L7p:RequestParamRules>\n            <L7p:ResponseHeaderRules httpPassthroughRuleSet=\"included\">\n                <L7p:Rules httpPassthroughRules=\"included\">\n                    <L7p:item httpPassthroughRule=\"included\">\n                        <L7p:Name stringValue=\"Set-Cookie\"/>\n                    </L7p:item>\n                </L7p:Rules>\n            </L7p:ResponseHeaderRules>\n        </L7p:HttpRoutingAssertion>\n    </wsp:All>\n</wsp:Policy>\n"
+            }
+        }
+    ],
+
+    "trustedCerts": [
+        {
+            "name": "some-trusted-cert",
+            "subjectDn": "cn=www.example.org,o=internet corporation for assigned names and numbers,l=los angeles,st=california,c=us",
+            "thumbprintSha1": "8qrXPTJoO3FtKn1htRxtV2SrOJk=",
+            "verifyHostname": false,
+            "trustAnchor": false,
+            "trustedFor": [
+                "SSL",
+                "SIGNING_SERVER_CERTS"
+            ],
+            "revocationCheckPolicyType": "USE_DEFAULT",
+            "notBefore": "2023-01-13T00:00:00Z",
+            "notAfter": "2024-02-13T23:59:59Z",
+            "certBase64": "MIIHSjCCBjKgAwIBAgIQDB/LGEUYx+OGZ0EjbWtz8TANBgkqhkiG9w0BAQsFADBPMQswCQYDVQQG\r\nEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMSkwJwYDVQQDEyBEaWdpQ2VydCBUTFMgUlNBIFNI\r\nQTI1NiAyMDIwIENBMTAeFw0yMzAxMTMwMDAwMDBaFw0yNDAyMTMyMzU5NTlaMIGWMQswCQYDVQQG\r\nEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEUMBIGA1UEBxMLTG9zIEFuZ2VsZXMxQjBABgNVBAoM\r\nOUludGVybmV0wqBDb3Jwb3JhdGlvbsKgZm9ywqBBc3NpZ25lZMKgTmFtZXPCoGFuZMKgTnVtYmVy\r\nczEYMBYGA1UEAxMPd3d3LmV4YW1wbGUub3JnMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC\r\nAQEAwoB3iVm4RW+6StkR+nutx1fQevu2+t0Fu6KBcbvhfyHSXy7w0nJOdTT4jWLjStpRkNQBPZwM\r\nwHH35i+21gdnJtDe/xfO8IX9McFmyodlBUcqX8CruIzDv9AXf2OjXPBG+4aq+03XKl5/muATl32+\r\n+301Vw1dXoGYNeoWQqLTsHT3WS3tOOf+ehuzNuZ+rj+ephaD3lMBToEArrtC9R91KTTN6YSAOK48\r\nNxTA8CfOMFK5itxfIqB5+E9OSQTidXyqLyoeA+xxTKMqYfxvypEek1oueAhY9u67NCBdmuavxtfy\r\nvwp7+o6Sd+NsewxAhmRKFexw13KOYzDhC+9aMJcuJQIDAQABo4ID2DCCA9QwHwYDVR0jBBgwFoAU\r\nt2ui6qiqhIx56rTaD5iyxZV2ufQwHQYDVR0OBBYEFLCTP+gXgv1ssrYXh8vjgP6CmwGeMIGBBgNV\r\nHREEejB4gg93d3cuZXhhbXBsZS5vcmeCC2V4YW1wbGUubmV0ggtleGFtcGxlLmVkdYILZXhhbXBs\r\nZS5jb22CC2V4YW1wbGUub3Jngg93d3cuZXhhbXBsZS5jb22CD3d3dy5leGFtcGxlLmVkdYIPd3d3\r\nLmV4YW1wbGUubmV0MA4GA1UdDwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUH\r\nAwIwgY8GA1UdHwSBhzCBhDBAoD6gPIY6aHR0cDovL2NybDMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0\r\nVExTUlNBU0hBMjU2MjAyMENBMS00LmNybDBAoD6gPIY6aHR0cDovL2NybDQuZGlnaWNlcnQuY29t\r\nL0RpZ2lDZXJ0VExTUlNBU0hBMjU2MjAyMENBMS00LmNybDA+BgNVHSAENzA1MDMGBmeBDAECAjAp\r\nMCcGCCsGAQUFBwIBFhtodHRwOi8vd3d3LmRpZ2ljZXJ0LmNvbS9DUFMwfwYIKwYBBQUHAQEEczBx\r\nMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wSQYIKwYBBQUHMAKGPWh0dHA6\r\nLy9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydFRMU1JTQVNIQTI1NjIwMjBDQTEtMS5jcnQw\r\nCQYDVR0TBAIwADCCAX8GCisGAQQB1nkCBAIEggFvBIIBawFpAHYA7s3QZNXbGs7FXLedtM0TojKH\r\nRny87N7DUUhZRnEftZsAAAGFq0gFIwAABAMARzBFAiEAqt+fK6jFdGA6tv0EWt9rax0WYBV4re9j\r\ngZgq0zi42QUCIEBh1yKpPvgX1BreE0wBUmriOVUhJS77KgF193fT2877AHcAc9meiRtMlnigIH1H\r\nneayxhzQUV5xGSqMa4AQesF3crUAAAGFq0gFnwAABAMASDBGAiEA12SUFK5rgLqRzvgcr7ZzV4nl\r\n+Zt9lloAzRLfPc7vSPACIQCXPbwScx1rE+BjFawZlVjLj/1PsM0KQQcsfHDZJUTLwAB2AEiw42va\r\npkc0D+VqAvqdMOscUgHLVt0sgdm7v6s52IRzAAABhatIBV4AAAQDAEcwRQIhAN5bhHthoyWMJ3CQ\r\nB/1iYFEhMgUVkFhHDM/nlE9ThCwhAiAPvPJXyp7a2kzwJX3P7fqH5Xko3rPhCzRoXYd6W+QkCjAN\r\nBgkqhkiG9w0BAQsFAAOCAQEAWeRK2KmCuppK8WMMbXYmdbM8dL7F9z2nkZL4zwYtWBDt87jW/Gz/\r\nE5YyzU/phySFC3SiwvYP9afYfXaKrunJWCtuAG+5zSTuxELFTBaFnTRhOSO/xo6VyYSpsuVBD0R4\r\n15W5z9l0v1hP5xb/fEAwxGxOIk3Lg2c6k78rxcWcGvJDoSU7hPb3U26oha7eFHSRMAYN8gfUxAi6\r\nQ2TF4j/arMVBr6Q36EJ2dPcTu0p9NlmBm8dE34lzuTNC6GDCTWFdEloQ9u//M4kUUOjWn8a5XCs1\r\n263t3Ta2JfKViqxpP5r+GvgVKG3qGFrC0mIYr0B4tfpeCY9T+cz4I6GDMSP0xg=="
+        },
+        {
+            "name": "some-other-trusted-cert",
+            "subjectDn": "cn=sni.cloudflaressl.com,o=cloudflare\\, inc.,l=san francisco,st=california,c=us",
+            "thumbprintSha1": "KCjaydt1qoeF9KZJxM0pDgBAd1U=",
+            "verifyHostname": true,
+            "trustAnchor": true,
+            "trustedFor": [
+                "SSL",
+                "SIGNING_SERVER_CERTS"
+            ],
+            "revocationCheckPolicyType": "USE_DEFAULT",
+            "notBefore": "2022-05-28T00:00:00Z",
+            "notAfter": "2023-05-28T23:59:59Z",
+            "certBase64": "MIIFJjCCBMygAwIBAgIQAc4RmE1z36BQTG41XVo7STAKBggqhkjOPQQDAjBKMQswCQYDVQQGEwJV\r\nUzEZMBcGA1UEChMQQ2xvdWRmbGFyZSwgSW5jLjEgMB4GA1UEAxMXQ2xvdWRmbGFyZSBJbmMgRUND\r\nIENBLTMwHhcNMjIwNTI4MDAwMDAwWhcNMjMwNTI4MjM1OTU5WjB1MQswCQYDVQQGEwJVUzETMBEG\r\nA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZyYW5jaXNjbzEZMBcGA1UEChMQQ2xvdWRm\r\nbGFyZSwgSW5jLjEeMBwGA1UEAxMVc25pLmNsb3VkZmxhcmVzc2wuY29tMFkwEwYHKoZIzj0CAQYI\r\nKoZIzj0DAQcDQgAENvXhMbPHM1wuM8muwgLfqOY8OZhhVbzGKYNf+VVTkgU4xvYoOtoBckp/L8HE\r\nYEIex1s77eEKNW4GuId6r+9g1KOCA2cwggNjMB8GA1UdIwQYMBaAFKXON+rrsHUOlGeItEX62SQQ\r\nh5YfMB0GA1UdDgQWBBSK7ogvwe81QKZOZXOq3FJVyiO3UTAuBgNVHREEJzAlggx3d3cuaWV0Zi5v\r\ncmeCFXNuaS5jbG91ZGZsYXJlc3NsLmNvbTAOBgNVHQ8BAf8EBAMCB4AwHQYDVR0lBBYwFAYIKwYB\r\nBQUHAwEGCCsGAQUFBwMCMHsGA1UdHwR0MHIwN6A1oDOGMWh0dHA6Ly9jcmwzLmRpZ2ljZXJ0LmNv\r\nbS9DbG91ZGZsYXJlSW5jRUNDQ0EtMy5jcmwwN6A1oDOGMWh0dHA6Ly9jcmw0LmRpZ2ljZXJ0LmNv\r\nbS9DbG91ZGZsYXJlSW5jRUNDQ0EtMy5jcmwwPgYDVR0gBDcwNTAzBgZngQwBAgIwKTAnBggrBgEF\r\nBQcCARYbaHR0cDovL3d3dy5kaWdpY2VydC5jb20vQ1BTMHYGCCsGAQUFBwEBBGowaDAkBggrBgEF\r\nBQcwAYYYaHR0cDovL29jc3AuZGlnaWNlcnQuY29tMEAGCCsGAQUFBzAChjRodHRwOi8vY2FjZXJ0\r\ncy5kaWdpY2VydC5jb20vQ2xvdWRmbGFyZUluY0VDQ0NBLTMuY3J0MAwGA1UdEwEB/wQCMAAwggF9\r\nBgorBgEEAdZ5AgQCBIIBbQSCAWkBZwB2AOg+0No+9QY1MudXKLyJa8kD08vREWvs62nhd31tBr1u\r\nAAABgQg6Ys4AAAQDAEcwRQIhANX0PSUOX/P50JSOcCYD98B6qt+R31549HF5pG7vNY6tAiBF0mN1\r\nuKpSSU//UYa2JsFnyNJoP1SCjjmltkviylJTlwB1ADXPGRu/sWxXvw+tTG1Cy7u2JyAmUeo/4Srv\r\nqAPDO9ZMAAABgQg6YugAAAQDAEYwRAIgFiWFDBq0iPpHVeuvExEotWs8OPvznzF5G/HKdTRoGSMC\r\nIFEHSwwxLw/3H7xZQCkga6oE2tlBnz1+RhcEMGSG+42iAHYAtz77JN+cTbp18jnFulj0bF38Qs96\r\nnzXEnh0JgSXttJkAAAGBCDpi0wAABAMARzBFAiEAyf8VZ5Y1NvgVk5PaBzvX3sWYqeLVaZje5QSs\r\nHIapKD8CICez+afq/kWu3bNv7ci5/ftUK63G4pye/8/tfzhPS3/HMAoGCCqGSM49BAMCA0gAMEUC\r\nIQDOQ2v6is3j1uVq8oS15c5SHTcsUd25ErdbcfGSs9HTGAIgIINaIvgtyM5xDmIObFHPBNYQpIAc\r\n9lIZN9fvL9ct7Yk="
+        }
+    ],
+
+    "webApiServices": [
+        {
+            "goid": "8ab5d466fb9c623b9f1d9182daedf550",
+            "name": "some-service",
+            "resolutionPath": "/some-service",
+            "checksum": "b45728c67414001e672e627ddd2c204dd0019c1c",
+            "enabled": true,
+            "folderPath": "/policyFragments",
+            "methodsAllowed": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ],
+            "tracingEnabled": false,
+            "wssProcessingEnabled": false,
+            "policy": {
+                "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:Include>\n            <L7p:PolicyGuid stringValue=\"57e20954-e6c7-479e-ba68-09c987fef748\"/>\n        </L7p:Include>\n        <L7p:HardcodedResponse>\n            <L7p:Base64ResponseBody stringValue=\"WyJoZWxsbyIke3NvbWUtb3V0cHV0fV0=\"/>\n            <L7p:ResponseContentType stringValue=\"application/json; charset=UTF-8\"/>\n        </L7p:HardcodedResponse>\n    </wsp:All>\n</wsp:Policy>\n"
+            }
+        },
+        {
+            "goid": "8ab5d466fb9c623b9f1d9182daedefdc",
+            "name": "some-other-webapi",
+            "resolutionPath": "/some-other-webapi",
+            "checksum": "3ba457671351f736f9445585360cd0816fbc9063",
+            "enabled": true,
+            "folderPath": "/webApiServices",
+            "methodsAllowed": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ],
+            "tracingEnabled": false,
+            "wssProcessingEnabled": false,
+            "properties": [
+                {
+                    "name": "some-prop",
+                    "value": "some-val"
+                },
+                {
+                    "name": "some-other-prop",
+                    "value": "some-other-val"
+                }
+            ],
+            "policy": {
+                "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <wsp:OneOrMore wsp:Usage=\"Required\">\n            <wsp:All wsp:Usage=\"Required\">\n                <L7p:ComparisonAssertion>\n                    <L7p:Expression1 stringValue=\"${gateway.greetings}\"/>\n                    <L7p:Expression2 stringValue=\"\"/>\n                    <L7p:ExpressionIsVariable booleanValue=\"false\"/>\n                    <L7p:Negate booleanValue=\"true\"/>\n                    <L7p:Operator operator=\"EMPTY\"/>\n                    <L7p:Predicates predicates=\"included\">\n                        <L7p:item binary=\"included\">\n                            <L7p:Negated booleanValue=\"true\"/>\n                            <L7p:Operator operator=\"EMPTY\"/>\n                            <L7p:RightValue stringValue=\"\"/>\n                        </L7p:item>\n                    </L7p:Predicates>\n                </L7p:ComparisonAssertion>\n                <L7p:SetVariable>\n                    <L7p:Base64Expression stringValue=\"JHtnYXRld2F5LmdyZWV0aW5nc30=\"/>\n                    <L7p:VariableToSet stringValue=\"greetings\"/>\n                </L7p:SetVariable>\n            </wsp:All>\n            <L7p:SetVariable>\n                <L7p:Base64Expression stringValue=\"SGVsbG8sIFdvcmxkIQ==\"/>\n                <L7p:VariableToSet stringValue=\"greetings\"/>\n            </L7p:SetVariable>\n        </wsp:OneOrMore>\n        <L7p:HardcodedResponse>\n            <L7p:Base64ResponseBody stringValue=\"JHtncmVldGluZ3N9\"/>\n            <L7p:ResponseContentType stringValue=\"text/plain; charset=UTF-8\"/>\n        </L7p:HardcodedResponse>\n    </wsp:All>\n</wsp:Policy>\n"
+            }
+        },
+        {
+            "goid": "8ab5d466fb9c623b9f1d9182daedefe8",
+            "name": "some-webapi",
+            "resolutionPath": "/some-webapi",
+            "checksum": "47600ae6ec52e98815487956cd97d0ac367fb5c8",
+            "enabled": true,
+            "folderPath": "/webApiServices",
+            "methodsAllowed": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ],
+            "tracingEnabled": false,
+            "wssProcessingEnabled": false,
+            "policy": {
+                "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <wsp:OneOrMore wsp:Usage=\"Required\">\n            <wsp:All wsp:Usage=\"Required\">\n                <L7p:ComparisonAssertion>\n                    <L7p:Expression1 stringValue=\"${gateway.greetings}\"/>\n                    <L7p:Expression2 stringValue=\"\"/>\n                    <L7p:ExpressionIsVariable booleanValue=\"false\"/>\n                    <L7p:Negate booleanValue=\"true\"/>\n                    <L7p:Operator operator=\"EMPTY\"/>\n                    <L7p:Predicates predicates=\"included\">\n                        <L7p:item binary=\"included\">\n                            <L7p:Negated booleanValue=\"true\"/>\n                            <L7p:Operator operator=\"EMPTY\"/>\n                            <L7p:RightValue stringValue=\"\"/>\n                        </L7p:item>\n                    </L7p:Predicates>\n                </L7p:ComparisonAssertion>\n                <L7p:SetVariable>\n                    <L7p:Base64Expression stringValue=\"JHtnYXRld2F5LmdyZWV0aW5nc30=\"/>\n                    <L7p:VariableToSet stringValue=\"greetings\"/>\n                </L7p:SetVariable>\n            </wsp:All>\n            <L7p:SetVariable>\n                <L7p:Base64Expression stringValue=\"SGVsbG8sIFdvcmxkIQ==\"/>\n                <L7p:VariableToSet stringValue=\"greetings\"/>\n            </L7p:SetVariable>\n        </wsp:OneOrMore>\n        <L7p:HardcodedResponse>\n            <L7p:Base64ResponseBody stringValue=\"JHtncmVldGluZ3N9\"/>\n            <L7p:ResponseContentType stringValue=\"text/plain; charset=UTF-8\"/>\n        </L7p:HardcodedResponse>\n    </wsp:All>\n</wsp:Policy>\n"
+            }
+        },
+        {
+            "name": "some-backend-service",
+            "resolutionPath": "/some-backend-service",
+            "enabled": true,
+            "folderPath": "/webApiServices",
+            "methodsAllowed": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ],
+            "tracingEnabled": false,
+            "wssProcessingEnabled": false,
+            "policy": {
+                "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\"><wsp:All wsp:Usage=\"Required\"><L7p:HardcodedResponse>\t<L7p:Base64ResponseBody stringValue=\"WyJoZWxsbyBmcm9tICR7c2VydmljZS5uYW1lfSJd\"/>\t<L7p:ResponseContentType stringValue=\"application/json; charset=UTF-8\"/></L7p:HardcodedResponse></wsp:All></wsp:Policy>"
+            }
+        }
+    ],
+
+    "fipUsers": [
+        {
+            "goid": "537a504aaf1eb2dfd7a5882ce4de7a9d",
+            "name": "some-fip-user",
+            "login": "some-fip-user",
+            "providerName": "some-fip",
+            "checksum": "ee4c15e07458302049b943e3a07e741ea82d9ac2",
+            "subjectDn": "cn=some-fip-user",
+            "email": "some-fip-user@some.fip"
+        },
+        {
+            "goid": "537a504aaf1eb2dfd7a5882ce4de7aae",
+            "name": "some-other-fip-user",
+            "login": "some-other-fip-user",
+            "providerName": "some-fip",
+            "checksum": "ee4c15e07458302049b943e3a07e741ea82d9ac2",
+            "subjectDn": "cn=some-other-fip-user",
+            "email": "some-other-fip-user@some.fip"
+        }
+    ],
+
+    "fipGroups": [
+        {
+            "goid": "537a504aaf1eb2dfd7a5882ce4de7a9b",
+            "name": "some-fip-group",
+            "providerName": "some-fip",
+            "checksum": "196930387caf90aaf797d41169bfe2743d50ad03",
+            "description": "some fip group"
+        },
+        {
+            "name": "some-other-fip-group",
+            "providerName": "some-fip",
+            "description": "some other fip group"
+        }
+    ],
+
+    "internalUsers": [
+        {
+            "goid": "e5c0dbef6bb3f4ff942b6b870c9cef5e",
+            "name": "alice",
+            "login": "alice",
+            "checksum": "18feb370cbd7af21ae6279820236a8813582d882",
+            "enabled": true,
+            "password": "$6$ZWoeHHFyLK73ajf0$OlnzlxFK/A4TO9Q7HfuKt6lNyv6B7XY5QRLzkZ.3eaQ1qulKtvANGM59nTJSzyt44VBumYxe18QXdSh6tiZVL/",
+            "certBase64": "MIIC5TCCAc2gAwIBAgIJANdJsL1iAZNIMA0GCSqGSIb3DQEBDAUAMBAxDjAMBgNVBAMTBWFsaWNl\r\nMB4XDTIzMDkyOTA2MTAwMVoXDTI4MDkyNzA2MTAwMVowEDEOMAwGA1UEAxMFYWxpY2UwggEiMA0G\r\nCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC73uJDY1FWtCFHbjdmO4Hx/yAhLoWXZyLdBfP9M8nB\r\nJb0Y/n0FrSRvE7IIFdbFuK0KnJlb9dbRV6JJSYVLq1TS6oJklqYIGruvAdtKlfv7LR5uNElibOuN\r\nPDvzgZFGv5S+eUVxWMn0DjUOZU/yv21AnBb1gvfm2pJbqmvKGV9Pte8V9l1S4B8FMzWo5QfrSd9P\r\nvZVuGb3+u9hdWG/0AsOBaUNUhi7T454g0in+O6zPqbTp5QqMM+McvxcsjbRc39aPAKnhy4EOMIsM\r\nRrm/kO0M8aCU+3T5D/mW6QeIPIhG0sINi1PGx3ZXuXrHN3Vg6clg3V+rgvuJaz9vx/9QhJI/AgMB\r\nAAGjQjBAMB0GA1UdDgQWBBSssLMuzGpaEXhR+lpuORc7YootrDAfBgNVHSMEGDAWgBSssLMuzGpa\r\nEXhR+lpuORc7YootrDANBgkqhkiG9w0BAQwFAAOCAQEAD3DIg8Ju2JeYvszngQNgSulQUELiZBdE\r\ndtwLx7tRwuQ5k1Kf+vxYv2UsmQ+DPy6ScjvkzWgJRE5T/Nx4yf2iv4TlL7YYDtYvpXPh6SmDdrAw\r\nlBPuT/hyogI+v9UsIeeWazse/+fgV+aAWxa7QCZNdnMM8+UbqTSOac2GeK4eetGgTiW8zS8JhNyC\r\n7uLpEaiH3hzVSUpfTXt6k4DARSo2lRIUc8oLZVnJEqlrl2t8HOSVCwF0y+4JlMfoEOi8WSnJPcPF\r\nSGX9nfGv/BNnzLRx6txy5tTTDC/BNcyKR4eGsuWROVloOlX8eGPGEBvL3mVqdQMZmveU9ttLj9lF\r\nvr+jWQ==",
+            "firstName": "",
+            "lastName": "",
+            "email": ""
+        },
+        {
+            "goid": "537a504aaf1eb2dfd7a5882ce4de7a95",
+            "name": "some-internal-user",
+            "login": "some-internal-user",
+            "checksum": "2a4609a288dafe03e072532746821a860c25d280",
+            "enabled": true,
+            "password": "$6$H71tKD5zQo01csDP$aBcup/hEjs1FDxRaJZM8POpPBp2Ge.fBd6nX/Uy7kPc4kn26VhpVj2n3ZDNM.lC6fTcr2NYO36orNoNKW7Gzx0",
+            "certBase64": "MIIGjDCCBXSgAwIBAgIJAOfLGfa8uS2BMA0GCSqGSIb3DQEBCwUAMIG0MQswCQYDVQQGEwJVUzEQ\r\nMA4GA1UECBMHQXJpem9uYTETMBEGA1UEBxMKU2NvdHRzZGFsZTEaMBgGA1UEChMRR29EYWRkeS5j\r\nb20sIEluYy4xLTArBgNVBAsTJGh0dHA6Ly9jZXJ0cy5nb2RhZGR5LmNvbS9yZXBvc2l0b3J5LzEz\r\nMDEGA1UEAxMqR28gRGFkZHkgU2VjdXJlIENlcnRpZmljYXRlIEF1dGhvcml0eSAtIEcyMB4XDTIy\r\nMDMxNDE3NDkyM1oXDTIzMDQxNTE1Mzg0MVowFzEVMBMGA1UEAwwMKi5rZWxvd25hLmNhMIIBIjAN\r\nBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2QCY48mBJfLCIuyJIQTwF5gikuf5B/FoGZ3LcAtv\r\nE9tagkS+0qDsMorwFYT93tnJFusmIVqoGUbVx7IRIWYQIzZsPUBLUEqoBYoyZJwYfsuX2XVP5XxC\r\noKuMQdNw/G32e2lbpcnYQ27svQ8jq9Hx+PcCxywgi8ar/jC3Bm/+NSl5IM63iiV2VFdrE74a9fmp\r\nN40W9uDl4du4N6PwMxc8cihn8ymiOcwFUC7R/6+4sIBFuddAMZ1J8FrOO+RSdflbOQvJYZDzFK00\r\n9VOC6PlxcK0IRKA450Qd3mzdHSJdLuPu38AuW394tvS9/M3ZlWQuZvqLCYIx/xpTWD7qWQ8H8QID\r\nAQABo4IDOzCCAzcwDAYDVR0TAQH/BAIwADAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIw\r\nDgYDVR0PAQH/BAQDAgWgMDgGA1UdHwQxMC8wLaAroCmGJ2h0dHA6Ly9jcmwuZ29kYWRkeS5jb20v\r\nZ2RpZzJzMS0zOTIxLmNybDBdBgNVHSAEVjBUMEgGC2CGSAGG/W0BBxcBMDkwNwYIKwYBBQUHAgEW\r\nK2h0dHA6Ly9jZXJ0aWZpY2F0ZXMuZ29kYWRkeS5jb20vcmVwb3NpdG9yeS8wCAYGZ4EMAQIBMHYG\r\nCCsGAQUFBwEBBGowaDAkBggrBgEFBQcwAYYYaHR0cDovL29jc3AuZ29kYWRkeS5jb20vMEAGCCsG\r\nAQUFBzAChjRodHRwOi8vY2VydGlmaWNhdGVzLmdvZGFkZHkuY29tL3JlcG9zaXRvcnkvZ2RpZzIu\r\nY3J0MB8GA1UdIwQYMBaAFEDCvSeOzDSDMKIz1/tss/C0LIDOMCMGA1UdEQQcMBqCDCoua2Vsb3du\r\nYS5jYYIKa2Vsb3duYS5jYTAdBgNVHQ4EFgQUEF5c8gyemT/aYylYsq2gimJumOowggGABgorBgEE\r\nAdZ5AgQCBIIBcASCAWwBagB3AOg+0No+9QY1MudXKLyJa8kD08vREWvs62nhd31tBr1uAAABf4mM\r\njjMAAAQDAEgwRgIhAN+bVp1Nf4tRQ7QkUNdB3XfvN5+5zA5SeJRJRvgkN1H3AiEAwBToqUD09ySi\r\nMKGyNCA+gU4VpeQKEQ71YXgEQowOhdEAdwA1zxkbv7FsV78PrUxtQsu7ticgJlHqP+Eq76gDwzvW\r\nTAAAAX+JjI9wAAAEAwBIMEYCIQD6ZBKhSjV2bC9QBcbwdKOEHRv2wX/e61MXvLN3ePBIjgIhAP87\r\nK4nObHAQgrZ0RPV6ji61EHzWt0Pwjwh287Ms0zECAHYAejKMVNi3LbYg6jjgUh7phBZwMhOFTTvS\r\nK8E6V6NS61IAAAF/iYyP0AAABAMARzBFAiEAtgcQJurJ3g8LdvNv2juOZ3U0tyX11iNPhJ4kPsCR\r\niosCIEDQrcucbYu2EIlXjUecYcnrUFO7TyvBEaMh3z4//SOKMA0GCSqGSIb3DQEBCwUAA4IBAQAT\r\nINkwgzr+oJJAjtUxNDPn7SUuxFdiOQrmnG7/7ZDMeGQ02SLiA+ukDzXXVqOQSlrX7I306xfqou3m\r\nNBSbyob53W46yq9hwqYS7PjFMjinyyG3aDX6mdOPtngtO8xfslkIBaSao5EDJC5HpA0KMPAc2xW7\r\nlmA/bluIS7a+U0Tbvv7uaZajTRV7KlT+7N2PpNUuMr0ilvB8wZjhJHZtNU2DTvotCPCdNaxTKLLT\r\nZc1at2Vc8Z10VrDvGK4JnHEAS6amNWoFPEdjzpbtVVV8F7xl8bJfKE4SwrBzZn8Aq5BcIxMhL5eq\r\nmS1dUj/x/4GUETE7ojJYYTE/4XVNzOxjmJc0"
+        }
+    ],
+
+    "internalGroups": [
+        {
+            "goid": "6448a1f4ef502804489d5edacd6d88ae",
+            "name": "some-internal-group",
+            "checksum": "8c726f5617f6d1f76f74c610c0380b66be630de5",
+            "description": "some internal group"
+        },
+        {
+            "goid": "6448a1f4ef502804489d5edacd6d88bf",
+            "name": "some-other-internal-group",
+            "checksum": "8c726f5617f6d1f76f74c610c0380b66be630de5",
+            "description": "some other internal group"
+        }
+    ],
+
+    "fips": [
+        {
+            "goid": "537a504aaf1eb2dfd7a5882ce4de7a93",
+            "name": "some-fip",
+            "checksum": "0566e18c8a1589ae65d5cd576d88643e94b7bdd0",
+            "enableCredentialTypeSaml": true,
+            "enableCredentialTypeX509": false,
+            "certificateReferences": [
+                {
+                    "goid": "537a504aaf1eb2dfd7a5882ce4de7a91",
+                    "name": "some-trusted-cert",
+                    "subjectDn": "cn=www.example.org,o=internet corporation for assigned names and numbers,l=los angeles,st=california,c=us",
+                    "thumbprintSha1": "8qrXPTJoO3FtKn1htRxtV2SrOJk=",
+                    "checksum": "af9fd03111e41e92a51ac3681362defafd90e528",
+                    "verifyHostname": false,
+                    "trustAnchor": false,
+                    "trustedFor": [
+                        "SSL",
+                        "SIGNING_SERVER_CERTS"
+                    ],
+                    "revocationCheckPolicyType": "USE_DEFAULT",
+                    "notBefore": "2023-01-13T05:30:00+05:30",
+                    "notAfter": "2024-02-14T05:29:59+05:30",
+                    "certBase64": "MIIHSjCCBjKgAwIBAgIQDB/LGEUYx+OGZ0EjbWtz8TANBgkqhkiG9w0BAQsFADBPMQswCQYDVQQG\r\nEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMSkwJwYDVQQDEyBEaWdpQ2VydCBUTFMgUlNBIFNI\r\nQTI1NiAyMDIwIENBMTAeFw0yMzAxMTMwMDAwMDBaFw0yNDAyMTMyMzU5NTlaMIGWMQswCQYDVQQG\r\nEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEUMBIGA1UEBxMLTG9zIEFuZ2VsZXMxQjBABgNVBAoM\r\nOUludGVybmV0wqBDb3Jwb3JhdGlvbsKgZm9ywqBBc3NpZ25lZMKgTmFtZXPCoGFuZMKgTnVtYmVy\r\nczEYMBYGA1UEAxMPd3d3LmV4YW1wbGUub3JnMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC\r\nAQEAwoB3iVm4RW+6StkR+nutx1fQevu2+t0Fu6KBcbvhfyHSXy7w0nJOdTT4jWLjStpRkNQBPZwM\r\nwHH35i+21gdnJtDe/xfO8IX9McFmyodlBUcqX8CruIzDv9AXf2OjXPBG+4aq+03XKl5/muATl32+\r\n+301Vw1dXoGYNeoWQqLTsHT3WS3tOOf+ehuzNuZ+rj+ephaD3lMBToEArrtC9R91KTTN6YSAOK48\r\nNxTA8CfOMFK5itxfIqB5+E9OSQTidXyqLyoeA+xxTKMqYfxvypEek1oueAhY9u67NCBdmuavxtfy\r\nvwp7+o6Sd+NsewxAhmRKFexw13KOYzDhC+9aMJcuJQIDAQABo4ID2DCCA9QwHwYDVR0jBBgwFoAU\r\nt2ui6qiqhIx56rTaD5iyxZV2ufQwHQYDVR0OBBYEFLCTP+gXgv1ssrYXh8vjgP6CmwGeMIGBBgNV\r\nHREEejB4gg93d3cuZXhhbXBsZS5vcmeCC2V4YW1wbGUubmV0ggtleGFtcGxlLmVkdYILZXhhbXBs\r\nZS5jb22CC2V4YW1wbGUub3Jngg93d3cuZXhhbXBsZS5jb22CD3d3dy5leGFtcGxlLmVkdYIPd3d3\r\nLmV4YW1wbGUubmV0MA4GA1UdDwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUH\r\nAwIwgY8GA1UdHwSBhzCBhDBAoD6gPIY6aHR0cDovL2NybDMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0\r\nVExTUlNBU0hBMjU2MjAyMENBMS00LmNybDBAoD6gPIY6aHR0cDovL2NybDQuZGlnaWNlcnQuY29t\r\nL0RpZ2lDZXJ0VExTUlNBU0hBMjU2MjAyMENBMS00LmNybDA+BgNVHSAENzA1MDMGBmeBDAECAjAp\r\nMCcGCCsGAQUFBwIBFhtodHRwOi8vd3d3LmRpZ2ljZXJ0LmNvbS9DUFMwfwYIKwYBBQUHAQEEczBx\r\nMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wSQYIKwYBBQUHMAKGPWh0dHA6\r\nLy9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydFRMU1JTQVNIQTI1NjIwMjBDQTEtMS5jcnQw\r\nCQYDVR0TBAIwADCCAX8GCisGAQQB1nkCBAIEggFvBIIBawFpAHYA7s3QZNXbGs7FXLedtM0TojKH\r\nRny87N7DUUhZRnEftZsAAAGFq0gFIwAABAMARzBFAiEAqt+fK6jFdGA6tv0EWt9rax0WYBV4re9j\r\ngZgq0zi42QUCIEBh1yKpPvgX1BreE0wBUmriOVUhJS77KgF193fT2877AHcAc9meiRtMlnigIH1H\r\nneayxhzQUV5xGSqMa4AQesF3crUAAAGFq0gFnwAABAMASDBGAiEA12SUFK5rgLqRzvgcr7ZzV4nl\r\n+Zt9lloAzRLfPc7vSPACIQCXPbwScx1rE+BjFawZlVjLj/1PsM0KQQcsfHDZJUTLwAB2AEiw42va\r\npkc0D+VqAvqdMOscUgHLVt0sgdm7v6s52IRzAAABhatIBV4AAAQDAEcwRQIhAN5bhHthoyWMJ3CQ\r\nB/1iYFEhMgUVkFhHDM/nlE9ThCwhAiAPvPJXyp7a2kzwJX3P7fqH5Xko3rPhCzRoXYd6W+QkCjAN\r\nBgkqhkiG9w0BAQsFAAOCAQEAWeRK2KmCuppK8WMMbXYmdbM8dL7F9z2nkZL4zwYtWBDt87jW/Gz/\r\nE5YyzU/phySFC3SiwvYP9afYfXaKrunJWCtuAG+5zSTuxELFTBaFnTRhOSO/xo6VyYSpsuVBD0R4\r\n15W5z9l0v1hP5xb/fEAwxGxOIk3Lg2c6k78rxcWcGvJDoSU7hPb3U26oha7eFHSRMAYN8gfUxAi6\r\nQ2TF4j/arMVBr6Q36EJ2dPcTu0p9NlmBm8dE34lzuTNC6GDCTWFdEloQ9u//M4kUUOjWn8a5XCs1\r\n263t3Ta2JfKViqxpP5r+GvgVKG3qGFrC0mIYr0B4tfpeCY9T+cz4I6GDMSP0xg=="
+                }
+            ]
+        }
+    ],
+
+    "ldaps": [
+        {
+            "goid": "d1525b9387e52c44f49843b2d6e60432",
+            "name": "some-ldap",
+            "checksum": "d9239c9913058b9cc466fe628233ff1d5510ea38",
+            "ldapUrls": [
+                "ldap://host:port",
+                "ldap://host2:port"
+            ],
+            "ldapsClientAuthEnabled": false,
+            "searchBase": "some-search-base",
+            "writable": false,
+            "bindDn": "some-bind-dn",
+            "bindPassword": "JEw3RXYwMiTkU0e4x8c/TMYwr5iJl68RM3Kv521d54vLyLzOcAsl1Q==",
+            "userMappings": [
+                {
+                    "objClass": "inetOrgPerson",
+                    "nameAttrName": "cn",
+                    "loginAttrName": "uid",
+                    "passwdAttrName": "userPassword",
+                    "firstNameAttrName": "givenName",
+                    "lastNameAttrName": "sn",
+                    "emailNameAttrName": "mail",
+                    "kerberosAttrName": "uid",
+                    "userCertAttrName": "userCertificate;binary",
+                    "passwdType": {
+                        "val": 0
+                    }
+                }
+            ],
+            "groupMappings": [
+                {
+                    "objClass": "posixGroup",
+                    "nameAttrName": "cn",
+                    "memberAttrName": "memberUid",
+                    "memberStrategy": {
+                        "val": 1
+                    }
+                },
+                {
+                    "objClass": "groupOfUniqueNames",
+                    "nameAttrName": "cn",
+                    "memberAttrName": "uniqueMember",
+                    "memberStrategy": {
+                        "val": 2
+                    }
+                },
+                {
+                    "objClass": "organizationalUnit",
+                    "nameAttrName": "ou",
+                    "memberAttrName": "",
+                    "memberStrategy": {
+                        "val": 3
+                    }
+                }
+            ]
+        }
+    ],
+
+    "serverModuleFiles": [
+        {
+            "goid": "d1525b9387e52c44f49843b2d6e6042b",
+            "name": "DelayAssertion",
+            "checksum": "a17682994733e8ae561ab8893998b954d944f842",
+            "moduleType": "CUSTOM_ASSERTION",
+            "moduleSha256": "d9f599f4f3568e0566852e72e3c04b47eb56ba1368f0ab8166d73e67c4e5cee6",
+            "signature": "MEYCIQCUnOqIv80VboRVsy6Ffl4I8WYpLxvPAOb0U0EaByQ2pAIhAIi9CGNpmSZK6KyVMnNCXBdskTNwS5qACGvlospQHgTl",
+            "signerCertBase64": "MIIBdjCCAR6gAwIBAgIJAOC+DREEgh+1MAkGByqGSM49BAEwGzEZMBcGA1UEAxMQcm9vdC5hcGltLmNhLmNvbTAeFw0xNTA4MDYyMzM5MTVaFw0zNTA4MDYyMzM5MTVaMCUxIzAhBgNVBAMTGnNpZ25lci5nYXRld2F5LmFwaW0uY2EuY29tMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEWR6rsgeDYY4nCkqjy12QBZW/U/dkWbM0NSEJnWwwDeKMD8rKgPygMKfZ3Gwbr134cYoqRtuE8rnYo4Oyxnm+NKNCMEAwHQYDVR0OBBYEFA/F83obUYIYLHnnXI5fObo/EMDIMB8GA1UdIwQYMBaAFOv2T4eG9aq4dDj8dGqF6Vj340LwMAkGByqGSM49BAEDRwAwRAIgIQrtZLIEZ6IXxPleal0AnnGE0wgq2MHzaWHAOm72KIgCIAWbYPKedEjKKcxv5vHuvbjAdUp1JhrnvnTCEWM7Zus7",
+            "properties": [
+                {
+                    "name": "moduleAssertions",
+                    "value": "DelayAssertion"
+                },
+                {
+                    "name": "moduleFileName",
+                    "value": "DelayAssertion-sdk80-1.1-729.jar"
+                },
+                {
+                    "name": "moduleSize",
+                    "value": "12769"
+                }
+            ],
+            "moduleStates": [
+                {
+                    "nodeId": "48b5a4bc60fd4db191ddd5258eab0a35",
+                    "nodeName": "48b5a4bc60fd4db191ddd5258eab0a35",
+                    "state": "LOADED"
+                }
+            ],
+            "moduleStateSummary": {
+                "state": "LOADED"
+            }
+        }
+    ],
+	
+	"properties": {
+		"defaultAction": "NEW_OR_UPDATE",
+		"mappings": {}
+	}
+}
