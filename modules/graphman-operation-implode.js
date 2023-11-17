@@ -71,7 +71,17 @@ let type1Imploder = (function () {
 
                         if (entity.certChain && entity.certChain.endsWith(".certchain.pem}")) {
                             const filename = entity.certChain.match(/{(.+)}/)[1];
-                            entity.certChain = utils.readFile(`${typeDir}/${filename}`);
+                            const lines = utils.readFile(`${typeDir}/${filename}`).split(/\r?\n/);
+                            let data = "";
+
+                            entity.certChain = [];
+                            for (var line of lines) {
+                                data += line + "\r\n";
+                                if (line.indexOf("-END CERTIFICATE-") !== -1) {
+                                    entity.certChain.push(data);
+                                    data = "";
+                                }
+                            }
                         }
                     }
 

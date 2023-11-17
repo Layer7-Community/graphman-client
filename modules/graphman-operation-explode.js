@@ -86,7 +86,12 @@ let type1Exploder = (function () {
             }
 
             if (entity.certChain) {
-                utils.writeFile(`${targetDir}/${filename}.certchain.pem`, entity.certChain);
+                let data = "";
+                for (var index in entity.certChain) {
+                    data += entity.certChain[index];
+                    data += "\r\n";
+                }
+                utils.writeFile(`${targetDir}/${filename}.certchain.pem`, data);
                 entity.certChain = `{${filename}.certchain.pem}`;
             }
         }
