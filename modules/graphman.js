@@ -1,6 +1,6 @@
 
-const VERSION = "v1.0";
-const SCHEMA_VERSION = "v11.0-CR01";
+const VERSION = "v1.1";
+const SCHEMA_VERSION = "v10.1-CR04";
 
 const utils = require("./graphman-utils");
 const hutils = require("./http-utils");

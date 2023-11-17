@@ -34,8 +34,8 @@ module.exports = {
         console.log("      --log <level>: to set the log level to one of ['warn', 'info', 'fine', 'debug', 'nolog']. Default is info.");
         console.log("      --schemaVersion <schema-version>: to specify the schema version to work with gateway's staged at different schemas.");
         console.log("        # supported schemas:");
-        console.log("          v11.0-CR01 (default)");
-        console.log("          v10.1-CR03");
+        console.log("          v10.1-CR04 (default)");
+        console.log("          v11.0-CR02");
 
         console.log();
         console.log("    NOTE: Often, entity types are referred in their plural form. Choose one from the below table for <entity-type-plural-tag>. And, the list goes as below:");

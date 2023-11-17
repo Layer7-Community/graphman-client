@@ -1,6 +1,0 @@
-{
-  "query": "{{folder.gql}}",
-  "variables": {
-    "folderPath": "?"
-  }
-}
