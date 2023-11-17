@@ -110,8 +110,8 @@ target gateway.
 > - --schemaVersion <schema-version>
 > 
 > Supported schemas are:
-> - 11.0-CR01 (default) 
-> - 10.1-CR03
+> - v10.1-CR04 (default) 
+> - v11.0-CR02
 > 
 ## Graphman configuration bundles <a name="bundles"></a>
 
