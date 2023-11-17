@@ -30,17 +30,32 @@ module.exports = {
         const inputBundle = butils.sanitize(utils.readFile(params.input), butils.IMPORT_USE, {excludeGoids: params.excludeGoids});
         butils.removeDuplicates(inputBundle);
 
+        const using = params.using ? params.using : 'mutation';
         const mappingActions = utils.mappingActions(
             params.defaultMappingAction,
             params.mappingAction,
             params.dependencyMappingAction
         );
+
+        if (!params.bundleDefaultAction) {
+            if (using === 'delete-bundle') params.bundleDefaultAction = 'DELETE';
+            else params.bundleDefaultAction = 'NEW_OR_UPDATE';
+        }
+
+        if (using !== 'delete-bundle' && params.bundleDefaultAction === 'DELETE') {
+            utils.warn("DELETE action with the improper order of mutation operations may lead to failures");
+        }
+
+        if (using === 'delete-bundle' && params.bundleDefaultAction !== 'DELETE') {
+            utils.warn(`Unexpected action specified for the chosen mutation: using=${using} and bundleDefaultAction=${params.bundleDefaultAction}`);
+        }
+
         butils.overrideMappings(inputBundle, {
             bundleDefaultAction: params.bundleDefaultAction,
             mappingActions: mappingActions
         });
 
-        const using = params.using ? params.using : 'mutation';
+
         const revisedBundle = params.revise ? opRevise.revise(inputBundle) : inputBundle;
 
         PRE_BUNDLE_EXTN.call(revisedBundle);
