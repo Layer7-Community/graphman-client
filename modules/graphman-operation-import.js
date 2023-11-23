@@ -39,15 +39,16 @@ module.exports = {
 
         if (!params.bundleDefaultAction) {
             if (using === 'delete-bundle') params.bundleDefaultAction = 'DELETE';
-            else params.bundleDefaultAction = 'NEW_OR_UPDATE';
         }
 
-        if (using !== 'delete-bundle' && params.bundleDefaultAction === 'DELETE') {
-            utils.warn("DELETE action with the improper order of mutation operations may lead to failures");
-        }
+        if (params.bundleDefaultAction) {
+            if (using !== 'delete-bundle' && params.bundleDefaultAction === 'DELETE') {
+                utils.warn("DELETE action with the improper order of mutation operations may lead to failures");
+            }
 
-        if (using === 'delete-bundle' && params.bundleDefaultAction !== 'DELETE') {
-            utils.warn(`Unexpected action specified for the chosen mutation: using=${using} and bundleDefaultAction=${params.bundleDefaultAction}`);
+            if (using === 'delete-bundle' && params.bundleDefaultAction !== 'DELETE') {
+                utils.warn(`Unexpected action specified for the chosen mutation: using=${using} and bundleDefaultAction=${params.bundleDefaultAction}`);
+            }
         }
 
         butils.overrideMappings(inputBundle, {
