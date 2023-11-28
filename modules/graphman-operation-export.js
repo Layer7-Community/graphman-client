@@ -67,17 +67,10 @@ module.exports = {
         console.log("      --bundleDefaultAction <action>");
         console.log("        # default mapping action at the bundle level.");
 
-        console.log("      --bundleMappingsLevel <0|1|2>");
-        console.log("        # use this option to have entity mappings at the specified level. Here, 0=no mappings, 1=entity level, 2=all entities");
-
-        console.log("      --normalizeMappings");
-        console.log("        # use this option to normalize mappings at entity level.");
-        console.log("      --mappingAction <entity-type-plural-tag>:<action>");
-        console.log("        # mapping action for the specified class of entities. This option can be repeatable.");
-        console.log("      --defaultMappingAction <entity-type-plural-tag>:<action>");
-        console.log("        # default mapping action for the specified class of entities. This option can be repeatable.");
-        console.log("      --dependencyMappingAction <entity-type-plural-tag>:<action>");
-        console.log("        # dependency mapping action for the specified class of entities. This option can be repeatable.");
+        console.log("      --mappings.<entity-type-plural-tag> <action>");
+        console.log("        # mapping action for the specified class of entities. This option can be repeatable. Use 'default' class to specify for all types of entities.");
+        console.log("      --dependencyMappings.<entity-type-plural-tag> <action>");
+        console.log("        # dependency mapping action for the specified class of entities. This option can be repeatable.  Use 'default' class to specify for all types of entities. ");
 
         console.log("      --excludeDependencies");
         console.log("        # use this option to exclude dependency entities from the exported bundled entities.");
@@ -103,19 +96,12 @@ function adjustParameters(params) {
         params.variables.policyAsYaml = true;
     }
 
-    params.options.bundleDefaultAction = params.bundleDefaultAction || "NEW_OR_UPDATE";
-    params.options.bundleMappingsLevel = params.bundleMappingsLevel || "0";
-    params.options.mappingActions = utils.mappingActions(
-        params.defaultMappingAction,
-        params.mappingAction,
-        params.dependencyMappingAction,
-        params.options.bundleDefaultAction
+    params.options.bundleDefaultAction = params.bundleDefaultAction;
+    params.options.bundleMappingsLevel = 0;
+    params.options.mappingActions = utils.mappings(
+        params.mappings,
+        params.dependencyMappings
     );
-    params.options.mappingActions['default'] = {
-        defaultAction: params.options.bundleDefaultAction,
-        action: params.options.bundleDefaultAction,
-        dependencyAction: params.options.bundleDefaultAction
-    };
 
     if (params.excludeDependencies) {
         params.options.excludeDependencies = true;
@@ -124,19 +110,18 @@ function adjustParameters(params) {
     if (params.excludeGoids) {
         params.options.excludeGoids = true;
     }
-
-    if (params.normalizeMappings) {
-        params.options.normalizeMappings = true;
-    }
 }
 
 function buildQueryParameters(options) {
     let queryParams = "";
+    let separator = "?";
 
     if (options) {
-        if (options.bundleDefaultAction) queryParams += "&bundleDefaultAction=" + options.bundleDefaultAction;
-        if (options.bundleMappingsLevel) queryParams += "&bundleMappingsLevel=" + options.bundleMappingsLevel;
+        if (options.bundleMappingsLevel >= 0) {
+            queryParams += separator + "bundleMappingsLevel=" + options.bundleMappingsLevel;
+            separator = "&";
+        }
     }
 
-    return queryParams.length > 1 ? "?" + queryParams.substring(1) : "";
+    return queryParams;
 }

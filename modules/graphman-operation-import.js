@@ -31,10 +31,9 @@ module.exports = {
         butils.removeDuplicates(inputBundle);
 
         const using = params.using ? params.using : 'mutation';
-        const mappingActions = utils.mappingActions(
-            params.defaultMappingAction,
-            params.mappingAction,
-            params.dependencyMappingAction
+        const mappingActions = utils.mappings(
+            params.mappings,
+            params.dependencyMappings
         );
 
         if (!params.bundleDefaultAction) {
@@ -79,11 +78,10 @@ module.exports = {
         console.log("    import [--using <query-id>] --input <input-file> [--variables.<name> <value>,...] [--output <output-file>] [<options>]");
         console.log("      --bundleDefaultAction <action>");
         console.log("        # default mapping action at the bundle level.");
-        console.log("      --mappingAction <entity-type-plural-tag>:<action>");
+
+        console.log("      --mappings.<entity-type-plural-tag> <action>");
         console.log("        # mapping action for the specified class of entities. This option can be repeatable.");
-        console.log("      --defaultMappingAction <entity-type-plural-tag>:<action>");
-        console.log("        # default mapping action for the specified class of entities. This option can be repeatable.");
-        console.log("      --dependencyMappingAction <entity-type-plural-tag>:<action>");
+        console.log("      --dependencyMappings.<entity-type-plural-tag> <action>");
         console.log("        # dependency mapping action for the specified class of entities. This option can be repeatable.");
 
         console.log("      --excludeGoids");

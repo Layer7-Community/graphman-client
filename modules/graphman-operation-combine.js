@@ -48,7 +48,7 @@ function combine(left, right) { // right takes the precedence
     });
 
     Object.keys(result).forEach(key => {
-        if (result[key].length === 0) {
+        if (Array.isArray(result[key]) && result[key].length === 0) {
             delete result[key];
         }
     });

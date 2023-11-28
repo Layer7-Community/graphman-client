@@ -209,6 +209,31 @@ module.exports = {
         return this.existsFile(MODULES_DIR + "/extn/" + ref + ".js") ? require("./extn/" + ref) : {call: function () {}};
     },
 
+    mappings: function (actions, depActions) {
+        const result = {
+            'default': {
+                action: null,
+                dependencyAction: null
+            }
+        };
+
+        Object.keys(actions||{}).forEach(key => {
+            result[key] = result[key] || {};
+            result[key].action = actions[key];
+            if (!result[key].dependencyAction && key !== 'default') {
+                result[key].dependencyAction = actions[key];
+            }
+        });
+
+        Object.keys(depActions||{}).forEach(key => {
+            result[key] = result[key] || {};
+            result[key].dependencyAction = depActions[key];
+        });
+
+        this.info("mappings", result);
+        return result;
+    },
+
     mappingActions: function (defaultMappingActions, mappingActions, dependencyMappingActions, defaultAction) {
         const normalizeArray = function (obj) {
             if (!obj) return [];

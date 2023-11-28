@@ -66,32 +66,32 @@ module.exports = {
         const properties = bundle.properties = bundle.properties || {};
         const mappings = properties.mappings = properties.mappings || {};
 
-        if (options.bundleDefaultAction) properties.defaultAction = options.bundleDefaultAction;
+        if (options.bundleDefaultAction) {
+            properties.defaultAction = options.bundleDefaultAction;
+            utils.info(`overriding bundle default action to ${options.bundleDefaultAction}`);
+        }
+
         if (options.mappingActions) {
-            Object.keys(options.mappingActions).forEach(key => {
+            Object.keys(options.mappingActions).filter(item => item !== 'default').forEach(key => {
                 const overrideActions = options.mappingActions[key];
-                const status = {defaultMapping: false, dependencyMapping: false, mapping: false};
+                const status = {dependencyMapping: false, mapping: false};
                 if (!mappings[key]) mappings[key] = [];
 
                 mappings[key].forEach(item => {
-                    if (item["default"]) {
-                        status.defaultMapping = true;
-                        item.action = overrideActions.defaultAction || item.action;
-                    } else if (item["dep"]) {
+                    if (item["dep"] && overrideActions.dependencyAction) {
                         status.dependencyMapping = true;
                         item.action = overrideActions.dependencyAction || item.action;
-                    } else {
+                    } else if (overrideActions.action) {
                         status.mapping = true;
                         item.action = overrideActions.action || item.action;
                     }
                 });
 
-                if (overrideActions.defaultAction && !status.defaultMapping) {
+                if (mappings[key].length === 0 && overrideActions.action) {
                     utils.info(`populating default mapping action for ${key}`);
-                    mappings[key] = [{'default': true, action: overrideActions.defaultAction}].concat(mappings[key]);
+                    mappings[key] = [{'default': true, action: overrideActions.action}].concat(mappings[key]);
                 }
 
-                if (status.defaultMapping) utils.info(`overriding default mapping action for ${key} to ${overrideActions.defaultAction}`);
                 if (status.mapping) utils.info(`overriding mapping action for ${key} to ${overrideActions.action}`);
                 if (status.dependencyMapping) utils.info(`overriding dependency mapping action for ${key} to ${overrideActions.dependencyAction}`);
             });
@@ -223,11 +223,10 @@ let exportSanitizer = function () {
             delete result.mappings;
             delete result.dependencyMappings;
 
-            if (!result.properties) result.properties = {"defaultAction": "NEW_OR_UPDATE"};
+            if (!result.properties) result.properties = {defaultAction: "NEW_OR_UPDATE"};
 
-            if (options.normalizeMappings) {
-                result.properties.mappings = normalizedMappings(mappings, dependencyMappings);
-            }
+            result.properties.defaultAction = options.bundleDefaultAction || result.properties.defaultAction;
+            result.properties.mappings = normalizedMappings(mappings, dependencyMappings);
 
             if (result.properties.mappings && Object.keys(result.properties.mappings).length === 0) {
                 delete result.properties.mappings;
@@ -294,10 +293,10 @@ let exportSanitizer = function () {
     function addEntity(entity, result, typeInfo, options, dependencies, sanitizedKey) {
         if (dependencies && options.excludeDependencies) {
             utils.info(`excluding the dependency ${sanitizedKey} - ${entity[typeInfo.idField]}`);
-            result.dependencyMappings[sanitizedKey].push(entity.mappingInstruction);
+            if (entity.mappingInstruction) result.dependencyMappings[sanitizedKey].push(entity.mappingInstruction);
         } else {
             result[sanitizedKey].push(entity);
-            result.mappings[sanitizedKey].push(entity.mappingInstruction);
+            if (entity.mappingInstruction) result.mappings[sanitizedKey].push(entity.mappingInstruction);
         }
 
         delete entity.mappingInstruction;
@@ -327,7 +326,9 @@ let exportSanitizer = function () {
     function createMappingInstruction(obj, typeInfo, options, dependencies) {
         typeInfo = SCHEMA_METADATA.bundleTypes[typeInfo.pluralMethod];
         const actions = options.mappingActions[typeInfo.bundleName] || options.mappingActions['default'];
-        const instruction = {action: dependencies ? actions.dependencyAction || actions.action : actions.action};
+        const instruction = {action: dependencies ? actions.dependencyAction : actions.action};
+
+        if (!instruction.action) return null;
 
         instruction[typeInfo.identityField] = obj[typeInfo.identityField];
         typeInfo.identityFields.forEach(field => instruction[field] = obj[field]);
