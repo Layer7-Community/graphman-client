@@ -31,10 +31,7 @@ module.exports = {
         butils.removeDuplicates(inputBundle);
 
         const using = params.using ? params.using : 'mutation';
-        const mappingActions = utils.mappings(
-            params.mappings,
-            params.dependencyMappings
-        );
+        const mappings = utils.mappings(params.mappings);
 
         if (!params.bundleDefaultAction) {
             if (using === 'delete-bundle') params.bundleDefaultAction = 'DELETE';
@@ -52,7 +49,7 @@ module.exports = {
 
         butils.overrideMappings(inputBundle, {
             bundleDefaultAction: params.bundleDefaultAction,
-            mappingActions: mappingActions
+            mappings: mappings
         });
 
 
@@ -77,12 +74,13 @@ module.exports = {
     usage: function () {
         console.log("    import [--using <query-id>] --input <input-file> [--variables.<name> <value>,...] [--output <output-file>] [<options>]");
         console.log("      --bundleDefaultAction <action>");
-        console.log("        # default mapping action at the bundle level.");
+        console.log("        # overrides the default mapping action at the bundle level.");
 
-        console.log("      --mappings.<entity-type-plural-tag> <action>");
-        console.log("        # mapping action for the specified class of entities. This option can be repeatable.");
-        console.log("      --dependencyMappings.<entity-type-plural-tag> <action>");
-        console.log("        # dependency mapping action for the specified class of entities. This option can be repeatable.");
+        console.log("      --mappings.action <action>");
+        console.log("        # overrides the mapping action for any entity.");
+
+        console.log("      --mappings.<entity-type-plural-tag>.action <action>");
+        console.log("        # overrides the mapping action for the specified class of entities. This option can be repeatable.");
 
         console.log("      --excludeGoids");
         console.log("        # use this option to exclude Goids from the importing bundled entities.");

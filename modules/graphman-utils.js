@@ -209,64 +209,24 @@ module.exports = {
         return this.existsFile(MODULES_DIR + "/extn/" + ref + ".js") ? require("./extn/" + ref) : {call: function () {}};
     },
 
-    mappings: function (actions, depActions) {
-        const result = {
-            'default': {
-                action: null,
-                dependencyAction: null
-            }
-        };
-
-        Object.keys(actions||{}).forEach(key => {
-            result[key] = result[key] || {};
-            result[key].action = actions[key];
-            if (!result[key].dependencyAction && key !== 'default') {
-                result[key].dependencyAction = actions[key];
-            }
-        });
-
-        Object.keys(depActions||{}).forEach(key => {
-            result[key] = result[key] || {};
-            result[key].dependencyAction = depActions[key];
-        });
-
-        this.info("mappings", result);
-        return result;
-    },
-
-    mappingActions: function (defaultMappingActions, mappingActions, dependencyMappingActions, defaultAction) {
-        const normalizeArray = function (obj) {
-            if (!obj) return [];
-            if (!Array.isArray(obj)) return [obj];
-            return obj;
-        }
-
-        defaultMappingActions = normalizeArray(defaultMappingActions);
-        mappingActions = normalizeArray(mappingActions);
-        dependencyMappingActions = normalizeArray(dependencyMappingActions);
-
+    mappings: function (actions) {
         const result = {};
 
-        defaultMappingActions.map(item => item.split(/:/)).filter(tokens => tokens.length >= 2).forEach(tokens => {
-            result[tokens[0]] = result[tokens[0]] || {};
-            result[tokens[0]].defaultAction = tokens[1];
-        });
-
-        mappingActions.map(item => item.split(/:/)).filter(tokens => tokens.length >= 2).forEach(tokens => {
-            result[tokens[0]] = result[tokens[0]] || {};
-            result[tokens[0]].action = tokens[1];
-        });
-
-        dependencyMappingActions.map(item => item.split(/:/)).filter(tokens => tokens.length >= 2).forEach(tokens => {
-            result[tokens[0]] = result[tokens[0]] || {};
-            result[tokens[0]].dependencyAction = tokens[1];
-        });
-
-        if (defaultAction) {
-            Object.keys(result).forEach(key => {
-                result[key].action = result[key].action || defaultAction;
-            });
+        if (actions) {
+            result['default'] = {action: actions.action, dependencyAction: actions.dependencyAction, level: actions.level};
+            delete actions.action;
+            delete actions.dependencyAction;
+            delete actions.level;
+        } else {
+            result['default'] = {action: null, dependencyAction: null, level: '0'};
         }
+
+        Object.keys(actions||{}).forEach(key => {
+            const instr = result[key] = result[key] || {};
+            instr.action = actions[key].action || result['default'].action;
+            instr.dependencyAction = actions[key].dependencyAction || result['default'].dependencyAction;
+            instr.level = actions[key].level || result['default'].level;
+        });
 
         return result;
     }

@@ -67,11 +67,6 @@ module.exports = {
         console.log("      --bundleDefaultAction <action>");
         console.log("        # default mapping action at the bundle level.");
 
-        console.log("      --mappings.<entity-type-plural-tag> <action>");
-        console.log("        # mapping action for the specified class of entities. This option can be repeatable. Use 'default' class to specify for all types of entities.");
-        console.log("      --dependencyMappings.<entity-type-plural-tag> <action>");
-        console.log("        # dependency mapping action for the specified class of entities. This option can be repeatable.  Use 'default' class to specify for all types of entities. ");
-
         console.log("      --excludeDependencies");
         console.log("        # use this option to exclude dependency entities from the exported bundled entities.");
         console.log("      --excludeGoids");
@@ -98,10 +93,7 @@ function adjustParameters(params) {
 
     params.options.bundleDefaultAction = params.bundleDefaultAction;
     params.options.bundleMappingsLevel = 0;
-    params.options.mappingActions = utils.mappings(
-        params.mappings,
-        params.dependencyMappings
-    );
+    params.options.mappings = utils.mappings({} || params.mappings);
 
     if (params.excludeDependencies) {
         params.options.excludeDependencies = true;
