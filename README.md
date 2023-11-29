@@ -243,7 +243,7 @@ It is recommended to install/delete bundles using the standard bundle operations
 
 By default, mutation action is NEW_OR_UPDATE. You can override this using _--bundleDefaultAction_ option.
 ```
-./graphman.sh import --using delete-bundle --input hello-world.json --bundleDefaultAction NEW_OR_EXISTING
+./graphman.sh import --using install-bundle --input hello-world.json --bundleDefaultAction NEW_OR_EXISTING
 ```
 
 > **NOTE**

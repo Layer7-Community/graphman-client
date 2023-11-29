@@ -102,6 +102,14 @@ module.exports = {
             if (status.mapping) utils.info(`overriding mapping action for ${key} to ${overrideMappings.action}`);
             if (status.dependencyMapping) utils.info(`overriding dependency mapping action for ${key} to ${overrideMappings.dependencyAction}`);
         });
+
+        Object.keys(options.mappings).forEach(key => {
+            const overrideMappings = options.mappings[key] || options.mappings['default'];
+            const defaultAction = overrideMappings.action || overrideMappings.dependencyAction;
+            if (key !== 'default' && !mappings[key] && defaultAction) {
+                mappings[key] = [{action: defaultAction, 'default': true}];
+            }
+        });
     },
 
     filter: function (bundle, filter) {
