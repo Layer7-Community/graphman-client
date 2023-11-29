@@ -31,7 +31,7 @@ module.exports = {
         butils.removeDuplicates(inputBundle);
 
         const using = params.using ? params.using : 'mutation';
-        const mappings = utils.mappings(params.mappings);
+        const mappings = params.mappings ? utils.mappings(params.mappings) : null;
 
         if (!params.bundleDefaultAction) {
             if (using === 'delete-bundle') params.bundleDefaultAction = 'DELETE';

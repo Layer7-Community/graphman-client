@@ -213,7 +213,7 @@ module.exports = {
         const result = {};
 
         if (actions) {
-            result['default'] = {action: actions.action, dependencyAction: actions.dependencyAction, level: actions.level};
+            result['default'] = {action: actions.action, dependencyAction: actions.dependencyAction, level: actions.level || '0'};
             delete actions.action;
             delete actions.dependencyAction;
             delete actions.level;
