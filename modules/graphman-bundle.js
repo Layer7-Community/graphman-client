@@ -76,38 +76,32 @@ module.exports = {
         }
 
         Object.keys(mappings).forEach(key => {
-            const overrideMappings = options.mappings[key] || options.mappings['default'];
-            const status = {dependencyMapping: false, mapping: false, foundDefault: false};
+            const overrideMapping = options.mappings[key] || options.mappings['default'];
+            const status = {mapping: false, foundDefault: false};
 
-            mappings[key].forEach(item => {
-                if (item["dep"] && overrideMappings.dependencyAction) {
-                    status.dependencyMapping = true;
-                    item.action = overrideMappings.dependencyAction || item.action;
-                } else if (overrideMappings.action) {
+            if (overrideMapping.action) {
+                mappings[key].forEach(item => {
                     status.mapping = true;
-                    item.action = overrideMappings.action || item.action;
-                }
+                    item.action = overrideMapping.action;
+                    status.foundDefault = status.foundDefault || item.default;
+                });
 
-                status.foundDefault = status.foundDefault || item.default;
-            });
-
-            if (!status.foundDefault) {
-                const defaultAction = overrideMappings.action || overrideMappings.dependencyAction;
-                if (defaultAction !== properties.defaultAction) {
-                    utils.info(`populating default mapping action for ${key} to ${defaultAction}`);
-                    mappings[key].unshift({'default': true, action: defaultAction});
+                if (!status.foundDefault && overrideMapping.action !== properties.defaultAction) {
+                    utils.info(`populating default mapping action for ${key} to ${overrideMapping.action}`);
+                    mappings[key].unshift({'default': true, action: overrideMapping.action});
                 }
             }
 
-            if (status.mapping) utils.info(`overriding mapping action for ${key} to ${overrideMappings.action}`);
-            if (status.dependencyMapping) utils.info(`overriding dependency mapping action for ${key} to ${overrideMappings.dependencyAction}`);
+            if (status.mapping) {
+                utils.info(`overriding mapping action for ${key} to ${overrideMapping.action}`);
+            }
         });
 
         Object.keys(options.mappings).forEach(key => {
-            const overrideMappings = options.mappings[key] || options.mappings['default'];
-            const defaultAction = overrideMappings.action || overrideMappings.dependencyAction;
-            if (key !== 'default' && !mappings[key] && defaultAction) {
-                mappings[key] = [{action: defaultAction, 'default': true}];
+            const overrideMapping = options.mappings[key] || options.mappings['default'];
+            if (key !== 'default' && !mappings[key] && overrideMapping.action) {
+                utils.info(`populating default mapping action for ${key} to ${overrideMapping.action}`);
+                mappings[key] = [{action: overrideMapping.action, 'default': true}];
             }
         });
     },
@@ -340,7 +334,7 @@ let exportSanitizer = function () {
     function createMappingInstruction(obj, typeInfo, options, dependencies) {
         typeInfo = SCHEMA_METADATA.bundleTypes[typeInfo.pluralMethod];
         const actions = options.mappings[typeInfo.bundleName] || options.mappings['default'];
-        const instruction = {action: dependencies ? actions.dependencyAction : actions.action, level: actions.level};
+        const instruction = {action: actions.action, level: actions.level};
 
         if (!instruction.action || !instruction.level || instruction.level === '0') return null;
 
@@ -377,9 +371,8 @@ let exportSanitizer = function () {
             }
 
             const mapping = options.mappings[key] || options.mappings['default'];
-            const defaultAction = mapping.action || mapping.dependencyAction;
-            if (mapping && defaultAction && mapping.level === '0' && defaultAction !== bundleDefaultAction) {
-                entityMappings.unshift({action: mapping.action || mapping.dependencyAction, 'default': true});
+            if (mapping && mapping.action && mapping.level === '0' && mapping.action !== bundleDefaultAction) {
+                entityMappings.unshift({action: mapping.action, 'default': true});
             }
 
             if (entityMappings.length === 0) {

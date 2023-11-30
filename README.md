@@ -256,7 +256,7 @@ By default, mutation action is NEW_OR_UPDATE. You can override this using _--bun
 
 You can override mutation actions if exists using _--mappings_ option. For example, delete a bundle excluding the keys and trustedCerts.
 ```
-./graphman.sh import --using delete-bundle --input hello-world.json --mappings.keys.action IGNORE --mappings.trustedCerts.action IGNORE
+./graphman.sh import --using delete-bundle --input hello-world.json --mappings.action DELETE --mappings.keys.action IGNORE --mappings.trustedCerts.action IGNORE
 ```
 
 ## Using the Graphman mappings command

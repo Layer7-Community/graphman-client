@@ -213,18 +213,16 @@ module.exports = {
         const result = {};
 
         if (actions) {
-            result['default'] = {action: actions.action, dependencyAction: actions.dependencyAction, level: actions.level || '0'};
+            result['default'] = {action: actions.action, level: actions.level || '0'};
             delete actions.action;
-            delete actions.dependencyAction;
             delete actions.level;
         } else {
-            result['default'] = {action: null, dependencyAction: null, level: '0'};
+            result['default'] = {action: null, level: '0'};
         }
 
         Object.keys(actions||{}).forEach(key => {
             const instr = result[key] = result[key] || {};
             instr.action = actions[key].action || result['default'].action;
-            instr.dependencyAction = actions[key].dependencyAction || result['default'].dependencyAction;
             instr.level = actions[key].level || result['default'].level;
         });
 
