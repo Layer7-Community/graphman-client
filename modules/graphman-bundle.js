@@ -454,6 +454,11 @@ let importSanitizer = function () {
                 delete entity.moduleStates;
                 delete entity.moduleStateSummary;
             }
+        } else if (pluralMethod === "trustedCerts") {
+            if (entity.revocationCheckPolicy) {
+                utils.info(`removing revocationCheckPolicy field(s) from trustedCerts ${entity.name}`);
+                delete entity.revocationCheckPolicy;
+            }
         } else if (entity.hardwiredService) {
             utils.info(`removing hardwiredService field from ${pluralMethod} ${entity.name}`);
             delete entity.hardwiredService;

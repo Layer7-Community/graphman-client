@@ -6,10 +6,10 @@ query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = f
             xml @skip (if: $policyAsYaml)
             {{PolicyAsYaml}} @include (if: $policyAsYaml)
             allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
 			directDependencies @include (if: $includeDirectDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
         }
     }
@@ -20,10 +20,10 @@ query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = f
             xml @skip (if: $policyAsYaml)
             {{PolicyAsYaml}} @include (if: $policyAsYaml)
             allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
 			directDependencies @include (if: $includeDirectDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
         }
     }
@@ -34,10 +34,10 @@ query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = f
             xml @skip (if: $policyAsYaml)
             {{PolicyAsYaml}} @include (if: $policyAsYaml)
             allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
 			directDependencies @include (if: $includeDirectDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
         }
     }
@@ -48,10 +48,10 @@ query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = f
             xml @skip (if: $policyAsYaml)
             {{PolicyAsYaml}} @include (if: $policyAsYaml)
             allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
 			directDependencies @include (if: $includeDirectDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
         }
     }
@@ -66,10 +66,10 @@ query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = f
             xml @skip (if: $policyAsYaml)
             {{PolicyAsYaml}} @include (if: $policyAsYaml)
             allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
 			directDependencies @include (if: $includeDirectDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
         }
     }
@@ -80,10 +80,10 @@ query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = f
             xml @skip (if: $policyAsYaml)
             {{PolicyAsYaml}} @include (if: $policyAsYaml)
             allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
 			directDependencies @include (if: $includeDirectDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
         }
     }
@@ -94,10 +94,10 @@ query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = f
             xml @skip (if: $policyAsYaml)
             {{PolicyAsYaml}} @include (if: $policyAsYaml)
             allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
 			directDependencies @include (if: $includeDirectDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
         }
     }
