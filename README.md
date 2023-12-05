@@ -198,6 +198,10 @@ To export all policy fragments, web API services, and soap services configuratio
 ```
 ./graphman.sh export --using folder --variables.folderPath /utils/foo --output folderUtilsFoo.json
 ```
+> **Note**
+> Sometimes, folder query execution might get aborted due to the limits imposed for protection. 
+> Please adjust the allowed query complexity using the gateway's system property (com.l7tech.server.graphman.maxQueryComplexity=3000). 
+> For more information, please check the system properties section of the [graphman](https://techdocs.broadcom.com/us/en/ca-enterprise-software/layer7-api-management/api-gateway/10-1/apis-and-toolkits/graphman.html) page.
 
 ### webApiService
 This query lets you package a particular web API service from the source gateway. You can package it with
