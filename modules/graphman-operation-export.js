@@ -18,17 +18,21 @@ module.exports = {
         let startDate = Date.now();
         this.export(
             config.sourceGateway,
-            queryBuilder.build(params.using ? params.using : 'all', params.variables),
+            queryBuilder.build(params.using ? params.using : 'all', params.variables, params.options),
             (data, parts) => {
                 let endDate = Date.now();
 
                 if (data.data) {
-                    data = butils.sanitize(data.data, butils.EXPORT_USE, params.excludeGoids);
+                    data = butils.sanitize(data.data, butils.EXPORT_USE, params.options);
                     butils.removeDuplicates(data);
                     butils.filter(data, params.filter);
                     POST_BUNDLE_EXTN.call(data, parts);
                     utils.writeResult(params.output, butils.sort(data));
                     if (parts) utils.writePartsResult(utils.parentPath(params.output), parts);
+
+                    if (data.errors) {
+                        utils.warn("errors detected", data.errors);
+                    }
                 } else {
                     utils.info("unexpected data", data);
                 }
@@ -47,6 +51,7 @@ module.exports = {
         }
 
         const request = graphman.request(gateway);
+        request.path += buildQueryParameters(query.options);
         request.body = query;
         graphman.invoke(request, callback);
     },
@@ -58,8 +63,16 @@ module.exports = {
         console.log("        # use this option to filter the exported entities by some field.");
         console.log("      --filter.equals|startsWith|endsWith|contains");
         console.log("        # use this option to choose the matching criteria to filter the exported entities.");
+
+        console.log("      --bundleDefaultAction <action>");
+        console.log("        # default mapping action at the bundle level.");
+
+        console.log("      --excludeDependencies");
+        console.log("        # use this option to exclude dependency entities from the exported bundled entities.");
         console.log("      --excludeGoids");
         console.log("        # use this option to exclude Goids from the exported bundled entities.");
+        console.log("      --policyAsYaml");
+        console.log("        # use this option to export policy in YAML format.");
         console.log("      --sourceGateway.*");
         console.log("        # use this option(s) to override the source gateway details from the graphman configuration");
     }
@@ -68,7 +81,39 @@ module.exports = {
 function adjustParameters(params) {
     // TODO: any better way to handle these customizations
     params.variables = params.variables || {};
+    params.options = params.options || {};
+
     if (params.using && (params.using === "encass" || params.using.startsWith("encass:")) && params.variables) {
         params.variables.policyName = params.variables.policyName || params.variables.name;
     }
+
+    if (params.policyAsYaml) {
+        params.variables.policyAsYaml = true;
+    }
+
+    params.options.bundleDefaultAction = params.bundleDefaultAction;
+    params.options.bundleMappingsLevel = 0;
+    params.options.mappings = utils.mappings({} || params.mappings);
+
+    if (params.excludeDependencies) {
+        params.options.excludeDependencies = true;
+    }
+
+    if (params.excludeGoids) {
+        params.options.excludeGoids = true;
+    }
+}
+
+function buildQueryParameters(options) {
+    let queryParams = "";
+    let separator = "?";
+
+    if (options) {
+        if (options.bundleMappingsLevel >= 0) {
+            queryParams += separator + "bundleMappingsLevel=" + options.bundleMappingsLevel;
+            separator = "&";
+        }
+    }
+
+    return queryParams;
 }

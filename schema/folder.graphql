@@ -1,0 +1,43 @@
+extend type Query {
+  "Get all Folders"
+  folders: [Folder!]!
+  "Get the folder identified by path"
+  folderByPath(path: String!) : Folder!
+  "Get the folders matches by path (i.e., folder itself and the folders in it)"
+  foldersByPath(path: String!) : [Folder!]!
+}
+
+extend type Mutation {
+    "Set the Folders"
+    setFolders(input : [FolderInput!]!) : FoldersPayload!
+    "Delete the Folders by Path"
+    deleteFolders(paths : [String!]!) : FoldersPayload!
+}
+
+input FolderInput {
+    "The goid for the folder"
+    goid : ID
+    "The folder name"
+    name : String
+    "The folder Path"
+    path : String!
+    "The configuration checksum of this folder"
+    checksum : String
+}
+
+type Folder {
+    "The goid for the folder"
+    goid : ID!
+    "The folder name"
+    name : String!
+    "The folder Path"
+    path : String!
+    "The configuration checksum of this folder"
+    checksum : String!
+}
+
+type FoldersPayload {
+    status: [EntityMutationStatus!]!
+    detailedStatus: [EntityMutationDetailedStatus!]!
+    folders: [Folder]!
+}

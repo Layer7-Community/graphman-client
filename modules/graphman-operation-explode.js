@@ -22,7 +22,7 @@ module.exports = {
             type2Exploder.explode(bundle, outputDir);
         } else {
             if (params.type && params.type !== "type1") utils.info("unrecognised explode format " + params.type + ", fall backing to default format");
-            type1Exploder.explode(bundle, outputDir);
+            type1Exploder.explode(bundle, outputDir, params);
         }
     },
 
@@ -30,22 +30,31 @@ module.exports = {
         console.log("    explode --input <input-file> [--output <output-directory>] [<options>]");
         console.log("      --type <explode-format>");
         console.log("        # <explode-format> can be either type1 or type2. Default option is type1.");
+        console.log("      --explodePolicies");
+        console.log("        # to explode policy code into separate files.");
+        console.log("      --explodeKeys");
+        console.log("        # to explode key data into separate files.");
+        console.log("      --explodeTrustedCerts");
+        console.log("        # to explode trusted certificate data into separate files.");
     }
 }
 
 let type1Exploder = (function () {
     return {
-        explode: function (bundle, outputDir) {
+        explode: function (bundle, outputDir, options) {
             Object.entries(bundle).forEach(([key, entities]) => {
-                if (entities.length) {
+                if (Array.isArray(entities) && entities.length) {
                     utils.info(`exploding ${key}`);
-                    entities.forEach(item => writeEntity(outputDir, key, item));
+                    entities.forEach(item => writeEntity(outputDir, key, item, options));
+                } else if (key === "properties") {
+                    utils.info(`capturing ${key} to bundle-properties.json`);
+                    utils.writeFile(`${outputDir}/bundle-properties.json`, entities);
                 }
             });
         }
     };
 
-    function writeEntity(dir, key, entity) {
+    function writeEntity(dir, key, entity, options) {
         let displayName = butils.entityDisplayName(entity);
         if (!displayName) {
             displayName = entity.checksum || Date.now().toString(36) + Math.random().toString(36).substring(2);
@@ -57,6 +66,53 @@ let type1Exploder = (function () {
         const filename = utils.safeName(displayName) + fileSuffix;
         utils.info(`  ${displayName}`);
         const targetDir = entity.folderPath ? utils.safePath(dir, "tree", entity.folderPath) : utils.path(dir, key);
+
+        if (options.explodeTrustedCerts && key === "trustedCerts") {
+            if (entity.certBase64) {
+                utils.writeFile(`${targetDir}/${filename}.cert`, atob(entity.certBase64));
+                entity.certBase64 = `{${filename}.cert}`;
+            }
+        }
+
+        if (options.explodeKeys && key === "keys") {
+            if (entity.p12) {
+                utils.writeFile(`${targetDir}/${filename}.p12`, atob(entity.p12));
+                entity.p12 = `{${filename}.p12}`;
+            }
+
+            if (entity.pem) {
+                utils.writeFile(`${targetDir}/${filename}.pem`, entity.pem);
+                entity.pem = `{${filename}.pem}`;
+            }
+
+            if (entity.certChain) {
+                let data = "";
+                for (var index in entity.certChain) {
+                    data += entity.certChain[index];
+                    data += "\r\n";
+                }
+                utils.writeFile(`${targetDir}/${filename}.certchain.pem`, data);
+                entity.certChain = `{${filename}.certchain.pem}`;
+            }
+        }
+
+        if (options.explodePolicies && entity.policy) {
+            if (entity.policy.xml) {
+                utils.writeFile(`${targetDir}/${filename}.xml`, entity.policy.xml);
+                entity.policy.xml = `{${filename}.xml}`;
+            }
+
+            if (entity.policy.json && !entity.policy.code) {
+                entity.policy.code = JSON.parse(entity.policy.json);
+                delete entity.policy.json;
+            }
+
+            if (entity.policy.yaml) {
+                utils.writeFile(`${targetDir}/${filename}.yaml`, entity.policy.yaml);
+                entity.policy.yaml = `{${filename}.yaml}`;
+            }
+        }
+
         utils.writeFile(`${targetDir}/${filename}.json`, entity);
     }
 })();

@@ -2,9 +2,27 @@ type Query {
 }
 
 type Mutation {
+    "Installs bundle of entities using set-based mutation operations"
+    installBundleEntities: BundleEntitiesPayload
+
+    "Deletes bundle of entities using set-based mutation operations"
+    deleteBundleEntities: BundleEntitiesPayload
 }
 
 scalar NonEmptyString
+scalar AnyObject
+
+type BundleEntitiesPayload {
+    summary: Boolean
+    full: Boolean
+}
+
+type AnyProperty {
+    "The name of property"
+    name: String!
+    "The value of the property"
+    value: AnyObject
+}
 
 "An Entity Property"
 type EntityProperty {
@@ -19,17 +37,31 @@ input EntityPropertyInput {
     value: String!
 }
 
+enum EntityMutationAction {
+    NEW_OR_UPDATE,
+    NEW_OR_EXISTING,
+    ALWAYS_CREATE_NEW,
+    IGNORE,
+    DELETE
+}
+
 enum EntityMutationStatus {
     NONE
     CREATED
     UPDATED
     DELETED
+    USED_EXISTING
+    IGNORED
     ERROR
 }
 
 type EntityMutationDetailedStatus {
+    action: EntityMutationAction
     status: EntityMutationStatus!
     description: String
+
+    source: [AnyProperty!]
+    target: [AnyProperty!]
 }
 
 interface EntityMutationPayload {
@@ -67,4 +99,10 @@ enum HttpMethod {
     OPTIONS
     PATCH
     OTHER
+}
+
+enum EntityFieldOption {
+    DEFAULT
+    NONE
+    CUSTOM
 }

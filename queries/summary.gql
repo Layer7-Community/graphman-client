@@ -91,9 +91,18 @@ query summary {
         {{SMConfig:summary}}
     }
     revocationCheckPolicies {
-        {{RevocationCheckPolicy}}
+        {{RevocationCheckPolicy:summary}}
     }
     trustedCerts {
         {{Certificate:summary}}
+    }
+    logSinks {
+        {{LogSink:summary}}
+    }
+    httpConfigurations {
+        {{HttpConfiguration:summary}}
+    }
+    customKeyValues {
+        {{CustomKeyValue:summary}}
     }
 }

@@ -29,7 +29,7 @@ module.exports = {
         if (Array.isArray(bundle)) {
             bundle.sort(comparator);
         } else {
-            Object.keys(bundle).forEach(key => {
+            Object.keys(bundle).filter(key => Array.isArray(bundle[key])).forEach(key => {
                 bundle[key].sort(comparator);
             });
         }
@@ -37,20 +37,20 @@ module.exports = {
         return bundle;
     },
 
-    sanitize: function (bundle, use, excludeGoids) {
+    sanitize: function (bundle, use, options) {
         use = use || this.EXPORT_USE;
 
         if (use === this.EXPORT_USE) {
-            return exportSanitizer.sanitize(bundle, !excludeGoids);
+            return exportSanitizer.sanitize(bundle, options);
         } else if (use === this.IMPORT_USE) {
-            return importSanitizer.sanitize(bundle, !excludeGoids);
+            return importSanitizer.sanitize(bundle, options);
         } else {
             utils.warn("incorrect [use] specified for bundle sanitization: " + use);
         }
     },
 
     removeDuplicates: function (bundle) {
-        Object.keys(bundle).forEach(key => {
+        Object.keys(bundle).filter(key => Array.isArray(bundle[key])).forEach(key => {
             const list = [];
             bundle[key].forEach(item => {
                 if (!this.findMatchingEntity(list, item)) list.push(item);
@@ -62,11 +62,55 @@ module.exports = {
         });
     },
 
+    overrideMappings: function (bundle, options) {
+        const properties = bundle.properties = bundle.properties || {};
+        const mappings = properties.mappings = properties.mappings || {};
+
+        if (options.bundleDefaultAction) {
+            properties.defaultAction = options.bundleDefaultAction;
+            utils.info(`overriding bundle default action to ${options.bundleDefaultAction}`);
+        }
+
+        if (!options.mappings) {
+            return;
+        }
+
+        Object.keys(mappings).forEach(key => {
+            const overrideMapping = options.mappings[key] || options.mappings['default'];
+            const status = {mapping: false, foundDefault: false};
+
+            if (overrideMapping.action) {
+                mappings[key].forEach(item => {
+                    status.mapping = true;
+                    item.action = overrideMapping.action;
+                    status.foundDefault = status.foundDefault || item.default;
+                });
+
+                if (!status.foundDefault && overrideMapping.action !== properties.defaultAction) {
+                    utils.info(`populating default mapping action for ${key} to ${overrideMapping.action}`);
+                    mappings[key].unshift({'default': true, action: overrideMapping.action});
+                }
+            }
+
+            if (status.mapping) {
+                utils.info(`overriding mapping action for ${key} to ${overrideMapping.action}`);
+            }
+        });
+
+        Object.keys(options.mappings).forEach(key => {
+            const overrideMapping = options.mappings[key] || options.mappings['default'];
+            if (key !== 'default' && !mappings[key] && overrideMapping.action) {
+                utils.info(`populating default mapping action for ${key} to ${overrideMapping.action}`);
+                mappings[key] = [{action: overrideMapping.action, 'default': true}];
+            }
+        });
+    },
+
     filter: function (bundle, filter) {
         if (!filter || !filter.by) return;
         if (!filter.equals && !filter.startsWith && !filter.endsWith && !filter.contains) return;
 
-        Object.keys(bundle).forEach(key => {
+        Object.keys(bundle).filter(key => Array.isArray(bundle[key])).forEach(key => {
             const list = [];
             bundle[key].forEach(item => {
                 let match = item.hasOwnProperty(filter.by);
@@ -178,67 +222,106 @@ function matchSoapResolvers(left, right) {
 
 let exportSanitizer = function () {
     return {
-        sanitize: function (bundle, includeGoids) {
-            const result = {};
-            sanitizeBundle(bundle, result, includeGoids);
+        sanitize: function (bundle, options) {
+            const result = {mappings: {}, dependencyMappings: {}};
+            sanitizeBundle(bundle, result, options);
+
+            const mappings = result.mappings;
+            const dependencyMappings = result.dependencyMappings;
+            delete result.mappings;
+            delete result.dependencyMappings;
+
+            if (!result.properties) result.properties = {defaultAction: "NEW_OR_UPDATE"};
+
+            result.properties.defaultAction = options.bundleDefaultAction || result.properties.defaultAction;
+            result.properties.mappings = normalizedMappings(mappings, dependencyMappings, options, result.properties.defaultAction);
+
+            if (result.properties.mappings && Object.keys(result.properties.mappings).length === 0) {
+                delete result.properties.mappings;
+            }
+
             return result;
         },
     };
 
-    function sanitizeKey (key) {
-        if (SCHEMA_METADATA.pluralMethods[key]) return key;
+    function typeInfoFromVariableBundleName (key) {
+        let typeName = SCHEMA_METADATA.pluralMethods[key];
+        if (typeName) return SCHEMA_METADATA.types[typeName];
 
         const types = Object.values(SCHEMA_METADATA.types);
 
         for (var item of types) {
             if (item.prefix && key.startsWith(item.prefix)) {
-                return item.pluralMethod;
+                return item;
             }
         }
 
         return null;
     }
 
-    function sanitizeBundle(obj, result, includeGoids) {
-        sanitizeBundleInternal(obj, result, includeGoids);
-        Object.keys(obj).forEach(key => {
+    function sanitizeBundle(obj, result, options) {
+        sanitizeBundleInternal(obj, result, options, false);
+        Object.keys(result).filter(key => Array.isArray(result[key])).forEach(key => {
             if (result[key] && result[key].length === 0) {
                 delete result[key];
             }
         });
     }
 
-    function sanitizeBundleInternal(obj, result, includeGoids) {
+    function sanitizeBundleInternal(obj, result, options, dependencies) {
         Object.keys(obj).forEach(key => {
-            const sanitizedKey = sanitizeKey(key);
-            const goidRequired = GOID_PLURAL_METHODS.includes(key);
+            const typeInfo = typeInfoFromVariableBundleName(key);
+            const sanitizedKey = typeInfo ? typeInfo.pluralMethod : null;
+            const goidRequired = GOID_PLURAL_METHODS.includes(key) || (!options.excludeGoids);
 
             if (sanitizedKey) {
                 if (!result[sanitizedKey]) result[sanitizedKey] = [];
+                if (!result.mappings[sanitizedKey]) result.mappings[sanitizedKey] = [];
+                if (!result.dependencyMappings[sanitizedKey]) result.dependencyMappings[sanitizedKey] = [];
 
                 if (Array.isArray(obj[key])) {
                     if (obj[key].length) utils.info(`sanitizing ${key} to ${sanitizedKey}`);
-                    obj[key].forEach(item => result[sanitizedKey].push(sanitizeEntity(item, result, goidRequired || includeGoids)));
+                    obj[key].forEach(item => {
+                        const entity = sanitizeEntity(item, result, typeInfo, options, dependencies, goidRequired);
+                        addEntity(entity, result, typeInfo, options, dependencies, sanitizedKey);
+                    });
                 } else {
                     utils.info(`sanitizing ${key} to ${sanitizedKey}`);
-                    result[sanitizedKey].push(sanitizeEntity(obj[key], result, goidRequired || includeGoids));
+                    const entity = sanitizeEntity(obj[key], result, typeInfo, options, dependencies, goidRequired);
+                    addEntity(entity, result, typeInfo, options, dependencies, sanitizedKey);
                 }
+            } else if (key === 'properties') {
+                result[key] = obj[key];
             } else {
                 utils.warn(`unrecognized key (${key}) with the bundle`);
             }
         });
     }
 
-    function sanitizeEntity(obj, result, goidRequired) {
+    function addEntity(entity, result, typeInfo, options, dependencies, sanitizedKey) {
+        if (dependencies && options.excludeDependencies) {
+            utils.info(`excluding the dependency ${sanitizedKey} - ${entity[typeInfo.idField]}`);
+            if (entity.mappingInstruction) result.dependencyMappings[sanitizedKey].push(entity.mappingInstruction);
+        } else {
+            result[sanitizedKey].push(entity);
+            if (entity.mappingInstruction) result.mappings[sanitizedKey].push(entity.mappingInstruction);
+        }
+
+        delete entity.mappingInstruction;
+    }
+
+    function sanitizeEntity(obj, result, typeInfo, options, dependencies, goidRequired) {
+        obj.mappingInstruction = createMappingInstruction(obj, typeInfo, options, dependencies);
+
         if (obj.policy && obj.policy.allDependencies) {
             utils.info(`expanding ${obj.name} policy (all) dependencies`);
-            sanitizeBundleInternal(obj.policy.allDependencies, result, goidRequired);
+            sanitizeBundleInternal(obj.policy.allDependencies, result, options, true);
             delete obj.policy.allDependencies;
         }
 
         if (obj.policy && obj.policy.directDependencies) {
             utils.info(`expanding ${obj.name} policy (direct) dependencies`);
-            sanitizeBundleInternal(obj.policy.directDependencies, result, goidRequired);
+            sanitizeBundleInternal(obj.policy.directDependencies, result, options, true);
             delete obj.policy.directDependencies;
         }
 
@@ -247,20 +330,102 @@ let exportSanitizer = function () {
 
         return obj;
     }
+
+    function createMappingInstruction(obj, typeInfo, options, dependencies) {
+        typeInfo = SCHEMA_METADATA.bundleTypes[typeInfo.pluralMethod];
+        const actions = options.mappings[typeInfo.bundleName] || options.mappings['default'];
+        const instruction = {action: actions.action, level: actions.level};
+
+        if (!instruction.action || !instruction.level || instruction.level === '0') return null;
+
+        instruction[typeInfo.identityField] = obj[typeInfo.identityField];
+        typeInfo.identityFields.forEach(field => instruction[field] = obj[field]);
+
+        if (dependencies) {
+            if (options.excludeDependencies) {
+                instruction['action'] = 'NEW_OR_EXISTING';
+                instruction['nodef'] = true;
+                instruction['failOnNew'] = true;
+            }
+
+            instruction['dep'] = true;
+        }
+
+        delete instruction.level;
+        return instruction;
+    }
+
+    function normalizedMappings(mappings, dependencyMappings, options, bundleDefaultAction) {
+        removeDuplicateInstructions(mappings);
+
+        Object.keys(mappings).forEach(key => {
+            let entityMappings = mappings[key];
+            let dependencyEntityMappings = dependencyMappings[key];
+
+            if (dependencyEntityMappings) {
+                dependencyEntityMappings.forEach(item => {
+                    if (!isDuplicateMatchingInstruction(entityMappings, item, SCHEMA_METADATA.bundleTypes[key])) {
+                        entityMappings.push(item);
+                    }
+                });
+            }
+
+            const mapping = options.mappings[key] || options.mappings['default'];
+            if (mapping && mapping.action && mapping.level === '0' && mapping.action !== bundleDefaultAction) {
+                entityMappings.unshift({action: mapping.action, 'default': true});
+            }
+
+            if (entityMappings.length === 0) {
+                delete mappings[key];
+            }
+        });
+
+
+        return mappings;
+    }
+
+    function removeDuplicateInstructions(mappings) {
+        Object.keys(mappings).forEach(key => {
+            let entityMappings = mappings[key];
+            const list = [];
+            entityMappings.forEach(item => {
+                if (!isDuplicateMatchingInstruction(list, item, SCHEMA_METADATA.bundleTypes[key])) list.push(item);
+            });
+            mappings[key] = list;
+        });
+    }
+
+    function isDuplicateMatchingInstruction(list, ele, typeInfo) {
+        for (var item of list) {
+            if (ele[typeInfo.identityField] === item[typeInfo.identityField]) {
+                if (typeInfo.identityFields.length === 0) return true;
+
+                for (var field of typeInfo.identityFields) {
+                    if (ele[field] !== item[field]) return false;
+                }
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
 }();
 
 let importSanitizer = function () {
     return {
-        sanitize: function (bundle, includeGoids) {
+        sanitize: function (bundle, options) {
             Object.keys(bundle).forEach(key => {
                 const goidRequired = GOID_PLURAL_METHODS.includes(key);
+                const includeGoids = !options.excludeGoids;
                 utils.info("inspecting " + key);
                 if (Array.isArray(bundle[key])) {
                     bundle[key].forEach(item => sanitizeEntity(item, key, goidRequired || includeGoids));
                     if (bundle[key].length === 0) {
                         delete bundle[key];
                     }
-                } else {
+                } else if (key !== "properties") {
                     sanitizeEntity(bundle[key], key, goidRequired || includeGoids);
                 }
             });
@@ -272,50 +437,31 @@ let importSanitizer = function () {
     function sanitizeEntity(entity, pluralMethod, goidRequired) {
         if (!goidRequired) delete entity.goid;
 
-        if (pluralMethod === "webApiServices" || pluralMethod === "soapServices" || pluralMethod === "internalWebApiServices" || pluralMethod === "internalSoapServices") {
-            if (entity.resolvers && !entity.resolutionPath) entity.resolutionPath = entity.resolvers.resolutionPath;
-            if (entity.guid || entity.resolvers) {
-                utils.info(`removing guid|resolvers field(s) from service ${entity.name}/${entity.resolutionPath}`);
-                delete entity.guid;
-                delete entity.resolvers;
-            }
-        } else if (pluralMethod === "internalGroups" || pluralMethod === "internalUsers") {
-            if (entity.members || entity.enabled) {
-                utils.info(`removing members|enabled field(s) from internalGroups|internalUsers ${entity.name}`);
+        if (pluralMethod === "internalGroups") {
+            if (entity.members) {
+                utils.info(`removing members field(s) from internalGroups ${entity.name}`);
                 delete entity.members;
-                delete entity.enabled;
             }
-
-            if (entity.memberOf) {
-                entity.memberOf.forEach(item => {
-                    delete item.goid;
-                    delete item.description;
-                    delete item.checksum;
-                });
+        } else if (pluralMethod === "fipGroups") {
+            if (entity.members) {
+                utils.info(`removing members field(s) from fipGroups ${entity.name}`);
+                delete entity.members;
             }
         } else if (pluralMethod === "serverModuleFiles") {
             if (entity.filePartName||entity.moduleStates||entity.moduleStateSummary) {
-                utils.info(`removing filePartName|moduleStates|moduleStateSummary field(s) from server module file ${entity.name}`);
+                utils.info(`removing filePartName|moduleStates|moduleStateSummary field(s) from serverModuleFiles ${entity.name}`);
                 delete entity.filePartName;
                 delete entity.moduleStates;
                 delete entity.moduleStateSummary;
             }
-        } else if (pluralMethod === "emailListeners" || pluralMethod === "listenPorts" || pluralMethod === "activeConnectors") {
-            if (entity.hardwiredService) {
-                utils.info(`removing hardwiredService fields from ${entity.name}`);
-                delete entity.hardwiredService;
-            }
         } else if (pluralMethod === "trustedCerts") {
             if (entity.revocationCheckPolicy) {
-                utils.info(`removing revocationCheckPolicy fields from ${entity.name}`);
-                entity.revocationCheckPolicyName = entity.revocationCheckPolicy.name;
+                utils.info(`removing revocationCheckPolicy field(s) from trustedCerts ${entity.name}`);
                 delete entity.revocationCheckPolicy;
             }
-        } else if (pluralMethod ==="passwordPolicies" || pluralMethod === "serviceResolutionConfigs") {
-            if (entity.checksum) {
-                utils.info(`removing checksum field`);
-                delete entity.checksum;
-            }
+        } else if (entity.hardwiredService) {
+            utils.info(`removing hardwiredService field from ${pluralMethod} ${entity.name}`);
+            delete entity.hardwiredService;
         }
     }
 }();

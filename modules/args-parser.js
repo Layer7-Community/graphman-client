@@ -48,6 +48,8 @@ function buildArg(argObj, value) {
 
 function normalize(obj) {
     if (typeof obj !== 'object') {
+        if (obj === 'true') return true;
+        if (obj === 'false') return false;
         return obj;
     }
 
@@ -56,10 +58,12 @@ function normalize(obj) {
             value.forEach((item, index) => value[index] = normalize(item));
         } else if (typeof value === 'object') {
             if (Object.keys(value).length === 1 && value["__value"]) {
-                obj[key] = value["__value"];
+                obj[key] = normalize(value["__value"]);
             } else {
                 obj[key] = normalize(value);
             }
+        } else {
+            obj[key] = normalize(value);
         }
     });
 

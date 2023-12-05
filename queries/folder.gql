@@ -1,14 +1,15 @@
-query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = false, $includeDirectDependencies: Boolean = false) {
+query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = false, $includeDirectDependencies: Boolean = false, $policyAsYaml: Boolean = false) {
     
     webApiServicesByFolderPath (folderPath: $folderPath) {
         {{WebApiService:-policy}}
         policy {
-            xml
+            xml @skip (if: $policyAsYaml)
+            {{PolicyAsYaml}} @include (if: $policyAsYaml)
             allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
 			directDependencies @include (if: $includeDirectDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
         }
     }
@@ -16,12 +17,13 @@ query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = f
     soapServicesByFolderPath (folderPath: $folderPath) {
         {{SoapService:-policy}}
         policy {
-            xml
+            xml @skip (if: $policyAsYaml)
+            {{PolicyAsYaml}} @include (if: $policyAsYaml)
             allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
 			directDependencies @include (if: $includeDirectDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
         }
     }
@@ -29,12 +31,13 @@ query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = f
 	internalWebApiServicesByFolderPath (folderPath: $folderPath) {
         {{WebApiService:-policy}}
         policy {
-            xml
+            xml @skip (if: $policyAsYaml)
+            {{PolicyAsYaml}} @include (if: $policyAsYaml)
             allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
 			directDependencies @include (if: $includeDirectDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
         }
     }
@@ -42,12 +45,13 @@ query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = f
     internalSoapServicesByFolderPath (folderPath: $folderPath) {
         {{SoapService:-policy}}
         policy {
-            xml
+            xml @skip (if: $policyAsYaml)
+            {{PolicyAsYaml}} @include (if: $policyAsYaml)
             allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
 			directDependencies @include (if: $includeDirectDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
         }
     }
@@ -59,12 +63,13 @@ query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = f
 	globalPoliciesByFolderPath (folderPath: $folderPath) {
         {{GlobalPolicy:-policy}}
         policy {
-            xml
+            xml @skip (if: $policyAsYaml)
+            {{PolicyAsYaml}} @include (if: $policyAsYaml)
             allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
 			directDependencies @include (if: $includeDirectDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
         }
     }
@@ -72,12 +77,13 @@ query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = f
 	backgroundTaskPoliciesByFolderPath (folderPath: $folderPath) {
         {{BackgroundTaskPolicy:-policy}}
         policy {
-            xml
+            xml @skip (if: $policyAsYaml)
+            {{PolicyAsYaml}} @include (if: $policyAsYaml)
             allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
 			directDependencies @include (if: $includeDirectDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
         }
     }
@@ -85,12 +91,13 @@ query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = f
 	policyFragmentsByFolderPath (folderPath: $folderPath) {
         {{PolicyFragment:-policy}}
         policy {
-            xml
+            xml @skip (if: $policyAsYaml)
+            {{PolicyAsYaml}} @include (if: $policyAsYaml)
             allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
 			directDependencies @include (if: $includeDirectDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
         }
     }

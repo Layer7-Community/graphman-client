@@ -27,10 +27,32 @@ module.exports = {
         }
 
         const request = graphman.request(config.targetGateway);
-        const inputBundle = butils.sanitize(utils.readFile(params.input), butils.IMPORT_USE, params.excludeGoids);
+        const inputBundle = butils.sanitize(utils.readFile(params.input), butils.IMPORT_USE, {excludeGoids: params.excludeGoids});
         butils.removeDuplicates(inputBundle);
 
         const using = params.using ? params.using : 'mutation';
+        const mappings = params.mappings ? utils.mappings(params.mappings) : null;
+
+        if (!params.bundleDefaultAction) {
+            if (using === 'delete-bundle') params.bundleDefaultAction = 'DELETE';
+        }
+
+        if (params.bundleDefaultAction) {
+            if (using !== 'delete-bundle' && params.bundleDefaultAction === 'DELETE') {
+                utils.warn("DELETE action with the improper order of mutation operations may lead to failures");
+            }
+
+            if (using === 'delete-bundle' && params.bundleDefaultAction !== 'DELETE') {
+                utils.warn(`Unexpected action specified for the chosen mutation: using=${using} and bundleDefaultAction=${params.bundleDefaultAction}`);
+            }
+        }
+
+        butils.overrideMappings(inputBundle, {
+            bundleDefaultAction: params.bundleDefaultAction,
+            mappings: mappings
+        });
+
+
         const revisedBundle = params.revise ? opRevise.revise(inputBundle) : inputBundle;
 
         PRE_BUNDLE_EXTN.call(revisedBundle);
@@ -51,6 +73,15 @@ module.exports = {
 
     usage: function () {
         console.log("    import [--using <query-id>] --input <input-file> [--variables.<name> <value>,...] [--output <output-file>] [<options>]");
+        console.log("      --bundleDefaultAction <action>");
+        console.log("        # overrides the default mapping action at the bundle level.");
+
+        console.log("      --mappings.action <action>");
+        console.log("        # overrides the mapping action for any entity.");
+
+        console.log("      --mappings.<entity-type-plural-tag>.action <action>");
+        console.log("        # overrides the mapping action for the specified class of entities. This option can be repeatable.");
+
         console.log("      --excludeGoids");
         console.log("        # use this option to exclude Goids from the importing bundled entities.");
         console.log("      --targetGateway.*");

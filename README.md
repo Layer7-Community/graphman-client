@@ -28,6 +28,7 @@ node -v
 ```
 
 If node is not already installed on your system, you can download it from https://nodejs.org/en/download/.
+Minimum version that is expected to work with is 16.+.
 
 Next, set the environmental variable GRAPHMAN_HOME to the path where this packaged is installed. For
 example:
@@ -110,9 +111,13 @@ target gateway.
 > - --schemaVersion <schema-version>
 > 
 > Supported schemas are:
-> - v11.0-CR01 (default) 
-> - v10.1-CR03
+> - v10.1-CR04 (default) 
+> - v11.0-CR02
 > 
+
+> **Note**
+> Use the older clients (https://github.com/Layer7-Community/graphman-client/releases) to work with the earlier schemas.
+
 ## Graphman configuration bundles <a name="bundles"></a>
 
 Graphman bundles are collections of 0 or more Layer7 Gateway configuration entities. You can combine any
@@ -193,6 +198,10 @@ To export all policy fragments, web API services, and soap services configuratio
 ```
 ./graphman.sh export --using folder --variables.folderPath /utils/foo --output folderUtilsFoo.json
 ```
+> **Note**
+> Sometimes, folder query execution might get aborted due to the limits imposed for protection. 
+> Please adjust the allowed query complexity using the gateway's system property (com.l7tech.server.graphman.maxQueryComplexity=3000). 
+> For more information, please check the system properties section of the [graphman](https://techdocs.broadcom.com/us/en/ca-enterprise-software/layer7-api-management/api-gateway/10-1/apis-and-toolkits/graphman.html) page.
 
 ### webApiService
 This query lets you package a particular web API service from the source gateway. You can package it with
@@ -227,6 +236,50 @@ Use this command to import a specified gateway configuration bundle to a target 
 You can override the gateway target details when you import bundles.
 ```
 ./graphman.sh import --input hello-world.json --targetGateway.address https://some-target:8443/graphman --targetGateway.username admin --targetGateway.password changeit
+```
+It is recommended to install/delete bundles using the standard bundle operations. Standard mutation operations cover all the supported entity types and take care of their mutations in their order of dependency.
+```
+./graphman.sh import --using install-bundle --input hello-world.json
+```
+```
+./graphman.sh import --using delete-bundle --input hello-world.json
+```
+
+By default, mutation action is NEW_OR_UPDATE. You can override this using _--bundleDefaultAction_ option.
+```
+./graphman.sh import --using install-bundle --input hello-world.json --bundleDefaultAction NEW_OR_EXISTING
+```
+
+> **NOTE**
+> Permitted mutation actions are:
+> - NEW_OR_UPDATE
+> - NEW_OR_EXISTING
+> - ALWAYS_CREATE_NEW
+> - DELETE
+> - IGNORE
+
+You can override mutation actions if exists using _--mappings_ option. For example, delete a bundle excluding the keys and trustedCerts.
+```
+./graphman.sh import --using delete-bundle --input hello-world.json --mappings.action DELETE --mappings.keys.action IGNORE --mappings.trustedCerts.action IGNORE
+```
+
+## Using the Graphman mappings command
+Sometimes, we may require greater level of control over the bundle mutations. For which, one can take advantage of the mappings to specify the mutation actions at the entity level.
+mappings command helps us to generate the mapping instructions with fine level of control. 
+
+Generate mapping instructions at the bundled entity level.
+```
+./graphman.sh mappings --input hello-world.json --mappings.action NEW_OR_EXISTING --mappings.level 2
+```
+
+Generate entity level mapping instructions for webApiServices alone 
+```
+./graphman.sh mappings --input hello-world.json --mappings.action NEW_OR_EXISTING --mappings.webApiServices.level 2
+```
+
+Generate mapping instructions for multiple entity classes
+```
+./graphman.sh mappings --input hello-world.json --mappings.webApiServices.action NEW_OR_EXISTING --mappings.webApiServices.level 2 --mappings.encassConfigs.action IGNORE
 ```
 
 ## Using the Graphman diff command

@@ -207,5 +207,43 @@ module.exports = {
 
     extension: function (ref) {
         return this.existsFile(MODULES_DIR + "/extn/" + ref + ".js") ? require("./extn/" + ref) : {call: function () {}};
+    },
+
+    mappings: function (actions) {
+        const result = {};
+
+        if (actions) {
+            this.verifyMappingAction(actions.action);
+            result['default'] = {action: actions.action, level: actions.level || '0'};
+            delete actions.action;
+            delete actions.level;
+        } else {
+            result['default'] = {action: null, level: '0'};
+        }
+
+        Object.keys(actions||{}).forEach(key => {
+            this.verifyMappingAction(actions[key].action, key);
+
+            const instr = result[key] = result[key] || {};
+            instr.action = actions[key].action || result['default'].action;
+            instr.level = actions[key].level || result['default'].level;
+        });
+
+        return result;
+    },
+
+    verifyMappingAction: function (action, type) {
+        if (!action) return;
+
+        switch (action) {
+            case "NEW_OR_EXISTING":
+            case "NEW_OR_UPDATE":
+            case "ALWAYS_CREATE_NEW":
+            case "IGNORE":
+            case "DELETE":
+                return;
+        }
+
+        throw "invalid mapping action " + action + (type ? " specified for " + type : "");
     }
 }

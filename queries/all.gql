@@ -96,4 +96,13 @@ query all {
     trustedCerts {
         {{Certificate}}
     }
+    logSinks {
+        {{LogSink}}
+    }
+    httpConfigurations {
+        {{HttpConfiguration}}
+    }
+    customKeyValues {
+        {{CustomKeyValue}}
+    }
 }

@@ -1,0 +1,115 @@
+extend type Query {
+    "Get All LogSinks"
+    logSinks: [LogSink!]!
+    "Get the LogSink with the given name"
+    logSinkByName(name : String!): LogSink
+}
+
+extend type Mutation {
+    """
+    Create or update Log Sinks.
+    If Log Sink with the same name exist, the Log Sink will be updated.
+    If no Log Sink with the name exist, a new Log Sink will be created.
+    """
+    setLogSinks(input: [LogSinkInput!]!): LogSinksPayload!
+
+    "Delete existing log sinks. Match is carried by name."
+    deleteLogSinks(names: [String!]!): LogSinksPayload!
+}
+
+type LogSink {
+    "The internal entity unique identifier"
+    goid : ID!
+    "log sink unique name"
+    name: String!
+    "The configuration checksum"
+    checksum: String!
+    "description of log sink"
+    description: String
+    "defines whether its a file based log Or sysLog"
+    type: LogSinkType!
+    "Whether this log sink is enabled"
+    enabled: Boolean!
+    "defines the severity threshold of log Sink"
+    severity: LogSeverityThreshold!
+    "defines list of categories"
+    categories: [LogSinkCategory!]!
+    "defines syslog host list"
+    syslogHosts: [String!]
+    "defines list of Log sink filters"
+    filters: [LogSinkFilter!]
+    "defines list of log Sink properties"
+    properties: [EntityProperty!]!
+}
+
+input LogSinkInput {
+    "The internal entity unique identifier"
+    goid : ID
+    "log sink unique name"
+    name: String!
+    "description of log sink"
+    description: String
+    "defines whether its a file based log or sysLog"
+    type: LogSinkType!
+    "Whether this log sink is enabled"
+    enabled: Boolean!
+    "defines the severity threshold of log Sink"
+    severity: LogSeverityThreshold!
+    "defines list of categories"
+    categories: [LogSinkCategory!]!
+    "defines syslog host list"
+    syslogHosts: [String!]
+    "defines list of Log sink filters"
+    filters: [LogSinkFilterInput!]
+    "defines list of log Sink properties"
+    properties: [EntityPropertyInput!]
+    "Ignored at creation time but can be used to compare bundle with gw state"
+    checksum : String
+}
+
+"Indicates severity threshold of the log sink"
+enum LogSeverityThreshold {
+    ALL,
+    FINEST,
+    FINER,
+    FINE,
+    CONFIG,
+    INFO,
+    WARNING,
+    SEVERE
+}
+
+"Indicates the type of sink . File Based Or SYSLOG based"
+enum LogSinkType {
+    FILE,
+    SYSLOG
+}
+
+"Indicates the Sink Category"
+enum LogSinkCategory{
+    LOG,
+    TRAFFIC,
+    AUDIT,
+    SSPC
+}
+"Indicate the long sink filter, consist of a type and list of values"
+type LogSinkFilter {
+    "defines the type of log sink"
+    type: String!
+    "defines the list of values"
+    values: [String!]!
+}
+
+"Indicate the long sink filter, consist of a type and list of values"
+input LogSinkFilterInput {
+    "defines the type of log sink"
+    type: String!
+    "defines the list of values"
+    values: [String!]!
+}
+
+type LogSinksPayload implements EntityMutationsPayload {
+    status: [EntityMutationStatus!]!
+    detailedStatus: [EntityMutationDetailedStatus!]!
+    logSinks: [LogSink]!
+}

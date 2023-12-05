@@ -1,6 +1,6 @@
 
-const VERSION = "v1.0";
-const SCHEMA_VERSION = "v11.0-CR01";
+const VERSION = "v1.1";
+const SCHEMA_VERSION = "v10.1-CR04";
 
 const utils = require("./graphman-utils");
 const hutils = require("./http-utils");
@@ -74,6 +74,14 @@ module.exports = {
             body: body || {}
         };
 
+        let queryString = "";
+        if (gateway.forceDelete) queryString += "&forceDelete=" + gateway.forceDelete;
+        if (gateway.deletionStrategy) queryString += "&deletionStrategy=" + gateway.deletionStrategy;
+        if (gateway.mutationsErrorStrategy) queryString += "&mutationsErrorStrategy=" + gateway.mutationsErrorStrategy;
+        if (queryString.length > 0) {
+            req.path = req.path + "?" + queryString.substring(1);
+        }
+
         if (gateway.username && gateway.password) {
             req.auth = gateway.username + ":" + gateway.password;
         } else if (gateway.keyFilename && gateway.certFilename) {
@@ -120,7 +128,7 @@ module.exports = {
                 } else {
                     utils.info("unexpected graphman http response");
                     utils.info(data);
-                    callback({error: data, data: {}});
+                    callback({errors: "no valid response from graphman"});
                 }
             });
         });

@@ -83,6 +83,7 @@ function renewEntities(gateway, entities, type) {
     };
 
     gql.query = queryBuilder.expandQuery(gql.query);
+    gql.query = gql.query.replaceAll("hardwiredService{ {{HardwiredService}} }", "");
     return renewInvoker(gateway, gql, typeObj);
 }
 
@@ -135,8 +136,18 @@ function renewInvoker(gateway, query, typeObj) {
             const result = {};
 
             result[typeObj.pluralMethod] = [];
-            Object.keys(data.data).forEach(key => {
-                result[typeObj.pluralMethod].push(data.data[key]);
+            if (data.errors) {
+                utils.warn("error encountered while renewing the entity", query, data.errors);
+            }
+
+            Object.keys(data.data || {}).forEach(key => {
+                if (key !== 'properties') {
+                    if (Array.isArray(data.data[key])) {
+                        data.data[key].forEach(item => result[typeObj.pluralMethod].push(item));
+                    } else {
+                        result[typeObj.pluralMethod].push(data.data[key]);
+                    }
+                }
             });
 
             // attach parts to the intermediate bundle

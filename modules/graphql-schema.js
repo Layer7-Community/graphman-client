@@ -20,6 +20,12 @@ module.exports = {
 
 function build(metadata, schemaVersion) {
     metadata.schemaVersion = schemaVersion;
+    metadata.bundleTypes = {};
+
+    // construct map from the base schema details
+    metadata.typeInfos.forEach(item => {
+        metadata.bundleTypes[item.bundleName] = item;
+    });
 
     // start parsing the graphql schema files
     const schemaDir = utils.schemaDir(schemaVersion);

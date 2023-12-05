@@ -21,7 +21,7 @@ extend type Mutation {
 "An Administrative User Account Minimum Property"
 type AdministrativeUserAccountProperty {
     "The administrative user account minimum property unique identifier"
-    goid: ID
+    goid: ID!
     "The name of administrative user account minimum property"
     name: String!
     "The value of the administrative user account minimum property"

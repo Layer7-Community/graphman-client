@@ -40,6 +40,11 @@ let type1Imploder = (function () {
                 }
             });
 
+            const propertiesFile = utils.path(inputDir, 'bundle-properties.json');
+            if (utils.existsFile(propertiesFile)) {
+                bundle['properties'] = utils.readFile(propertiesFile);
+            }
+
             return bundle;
         }
     };
@@ -52,7 +57,42 @@ let type1Imploder = (function () {
             utils.listDir(typeDir).forEach(item => {
                 if (item.endsWith(".json")) {
                     utils.info(`  ${item}`);
-                    bundle[type].push(utils.readFile(`${typeDir}/${item}`));
+                    let entity = utils.readFile(`${typeDir}/${item}`);
+                    if (type === "keys") {
+                        if (entity.p12 && entity.p12.endsWith(".p12}")) {
+                            const filename = entity.p12.match(/{(.+)}/)[1];
+                            entity.p12 = btoa(utils.readFile(`${typeDir}/${filename}`));
+                        }
+
+                        if (entity.pem && entity.pem.endsWith(".pem}")) {
+                            const filename = entity.pem.match(/{(.+)}/)[1];
+                            entity.pem = utils.readFile(`${typeDir}/${filename}`);
+                        }
+
+                        if (entity.certChain && entity.certChain.endsWith(".certchain.pem}")) {
+                            const filename = entity.certChain.match(/{(.+)}/)[1];
+                            const lines = utils.readFile(`${typeDir}/${filename}`).split(/\r?\n/);
+                            let data = "";
+
+                            entity.certChain = [];
+                            for (var line of lines) {
+                                data += line + "\r\n";
+                                if (line.indexOf("-END CERTIFICATE-") !== -1) {
+                                    entity.certChain.push(data);
+                                    data = "";
+                                }
+                            }
+                        }
+                    }
+
+                    if (type === "trustedCerts") {
+                        if (entity.certBase64 && entity.certBase64.endsWith(".cert}")) {
+                            const filename = entity.certBase64.match(/{(.+)}/)[1];
+                            entity.certBase64 = btoa(utils.readFile(`${typeDir}/${filename}`));
+                        }
+                    }
+
+                    bundle[type].push(entity);
                 }
             });
         }
@@ -72,7 +112,21 @@ let type1Imploder = (function () {
         Object.entries(butils.ENTITY_TYPE_PLURAL_TAG_FRIENDLY_NAME).forEach(([key, value]) => {
             if (filename.endsWith(`.${value}.json`)) {
                 if (!bundle[key]) bundle[key] = [];
-                bundle[key].push(utils.readFile(`${dir}/${filename}`));
+                let entity = utils.readFile(`${dir}/${filename}`);
+                if (entity.policy) {
+                    const xml = entity.policy.xml;
+                    if (xml && xml.endsWith(".xml}")) {
+                        const filename = xml.match(/{(.+)}/)[1];
+                        entity.policy.xml = utils.readFile(`${dir}/${filename}`);
+                    }
+
+                    const yaml = entity.policy.yaml;
+                    if (yaml && yaml.endsWith(".yaml}")) {
+                        const filename = yaml.match(/{(.+)}/)[1];
+                        entity.policy.yaml = utils.readFile(`${dir}/${filename}`);
+                    }
+                }
+                bundle[key].push(entity);
             }
         });
     }

@@ -120,6 +120,8 @@ type SoapResolvers {
 input SoapServiceResolverInput {
    "One of the SoapAction of the service to resolved. This must be specified along with a base ns from the WSDL"
    soapAction: String
+   "One or more soap actions of the service to resolved. This must be specified in the absence of soapAction field."
+   soapActions: [String!]
    "Base uri from the wsdl of the service. Use this alongside the soapaction property to resolve a soap service without resolutionUri"
    baseUri: String
    "The resolution path of the service if that is how the soap service is resolved"
@@ -139,6 +141,8 @@ input SoapServiceInput {
    wsdl: String!
    "The resolution path of the service"
    resolutionPath: String
+   "Soap service resolvers"
+   resolvers: SoapServiceResolverInput
    "The policy"
    policy: PolicyInput!
    "Whether the service is enabled (optional, default true)"
