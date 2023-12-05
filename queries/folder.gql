@@ -5,10 +5,10 @@ query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = f
         policy {
             xml
             allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
 			directDependencies @include (if: $includeDirectDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
         }
     }
@@ -18,10 +18,10 @@ query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = f
         policy {
             xml
             allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
 			directDependencies @include (if: $includeDirectDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
         }
     }
@@ -31,10 +31,10 @@ query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = f
         policy {
             xml
             allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
 			directDependencies @include (if: $includeDirectDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
         }
     }
@@ -44,10 +44,10 @@ query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = f
         policy {
             xml
             allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
 			directDependencies @include (if: $includeDirectDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
         }
     }
@@ -61,10 +61,10 @@ query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = f
         policy {
             xml
             allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
 			directDependencies @include (if: $includeDirectDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
         }
     }
@@ -74,10 +74,10 @@ query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = f
         policy {
             xml
             allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
 			directDependencies @include (if: $includeDirectDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
         }
     }
@@ -87,10 +87,10 @@ query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = f
         policy {
             xml
             allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
 			directDependencies @include (if: $includeDirectDependencies) {
-                {{PolicyDependency:-policyFragments,encassConfigs}}
+                {{PolicyDependency}}
             }
         }
     }
