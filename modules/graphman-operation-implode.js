@@ -69,8 +69,9 @@ let type1Imploder = (function () {
                             entity.pem = utils.readFile(`${typeDir}/${filename}`);
                         }
 
-                        if (entity.certChain && entity.certChain.endsWith(".certchain.pem}")) {
-                            const filename = entity.certChain.match(/{(.+)}/)[1];
+                        const certChain = entity.certChain;
+                        if (certChain && typeof certChain === 'string' && certChain.endsWith(".certchain.pem}")) {
+                            const filename = certChain.match(/{(.+)}/)[1];
                             const lines = utils.readFile(`${typeDir}/${filename}`).split(/\r?\n/);
                             let data = "";
 
