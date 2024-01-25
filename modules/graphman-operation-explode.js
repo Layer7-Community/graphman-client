@@ -40,6 +40,9 @@ module.exports = {
 }
 
 let type1Exploder = (function () {
+	const BEGIN_CERT_HEADER = '-----BEGIN CERTIFICATE-----';
+	const END_CERT_HEADER = '-----END CERTIFICATE-----';
+	
     return {
         explode: function (bundle, outputDir, options) {
             Object.entries(bundle).forEach(([key, entities]) => {
@@ -69,8 +72,11 @@ let type1Exploder = (function () {
 
         if (options.explodeTrustedCerts && key === "trustedCerts") {
             if (entity.certBase64) {
-                utils.writeFile(`${targetDir}/${filename}.cert`, atob(entity.certBase64));
-                entity.certBase64 = `{${filename}.cert}`;
+				let pemData = BEGIN_CERT_HEADER;
+				pemData += '\r\n' + entity.certBase64;
+				pemData += '\r\n' + END_CERT_HEADER;
+                utils.writeFile(`${targetDir}/${filename}.pem`, pemData);
+                entity.certBase64 = `{${filename}.pem}`;
             }
         }
 
@@ -88,7 +94,7 @@ let type1Exploder = (function () {
             if (entity.certChain) {
                 let data = "";
                 for (var index in entity.certChain) {
-                    data += entity.certChain[index];
+                    data += entity.certChain[index].trim();
                     data += "\r\n";
                 }
                 utils.writeFile(`${targetDir}/${filename}.certchain.pem`, data);
