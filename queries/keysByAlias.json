@@ -1,0 +1,6 @@
+{
+  "query": "{{keysByAlias.gql}}",
+  "variables": {
+    "alias": "?"
+  }
+}
