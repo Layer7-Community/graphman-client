@@ -1,5 +1,5 @@
 {
-  "query": "{{keysByAlias.gql}}",
+  "query": "{{keyByAlias.gql}}",
   "variables": {
     "alias": "?"
   }
