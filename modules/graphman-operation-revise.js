@@ -54,7 +54,9 @@ function reviseEntities(entities, mappings) {
 
 function reviseEntity(entity, mappings) {
     mappings.forEach(mapping => {
-        entity.policy.xml = entity.policy.xml.replaceAll(mapping.source, function (match) {
+        // entity.policy.xml = entity.policy.xml.replaceAll(mapping.source, function (match) {
+        var re = new RegExp(mapping.source,"g");
+        entity.policy.xml = entity.policy.xml.replace(re, function (match) {
             const name = butils.entityDisplayName(entity);
             utils.info(`  revising ${name}, replacing ${mapping.source} with ${mapping.target}`);
             return mapping.target;

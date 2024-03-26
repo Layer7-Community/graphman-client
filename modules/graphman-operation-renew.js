@@ -83,7 +83,8 @@ function renewEntities(gateway, entities, type) {
     };
 
     gql.query = queryBuilder.expandQuery(gql.query);
-    gql.query = gql.query.replaceAll("hardwiredService{ {{HardwiredService}} }", "");
+    // gql.query = gql.query.replaceAll("hardwiredService{ {{HardwiredService}} }", "");
+    gql.query = gql.query.replace("/hardwiredService{ {{HardwiredService}} }/g", "");
     return renewInvoker(gateway, gql, typeObj);
 }
 

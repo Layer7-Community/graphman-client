@@ -153,8 +153,10 @@ module.exports = {
         if (args[0].length > 0) args[0].forEach(item => text += " " + this.pretty(item));
 
         console.log(text
-            .replaceAll("\\r\\n", "\n")
-            .replaceAll("\\n", "\n"));
+            // .replaceAll("\\r\\n", "\n")
+            // .replaceAll("\\n", "\n"));
+            .replace("/\\r\\n/g", "\n")
+            .replace("/\\n/g", "\n"));
     },
 
     warn: function (message, ...args) {

@@ -56,7 +56,8 @@ module.exports = {
             }
         }
 
-        gql.query = gql.query.replaceAll(/{{([^}]+)}}/g, function (subtext, file) {
+        // gql.query = gql.query.replaceAll(/{{([^}]+)}}/g, function (subtext, file) {
+        gql.query = gql.query.replace(/{{([^}]+)}}/g, function (subtext, file) {
             return file.endsWith(".gql") ? utils.readFile(`${QUERIES_DIR}/${file}`) : subtext;
         });
         gql.query = expandQuery(gql.query);
@@ -77,7 +78,8 @@ module.exports = {
  * @returns {string} expanded GraphQL query
  */
 function expandQuery(text) {
-    return text.replaceAll(/{{([^}]+)}}/g, function (subtext, subgroup) {
+    // return text.replaceAll(/{{([^}]+)}}/g, function (subtext, subgroup) {
+    return text.replace(/{{([^}]+)}}/g, function (subtext, subgroup) {
         const tokens = (subgroup + ":").split(":");
         const typeName = tokens[0];
         const suffix = tokens[1];
