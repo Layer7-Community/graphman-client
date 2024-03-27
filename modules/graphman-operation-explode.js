@@ -51,6 +51,15 @@ let type1Exploder = (function () {
                 } else if (key === "properties") {
                     utils.info(`capturing ${key} to bundle-properties.json`);
                     utils.writeFile(`${outputDir}/bundle-properties.json`, entities);
+                } else if (key === "updates") {
+                    utils.info(`exploding updates int ${outputDir}/updates`);
+                    this.explode( bundle.updates, outputDir+"/updates", options);
+                } else if (key === "inserts") {
+                    utils.info(`exploding inserts int ${outputDir}/inserts`);
+                    this.explode( bundle.inserts, outputDir+"/inserts", options);
+                } else if (key === "deletes") {
+                    utils.info(`exploding deletes int ${outputDir}/deletes`);
+                    this.explode( bundle.deletes, outputDir+"/deletes", options);
                 }
             });
         }

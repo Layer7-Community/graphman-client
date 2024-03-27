@@ -32,6 +32,21 @@ let type1Imploder = (function () {
         implode: function (inputDir) {
             const bundle = {};
 
+            const updatesDir = utils.path(inputDir, 'updates');
+            if (utils.existsFile(updatesDir)) {
+                loopdir(updatesDir,bundle,"updates");
+            }
+
+            const insertsDir = utils.path(inputDir, 'inserts');
+            if (utils.existsFile(insertsDir)) {
+                loopdir(insertsDir,bundle,"inserts");
+            }
+
+            const deletesDir = utils.path(inputDir, 'deletes');
+            if (utils.existsFile(deletesDir)) {
+                loopdir(deletesDir,bundle,"deletes");
+            }
+            
             utils.listDir(inputDir).forEach(item => {
                 let subDir = inputDir + "/" + item;
                 if (utils.isDirectory(subDir)) {
@@ -49,6 +64,17 @@ let type1Imploder = (function () {
         }
     };
 
+    function loopdir (inputDir,bundle,property) {
+        utils.listDir(inputDir).forEach(item => {
+            let subDir = inputDir + "/" + item;
+            if (utils.isDirectory(subDir)) {
+                utils.info("imploding " + item);
+                if(!bundle[property]) bundle[property] = {};
+                readEntities(subDir, item, bundle[property]);
+            }
+        });
+    }
+    
     function readEntities(typeDir, type, bundle) {
         if (type === 'tree') {
             readFolderableEntities(typeDir, bundle);
