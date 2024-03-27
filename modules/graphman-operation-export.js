@@ -61,8 +61,12 @@ module.exports = {
         console.log("        # use <entity-type-plural-tag> as query-id for listing the entities. If not specified, it will be defaulted to all.");
         console.log("      --filter.by");
         console.log("        # use this option to filter the exported entities by some field.");
-        console.log("      --filter.equals|startsWith|endsWith|contains");
+        console.log("      --filter.equals|startsWith|endsWith|contains|greaterThan|lessThan");
         console.log("        # use this option to choose the matching criteria to filter the exported entities.");
+        console.log("        # 'greaterThan' and 'lessThan' will do a date comparision for known date-fields (notAfter|notBefore|executionDate), otherwise a string comparison.");
+        console.log("      --filter.not");
+        console.log("        # if present or set to true, will invert the condition result ");
+
 
         console.log("      --bundleDefaultAction <action>");
         console.log("        # default mapping action at the bundle level.");

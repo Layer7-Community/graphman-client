@@ -108,7 +108,15 @@ module.exports = {
 
     filter: function (bundle, filter) {
         if (!filter || !filter.by) return;
-        if (!filter.equals && !filter.startsWith && !filter.endsWith && !filter.contains) return;
+        // if (!filter.equals && !filter.startsWith && !filter.endsWith && !filter.contains) return;
+        if (!filter.equals && !filter.startsWith && !filter.endsWith && !filter.contains && !filter.greaterThan && !filter.lessThan) return;
+
+        // support "--filter.not ..." to support of reverse logic
+        if (filter.not === undefined) filter.not = false;
+        else {
+            if (filter.not.toString() === 'false') filter.not=false;
+            else filter.not=true
+        }
 
         Object.keys(bundle).filter(key => Array.isArray(bundle[key])).forEach(key => {
             const list = [];
@@ -120,9 +128,25 @@ module.exports = {
                 if (typeof item[filter.by] === 'string') {
                     if (filter.startsWith) match &= item[filter.by].startsWith(filter.startsWith);
                     if (filter.endsWith) match &= item[filter.by].endsWith(filter.endsWith);
-                    if (filter.contains) match &= item[filter.by].includes(filter.contains);
-                }
+                    //if (filter.contains) match &= item[filter.by].includes(filter.contains);
+                    if (filter.contains) {
+                        // use match instead of includes -support of regex for filter.contains
+                        result=item[filter.by].match(new RegExp(filter.contains,"g"));
+                        match &= (result && result !== 'null' && result !== 'undefined');
+                    }
 
+                    // Do Date comparison for currently known DateTime fields (notAfter|notBefore|executionDate). Otherwise do string comparison.
+                    if (filter.by == "notAfter" || filter.by == "notBefore" || filter.by == "executionDate" ) {
+                        if (filter.greaterThan) match &= (new Date(item[filter.by]) > new Date(filter.greaterThan));
+                        if (filter.lessThan) match &= (new Date(item[filter.by]) < new Date(filter.lessThan));
+                    }
+                    else {
+                        if (filter.greaterThan) match &= (item[filter.by] > filter.greaterThan);
+                        if (filter.lessThan) match &= (item[filter.by] < filter.lessThan);
+                    }
+                }
+                
+                if (filter.not) match = !match;
                 if (match) list.push(item);
             });
             bundle[key] = list;
