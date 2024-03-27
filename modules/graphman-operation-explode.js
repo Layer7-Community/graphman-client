@@ -36,6 +36,8 @@ module.exports = {
         console.log("        # to explode key data into separate files.");
         console.log("      --explodeTrustedCerts");
         console.log("        # to explode trusted certificate data into separate files.");
+        console.log("      --decodeBase64");
+        console.log("        # to decode Base64 encoded expressions in XML");
     }
 }
 
@@ -98,7 +100,8 @@ let type1Exploder = (function () {
 
         if (options.explodePolicies && entity.policy) {
             if (entity.policy.xml) {
-                utils.writeFile(`${targetDir}/${filename}.xml`, entity.policy.xml);
+                if(options.decodeBase64) utils.writeFile(`${targetDir}/${filename}.xml`, decodeBase64(entity.policy.xml.toString()));
+                else                     utils.writeFile(`${targetDir}/${filename}.xml`, entity.policy.xml.toString());
                 entity.policy.xml = `{${filename}.xml}`;
             }
 
@@ -115,6 +118,40 @@ let type1Exploder = (function () {
 
         utils.writeFile(`${targetDir}/${filename}.json`, entity);
     }
+    
+    function decodeBase64(plainXml) {
+            // handle Base64 encoded code, loop through all tags starting with Base64
+            tagStart=-1;
+            tagStart=plainXml.indexOf('<L7p:Base64', 0);
+            while (tagStart != -1) {
+                b64start=plainXml.indexOf('"', tagStart)+1;
+                lineStart=plainXml.lastIndexOf("\n",tagStart)
+                indent=" ".repeat(b64start-lineStart+6);
+                b64end=plainXml.indexOf('\"/>',b64start);
+                encodedStr=plainXml.substring(b64start,b64end);
+                var decodedStr = Buffer.from(encodedStr, 'base64').toString();
+
+                if (encodedStr === "0"){
+                    // handle very specific case, where encoded value looks like "0"
+                    // found in some policies, e.g empty string variable assignment ... ???
+                    // mark it with special tag DecodedBase64Zero...
+                    plainXml=`${plainXml.substr(0,tagStart)}<L7p:DecodedBase64Zero${plainXml.substring(tagStart+11,b64start)}0${plainXml.substr(b64end)}`;
+                }
+                else{
+                    plainXml=`${plainXml.substr(0,tagStart)}<L7p:DecodedBase64${plainXml.substring(tagStart+11,b64start)}${escapeEoc(decodedStr,indent)}${plainXml.substr(b64end)}`;
+                }
+                // find next
+                tagStart=plainXml.indexOf('<L7p:Base64', 0);
+            }
+            return(plainXml);
+    }
+
+    function escapeEoc(unsafe,indent) {
+        //escape potential end of code characters "/> by &quoted_end_of_tag;
+        escaped=unsafe.replace(/"\/>/g,"&quoted_end_of_tag;");
+        return escaped;
+    }
+    
 })();
 
 let type2Exploder = (function () {

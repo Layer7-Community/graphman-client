@@ -118,7 +118,7 @@ let type1Imploder = (function () {
                     const xml = entity.policy.xml;
                     if (xml && xml.endsWith(".xml}")) {
                         const filename = xml.match(/{(.+)}/)[1];
-                        entity.policy.xml = utils.readFile(`${dir}/${filename}`);
+                        entity.policy.xml = encodeBase64(utils.readFile(`${dir}/${filename}`));
                     }
 
                     const yaml = entity.policy.yaml;
@@ -131,6 +131,52 @@ let type1Imploder = (function () {
             }
         });
     }
+
+    function encodeBase64(decodedXml) {
+            // handle Base64 encoded code, loop through all tags starting with Base64
+            tagStart=-1;
+            tagStart=decodedXml.indexOf('<L7p:DecodedBase64', 0);
+            while (tagStart != -1) {
+                // b64start:  index of start og decoded b64 text
+                // 13: length of text : stringValue="
+                b64start=decodedXml.indexOf('stringValue=\"', tagStart)+13;
+                
+
+                // b64end : index of end of decoded b64 text
+                b64end=decodedXml.indexOf('\"/>',b64start);
+                
+                decodedStr=decodedXml.substring(b64start,b64end);
+
+                // 18: textlength of : <L7p:DecodedBase64 --> Zero starts at 18 (relative to tagStart)
+                if (decodedStr == "0" && decodedXml.indexOf("Zero",tagStart)-tagStart == 18) { 
+                    // handle very special case where original tag was looking like: <L7p:Base64Expression stringValue="0"/> // stringValue obviously not encoded ???
+                    // here the value was exploded as <L7p:DecodedBase64ZeroExpression stringValue="0"/>
+                    // assure, to revert it to the original value.
+                    // hardcode encoded string to original value.
+                    encodedStr="0";
+                    // 22: textlength of : <L7p:DecodedBase64Zero , offset for original tagname
+                    orgTagStart = 22;
+                }
+                else {
+                    // encode string to base64
+                    encodedStr = Buffer.from(undoEscapeEoc(decodedStr)).toString('base64');
+                    // 18: textlength of : <L7p:DecodedBase64 , offset for original tagname
+                    orgTagStart = 18;
+                }
+
+                // starting part + '<L7p:Base64' + <trailing part of Base64 tag> + encoded-string + rest of decodedXml
+                decodedXml=`${decodedXml.substr(0,tagStart)}<L7p:Base64${decodedXml.substring(tagStart+orgTagStart,b64start)}${encodedStr}${decodedXml.substr(b64end)}`;
+                // find next
+                tagStart=decodedXml.indexOf('<L7p:DecodedBase64', b64end);
+            }	
+            return(decodedXml);
+    }
+
+    function undoEscapeEoc(escaped) {
+        //substitute all '&quoted_end_of_tag;' by "/>
+        return( escaped.replace(/&quoted_end_of_tag;/g, "\"/>"));
+    }
+
 })();
 
 let type2Imploder = (function () {
