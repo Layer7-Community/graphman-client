@@ -5444,12 +5444,12 @@
 		},
 		{
 			"key": "source_gw",
-			"value": "https://localhost:8443/graphman",
+			"value": "https://source.gateway:8443/graphman",
 			"type": "string"
 		},
 		{
 			"key": "target_gw",
-			"value": "https://localhost:8443/graphman",
+			"value": "https://target.gateway:8443/graphman",
 			"type": "string"
 		},
 		{
