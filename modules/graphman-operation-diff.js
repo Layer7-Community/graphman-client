@@ -21,9 +21,18 @@ module.exports = {
             const rightBundle = results[1];
             const diffBundle = {goidMappings: [], guidMappings: []};
 
-            diff(leftBundle, rightBundle, diffBundle);
-            if (!diffBundle.goidMappings.length) delete diffBundle.goidMappings;
-            if (!diffBundle.guidMappings.length) delete diffBundle.guidMappings;
+            if (params.fullDiff){
+                diffBundle["updates"] = {};
+                diffBundle["inserts"] = {};
+                diffBundle["deletes"] = {};
+            }
+
+            diff(leftBundle, rightBundle, diffBundle, params);
+            if (!diffBundle.goidMappings.length)                               delete diffBundle.goidMappings;
+            if (!diffBundle.guidMappings.length)                               delete diffBundle.guidMappings;
+            if (diffBundle.updates && !Object.keys(diffBundle.updates).length) delete diffBundle.updates;
+            if (diffBundle.inserts && !Object.keys(diffBundle.inserts).length) delete diffBundle.inserts;
+            if (diffBundle.deletes && !Object.keys(diffBundle.deletes).length) delete diffBundle.deletes;
 
             if (params.renew) {
                 Promise.all(opRenew.renew(config.sourceGateway, diffBundle)).then(results => {
@@ -57,6 +66,8 @@ module.exports = {
         console.log("        # when second input bundle is missing, it will be pulled from the target gateway.");
         console.log("      --renew");
         console.log("        # to renew the diff entities from the source gateway");
+        console.log("      --fullDiff");
+        console.log("        # deviding resources into updates, inserts and deletes.");
     }
 }
 
@@ -95,11 +106,28 @@ function diffEntities(leftEntities, rightEntities, resultEntities, resultBundle,
         const matchingEntity = butils.findMatchingEntity(rightEntities, left);
 
         if (!matchingEntity) {
-            utils.info("  selecting " + butils.entityDisplayName(left));
-            resultEntities.push(left);
+            utils.info("  selecting for insert " + butils.entityDisplayName(left));
+            //resultEntities.push(left);
+            if (resultBundle.inserts) {
+                if( !resultBundle.inserts[key]) resultBundle.inserts[key]=new Array();
+                resultBundle.inserts[key].push(left);
+            }
+            else {
+                if( !resultBundle[key]) resultBundle[key]=new Array();
+                resultEntities[key].push(left);
+            }
+                
         } else if (matchingEntity.checksum != null && matchingEntity.checksum !== left.checksum) { // if matchingEntity.checksum is not present, we assume user explicitely wants to ignore same entity that have different value
-            utils.info("  selecting " + butils.entityDisplayName(left));
-            resultEntities.push(left);
+            utils.info("  selecting for update " + butils.entityDisplayName(left));
+            //resultEntities.push(left);
+            if (resultBundle.updates) {
+                if( !resultBundle.updates[key]) resultBundle.updates[key]=new Array();
+                resultBundle.updates[key].push(left);
+            }
+            else {
+                if( !resultBundle[key]) resultBundle[key]=new Array();
+                resultEntities[key].push(left);
+            }
         }
 
         if (matchingEntity) {
@@ -118,6 +146,10 @@ function diffEntities(leftEntities, rightEntities, resultEntities, resultBundle,
     rightEntities.forEach(right => {
         if (leftEntities.every(left => !butils.matchEntity(left, right))) {
             utils.info("  (opt) marking the target entity for deletion " + butils.entityDisplayName(right));
+            if (resultBundle.deletes) {
+                if( !resultBundle.deletes[key]) resultBundle.deletes[key]=new Array();
+                resultBundle.deletes[key].push(right);
+            }
         }
     });
 }
