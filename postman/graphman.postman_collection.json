@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "942e8b75-243c-406c-a4e5-9619e1eca0de",
+		"_postman_id": "0935d629-9111-4241-9041-c0eac25a94cd",
 		"name": "Layer7 Gateway - graphman",
 		"description": "# Graphman API Collection\n\n- version 1.1\n    \n\nUse this collection to discover the graphman API, to capture your relevant gateway configuration, to prepare your migration workflow\n\n## Set your graphman target\n\nThe collection has variables for pointing to your graphman endpoints. You can define separate targets for a source and a target gateway.\n\n## Set your gateway\n\nYou can change the admin username/password in the Authorization tab of the collection root as well",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "26752814"
+		"_exporter_id": "10254377"
 	},
 	"item": [
 		{
@@ -1746,7 +1746,7 @@
 					]
 				},
 				{
-					"name": "Identity Providers",
+					"name": "Identity Providers (Deprecated)",
 					"item": [
 						{
 							"name": "Mutations",
@@ -1803,48 +1803,6 @@
 											"graphql": {
 												"query": "mutation deleteIdps($fips: [String!]!, $ldaps: [String!]!) {\n    deleteFips(names: $fips) {\n        detailedStatus {status description}\n        fips {\n            goid\n            name\n        }\n    }\n\n    deleteLdaps(names: $ldaps) {\n        detailedStatus {status description}\n        ldaps {\n            goid\n            name\n        }\n    }\n}",
 												"variables": "{\n    \"fips\": [\"some-fip\"],\n    \"ldaps\": [\"some-ldap\"]\n}"
-											}
-										},
-										"url": {
-											"raw": "{{target_gw}}",
-											"host": [
-												"{{target_gw}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Set Internal Members",
-									"request": {
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "graphql",
-											"graphql": {
-												"query": "mutation setInternalMembers (\n    $internalUsers: [InternalUserInput!]!,\n    $internalGroups: [InternalGroupInput!]!) {\n\n    setInternalGroups (input: $internalGroups) {\n        internalGroups {\n            name\n            checksum\n            members {\n                name\n            }\n        }\n    }\n\n    setInternalUsers (input: $internalUsers) {\n        internalUsers {\n            name\n            memberOf{name}\n            password\n            checksum\n        }\n    }\n}",
-												"variables": "{\n  \"internalUsers\": [\n    {\n        \"name\": \"some-internal-user\",\n        \"memberOf\": [\n            {\n                \"name\": \"some-internal-group\"\n            }\n        ],\n        \"login\": \"some-internal-user\",\n        \"password\": \"$6$H71tKD5zQo01csDP$aBcup/hEjs1FDxRaJZM8POpPBp2Ge.fBd6nX/Uy7kPc4kn26VhpVj2n3ZDNM.lC6fTcr2NYO36orNoNKW7Gzx0\",\n        \"certBase64\": \"MIIGjDCCBXSgAwIBAgIJAOfLGfa8uS2BMA0GCSqGSIb3DQEBCwUAMIG0MQswCQYDVQQGEwJVUzEQ\\r\\nMA4GA1UECBMHQXJpem9uYTETMBEGA1UEBxMKU2NvdHRzZGFsZTEaMBgGA1UEChMRR29EYWRkeS5j\\r\\nb20sIEluYy4xLTArBgNVBAsTJGh0dHA6Ly9jZXJ0cy5nb2RhZGR5LmNvbS9yZXBvc2l0b3J5LzEz\\r\\nMDEGA1UEAxMqR28gRGFkZHkgU2VjdXJlIENlcnRpZmljYXRlIEF1dGhvcml0eSAtIEcyMB4XDTIy\\r\\nMDMxNDE3NDkyM1oXDTIzMDQxNTE1Mzg0MVowFzEVMBMGA1UEAwwMKi5rZWxvd25hLmNhMIIBIjAN\\r\\nBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2QCY48mBJfLCIuyJIQTwF5gikuf5B/FoGZ3LcAtv\\r\\nE9tagkS+0qDsMorwFYT93tnJFusmIVqoGUbVx7IRIWYQIzZsPUBLUEqoBYoyZJwYfsuX2XVP5XxC\\r\\noKuMQdNw/G32e2lbpcnYQ27svQ8jq9Hx+PcCxywgi8ar/jC3Bm/+NSl5IM63iiV2VFdrE74a9fmp\\r\\nN40W9uDl4du4N6PwMxc8cihn8ymiOcwFUC7R/6+4sIBFuddAMZ1J8FrOO+RSdflbOQvJYZDzFK00\\r\\n9VOC6PlxcK0IRKA450Qd3mzdHSJdLuPu38AuW394tvS9/M3ZlWQuZvqLCYIx/xpTWD7qWQ8H8QID\\r\\nAQABo4IDOzCCAzcwDAYDVR0TAQH/BAIwADAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIw\\r\\nDgYDVR0PAQH/BAQDAgWgMDgGA1UdHwQxMC8wLaAroCmGJ2h0dHA6Ly9jcmwuZ29kYWRkeS5jb20v\\r\\nZ2RpZzJzMS0zOTIxLmNybDBdBgNVHSAEVjBUMEgGC2CGSAGG/W0BBxcBMDkwNwYIKwYBBQUHAgEW\\r\\nK2h0dHA6Ly9jZXJ0aWZpY2F0ZXMuZ29kYWRkeS5jb20vcmVwb3NpdG9yeS8wCAYGZ4EMAQIBMHYG\\r\\nCCsGAQUFBwEBBGowaDAkBggrBgEFBQcwAYYYaHR0cDovL29jc3AuZ29kYWRkeS5jb20vMEAGCCsG\\r\\nAQUFBzAChjRodHRwOi8vY2VydGlmaWNhdGVzLmdvZGFkZHkuY29tL3JlcG9zaXRvcnkvZ2RpZzIu\\r\\nY3J0MB8GA1UdIwQYMBaAFEDCvSeOzDSDMKIz1/tss/C0LIDOMCMGA1UdEQQcMBqCDCoua2Vsb3du\\r\\nYS5jYYIKa2Vsb3duYS5jYTAdBgNVHQ4EFgQUEF5c8gyemT/aYylYsq2gimJumOowggGABgorBgEE\\r\\nAdZ5AgQCBIIBcASCAWwBagB3AOg+0No+9QY1MudXKLyJa8kD08vREWvs62nhd31tBr1uAAABf4mM\\r\\njjMAAAQDAEgwRgIhAN+bVp1Nf4tRQ7QkUNdB3XfvN5+5zA5SeJRJRvgkN1H3AiEAwBToqUD09ySi\\r\\nMKGyNCA+gU4VpeQKEQ71YXgEQowOhdEAdwA1zxkbv7FsV78PrUxtQsu7ticgJlHqP+Eq76gDwzvW\\r\\nTAAAAX+JjI9wAAAEAwBIMEYCIQD6ZBKhSjV2bC9QBcbwdKOEHRv2wX/e61MXvLN3ePBIjgIhAP87\\r\\nK4nObHAQgrZ0RPV6ji61EHzWt0Pwjwh287Ms0zECAHYAejKMVNi3LbYg6jjgUh7phBZwMhOFTTvS\\r\\nK8E6V6NS61IAAAF/iYyP0AAABAMARzBFAiEAtgcQJurJ3g8LdvNv2juOZ3U0tyX11iNPhJ4kPsCR\\r\\niosCIEDQrcucbYu2EIlXjUecYcnrUFO7TyvBEaMh3z4//SOKMA0GCSqGSIb3DQEBCwUAA4IBAQAT\\r\\nINkwgzr+oJJAjtUxNDPn7SUuxFdiOQrmnG7/7ZDMeGQ02SLiA+ukDzXXVqOQSlrX7I306xfqou3m\\r\\nNBSbyob53W46yq9hwqYS7PjFMjinyyG3aDX6mdOPtngtO8xfslkIBaSao5EDJC5HpA0KMPAc2xW7\\r\\nlmA/bluIS7a+U0Tbvv7uaZajTRV7KlT+7N2PpNUuMr0ilvB8wZjhJHZtNU2DTvotCPCdNaxTKLLT\\r\\nZc1at2Vc8Z10VrDvGK4JnHEAS6amNWoFPEdjzpbtVVV8F7xl8bJfKE4SwrBzZn8Aq5BcIxMhL5eq\\r\\nmS1dUj/x/4GUETE7ojJYYTE/4XVNzOxjmJc0\"\n    }\n  ],\n\n  \"internalGroups\": [\n    {\n        \"name\": \"some-internal-group\",\n        \"description\": \"some internal group\"\n    }\n  ]\n}"
-											}
-										},
-										"url": {
-											"raw": "{{target_gw}}",
-											"host": [
-												"{{target_gw}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Delete Internal Members",
-									"request": {
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "graphql",
-											"graphql": {
-												"query": "mutation deleteInternalMembers(\n    $internalUsers: [String!]!,\n    $internalGroups: [String!]!) {\n  deleteInternalUsers(logins: $internalUsers) {\n    detailedStatus {status description}\n    internalUsers {\n        goid\n        name\n        login\n    }\n  }\n\n  deleteInternalGroups(names: $internalGroups) {\n    detailedStatus {status description}\n    internalGroups {\n        goid\n        name\n    }\n  }\n}\n",
-												"variables": "{\n    \"internalUsers\": [\"some-internal-user\"],\n    \"internalGroups\": [\"some-internal-group\"]\n}"
 											}
 										},
 										"url": {
@@ -1932,7 +1890,7 @@
 										"body": {
 											"mode": "graphql",
 											"graphql": {
-												"query": "query fipByName($name: String!) {\n    fipByName(name : $name) {\n        goid \n        name \n        checksum \n        \n        enableCredentialTypeSaml \n        enableCredentialTypeX509 \n        certificateValidation \n        certificateReferences { \n            goid \n            name \n            subjectDn \n            thumbprintSha1 \n            checksum \n            \n            verifyHostname \n            trustAnchor \n            trustedFor \n            revocationCheckPolicyType \n            revocationCheckPolicy { goid name } \n            notBefore \n            notAfter \n            certBase64 \n        }\n    }\n}",
+												"query": "query federatedIdpByName($name: String!) {\n    federatedIdpByName(name : $name) {\n        goid \n        name \n        checksum \n        \n        supportsSAML \n        supportsX509 \n        certValidation \n        trustedCerts { \n            name \n            subjectDn \n            thumbprintSha1 \n        }\n    }\n}",
 												"variables": "{\n    \"name\" : \"some-fip\"\n}"
 											}
 										},
@@ -1995,73 +1953,8 @@
 										"body": {
 											"mode": "graphql",
 											"graphql": {
-												"query": "query searchIdp ($internalFilter: IdpFilter!, $fipFilter: IdpFilter!) {\n    searchInternal (filter : $internalFilter) {\n        internalUsers {\n            goid\n            name\n            login\n            checksum\n        }\n        \n        internalGroups {\n            goid\n            name\n            checksum\n        }\n    }\n\n    searchFip (filter: $fipFilter) {\n        fipUsers {\n            goid\n            name\n            login\n            providerName\n            checksum\n        }\n\n        fipGroups {\n            goid\n            name\n            providerName\n            checksum\n        }\n    }\n}",
+												"query": "query searchIdp ($internalFilter: IdpFilter!, $fipFilter: IdpFilter!) {\n    searchInternal (filter : $internalFilter) {\n        internalUsers {\n            goid\n            name\n            login\n            checksum\n        }\n        \n        internalGroups {\n            goid\n            name\n            checksum\n        }\n    }\n\n    searchFip (filter: $fipFilter) {\n        fipUsers {\n            goid\n            name\n            login\n            providerName\n            checksum\n        }\n\n        fipGroups {\n            goid\n            name\n            providerName\n            checksum\n        }\n    }\n\n}",
 												"variables": "{\n    \"internalFilter\": {\n        \"providerName\": \"Internal Identity\",\n        \"namePattern\" : \"some*\"\n    },\n\n    \"fipFilter\" : {\n        \"providerName\": \"some-fip\",\n        \"namePattern\" : \"some*\"\n    }\n}"
-											}
-										},
-										"url": {
-											"raw": "{{source_gw}}",
-											"host": [
-												"{{source_gw}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Internal Members",
-									"request": {
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "graphql",
-											"graphql": {
-												"query": "query internalUsers {\n    internalUsers {\n        goid \n        name \n        login \n        checksum \n        \n        enabled \n        password \n        certBase64 \n        firstName \n        lastName \n        email\n\n        memberOf {\n            name\n        }\n    }\n\n    internalGroups {\n        goid \n        name \n        checksum \n        description\n\n        members {\n            name\n        }\n    }\n}",
-												"variables": "{}"
-											}
-										},
-										"url": {
-											"raw": "{{source_gw}}",
-											"host": [
-												"{{source_gw}}"
-											]
-										},
-										"description": "# Get Internal Users"
-									},
-									"response": []
-								},
-								{
-									"name": "Internal User By Login",
-									"request": {
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "graphql",
-											"graphql": {
-												"query": "query internalUserByLogin ($login: String!) {\n    internalUserByLogin(login : $login) {\n        goid \n        name \n        login \n        checksum \n        \n        enabled \n        password \n        certBase64 \n        firstName \n        lastName \n        email\n\n        memberOf {\n            name\n        }\n    }\n}",
-												"variables": "{\n    \"login\" : \"some-internal-user\"\n}"
-											}
-										},
-										"url": {
-											"raw": "{{source_gw}}",
-											"host": [
-												"{{source_gw}}"
-											]
-										},
-										"description": "# Get Internal User by Login"
-									},
-									"response": []
-								},
-								{
-									"name": "Internal Group By Name",
-									"request": {
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "graphql",
-											"graphql": {
-												"query": "query internalGroupByName($name: String!) {\n    internalGroupByName(name : $name) {\n        goid\n        name\n        checksum\n        description\n\n        members {name}\n    }\n}",
-												"variables": "{\n    \"name\" : \"some-internal-group\"\n}"
 											}
 										},
 										"url": {
@@ -2140,6 +2033,632 @@
 						}
 					],
 					"description": "This folder has queries and mutations for identity provider-related entity types. The types covered are:\n\n\\*   fips\n\\*   ldap idps\n\\*   fip groups\n\\*   fip users\n\\*   internal groups\n\\*   internal users"
+				},
+				{
+					"name": "Identity Providers",
+					"item": [
+						{
+							"name": "Mutations",
+							"item": [
+								{
+									"name": "Set Federated Idps",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation setFederatedIdps (\n    $federatedIdps: [FederatedIdpInput!]!,\n    $trustedCerts: [TrustedCertInput!]!) {\n    # Ensure the availability of fips dependencies\n    setTrustedCerts (input: $trustedCerts) {\n        detailedStatus {status description}\n        trustedCerts {\n            goid\n            name\n            subjectDn\n            thumbprintSha1\n            checksum\n        }\n    }\n\n    setFederatedIdps (input: $federatedIdps) {\n        detailedStatus{status description}\n        federatedIdps {\n            goid\n            name\n            checksum\n        }\n    }\n}",
+												"variables": "{\n  \"federatedIdps\": [\n    {\n        \"name\": \"some-fip\",\n        \"supportsSAML\": true,\n        \"supportsX509\": false,\n        \"trustedCerts\": [\n            {\n                \"name\": \"some-trusted-cert\",\n                \"thumbprintSha1\": \"8qrXPTJoO3FtKn1htRxtV2SrOJk=\"\n            }\n        ]\n    }\n  ],\n\n  \"trustedCerts\": [\n    {\n      \"name\": \"some-trusted-cert\",\n      \"subjectDn\": \"cn=www.example.org,o=internet corporation for assigned names and numbers,l=los angeles,st=california,c=us\",\n      \"thumbprintSha1\": \"8qrXPTJoO3FtKn1htRxtV2SrOJk=\",\n      \"verifyHostname\": false,\n      \"trustAnchor\": false,\n      \"trustedFor\": [\n        \"SSL\",\n        \"SIGNING_SERVER_CERTS\"\n      ],\n      \"revocationCheckPolicyType\": \"USE_DEFAULT\",\n      \"notBefore\": \"2023-01-13T00:00:00Z\",\n      \"notAfter\": \"2024-02-13T23:59:59Z\",\n      \"certBase64\": \"MIIHSjCCBjKgAwIBAgIQDB/LGEUYx+OGZ0EjbWtz8TANBgkqhkiG9w0BAQsFADBPMQswCQYDVQQG\\r\\nEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMSkwJwYDVQQDEyBEaWdpQ2VydCBUTFMgUlNBIFNI\\r\\nQTI1NiAyMDIwIENBMTAeFw0yMzAxMTMwMDAwMDBaFw0yNDAyMTMyMzU5NTlaMIGWMQswCQYDVQQG\\r\\nEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEUMBIGA1UEBxMLTG9zIEFuZ2VsZXMxQjBABgNVBAoM\\r\\nOUludGVybmV0wqBDb3Jwb3JhdGlvbsKgZm9ywqBBc3NpZ25lZMKgTmFtZXPCoGFuZMKgTnVtYmVy\\r\\nczEYMBYGA1UEAxMPd3d3LmV4YW1wbGUub3JnMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC\\r\\nAQEAwoB3iVm4RW+6StkR+nutx1fQevu2+t0Fu6KBcbvhfyHSXy7w0nJOdTT4jWLjStpRkNQBPZwM\\r\\nwHH35i+21gdnJtDe/xfO8IX9McFmyodlBUcqX8CruIzDv9AXf2OjXPBG+4aq+03XKl5/muATl32+\\r\\n+301Vw1dXoGYNeoWQqLTsHT3WS3tOOf+ehuzNuZ+rj+ephaD3lMBToEArrtC9R91KTTN6YSAOK48\\r\\nNxTA8CfOMFK5itxfIqB5+E9OSQTidXyqLyoeA+xxTKMqYfxvypEek1oueAhY9u67NCBdmuavxtfy\\r\\nvwp7+o6Sd+NsewxAhmRKFexw13KOYzDhC+9aMJcuJQIDAQABo4ID2DCCA9QwHwYDVR0jBBgwFoAU\\r\\nt2ui6qiqhIx56rTaD5iyxZV2ufQwHQYDVR0OBBYEFLCTP+gXgv1ssrYXh8vjgP6CmwGeMIGBBgNV\\r\\nHREEejB4gg93d3cuZXhhbXBsZS5vcmeCC2V4YW1wbGUubmV0ggtleGFtcGxlLmVkdYILZXhhbXBs\\r\\nZS5jb22CC2V4YW1wbGUub3Jngg93d3cuZXhhbXBsZS5jb22CD3d3dy5leGFtcGxlLmVkdYIPd3d3\\r\\nLmV4YW1wbGUubmV0MA4GA1UdDwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUH\\r\\nAwIwgY8GA1UdHwSBhzCBhDBAoD6gPIY6aHR0cDovL2NybDMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0\\r\\nVExTUlNBU0hBMjU2MjAyMENBMS00LmNybDBAoD6gPIY6aHR0cDovL2NybDQuZGlnaWNlcnQuY29t\\r\\nL0RpZ2lDZXJ0VExTUlNBU0hBMjU2MjAyMENBMS00LmNybDA+BgNVHSAENzA1MDMGBmeBDAECAjAp\\r\\nMCcGCCsGAQUFBwIBFhtodHRwOi8vd3d3LmRpZ2ljZXJ0LmNvbS9DUFMwfwYIKwYBBQUHAQEEczBx\\r\\nMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wSQYIKwYBBQUHMAKGPWh0dHA6\\r\\nLy9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydFRMU1JTQVNIQTI1NjIwMjBDQTEtMS5jcnQw\\r\\nCQYDVR0TBAIwADCCAX8GCisGAQQB1nkCBAIEggFvBIIBawFpAHYA7s3QZNXbGs7FXLedtM0TojKH\\r\\nRny87N7DUUhZRnEftZsAAAGFq0gFIwAABAMARzBFAiEAqt+fK6jFdGA6tv0EWt9rax0WYBV4re9j\\r\\ngZgq0zi42QUCIEBh1yKpPvgX1BreE0wBUmriOVUhJS77KgF193fT2877AHcAc9meiRtMlnigIH1H\\r\\nneayxhzQUV5xGSqMa4AQesF3crUAAAGFq0gFnwAABAMASDBGAiEA12SUFK5rgLqRzvgcr7ZzV4nl\\r\\n+Zt9lloAzRLfPc7vSPACIQCXPbwScx1rE+BjFawZlVjLj/1PsM0KQQcsfHDZJUTLwAB2AEiw42va\\r\\npkc0D+VqAvqdMOscUgHLVt0sgdm7v6s52IRzAAABhatIBV4AAAQDAEcwRQIhAN5bhHthoyWMJ3CQ\\r\\nB/1iYFEhMgUVkFhHDM/nlE9ThCwhAiAPvPJXyp7a2kzwJX3P7fqH5Xko3rPhCzRoXYd6W+QkCjAN\\r\\nBgkqhkiG9w0BAQsFAAOCAQEAWeRK2KmCuppK8WMMbXYmdbM8dL7F9z2nkZL4zwYtWBDt87jW/Gz/\\r\\nE5YyzU/phySFC3SiwvYP9afYfXaKrunJWCtuAG+5zSTuxELFTBaFnTRhOSO/xo6VyYSpsuVBD0R4\\r\\n15W5z9l0v1hP5xb/fEAwxGxOIk3Lg2c6k78rxcWcGvJDoSU7hPb3U26oha7eFHSRMAYN8gfUxAi6\\r\\nQ2TF4j/arMVBr6Q36EJ2dPcTu0p9NlmBm8dE34lzuTNC6GDCTWFdEloQ9u//M4kUUOjWn8a5XCs1\\r\\n263t3Ta2JfKViqxpP5r+GvgVKG3qGFrC0mIYr0B4tfpeCY9T+cz4I6GDMSP0xg==\"\n    }\n  ]\n}"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Federated Idps",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation deleteFederatedIdps($federatedIdps: [String!]!) {\n    deleteFederatedIdps(names: $federatedIdps) {\n       detailedStatus {status description}\n        federatedIdps {\n            goid \n            name \n            checksum \n        }\n    }\n}",
+												"variables": "{\n    \"federatedIdps\": [\"some-fip\"]\n}"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Set Ldap Idps",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation setLdapIdps ($ldapIdps: [LdapIdpInput!]!) {\n    setLdapIdps (input: $ldapIdps) {\n        detailedStatus {status description}\n        ldapIdps {\n            goid \n            name \n            checksum \n            \n            ldapType\n            serverUrls \n            useSslClientAuth \n            sslClientKeyAlias  \n            searchBase \n            writable\n            writeBase \n            bindDn \n            bindPassword \n            specifiedAttributes\n\n            userMappings { \n                objClass \n                nameAttrName \n                loginAttrName \n                passwdAttrName \n                firstNameAttrName \n                lastNameAttrName \n                emailNameAttrName \n                kerberosAttrName \n                kerberosEnterpriseAttrName \n                userCertAttrName \n                passwdType { val } \n            } \n            \n            groupMappings { \n                objClass \n                nameAttrName \n                memberAttrName \n                memberStrategy { val } \n            }\n            properties{\n                name\n                value\n            }\n            ntlmProperties{\n                name\n                value\n            }\n        }\n    }\n}",
+												"variables": "{\n  \"ldapIdps\": [\n    {\n      \"name\": \"some-ldap\",\n      \"ldapType\": \"GenericLDAP\",\n      \"serverUrls\": [\n        \"ldap://ldap.forumsys.com\"\n      ],\n      \"useSslClientAuth\": true,\n      \"sslClientKeyAlias\":\"ssl\",\n      \"searchBase\": \"dc=example,dc=com\",\n      \"writable\": true,\n      \"writeBase\": \"dc=example,dc=com\",\n      \"bindDn\": \"cn=read-only-admin,dc=example,dc=com\",\n      \"bindPassword\": \"JEw3RXYwMiQ8cuJewqLNzu9hRZDqUs0UlBk6nRcOHfaExUCqRsWKTw==\",\n      \"specifiedAttributes\" : [\"testAttribute\"\n         ],\n      \"userMappings\": [\n        {\n          \"objClass\": \"inetOrgPerson\",\n          \"nameAttrName\": \"cn\",\n          \"loginAttrName\": \"uid\",\n          \"passwdAttrName\": \"userPassword\",\n          \"firstNameAttrName\": \"givenName\",\n          \"lastNameAttrName\": \"sn\",\n          \"emailNameAttrName\": \"mail\",\n          \"kerberosAttrName\": \"uid\",\n          \"userCertAttrName\": \"userCertificate;binary\",\n          \"passwdType\": {\n            \"val\": 0\n          }\n        }\n      ],\n      \"groupMappings\": [\n        {\n          \"objClass\": \"posixGroup\",\n          \"nameAttrName\": \"cn\",\n          \"memberAttrName\": \"memberUid\",\n          \"memberStrategy\": {\n            \"val\": 1\n          }\n        },\n        {\n          \"objClass\": \"groupOfUniqueNames\",\n          \"nameAttrName\": \"cn\",\n          \"memberAttrName\": \"uniqueMember\",\n          \"memberStrategy\": {\n            \"val\": 2\n          }\n        },\n        {\n          \"objClass\": \"organizationalUnit\",\n          \"nameAttrName\": \"ou\",\n          \"memberAttrName\": \"\",\n          \"memberStrategy\": {\n            \"val\": 3\n          }\n        }\n      ],\n      \"ntlmProperties\": [\n        {\n            \"name\": \"aasdf\",\n            \"value\": \"asdf\"\n        },\n        {\n            \"name\": \"adsf\",\n            \"value\": \"asdfa\"\n        },\n        {\n            \"name\": \"domain.dns.name\",\n            \"value\": \"asdfasf\"\n        },\n        {\n            \"name\": \"domain.netbios.name\",\n            \"value\": \"asdfa\"\n        },\n        {\n            \"name\": \"enabled\",\n            \"value\": \"true\"\n        },\n        {\n            \"name\": \"host.dns.name\",\n            \"value\": \"adsfa\"\n        },\n        {\n            \"name\": \"host.netbios.name\",\n            \"value\": \"adfsa\"\n        },\n        {\n            \"name\": \"server.dns.name\",\n            \"value\": \"asdfa\"\n        },\n        {\n            \"name\": \"service.account\",\n            \"value\": \"asdfa\"\n        },\n        {\n            \"name\": \"service.passwordOid\",\n            \"value\": \"ecdcb5f6c178e3b2961e8a6a24a86cb4\"\n        }\n      ]\n    }\n  ]\n}"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Ldap Idps",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation deleteLdapIdps($ldapIdps: [String!]!) {\n    deleteLdapIdps(names: $ldapIdps) {\n       detailedStatus {status description}\n        ldapIdps {\n            goid \n            name \n            checksum \n            \n            ldapType\n            serverUrls \n            useSslClientAuth \n            sslClientKeyAlias  \n            searchBase \n            writable\n            writeBase \n            bindDn \n            bindPassword \n            specifiedAttributes\n\n            userMappings { \n                objClass \n                nameAttrName \n                loginAttrName \n                passwdAttrName \n                firstNameAttrName \n                lastNameAttrName \n                emailNameAttrName \n                kerberosAttrName \n                kerberosEnterpriseAttrName \n                userCertAttrName \n                passwdType { val } \n            } \n            \n            groupMappings { \n                objClass \n                nameAttrName \n                memberAttrName \n                memberStrategy { val } \n            }\n            properties{\n                name\n                value\n            }\n            ntlmProperties{\n                name\n                value\n            }\n        }\n    }\n}",
+												"variables": "{\n    \"ldapIdps\": [\"some-ldap\"]\n}"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Set Policy Backed Idp",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation setPolicyBackedIdps ($policyBackedIdps: [PolicyBackedIdpInput!]!) {\n    setPolicyBackedIdps (input: $policyBackedIdps) {\n        detailedStatus {status description}\n        policyBackedIdps {\n            goid\n            name\n            checksum\n\n            authPolicyName \n            defaultRoleName \n            properties { name value }\n        }\n    }\n}",
+												"variables": "{\n  \"policyBackedIdps\": [\n    {\n      \"name\": \"some-policybacked-idp\",\n      \"authPolicyName\": \"Test Identity Policy\",\n      \"defaultRoleName\": \"Administrator\",\n      \"properties\": [\n        {\n            \"name\": \"adminEnabled\",\n            \"value\": true\n        }\n      ]\n\n    }\n  ]\n}"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Policy Backed Idp",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation deletePolicyBackedIdps($policyBackedIdps: [String!]!) {\n    deletePolicyBackedIdps(names: $policyBackedIdps) {\n        detailedStatus {status description}\n        policyBackedIdps {\n            goid\n            name\n            checksum\n\n            authPolicyName \n            defaultRoleName \n            properties { name value }\n        }\n    }\n}",
+												"variables": "{\n    \"policyBackedIdps\": [\"some-policybacked-idp\"]\n}"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Set Simple Ldaps",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation setSimpleLdapIdps ($simpleLdapIdps: [SimpleLdapIdpInput!]!) {\n    setSimpleLdapIdps (input: $simpleLdapIdps) {\n        detailedStatus {status description}\n        simpleLdapIdps {\n            goid\n            name\n            checksum\n\n            serverUrls\n            useSslClientAuth\n            sslClientKeyAlias\n            bindDnPatternPrefix\n            bindDnPatternSuffix\n            properties{\n                name\n                value\n            }\n        }\n    }\n}",
+												"variables": "{\n  \"simpleLdapIdps\": [\n    {\n      \"name\": \"some-simple-ldap\",\n      \"serverUrls\": [\n        \"ldap://ldap.forumsys.com:389\",\n        \"ldaps://ldap.forumsys.com:636\"\n      ],\n      \"useSslClientAuth\": true,\n      \"sslClientKeyAlias\": \"ssl\",\n      \"bindDnPatternPrefix\": \"cn=\",\n      \"bindDnPatternSuffix\": \"dc=l7tech,dc=com\",\n      \"properties\": [\n        {\n            \"name\": \"reconnectTimeout\",\n            \"value\": 50000\n        }\n      ]\n\n    }\n  ]\n}"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Simple Ldap",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation deleteSimpleLdapIdps($simpleLdapIdps: [String!]!) {\n    deleteSimpleLdapIdps(names: $simpleLdapIdps) {\n        detailedStatus {status description}\n        simpleLdapIdps {\n            goid\n            name\n            checksum\n\n            serverUrls\n            useSslClientAuth\n            sslClientKeyAlias\n            bindDnPatternPrefix\n            bindDnPatternSuffix\n            properties{\n                name\n                value\n            }\n        }\n    }\n}",
+												"variables": "{\n    \"simpleLdapIdps\": [\"some-simple-ldap\"]\n}"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Set Internal Idps",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation setInternalIdps ($internalIdps: [InternalIdpInput!]!) {\n    setInternalIdps (input: $internalIdps) {\n        detailedStatus{status description}\n        internalIdps {\n            goid\n            name\n            checksum\n        }\n    }\n}",
+												"variables": "{\n  \"internalIdps\": [\n    {\n        \"name\": \"some-internal-idp\",\n        \"certValidation\": \"USE_DEFAULT\"\n        \n    }\n  ]\n}"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Set Federated Members",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation setFipMembers (\n    $fipUsers: [FipUserInput!]!, \n    $fipGroups: [FipGroupInput!]!) {\n    setFipGroups (input: $fipGroups) {\n        detailedStatus {status description}\n        fipGroups {\n            goid\n            name\n            providerName\n            checksum\n        }\n    }\n\n    setFipUsers (input: $fipUsers) {\n        detailedStatus {status description}\n        fipUsers {\n            goid\n            name\n            login\n            providerName\n            checksum\n        }\n    }\n}",
+												"variables": "{\n  \"fipUsers\": [\n    {\n        \"name\": \"some-fip-user\",\n        \"login\": \"some-fip-user\",\n        \"providerName\": \"some-fip\",\n        \"email\": \"some-fip-user@some.fip\",\n        \"memberOf\": [{\n            \"name\": \"some-fip-group\"\n        }],\n        \"subjectDn\": \"cn=some-fip-user\"\n    }\n  ],\n\n  \"fipGroups\": [\n    {\n        \"name\": \"some-fip-group\",\n        \"providerName\": \"some-fip\",\n        \"description\": \"some fip group\"\n    }\n  ]\n}"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Federated Members",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation deleteFederatedMembers(\n    $providerName: String!, \n    $federatedUsers: [String!]!,\n    $federatedGroups: [String!]!) {\n\n    deleteFederatedUsers(providerName: $providerName, names: $federatedUsers) {\n        detailedStatus {status description}\n        federatedUsers {\n            goid\n            name\n            providerName\n        }\n    }\n\n    deleteFederatedGroups(providerName: $providerName, names: $federatedGroups) {\n        detailedStatus {status description}\n        federatedGroups {\n            goid\n            name\n            providerName\n        }\n    }\n}",
+												"variables": "{\n    \"providerName\": \"some-fip\",\n    \"federatedUsers\": [\"some-fip-user\"],\n    \"federatedGroups\": [\"some-fip-group\"]\n}\n"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Set Internal Members",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation setInternalMembers (\n    $internalUsers: [InternalUserInput!]!,\n    $internalGroups: [InternalGroupInput!]!) {\n\n    setInternalGroups (input: $internalGroups) {\n        internalGroups {\n            name\n            checksum\n            members {\n                name\n            }\n        }\n    }\n\n    setInternalUsers (input: $internalUsers) {\n        internalUsers {\n            name\n            memberOf{name}\n            password\n            checksum\n        }\n    }\n}",
+												"variables": "{\n  \"internalUsers\": [\n    {\n        \"name\": \"some-internal-user\",\n        \"memberOf\": [\n            {\n                \"name\": \"some-internal-group\"\n            }\n        ],\n        \"login\": \"some-internal-user\",\n        \"password\": \"$6$H71tKD5zQo01csDP$aBcup/hEjs1FDxRaJZM8POpPBp2Ge.fBd6nX/Uy7kPc4kn26VhpVj2n3ZDNM.lC6fTcr2NYO36orNoNKW7Gzx0\",\n        \"certBase64\": \"MIIGjDCCBXSgAwIBAgIJAOfLGfa8uS2BMA0GCSqGSIb3DQEBCwUAMIG0MQswCQYDVQQGEwJVUzEQ\\r\\nMA4GA1UECBMHQXJpem9uYTETMBEGA1UEBxMKU2NvdHRzZGFsZTEaMBgGA1UEChMRR29EYWRkeS5j\\r\\nb20sIEluYy4xLTArBgNVBAsTJGh0dHA6Ly9jZXJ0cy5nb2RhZGR5LmNvbS9yZXBvc2l0b3J5LzEz\\r\\nMDEGA1UEAxMqR28gRGFkZHkgU2VjdXJlIENlcnRpZmljYXRlIEF1dGhvcml0eSAtIEcyMB4XDTIy\\r\\nMDMxNDE3NDkyM1oXDTIzMDQxNTE1Mzg0MVowFzEVMBMGA1UEAwwMKi5rZWxvd25hLmNhMIIBIjAN\\r\\nBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2QCY48mBJfLCIuyJIQTwF5gikuf5B/FoGZ3LcAtv\\r\\nE9tagkS+0qDsMorwFYT93tnJFusmIVqoGUbVx7IRIWYQIzZsPUBLUEqoBYoyZJwYfsuX2XVP5XxC\\r\\noKuMQdNw/G32e2lbpcnYQ27svQ8jq9Hx+PcCxywgi8ar/jC3Bm/+NSl5IM63iiV2VFdrE74a9fmp\\r\\nN40W9uDl4du4N6PwMxc8cihn8ymiOcwFUC7R/6+4sIBFuddAMZ1J8FrOO+RSdflbOQvJYZDzFK00\\r\\n9VOC6PlxcK0IRKA450Qd3mzdHSJdLuPu38AuW394tvS9/M3ZlWQuZvqLCYIx/xpTWD7qWQ8H8QID\\r\\nAQABo4IDOzCCAzcwDAYDVR0TAQH/BAIwADAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIw\\r\\nDgYDVR0PAQH/BAQDAgWgMDgGA1UdHwQxMC8wLaAroCmGJ2h0dHA6Ly9jcmwuZ29kYWRkeS5jb20v\\r\\nZ2RpZzJzMS0zOTIxLmNybDBdBgNVHSAEVjBUMEgGC2CGSAGG/W0BBxcBMDkwNwYIKwYBBQUHAgEW\\r\\nK2h0dHA6Ly9jZXJ0aWZpY2F0ZXMuZ29kYWRkeS5jb20vcmVwb3NpdG9yeS8wCAYGZ4EMAQIBMHYG\\r\\nCCsGAQUFBwEBBGowaDAkBggrBgEFBQcwAYYYaHR0cDovL29jc3AuZ29kYWRkeS5jb20vMEAGCCsG\\r\\nAQUFBzAChjRodHRwOi8vY2VydGlmaWNhdGVzLmdvZGFkZHkuY29tL3JlcG9zaXRvcnkvZ2RpZzIu\\r\\nY3J0MB8GA1UdIwQYMBaAFEDCvSeOzDSDMKIz1/tss/C0LIDOMCMGA1UdEQQcMBqCDCoua2Vsb3du\\r\\nYS5jYYIKa2Vsb3duYS5jYTAdBgNVHQ4EFgQUEF5c8gyemT/aYylYsq2gimJumOowggGABgorBgEE\\r\\nAdZ5AgQCBIIBcASCAWwBagB3AOg+0No+9QY1MudXKLyJa8kD08vREWvs62nhd31tBr1uAAABf4mM\\r\\njjMAAAQDAEgwRgIhAN+bVp1Nf4tRQ7QkUNdB3XfvN5+5zA5SeJRJRvgkN1H3AiEAwBToqUD09ySi\\r\\nMKGyNCA+gU4VpeQKEQ71YXgEQowOhdEAdwA1zxkbv7FsV78PrUxtQsu7ticgJlHqP+Eq76gDwzvW\\r\\nTAAAAX+JjI9wAAAEAwBIMEYCIQD6ZBKhSjV2bC9QBcbwdKOEHRv2wX/e61MXvLN3ePBIjgIhAP87\\r\\nK4nObHAQgrZ0RPV6ji61EHzWt0Pwjwh287Ms0zECAHYAejKMVNi3LbYg6jjgUh7phBZwMhOFTTvS\\r\\nK8E6V6NS61IAAAF/iYyP0AAABAMARzBFAiEAtgcQJurJ3g8LdvNv2juOZ3U0tyX11iNPhJ4kPsCR\\r\\niosCIEDQrcucbYu2EIlXjUecYcnrUFO7TyvBEaMh3z4//SOKMA0GCSqGSIb3DQEBCwUAA4IBAQAT\\r\\nINkwgzr+oJJAjtUxNDPn7SUuxFdiOQrmnG7/7ZDMeGQ02SLiA+ukDzXXVqOQSlrX7I306xfqou3m\\r\\nNBSbyob53W46yq9hwqYS7PjFMjinyyG3aDX6mdOPtngtO8xfslkIBaSao5EDJC5HpA0KMPAc2xW7\\r\\nlmA/bluIS7a+U0Tbvv7uaZajTRV7KlT+7N2PpNUuMr0ilvB8wZjhJHZtNU2DTvotCPCdNaxTKLLT\\r\\nZc1at2Vc8Z10VrDvGK4JnHEAS6amNWoFPEdjzpbtVVV8F7xl8bJfKE4SwrBzZn8Aq5BcIxMhL5eq\\r\\nmS1dUj/x/4GUETE7ojJYYTE/4XVNzOxjmJc0\"\n    }\n  ],\n\n  \"internalGroups\": [\n    {\n        \"name\": \"some-internal-group\",\n        \"description\": \"some internal group\"\n    }\n  ]\n}"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Internal Members",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation deleteInternalMembers(\n    $internalUsers: [String!]!,\n    $internalGroups: [String!]!) {\n  deleteInternalUsers(logins: $internalUsers) {\n    detailedStatus {status description}\n    internalUsers {\n        goid\n        name\n        login\n    }\n  }\n\n  deleteInternalGroups(names: $internalGroups) {\n    detailedStatus {status description}\n    internalGroups {\n        goid\n        name\n    }\n  }\n}\n",
+												"variables": "{\n    \"internalUsers\": [\"some-internal-user\"],\n    \"internalGroups\": [\"some-internal-group\"]\n}"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Queries",
+							"item": [
+								{
+									"name": "Federated Idps",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "query federatedIdps {\n    federatedIdps {\n        goid \n        name \n        checksum \n        \n        supportsSAML \n        supportsX509 \n        certValidation \n        trustedCerts { \n            name \n            subjectDn \n            thumbprintSha1 \n        }\n    }\n}",
+												"variables": "{}"
+											}
+										},
+										"url": {
+											"raw": "{{source_gw}}",
+											"host": [
+												"{{source_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Federated Idp By Name",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "query fipByName($name: String!) {\n    fipByName(name : $name) {\n        goid \n        name \n        checksum \n        \n        enableCredentialTypeSaml \n        enableCredentialTypeX509 \n        certificateValidation \n        certificateReferences { \n            goid \n            name \n            subjectDn \n            thumbprintSha1 \n            checksum \n            \n            verifyHostname \n            trustAnchor \n            trustedFor \n            revocationCheckPolicyType \n            revocationCheckPolicy { goid name } \n            notBefore \n            notAfter \n            certBase64 \n        }\n    }\n}",
+												"variables": "{\n    \"name\" : \"some-fip\"\n}"
+											}
+										},
+										"url": {
+											"raw": "{{source_gw}}",
+											"host": [
+												"{{source_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Ldap Idps",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "query ldapIdps {\n    ldapIdps {\n        goid \n        name \n        checksum \n        \n        ldapType\n        serverUrls \n        useSslClientAuth \n        sslClientKeyAlias  \n        searchBase \n        writable\n        writeBase \n        bindDn \n        bindPassword \n        specifiedAttributes\n\n        userMappings { \n            objClass \n            nameAttrName \n            loginAttrName \n            passwdAttrName \n            firstNameAttrName \n            lastNameAttrName \n            emailNameAttrName \n            kerberosAttrName \n            kerberosEnterpriseAttrName \n            userCertAttrName \n            passwdType { val } \n        } \n            \n        groupMappings { \n            objClass \n            nameAttrName \n            memberAttrName \n            memberStrategy { val } \n        } \n        properties{\n            name\n            value\n        }\n        ntlmProperties{\n            name\n            value\n        }\n    }\n}",
+												"variables": "{}"
+											}
+										},
+										"url": {
+											"raw": "{{source_gw}}",
+											"host": [
+												"{{source_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Ldap Idp By Name",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "query ldapIdpByName($name : String!) {\n    ldapIdpByName(name : $name) {\n        goid \n        name \n        checksum \n        \n        ldapType\n        serverUrls \n        useSslClientAuth \n        sslClientKeyAlias  \n        searchBase \n        writable\n        writeBase \n        bindDn \n        bindPassword \n        specifiedAttributes\n\n        userMappings { \n            objClass \n            nameAttrName \n            loginAttrName \n            passwdAttrName \n            firstNameAttrName \n            lastNameAttrName \n            emailNameAttrName \n            kerberosAttrName \n            kerberosEnterpriseAttrName \n            userCertAttrName \n            passwdType { val } \n        } \n            \n        groupMappings { \n            objClass \n            nameAttrName \n            memberAttrName \n            memberStrategy { val } \n        }\n        properties{\n            name\n            value\n        }\n        ntlmProperties{\n            name\n            value\n        }\n    }\n}",
+												"variables": "{\n    \"name\" : \"Ldap\"\n}"
+											}
+										},
+										"url": {
+											"raw": "{{source_gw}}",
+											"host": [
+												"{{source_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Policy Backed Idps",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "query policyBackedIdps {\n    policyBackedIdps {\n        goid \n        name \n        checksum \n\n        authPolicyName \n        defaultRoleName \n        properties { name value }\n        \n    }\n}",
+												"variables": "{}"
+											}
+										},
+										"url": {
+											"raw": "{{source_gw}}",
+											"host": [
+												"{{source_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Policy Backed Idp By Name",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "query policyBackedIdpByName($name : String!) {\n    policyBackedIdpByName(name : $name) {\n        goid \n        name \n        checksum \n\n        authPolicyName \n        defaultRoleName \n        properties { name value }\n    }\n}",
+												"variables": "{\n    \"name\" : \"some-ldap\"\n}"
+											}
+										},
+										"url": {
+											"raw": "{{source_gw}}",
+											"host": [
+												"{{source_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Simple Ldaps",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "query simpleLdapIdps {\n    simpleLdapIdps {\n        goid \n        name \n        checksum \n\n        serverUrls \n        useSslClientAuth \n        sslClientKeyAlias \n        bindDnPatternPrefix \n        bindDnPatternSuffix \n        properties { name value }\n        \n    }\n}",
+												"variables": "{}"
+											}
+										},
+										"url": {
+											"raw": "{{source_gw}}",
+											"host": [
+												"{{source_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Simple Ldap By Name",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "query simpleLdapIdpByName($name : String!) {\n    simpleLdapIdpByName(name : $name) {\n        goid \n        name \n        checksum \n\n        serverUrls \n        useSslClientAuth \n        sslClientKeyAlias \n        bindDnPatternPrefix \n        bindDnPatternSuffix \n        properties { name value }\n    }\n}",
+												"variables": "{\n    \"name\" : \"some-ldap\"\n}"
+											}
+										},
+										"url": {
+											"raw": "{{source_gw}}",
+											"host": [
+												"{{source_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Internal Idps",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "query InternalIdps {\n    internalIdps {\n        goid \n        name \n        checksum \n        certValidation \n    }\n}",
+												"variables": "{}"
+											}
+										},
+										"url": {
+											"raw": "{{source_gw}}",
+											"host": [
+												"{{source_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Federated Members",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "query federatedUsers {\n    federatedUsers {\n        goid\n        name\n        login\n        providerName\n        checksum\n\n        subjectDn \n        certBase64 \n        firstName \n        lastName \n        email\n\n        memberOf {\n            name\n        }\n    }\n\n    federatedGroups {\n        goid \n        name \n        providerName \n        checksum \n        \n        description\n        members { name }\n    }\n}",
+												"variables": "{}"
+											}
+										},
+										"url": {
+											"raw": "{{source_gw}}",
+											"host": [
+												"{{source_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Federated User By Name",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "query federatedUserByName($providerName: String!, $name: String!) {\n    federatedUserByName (providerName: $providerName, name : $name){\n        goid\n        name\n        login\n        providerName\n        checksum\n\n        subjectDn \n        certBase64 \n        firstName \n        lastName \n        email\n\n        memberOf {\n            name\n        }\n    }\n}",
+												"variables": "{\n    \"providerName\" : \"some-fip\",\n    \"name\" : \"some-fip-user\"\n}"
+											}
+										},
+										"url": {
+											"raw": "{{source_gw}}",
+											"host": [
+												"{{source_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Federated Group By Name",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "query federatedGroupByName($providerName: String!, $name: String!) {\n    federatedGroupByName(providerName: $providerName, name : $name) {\n        goid\n        name\n        providerName\n        checksum\n\n        description\n        members { name }\n    }\n}",
+												"variables": "{\n    \"providerName\": \"some-fip\",\n    \"name\": \"some-fip-group\"\n    \n}"
+											}
+										},
+										"url": {
+											"raw": "{{source_gw}}",
+											"host": [
+												"{{source_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Internal Members",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "query internalUsers {\n    internalUsers {\n        goid \n        name \n        login \n        checksum \n        \n        enabled \n        password \n        certBase64 \n        firstName \n        lastName \n        email\n\n        memberOf {\n            name\n        }\n    }\n\n    internalGroups {\n        goid \n        name \n        checksum \n        description\n\n        members {\n            name\n        }\n    }\n}",
+												"variables": "{}"
+											}
+										},
+										"url": {
+											"raw": "{{source_gw}}",
+											"host": [
+												"{{source_gw}}"
+											]
+										},
+										"description": "# Get Internal Users"
+									},
+									"response": []
+								},
+								{
+									"name": "Internal User By Login",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "query internalUserByLogin ($login: String!) {\n    internalUserByLogin(login : $login) {\n        goid \n        name \n        login \n        checksum \n        \n        enabled \n        password \n        certBase64 \n        firstName \n        lastName \n        email\n\n        memberOf {\n            name\n        }\n    }\n}",
+												"variables": "{\n    \"login\" : \"some-internal-user\"\n}"
+											}
+										},
+										"url": {
+											"raw": "{{source_gw}}",
+											"host": [
+												"{{source_gw}}"
+											]
+										},
+										"description": "# Get Internal User by Login"
+									},
+									"response": []
+								},
+								{
+									"name": "Internal Group By Name",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "query internalGroupByName($name: String!) {\n    internalGroupByName(name : $name) {\n        goid\n        name\n        checksum\n        description\n\n        members {name}\n    }\n}",
+												"variables": "{\n    \"name\" : \"some-internal-group\"\n}"
+											}
+										},
+										"url": {
+											"raw": "{{source_gw}}",
+											"host": [
+												"{{source_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Search Internal IdP",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "query searchIdp ($internalFilter: IdpFilter!, $fipFilter: IdpFilter!) {\n\n    searchInternalIdp (filter : $internalFilter) {\n        internalUsers {\n            goid\n            name\n            login\n            checksum\n        }\n        \n        internalGroups {\n            goid\n            name\n            checksum\n        }\n    }\n\n    searchFederatedIdp (filter: $fipFilter) {\n        federatedUsers {\n            goid\n            name\n            login\n            providerName\n            checksum\n        }\n\n        federatedGroups {\n            goid\n            name\n            providerName\n            checksum\n        }\n    }\n}",
+												"variables": "{\n    \"internalFilter\": {\n        \"providerName\": \"Internal Identity\",\n        \"namePattern\" : \"some*\"\n    },\n\n    \"fipFilter\" : {\n        \"providerName\": \"some-fip\",\n        \"namePattern\" : \"some*\"\n    }\n}"
+											}
+										},
+										"url": {
+											"raw": "{{source_gw}}",
+											"host": [
+												"{{source_gw}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
 				},
 				{
 					"name": "Internal Services",
@@ -3223,6 +3742,315 @@
 					]
 				},
 				{
+					"name": "Policy Revisions",
+					"item": [
+						{
+							"name": "Queries",
+							"item": [
+								{
+									"name": "Active Revision",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "query ActiveRevision {\n    policyByName(name: \"some-policy\") {\n    goid\n    guid\n    name\n    policyRevision {ordinal active comment time xml}\n    }\n \n    serviceByResolutionPath(resolutionPath: \"/some-webapi\") {\n    goid\n    guid\n    name\n    policyRevision {ordinal active comment time xml}\n    }\n}",
+												"variables": "{\n   \n}"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										},
+										"description": "# Set Web Api Services\n\nCreate multiple web API services on the target gateway.\n\nInput: See sample for input. Here is a sample:\n\n``` json\n{  \"input\": {    \"name\" : \"New service created\",    \"folderPath\" : \"/migrationTest\",    \"resolutionPath\": \"/testNewService17\",            \"methodsAllowed\": [                \"GET\",                \"POST\",                \"PUT\",                \"DELETE\"            ],            \"enabled\": true,            \"policy\": {                \"xml\": \"wsp:Policy...\"            }  }}\n\n```"
+									},
+									"response": []
+								},
+								{
+									"name": "All Revisions",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "query AllRevisions {\n    policyByName(name: \"some-policy\") {\n    goid\n    guid\n    name\n    policyRevisions {ordinal active comment time xml}\n    }\n \n    serviceByResolutionPath(resolutionPath: \"/some-webapi\") {\n    goid\n    guid\n    name\n    policyRevisions {ordinal active comment time xml}\n    }\n}",
+												"variables": "{\n   \n}"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										},
+										"description": "# Set Web Api Services\n\nCreate multiple web API services on the target gateway.\n\nInput: See sample for input. Here is a sample:\n\n``` json\n{  \"input\": {    \"name\" : \"New service created\",    \"folderPath\" : \"/migrationTest\",    \"resolutionPath\": \"/testNewService17\",            \"methodsAllowed\": [                \"GET\",                \"POST\",                \"PUT\",                \"DELETE\"            ],            \"enabled\": true,            \"policy\": {                \"xml\": \"wsp:Policy...\"            }  }}\n\n```"
+									},
+									"response": []
+								},
+								{
+									"name": "Specified Revision",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "query SpecifiedRevision ($resolvers : ServiceResolversInput!) {\n    policyByNameAndRevision(name: \"some-policy\", revision: 1) {\n    goid\n    guid\n    name\n    policyRevision {ordinal active comment time xml}\n    }\n \n    serviceByResolversAndRevision(resolvers:$resolvers, revision: 2) {\n    goid\n    guid\n    name\n    policyRevision {ordinal active comment time xml}\n    }\n}",
+												"variables": "{\n   \"resolvers\" : {\n    \"resolutionPath\": \"/some-webapi\"\n   }\n}"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										},
+										"description": "# Set Web Api Services\n\nCreate multiple web API services on the target gateway.\n\nInput: See sample for input. Here is a sample:\n\n``` json\n{  \"input\": {    \"name\" : \"New service created\",    \"folderPath\" : \"/migrationTest\",    \"resolutionPath\": \"/testNewService17\",            \"methodsAllowed\": [                \"GET\",                \"POST\",                \"PUT\",                \"DELETE\"            ],            \"enabled\": true,            \"policy\": {                \"xml\": \"wsp:Policy...\"            }  }}\n\n```"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Mutations",
+							"item": [
+								{
+									"name": "Set Policies",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation setPolicies ($input: [L7PolicyInput!]!) {\n    setPolicies (input: $input) {\n        detailedStatus {status description}\n        policies {\n            goid\n            guid\n            name\n            checksum\n        }\n    }\n}",
+												"variables": "{\n  \"input\": [\n    {\n        \"guid\": \"86ba61e9-fc93-4be9-94de-3975bb03f641\",\n        \"name\": \"some-policy\",\n        \"folderPath\": \"/\",\n        \"policyType\": \"FRAGMENT\",\n        \"soap\": false,\n        \"policy\": {\n            \"xml\": \"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?>\\n<wsp:Policy xmlns:L7p=\\\"http://www.layer7tech.com/ws/policy\\\" xmlns:wsp=\\\"http://schemas.xmlsoap.org/ws/2002/12/policy\\\">\\n    <wsp:All wsp:Usage=\\\"Required\\\">\\n        <L7p:CommentAssertion>\\n            <L7p:Comment stringValue=\\\"Policy Fragment: some-policy\\\"/>\\n        </L7p:CommentAssertion>\\n        <L7p:HardcodedResponse>\\n            <L7p:Base64ResponseBody stringValue=\\\"SGVsbG8gV29ybGQ=\\\"/>\\n        </L7p:HardcodedResponse>\\n    </wsp:All>\\n</wsp:Policy>\\n\"\n        }\n    }\n  ]\n}"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										},
+										"description": "# Set Policy Fragments\n\nSet multiple policy fragments together. The fragments may or may not exist at the destination. Each fragment is either created if it doesn't exist at target or updated if it already exists.\n\nInput: same structure as createPolicyFragment but as an array instead of a single web api service\n\n``` json\n{\n  \"input\": [\n    {\n      \"name\" : \"New policy somewhere\",\n      \"folderPath\" : \"/migrationTest\",\n      \"policy\" : {\n      \"xml\" : \"wsp:Policy...>\"\n      }\n    }\n  ]\n}\n\n```"
+									},
+									"response": []
+								},
+								{
+									"name": "Set Services",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation setServices (\n    $input: [L7ServiceInput!]!,\n    $clusterProperties: [ClusterPropertyInput!]!) {\n    # Ensure the availability of Web API service dependencies\n    setClusterProperties(input: $clusterProperties) {\n        detailedStatus {status description}\n        clusterProperties {\n            goid\n            name\n            checksum\n        }\n    }\n    setServices (input: $input) {\n        detailedStatus {status description}\n        services {\n            goid\n            name\n            resolutionPath\n            checksum\n        }\n    }\n}",
+												"variables": "{\n  \"input\": [\n    {\n      \"name\": \"some-webapi\",\n      \"resolutionPath\": \"/some-webapi\",\n      \"enabled\": true,\n      \"checksum\": \"744531b224938981e1ecacea1efcf002517d99a5\",\n      \"folderPath\": \"/\",\n      \"serviceType\":\"WEB_API\",\n      \"methodsAllowed\": [\n        \"GET\",\n        \"POST\",\n        \"PUT\",\n        \"DELETE\"\n      ],\n      \"policy\": {\n        \"xml\": \"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?>\\n<wsp:Policy xmlns:L7p=\\\"http://www.layer7tech.com/ws/policy\\\" xmlns:wsp=\\\"http://schemas.xmlsoap.org/ws/2002/12/policy\\\">\\n    <wsp:All wsp:Usage=\\\"Required\\\">\\n        <wsp:OneOrMore wsp:Usage=\\\"Required\\\">\\n            <wsp:All wsp:Usage=\\\"Required\\\">\\n                <L7p:ComparisonAssertion>\\n                    <L7p:Expression1 stringValue=\\\"${gateway.greetings}\\\"/>\\n                    <L7p:Expression2 stringValue=\\\"\\\"/>\\n                    <L7p:ExpressionIsVariable booleanValue=\\\"false\\\"/>\\n                    <L7p:Negate booleanValue=\\\"true\\\"/>\\n                    <L7p:Operator operator=\\\"EMPTY\\\"/>\\n                    <L7p:Predicates predicates=\\\"included\\\">\\n                        <L7p:item binary=\\\"included\\\">\\n                            <L7p:Negated booleanValue=\\\"true\\\"/>\\n                            <L7p:Operator operator=\\\"EMPTY\\\"/>\\n                            <L7p:RightValue stringValue=\\\"\\\"/>\\n                        </L7p:item>\\n                    </L7p:Predicates>\\n                </L7p:ComparisonAssertion>\\n                <L7p:SetVariable>\\n                    <L7p:Base64Expression stringValue=\\\"JHtnYXRld2F5LmdyZWV0aW5nc30=\\\"/>\\n                    <L7p:VariableToSet stringValue=\\\"greetings\\\"/>\\n                </L7p:SetVariable>\\n            </wsp:All>\\n            <L7p:SetVariable>\\n                <L7p:Base64Expression stringValue=\\\"SGVsbG8sIFdvcmxkIQ==\\\"/>\\n                <L7p:VariableToSet stringValue=\\\"greetings\\\"/>\\n            </L7p:SetVariable>\\n        </wsp:OneOrMore>\\n        <L7p:HardcodedResponse>\\n            <L7p:Base64ResponseBody stringValue=\\\"JHtncmVldGluZ3N9\\\"/>\\n            <L7p:ResponseContentType stringValue=\\\"text/plain; charset=UTF-8\\\"/>\\n        </L7p:HardcodedResponse>\\n    </wsp:All>\\n</wsp:Policy>\\n\"\n      },\n      \"tracingEnabled\": false,\n      \"wssProcessingEnabled\": false\n    }\n  ],\n  \"clusterProperties\": [\n    {\n      \"name\": \"greetings\",\n      \"value\": \"Hello, World!\"\n    }\n  ]\n}\n"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										},
+										"description": "# Set Web Api Services\n\nCreate multiple web API services on the target gateway.\n\nInput: See sample for input. Here is a sample:\n\n``` json\n{  \"input\": {    \"name\" : \"New service created\",    \"folderPath\" : \"/migrationTest\",    \"resolutionPath\": \"/testNewService17\",            \"methodsAllowed\": [                \"GET\",                \"POST\",                \"PUT\",                \"DELETE\"            ],            \"enabled\": true,            \"policy\": {                \"xml\": \"wsp:Policy...\"            }  }}\n\n```"
+									},
+									"response": []
+								},
+								{
+									"name": "Update Revisions",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation updateRevisions(\n    $policies: [L7PolicyPartialInput!]!,\n    $services: [L7ServicePartialInput!]!,\n    $activate: Boolean!,\n    $comment: String) {\n  updatePoliciesRevision( input: $policies\n        activate: $activate\n        comment: $comment) {\n    detailedStatus {action status description}\n  }\n \n  updateServicesRevision(\n        input: $services\n        activate: $activate\n        comment: $comment) {\n    detailedStatus {action status description}\n  }\n}",
+												"variables": "{\n    \"comment\": \"test-comment\",\n    \"activate\": true,\n    \"policies\": [{\n        \"name\": \"some-policy\",\n        \"policyType\": \"FRAGMENT\",\n        \"checksum\": \"\",\n        \"policyRevision\": {\n            \"ordinal\": 1\n        }\n    }],\n    \"services\": [{\n        \"name\": \"some-webapi\",\n        \"resolutionPath\": \"/some-webapi\",\n        \"serviceType\": \"WEB_API\",\n        \"checksum\": \"\",\n        \"policyRevision\": {\n                \"ordinal\": 2\n        }\n    }]\n}"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										},
+										"description": "# Set Web Api Services\n\nCreate multiple web API services on the target gateway.\n\nInput: See sample for input. Here is a sample:\n\n``` json\n{  \"input\": {    \"name\" : \"New service created\",    \"folderPath\" : \"/migrationTest\",    \"resolutionPath\": \"/testNewService17\",            \"methodsAllowed\": [                \"GET\",                \"POST\",                \"PUT\",                \"DELETE\"            ],            \"enabled\": true,            \"policy\": {                \"xml\": \"wsp:Policy...\"            }  }}\n\n```"
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Private Key Signing",
+					"item": [
+						{
+							"name": "Queries",
+							"item": []
+						},
+						{
+							"name": "Mutations",
+							"item": [
+								{
+									"name": "Set Keys",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation setKeys ($keys: [KeyInput!]!) {\n    setKeys (input: $keys) {\n        detailedStatus {status description}\n        keys {\n            goid\n            keystoreId\n            alias\n            checksum\n        }\n    }\n}",
+												"variables": "{\n  \"keys\": [\n      {\n      \"keystoreId\": \"00000000000000000000000000000002\",\n      \"alias\": \"some-key\",\n      \"keyType\": \"RSA\",\n      \"subjectDn\": \"CN=some-key\",\n      \"p12\": \"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\",\n      \"certChain\": [\n        \"-----BEGIN CERTIFICATE-----\\nMIIC6zCCAdOgAwIBAgIJAPBYDK3qjfM1MA0GCSqGSIb3DQEBDAUAMBMxETAPBgNVBAMTCHNvbWUt\\r\\na2V5MB4XDTIzMDQwNDA1NDU1M1oXDTI4MDQwMjA1NDU1M1owEzERMA8GA1UEAxMIc29tZS1rZXkw\\r\\nggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCADgFxsGgmoRefiq4dMzfgy0minfIw98PP\\r\\nco/gJtvAXdW/0ZamjpGNhepq3LJ0rNonXrbpOJSn9nBtcAmQQdDq9rMWVXbh11OJH7BfeGs2vFSU\\r\\nPXV9P0K/8w/X5xFaKZ8/qhQVLLyOq8gGjCk3NS7XTMmA+9jjkoxzqNDvRVRw7mEFRFxgIJOuPBBL\\r\\nTpBKjiCxdfFbcV9r2ZQyf0a/UO+M7UIGuFFJxHTtdtp0PBZAhJ/wf6oIyMeeCNSkYmLYI9v8Sne5\\r\\n4oRiIFTJ0BrnIA/7PNyjiaDejfy6TmrqmtV85cn3wxorC8tOfUv1PsOv1FGqBbbYvQ7lh5ybVLL7\\r\\nefGTAgMBAAGjQjBAMB0GA1UdDgQWBBQL2fCUg0lRk4HWwBBr35SyKSQ70jAfBgNVHSMEGDAWgBQL\\r\\n2fCUg0lRk4HWwBBr35SyKSQ70jANBgkqhkiG9w0BAQwFAAOCAQEAELwHue6qGlrWpfJc3rq3Pby7\\r\\nNwjI7VEANcWHM5WVQ0TX5+Hm/P+GIyxr4WFA356nnUeGCe3owCWv3Y3yRva715Jf6JUofYCNgvk7\\r\\nuUoQgLmTIe2s4GguuX7ATVAEMz5EM1EmcapGgrfoEbWFTEemUr1nvu19LSDgVzKJhvVpWvWwCQGr\\r\\nX2lipOGuZrgGumW+AaTATLpxCasG3aP3IqdGaMs+ALi07CM9b/JD+XPRAp1B7yYrFTGYbftfvBeJ\\r\\nKfKiC2YoJKNJcNXMsz3yhGfvVbZrSG5LZIgCjqsDJ0EoCXMzpR3AACHbF9p4ummEbrAOmse1lx6u\\r\\nPh9PhFwPx2XmUg==\\n-----END CERTIFICATE-----\\n\"\n      ]\n    },\n    {\n            \"goid\": \"00000000000000000000000000000002:signer-key\",\n            \"keystoreId\": \"00000000000000000000000000000002\",\n            \"alias\": \"signer-key\",\n            \"checksum\": \"0ccd1a6cbad5e1b02a50c23bb55e5217fb6fc6e8\",\n            \"keyType\": \"RSA\",\n            \"subjectDn\": \"CN=signer-key\",\n            \"p12\": \"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\",\n            \"certChain\": [\n                \"-----BEGIN CERTIFICATE-----\\nMIIDEzCCAfugAwIBAgIJAPbRKstkY3I0MA0GCSqGSIb3DQEBDAUAMBUxEzARBgNVBAMTCnNpZ25l\\r\\nci1rZXkwHhcNMjQwMzIyMTAxNTAyWhcNMjkwMzIxMTAxNTAyWjAVMRMwEQYDVQQDEwpzaWduZXIt\\r\\na2V5MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtJHdjife5OA+mGiDlpZ1Mo3dAA8o\\r\\nRodnyHYr0Rv2npWXM1M76Mz+nmLlvCNEJ5IvZCPsUKVtJY/XwJLhg/macYPnmR8+SM9s6y3kXdfP\\r\\nSkfF9sa3rge+xUOtpE+adeBTBurmY/gyjBulo4pKThtVyLqd3fI1MZrUVZeE/Yon/GFpnc1ZxVDt\\r\\nT5i0Jo+kRAVAwgL/qvY37Alf76Rz1hTsQmCANlT0HgvmH3fpFMCbm9sMX5pRHy64ogizyU9F19xA\\r\\nzaJ9w1u1xPs3BJPme8j/QJkK4rlFiD8qb1s0xiHQQ1bw16y3vPG0H9f99aw+dtVgZCHcarYKuDk5\\r\\nrXy/FweNsQIDAQABo2YwZDASBgNVHRMBAf8ECDAGAQH/AgEBMA4GA1UdDwEB/wQEAwIBBjAdBgNV\\r\\nHQ4EFgQUsxxyRk1hOYBhvG50e/tMVk2xeXgwHwYDVR0jBBgwFoAUsxxyRk1hOYBhvG50e/tMVk2x\\r\\neXgwDQYJKoZIhvcNAQEMBQADggEBACpoX96lMwQ76vEFgISu32jiuB2JDW/mw0yXzLzxibmWRM9W\\r\\nUq9bc0yYMpgRkEpTLfsnXzhhY5/yDZgC0Qp86K5jzPHma89oY1vlAymKJ2XxBeKRdkuTRGAAuKDr\\r\\nEZ4+XQ5n0oRfA2fz/ScjTclY9Ws5Hwnz2HnD6KuDICq8bLAUwfqwQ/CwsUn0H7XaMhO9lKw4vE9B\\r\\nNhxYvN4YZ35LMSd+hX8MeboZ2S6HjTy5u0gmSjjDNwaYr/fBtOrnDsLTxAJTO5htG6Ha+n2jAqK2\\r\\nKvhCuMWfV+dDAo4FLUReaGMeX30T12SnmLOe77KUlGO3VYaEecOZ4FVV6TSdzZx6nk0=\\n-----END CERTIFICATE-----\\n\"\n            ]\n        }\n  ]\n}"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										},
+										"description": "# Set Keys\n\nBase64 encoded PKCS12 keystore containing the private key and cert chain for the key entry.  \nThe keystore is password-protected using the transaction encryption passphrase provided."
+									},
+									"response": []
+								},
+								{
+									"name": "Generate CSR",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation generateCSR($alias:String!, $params:CSRGenerateParamsInput!) {\n    generateCSR(alias:$alias, params:$params) {\n        csr { \n            pem\n            issuedTo\n        }\n    }\n}",
+												"variables": "{\n     \"params\": {\n         \"subjectDn\": \"cn=test\",\n         \"hashAlgorithm\": \"SHA512\",\n         \"signatureAlgorithm\":\"RSASSA_PSS\",\n         \"expiryAge\":100,\n         \"notBefore\":\"2024-03-07\",\n         \"subjectAlternativeNames\" : [\n            {\"name\": \"email\", \"value\": \"test@mail.com\" },\n            {\"name\":\"uri\", \"value\":\"https://test.com\"},\n            {\"name\":\"IP Address\", \"value\":\"10.12.121.12\"},\n            {\"name\":\"IP Address\", \"value\":\"10.12.121.13\"},\n            {\"name\":\"DNS Name\", \"value\":\"test\"},\n            {\"name\":\"Directory Name\", \"value\": \"cn=John Doe,dc=example,dc=com\"}\n         ]\n     },\n     \"alias\":\"some-key\"\n}"
+											}
+										},
+										"url": {
+											"raw": "{{source_gw}}",
+											"host": [
+												"{{source_gw}}"
+											]
+										},
+										"description": "# Get key by alias\n\nGet key by alias.\n\nThis is an entry in the gateway keystore. These entries combine a private key and associated certificate and are used for example by listener ports.\n\nThese represent the gateway's own certificates as opposed to the Certificate type which represent a cert trusted by the gateway.\n\nBase64 encoded PKCS12 keystore containing the private key and cert chain for the key entry.  \nThe keystore is password-protected using the transaction encryption passphrase provided."
+									},
+									"response": []
+								},
+								{
+									"name": "Sign Certificate",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation signCSR ($alias:String!, $params:CSRSignParamsInput!) {\n    signCSR (alias:$alias, params:$params) {\n        chain {\n            issuedTo\n            issuedBy\n            certChain\n        }\n    }\n}",
+												"variables": "{\n     \"params\": {\n         \"subjectDn\": \"cn=test1\",\n         \"hashAlgorithm\": \"SHA512\",\n         \"expiryAge\":100,\n         \"notBefore\":\"2024-03-07\",\n         \"csr\": {\n                \"pem\": \"-----BEGIN CERTIFICATE REQUEST-----\\nMIIDITCCAdUCAQAwDzENMAsGA1UEAwwEdGVzdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC\\r\\nggEBAIAOAXGwaCahF5+Krh0zN+DLSaKd8jD3w89yj+Am28Bd1b/RlqaOkY2F6mrcsnSs2idetuk4\\r\\nlKf2cG1wCZBB0Or2sxZVduHXU4kfsF94aza8VJQ9dX0/Qr/zD9fnEVopnz+qFBUsvI6ryAaMKTc1\\r\\nLtdMyYD72OOSjHOo0O9FVHDuYQVEXGAgk648EEtOkEqOILF18VtxX2vZlDJ/Rr9Q74ztQga4UUnE\\r\\ndO122nQ8FkCEn/B/qgjIx54I1KRiYtgj2/xKd7nihGIgVMnQGucgD/s83KOJoN6N/LpOauqa1Xzl\\r\\nyffDGisLy059S/U+w6/UUaoFtti9DuWHnJtUsvt58ZMCAwEAAaCBmDCBlQYJKoZIhvcNAQkOMYGH\\r\\nMIGEMIGBBgNVHREEejB4gQ10ZXN0QG1haWwuY29thhBodHRwczovL3Rlc3QuY29thwQKDHkMhwQK\\r\\nDHkNggR0ZXN0pEMwQTERMA8GA1UEAwwISm9obiBEb2UxFzAVBgoJkiaJk/IsZAEZFgdleGFtcGxl\\r\\nMRMwEQYKCZImiZPyLGQBGRYDY29tMEEGCSqGSIb3DQEBCjA0oA8wDQYJYIZIAWUDBAIDBQChHDAa\\r\\nBgkqhkiG9w0BAQgwDQYJYIZIAWUDBAIDBQCiAwIBQAOCAQEAQ85h0KBxSRZ7WLgN2ab3N6cUX03Q\\r\\nG2/Fljj5eFK+M1yhizZ5bNg6K/YoAbMElG50nti+zCTUcKnJGh/u3edCLhLkSFLRStS0dDS5N90T\\r\\nUH4LR19B1AbYPoTgjA9CLHERTJZWxnvaV/MDU7o71EyuNK9IkwqhxmENdyOuhu5YL+8h7pR+ZBdH\\r\\n4ZGdRFTBwaVAdreXbfApzA9SH/DccdjbSE2svvJWPCAWe76OFv4bmsLM0mMWGvvXFc9bQX6o3jOK\\r\\n89AMgYOcxKgvpC2GaFiVdM/mmMq/oFXwJVKhuJB+EOQ00UbTJuGN1uvUQIa5lcaXhZEdHSu29YQE\\r\\nSx4Xy9o39w==\\n-----END CERTIFICATE REQUEST-----\\n\",\n                \"issuedTo\": \"00000000000000000000000000000002:some-key\"\n            }\n     },\n     \"alias\":\"signer-key\"\n}"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										},
+										"description": "# Set Keys\n\nBase64 encoded PKCS12 keystore containing the private key and cert chain for the key entry.  \nThe keystore is password-protected using the transaction encryption passphrase provided."
+									},
+									"response": []
+								},
+								{
+									"name": "Replace Certificate Chain",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation replaceCertChain ($alias:String!, $params:KeyCertChainParamsInput!) {\n    replaceCertChain (alias:$alias, params:$params) {\n        affectedKeyAliases\n    }\n}",
+												"variables": "{\n    \"alias\":\"some-key\",\n    \"params\": {\n        \"certChain\": [\n                    \"-----BEGIN CERTIFICATE-----\\nMIIDjjCCAnagAwIBAgIJAPoroUlnZ8kdMA0GCSqGSIb3DQEBDQUAMBUxEzARBgNVBAMTCnNpZ25l\\r\\nci1rZXkwHhcNMjQwMzA2MTgzMDAwWhcNMjQwNjMwMTAxODE1WjAQMQ4wDAYDVQQDEwV0ZXN0MTCC\\r\\nASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAIAOAXGwaCahF5+Krh0zN+DLSaKd8jD3w89y\\r\\nj+Am28Bd1b/RlqaOkY2F6mrcsnSs2idetuk4lKf2cG1wCZBB0Or2sxZVduHXU4kfsF94aza8VJQ9\\r\\ndX0/Qr/zD9fnEVopnz+qFBUsvI6ryAaMKTc1LtdMyYD72OOSjHOo0O9FVHDuYQVEXGAgk648EEtO\\r\\nkEqOILF18VtxX2vZlDJ/Rr9Q74ztQga4UUnEdO122nQ8FkCEn/B/qgjIx54I1KRiYtgj2/xKd7ni\\r\\nhGIgVMnQGucgD/s83KOJoN6N/LpOauqa1XzlyffDGisLy059S/U+w6/UUaoFtti9DuWHnJtUsvt5\\r\\n8ZMCAwEAAaOB5TCB4jAMBgNVHRMBAf8EAjAAMA4GA1UdDwEB/wQEAwIF4DAdBgNVHQ4EFgQUC9nw\\r\\nlINJUZOB1sAQa9+UsikkO9IwHwYDVR0jBBgwFoAUsxxyRk1hOYBhvG50e/tMVk2xeXgwgYEGA1Ud\\r\\nEQR6MHiBDXRlc3RAbWFpbC5jb22GEGh0dHBzOi8vdGVzdC5jb22HBAoMeQyHBAoMeQ2CBHRlc3Sk\\r\\nQzBBMRMwEQYKCZImiZPyLGQBGRYDY29tMRcwFQYKCZImiZPyLGQBGRYHZXhhbXBsZTERMA8GA1UE\\r\\nAxMISm9obiBEb2UwDQYJKoZIhvcNAQENBQADggEBAAWQJbIsyyJi/naiy6az01Q6bgogiSdUvcPv\\r\\nl0B+/N1oTo4B1lb9RwnSDArBAgGuVcmsDmI0Xtw7V+q1EGZV/Ir0x1aSOa98B8qatJan1v9sGPKJ\\r\\nK5Dv/Hvakaxxf+qOP4UUjITqxxE0SKILxI7+yRXD0ii+FUqwSDejraYbr2b05FDlVSbzgsQ29dXG\\r\\nKELSocVNpOxa4wsEtuofE4VVGU09QF1ofC/bPXCg8bL4B8m6RKm9JQkEfkNWwWPyJblDAC9c8NOU\\r\\nXkHsEfH55Ngff5zY6QTqjBM3LoFzbh8uItU9vC4/cRfNkrMIeMwlqULeUVF1kYlcleb4IXoD8ROj\\r\\n/30=\\n-----END CERTIFICATE-----\\n\",\n                    \"-----BEGIN CERTIFICATE-----\\nMIIDEzCCAfugAwIBAgIJAPbRKstkY3I0MA0GCSqGSIb3DQEBDAUAMBUxEzARBgNVBAMTCnNpZ25l\\r\\nci1rZXkwHhcNMjQwMzIyMTAxNTAyWhcNMjkwMzIxMTAxNTAyWjAVMRMwEQYDVQQDEwpzaWduZXIt\\r\\na2V5MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtJHdjife5OA+mGiDlpZ1Mo3dAA8o\\r\\nRodnyHYr0Rv2npWXM1M76Mz+nmLlvCNEJ5IvZCPsUKVtJY/XwJLhg/macYPnmR8+SM9s6y3kXdfP\\r\\nSkfF9sa3rge+xUOtpE+adeBTBurmY/gyjBulo4pKThtVyLqd3fI1MZrUVZeE/Yon/GFpnc1ZxVDt\\r\\nT5i0Jo+kRAVAwgL/qvY37Alf76Rz1hTsQmCANlT0HgvmH3fpFMCbm9sMX5pRHy64ogizyU9F19xA\\r\\nzaJ9w1u1xPs3BJPme8j/QJkK4rlFiD8qb1s0xiHQQ1bw16y3vPG0H9f99aw+dtVgZCHcarYKuDk5\\r\\nrXy/FweNsQIDAQABo2YwZDASBgNVHRMBAf8ECDAGAQH/AgEBMA4GA1UdDwEB/wQEAwIBBjAdBgNV\\r\\nHQ4EFgQUsxxyRk1hOYBhvG50e/tMVk2xeXgwHwYDVR0jBBgwFoAUsxxyRk1hOYBhvG50e/tMVk2x\\r\\neXgwDQYJKoZIhvcNAQEMBQADggEBACpoX96lMwQ76vEFgISu32jiuB2JDW/mw0yXzLzxibmWRM9W\\r\\nUq9bc0yYMpgRkEpTLfsnXzhhY5/yDZgC0Qp86K5jzPHma89oY1vlAymKJ2XxBeKRdkuTRGAAuKDr\\r\\nEZ4+XQ5n0oRfA2fz/ScjTclY9Ws5Hwnz2HnD6KuDICq8bLAUwfqwQ/CwsUn0H7XaMhO9lKw4vE9B\\r\\nNhxYvN4YZ35LMSd+hX8MeboZ2S6HjTy5u0gmSjjDNwaYr/fBtOrnDsLTxAJTO5htG6Ha+n2jAqK2\\r\\nKvhCuMWfV+dDAo4FLUReaGMeX30T12SnmLOe77KUlGO3VYaEecOZ4FVV6TSdzZx6nk0=\\n-----END CERTIFICATE-----\\n\"\n                ],\n          \"replaceAllMatchingCerts\": true\n     }\n     \n}\n"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										},
+										"description": "# Set Keys\n\nBase64 encoded PKCS12 keystore containing the private key and cert chain for the key entry.  \nThe keystore is password-protected using the transaction encryption passphrase provided."
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
 					"name": "Revocation Check Policy",
 					"item": [
 						{
@@ -3845,6 +4673,77 @@
 											]
 										},
 										"description": "# Get key by alias\n\nGet key by alias.\n\nThis is an entry in the gateway keystore. These entries combine a private key and associated certificate and are used for example by listener ports.\n\nThese represent the gateway's own certificates as opposed to the Certificate type which represent a cert trusted by the gateway.\n\nBase64 encoded PKCS12 keystore containing the private key and cert chain for the key entry.  \nThe keystore is password-protected using the transaction encryption passphrase provided."
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Services",
+					"item": [
+						{
+							"name": "Queries",
+							"item": [
+								{
+									"name": "Layer7 Services",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "query services  {\n    services  {\n        goid\n        name\n        resolutionPath\n        checksum\n\n        enabled\n        folderPath\n        methodsAllowed\n        properties {name value}\n        tracingEnabled\n        wssProcessingEnabled\n\n        policy {xml}\n        policyRevision{\n            goid\n            ordinal\n            xml\n        }\n    }\n}",
+												"variables": "{}"
+											}
+										},
+										"url": {
+											"raw": "{{source_gw}}",
+											"host": [
+												"{{source_gw}}"
+											]
+										},
+										"description": "# APIs in a folder\n\nRetrieves the Web APi Services given a folder path. This query good into subfolders as well so you get the whole tree.\n\nInput: folderPath"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Mutations",
+							"item": [
+								{
+									"name": "Set Services",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation setServices (\n    $input: [L7ServiceInput!]!,\n    $clusterProperties: [ClusterPropertyInput!]!) {\n    # Ensure the availability of Web API service dependencies\n    setClusterProperties(input: $clusterProperties) {\n        detailedStatus {status description}\n        clusterProperties {\n            goid\n            name\n            checksum\n        }\n    }\n    setServices (input: $input) {\n        detailedStatus {status description}\n        services {\n            goid\n            name\n            resolutionPath\n            checksum\n        }\n    }\n}",
+												"variables": "{\n  \"input\": [\n    {\n      \"name\": \"some-webapi\",\n      \"resolutionPath\": \"/some-webapi\",\n      \"enabled\": true,\n      \"serviceType\": \"WEB_API\",\n      \"checksum\": \"744531b224938981e1ecacea1efcf002517d99a5\",\n      \"folderPath\": \"/graphman-tests/webApiServices\",\n      \"methodsAllowed\": [\n        \"GET\",\n        \"POST\",\n        \"PUT\",\n        \"DELETE\"\n      ],\n      \"policy\": {\n        \"xml\": \"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?>\\n<wsp:Policy xmlns:L7p=\\\"http://www.layer7tech.com/ws/policy\\\" xmlns:wsp=\\\"http://schemas.xmlsoap.org/ws/2002/12/policy\\\">\\n    <wsp:All wsp:Usage=\\\"Required\\\">\\n        <wsp:OneOrMore wsp:Usage=\\\"Required\\\">\\n            <wsp:All wsp:Usage=\\\"Required\\\">\\n                <L7p:ComparisonAssertion>\\n                    <L7p:Expression1 stringValue=\\\"${gateway.greetings}\\\"/>\\n                    <L7p:Expression2 stringValue=\\\"\\\"/>\\n                    <L7p:ExpressionIsVariable booleanValue=\\\"false\\\"/>\\n                    <L7p:Negate booleanValue=\\\"true\\\"/>\\n                    <L7p:Operator operator=\\\"EMPTY\\\"/>\\n                    <L7p:Predicates predicates=\\\"included\\\">\\n                        <L7p:item binary=\\\"included\\\">\\n                            <L7p:Negated booleanValue=\\\"true\\\"/>\\n                            <L7p:Operator operator=\\\"EMPTY\\\"/>\\n                            <L7p:RightValue stringValue=\\\"\\\"/>\\n                        </L7p:item>\\n                    </L7p:Predicates>\\n                </L7p:ComparisonAssertion>\\n                <L7p:SetVariable>\\n                    <L7p:Base64Expression stringValue=\\\"JHtnYXRld2F5LmdyZWV0aW5nc30=\\\"/>\\n                    <L7p:VariableToSet stringValue=\\\"greetings\\\"/>\\n                </L7p:SetVariable>\\n            </wsp:All>\\n            <L7p:SetVariable>\\n                <L7p:Base64Expression stringValue=\\\"SGVsbG8sIFdvcmxkIQ==\\\"/>\\n                <L7p:VariableToSet stringValue=\\\"greetings\\\"/>\\n            </L7p:SetVariable>\\n        </wsp:OneOrMore>\\n        <L7p:HardcodedResponse>\\n            <L7p:Base64ResponseBody stringValue=\\\"JHtncmVldGluZ3N9\\\"/>\\n            <L7p:ResponseContentType stringValue=\\\"text/plain; charset=UTF-8\\\"/>\\n        </L7p:HardcodedResponse>\\n    </wsp:All>\\n</wsp:Policy>\\n\"\n      },\n      \"tracingEnabled\": false,\n      \"wssProcessingEnabled\": false\n    }\n  ],\n  \"clusterProperties\": [\n    {\n      \"name\": \"greetings\",\n      \"value\": \"Hello, World!\"\n    }\n  ]\n}\n"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										},
+										"description": "# Set Web Api Services\n\nCreate multiple web API services on the target gateway.\n\nInput: See sample for input. Here is a sample:\n\n``` json\n{  \"input\": {    \"name\" : \"New service created\",    \"folderPath\" : \"/migrationTest\",    \"resolutionPath\": \"/testNewService17\",            \"methodsAllowed\": [                \"GET\",                \"POST\",                \"PUT\",                \"DELETE\"            ],            \"enabled\": true,            \"policy\": {                \"xml\": \"wsp:Policy...\"            }  }}\n\n```"
 									},
 									"response": []
 								}
