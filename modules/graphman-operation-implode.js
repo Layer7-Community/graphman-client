@@ -72,24 +72,15 @@ let type1Imploder = (function () {
                         const certChain = entity.certChain;
                         if (certChain && typeof certChain === 'string' && certChain.endsWith(".certchain.pem}")) {
                             const filename = certChain.match(/{(.+)}/)[1];
-                            const lines = utils.readFile(`${typeDir}/${filename}`).split(/\r?\n/);
-                            let data = "";
-
-                            entity.certChain = [];
-                            for (var line of lines) {
-                                data += line + "\r\n";
-                                if (line.indexOf("-END CERTIFICATE-") !== -1) {
-                                    entity.certChain.push(data);
-                                    data = "";
-                                }
-                            }
+                            entity.certChain = readCertFile(`${typeDir}/${filename}`);
                         }
                     }
 
                     if (type === "trustedCerts") {
-                        if (entity.certBase64 && entity.certBase64.endsWith(".cert}")) {
+                        if (entity.certBase64 && entity.certBase64.endsWith(".pem}")) {
                             const filename = entity.certBase64.match(/{(.+)}/)[1];
-                            entity.certBase64 = btoa(utils.readFile(`${typeDir}/${filename}`));
+                            let data = readCertFile(`${typeDir}/${filename}`, false);
+                            entity.certBase64 = data[0];
                         }
                     }
 
@@ -130,6 +121,32 @@ let type1Imploder = (function () {
                 bundle[key].push(entity);
             }
         });
+    }
+
+    function readCertFile(path, includeHeader) {
+        const lines = utils.readFile(path).split(/\r?\n/);
+        const certs = [];
+        let data = null;
+
+        includeHeader = includeHeader !== undefined ? includeHeader : true;
+
+        for (var line of lines) {
+            if (data == null) {
+                if (line.indexOf("-BEGIN CERTIFICATE-") !== -1) {
+                    data = includeHeader ? line : "";
+                }
+            } else {
+                if (line.indexOf("-END CERTIFICATE-") !== -1) {
+                    data += "\r\n" + (includeHeader ? line : "");
+                    certs.push(data.trim());
+                    data = null;
+                } else {
+                    data += "\r\n" + line;
+                }
+            }
+        }
+
+        return certs;
     }
 })();
 
