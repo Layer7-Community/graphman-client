@@ -1,5 +1,5 @@
 
-const VERSION = "v1.1";
+const VERSION = "v1.2";
 const SCHEMA_VERSION = "v10.1-CR04";
 
 const utils = require("./graphman-utils");

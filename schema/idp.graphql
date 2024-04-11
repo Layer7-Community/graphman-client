@@ -1,162 +1,54 @@
 extend type Query {
-    "Get all internal users"
-    internalUsers : [InternalUser!]!
-    "Get all internal groups"
-    internalGroups : [InternalGroup!]!
-    "Get internal user by login"
-    internalUserByLogin(login: String!) : InternalUser
-    "Get internal group by name"
-    internalGroupByName(name: String!) : InternalGroup
-    "Get internal users and groups"
-    searchInternal(filter: IdpFilter!) : InternalSearchResult!
-
     "Get all fips configurations"
-    fips : [Fip!]!
+    fips : [Fip!]! @deprecated(reason: "Use 'federatedIdps' instead.")
     "Get all fip users"
-    fipUsers : [FipUser!]!
+    fipUsers : [FipUser!]! @deprecated(reason: "Use 'federatedUsers' instead.")
     "Get all fip groups"
-    fipGroups : [FipGroup!]!
+    fipGroups : [FipGroup!]! @deprecated(reason: "Use 'federatedGroups' instead.")
     "Get fip configuration by name"
-    fipByName(name: String!) : Fip
+    fipByName(name: String!) : Fip @deprecated(reason: "Use 'federatedIdpByName' instead.")
     "Get fip user by name"
-    fipUserByName(providerName: String!, name: String!) : FipUser
+    fipUserByName(providerName: String!, name: String!) : FipUser @deprecated(reason: "Use 'federatedUserByName' instead.")
     "Get fip group by name"
-    fipGroupByName(providerName: String!, name: String!) : FipGroup
-    searchFip(filter: IdpFilter!) : FipSearchResult!
-
+    fipGroupByName(providerName: String!, name: String!) : FipGroup @deprecated(reason: "Use 'federatedGroupByName' instead.")
+    searchFip(filter: IdpFilter!) : FipSearchResult! @deprecated(reason: "Use 'searchFederatedIdp' instead.")
+    "Get internal users and groups"
+    searchInternal(filter: IdpFilter!) : InternalSearchResult! @deprecated(reason: "Use 'searchInternalIdp' instead.")
     "Get all ldap configurations"
-    ldaps : [Ldap!]!
+    ldaps : [Ldap!]! @deprecated(reason: "Use 'ldapIdps' instead.")
     "Get ldap configuration by name"
-    ldapByName(name: String!) : Ldap
+    ldapByName(name: String!) : Ldap @deprecated(reason: "Use 'ldapIdpByName' instead.")
 }
 
 extend type Mutation {
     "Creates or updates one or more fips"
-    setFips(input: [FipInput!]!) : FipsPayload
+    setFips(input: [FipInput!]!) : FipsPayload @deprecated(reason: "Use 'setFederatedIdps' instead.")
     "Creates or updates one or more ldaps"
-    setLdaps(input: [LdapInput!]!) : LdapsPayload
+    setLdaps(input: [LdapInput!]!) : LdapsPayload @deprecated(reason: "Use 'setLdapIdps' instead.")
     "Deletes one or more existing fips"
-    deleteFips(names: [String!]!) : FipsPayload
+    deleteFips(names: [String!]!) : FipsPayload @deprecated(reason: "Use 'deleteFederatedIdps' instead.")
     "Deletes one or more existing ldaps"
-    deleteLdaps(names: [String!]!) : LdapsPayload
-
-    "Creates or updates one or more internal users"
-    setInternalUsers(input: [InternalUserInput!]!) : InternalUsersPayload
-    "Creates or updates one or more internal groups"
-    setInternalGroups(input: [InternalGroupInput!]!) : InternalGroupsPayload
-    "Deletes one or more existing internal users"
-    deleteInternalUsers(logins: [String!]!) : InternalUsersPayload
-    "Deletes one or more existing internal groups"
-    deleteInternalGroups(names: [String!]!) : InternalGroupsPayload
+    deleteLdaps(names: [String!]!) : LdapsPayload @deprecated(reason: "Use 'deleteLdapIdps' instead.")
 
     """
     Creates or updates one or more fip users.
     NOTE: Existing user will be found by either login or subjectDn or name.
     """
-    setFipUsers(input: [FipUserInput!]!) : FipUsersPayload
+    setFipUsers(input: [FipUserInput!]!) : FipUsersPayload @deprecated(reason: "Use 'setFederatedUsers' instead.")
     "Creates or updates one or more fip groups"
-    setFipGroups(input: [FipGroupInput!]!) : FipGroupsPayload
+    setFipGroups(input: [FipGroupInput!]!) : FipGroupsPayload @deprecated(reason: "Use 'setFederatedGroups' instead.")
     """
     Deletes one or more existing fip users.
     NOTE: Here, name can be either login or subjectDn or name.
     """
-    deleteFipUsers(providerName: String!, names: [String!]!) : FipUsersPayload
+    deleteFipUsers(providerName: String!, names: [String!]!) : FipUsersPayload @deprecated(reason: "Use 'deleteFederatedUsers' instead.")
     "Deletes one or more existing fip groups"
-    deleteFipGroups(providerName: String!, names: [String!]!) : FipGroupsPayload
-}
-
-" Indicate how to search for group or user. Provide either a name pattern, a subject dn and or a goid. "
-input IdpFilter {
-    " The name of the FiP provider, or 'Internal' "
-    providerName : String!
-    "Finds users and groups whose name matches the specified pattern. May include wildcard such as * character"
-    namePattern : String
-    " SubjectDN of a FIP user "
-    subjectDn : String
-    " Get entity by goid "
-    goid : ID
-}
-
-type InternalSearchResult {
-    internalUsers : [InternalUser!]!
-    internalGroups : [InternalGroup!]!
+    deleteFipGroups(providerName: String!, names: [String!]!) : FipGroupsPayload @deprecated(reason: "Use 'deleteFederatedGroups' instead.")
 }
 
 type FipSearchResult {
     fipUsers : [FipUser!]!
     fipGroups : [FipGroup!]!
-}
-
-" A group of users defined in the internal identity provider "
-type InternalGroup {
-    goid : ID!
-    name : String!
-    "A checksum of the name, description and member names properties of the group"
-    checksum : String!
-
-    description : String
-    " The list of internal users that are part of this group "
-    members : [InternalUser!]!
-}
-
-" A user in the internal identity provider "
-type InternalUser {
-    goid : ID!
-    name : String
-    login : String!
-    checksum : String!
-
-    enabled : Boolean!
-    "The hashed password of the user if defined"
-    password : String
-    "A client-side certificate associated with this user to use for pki type authentication"
-    certBase64 : String
-    firstName : String
-    lastName : String
-    email : String
-
-    " List of groups this is member of "
-    memberOf : [InternalGroup!]!
-
-    # possible future expansion expiration, accountExpiration
-}
-
-input InternalGroupInput {
-    name : String!
-    "If provided, will try to honour at creation time"
-    goid : ID
-    description : String
-    "Ignored at creation time but can be used to compare bundle with gw state"
-    checksum : String
-}
-
-input InternalUserInput {
-    name : String
-    "If provided, will try to honour at creation time"
-    goid : ID
-    "The list of internal group details (names) that this user is member of. If you pass empty array, will reset memberships. If absent, does not affect memberships for current users."
-    memberOf : [MembershipInput!]
-    login : String!
-    "You can either pass in the hashed password which comes back in queries or the raw passwd directly"
-    password : String
-    "A client-side certificate associated with this user to use for pki type authentication"
-    certBase64 : String
-    firstName : String
-    lastName : String
-    email : String
-    "Is user enabled or not!"
-    enabled : Boolean
-    "Ignored at creation time but can be used to compare bundle with gw state"
-    checksum : String
-}
-
-input MembershipInput {
-    "The name of group to which the membership is defined"
-    name: String!
-    goid : ID
-    description : String
-    providerName : String
-    checksum : String
 }
 
 input FipUserInput {
@@ -188,7 +80,14 @@ input FipGroupInput {
     checksum : String
 }
 
-" A group defined in a federated identity provider"
+"""
+A group defined in a federated identity provider.
+> @l7-entity
+> @l7-identity-fields name
+> @l7-summary-fields goid,name,providerName,checksum
+> @l7-excluded-fields members
+> @l7-deprecated Use 'FederatedGroup' instead.
+"""
 type FipGroup {
     goid : ID!
     name : String!
@@ -203,7 +102,14 @@ type FipGroup {
 }
 # Note FIP also has concept of virtual group with name, description, subjectDnPattern, emailPattern, isRegex
 
-" A user defined in a federated identity provider "
+"""
+A user defined in a federated identity provider..
+> @l7-entity
+> @l7-identity-fields login,name,providerName
+> @l7-summary-fields goid,name,login,providerName,checksum
+> @l7-excluded-fields
+> @l7-deprecated Use 'FederatedUser' instead.
+"""
 type FipUser {
     goid : ID!
     name : String!
@@ -222,7 +128,14 @@ type FipUser {
     memberOf : [FipGroup!]!
 }
 
-"A Federated Identity Provider"
+"""
+A federated identity provider.
+> @l7-entity
+> @l7-identity-fields name
+> @l7-summary-fields goid,name,checksum
+> @l7-excluded-fields
+> @l7-deprecated Use 'FederatedIdp' instead.
+"""
 type Fip {
     goid : ID!
     name : String!
@@ -311,18 +224,6 @@ type LdapsPayload implements EntityMutationsPayload {
     ldaps: [Ldap]!
 }
 
-type InternalUsersPayload implements EntityMutationsPayload {
-    status: [EntityMutationStatus!]!
-    detailedStatus: [EntityMutationDetailedStatus!]!
-    internalUsers: [InternalUser]!
-}
-
-type InternalGroupsPayload implements EntityMutationsPayload {
-    status: [EntityMutationStatus!]!
-    detailedStatus: [EntityMutationDetailedStatus!]!
-    internalGroups: [InternalGroup]!
-}
-
 type FipUsersPayload implements EntityMutationsPayload {
     status: [EntityMutationStatus!]!
     detailedStatus: [EntityMutationDetailedStatus!]!
@@ -341,6 +242,11 @@ underlying users and groups in the ldap since they are not
 part of the gateway configuration itself. When l7 policies
 refer to these ldap users and groups, thee references are
 interpreted by the ldap directory itself.
+> @l7-entity
+> @l7-identity-fields name
+> @l7-summary-fields goid,name,checksum
+> @l7-excluded-fields
+> @l7-deprecated Use 'LdapIdp' instead.
 """
 type Ldap {
     goid : ID!
@@ -408,7 +314,7 @@ type UserMapping {
     kerberosAttrName : String
     kerberosEnterpriseAttrName : String
 	userCertAttrName : String
-    passwdType : PasswdStrategy!
+    passwdType : PasswdStrategy
 }
 
 input UserMappingInput {
@@ -422,7 +328,7 @@ input UserMappingInput {
     kerberosAttrName : String
     kerberosEnterpriseAttrName : String
 	userCertAttrName : String
-    passwdType : PasswdStrategyInput!
+    passwdType : PasswdStrategyInput
 }
 
 type PasswdStrategy {

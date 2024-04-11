@@ -201,6 +201,9 @@ module.exports = {
 }
 
 function matchSoapResolvers(left, right) {
+    if((left.resolvers && !right.resolvers) || (right.resolvers && !left.resolvers)) {
+        return false;
+    }
     if (left.resolvers.baseUri && left.resolvers.baseUri !== right.resolvers.baseUri) {
         return false;
     }

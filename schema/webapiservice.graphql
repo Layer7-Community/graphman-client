@@ -1,39 +1,46 @@
 extend type Query {
   "Get all webApi services"
-  webApiServices : [WebApiService]!
-  internalWebApiServices : [InternalWebApiService]!
+  webApiServices : [WebApiService]! @deprecated(reason: "Use 'services' instead.")
+  internalWebApiServices : [InternalWebApiService]! @deprecated(reason: "Use 'services' instead.")
   "Get webApi services by name"
-  webApiServicesByName(name: String!) : [WebApiService!]!
+  webApiServicesByName(name: String!) : [WebApiService!]! @deprecated(reason: "Use 'servicesByName' instead.")
   "Get webApi service by name. Returns none if more than one are found."
-  webApiServiceByName(name: String!) : WebApiService
+  webApiServiceByName(name: String!) : WebApiService @deprecated(reason: "Use 'serviceByName' instead.")
   "Get Internal webApi Service by name"
-  internalWebApiServiceByName(name: String!) : InternalWebApiService
+  internalWebApiServiceByName(name: String!) : InternalWebApiService @deprecated(reason: "Use 'serviceByName' instead.")
   "Get webApi services by resolutionPath"
-  webApiServicesByResolutionPath(resolutionPath: String!) : [WebApiService !]!
+  webApiServicesByResolutionPath(resolutionPath: String!) : [WebApiService !]! @deprecated(reason: "Use 'servicesByResolutionPath' instead.")
   "Get webApi service by resolutionPath. Returns none if more than one are found."
-  webApiServiceByResolutionPath(resolutionPath: String!) : WebApiService
+  webApiServiceByResolutionPath(resolutionPath: String!) : WebApiService @deprecated(reason: "Use 'serviceByResolutionPath' instead.")
   "Get Internal webApi Services by resolutionPath"
-  internalWebApiServiceByResolutionPath(resolutionPath: String!) : InternalWebApiService
+  internalWebApiServiceByResolutionPath(resolutionPath: String!) : InternalWebApiService @deprecated(reason: "Use 'servicesByResolutionPath' instead.")
   "Get webApi services inside a folder"
-  webApiServicesByFolderPath(folderPath: String!) : [WebApiService]!
+  webApiServicesByFolderPath(folderPath: String!) : [WebApiService]! @deprecated(reason: "Use 'servicesByFolderPath' instead.")
   "Get Internal webApi services inside a folder"
-  internalWebApiServicesByFolderPath(folderPath: String!) : [InternalWebApiService]!
+  internalWebApiServicesByFolderPath(folderPath: String!) : [InternalWebApiService]! @deprecated(reason: "Use 'servicesByFolderPath' instead.")
   "Get webApi services by goid"
   webApiServiceByGoid(goid: ID!) : WebApiService
 }
 
 extend type Mutation {
   "Create or update web api services"
-  setWebApiServices(input: [WebApiServiceInput!]!) : WebApiServicesPayload
+  setWebApiServices(input: [WebApiServiceInput!]!) : WebApiServicesPayload  @deprecated(reason: "Use 'setServices' instead.")
   "Create or update Internal web api services"
-  setInternalWebApiServices(input: [WebApiServiceInput!]!) : InternalWebApiServicesPayload
+  setInternalWebApiServices(input: [WebApiServiceInput!]!) : InternalWebApiServicesPayload  @deprecated(reason: "Use 'setServices' instead.")
   "Delete existing web api services given their resolution paths"
-  deleteWebApiServices(resolutionPaths: [String!]!) : WebApiServicesPayload
+  deleteWebApiServices(resolutionPaths: [String!]!) : WebApiServicesPayload  @deprecated(reason: "Use 'deleteServices' instead.")
   "Delete existing Internal web api services given their resolution paths"
-  deleteInternalWebApiServices(resolutionPaths: [String!]!) : InternalWebApiServicesPayload
+  deleteInternalWebApiServices(resolutionPaths: [String!]!) : InternalWebApiServicesPayload @deprecated(reason: "Use 'deleteServices' instead.")
 }
 
-"A Web API service published on the Layer7 Gateway"
+"""
+A Web API service published on the Layer7 Gateway
+> @l7-entity
+> @l7-identity-fields resolutionPath
+> @l7-summary-fields goid,guid,name,resolutionPath,checksum
+> @l7-excluded-fields
+> @l7-deprecated Use 'L7Service' instead.
+"""
 type WebApiService implements PublishedService {
     "The goid for this service"
     goid : ID!
@@ -60,7 +67,14 @@ type WebApiService implements PublishedService {
     policy: Policy!
 }
 
-"A Internal Web API service published on the Layer7 Gateway"
+"""
+A Internal Web API service published on the Layer7 Gateway
+> @l7-entity
+> @l7-identity-fields resolutionPath
+> @l7-summary-fields goid,guid,name,resolutionPath,checksum
+> @l7-excluded-fields
+> @l7-deprecated Use 'L7Service' instead.
+"""
 type InternalWebApiService implements PublishedService {
     "The goid for this service"
     goid : ID!
