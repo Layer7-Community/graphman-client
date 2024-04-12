@@ -307,8 +307,8 @@
             "prefix": "soapService"
         },
         "TrustedCertRef": {
-            "pluralMethod": "trustedCerts",
-            "singularMethod": "trustedCertByThumbprint",
+            "pluralMethod": "trustedCertRefs",
+            "singularMethod": "trustedCertRefByThumbprint",
             "idField": "thumbprintSha1",
             "idFields": [
                 "name",
@@ -324,7 +324,7 @@
                 "name",
                 "thumbprintSha1"
             ],
-            "prefix": "trustedCert"
+            "prefix": "trustedCertRef"
         },
         "WebApiService": {
             "pluralMethod": "webApiServices",
