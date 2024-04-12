@@ -95,4 +95,7 @@ query summary {
     policyBackedIdps {
         {{PolicyBackedIdp:summary}}
     }
+    internalIdps {
+        {{InternalIdp:summary}}
+    }
 }
