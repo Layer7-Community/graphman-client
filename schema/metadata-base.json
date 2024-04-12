@@ -83,13 +83,13 @@
         },
         "FederatedIdp": {
             "pluralMethod": "federatedIdps",
-            "singularMethod": "federatedIdp",
+            "singularMethod": "federatedIdpByName",
             "idField": "name",
             "prefix": "federatedIdp"
         },
         "FederatedGroup": {
             "pluralMethod": "federatedGroups",
-            "singularMethod": "federatedGroup",
+            "singularMethod": "federatedGroupByName",
             "idField": "name",
             "idFields": [
                 "name",
@@ -109,7 +109,7 @@
         },
         "FederatedUser": {
             "pluralMethod": "federatedUsers",
-            "singularMethod": "federatedUser",
+            "singularMethod": "federatedUserByName",
             "idField": "name",
             "idFields": [
                 "login",
