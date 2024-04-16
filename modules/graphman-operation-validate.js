@@ -5,13 +5,13 @@ module.exports = {
     run: function (params) {
         if (params.input) {
             const obj = utils.readFile(params.input)
-            if (Object.keys(obj)[0] == "All") {
+            if (Object.keys(obj).length == 1 && Object.keys(obj)[0] == "All") {
                 validateJson(Object.values(obj)[0])
                 if (!graphman.policySchema.errors) {
                     utils.info("validation is successful");
                 }
             } else {
-                console.log("Invalid policy");
+                console.log("Given policy is invalid");
             }
         }
     },
