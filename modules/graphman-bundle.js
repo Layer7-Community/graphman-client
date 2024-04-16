@@ -1,7 +1,7 @@
 
 const utils = require("./graphman-utils");
 const SCHEMA_METADATA = require("./graphman").schemaMetadata();
-const GOID_PLURAL_METHODS = ["federatedUsers", "internalUsers", "federatedGroups", "internalGroups", "ldapIdps", "federatedIdps", "trustedCerts"];
+const GOID_PLURAL_METHODS = ["fipUsers", "federatedUsers", "internalUsers", "fipGroups", "federatedGroups", "internalGroups", "ldaps", "ldapIdps", "fips", "federatedIdps", "trustedCerts"];
 module.exports = {
     EXPORT_USE: 'export',
     IMPORT_USE: 'import',
