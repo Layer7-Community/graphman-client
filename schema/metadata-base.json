@@ -391,7 +391,7 @@
             "JSON"
         ],
         "excludedFields": {
-            "Policy": "directDependencies,allDependencies",
+            "Policy": "directDependencies,allDependencies,json,yaml,code",
             "InternalUser": "memberOf",
             "InternalGroup": "members",
             "FipUser": "memberOf",
@@ -467,7 +467,7 @@
         {"typeName": "InternalGroup", "queryExcludedFields": ["members"], "exportExcludedFields": [], "importExcludedFields": ["members"]},
         {"typeName": "InternalUser", "queryExcludedFields": [], "exportExcludedFields": ["members:-name"], "importExcludedFields": ["members:-name"]},
         {"typeName": "ListenPort", "queryExcludedFields": ["hardwiredService"], "exportExcludedFields": [], "importExcludedFields": ["hardwiredService"]},
-        {"typeName": "Policy", "queryExcludedFields": ["directDependencies", "allDependencies"], "exportExcludedFields": [], "importExcludedFields": []},
+        {"typeName": "Policy", "queryExcludedFields": ["directDependencies", "allDependencies", "json", "yaml", "code"], "exportExcludedFields": ["json", "yaml", "code"], "importExcludedFields": ["json", "yaml", "code"]},
         {"typeName": "L7Policy", "queryExcludedFields": [], "exportExcludedFields": ["policyRevision", "policyRevisions"], "importExcludedFields": ["policyRevision", "policyRevisions"]},
         {"typeName": "L7Service", "queryExcludedFields": [], "exportExcludedFields": ["policyRevision", "policyRevisions"], "importExcludedFields": ["policyRevision", "policyRevisions"]},
         {"typeName": "TrustedCert", "queryExcludedFields": [], "exportExcludedFields": [], "importExcludedFields": ["revocationCheckPolicy"]},

@@ -3,15 +3,9 @@ query policyByName ($name: String!, $includePolicyRevision: Boolean = false, $in
         {{L7Policy:-policyRevision,policyRevisions}}
         policyRevision @include (if: $includePolicyRevision) {
             xml
-            json
-            yaml
-            code
         }
         policyRevisions @include (if: $includePolicyRevisions) {
             xml
-            json
-            yaml
-            code
         }
     }
 }
