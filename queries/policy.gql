@@ -1,0 +1,11 @@
+query policyByName ($name: String!, $includePolicyRevision: Boolean = false, $includePolicyRevisions: Boolean = false) {
+    policyByName (name: $name) {
+        {{L7Policy:-policyRevision,policyRevisions}}
+        policyRevision @include (if: $includePolicyRevision) {
+            xml
+        }
+        policyRevisions @include (if: $includePolicyRevisions) {
+            xml
+        }
+    }
+}

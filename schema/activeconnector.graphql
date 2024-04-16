@@ -4,7 +4,7 @@ extend type Query {
   "Get the active connector by name"
   activeConnectorByName(name : String!) : ActiveConnector
   "Get the active connectors by type"
-  activeConnectorsByType(connectorType : ActiveConnectorType!) : [ActiveConnector!]!
+  activeConnectorsByType(connectorType : String!) : [ActiveConnector!]!
 }
 
 extend type Mutation {
@@ -18,24 +18,25 @@ extend type Mutation {
   deleteActiveConnectors(names: [String!]!): ActiveConnectorsPayload!
 }
 
-enum ActiveConnectorType {
-    KAFKA
-    SFTP_POLLING_LISTENER
-    MQ_NATIVE
-}
-
+"""
+An active connector retrieves messages from external systems, perhaps by polling or by registering for notifications.
+> @l7-entity
+> @l7-identity-fields name
+> @l7-summary-fields goid,name,connectorType,checksum
+> @l7-excluded-fields hardwiredService
+"""
 type ActiveConnector {
     "The goid for the active connector"
     goid : ID!
     "The active connector name"
     name : String!
+    "The active connector type Examples:- KAFKA, SFTP_POLLING_LISTENER, MQ_NATIVE"
+    connectorType: String!
     "The configuration checksum of this active connector"
     checksum : String!
 
     "Whether this active connector is enabled"
     enabled : Boolean!
-    "The active connector type - KAFKA, SFTP_POLLING_LISTENER, MQ_NATIVE"
-    connectorType: ActiveConnectorType!
     "The name of the published service hardwired to the active connector"
     hardwiredServiceName: String
     "The active connector Properties"
@@ -54,8 +55,8 @@ input ActiveConnectorInput {
     name: String!
     "Whether this active connector is enabled"
     enabled: Boolean!
-    "The active connector type - KAFKA, SFTP_POLLING_LISTENER, MQ_NATIVE"
-    connectorType: ActiveConnectorType!
+    "The active connector type Examples:- KAFKA, SFTP_POLLING_LISTENER, MQ_NATIVE"
+    connectorType: String!
     "The name of the published service hardwired to the active connector"
     hardwiredServiceName: String
     "The active connector properties"

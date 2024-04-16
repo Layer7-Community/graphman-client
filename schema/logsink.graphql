@@ -17,6 +17,13 @@ extend type Mutation {
     deleteLogSinks(names: [String!]!): LogSinksPayload!
 }
 
+"""
+A Log sink.
+> @l7-entity
+> @l7-identity-fields name
+> @l7-summary-fields goid,name,checksum
+> @l7-excluded-fields
+"""
 type LogSink {
     "The internal entity unique identifier"
     goid : ID!

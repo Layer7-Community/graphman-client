@@ -22,6 +22,13 @@ enum SMCryptoMode {
     FIPS
 }
 
+"""
+A siteminder configuration.
+> @l7-entity smConfig|smConfigs
+> @l7-identity-fields name
+> @l7-summary-fields goid,name,checksum
+> @l7-excluded-fields
+"""
 type SMConfig {
     "The goid for the CA SSO connection"
     goid : ID!

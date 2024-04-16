@@ -60,16 +60,18 @@ type ListenPortTlsSettings {
     useCipherSuitesOrder: Boolean!
 }
 
+"""
+A listen port (Layer7 Gateway connector).
+> @l7-entity
+> @l7-identity-fields name
+> @l7-summary-fields goid,name,protocol,port,checksum
+> @l7-excluded-fields hardwiredService
+"""
 type ListenPort {
     "The internal entity unique identifier"
     goid : ID!
     "The listen port configuration name"
     name : String!
-    "The configuration checksum"
-    checksum: String!
-
-    "Whether this listen port configuration is enabled"
-    enabled : Boolean!
     """
     Protocol (scheme). Possible values are:
         HTTP
@@ -87,6 +89,11 @@ type ListenPort {
     Note: If the listen port is using the SSH2 protocol, avoid using port 22, as it may conflict with the default SSH port 22 on Linux or Unix systems.
     """
     port : PositiveInt!
+    "The configuration checksum"
+    checksum: String!
+
+    "Whether this listen port configuration is enabled"
+    enabled : Boolean!
     "The name of the published service hardwired to the listen port"
     hardwiredServiceName: String
     "Which Gateway services can be accessed through this listen port"

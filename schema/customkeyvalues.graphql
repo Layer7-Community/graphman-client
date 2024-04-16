@@ -16,7 +16,13 @@ extend type Mutation {
   deleteCustomKeyValues(keys: [String!]!): CustomKeyValuePayload!
 }
 
-"Cluster properties are used to set global properties"
+"""
+A custom key value pair.
+> @l7-entity
+> @l7-identity-fields key
+> @l7-summary-fields goid,key,checksum
+> @l7-excluded-fields
+"""
 type CustomKeyValue {
     "The goid for the custom key value"
     goid : ID!

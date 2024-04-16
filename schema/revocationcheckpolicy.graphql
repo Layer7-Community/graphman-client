@@ -49,6 +49,13 @@ type RevocationCheckPolicyItem {
     signerThumbprintSha1s: [String!]
 }
 
+"""
+A trusted certificate revocation check policy.
+> @l7-entity
+> @l7-identity-fields name
+> @l7-summary-fields goid,name,checksum
+> @l7-excluded-fields
+"""
 type RevocationCheckPolicy {
     "The goid for this revocation check policy"
     goid : ID!

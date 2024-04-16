@@ -87,7 +87,7 @@ interface PublishedService {
     enabled: Boolean!
 }
 
-union HardwiredService = SoapService | WebApiService
+union HardwiredService = SoapService | WebApiService | L7Service
 
 "Support Http methods for Web API Service"
 enum HttpMethod {

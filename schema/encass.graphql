@@ -22,7 +22,13 @@ extend type Mutation {
     deleteEncassConfigs(names: [String!]!) : EncassConfigsPayload
 }
 
-"An Encapsulated Assertion Configuration"
+"""
+An encapsulated assertion configuration.
+> @l7-entity
+> @l7-identity-fields name
+> @l7-summary-fields goid,guid,name,checksum
+> @l7-excluded-fields
+"""
 type EncassConfig {
     "The goid for this encass config"
     goid : ID!

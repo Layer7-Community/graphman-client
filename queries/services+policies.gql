@@ -1,23 +1,8 @@
 query servicesPolicies {
-    webApiServices {
-        {{WebApiService}}
+    services {
+        {{L7Service:-policyRevision,policyRevisions}}
     }
-    soapServices {
-        {{SoapService}}
-    }
-	internalWebApiServices {
-        {{InternalWebApiService}}
-    }
-    internalSoapServices {
-        {{InternalSoapService}}
-    }
-	globalPolicies {
-        {{GlobalPolicy}}
-    }
-    backgroundTaskPolicies {
-        {{BackgroundTaskPolicy}}
-    }
-	policyFragments {
-        {{PolicyFragment}}
+	policies {
+        {{L7Policy:-policyRevision,policyRevisions}}
     }
 }

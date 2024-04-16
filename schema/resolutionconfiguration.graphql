@@ -35,6 +35,13 @@ type ServiceResolutionConfigsPayLoad {
     serviceResolutionConfigs: [ServiceResolutionConfig]!
 }
 
+"""
+A Layer7 service resolution configuration.
+> @l7-entity
+> @l7-identity-fields goid
+> @l7-summary-fields goid,checksum
+> @l7-excluded-fields
+"""
 type ServiceResolutionConfig {
     "The internal entity unique identifier"
     goid : ID!
