@@ -5,8 +5,10 @@ const HOME_DIR = process.env.GRAPHMAN_HOME;
 const MODULES_DIR = HOME_DIR + "/modules";
 const QUERIES_DIR = HOME_DIR + "/queries";
 const SCHEMA_DIR = HOME_DIR + "/schema";
+const POLICY_SCHEMA_DIR = HOME_DIR + "/policyschema";
 const SCHEMA_METADATA_BASE_FILE = "metadata-base.json";
 const SCHEMA_METADATA_FILE = "metadata.json";
+const POLICY_SCHEMA_FILE = "schema.json";
 
 const NONE_LEVEL = 0;
 const WARN_LEVEL = 1;
@@ -60,6 +62,10 @@ module.exports = {
 
     schemaMetadataFile: function (schemaVersion) {
         return this.path(this.schemaDir(schemaVersion), SCHEMA_METADATA_FILE);
+    },
+
+    policySchemaFile: function () {
+      return this.path(POLICY_SCHEMA_DIR, POLICY_SCHEMA_FILE)
     },
 
     queriesDir: function (schemaVersion) {

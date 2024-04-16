@@ -5,6 +5,7 @@ const SCHEMA_VERSION = "v10.1-CR04";
 const utils = require("./graphman-utils");
 const hutils = require("./http-utils");
 const gqlschema = require("./graphql-schema");
+const policySchema = require("./policy-schema");
 
 const PRE_REQUEST_EXTN = utils.extension("graphman-pre-request");
 const PRE_RESPONSE_EXTN = utils.extension("graphman-pre-response");
@@ -14,6 +15,7 @@ const https = require("https");
 module.exports = {
     loadedConfig: null,
     metadata: null,
+    policySchema: null,
 
     init: function (params) {
         let config = JSON.parse(utils.readFile(utils.home() + "/graphman.configuration"));
@@ -35,6 +37,7 @@ module.exports = {
 
         this.metadata = gqlschema.build(config.schemaVersion, false);
         this.loadedConfig = config;
+        this.policySchema = policySchema.build();
     },
 
     configuration: function () {
