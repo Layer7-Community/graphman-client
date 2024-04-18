@@ -88,7 +88,7 @@ let type1Exploder = (function () {
         if (options.explodeKeys && key === "keys") {
             if (entity.p12) {
                 // utils.writeFile(`${targetDir}/${filename}.p12`, atob(entity.p12));
-                utils.writeFile(`${targetDir}/${filename}.p12`, Buffer.from(entity.p12, 'base64').toString());
+                utils.writeFileBinary(`${targetDir}/${filename}.p12`, Buffer.from(entity.p12, 'base64').toString('binary'));
                 entity.p12 = `{${filename}.p12}`;
             }
 
