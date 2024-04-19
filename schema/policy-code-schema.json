@@ -17,7 +17,7 @@
                             "type": "string"
                         }
                     },
-					"unevaluatedProperties": false
+                    "unevaluatedProperties": false
                 }
             }
         },
@@ -70,13 +70,7 @@
                             "type": "string"
                         },
                         "contentType": {
-                            "type": "string",
-                            "enum": [
-                                "text/xml; charset=utf-8",
-                                "text/plain; charset=utf-8",
-                                "application/soap+xml; charset=utf-8",
-                                "application/json; charset=utf-8"
-                            ]
+                            "type": "string"
                         },
                         "dataType": {
                             "type": "string",
@@ -135,7 +129,7 @@
                         "expression",
                         "variable"
                     ],
-					"unevaluatedProperties": false
+                    "unevaluatedProperties": false
                 }
             },
             "unevaluatedProperties": false
@@ -169,7 +163,7 @@
                     "required": [
                         "policyName"
                     ],
-					"unevaluatedProperties": false
+                    "unevaluatedProperties": false
                 }
             },
             "unevaluatedProperties": false
@@ -195,7 +189,7 @@
                     "required": [
                         "encassName"
                     ],
-					"unevaluatedProperties": false
+                    "unevaluatedProperties": false
                 }
             },
             "unevaluatedProperties": false
