@@ -33,27 +33,19 @@ function validateBundle(obj) {
 function validateEntities(entities) {
     for (const entity of entities) {
         policyErrors = false
-        var name
-        for (const [propertyName, propertyValue] of Object.entries(entity)) {
-            if (propertyName == "name") {
-                name = propertyValue
-            } else if (propertyName == "policy") {
-                validatePolicy(propertyValue)
-            }
-        }
+        utils.info("Validating policy of entity " + entity.name);
+        validatePolicy(entity.policy)
         if (policyErrors) {
-            utils.info("Invalid policy code in " + name);
+            utils.info("Invalid policy code");
         }
     }
 }
 
 function validatePolicy(policy) {
-    for (const [propertyName, propertyValue] of Object.entries(policy)) {
-        if (propertyName == "code") {
-            validatePolicyCode(propertyValue)
-        } else if (propertyName == "json") {
-            validatePolicyCode(JSON.parse(propertyValue))
-        }
+    if (policy.code) {
+        validatePolicyCode(policy.code)
+    } else if (policy.json) {
+        validatePolicyCode(JSON.parse(policy.json))
     }
 }
 
