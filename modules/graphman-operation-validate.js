@@ -51,13 +51,15 @@ function validatePolicy(policy) {
     for (const [propertyName, propertyValue] of Object.entries(policy)) {
         if (propertyName == "code") {
             validatePolicyCode(propertyValue)
+        } else if (propertyName == "json") {
+            validatePolicyCode(JSON.parse(propertyValue))
         }
     }
 }
 
-function validatePolicyCode(obj) {
-    if (Object.keys(obj).length == 1 && Object.keys(obj)[0] == "All") {
-        validateAssertions(Object.values(obj)[0])
+function validatePolicyCode(code) {
+    if (Object.keys(code).length == 1 && Object.keys(code)[0] == "All") {
+        validateAssertions(Object.values(code)[0])
     } else {
         utils.info("Given policy is invalid");
     }
