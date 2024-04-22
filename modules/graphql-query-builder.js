@@ -122,7 +122,17 @@ function buildQuery(queryIdPrefix, queryIdSuffix) {
 
 function substitutePolicyCodeField(text, policyCodeFormat) {
     if (!policyCodeFormat || policyCodeFormat === "xml") return text;
-    return text.replaceAll(/policy[\s]*{[\s]*xml([\s]*|})/g, function (subtext, subgroup) {
+
+    text = text.replaceAll(/policy[\s]*(@[^{]+)?{[^}]+}/g, function (subtext) {
+        return subtext.replace("xml", policyCodeFormat);
+    });
+
+    text = text.replaceAll(/policyRevisions[\s]*(@[^{]+)?{[^}]+}/g, function (subtext) {
+        return subtext.replace("xml", policyCodeFormat);
+    });
+
+    return text.replaceAll(/policyRevisions[\s]*(@[^{]+)?{[^}]+}/g, function (subtext) {
         return subtext.replace("xml", policyCodeFormat);
     });
 }
+
