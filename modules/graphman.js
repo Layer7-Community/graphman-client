@@ -33,6 +33,9 @@ module.exports = {
             utils.warn(`specified schema (${config.schemaVersion}) is missing, falling back to the default`);
         }
 
+        config.properties = config.properties || {};
+        if (!config.properties.policyCodeFormat) config.properties.policyCodeFormat = "xml";
+
         this.metadata = gqlschema.build(config.schemaVersion, false);
         this.loadedConfig = config;
     },

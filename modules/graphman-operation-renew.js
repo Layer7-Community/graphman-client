@@ -82,7 +82,7 @@ function renewEntities(gateway, entities, type) {
         variables: queryInfo.variables
     };
 
-    gql.query = queryBuilder.expandQuery(gql.query);
+    gql.query = queryBuilder.expandQuery(gql.query, graphman.configuration().properties);
     gql.query = gql.query.replaceAll("hardwiredService{ {{HardwiredService}} }", "");
     return renewInvoker(gateway, gql, typeObj);
 }

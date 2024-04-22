@@ -1,8 +1,0 @@
-query servicesPolicies {
-    services {
-        {{L7Service:-policyRevision,policyRevisions}}
-    }
-	policies {
-        {{L7Policy:-policyRevision,policyRevisions}}
-    }
-}

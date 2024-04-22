@@ -12,5 +12,9 @@
         "password": "7layer",
         "rejectUnauthorized": false,
         "passphrase": "7layer"
+    },
+
+    "properties": {
+        "policyCodeFormat": "xml"
     }
 }
