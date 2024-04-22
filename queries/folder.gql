@@ -1,103 +1,25 @@
-query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = false, $includeDirectDependencies: Boolean = false, $policyAsYaml: Boolean = false) {
+query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = false) {
     
-    webApiServicesByFolderPath (folderPath: $folderPath) {
-        {{WebApiService:-policy}}
+    servicesByFolderPath (folderPath: $folderPath) {
+        {{L7Service:-policy,policyRevision,policyRevisions}}
         policy {
-            xml @skip (if: $policyAsYaml)
-            {{PolicyAsYaml}} @include (if: $policyAsYaml)
+            xml
             allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency}}
-            }
-			directDependencies @include (if: $includeDirectDependencies) {
-                {{PolicyDependency}}
-            }
-        }
-    }
-	
-    soapServicesByFolderPath (folderPath: $folderPath) {
-        {{SoapService:-policy}}
-        policy {
-            xml @skip (if: $policyAsYaml)
-            {{PolicyAsYaml}} @include (if: $policyAsYaml)
-            allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency}}
-            }
-			directDependencies @include (if: $includeDirectDependencies) {
-                {{PolicyDependency}}
-            }
-        }
-    }
-	
-	internalWebApiServicesByFolderPath (folderPath: $folderPath) {
-        {{WebApiService:-policy}}
-        policy {
-            xml @skip (if: $policyAsYaml)
-            {{PolicyAsYaml}} @include (if: $policyAsYaml)
-            allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency}}
-            }
-			directDependencies @include (if: $includeDirectDependencies) {
-                {{PolicyDependency}}
-            }
-        }
-    }
-	
-    internalSoapServicesByFolderPath (folderPath: $folderPath) {
-        {{SoapService:-policy}}
-        policy {
-            xml @skip (if: $policyAsYaml)
-            {{PolicyAsYaml}} @include (if: $policyAsYaml)
-            allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency}}
-            }
-			directDependencies @include (if: $includeDirectDependencies) {
-                {{PolicyDependency}}
-            }
-        }
-    }
-	
-	encassConfigsByFolderPath (folderPath: $folderPath) {
-        {{EncassConfig}}
-    }
-	
-	globalPoliciesByFolderPath (folderPath: $folderPath) {
-        {{GlobalPolicy:-policy}}
-        policy {
-            xml @skip (if: $policyAsYaml)
-            {{PolicyAsYaml}} @include (if: $policyAsYaml)
-            allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency}}
-            }
-			directDependencies @include (if: $includeDirectDependencies) {
-                {{PolicyDependency}}
+                {{PolicyDependency:-policyFragments,ldaps,fips,fipUsers,fipGroups}}
             }
         }
     }
 
-	backgroundTaskPoliciesByFolderPath (folderPath: $folderPath) {
-        {{BackgroundTaskPolicy:-policy}}
-        policy {
-            xml @skip (if: $policyAsYaml)
-            {{PolicyAsYaml}} @include (if: $policyAsYaml)
-            allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency}}
-            }
-			directDependencies @include (if: $includeDirectDependencies) {
-                {{PolicyDependency}}
-            }
-        }
+	encassConfigsByFolderPath (folderPath: $folderPath) {
+        {{EncassConfig}}
     }
-	
-	policyFragmentsByFolderPath (folderPath: $folderPath) {
-        {{PolicyFragment:-policy}}
+
+	policiesByFolderPath (folderPath: $folderPath) {
+        {{L7Policy:-policy,policyRevision,policyRevisions}}
         policy {
-            xml @skip (if: $policyAsYaml)
-            {{PolicyAsYaml}} @include (if: $policyAsYaml)
+            xml
             allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency}}
-            }
-			directDependencies @include (if: $includeDirectDependencies) {
-                {{PolicyDependency}}
+                {{PolicyDependency:-policyFragments,ldaps,fips,fipUsers,fipGroups}}
             }
         }
     }

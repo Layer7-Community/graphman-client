@@ -1,6 +1,6 @@
-query policyByName ($name: String!, $includeAllDependencies: Boolean = false, $includePolicyRevision: Boolean = false, $includePolicyRevisions: Boolean = false) {
-    policyByName (name: $name) {
-        {{L7Policy:-policy,policyRevision,policyRevisions}}
+query serviceByResolutionPath ($resolutionPath: String!, $includeAllDependencies: Boolean = false, $includePolicyRevision: Boolean = false, $includePolicyRevisions: Boolean = false) {
+    serviceByResolutionPath (resolutionPath: $resolutionPath) {
+        {{L7Service:-policy,policyRevision,policyRevisions}}
          policy {
             xml
             allDependencies @include (if: $includeAllDependencies) {

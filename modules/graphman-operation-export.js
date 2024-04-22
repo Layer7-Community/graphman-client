@@ -13,7 +13,7 @@ module.exports = {
             throw "source gateway details are missing";
         }
 
-        adjustParameters(params);
+        adjustParameters(params, config);
 
         let startDate = Date.now();
         this.export(
@@ -71,24 +71,18 @@ module.exports = {
         console.log("        # use this option to exclude dependency entities from the exported bundled entities.");
         console.log("      --excludeGoids");
         console.log("        # use this option to exclude Goids from the exported bundled entities.");
-        console.log("      --policyAsYaml");
-        console.log("        # use this option to export policy in YAML format.");
         console.log("      --sourceGateway.*");
         console.log("        # use this option(s) to override the source gateway details from the graphman configuration");
     }
 }
 
-function adjustParameters(params) {
+function adjustParameters(params, config) {
     // TODO: any better way to handle these customizations
     params.variables = params.variables || {};
     params.options = params.options || {};
 
     if (params.using && (params.using === "encass" || params.using.startsWith("encass:")) && params.variables) {
         params.variables.policyName = params.variables.policyName || params.variables.name;
-    }
-
-    if (params.policyAsYaml) {
-        params.variables.policyAsYaml = true;
     }
 
     params.options.bundleDefaultAction = params.bundleDefaultAction;
@@ -101,6 +95,10 @@ function adjustParameters(params) {
 
     if (params.excludeGoids) {
         params.options.excludeGoids = true;
+    }
+
+    if (!params.options.policyCodeFormat) {
+        params.options.policyCodeFormat = config.properties.policyCodeFormat;
     }
 }
 

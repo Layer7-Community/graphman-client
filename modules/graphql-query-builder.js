@@ -35,10 +35,6 @@ module.exports = {
         const gql = utils.existsFile(queryFilename) ? utils.readFile(queryFilename) : buildQuery(queryIdPrefix, queryIdSuffix);
 
         options = options || {};
-        if (!variables.policyAsYaml) {
-            SCHEMA_METADATA.types["PolicyAsYaml"].fields = ["xml"];
-            SCHEMA_METADATA.types["PolicyAsYaml"].summaryFields = ["xml"];
-        }
 
         // look for specific version of query if exists
         if (queryIdSuffix) {
@@ -59,15 +55,15 @@ module.exports = {
         gql.query = gql.query.replaceAll(/{{([^}]+)}}/g, function (subtext, file) {
             return file.endsWith(".gql") ? utils.readFile(`${QUERIES_DIR}/${file}`) : subtext;
         });
-        gql.query = expandQuery(gql.query);
+        gql.query = substitutePolicyCodeField(expandQuery(gql.query), options.policyCodeFormat);
         gql.variables = Object.assign(gql.variables || {}, variables);
         gql.options = options;
 
         return gql;
     },
 
-    expandQuery: function (query) {
-        return expandQuery(query);
+    expandQuery: function (query, options) {
+        return substitutePolicyCodeField(expandQuery(query), options.policyCodeFormat);
     }
 }
 
@@ -122,4 +118,11 @@ function buildQuery(queryIdPrefix, queryIdSuffix) {
     } else {
         throw "unrecognized query " + queryIdPrefix;
     }
+}
+
+function substitutePolicyCodeField(text, policyCodeFormat) {
+    if (!policyCodeFormat || policyCodeFormat === "xml") return text;
+    return text.replaceAll(/policy[\s]*{[\s]*xml([\s]*|})/g, function (subtext, subgroup) {
+        return subtext.replace("xml", policyCodeFormat);
+    });
 }

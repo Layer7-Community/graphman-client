@@ -68,7 +68,7 @@ function readBundle(gateway, file) {
             utils.info("retrieving the gateway configuration summary from " + gateway.address);
             opExport.export(
                 gateway,
-                queryBuilder.build("summary", {}),
+                queryBuilder.build("summary", {}, graphman.configuration().properties),
                 data => resolve(data.data)
             );
         }
