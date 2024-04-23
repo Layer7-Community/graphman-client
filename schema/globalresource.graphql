@@ -25,7 +25,13 @@ extend type Mutation {
     deleteDtds(systemIds: [String!]!) : DtdsPayload
 }
 
-"An XML Schema which can be referred to in policy, for example in the validate xml schema assertion"
+"""
+An XML Schema which can be referred to in policy, for example in the validate xml schema assertion.
+> @l7-entity
+> @l7-identity-fields systemId
+> @l7-summary-fields goid,systemId,checksum
+> @l7-excluded-fields
+"""
 type Schema {
     "Internal goid for this schema"
     goid : ID!
@@ -42,7 +48,13 @@ type Schema {
     content : String!
 }
 
-"A Document Type Definition (DTD) which can be referred to in policy"
+"""
+A Document Type Definition (DTD) which can be referred to in policy.
+> @l7-entity
+> @l7-identity-fields systemId
+> @l7-summary-fields goid,systemId,checksum
+> @l7-excluded-fields
+"""
 type Dtd {
     "Internal goid for this DTD"
     goid : ID!

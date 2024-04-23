@@ -1,28 +1,15 @@
 query folderSummary ($folderPath: String!) {
     
-    webApiServicesByFolderPath (folderPath: $folderPath) {
-        {{WebApiService:summary}}
+    servicesByFolderPath (folderPath: $folderPath) {
+        {{L7Service:summary}}
     }
-    soapServicesByFolderPath (folderPath: $folderPath) {
-        {{SoapService:summary}}
-    }
-	internalWebApiServicesByFolderPath (folderPath: $folderPath) {
-        {{InternalWebApiService:summary}}
-    }
-    internalSoapServicesByFolderPath (folderPath: $folderPath) {
-        {{InternalSoapService:summary}}
-    }
-	encassConfigsByFolderPath (folderPath: $folderPath) {
+
+    encassConfigsByFolderPath (folderPath: $folderPath) {
         {{EncassConfig:summary}}
     }
-	globalPoliciesByFolderPath (folderPath: $folderPath) {
-        {{GlobalPolicy:summary}}
-    }
-    backgroundTaskPoliciesByFolderPath (folderPath: $folderPath) {
-        {{BackgroundTaskPolicy:summary}}
-    }
-    policyFragmentsByFolderPath (folderPath: $folderPath) {
-        {{PolicyFragment:summary}}
+
+    policiesByFolderPath (folderPath: $folderPath) {
+        {{L7Policy:summary}}
     }
 	
 }

@@ -1,29 +1,13 @@
 query summary {
-    webApiServices {
-        {{WebApiService:summary}}
-    }
-    soapServices {
-        {{SoapService:summary}}
-    }
-    internalWebApiServices {
-        {{InternalWebApiService:summary}}
-    }
-    internalSoapServices {
-        {{InternalSoapService:summary}}
+    services {
+        {{L7Service:summary}}
     }
     encassConfigs {
         {{EncassConfig:summary}}
     }
-    globalPolicies {
-        {{GlobalPolicy:summary}}
+    policies {
+        {{L7Policy:summary}}
     }
-    backgroundTaskPolicies {
-        {{BackgroundTaskPolicy:summary}}
-    }
-    policyFragments {
-        {{PolicyFragment:summary}}
-    }
-    
     activeConnectors {
         {{ActiveConnector:summary}}
     }
@@ -39,14 +23,14 @@ query summary {
     emailListeners {
         {{EmailListener:summary}}
     }
-    fips {
-        {{Fip:summary}}
+    federatedIdps {
+        {{FederatedIdp:summary}}
     }
-    fipGroups {
-        {{FipGroup:summary}}
+    federatedGroups {
+        {{FederatedGroup:summary}}
     }
-    fipUsers {
-        {{FipUser:summary}}
+    federatedUsers {
+        {{FederatedUser:summary}}
     }
     internalDtds {
         {{Dtd:summary}}
@@ -69,8 +53,8 @@ query summary {
     keys {
         {{Key:summary}}
     }
-    ldaps {
-        {{Ldap:summary}}
+    ldapIdps {
+        {{LdapIdp:summary}}
     }
     listenPorts {
         {{ListenPort:summary}}
@@ -104,5 +88,14 @@ query summary {
     }
     customKeyValues {
         {{CustomKeyValue:summary}}
+    }
+    simpleLdapIdps {
+        {{SimpleLdapIdp:summary}}
+    }
+    policyBackedIdps {
+        {{PolicyBackedIdp:summary}}
+    }
+    internalIdps {
+        {{InternalIdp:summary}}
     }
 }

@@ -25,6 +25,13 @@ input FolderInput {
     checksum : String
 }
 
+"""
+A folder that is used to group services, policies, and other folders.
+> @l7-entity
+> @l7-identity-fields path
+> @l7-summary-fields goid,name,path,checksum
+> @l7-excluded-fields
+"""
 type Folder {
     "The goid for the folder"
     goid : ID!

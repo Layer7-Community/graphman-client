@@ -1,42 +1,42 @@
 extend type Query {
     "Get all soap services"
-    soapServices : [SoapService]!
+    soapServices : [SoapService]! @deprecated(reason: "Use 'services' instead.")
     "Get all Internal soap services"
-    internalSoapServices : [InternalSoapService]!
+    internalSoapServices : [InternalSoapService]! @deprecated(reason: "Use 'services' instead.")
     "Get soap services by name"
-    soapServicesByName(name: String!) : [SoapService]!
+    soapServicesByName(name: String!) : [SoapService]! @deprecated(reason: "Use 'servicesByName' instead.")
     "Get soap service by name. Returns none if more than one are found."
-    soapServiceByName(name: String!) : SoapService
+    soapServiceByName(name: String!) : SoapService @deprecated(reason: "Use 'serviceByName' instead.")
     "Get Internal soap service by name. Returns none if more than one are found."
-    internalSoapServiceByName(name: String!) : InternalSoapService
+    internalSoapServiceByName(name: String!) : InternalSoapService @deprecated(reason: "Use 'serviceByName' instead.")
     "Get soap services inside a folder"
-    soapServicesByFolderPath(folderPath: String!) : [SoapService]!
+    soapServicesByFolderPath(folderPath: String!) : [SoapService]! @deprecated(reason: "Use 'servicesByFolderPath' instead.")
     "Get Internal soap services inside a folder"
-    internalSoapServicesByFolderPath(folderPath: String!) : [InternalSoapService]!
+    internalSoapServicesByFolderPath(folderPath: String!) : [InternalSoapService]! @deprecated(reason: "Use 'servicesByFolderPath' instead.")
     "Get soap service by goid"
     soapServiceByGoid(goid: ID!) : SoapService
     "Get soap service by resolver"
-    soapServiceByResolver(resolver: SoapServiceResolverInput!) : SoapService
+    soapServiceByResolver(resolver: SoapServiceResolverInput!) : SoapService @deprecated(reason: "Use 'serviceByResolvers' instead.")
 }
 
 extend type Mutation {
     "Create or update soap services"
-    setSoapServices(input: [SoapServiceInput!]!) : SoapServicesPayload
+    setSoapServices(input: [SoapServiceInput!]!) : SoapServicesPayload @deprecated(reason: "Use 'setServices' instead.")
     "Create or update Internal soap services"
-    setInternalSoapServices(input: [SoapServiceInput!]!) : InternalSoapServicesPayload
+    setInternalSoapServices(input: [SoapServiceInput!]!) : InternalSoapServicesPayload @deprecated(reason: "Use 'setServices' instead.")
     "Delete existing soap services given their resolution details"
-    deleteSoapServices(resolvers: [SoapServiceResolverInput!]!) : SoapServicesPayload
+    deleteSoapServices(resolvers: [SoapServiceResolverInput!]!) : SoapServicesPayload @deprecated(reason: "Use 'deleteServices' instead.")
     "Delete existing Internal soap services given their resolution details"
-    deleteInternalSoapServices(resolvers: [SoapServiceResolverInput!]!) : InternalSoapServicesPayload
+    deleteInternalSoapServices(resolvers: [SoapServiceResolverInput!]!) : InternalSoapServicesPayload @deprecated(reason: "Use 'deleteServices' instead.")
 }
 
-enum SoapVersion {
-    SOAP_1_1
-    SOAP_1_2
-    UNKNOWN
-}
-
-"A Soap service published on the Layer7 Gateway"
+"""
+A Soap service published on the Layer7 Gateway
+> @l7-entity
+> @l7-identity-fields resolutionPath,resolvers
+> @l7-summary-fields goid,guid,name,resolutionPath,resolvers,checksum
+> @l7-excluded-fields
+"""
 type SoapService implements PublishedService {
     "The goid for this service"
     goid : ID!
@@ -71,7 +71,13 @@ type SoapService implements PublishedService {
     policy: Policy!
 }
 
-"A Soap service published on the Layer7 Gateway"
+"""
+A Internal Soap service published on the Layer7 Gateway
+> @l7-entity
+> @l7-identity-fields resolutionPath,resolvers
+> @l7-summary-fields goid,guid,name,resolutionPath,resolvers,checksum
+> @l7-excluded-fields
+"""
 type InternalSoapService implements PublishedService {
     "The goid for this service"
     goid : ID!
@@ -140,7 +146,7 @@ input SoapServiceInput {
    "The WSDL of the soap service"
    wsdl: String!
    "The resolution path of the service"
-   resolutionPath: String
+   resolutionPath: String = "/ssg/soap"
    "Soap service resolvers"
    resolvers: SoapServiceResolverInput
    "The policy"

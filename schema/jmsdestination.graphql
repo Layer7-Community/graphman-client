@@ -32,7 +32,13 @@ extend type Mutation {
         names: [String!]!): JmsDestinationsPayload
 }
 
-"A JMS Destination"
+"""
+A JMS destination (queue or topic).
+> @l7-entity
+> @l7-identity-fields name,direction,providerType
+> @l7-summary-fields goid,name,direction,providerType,checksum
+> @l7-excluded-fields
+"""
 type JmsDestination {
     "The goid for the JMS Destination"
     goid : ID!
@@ -52,11 +58,11 @@ type JmsDestination {
     "Whether this JMS destination is template"
     template: Boolean!
     "The initial context factory class name"
-    initialContextFactoryClassname: String!
+    initialContextFactoryClassname: String
     "The connection factory name"
-    connectionFactoryName: String!
+    connectionFactoryName: String
     "The JNDI URL"
-    jndiUrl: String!
+    jndiUrl: String
     "The JNDI username"
     jndiUsername: String
     "The JNDI password"
@@ -67,7 +73,7 @@ type JmsDestination {
     "The destination type"
     destinationType: String!
     "The destination name"
-    destinationName: String!
+    destinationName: String
     "The username for destination connection"
     destinationUsername: String
     "The password for destination connection"
@@ -104,11 +110,11 @@ input JmsDestinationInput {
     "The JMS provider type"
     providerType : String!
     "The initial context factory class name"
-    initialContextFactoryClassname: String!
+    initialContextFactoryClassname: String
     "The connection factory name"
-    connectionFactoryName: String!
+    connectionFactoryName: String
     "The JNDI URL"
-    jndiUrl: String!
+    jndiUrl: String
     "The JNDI username"
     jndiUsername: String
     "The JNDI password"
@@ -118,7 +124,7 @@ input JmsDestinationInput {
     "The destination type"
     destinationType: String!
     "The destination name"
-    destinationName: String!
+    destinationName: String
     "The username for destination connection"
     destinationUsername: String
     "The password for destination connection"

@@ -30,7 +30,7 @@ module.exports = {
         const inputBundle = butils.sanitize(utils.readFile(params.input), butils.IMPORT_USE, {excludeGoids: params.excludeGoids});
         butils.removeDuplicates(inputBundle);
 
-        const using = params.using ? params.using : 'mutation';
+        const using = params.using ? params.using : 'install-bundle';
         const mappings = params.mappings ? utils.mappings(params.mappings) : null;
 
         if (!params.bundleDefaultAction) {
@@ -57,7 +57,7 @@ module.exports = {
 
         PRE_BUNDLE_EXTN.call(revisedBundle);
 
-        request.body = queryBuilder.build(using, Object.assign(revisedBundle, params.variables));
+        request.body = queryBuilder.build(using, Object.assign(revisedBundle, params.variables), graphman.configuration().properties);
 
         if (isPartsNeeded(revisedBundle)) {
             const boundary = "--------" + Date.now();

@@ -1,6 +1,6 @@
 
-const VERSION = "v1.1";
-const SCHEMA_VERSION = "v10.1-CR04";
+const VERSION = "v1.2";
+const SCHEMA_VERSION = "v11.1.00";
 
 const utils = require("./graphman-utils");
 const hutils = require("./http-utils");
@@ -32,6 +32,9 @@ module.exports = {
         if (config.schemaVersion !== SCHEMA_VERSION && utils.schemaDir(config.schemaVersion) === utils.schemaDir()) {
             utils.warn(`specified schema (${config.schemaVersion}) is missing, falling back to the default`);
         }
+
+        config.properties = config.properties || {};
+        if (!config.properties.policyCodeFormat) config.properties.policyCodeFormat = "xml";
 
         this.metadata = gqlschema.build(config.schemaVersion, false);
         this.loadedConfig = config;
