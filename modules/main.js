@@ -22,8 +22,10 @@ try {
         operation(op).run(params);
     }
 } catch (e) {
-    if (typeof e !== 'object') {
-        console.log(e);
+    if (typeof e === 'string') {
+        utils.error(e);
+    } else if (typeof e === 'object' && e.name === 'GraphmanOperationError') {
+        utils.error(e.message);
     } else if (utils.loggingAt('debug')) {
         console.log(e);
     } else {

@@ -55,7 +55,7 @@ module.exports = {
         gql.query = gql.query.replaceAll(/{{([^}]+)}}/g, function (subtext, file) {
             return file.endsWith(".gql") ? utils.readFile(`${QUERIES_DIR}/${file}`) : subtext;
         });
-        gql.query = substitutePolicyCodeField(expandQuery(gql.query), options.policyCodeFormat);
+        gql.query = substituteAlternativeFields(expandQuery(gql.query), options);
         gql.variables = Object.assign(gql.variables || {}, variables);
         gql.options = options;
 
@@ -63,7 +63,7 @@ module.exports = {
     },
 
     expandQuery: function (query, options) {
-        return substitutePolicyCodeField(expandQuery(query), options.policyCodeFormat);
+        return substituteAlternativeFields(expandQuery(query), options);
     }
 }
 
@@ -120,19 +120,21 @@ function buildQuery(queryIdPrefix, queryIdSuffix) {
     }
 }
 
-function substitutePolicyCodeField(text, policyCodeFormat) {
-    if (!policyCodeFormat || policyCodeFormat === "xml") return text;
+function substituteAlternativeFields(text, options) {
+    // substitute alternative field for policy code (xml or json or yaml or code)
+    if (options.policyCodeFormat && options.policyCodeFormat !== "xml") {
+        text = text.replaceAll(/(policy|policyRevision|policyRevisions)[^{]+[{][^}]+}/g, function (subtext) {
+            return subtext.replace("xml", options.policyCodeFormat);
+        });
+    }
 
-    text = text.replaceAll(/policy[\s]*(@[^{]+)?{[^}]+}/g, function (subtext) {
-        return subtext.replace("xml", policyCodeFormat);
-    });
+    // substitute alternative field for key detail (p12 or pem)
+    if (options.keyFormat && options.keyFormat !== "p12") {
+        text = text.replaceAll(/(keys|keyBy[\w]+)[^{]+[{][^}]+}/g, function (subtext) {
+            return subtext.replace("p12", options.keyFormat);
+        });
+    }
 
-    text = text.replaceAll(/policyRevisions[\s]*(@[^{]+)?{[^}]+}/g, function (subtext) {
-        return subtext.replace("xml", policyCodeFormat);
-    });
-
-    return text.replaceAll(/policyRevisions[\s]*(@[^{]+)?{[^}]+}/g, function (subtext) {
-        return subtext.replace("xml", policyCodeFormat);
-    });
+    return text;
 }
 

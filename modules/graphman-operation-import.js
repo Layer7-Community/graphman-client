@@ -12,21 +12,22 @@ module.exports = {
             throw "Missing --input argument";
         }
 
-        const config = graphman.configuration(params);
+        const config = graphman.configuration();
+        const gateway = graphman.gatewayConfiguration(params.gateway) ||
+            graphman.overridenGatewayConfiguration(params.targetGateway) ||
+            config.defaultGateway;
 
-        if (!config.targetGateway) {
-            throw "target gateway details are missing";
+        if (!gateway.address) {
+            throw utils.newError(`${gateway.name} gateway details are missing`);
         }
 
-        if (config.sourceGateway && config.sourceGateway.address === config.targetGateway.address) {
-            if (!params.force) {
-                utils.warn("source and target gateways cannot be the same, ignoring the operation");
-                utils.warn("  please use --force option to override");
-                return;
-            }
+        if (!gateway.allowMutations) {
+            utils.warn(`${gateway.name} gateway is not opted for mutations, ignoring the operation`);
+            utils.warn("  please modify the gateway profile in the graphman configuration and try again");
+            return;
         }
 
-        const request = graphman.request(config.targetGateway);
+        const request = graphman.request(gateway);
         const inputBundle = butils.sanitize(utils.readFile(params.input), butils.IMPORT_USE, {excludeGoids: params.excludeGoids});
         butils.removeDuplicates(inputBundle);
 
@@ -57,7 +58,7 @@ module.exports = {
 
         PRE_BUNDLE_EXTN.call(revisedBundle);
 
-        request.body = queryBuilder.build(using, Object.assign(revisedBundle, params.variables), graphman.configuration().properties);
+        request.body = queryBuilder.build(using, Object.assign(revisedBundle, params.variables), graphman.configuration().options);
 
         if (isPartsNeeded(revisedBundle)) {
             const boundary = "--------" + Date.now();
@@ -84,12 +85,12 @@ module.exports = {
 
         console.log("      --excludeGoids");
         console.log("        # use this option to exclude Goids from the importing bundled entities.");
+        console.log("      --gateway <name>");
+        console.log("        # specify the name of gateway profile from the graphman configuration");
         console.log("      --targetGateway.*");
-        console.log("        # use this option(s) to override the target gateway details from the graphman configuration");
+        console.log("        # (DEPRECATED, use --gateway option) use this option(s) to override the target gateway details from the graphman configuration");
         console.log("      --revise");
         console.log("        # to revise the importing bundled entities (especially for matching the GOIDs) with respect to target gateway configuration");
-        console.log("      --force");
-        console.log("        # to force the import to the target gateway when source and target gateway details are found to be same");
     }
 }
 

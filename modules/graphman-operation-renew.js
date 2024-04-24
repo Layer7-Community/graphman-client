@@ -12,9 +12,17 @@ module.exports = {
             throw "--input parameter is missing";
         }
 
+        const config = graphman.configuration();
+        const gateway = graphman.gatewayConfiguration(params.gateway) ||
+            config.defaultGateway;
+
+        if (!gateway.address) {
+            throw utils.newError(`${gateway.name} gateway details are missing`);
+        }
+
         const bundle = utils.readFile(params.input);
 
-        Promise.all(this.renew(graphman.configuration(params).sourceGateway, bundle, params.scope)).then(results => {
+        Promise.all(this.renew(gateway, bundle, params.scope)).then(results => {
             const renewedBundle = {};
 
             results.forEach(item => {
@@ -53,6 +61,8 @@ module.exports = {
 
     usage: function () {
         console.log("    renew --input <input-file> [--output <output-file>] [<options>]");
+        console.log("      --gateway <name>");
+        console.log("        # specify the name of gateway profile from the graphman configuration");
         console.log("      --scope <entity-type-plural-tag>");
         console.log("        # to select one or more entity types for renew operation.");
         console.log("        # repeat this option to select multiple entity types.");
@@ -82,7 +92,7 @@ function renewEntities(gateway, entities, type) {
         variables: queryInfo.variables
     };
 
-    gql.query = queryBuilder.expandQuery(gql.query, graphman.configuration().properties);
+    gql.query = queryBuilder.expandQuery(gql.query, graphman.configuration().options);
     gql.query = gql.query.replaceAll("hardwiredService{ {{HardwiredService}} }", "");
     return renewInvoker(gateway, gql, typeObj);
 }

@@ -399,7 +399,8 @@
             "ListenPort": "hardwiredService",
             "L7Policy": "policyRevision,policyRevisions",
             "L7Service": "policyRevision,policyRevisions",
-            "ActiveConnector": "hardwiredService"
+            "ActiveConnector": "hardwiredService",
+            "Key": "pem"
         }
     },
     "enumTypes": [],
