@@ -83,12 +83,15 @@ function renewEntities(gateway, entities, type) {
         buildQueryForSoapServiceEntities(entities, type, typeObj, queryInfo);
     } else if (type === 'FipUser' || type === 'FipGroup') {
         buildQueryForFipUserOrGroupEntities(entities, type, typeObj, queryInfo);
+    } else if (type === 'InternalIdp') {
+        queryInfo.head = `query reviseBundleFor${type}\n`;
+        queryInfo.body += `    internalIdps { {{InternalIdp}} }\n`;
     } else {
         buildQueryForEntities(entities, type, typeObj, queryInfo);
     }
 
     const gql = {
-        query: `${queryInfo.head} ){\n ${queryInfo.body} }\n`,
+        query: `${queryInfo.head} {\n ${queryInfo.body} }\n`,
         variables: queryInfo.variables
     };
 
@@ -111,6 +114,7 @@ function buildQueryForSoapServiceEntities(entities, type, typeObj, queryInfo) {
         }
         utils.info(`  using ${typeObj.idField}=${idFieldValue.resolutionPath},${idFieldValue.baseUri},${idFieldValue.soapAction}`);
     });
+    queryInfo.head += ')';
 }
 
 function buildQueryForFipUserOrGroupEntities(entities, type, typeObj, queryInfo) {
@@ -126,18 +130,22 @@ function buildQueryForFipUserOrGroupEntities(entities, type, typeObj, queryInfo)
         queryInfo.variables[refName + "Name"] = entity.name;
         utils.info(`  using providerName=${entity.providerName},name=${entity.name}`);
     });
+    queryInfo.head += ')';
 }
 
 function buildQueryForEntities(entities, type, typeObj, queryInfo) {
     let separator = "";
+    let excludedFields = SCHEMA_METADATA.parserHints.excludedFields[type];
+    excludedFields = excludedFields ? ":-" + excludedFields : "";
     entities.forEach((entity, index) => {
         const refName = `${typeObj.singularMethod}${index + 1}`;
         queryInfo.head += separator + `  $${refName}: String!`;
-        queryInfo.body += `    ${refName}:  ${typeObj.singularMethod} (${typeObj.idField}: $${refName}){ {{${type}}} }\n`;
+        queryInfo.body += `    ${refName}:  ${typeObj.singularMethod} (${typeObj.idField}: $${refName}){ {{${type}${excludedFields}}} }\n`;
         separator = ",\n";
         const idFieldValue = queryInfo.variables[refName] = entity[typeObj.idField];
         utils.info(`  using ${typeObj.idField}=${idFieldValue}`);
     });
+    queryInfo.head += ')';
 }
 
 function renewInvoker(gateway, query, typeObj) {

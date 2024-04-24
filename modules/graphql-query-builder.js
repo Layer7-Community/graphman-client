@@ -123,14 +123,14 @@ function buildQuery(queryIdPrefix, queryIdSuffix) {
 function substituteAlternativeFields(text, options) {
     // substitute alternative field for policy code (xml or json or yaml or code)
     if (options.policyCodeFormat && options.policyCodeFormat !== "xml") {
-        text = text.replaceAll(/(policy|policyRevision|policyRevisions)[^{]+[{][^}]+}/g, function (subtext) {
+        text = text.replaceAll(/(policy|policyRevision|policyRevisions)[^{]*[{][^}]+}/g, function (subtext) {
             return subtext.replace("xml", options.policyCodeFormat);
         });
     }
 
     // substitute alternative field for key detail (p12 or pem)
     if (options.keyFormat && options.keyFormat !== "p12") {
-        text = text.replaceAll(/(keys|keyBy[\w]+)[^{]+[{][^}]+}/g, function (subtext) {
+        text = text.replaceAll(/(keys|keyBy[\w]+)[^{]*[{][^}]+}/g, function (subtext) {
             return subtext.replace("p12", options.keyFormat);
         });
     }
