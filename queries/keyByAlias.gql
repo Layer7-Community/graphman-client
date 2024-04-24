@@ -1,5 +1,5 @@
 query keyByAlias($alias: String!) {
     keyByAlias(alias : $alias) {
-        {{Key}}
+        {{Key:-pem}}
     }
 }
