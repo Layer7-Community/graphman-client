@@ -1,15 +1,15 @@
 {
     "sourceGateway": {
-        "address": "https://localhost:8443/graphman",
+        "address": "https://192.168.2.202:8443/graphman",
         "username": "admin",
-        "password": "7layer",
+        "password": "Hilde64#",
         "rejectUnauthorized": false,
         "passphrase": "7layer"
     },
     "targetGateway": {
-        "address": "https://localhost:8443/graphman",
+        "address": "https://192.168.2.202:8443/graphman",
         "username": "admin",
-        "password": "7layer",
+        "password": "Hilde64#",
         "rejectUnauthorized": false,
         "passphrase": "7layer"
     }
