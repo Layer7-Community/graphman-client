@@ -51,7 +51,7 @@ query all {
         {{JmsDestination}}
     }
     keys {
-        {{Key}}
+        {{Key:-pem}}
     }
     ldapIdps {
         {{LdapIdp}}

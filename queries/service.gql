@@ -8,22 +8,10 @@ query serviceByResolutionPath ($resolutionPath: String!, $includeAllDependencies
             }
         }
         policyRevision @include (if: $includePolicyRevision) {
-            goid
-            ordinal
-            active
-            comment
-            author
-            time
-            xml
+            {{PolicyRevision:-json,yaml,code}}
         }
         policyRevisions @include (if: $includePolicyRevisions) {
-            goid
-            ordinal
-            active
-            comment
-            author
-            time
-            xml
+            {{PolicyRevision:-json,yaml,code}}
         }
     }
 }
