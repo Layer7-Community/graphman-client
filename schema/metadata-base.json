@@ -420,6 +420,8 @@
         {"bundleName": "federatedGroups", "typeName": "FederatedGroup", "identityField": "name", "identityFields": [], "summaryFields": ["goid", "name", "providerName", "checksum"], "fields": []},
         {"bundleName": "federatedUsers", "typeName": "FederatedUser", "identityField": "name", "identityFields": ["login", "providerName", "name"], "summaryFields": ["goid", "login", "providerName", "name", "checksum"], "fields": []},
         {"bundleName": "globalPolicies", "typeName": "GlobalPolicy", "identityField": "tag", "identityFields": [], "summaryFields": ["goid", "guid", "tag", "checksum"], "fields": []},
+        {"bundleName": "internalDtds", "typeName": "Dtd", "identityField": "systemId", "identityFields": [], "summaryFields": ["goid", "systemId", "checksum"], "fields": []},
+        {"bundleName": "internalSchemas", "typeName": "Schema", "identityField": "systemId", "identityFields": [], "summaryFields": ["goid", "systemId", "checksum"], "fields": []},
         {"bundleName": "internalIdps", "typeName": "InternalIdp", "identityField": "name", "identityFields": [], "summaryFields": ["goid", "name", "checksum"], "fields": []},
         {"bundleName": "internalGroups", "typeName": "InternalGroup", "identityField": "name", "identityFields": [], "summaryFields": ["goid", "name", "checksum"], "fields": []},
         {"bundleName": "internalUsers", "typeName": "InternalUser", "identityField": "login", "identityFields": [], "summaryFields": ["goid", "login", "checksum"], "fields": []},
