@@ -16,7 +16,18 @@ const FINE_LEVEL = 3;
 const DEBUG_LEVEL = 10;
 let logLevel = INFO_LEVEL;
 
+class GraphmanOperationError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = 'GraphmanOperationError';
+    }
+}
+
 module.exports = {
+    newError: function (msg) {
+        return new GraphmanOperationError(msg);
+    },
+
     loggingAt: function (level) {
         if (level === 'warn' && logLevel === WARN_LEVEL) return true;
         else if (level === 'info' && logLevel === INFO_LEVEL) return true;
@@ -160,6 +171,10 @@ module.exports = {
         console.log(text
             .replaceAll("\\r\\n", "\n")
             .replaceAll("\\n", "\n"));
+    },
+
+    error: function (message, ...args) {
+        this.log("[error] " + message, args);
     },
 
     warn: function (message, ...args) {

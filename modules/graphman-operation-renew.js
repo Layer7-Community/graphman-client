@@ -12,9 +12,17 @@ module.exports = {
             throw "--input parameter is missing";
         }
 
+        const config = graphman.configuration();
+        const gateway = graphman.gatewayConfiguration(params.gateway) ||
+            config.defaultGateway;
+
+        if (!gateway.address) {
+            throw utils.newError(`${gateway.name} gateway details are missing`);
+        }
+
         const bundle = utils.readFile(params.input);
 
-        Promise.all(this.renew(graphman.configuration(params).sourceGateway, bundle, params.scope)).then(results => {
+        Promise.all(this.renew(gateway, bundle, params.scope)).then(results => {
             const renewedBundle = {};
 
             results.forEach(item => {
@@ -53,6 +61,8 @@ module.exports = {
 
     usage: function () {
         console.log("    renew --input <input-file> [--output <output-file>] [<options>]");
+        console.log("      --gateway <name>");
+        console.log("        # specify the name of gateway profile from the graphman configuration");
         console.log("      --scope <entity-type-plural-tag>");
         console.log("        # to select one or more entity types for renew operation.");
         console.log("        # repeat this option to select multiple entity types.");
@@ -73,16 +83,19 @@ function renewEntities(gateway, entities, type) {
         buildQueryForSoapServiceEntities(entities, type, typeObj, queryInfo);
     } else if (type === 'FipUser' || type === 'FipGroup') {
         buildQueryForFipUserOrGroupEntities(entities, type, typeObj, queryInfo);
+    } else if (type === 'InternalIdp') {
+        queryInfo.head = `query reviseBundleFor${type}\n`;
+        queryInfo.body += `    internalIdps { {{InternalIdp}} }\n`;
     } else {
         buildQueryForEntities(entities, type, typeObj, queryInfo);
     }
 
     const gql = {
-        query: `${queryInfo.head} ){\n ${queryInfo.body} }\n`,
+        query: `${queryInfo.head} {\n ${queryInfo.body} }\n`,
         variables: queryInfo.variables
     };
 
-    gql.query = queryBuilder.expandQuery(gql.query, graphman.configuration().properties);
+    gql.query = queryBuilder.expandQuery(gql.query, graphman.configuration().options);
     gql.query = gql.query.replaceAll("hardwiredService{ {{HardwiredService}} }", "");
     return renewInvoker(gateway, gql, typeObj);
 }
@@ -101,6 +114,7 @@ function buildQueryForSoapServiceEntities(entities, type, typeObj, queryInfo) {
         }
         utils.info(`  using ${typeObj.idField}=${idFieldValue.resolutionPath},${idFieldValue.baseUri},${idFieldValue.soapAction}`);
     });
+    queryInfo.head += ')';
 }
 
 function buildQueryForFipUserOrGroupEntities(entities, type, typeObj, queryInfo) {
@@ -116,18 +130,22 @@ function buildQueryForFipUserOrGroupEntities(entities, type, typeObj, queryInfo)
         queryInfo.variables[refName + "Name"] = entity.name;
         utils.info(`  using providerName=${entity.providerName},name=${entity.name}`);
     });
+    queryInfo.head += ')';
 }
 
 function buildQueryForEntities(entities, type, typeObj, queryInfo) {
     let separator = "";
+    let excludedFields = SCHEMA_METADATA.parserHints.excludedFields[type];
+    excludedFields = excludedFields ? ":-" + excludedFields : "";
     entities.forEach((entity, index) => {
         const refName = `${typeObj.singularMethod}${index + 1}`;
         queryInfo.head += separator + `  $${refName}: String!`;
-        queryInfo.body += `    ${refName}:  ${typeObj.singularMethod} (${typeObj.idField}: $${refName}){ {{${type}}} }\n`;
+        queryInfo.body += `    ${refName}:  ${typeObj.singularMethod} (${typeObj.idField}: $${refName}){ {{${type}${excludedFields}}} }\n`;
         separator = ",\n";
         const idFieldValue = queryInfo.variables[refName] = entity[typeObj.idField];
         utils.info(`  using ${typeObj.idField}=${idFieldValue}`);
     });
+    queryInfo.head += ')';
 }
 
 function renewInvoker(gateway, query, typeObj) {
