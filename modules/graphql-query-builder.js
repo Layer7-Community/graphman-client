@@ -35,10 +35,6 @@ module.exports = {
         const gql = utils.existsFile(queryFilename) ? utils.readFile(queryFilename) : buildQuery(queryIdPrefix, queryIdSuffix);
 
         options = options || {};
-        if (!variables.policyAsYaml) {
-            SCHEMA_METADATA.types["PolicyAsYaml"].fields = ["xml"];
-            SCHEMA_METADATA.types["PolicyAsYaml"].summaryFields = ["xml"];
-        }
 
         // look for specific version of query if exists
         if (queryIdSuffix) {
@@ -59,15 +55,15 @@ module.exports = {
         gql.query = gql.query.replaceAll(/{{([^}]+)}}/g, function (subtext, file) {
             return file.endsWith(".gql") ? utils.readFile(`${QUERIES_DIR}/${file}`) : subtext;
         });
-        gql.query = expandQuery(gql.query);
+        gql.query = substituteAlternativeFields(expandQuery(gql.query), options);
         gql.variables = Object.assign(gql.variables || {}, variables);
         gql.options = options;
 
         return gql;
     },
 
-    expandQuery: function (query) {
-        return expandQuery(query);
+    expandQuery: function (query, options) {
+        return substituteAlternativeFields(expandQuery(query), options);
     }
 }
 
@@ -123,3 +119,22 @@ function buildQuery(queryIdPrefix, queryIdSuffix) {
         throw "unrecognized query " + queryIdPrefix;
     }
 }
+
+function substituteAlternativeFields(text, options) {
+    // substitute alternative field for policy code (xml or json or yaml or code)
+    if (options.policyCodeFormat && options.policyCodeFormat !== "xml") {
+        text = text.replaceAll(/(policy|policyRevision|policyRevisions)[^{]*[{][^}]+}/g, function (subtext) {
+            return subtext.replace("xml", options.policyCodeFormat);
+        });
+    }
+
+    // substitute alternative field for key detail (p12 or pem)
+    if (options.keyFormat && options.keyFormat !== "p12") {
+        text = text.replaceAll(/(keys|keyBy[\w]+)[^{]*[{][^}]+}/g, function (subtext) {
+            return subtext.replace("p12", options.keyFormat);
+        });
+    }
+
+    return text;
+}
+

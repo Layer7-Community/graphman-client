@@ -1,7 +1,7 @@
 
 const utils = require("./graphman-utils");
 const SCHEMA_METADATA = require("./graphman").schemaMetadata();
-const GOID_PLURAL_METHODS = ["fipUsers", "internalUsers", "fipGroups", "internalGroups", "ldaps", "fips", "trustedCerts"];
+const GOID_PLURAL_METHODS = ["fipUsers", "federatedUsers", "internalUsers", "fipGroups", "federatedGroups", "internalGroups", "ldaps", "ldapIdps", "fips", "federatedIdps", "trustedCerts"];
 module.exports = {
     EXPORT_USE: 'export',
     IMPORT_USE: 'import',
@@ -201,23 +201,26 @@ module.exports = {
 }
 
 function matchSoapResolvers(left, right) {
-    if (left.resolvers.baseUri && left.resolvers.baseUri !== right.resolvers.baseUri) {
-        return false;
-    }
-
-    if (Array.isArray(left.resolvers.soapActions) && Array.isArray(right.resolvers.soapActions)) {
-        if (left.resolvers.soapActions.length !== right.resolvers.soapActions.length) {
+    if (left.resolvers && right.resolvers) {
+        if (left.resolvers.baseUri && left.resolvers.baseUri !== right.resolvers.baseUri) {
             return false;
         }
 
-        for (var item of left.resolvers.soapActions) {
-            if (!right.resolvers.soapActions.includes(item)) {
+        if (Array.isArray(left.resolvers.soapActions) && Array.isArray(right.resolvers.soapActions)) {
+            if (left.resolvers.soapActions.length !== right.resolvers.soapActions.length) {
                 return false;
             }
-        }
-    }
 
-    return left.resolvers.resolutionPath === right.resolvers.resolutionPath;
+            for (var item of left.resolvers.soapActions) {
+                if (!right.resolvers.soapActions.includes(item)) {
+                    return false;
+                }
+            }
+        }
+
+        return left.resolvers.resolutionPath === right.resolvers.resolutionPath;
+    }
+    return false;
 }
 
 let exportSanitizer = function () {

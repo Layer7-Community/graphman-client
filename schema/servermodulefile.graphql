@@ -25,7 +25,13 @@ enum ModuleType {
     CUSTOM_ASSERTION
 }
 
-"A Server module file"
+"""
+A Server module file.
+> @l7-entity
+> @l7-identity-fields name
+> @l7-summary-fields goid,name,checksum
+> @l7-excluded-fields filePartName, moduleStates, moduleStateSummary
+"""
 type ServerModuleFile {
     "The goid for the Server module file"
     goid: ID!

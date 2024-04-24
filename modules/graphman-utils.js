@@ -7,6 +7,7 @@ const QUERIES_DIR = HOME_DIR + "/queries";
 const SCHEMA_DIR = HOME_DIR + "/schema";
 const SCHEMA_METADATA_BASE_FILE = "metadata-base.json";
 const SCHEMA_METADATA_FILE = "metadata.json";
+const POLICY_SCHEMA_FILE = "policy-code-schema.json";
 
 const NONE_LEVEL = 0;
 const WARN_LEVEL = 1;
@@ -15,7 +16,18 @@ const FINE_LEVEL = 3;
 const DEBUG_LEVEL = 10;
 let logLevel = INFO_LEVEL;
 
+class GraphmanOperationError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = 'GraphmanOperationError';
+    }
+}
+
 module.exports = {
+    newError: function (msg) {
+        return new GraphmanOperationError(msg);
+    },
+
     loggingAt: function (level) {
         if (level === 'warn' && logLevel === WARN_LEVEL) return true;
         else if (level === 'info' && logLevel === INFO_LEVEL) return true;
@@ -60,6 +72,10 @@ module.exports = {
 
     schemaMetadataFile: function (schemaVersion) {
         return this.path(this.schemaDir(schemaVersion), SCHEMA_METADATA_FILE);
+    },
+
+    policySchemaFile: function () {
+      return this.path(SCHEMA_DIR, POLICY_SCHEMA_FILE)
     },
 
     queriesDir: function (schemaVersion) {
@@ -155,6 +171,10 @@ module.exports = {
         console.log(text
             .replaceAll("\\r\\n", "\n")
             .replaceAll("\\n", "\n"));
+    },
+
+    error: function (message, ...args) {
+        this.log("[error] " + message, args);
     },
 
     warn: function (message, ...args) {

@@ -1,6 +1,6 @@
 
 const GRAPHMAN_HOME = 'GRAPHMAN_HOME';
-const SUPPORTED_OPERATIONS = ["export", "import", "explode", "implode", "combine", "diff", "renew", "revise", "mappings", "schema"];
+const SUPPORTED_OPERATIONS = ["export", "import", "explode", "implode", "combine", "diff", "renew", "revise", "mappings", "schema", "validate"];
 const GRAPHMAN_OPERATION_MODULE_PREFIX = "./graphman-operation-";
 const args = process.argv.slice(2);
 const op = args[0];
@@ -22,8 +22,10 @@ try {
         operation(op).run(params);
     }
 } catch (e) {
-    if (typeof e !== 'object') {
-        console.log(e);
+    if (typeof e === 'string') {
+        utils.error(e);
+    } else if (typeof e === 'object' && e.name === 'GraphmanOperationError') {
+        utils.error(e.message);
     } else if (utils.loggingAt('debug')) {
         console.log(e);
     } else {

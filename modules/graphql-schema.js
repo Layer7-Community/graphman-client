@@ -56,6 +56,9 @@ function build(metadata, schemaVersion) {
             }
         });
     });
+
+    metadata.pluralMethods["internalSchemas"] = "Schema";
+    metadata.pluralMethods["internalDtds"] = "Dtd";
 }
 
 function parseSchemaFile(file, metadata) {

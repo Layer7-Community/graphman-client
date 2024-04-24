@@ -1,6 +1,6 @@
 
-const VERSION = "v1.1";
-const SCHEMA_VERSION = "v10.1-CR04";
+const VERSION = "v1.2";
+const SCHEMA_VERSION = "v11.1.00";
 
 const utils = require("./graphman-utils");
 const hutils = require("./http-utils");
@@ -16,15 +16,10 @@ module.exports = {
     metadata: null,
 
     init: function (params) {
-        let config = JSON.parse(utils.readFile(utils.home() + "/graphman.configuration"));
-
-        if (params.sourceGateway) {
-            Object.assign(config.sourceGateway, params.sourceGateway);
-        }
-
-        if (params.targetGateway) {
-            Object.assign(config.targetGateway, params.targetGateway);
-        }
+        const config = JSON.parse(utils.readFile(utils.home() + "/graphman.configuration"));
+        config.options = makeOptions(config.options || {});
+        config.gateways = makeGateways(config.gateways || {});
+        config.defaultGateway = config.gateways['default'];
 
         config.version = VERSION;
         config.defaultSchemaVersion = SCHEMA_VERSION;
@@ -39,6 +34,20 @@ module.exports = {
 
     configuration: function () {
         return this.loadedConfig;
+    },
+
+    gatewayConfiguration: function (name) {
+        return name ? Object.assign({name: name}, this.configuration().gateways[name]) : null;
+    },
+
+    overridenGatewayConfiguration: function (obj) {
+        if (!obj) return null;
+
+        utils.warn("overriding the gateway details via parameter is deprecated, make use of multiple gateway definitions");
+        let gateway = Object.assign({}, this.configuration().defaultGateway || {});
+        Object.assign(gateway, obj);
+        gateway.name = gateway.address;
+        return gateway;
     },
 
     schemaMetadata: function () {
@@ -171,4 +180,33 @@ function getPartsFromRawRequest(options) {
     }
 
     return options.parts;
+}
+
+function makeOptions(options) {
+    return Object.assign({
+        "policyCodeFormat": "xml",
+        "keyFormat": "p12"
+    }, options);
+}
+
+function makeGateways(gateways) {
+    // populate default gateway if no gateway profiles are defined
+    if (!Object.keys(gateways).length) {
+        gateways['default'] = {
+            "address": "https://localhost:8443/graphman",
+            "username": "admin",
+            "password": "7layer",
+            "rejectUnauthorized": false,
+            "passphrase": "7layer",
+            "allowMutations": false
+        };
+    }
+
+    // define entry for default gateway for error reporting
+    if (!gateways['default']) {
+        gateways['default'] = {};
+    }
+
+    Object.entries(gateways).forEach(([key, item]) => item['name'] = key);
+    return gateways;
 }

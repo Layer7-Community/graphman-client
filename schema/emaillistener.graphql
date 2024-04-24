@@ -21,6 +21,13 @@ enum EmailServerType {
     POP3
 }
 
+"""
+An email listener.
+> @l7-entity
+> @l7-identity-fields name
+> @l7-summary-fields goid,name,checksum
+> @l7-excluded-fields hardwiredService
+"""
 type EmailListener {
     "The goid for the email listener Connection"
     goid : ID!

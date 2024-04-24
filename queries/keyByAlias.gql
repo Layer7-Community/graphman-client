@@ -1,13 +1,5 @@
 query keyByAlias($alias: String!) {
     keyByAlias(alias : $alias) {
-        goid
-        keystoreId
-        alias
-        checksum
-
-        keyType
-        subjectDn
-        p12
-        certChain
+        {{Key:-pem}}
     }
 }

@@ -4,6 +4,7 @@ extend type Query {
     "Get the http configuration with the given host"
     httpConfigurationsByHost(host : String!) : [HttpConfiguration!]!
 }
+
 extend type Mutation {
     "Create or update existing http configuration."
     setHttpConfigurations(input: [HttpConfigurationInput!]!): HttpConfigurationsPayload!
@@ -11,6 +12,14 @@ extend type Mutation {
     "Delete existing http configuration"
     deleteHttpConfigurations(input: [HttpConfigurationPartialInput!]!): HttpConfigurationsPayload!
 }
+
+"""
+An HTTP configuration.
+> @l7-entity
+> @l7-identity-fields host,port,protocol,path
+> @l7-summary-fields goid,host,port,protocol,path,checksum
+> @l7-excluded-fields
+"""
 type HttpConfiguration {
     "The goid for the http configuration"
     goid : ID!

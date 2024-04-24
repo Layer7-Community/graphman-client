@@ -37,7 +37,13 @@ extend type Mutation {
         names: [String!]!): JdbcConnectionsPayload
 }
 
-"A JDBC Connection"
+"""
+A JDBC connection.
+> @l7-entity
+> @l7-identity-fields name
+> @l7-summary-fields goid,name,checksum
+> @l7-excluded-fields
+"""
 type JdbcConnection {
     "The goid for the JDBC Connection"
     goid : ID!

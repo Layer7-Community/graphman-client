@@ -1,0 +1,6 @@
+{
+  "query": "{{service.gql}}",
+  "variables": {
+    "name": "?"
+  }
+}

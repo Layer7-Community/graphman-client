@@ -1,9 +1,5 @@
 {
     "types": {
-        "PolicyAsYaml": {
-            "fields": ["yaml"],
-            "summaryFields": ["yaml"]
-        },
         "AdministrativeUserAccountProperty": {
             "pluralMethod": "administrativeUserAccountProperties",
             "singularMethod": "administrativeUserAccountProperties",
@@ -81,6 +77,22 @@
             "idField": "name",
             "prefix": "fip"
         },
+        "FederatedIdp": {
+            "pluralMethod": "federatedIdps",
+            "singularMethod": "federatedIdpByName",
+            "idField": "name",
+            "prefix": "federatedIdp"
+        },
+        "FederatedGroup": {
+            "pluralMethod": "federatedGroups",
+            "singularMethod": "federatedGroupByName",
+            "idField": "name",
+            "idFields": [
+                "name",
+                "providerName"
+            ],
+            "prefix": "federatedGroup"
+        },
         "FipGroup": {
             "pluralMethod": "fipGroups",
             "singularMethod": "fipGroupByName",
@@ -90,6 +102,17 @@
                 "providerName"
             ],
             "prefix": "fipGroup"
+        },
+        "FederatedUser": {
+            "pluralMethod": "federatedUsers",
+            "singularMethod": "federatedUserByName",
+            "idField": "name",
+            "idFields": [
+                "login",
+                "name",
+                "providerName"
+            ],
+            "prefix": "federatedUser"
         },
         "FipUser": {
             "pluralMethod": "fipUsers",
@@ -110,6 +133,12 @@
                 "tag"
             ],
             "prefix": "globalPolic"
+        },
+        "InternalIdp": {
+            "pluralMethod": "internalIdps",
+            "singularMethod": "internalIdp",
+            "idField": "name",
+            "prefix": "internalIdp"
         },
         "InternalGroup": {
             "pluralMethod": "internalGroups",
@@ -177,6 +206,12 @@
             "idField": "name",
             "prefix": "ldap"
         },
+        "LdapIdp": {
+            "pluralMethod": "ldapIdps",
+            "singularMethod": "ldapIdpByName",
+            "idField": "name",
+            "prefix": "ldapIdp"
+        },
         "ListenPort": {
             "pluralMethod": "listenPorts",
             "singularMethod": "listenPortByName",
@@ -188,6 +223,19 @@
             "singularMethod": "policyFragmentByName",
             "idField": "name",
             "prefix": "policyFragment"
+        },
+        "PolicyBackedIdp": {
+            "pluralMethod": "policyBackedIdps",
+            "singularMethod": "policyBackedIdpByName",
+            "idField": "name",
+            "prefix": "policyBackedIdp"
+        },
+        "L7Policy": {
+            "pluralMethod": "policies",
+            "singularMethod": "policyByName",
+            "idField": "name",
+            "idFields": ["name", "policyType"],
+            "prefix": "polic"
         },
         "RevocationCheckPolicy": {
             "pluralMethod": "revocationCheckPolicies",
@@ -225,6 +273,23 @@
             "idField": "name",
             "prefix": "serverModuleFile"
         },
+        "SimpleLdapIdp": {
+            "pluralMethod": "simpleLdapIdps",
+            "singularMethod": "simpleLdapIdpByName",
+            "idField": "name",
+            "prefix": "simpleLdapIdp"
+        },
+        "L7Service": {
+            "pluralMethod": "services",
+            "singularMethod": "serviceByResolutionPath",
+            "idField": "resolutionPath",
+            "idFields": [
+                "serviceType",
+                "resolutionPath",
+                "resolvers { {{ServiceResolvers}} }"
+            ],
+            "prefix": "service"
+        },
         "SoapService": {
             "pluralMethod": "soapServices",
             "singularMethod": "soapServiceByResolver",
@@ -236,6 +301,26 @@
                 "resolvers { {{SoapResolvers}} }"
             ],
             "prefix": "soapService"
+        },
+        "TrustedCertRef": {
+            "pluralMethod": "trustedCertRefs",
+            "singularMethod": "trustedCertRefByThumbprint",
+            "idField": "thumbprintSha1",
+            "idFields": [
+                "name",
+                "subjectDn",
+                "thumbprintSha1"
+            ],
+            "fields": [
+                "name",
+                "subjectDn",
+                "thumbprintSha1"
+            ],
+            "summary" : [
+                "name",
+                "thumbprintSha1"
+            ],
+            "prefix": "trustedCertRef"
         },
         "WebApiService": {
             "pluralMethod": "webApiServices",
@@ -296,18 +381,26 @@
             "PositiveInt",
             "NonNegativeInt",
             "Int",
-            "DateTime"
+            "Long",
+            "Date",
+            "DateTime",
+            "JSON"
         ],
         "excludedFields": {
-            "Policy": "directDependencies,allDependencies",
+            "Policy": "directDependencies,allDependencies,json,yaml,code",
             "InternalUser": "memberOf",
             "InternalGroup": "members",
             "FipUser": "memberOf",
             "FipGroup": "members",
+            "FederatedGroup": "members",
+            "FederatedUser": "memberOf",
             "ServerModuleFile": "filePartName",
             "EmailListener": "hardwiredService",
             "ListenPort": "hardwiredService",
-            "ActiveConnector": "hardwiredService"
+            "L7Policy": "policyRevision,policyRevisions",
+            "L7Service": "policyRevision,policyRevisions",
+            "ActiveConnector": "hardwiredService",
+            "Key": "pem"
         }
     },
     "enumTypes": [],
@@ -324,7 +417,13 @@
         {"bundleName": "fipGroups", "typeName": "FipGroup", "identityField": "name", "identityFields": [], "summaryFields": ["goid", "name", "checksum"], "fields": []},
         {"bundleName": "fipUsers", "typeName": "FipUser", "identityField": "login", "identityFields": ["login", "subjectDn", "name"], "summaryFields": ["goid", "login", "subjectDn", "name", "checksum"], "fields": []},
         {"bundleName": "fips", "typeName": "Fip", "identityField": "name", "identityFields": [], "summaryFields": ["goid", "name", "checksum"], "fields": []},
+        {"bundleName": "federatedIdps", "typeName": "FederatedIdp", "identityField": "name", "identityFields": [], "summaryFields": ["goid", "name", "checksum"], "fields": []},
+        {"bundleName": "federatedGroups", "typeName": "FederatedGroup", "identityField": "name", "identityFields": [], "summaryFields": ["goid", "name", "providerName", "checksum"], "fields": []},
+        {"bundleName": "federatedUsers", "typeName": "FederatedUser", "identityField": "name", "identityFields": ["login", "providerName", "name"], "summaryFields": ["goid", "login", "providerName", "name", "checksum"], "fields": []},
         {"bundleName": "globalPolicies", "typeName": "GlobalPolicy", "identityField": "tag", "identityFields": [], "summaryFields": ["goid", "guid", "tag", "checksum"], "fields": []},
+        {"bundleName": "internalDtds", "typeName": "Dtd", "identityField": "systemId", "identityFields": [], "summaryFields": ["goid", "systemId", "checksum"], "fields": []},
+        {"bundleName": "internalSchemas", "typeName": "Schema", "identityField": "systemId", "identityFields": [], "summaryFields": ["goid", "systemId", "checksum"], "fields": []},
+        {"bundleName": "internalIdps", "typeName": "InternalIdp", "identityField": "name", "identityFields": [], "summaryFields": ["goid", "name", "checksum"], "fields": []},
         {"bundleName": "internalGroups", "typeName": "InternalGroup", "identityField": "name", "identityFields": [], "summaryFields": ["goid", "name", "checksum"], "fields": []},
         {"bundleName": "internalUsers", "typeName": "InternalUser", "identityField": "login", "identityFields": [], "summaryFields": ["goid", "login", "checksum"], "fields": []},
         {"bundleName": "internalSoapServices", "typeName": "InternalSoapService", "identityField": "resolutionPath", "identityFields": ["resolutionPath", "resolvers"], "summaryFields": ["goid", "guid", "resolutionPath", "resolvers", "checksum"], "fields": []},
@@ -333,15 +432,20 @@
         {"bundleName": "jmsDestinations", "typeName": "JmsDestination", "identityField": "name", "identityFields": ["direction", "providerType", "name"], "summaryFields": ["goid", "name", "direction", "providerType", "checksum"], "fields": []},
         {"bundleName": "keys", "typeName": "Key", "identityField": "alias", "identityFields": ["alias", "keystoreId"], "summaryFields": ["goid", "keystoreId", "alias", "checksum"], "fields": []},
         {"bundleName": "ldaps", "typeName": "Ldap", "identityField": "name", "identityFields": [], "summaryFields": ["goid", "name", "checksum"], "fields": []},
+        {"bundleName": "ldapIdps", "typeName": "LdapIdp", "identityField": "name", "identityFields": [], "summaryFields": ["goid", "name", "ldapType", "checksum"], "fields": []},
         {"bundleName": "listenPorts", "typeName": "ListenPort", "identityField": "name", "identityFields": [], "summaryFields": ["goid", "name", "checksum"], "fields": []},
         {"bundleName": "passwordPolicies", "typeName": "PasswordPolicy", "identityField": "name", "identityFields": [], "summaryFields": ["goid", "name", "checksum"], "fields": []},
         {"bundleName": "policyFragments", "typeName": "PolicyFragment", "identityField": "name", "identityFields": [], "summaryFields": ["goid", "guid", "name", "checksum"], "fields": []},
+        {"bundleName": "policyBackedIdps", "typeName": "PolicyBackedIdp", "identityField": "name", "identityFields": [], "summaryFields": ["goid", "name", "checksum"], "fields": []},
+        {"bundleName": "policies", "typeName": "L7Policy", "identityField": "name", "identityFields": ["name", "policyType"], "summaryFields": ["goid", "guid", "name", "policyType", "tag", "subTag", "checksum"], "fields": []},
         {"bundleName": "revocationCheckPolicies", "typeName": "RevocationCheckPolicy", "identityField": "name", "identityFields": [], "summaryFields": ["goid", "name", "checksum"], "fields": []},
         {"bundleName": "scheduledTasks", "typeName": "ScheduledTask", "identityField": "name", "identityFields": [], "summaryFields": ["goid", "name", "checksum"], "fields": []},
         {"bundleName": "schemas", "typeName": "Schema", "identityField": "systemId", "identityFields": [], "summaryFields": ["goid", "systemId", "checksum"], "fields": []},
         {"bundleName": "secrets", "typeName": "Secret", "identityField": "name", "identityFields": [], "summaryFields": ["goid", "name", "checksum"], "fields": []},
         {"bundleName": "serverModuleFiles", "typeName": "ServerModuleFile", "identityField": "name", "identityFields": [], "summaryFields": ["goid", "name", "checksum"], "fields": []},
         {"bundleName": "serviceResolutionConfigs", "typeName": "ServiceResolutionConfig", "identityField": "name", "identityFields": [], "summaryFields": ["goid", "name", "checksum"], "fields": []},
+        {"bundleName": "services", "typeName": "L7Service", "identityField": "resolutionPath", "identityFields": ["resolutionPath", "resolvers", "serviceType"], "summaryFields": ["goid", "guid", "name", "resolutionPath", "resolvers", "serviceType", "checksum"], "fields": []},
+        {"bundleName": "simpleLdapIdps", "typeName": "SimpleLdapIdp", "identityField": "name", "identityFields": [], "summaryFields": ["goid", "name", "checksum"], "fields": []},
         {"bundleName": "smConfigs", "typeName": "SMConfig", "identityField": "name", "identityFields": [], "summaryFields": ["goid", "name", "checksum"], "fields": []},
         {"bundleName": "soapServices", "typeName": "SoapService", "identityField": "resolutionPath", "identityFields": ["resolutionPath", "resolvers"], "summaryFields": ["goid", "guid", "name", "resolutionPath", "resolvers", "checksum"], "fields": []},
         {"bundleName": "trustedCerts", "typeName": "TrustedCert", "identityField": "thumbprintSha1", "identityFields": [], "summaryFields": ["goid", "name", "thumbprintSha1", "checksum"], "fields": []},
@@ -356,11 +460,15 @@
         {"typeName": "ActiveConnector", "queryExcludedFields": ["hardwiredService"], "exportExcludedFields": [], "importExcludedFields": ["hardwiredService"]},
         {"typeName": "EmailListener", "queryExcludedFields": ["hardwiredService"], "exportExcludedFields": [], "importExcludedFields": ["hardwiredService"]},
         {"typeName": "FipGroup", "queryExcludedFields": ["members"], "exportExcludedFields": [], "importExcludedFields": ["members"]},
-        {"typeName": "FipUser", "queryExcludedFields": [], "exportExcludedFields": ["members:-name"], "importExcludedFields": ["members:-name"]},
+        {"typeName": "FederatedGroup", "queryExcludedFields": ["members"], "exportExcludedFields": [], "importExcludedFields": ["members"]},
+        {"typeName": "FipUser", "queryExcludedFields": [], "exportExcludedFields": ["memberOf:-name"], "importExcludedFields": ["memberOf:-name"]},
+        {"typeName": "FederatedUser", "queryExcludedFields": [], "exportExcludedFields": ["memberOf:-name"], "importExcludedFields": ["memberOf:-name"]},
         {"typeName": "InternalGroup", "queryExcludedFields": ["members"], "exportExcludedFields": [], "importExcludedFields": ["members"]},
         {"typeName": "InternalUser", "queryExcludedFields": [], "exportExcludedFields": ["members:-name"], "importExcludedFields": ["members:-name"]},
         {"typeName": "ListenPort", "queryExcludedFields": ["hardwiredService"], "exportExcludedFields": [], "importExcludedFields": ["hardwiredService"]},
-        {"typeName": "Policy", "queryExcludedFields": ["directDependencies", "allDependencies"], "exportExcludedFields": [], "importExcludedFields": []},
+        {"typeName": "Policy", "queryExcludedFields": ["directDependencies", "allDependencies", "json", "yaml", "code"], "exportExcludedFields": ["json", "yaml", "code"], "importExcludedFields": ["json", "yaml", "code"]},
+        {"typeName": "L7Policy", "queryExcludedFields": [], "exportExcludedFields": ["policyRevision", "policyRevisions"], "importExcludedFields": ["policyRevision", "policyRevisions"]},
+        {"typeName": "L7Service", "queryExcludedFields": [], "exportExcludedFields": ["policyRevision", "policyRevisions"], "importExcludedFields": ["policyRevision", "policyRevisions"]},
         {"typeName": "TrustedCert", "queryExcludedFields": [], "exportExcludedFields": [], "importExcludedFields": ["revocationCheckPolicy"]},
         {"typeName": "ServerModuleFile", "queryExcludedFields": ["filePartName"], "exportExcludedFields": [], "importExcludedFields": ["filePartName", "moduleStates", "moduleStateSummary"]}
     ],
@@ -373,6 +481,9 @@
         "PositiveInt",
         "NonNegativeInt",
         "Int",
-        "DateTime"
+        "Long",
+        "Date",
+        "DateTime",
+        "JSON"
     ]
 }

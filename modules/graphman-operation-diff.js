@@ -4,17 +4,17 @@ const utils = require("./graphman-utils");
 const butils = require("./graphman-bundle");
 const queryBuilder = require("./graphql-query-builder");
 const opExport = require("./graphman-operation-export");
-const opRenew = require("./graphman-operation-renew");
 
 module.exports = {
     run: function (params) {
         const bundles = [];
-        const config = graphman.configuration(params);
 
-        bundles.push(readBundle(config.sourceGateway,
-            Array.isArray(params.input) ? params.input[0] : params.input));
-        bundles.push(readBundle(config.targetGateway,
-            Array.isArray(params.input) ? params.input[1] : null));
+        if (Array.isArray(params.input) && params.input.length >= 2) {
+            bundles.push(readBundleFrom(params.input[0]));
+            bundles.push(readBundleFrom(params.input[1]));
+        } else {
+            throw utils.newError("not enough arguments")
+        }
 
         Promise.all(bundles).then(results => {
             const leftBundle = results[0];
@@ -25,53 +25,39 @@ module.exports = {
             if (!diffBundle.goidMappings.length) delete diffBundle.goidMappings;
             if (!diffBundle.guidMappings.length) delete diffBundle.guidMappings;
 
-            if (params.renew) {
-                Promise.all(opRenew.renew(config.sourceGateway, diffBundle)).then(results => {
-                    const renewedBundle = {};
-
-                    results.forEach(item => {
-                        // process parts (SMF entities) if exists
-                        if (item.parts) {
-                            utils.writePartsResult(utils.parentPath(params.output), item.parts);
-                            delete item.parts;
-                        }
-
-                        // merge the intermediate bundles
-                        Object.assign(renewedBundle, item);
-                    });
-
-                    renewedBundle.properties = leftBundle.properties;
-                    utils.writeResult(params.output, butils.sort(renewedBundle));
-                });
-            } else {
-                diffBundle.properties = leftBundle.properties;
-                utils.writeResult(params.output, butils.sort(diffBundle));
-            }
+            diffBundle.properties = leftBundle.properties;
+            utils.writeResult(params.output, butils.sort(diffBundle));
         });
     },
 
     usage: function () {
-        console.log("    diff [--input <input-file> --input <input-file>] [--output <output-file>] [<options>]");
+        console.log("    diff [--input <input-file-or-gateway> --input <input-file-or-gateway>] [--output <output-file>] [<options>]");
         console.log("        # evaluates the differences between bundles or gateways.");
-        console.log("        # when input bundles are missing, bundles will be pulled from the source and target gateways.");
-        console.log("        # when second input bundle is missing, it will be pulled from the target gateway.");
-        console.log("      --renew");
-        console.log("        # to renew the diff entities from the source gateway");
+        console.log("        # input can be a bundle file or a gateway name if it precedes with '@' special character.");
+        console.log("        # when gateway is specified as input, summary bundle will be pulled for comparison.");
     }
 }
 
-function readBundle(gateway, file) {
+function readBundleFrom(fileOrGateway) {
+    if (fileOrGateway.startsWith('@')) {
+        const gateway = graphman.gatewayConfiguration(fileOrGateway.substring(1));
+        if (!gateway.address) throw utils.newError(`${gateway.name} gateway details are missing`);
+        return readBundleFromGateway(gateway);
+    } else {
+        return new Promise(function (resolve) {
+            resolve(utils.readFile(fileOrGateway));
+        });
+    }
+}
+
+function readBundleFromGateway(gateway) {
     return new Promise(function (resolve) {
-        if (file) {
-            resolve(utils.readFile(file));
-        } else {
-            utils.info("retrieving the gateway configuration summary from " + gateway.address);
-            opExport.export(
-                gateway,
-                queryBuilder.build("summary", {}),
-                data => resolve(data.data)
-            );
-        }
+        utils.info(`retrieving ${gateway.name} gateway configuration summary`);
+        opExport.export(
+            gateway,
+            queryBuilder.build("summary", {}, graphman.configuration().options),
+            data => resolve(data.data)
+        );
     });
 }
 

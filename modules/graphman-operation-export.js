@@ -7,17 +7,20 @@ const POST_BUNDLE_EXTN = utils.extension("graphman-post-bundle");
 module.exports = {
     run: function (params) {
         const queryBuilder = require("./graphql-query-builder");
-        const config = graphman.configuration(params);
+        const config = graphman.configuration();
+        const gateway = graphman.gatewayConfiguration(params.gateway) ||
+            graphman.overridenGatewayConfiguration(params.sourceGateway) ||
+            config.defaultGateway;
 
-        if (!config.sourceGateway) {
-            throw "source gateway details are missing";
+        if (!gateway.address) {
+            throw utils.newError(`${gateway.name} gateway details are missing`);
         }
 
-        adjustParameters(params);
+        adjustParameters(params, config);
 
         let startDate = Date.now();
         this.export(
-            config.sourceGateway,
+            gateway,
             queryBuilder.build(params.using ? params.using : 'all', params.variables, params.options),
             (data, parts) => {
                 let endDate = Date.now();
@@ -50,6 +53,7 @@ module.exports = {
             throw "invalid query for export operation";
         }
 
+        utils.info(`exporting from ${gateway.name||gateway.address} gateway`);
         const request = graphman.request(gateway);
         request.path += buildQueryParameters(query.options);
         request.body = query;
@@ -71,24 +75,20 @@ module.exports = {
         console.log("        # use this option to exclude dependency entities from the exported bundled entities.");
         console.log("      --excludeGoids");
         console.log("        # use this option to exclude Goids from the exported bundled entities.");
-        console.log("      --policyAsYaml");
-        console.log("        # use this option to export policy in YAML format.");
+        console.log("      --gateway <name>");
+        console.log("        # specify the name of gateway profile from the graphman configuration");
         console.log("      --sourceGateway.*");
-        console.log("        # use this option(s) to override the source gateway details from the graphman configuration");
+        console.log("        # (DEPRECATED, use --gateway option) use this option(s) to override the source gateway details from the graphman configuration");
     }
 }
 
-function adjustParameters(params) {
+function adjustParameters(params, config) {
     // TODO: any better way to handle these customizations
     params.variables = params.variables || {};
     params.options = params.options || {};
 
     if (params.using && (params.using === "encass" || params.using.startsWith("encass:")) && params.variables) {
         params.variables.policyName = params.variables.policyName || params.variables.name;
-    }
-
-    if (params.policyAsYaml) {
-        params.variables.policyAsYaml = true;
     }
 
     params.options.bundleDefaultAction = params.bundleDefaultAction;
@@ -101,6 +101,14 @@ function adjustParameters(params) {
 
     if (params.excludeGoids) {
         params.options.excludeGoids = true;
+    }
+
+    if (!params.options.policyCodeFormat) {
+        params.options.policyCodeFormat = config.options.policyCodeFormat;
+    }
+
+    if (!params.options.keyFormat) {
+        params.options.keyFormat = config.options.keyFormat;
     }
 }
 
