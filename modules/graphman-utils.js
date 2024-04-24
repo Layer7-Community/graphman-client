@@ -130,7 +130,7 @@ module.exports = {
             throw "file doesn't exist, " + file;
         }
 
-        return fs.readFileSync(file);
+        return fs.readFileSync(file, { encoding: null });
     },
 
     writeFile: function (file, data) {
@@ -140,7 +140,7 @@ module.exports = {
 
     writeFileBinary: function (file, data) {
         this.mkDir(this.parentPath(file));
-        fs.writeFileSync(file, data);
+        fs.writeFileSync(file, data, { encoding: 'binary' });
     },
 
     print: function (data) {
