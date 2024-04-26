@@ -20,7 +20,7 @@ module.exports = {
 
 function validateBundle(bundle) {
     Array.of("policies", "services").forEach(pluralName => {
-        validateEntities(bundle[pluralName], graphman.typeInfoByPluralName(pluralName));
+        if (bundle[pluralName]) validateEntities(bundle[pluralName], graphman.typeInfoByPluralName(pluralName));
     });
 }
 
@@ -36,7 +36,7 @@ function validateEntities(entities, typeInfo) {
         utils.info("  validating policy of " + entity.name);
         pcode.validate(entity, typeInfo, errorInfo => {
             if (errorInfo.error) utils.warn(`    ${errorInfo.path} - ${errorInfo.name} - ${errorInfo.error}`);
-            if (errorInfo.errors) utils.warn(`    ${errorInfo.path} - ${errorInfo.name} - ${errorInfo.errors}`);
+            if (errorInfo.errors) for (const err of errorInfo.errors) utils.warn(`    ${errorInfo.path} - ${errorInfo.name} - ${err.message}`);
         });
     }
 }

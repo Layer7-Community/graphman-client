@@ -30,7 +30,7 @@ function validatePolicyCode(code, callback) {
 }
 
 function getAssertionName(assertion) {
-    return Object.keys(assertion).find(x => !x.equals(".properties"));
+    return Object.keys(assertion).find(x => x !==".properties");
 }
 
 function isAssertionEnabled(assertion) {
