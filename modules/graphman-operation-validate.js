@@ -1,81 +1,42 @@
 const utils = require("./graphman-utils");
-const policySchema = require("./policy-schema");
+const graphman = require("./graphman");
+const pcode = require("./policy-code");
 
-var error = false;
-var policyErrors = false;
 module.exports = {
-    schemaValidator: null,
     run: function (params) {
-        if (params.input) {
-            buildPolicySchema()
-            const obj = utils.readFile(params.input)
-            validateBundle(obj);
-            if (!error) {
-                utils.info("validation is successful");
-            }
+        if (!params.input) {
+            throw new utils.newError("Missing --input argument");
         }
+
+        const input = utils.readFile(params.input);
+        validateBundle(input);
     },
 
     usage: function () {
         utils.print("    validate --input <input-file>");
+        utils.print("    Validates the bundled entities. Currently, it is limited to validating the policy code in JSON format.");
     }
 }
 
-function validateBundle(obj) {
-    for (const [entityName, entities] of Object.entries(obj)) {
-        if (entityName == "services" || entityName == "policies") {
-            validateEntities(entities)
-        }
-    }
-
+function validateBundle(bundle) {
+    Array.of("policies", "services").forEach(pluralName => {
+        validateEntities(bundle[pluralName], graphman.typeInfoByPluralName(pluralName));
+    });
 }
 
-function validateEntities(entities) {
+/**
+ *
+ * @param entities bundled entities
+ * @param typeInfo entity type info
+ * @param typeInfo.bundleName name of the entity type in plural form
+ */
+function validateEntities(entities, typeInfo) {
+    utils.info("validating " + typeInfo.bundleName);
     for (const entity of entities) {
-        policyErrors = false
-        utils.info("Validating policy of entity " + entity.name);
-        validatePolicy(entity.policy)
-        if (policyErrors) {
-            utils.info("Invalid policy code");
-        }
-    }
-}
-
-function validatePolicy(policy) {
-    if (policy.code) {
-        validatePolicyCode(policy.code)
-    } else if (policy.json) {
-        validatePolicyCode(JSON.parse(policy.json))
-    }
-}
-
-function validatePolicyCode(code) {
-    if (Object.keys(code).length == 1 && Object.keys(code)[0] == "All") {
-        validateAssertions(Object.values(code)[0])
-    } else {
-        utils.info("Given policy is invalid");
-    }
-}
-
-function buildPolicySchema() {
-    this.schemaValidator = policySchema.build();
-}
-
-function validateAssertions(assertionArray) {
-    for (let i = 0; i < assertionArray.length; i++) {
-        validateAssertion(assertionArray[i])
-        const key = Object.keys(assertionArray[i])[0]
-        if (key == "All" || key == "OneOrMore") {
-            validateAssertions(Object.values(assertionArray[i])[0])
-        }
-    }
-}
-
-function validateAssertion(assertion) {
-    const valid = this.schemaValidator(assertion)
-    if (!valid) {
-        error = true
-        policyErrors = true
-        utils.print(this.schemaValidator.errors)
+        utils.info("  validating policy of " + entity.name);
+        pcode.validate(entity, typeInfo, errorInfo => {
+            if (errorInfo.error) utils.warn(`    ${errorInfo.path} - ${errorInfo.name} - ${errorInfo.error}`);
+            if (errorInfo.errors) utils.warn(`    ${errorInfo.path} - ${errorInfo.name} - ${errorInfo.errors}`);
+        });
     }
 }
