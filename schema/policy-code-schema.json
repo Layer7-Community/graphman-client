@@ -207,6 +207,35 @@
                 }
             },
             "unevaluatedProperties": false
+        },
+        "hardcodedResponse": {
+            "type": "object",
+            "$id": "schema:hardcodedResponse",
+            "$ref": "schema:assertion",
+            "properties": {
+                "HardcodedResponse": {
+                    "type": "object",
+                    "properties": {
+                        "body": {
+                            "type": "string"
+                        },
+                        "contentType": {
+                            "type": "string"
+                        },
+                        "earlyResponse": {
+                            "type": "boolean"
+                        },
+                        "responseStatus": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "body"
+                    ],
+                    "unevaluatedProperties": false
+                }
+            },
+            "unevaluatedProperties": false
         }
     },
     "oneOf": [
@@ -227,6 +256,9 @@
         },
         {
             "$ref": "schema:encass"
+        },
+        {
+            "$ref": "schema:hardcodedResponse"
         }
     ]
 }
