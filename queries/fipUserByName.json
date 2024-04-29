@@ -1,0 +1,7 @@
+{
+  "query": "{{fipUserByName.gql}}",
+  "variables": {
+    "providerName": "?",
+    "name" : "?"
+  }
+}

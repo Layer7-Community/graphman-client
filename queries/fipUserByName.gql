@@ -1,0 +1,5 @@
+query fipUserByName($providerName: String!, $name: String!) {
+    fipUserByName(providerName : $providerName, name : $name) {
+        {{FipUser}}
+    }
+}

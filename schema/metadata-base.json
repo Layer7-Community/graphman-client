@@ -75,12 +75,6 @@
             "idField": "name",
             "prefix": "encassConfig"
         },
-        "Fip": {
-            "pluralMethod": "fips",
-            "singularMethod": "fipByName",
-            "idField": "name",
-            "prefix": "fip"
-        },
         "FipGroup": {
             "pluralMethod": "fipGroups",
             "singularMethod": "fipGroupByName",
@@ -100,6 +94,12 @@
                 "providerName"
             ],
             "prefix": "fipUser"
+        },
+        "Fip": {
+            "pluralMethod": "fips",
+            "singularMethod": "fipByName",
+            "idField": "name",
+            "prefix": "fip"
         },
         "GlobalPolicy": {
             "pluralMethod": "globalPolicies",
