@@ -33,10 +33,15 @@ function validateBundle(bundle) {
 function validateEntities(entities, typeInfo) {
     utils.info("validating " + typeInfo.bundleName);
     for (const entity of entities) {
-        utils.info("  validating policy of " + entity.name);
-        pcode.validate(entity, typeInfo, errorInfo => {
-            if (errorInfo.error) utils.warn(`    ${errorInfo.path} - ${errorInfo.name} - ${errorInfo.error}`);
-            if (errorInfo.errors) for (const err of errorInfo.errors) utils.warn(`    ${errorInfo.path} - ${errorInfo.name} - ${err.message}`);
+        const statusRef = {errors: []};
+        pcode.validate(entity, typeInfo, statusInfo => {
+            if (statusInfo.error) statusRef.errors.push(`    ${statusInfo.path} - ${statusInfo.name} - ${statusInfo.error}`);
+            if (statusInfo.errors) for (const err of statusInfo.errors) {
+                statusRef.errors.push(`    ${statusInfo.path} - ${statusInfo.name} - ${err.message}`);
+            }
         });
+
+        utils.info("  validating policy of " + entity.name + ": " + (statusRef.errors.length === 0 ? "ok" : "error(s)"));
+        for (const error of statusRef.errors) utils.warn(error);
     }
 }

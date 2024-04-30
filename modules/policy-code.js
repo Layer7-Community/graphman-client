@@ -1,6 +1,7 @@
 
 const utils = require("./graphman-utils");
 const vRef = {validator: null};
+const knownAssertions = ["All", "OneOrMore", "Comment", "SetVariable", "Include", "Encapsulated", "HardcodedResponse"];
 
 module.exports = {
     validate: function (entity, typeInfo, callback) {
@@ -45,8 +46,13 @@ function validateAssertions(path, assertions, callback) {
 }
 
 function validateAssertion(path, assertion, callback) {
-    const valid = vRef.validator(assertion)
-    if (!valid) {
-        callback({path: path, name: getAssertionName(assertion), tag: assertion, errors: vRef.validator.errors});
+    const assertionName = getAssertionName(assertion);
+    if (!knownAssertions.includes(assertionName)) {
+        callback({path: path, name: assertionName, tag: assertion, category: 'info', info: 'unknown assertion, ignoring it'});
+    } else {
+        const valid = vRef.validator(assertion)
+        if (!valid) {
+            callback({path: path, name: assertionName, tag: assertion, category: 'error', error: 'validation failed', errors: vRef.validator.errors});
+        }
     }
 }
