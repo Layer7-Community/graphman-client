@@ -39,6 +39,10 @@ function isAssertionEnabled(assertion) {
     return props ? props[".enabled"] || true : true;
 }
 
+function isCompositeAssertion(assertion, assertionName) {
+    return Array.isArray(assertion[assertionName]);
+}
+
 function validateAssertions(path, assertions, callback) {
     for (let i = 0; i < assertions.length; i++) {
         validateAssertion(path + "." + (i + 1), assertions[i], callback);
@@ -49,6 +53,8 @@ function validateAssertion(path, assertion, callback) {
     const assertionName = getAssertionName(assertion);
     if (!knownAssertions.includes(assertionName)) {
         callback({path: path, name: assertionName, tag: assertion, category: 'info', info: 'unknown assertion, ignoring it'});
+    } else if (isCompositeAssertion(assertion, assertionName)) {
+        validateAssertions(path, assertion[assertionName], callback);
     } else {
         const valid = vRef.validator(assertion)
         if (!valid) {
