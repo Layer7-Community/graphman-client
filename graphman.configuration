@@ -11,7 +11,25 @@
     },
 
     "options": {
+        "log": "info",
         "policyCodeFormat": "xml",
-        "keyFormat": "p12"
+        "keyFormat": "p12",
+
+        "export": {
+            "bundleDefaultAction": "NEW_OR_UPDATE",
+            "bundleMappingsLevel": 0
+        },
+
+        "explode": {
+            "explodePolicies": false,
+            "explodeKeys": false,
+            "explodeTrustedCerts": false
+        },
+
+        "import": {
+            "forceDelete": false,
+            "forceAdminPasswordReset": false,
+            "replaceAllMatchingCertChain": false
+        }
     }
 }

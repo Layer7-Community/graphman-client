@@ -3,13 +3,20 @@ const utils = require("./graphman-utils");
 const butils = require("./graphman-bundle");
 
 module.exports = {
+    /**
+     * Explodes bundle into multiple files.
+     * @param params
+     * @param params.input name of the input file containing the gateway configuration as bundle
+     * @param params.output name of the output directory into which the gateway configuration will be exploded
+     * @param params.options name-value pairs used to customize explode operation
+     */
     run: function (params) {
         if (!params.input) {
-            throw "Missing --input parameter";
+            throw "--input parameter is missing";
         }
 
         if (!params.output) {
-            throw "Missing --output parameter";
+            throw "--output parameter is missing";
         }
 
         const bundle = utils.readFile(params.input);
@@ -18,24 +25,45 @@ module.exports = {
         utils.mkDir(outputDir);
         utils.info(`exploding to ${outputDir}`);
 
-        if (params.type === "type2") {
-            type2Exploder.explode(bundle, outputDir);
-        } else {
-            if (params.type && params.type !== "type1") utils.info("unrecognised explode format " + params.type + ", fall backing to default format");
-            type1Exploder.explode(bundle, outputDir, params);
-        }
+        type1Exploder.explode(bundle, outputDir, params.options);
+    },
+
+    initParams: function (params, config) {
+        params = Object.assign({
+            gateway: "default"
+        }, params);
+
+        params.options = Object.assign({
+            explodePolicies: false,
+            explodeKeys: false,
+            explodeTrustedCerts: false
+        }, config.options, config.options.explode, params.options);
+
+        return params;
     },
 
     usage: function () {
-        console.log("    explode --input <input-file> [--output <output-directory>] [<options>]");
-        console.log("      --type <explode-format>");
-        console.log("        # <explode-format> can be either type1 or type2. Default option is type1.");
-        console.log("      --explodePolicies");
-        console.log("        # to explode policy code into separate files.");
-        console.log("      --explodeKeys");
-        console.log("        # to explode key data into separate files.");
-        console.log("      --explodeTrustedCerts");
-        console.log("        # to explode trusted certificate data into separate files.");
+        console.log("explode --input <input-file>");
+        console.log("  --output <output-dir>");
+        console.log("  [--options.<name> <value>,...]");
+        console.log();
+        console.log("Explodes bundle into multiple files.");
+        console.log();
+        console.log("  --input <input-file>");
+        console.log("    specify the name of input bundle file that contains gateway configuration");
+        console.log();
+        console.log("  --output <output-dir>");
+        console.log("    specify the name of directory to explode into.");
+        console.log();
+        console.log("  --options.<name> <value>");
+        console.log("    specify options as name-value pair(s) to customize the operation");
+        console.log("      .explodePolicies false|true");
+        console.log("        to explode policy code into separate files");
+        console.log("      .explodeKeys false|true");
+        console.log("        to explode key data into separate files.");
+        console.log("      .explodeTrustedCerts false|true");
+        console.log("        to explode trusted certificate data into separate files.");
+        console.log();
     }
 }
 

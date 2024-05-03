@@ -1,5 +1,5 @@
 
-const VERSION = "v1.2";
+const VERSION = "v1.2.00";
 const SCHEMA_VERSION = "v11.1.00";
 
 const utils = require("./graphman-utils");
@@ -18,6 +18,8 @@ module.exports = {
     init: function (params) {
         const config = JSON.parse(utils.readFile(utils.home() + "/graphman.configuration"));
         config.options = makeOptions(config.options || {});
+        utils.logAt(config.options.log);
+
         config.gateways = makeGateways(config.gateways || {});
         config.defaultGateway = config.gateways['default'];
 
@@ -40,36 +42,27 @@ module.exports = {
         return name ? Object.assign({name: name}, this.configuration().gateways[name]) : null;
     },
 
-    overridenGatewayConfiguration: function (obj) {
-        if (!obj) return null;
-
-        utils.warn("overriding the gateway details via parameter is deprecated, make use of multiple gateway definitions");
-        let gateway = Object.assign({}, this.configuration().defaultGateway || {});
-        Object.assign(gateway, obj);
-        gateway.name = gateway.address;
-        return gateway;
-    },
-
     schemaMetadata: function () {
         return this.metadata;
     },
 
     typeInfoByPluralName: function (name) {
-        return this.metadata.bundleTypes[name];
+        const typeName = this.metadata.pluralMethods[name];
+        return typeName ? this.metadata.types[typeName] : null;
     },
 
     refreshSchemaMetadata: function () {
         this.metadata = gqlschema.build(this.loadedConfig.schemaVersion, true);
     },
 
-    request: function (gateway, body) {
+    request: function (gateway, options) {
         const url = new URL(gateway.address);
         const headers = {
             'content-type': 'application/json; charset=utf-8'
         };
 
         if (gateway.passphrase) {
-            headers['l7-passphrase'] = gateway.passphrase;
+            headers['x-l7-passphrase'] = Buffer.from(gateway.passphrase).toString('base64');
         }
 
         if (gateway.rejectUnauthorized === undefined) {
@@ -84,13 +77,16 @@ module.exports = {
             method: 'POST',
             rejectUnauthorized: gateway.rejectUnauthorized.toString() === 'true',
             headers: headers,
-            body: body || {}
+            body: {}
         };
 
         let queryString = "";
-        if (gateway.forceDelete) queryString += "&forceDelete=" + gateway.forceDelete;
-        if (gateway.deletionStrategy) queryString += "&deletionStrategy=" + gateway.deletionStrategy;
-        if (gateway.mutationsErrorStrategy) queryString += "&mutationsErrorStrategy=" + gateway.mutationsErrorStrategy;
+        for (const key of ["activate", "comment", "forceAdminPasswordReset", "forceDelete", "replaceAllMatchingCertChain"]) {
+            if (options.hasOwnProperty(key)) {
+                queryString += "&" + key + "=" + options[key];
+            }
+        }
+
         if (queryString.length > 0) {
             req.path = req.path + "?" + queryString.substring(1);
         }
@@ -188,6 +184,7 @@ function getPartsFromRawRequest(options) {
 
 function makeOptions(options) {
     return Object.assign({
+        "log": "info",
         "policyCodeFormat": "xml",
         "keyFormat": "p12"
     }, options);

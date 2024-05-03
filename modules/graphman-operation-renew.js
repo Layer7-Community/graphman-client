@@ -4,25 +4,30 @@ const butils = require("./graphman-bundle");
 const queryBuilder = require("./graphql-query-builder");
 const opExport = require("./graphman-operation-export");
 const graphman = require("./graphman");
-const SCHEMA_METADATA = graphman.schemaMetadata();
+const metadata = graphman.schemaMetadata();
 
 module.exports = {
+    /**
+     * Renews the bundle using gateway.
+     * @param params
+     * @param params.input name of the input file containing the gateway configuration as bundle
+     * @param params.gateway name of the gateway profile
+     * @param params.output name of the output file
+     * @param params.options name-value pairs used to customize renew operation
+     */
     run: function (params) {
         if (!params.input) {
             throw "--input parameter is missing";
         }
 
-        const config = graphman.configuration();
-        const gateway = graphman.gatewayConfiguration(params.gateway) ||
-            config.defaultGateway;
-
+        const gateway = graphman.gatewayConfiguration(params.gateway);
         if (!gateway.address) {
             throw utils.newError(`${gateway.name} gateway details are missing`);
         }
 
         const bundle = utils.readFile(params.input);
 
-        Promise.all(this.renew(gateway, bundle, params.scope)).then(results => {
+        Promise.all(this.renew(gateway, bundle, params.options)).then(results => {
             const renewedBundle = {};
 
             results.forEach(item => {
@@ -40,12 +45,11 @@ module.exports = {
         });
     },
 
-    renew: function (gateway, bundle, scope) {
+    renew: function (gateway, bundle, options) {
         const promises = [];
-        scope = scope || [];
 
         Object.keys(bundle).forEach(key => {
-            if (SCHEMA_METADATA.pluralMethods[key] && (!scope.length || scope.includes(key))) {
+            if (SCHEMA_METADATA.pluralMethods[key] && (!options.scope.length || options.scope.includes(key))) {
                 utils.info("renewing " + key);
                 promises.push(renewEntities(gateway, bundle[key], SCHEMA_METADATA.pluralMethods[key]));
             } else {
@@ -59,24 +63,53 @@ module.exports = {
         return promises;
     },
 
+    initParams: function (params, config) {
+        params = Object.assign({
+            gateway: "default"
+        }, params);
+
+        params.options = Object.assign({scope: []}, params.options);
+
+        return params;
+    },
+
     usage: function () {
-        console.log("    renew --input <input-file> [--output <output-file>] [<options>]");
-        console.log("      --gateway <name>");
-        console.log("        # specify the name of gateway profile from the graphman configuration");
-        console.log("      --scope <entity-type-plural-tag>");
-        console.log("        # to select one or more entity types for renew operation.");
-        console.log("        # repeat this option to select multiple entity types.");
+        console.log("renew --input <input-file> --gateway <name>");
+        console.log("  [--output <output-file>]");
+        console.log("  [--options.<name> <value>,...]");
+        console.log();
+        console.log("Renews bundle using a gateway.");
+        console.log("This operation is useful when the given bundle is out of date or contains partial details.");
+        console.log();
+        console.log("  --input <input-file>");
+        console.log("    specify the name of input bundle file that contains gateway configuration");
+        console.log();
+        console.log("  --gateway <name>");
+        console.log("    specify the name of gateway profile from the graphman configuration.");
+        console.log("    when skipped, defaulted to the 'default' gateway profile.");
+        console.log();
+        console.log("  --output <output-file>");
+        console.log("    specify the name of file to capture the renewed bundle.");
+        console.log("    when skipped, output will be written to the console.");
+        console.log();
+        console.log("  --options.<name> <value>");
+        console.log("    specify options as name-value pair(s) to customize the operation");
+        console.log("      .scope <enity-type-plural-name>");
+        console.log("        select one or more entity types for renew operation.");
+        console.log("        by default, all the entity types will be considered for operation's scope.");
+        console.log();
     }
 }
 
 function renewEntities(gateway, entities, type) {
+    const typeObj = SCHEMA_METADATA.types[type];
+
     if (entities.length === 0) {
         const empty = {};
-        empty[type.pluralMethod] = [];
+        empty[typeObj.pluralMethod] = [];
         return Promise.resolve(empty);
     }
 
-    const typeObj = SCHEMA_METADATA.types[type];
     let queryInfo = {head: `query reviseBundleFor${type}(\n`, body: "", variables: {}};
 
     if (type === 'SoapService') {
@@ -135,7 +168,7 @@ function buildQueryForFipUserOrGroupEntities(entities, type, typeObj, queryInfo)
 
 function buildQueryForEntities(entities, type, typeObj, queryInfo) {
     let separator = "";
-    let excludedFields = SCHEMA_METADATA.parserHints.excludedFields[type];
+    let excludedFields = metadata.parserHints.excludedFields[type];
     excludedFields = excludedFields ? ":-" + excludedFields : "";
     entities.forEach((entity, index) => {
         const refName = `${typeObj.singularMethod}${index + 1}`;

@@ -55,11 +55,13 @@ module.exports = {
         args.push(outputFile);
 
         if (fs.existsSync(outputFile)) fs.unlinkSync(outputFile);
-        console.log(String(cp.execFileSync(execFile, args)));
-
-        const output = String(fs.readFileSync(outputFile));
+        const stdOutput = String(cp.execFileSync(execFile, args));
+        console.log(stdOutput);
+        const output = fs.existsSync(outputFile)? String(fs.readFileSync(outputFile)) : "{}";
         console.log(output);
-        return JSON.parse(output);
+        const json = JSON.parse(output);
+        json.stdout = stdOutput;
+        return json;
     },
 
     expectArray: function (actual) {

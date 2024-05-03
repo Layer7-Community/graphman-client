@@ -3,18 +3,31 @@ const graphman = require("./graphman");
 const pcode = require("./policy-code");
 
 module.exports = {
+    /**
+     * Validates the bundle. Precisely, it validates the policy code as per the available policy code schema.
+     * @param params
+     * @param params.input input bundle file
+     */
     run: function (params) {
         if (!params.input) {
-            throw new utils.newError("Missing --input argument");
+            throw new utils.newError("--input parameter is missing");
         }
 
         const input = utils.readFile(params.input);
         validateBundle(input);
     },
 
+    initParams: function (params, config) {
+        // do nothing
+        return params;
+    },
+
     usage: function () {
-        utils.print("    validate --input <input-file>");
-        utils.print("    Validates the bundled entities. Currently, it is limited to validating the policy code in JSON format.");
+        console.log("validate --input <input-file>");
+        console.log();
+        console.log("Validates the bundled entities.");
+        console.log("Currently, it is limited to validating the policy code in JSON format.");
+        console.log();
     }
 }
 
