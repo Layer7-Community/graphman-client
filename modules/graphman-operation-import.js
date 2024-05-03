@@ -41,7 +41,9 @@ module.exports = {
         const revisedBundle = params.options.revise ? opRevise.revise(inputBundle) : inputBundle;
         preImportExtension.call(revisedBundle);
 
-        request.body = queryBuilder.build(params.using, Object.assign(revisedBundle, params.variables), params.options);
+        const query = queryBuilder.build(params.using, Object.assign(revisedBundle, params.variables), params.options);
+        delete query.options;
+        request.body = query;
 
         if (isPartsNeeded(revisedBundle)) {
             const boundary = "--------" + Date.now();
@@ -71,16 +73,10 @@ module.exports = {
         params.options.mappings = utils.mappings(params.options.mappings || {});
 
         const using = params.using;
-        if (!params.bundleDefaultAction) {
-            if (using === 'delete-bundle') params.bundleDefaultAction = 'DELETE';
-        } else {
-            if (using !== 'delete-bundle' && params.bundleDefaultAction === 'DELETE') {
-                utils.warn("DELETE action with the improper order of mutation operations may lead to failures");
-            }
-
-            if (using === 'delete-bundle' && params.bundleDefaultAction !== 'DELETE') {
-                utils.warn(`Unexpected action specified for the chosen mutation: using=${using} and bundleDefaultAction=${params.bundleDefaultAction}`);
-            }
+        if (using === 'delete-bundle') {
+            params.options.bundleDefaultAction = 'DELETE';
+        } else if (params.options.bundleDefaultAction === 'DELETE') {
+            utils.warn("DELETE action with the improper order of mutation operations may lead to failures");
         }
 
         return params;

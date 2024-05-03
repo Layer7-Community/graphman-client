@@ -16,8 +16,7 @@
         "keyFormat": "p12",
 
         "export": {
-            "bundleDefaultAction": "NEW_OR_UPDATE",
-            "bundleMappingsLevel": 0
+            "bundleDefaultAction": "NEW_OR_EXISTING"
         },
 
         "explode": {

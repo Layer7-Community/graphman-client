@@ -43,6 +43,7 @@ module.exports = {
 
         utils.info(`exporting from ${gateway.name||gateway.address} gateway`);
         const request = graphman.request(gateway, query.options);
+        delete query.options;
         request.body = query;
         graphman.invoke(request, callback);
     },
