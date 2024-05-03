@@ -54,6 +54,10 @@ module.exports = {
         return this.metadata;
     },
 
+    typeInfoByPluralName: function (name) {
+        return this.metadata.bundleTypes[name];
+    },
+
     refreshSchemaMetadata: function () {
         this.metadata = gqlschema.build(this.loadedConfig.schemaVersion, true);
     },

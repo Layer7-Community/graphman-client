@@ -160,7 +160,8 @@ module.exports = {
     },
 
     print: function (data) {
-        console.log(this.pretty(data));
+        if (data) console.log(this.pretty(data));
+        else console.log();
     },
 
     log: function (prefix, ...args) {
