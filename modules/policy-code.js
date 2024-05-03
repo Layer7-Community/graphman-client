@@ -53,12 +53,12 @@ function validateAssertion(path, assertion, callback) {
     const assertionName = getAssertionName(assertion);
     if (!knownAssertions.includes(assertionName)) {
         callback({path: path, name: assertionName, tag: assertion, category: 'info', info: 'unknown assertion, ignoring it'});
-    } else if (isCompositeAssertion(assertion, assertionName)) {
-        validateAssertions(path, assertion[assertionName], callback);
     } else {
         const valid = vRef.validator(assertion)
         if (!valid) {
             callback({path: path, name: assertionName, tag: assertion, category: 'error', error: 'validation failed', errors: vRef.validator.errors});
+        } else if (isCompositeAssertion(assertion, assertionName)) {
+            validateAssertions(path, assertion[assertionName], callback);
         }
     }
 }
