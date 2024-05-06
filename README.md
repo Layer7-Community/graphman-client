@@ -35,7 +35,7 @@ example:
 ```
 export GRAPHMAN_HOME=~/dev/mygraphmanclient
 ```
-> **Note**
+> [!TIP]
 > Make sure adding the node and graphman client paths to the PATH environment variable so that client can be used from any directory workspace.
 
 Then, you configure the one or more gateway profiles (under _gateways_ section) to interact with by editing the _**graphman.configuration**_ file. 
@@ -62,7 +62,7 @@ Choose one of the gateway profile as part of _--gateway_ parameter while working
     }
 }
 ```
-> **Note**
+> [!NOTE]
 > mTLS based authentication takes the precedence over the password-based authentication.
 
 > **Note**
