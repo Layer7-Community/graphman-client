@@ -173,7 +173,7 @@ delete some files, copy others, etc) and repackage it as a single bundle JSON by
 ## Using the Graphman export command
 
 The Graphman export command lets you create a bundle for specific entities based on a query targetting those
-entities. The queries folder contains a number of sample queries that can be used for this purpose. The query
+entities. The **queries** folder contains a number of sample queries that can be used for this purpose. The query
 to use is provided to the command using the --using option. Here are some examples and how to use them.
 
 ### all
@@ -181,46 +181,53 @@ to use is provided to the command using the --using option. Here are some exampl
 This query lets you package the entire configuration of a gateway. No input parameters are needed for this
 one:
 ```
-./graphman.sh export --using all --output mybundle.json
+./graphman.sh export --gateway source-gateway --using all --output mybundle.json
 ```
 
 ### folder
 This sample query packages a combination of all policies and services
-configuration entities that are at a specific folder path location as well as in children sub-folders.
+ that are at a specific folder path location as well as in children sub-folders.
 
-To export all policies and services from a folder /utils/foo and all its sub-folders:
+To export all policies and services from a folder _/hello/world_ and all its sub-folders:
 ```
-./graphman.sh export --gateway source-gateway --using folder --variables.folderPath /utils/foo --output foo.json
+./graphman.sh export --gateway source-gateway --using folder --variables.folderPath /hello/world --output hello-world.json
+```
+
+### service
+This query lets you package a particular published service from the source gateway. You identify which service to pull by providing the command the
+resolution path defined for this service.
+
+To export a service with the _/hello-world_ resolution path:
+```
+./graphman.sh export --gateway source-gateway --using service --variables.resolutionPath /hello-world --output hello-world.json
+```
+
+### encass
+This query lets you package a particular encapsulated assertion from the source gateway. To export an encapsulated assertion with the _hello-world_ name:
+```
+./graphman.sh export --gateway source-gateway --using encass --variables.name hello-world --output hello-world.json
+```
+
+### policy
+This query lets you package a particular policy from the source gateway. To export a policy with the _hello-world_ name:
+```
+./graphman.sh export --gateway source-gateway --using encass --variables.name hello-world --output hello-world.json
 ```
 
 > [!TIP]
-> To include the dependencies, choose either of the below option
-> 
+> To include the dependencies while using above queries, choose either of the below option
+>
 > using the query suffix
->> <some-query>**:full**
-> 
+>> <folder|service|encass|policy>**:full**
+>
 > using the additional parameter
->> _--variables.includeAllDependencies true_ 
+>> _--variables.includeAllDependencies true_
 
 > [!NOTE]
-> Sometimes, complex query execution might get aborted due to the limits imposed for protection. 
-> Please adjust the allowed query max depth and complexity using the gateway's system properties. 
+> Sometimes, complex query execution might get aborted due to the limits imposed for protection.
+> Please adjust the allowed query max depth and complexity using the gateway's system properties.
 > For more information, please check the system properties section of the [graphman](https://techdocs.broadcom.com/us/en/ca-enterprise-software/layer7-api-management/api-gateway/11-1/apis-and-toolkits/graphman-management-api.html) page.
-
-### service
-This query lets you package a particular published service from the source gateway. You can package it with
-or without its dependencies. You identify which service to pull by providing the command the
-resolution path defined for this service.
-
-To export /hello-world service without dependencies:
-```
-./graphman.sh export --using service --variables.resolutionPath /hello-world --output hello-world.json
-```
-To export /hello-world service along with its dependencies:
-```
-./graphman.sh export --using service:full --variables.resolutionPath /hello-world --output hello-world.json
-```
-
+> 
 ### General using queries and creating your own queries
 The folder 'queries' contains other queries you can use. Each query is defined in a .gql file and corresponding
 .json files to wrap the query and its variables. You will notice some of the .gql files contain raw graphql
