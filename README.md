@@ -30,13 +30,13 @@ node -v
 If node is not already installed on your system, you can download it from https://nodejs.org/en/download/.
 Minimum version that is expected to work with is 16.+.
 
-Next, set the environmental variable GRAPHMAN_HOME to the path where this packaged is installed. For
+Next, set the environmental variable **GRAPHMAN_HOME** to the path where this packaged is installed. For
 example:
 ```
 export GRAPHMAN_HOME=~/dev/mygraphmanclient
 ```
 > [!TIP]
-> Make sure adding the node and graphman client paths to the PATH environment variable so that client can be used from any directory workspace.
+> Make sure adding the node and graphman client paths to the **PATH** environment variable so that client can be used from any directory workspace.
 
 Then, you configure the one or more gateway profiles (under _gateways_ section) to interact with by editing the _**graphman.configuration**_ file. 
 Choose one of the gateway profile as part of _--gateway_ parameter while working with CLI. When this parameter is omitted, it will be defaulted to the **_default_** gateway profile.
@@ -65,7 +65,7 @@ Choose one of the gateway profile as part of _--gateway_ parameter while working
 > [!NOTE]
 > mTLS based authentication takes the precedence over the password-based authentication.
 
-> **Note**
+> [!NOTE]
 > In order to protect the gateways from the accidental mutations, by default, mutation based queries are disallowed. You must enable them by setting the _allowMutations_ field of the gateway profile to _true_.
 > 
 You are now ready to start using Graphman. 
@@ -84,14 +84,14 @@ You can apply this configuration bundle as-is to the target gateway.
 Congratulations, you just packaged all the configuration from the source gateway, and applied it to the
 target gateway.
 
-> **Note**
+> [!TIP]
 > Use platform specific entrypoint to interact with the GRAPHMAN. 
 > 
 > - Windows - graphman.bat
 > 
 > - Linux - graphman.sh
 
-> **Note**
+> [!TIP]
 > Running GRAPHMAN with no arguments lists the supported operations and shows how to get started. 
  
 You can get more information about every operation by specifying the _--help_ parameter.
@@ -104,7 +104,7 @@ To know about client itself, now use the _**version**_ operation
 ./graphman.sh version
 ```
 
-> **Warning**
+> [!WARNING]
 > Graphman is still under continuous development to extend its support to the gateway entities. 
 > As GraphQL schema is subjected to the frequent modifications, new or modified queries may not be compatible with the older gateways. 
 > 
@@ -193,12 +193,12 @@ To export all policies and services from a folder /utils/foo and all its sub-fol
 ./graphman.sh export --gateway source-gateway --using folder --variables.folderPath /utils/foo --output foo.json
 ```
 
-> **Note**
+> [!TIP]
 > To include the dependencies, consider specifying below parameter
 > 
 >> _--variables.includeAllDependencies true_ 
 
-> **Note**
+> [!NOTE]
 > Sometimes, complex query execution might get aborted due to the limits imposed for protection. 
 > Please adjust the allowed query complexity using the gateway's system property (com.l7tech.server.graphman.maxQueryComplexity=3000). 
 > For more information, please check the system properties section of the [graphman](https://techdocs.broadcom.com/us/en/ca-enterprise-software/layer7-api-management/api-gateway/11-1/apis-and-toolkits/graphman-management-api.html) page.
@@ -250,7 +250,7 @@ By default, mutation action is NEW_OR_UPDATE. You can override this using _--bun
 ./graphman.sh import --using install-bundle --input hello-world.json --bundleDefaultAction NEW_OR_EXISTING
 ```
 
-> **NOTE**
+> [!NOTE]
 > Permitted mutation actions are:
 > - NEW_OR_UPDATE
 > - NEW_OR_EXISTING
