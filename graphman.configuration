@@ -5,6 +5,8 @@
             "username": "admin",
             "password": "7layer",
             "rejectUnauthorized": false,
+            "keyFilename": null,
+            "certFilename": null,
             "passphrase": "7layer",
             "allowMutations": false
         }
@@ -13,22 +15,6 @@
     "options": {
         "log": "info",
         "policyCodeFormat": "xml",
-        "keyFormat": "p12",
-
-        "export": {
-            "bundleDefaultAction": "NEW_OR_EXISTING"
-        },
-
-        "explode": {
-            "explodePolicies": false,
-            "explodeKeys": false,
-            "explodeTrustedCerts": false
-        },
-
-        "import": {
-            "forceDelete": false,
-            "forceAdminPasswordReset": false,
-            "replaceAllMatchingCertChain": false
-        }
+        "keyFormat": "p12"
     }
 }

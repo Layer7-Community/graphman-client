@@ -91,12 +91,12 @@ module.exports = {
             req.path = req.path + "?" + queryString.substring(1);
         }
 
-        if (gateway.username && gateway.password) {
-            req.auth = gateway.username + ":" + gateway.password;
-        } else if (gateway.keyFilename && gateway.certFilename) {
+        if (gateway.keyFilename && gateway.certFilename) {
             // This expects the certificate.pem and certificate.key file(s) to be in the graphman-client directory. 
-            req.key = utils.readFileBinary(`${__dirname}/../${gateway.keyFilename}`);
-            req.cert = utils.readFileBinary(`${__dirname}/../${gateway.certFilename}`);
+            req.key = utils.readFileBinary(utils.path(utils.home(), gateway.keyFilename));
+            req.cert = utils.readFileBinary(utils.path(utils.home(), gateway.certFilename));
+        } else if (gateway.username && gateway.password) {
+            req.auth = gateway.username + ":" + gateway.password;
         } else {
             throw new Error("Authentication details are missing. Please provide either basic authentication (username/password) or mTLS based authentication (keyFilename/certFilename)");
         }
@@ -160,6 +160,7 @@ module.exports = {
 
 function maskedHttpRequest(options) {
     if (options.auth) options.auth = "***";
+    if (options.headers['x-l7-passphrase']) options.headers['x-l7-passphrase'] = "***";
     if (options.headers['l7-passphrase']) options.headers['l7-passphrase'] = "***";
     if (options.headers.encpass) options.headers.encpass = "***";
     return options;
@@ -198,6 +199,8 @@ function makeGateways(gateways) {
             "username": "admin",
             "password": "7layer",
             "rejectUnauthorized": false,
+            "keyFilename": null,
+            "certFilename": null,
             "passphrase": "7layer",
             "allowMutations": false
         };

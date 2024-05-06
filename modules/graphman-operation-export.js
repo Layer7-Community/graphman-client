@@ -29,7 +29,11 @@ module.exports = {
         utils.fine("start time: " + startDate);
         this.export(gateway, query, (data, parts) => {
             const endDate = Date.now();
-            onExportDataCallback(data, parts, params);
+            if (params.onExportDataCallback) {
+                params.onExportDataCallback(data, parts, params);
+            } else {
+                onExportDataCallback(data, parts, params);
+            }
             utils.fine("end time: " + endDate);
             utils.fine("operation completed in " + (endDate - startDate) + " milliseconds");
         });
@@ -57,15 +61,30 @@ module.exports = {
         params.variables = params.variables || {};
         params.options = Object.assign({
             bundleDefaultAction: "NEW_OR_UPDATE",
-            bundleMappingsLevel: 0,
             excludeDependencies: false,
             excludeGoids: false
-        }, config.options, config.options.export, params.options);
+        }, config.options, params.options);
 
         params.options.mappings = utils.mappings({});
 
+        // special post processing for encass query
         if (params.using === "encass" || params.using.startsWith("encass:")) {
             params.variables.policyName = params.variables.policyName || params.variables.name;
+
+            const operation = this;
+            params.onExportDataCallback = function (data, parts, params) {
+                const encassConfigByName = data.data ? data.data.encassConfigByName : null;
+                const policyByName = data.data ? data.data.policyByName : null;
+                // retry export operation if encass policy is not retrieved in the first attempt
+                if (encassConfigByName && encassConfigByName.policyName && !(policyByName && policyByName.name)) {
+                    delete params.onExportDataCallback;
+                    utils.info("retrying export operation to retrieve encass and it's backing policy details")
+                    params.variables.policyName = encassConfigByName.policyName;
+                    operation.run(params);
+                } else {
+                    onExportDataCallback(data, parts, params);
+                }
+            };
         }
 
         return params;

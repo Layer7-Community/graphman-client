@@ -34,10 +34,8 @@ module.exports = {
         }, params);
 
         params.options = Object.assign({
-            explodePolicies: false,
-            explodeKeys: false,
-            explodeTrustedCerts: false
-        }, config.options, config.options.explode, params.options);
+            level: 0
+        }, config.options, params.options);
 
         return params;
     },
@@ -57,12 +55,11 @@ module.exports = {
         console.log();
         console.log("  --options.<name> <value>");
         console.log("    specify options as name-value pair(s) to customize the operation");
-        console.log("      .explodePolicies false|true");
-        console.log("        to explode policy code into separate files");
-        console.log("      .explodeKeys false|true");
-        console.log("        to explode key data into separate files.");
-        console.log("      .explodeTrustedCerts false|true");
-        console.log("        to explode trusted certificate data into separate files.");
+        console.log("      .level 0|1|2");
+        console.log("        to decide the level of explode operation");
+        console.log("          - 0, default level where the individual entities will be exploded into separate files");
+        console.log("          - 1, binary data (p12, pem, etc) associated with the entities will be exploded into separate files");
+        console.log("          - 2, policy code will be exploded into separate files");
         console.log();
     }
 }
@@ -98,7 +95,7 @@ let type1Exploder = (function () {
         utils.info(`  ${displayName}`);
         const targetDir = entity.folderPath ? utils.safePath(dir, "tree", entity.folderPath) : utils.path(dir, key);
 
-        if (options.explodeTrustedCerts && key === "trustedCerts") {
+        if (options.level >= 1 && key === "trustedCerts") {
             if (entity.certBase64) {
 				let pemData = BEGIN_CERT_HEADER;
 				pemData += '\r\n' + entity.certBase64;
@@ -108,7 +105,7 @@ let type1Exploder = (function () {
             }
         }
 
-        if (options.explodeKeys && key === "keys") {
+        if (options.level >= 1 && key === "keys") {
             if (entity.p12) {
                 utils.writeFile(`${targetDir}/${filename}.p12`, atob(entity.p12));
                 entity.p12 = `{${filename}.p12}`;
@@ -130,7 +127,7 @@ let type1Exploder = (function () {
             }
         }
 
-        if (options.explodePolicies && entity.policy) {
+        if (options.level >= 2 && entity.policy) {
             if (entity.policy.xml) {
                 utils.writeFile(`${targetDir}/${filename}.xml`, entity.policy.xml);
                 entity.policy.xml = `{${filename}.xml}`;

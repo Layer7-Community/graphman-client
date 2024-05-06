@@ -27,9 +27,9 @@ module.exports = {
             throw utils.newError(`${gateway.name} gateway details are missing`);
         }
 
-        if (!gateway.allowMutations && !params.options.force) {
+        if (!gateway.allowMutations) {
             utils.warn(`${gateway.name} gateway is not opted for mutations, ignoring the operation`);
-            utils.warn("  please consider either modifying the gateway profile in the graphman configuration or using the --force option");
+            utils.warn("  make sure the gateway profile is ready for mutations (.allowMutations=true)");
             return;
         }
 
@@ -64,11 +64,14 @@ module.exports = {
         }, params);
 
         params.options = Object.assign({
+            comment: null,
             bundleDefaultAction: "NEW_OR_UPDATE",
             excludeGoids: false,
-            revise: false,
-            force: false
-        }, config.options, config.options.import, params.options);
+            forceDelete: false,
+            forceAdminPasswordReset: false,
+            replaceAllMatchingCertChain: false,
+            revise: false
+        }, config.options, params.options);
 
         params.options.mappings = utils.mappings(params.options.mappings || {});
 
@@ -119,8 +122,12 @@ module.exports = {
         console.log("        overrides the mapping action for the specified class of entities. This option can be repeatable.");
         console.log("      .excludeGoids false|true");
         console.log("        use this option to exclude GOIDs from the importing bundled entities.");
-        console.log("      .force false|true");
-        console.log("        to force the operation even if the selected gateway profile is not designated for mutations.");
+        console.log("      .forceDelete false|true");
+        console.log("        to force deleting the entities when required.");
+        console.log("      .forceAdminPasswordReset false|true");
+        console.log("        to force modifying the admin user's password.");
+        console.log("      .replaceAllMatchingCertChain false|true");
+        console.log("        to replace all matching cert chain for the keys when required.");
         console.log("      .revise false|true");
         console.log("        to revise the importing bundled entities (especially for matching the GOIDs) with respect to target gateway configuration.");
         console.log();

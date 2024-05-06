@@ -35,59 +35,50 @@ example:
 ```
 export GRAPHMAN_HOME=~/dev/mygraphmanclient
 ```
+> **Note**
+> Make sure adding the node and graphman client paths to the PATH environment variable so that client can be used from any directory workspace.
 
-Then, you configure the Graphman endpoints to interact with by editing the file graphman.configuration. For
-example:
+Then, you configure the one or more gateway profiles (under _gateways_ section) to interact with by editing the _**graphman.configuration**_ file. 
+Choose one of the gateway profile as part of _--gateway_ parameter while working with CLI. When this parameter is omitted, it will be defaulted to the **_default_** gateway profile.
 ```
 {
-  "sourceGateway": {
-    "address": "https://some-source-gateway:8443/graphman",
-    "username": "admin",
-    "password": "7layer",
-    "rejectUnauthorized": false,
-    "passphrase": "7layer"
-  },
+    "gateways": {
+        "default": {
+            "address": "https://localhost:8443/graphman",
+            "username": "admin",
+            "password": "7layer",
+            "rejectUnauthorized": false,
+            "keyFilename": null,  /* key for mTLS based authentication */
+            "certFilename": null,  /* cert for mTLS based authentication */
+            "passphrase": "7layer",
+            "allowMutations": false  /* true to allow mutations */
+        }
+    },
 
-  "targetGateway": {
-    "address": "https://some-target-gateway:8443/graphman",
-    "username": "admin",
-    "password": "7layer",
-    "rejectUnauthorized": false,
-    "passphrase": "7layer"
-  }
+    "options": {
+        "log": "info",
+        "policyCodeFormat": "xml",
+        "keyFormat": "p12"
+    }
 }
 ```
+> **Note**
+> mTLS based authentication takes the precedence over the password-based authentication.
 
-If you wish to authenticate using a certificate provide the following values in the file graphman.configuration:
-```
-{
-  "sourceGateway": {
-    "address": "https://some-source-gateway:8443/graphman",
-    "certFilename": "authentication-certificate.pem",
-    "keyFilename": "authentication-certificate.key",
-    "rejectUnauthorized": false,
-    "passphrase": "7layer"
-  },
+> **Note**
+> In order to protect the gateways from the accidental mutations, by default, mutation based queries are disallowed. You must enable them by setting the _allowMutations_ field of the gateway profile to _true_.
+> 
+You are now ready to start using Graphman. 
 
-  "targetGateway": {
-    "address": "https://some-target-gateway:6443/graphman",
-    "certFilename": "authentication-certificate.pem",
-    "keyFilename": "authentication-certificate.key",
-    "rejectUnauthorized": false,
-    "passphrase": "7layer"
-  }
-}
-```
-
-You are now ready to start using Graphman. To bundle the entire configuration of the source gateway, run the
+To bundle the entire configuration of the gateway, run the
 following command:
 ```
-./graphman.sh export --using all --output mybundle.json
+./graphman.sh export --gateway source-gateway --using all --output mybundle.json
 ```
 
 You can apply this configuration bundle as-is to the target gateway.
 ```
-./graphman.sh import --input mybundle.json
+./graphman.sh import --gateway target-gateway --input mybundle.json
 ```
 
 Congratulations, you just packaged all the configuration from the source gateway, and applied it to the
@@ -101,21 +92,26 @@ target gateway.
 > - Linux - graphman.sh
 
 > **Note**
-> Running GRAPHMAN with no arguments shows the description about the supported operations. Try it out.
+> Running GRAPHMAN with no arguments lists the supported operations and shows how to get started. 
+ 
+You can get more information about every operation by specifying the _--help_ parameter.
+```
+./graphman.sh <operation> --help
+```
+
+To know about client itself, now use the _**version**_ operation
+```
+./graphman.sh version
+```
 
 > **Warning**
 > Graphman is still under continuous development to extend its support to the gateway entities. 
 > As GraphQL schema is subjected to the frequent modifications, new or modified queries may not be compatible with the older gateways. 
-> Because of which, CLI is improved to work with multiple schemas. Use configuration file or CLI argument to decide the schema to work with.
-> - "schemaVersion": <schema-version>
-> - --schemaVersion <schema-version>
 > 
-> Supported schemas are:
-> - v10.1-CR04 (default) 
-> - v11.0-CR02
 > 
-
-> **Note**
+> Supported schema(s):
+> - v11.1.00
+>
 > Use the older clients (https://github.com/Layer7-Community/graphman-client/releases) to work with the earlier schemas.
 
 ## Graphman configuration bundles <a name="bundles"></a>
@@ -163,15 +159,15 @@ each configuration entity is separated in its own individual JSON file organized
 
 To created an 'exploded' representation of a Graphman bundle, use this command:
 ```
-./graphman.sh explode --input mybundle.json --output exploded
+./graphman.sh explode --input mybundle.json --output bundle-exploded
 ```
 
-This will create a directory structure under exploded, which contains each configuration entity in its own
+This will create a directory structure under the _bundle-exploded_ directory, which contains each configuration entity in its own
 file. You manipulate the configuration in this directory structure directly (changing JSON file properties, 
 delete some files, copy others, etc) and repackage it as a single bundle JSON by doing this reverse command.
 
 ```
-./graphman.sh implode --input exploded --output mynewbundle.json
+./graphman.sh implode --input bundle-exploded --output mynewbundle.json
 ```
 
 ## Using the Graphman export command
@@ -189,21 +185,25 @@ one:
 ```
 
 ### folder
+This sample query packages a combination of all policies and services
+configuration entities that are at a specific folder path location as well as in children sub-folders.
 
-This sample query packages a combination of all policy fragments, web API services, and soap services
-configuration entities that are at a specific folder path location as well as in children subfolders.
+To export all policies and services from a folder /utils/foo and all its sub-folders:
+```
+./graphman.sh export --gateway source-gateway --using folder --variables.folderPath /utils/foo --output foo.json
+```
 
-To export all policy fragments, web API services, and soap services configurations from a folder
-/utils/foo and all its subfolders:
-```
-./graphman.sh export --using folder --variables.folderPath /utils/foo --output folderUtilsFoo.json
-```
 > **Note**
-> Sometimes, folder query execution might get aborted due to the limits imposed for protection. 
-> Please adjust the allowed query complexity using the gateway's system property (com.l7tech.server.graphman.maxQueryComplexity=3000). 
-> For more information, please check the system properties section of the [graphman](https://techdocs.broadcom.com/us/en/ca-enterprise-software/layer7-api-management/api-gateway/10-1/apis-and-toolkits/graphman.html) page.
+> To include the dependencies, consider specifying below parameter
+> 
+>> _--variables.includeAllDependencies true_ 
 
-### webApiService
+> **Note**
+> Sometimes, complex query execution might get aborted due to the limits imposed for protection. 
+> Please adjust the allowed query complexity using the gateway's system property (com.l7tech.server.graphman.maxQueryComplexity=3000). 
+> For more information, please check the system properties section of the [graphman](https://techdocs.broadcom.com/us/en/ca-enterprise-software/layer7-api-management/api-gateway/11-1/apis-and-toolkits/graphman-management-api.html) page.
+
+### service
 This query lets you package a particular web API service from the source gateway. You can package it with
 or without its dependencies. You identify which web API service to pull by providing the command the
 resolution path defined for this web API service.
