@@ -194,27 +194,31 @@ To export all policies and services from a folder /utils/foo and all its sub-fol
 ```
 
 > [!TIP]
-> To include the dependencies, consider specifying below parameter
+> To include the dependencies, choose either of the below option
 > 
+> using the query suffix
+>> <some-query>**:full**
+> 
+> using the additional parameter
 >> _--variables.includeAllDependencies true_ 
 
 > [!NOTE]
 > Sometimes, complex query execution might get aborted due to the limits imposed for protection. 
-> Please adjust the allowed query complexity using the gateway's system property (com.l7tech.server.graphman.maxQueryComplexity=3000). 
+> Please adjust the allowed query max depth and complexity using the gateway's system properties. 
 > For more information, please check the system properties section of the [graphman](https://techdocs.broadcom.com/us/en/ca-enterprise-software/layer7-api-management/api-gateway/11-1/apis-and-toolkits/graphman-management-api.html) page.
 
 ### service
-This query lets you package a particular web API service from the source gateway. You can package it with
-or without its dependencies. You identify which web API service to pull by providing the command the
-resolution path defined for this web API service.
+This query lets you package a particular published service from the source gateway. You can package it with
+or without its dependencies. You identify which service to pull by providing the command the
+resolution path defined for this service.
 
 To export /hello-world service without dependencies:
 ```
-./graphman.sh export --using webApiService --variables.resolutionPath /hello-world --output hello-world.json
+./graphman.sh export --using service --variables.resolutionPath /hello-world --output hello-world.json
 ```
 To export /hello-world service along with its dependencies:
 ```
-./graphman.sh export --using webApiService:full --variables.resolutionPath /hello-world --output hello-world.json
+./graphman.sh export --using service:full --variables.resolutionPath /hello-world --output hello-world.json
 ```
 
 ### General using queries and creating your own queries
@@ -251,7 +255,7 @@ By default, mutation action is NEW_OR_UPDATE. You can override this using _--bun
 ```
 
 > [!NOTE]
-> Permitted mutation actions are:
+> Permitted entity mapping actions are:
 > - NEW_OR_UPDATE
 > - NEW_OR_EXISTING
 > - ALWAYS_CREATE_NEW
