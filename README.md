@@ -438,8 +438,8 @@ re-encrypted for modification using this standard openssl command
 ```
 
 # Policy as code
-Policy code can be represented in newer formats i.e., JSON and YAML. By default, it will be in XML. Client can be configured to work with these newer formats.
-Use _policyCodeFormat_ global option to choose one of these formats. Exploding the bundle with level 2 makes the policy code separate from the usual configuration when needed. 
+Policy code can be represented in newer formats i.e., **_json_** and **_yaml_**. By default, it will be in **_xml_**. Client can be configured to work with these newer formats.
+Use _policyCodeFormat_ global option to choose one of these formats. Exploding the bundle with level **2** makes the policy code separate from the usual configuration when needed. 
 When the policy code is authored outside the Layer7, it can be validated using the below operation.
 ```
 ./graphman.sh validate --input mybundle.json
