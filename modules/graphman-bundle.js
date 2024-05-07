@@ -2,11 +2,19 @@
 const utils = require("./graphman-utils");
 const SCHEMA_METADATA = require("./graphman").schemaMetadata();
 const GOID_PLURAL_METHODS = ["fipUsers", "federatedUsers", "internalUsers", "fipGroups", "federatedGroups", "internalGroups", "ldaps", "ldapIdps", "fips", "federatedIdps", "trustedCerts"];
+const DEPRECATED_TYPES = [
+    "webApiServices", "soapServices", "internalWebApiServices", "internalSoapServices",
+    "policyFragments",
+    "fips", "ldaps", "fipUsers", "fipGroups"
+];
+
 module.exports = {
     EXPORT_USE: 'export',
     IMPORT_USE: 'import',
     GOID_MAPPING_PLURAL_METHODS: GOID_PLURAL_METHODS,
     ENTITY_TYPE_PLURAL_TAG_FRIENDLY_NAME: {
+        policies: 'policy',
+        services: 'service',
         policyFragments: 'policy',
         webApiServices: 'webapi',
         soapServices: 'soap',
@@ -154,7 +162,9 @@ module.exports = {
         if (left.name && left.direction && left.providerType &&
             (left.name !== right.name || left.direction !== right.direction || left.providerType !== right.providerType)) return false;
 
-        return !(idRef !== 'name' && left.name && left.name !== right.name);
+        if (idRef !== 'name' && left.name && right.name && left.name !== right.name) return false;
+
+        return true;
     },
 
     entityIdRef: function (entity) {
@@ -281,6 +291,10 @@ let exportSanitizer = function () {
                 if (!result[sanitizedKey]) result[sanitizedKey] = [];
                 if (!result.mappings[sanitizedKey]) result.mappings[sanitizedKey] = [];
                 if (!result.dependencyMappings[sanitizedKey]) result.dependencyMappings[sanitizedKey] = [];
+
+                if (DEPRECATED_TYPES.includes(sanitizedKey)) {
+                    utils.warn("found deprecated entity type: " + sanitizedKey + ", revise the query");
+                }
 
                 if (Array.isArray(obj[key])) {
                     if (obj[key].length) utils.info(`sanitizing ${key} to ${sanitizedKey}`);
@@ -423,6 +437,11 @@ let importSanitizer = function () {
                 const goidRequired = GOID_PLURAL_METHODS.includes(key);
                 const includeGoids = !options.excludeGoids;
                 utils.info("inspecting " + key);
+
+                if (DEPRECATED_TYPES.includes(key)) {
+                    utils.warn("found deprecated entity type: " + key + ", revise the bundle");
+                }
+
                 if (Array.isArray(bundle[key])) {
                     bundle[key].forEach(item => sanitizeEntity(item, key, goidRequired || includeGoids));
                     if (bundle[key].length === 0) {

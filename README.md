@@ -30,92 +30,88 @@ node -v
 If node is not already installed on your system, you can download it from https://nodejs.org/en/download/.
 Minimum version that is expected to work with is 16.+.
 
-Next, set the environmental variable GRAPHMAN_HOME to the path where this packaged is installed. For
+Next, set the environmental variable **GRAPHMAN_HOME** to the path where this packaged is installed. For
 example:
 ```
 export GRAPHMAN_HOME=~/dev/mygraphmanclient
 ```
+> [!TIP]
+> Make sure adding the node and graphman client paths to the **PATH** environment variable so that client can be used from any directory workspace.
 
-Then, you configure the Graphman endpoints to interact with by editing the file graphman.configuration. For
-example:
+Then, you configure the one or more gateway profiles (under _gateways_ section) to interact with by editing the _**graphman.configuration**_ file. 
+Choose one of the gateway profile as part of _--gateway_ parameter while working with CLI. When this parameter is omitted, it will be defaulted to the **_default_** gateway profile.
 ```
 {
-  "sourceGateway": {
-    "address": "https://some-source-gateway:8443/graphman",
-    "username": "admin",
-    "password": "7layer",
-    "rejectUnauthorized": false,
-    "passphrase": "7layer"
-  },
+    "gateways": {
+        "default": {
+            "address": "https://localhost:8443/graphman",
+            "username": "admin",
+            "password": "7layer",
+            "rejectUnauthorized": false,
+            "keyFilename": null,  /* key for mTLS based authentication */
+            "certFilename": null,  /* cert for mTLS based authentication */
+            "passphrase": "7layer",
+            "allowMutations": false  /* true to allow mutations */
+        }
+    },
 
-  "targetGateway": {
-    "address": "https://some-target-gateway:8443/graphman",
-    "username": "admin",
-    "password": "7layer",
-    "rejectUnauthorized": false,
-    "passphrase": "7layer"
-  }
+    "options": {
+        "log": "info",
+        "policyCodeFormat": "xml",
+        "keyFormat": "p12"
+    }
 }
 ```
+> [!NOTE]
+> mTLS based authentication takes the precedence over the password-based authentication.
 
-If you wish to authenticate using a certificate provide the following values in the file graphman.configuration:
-```
-{
-  "sourceGateway": {
-    "address": "https://some-source-gateway:8443/graphman",
-    "certFilename": "authentication-certificate.pem",
-    "keyFilename": "authentication-certificate.key",
-    "rejectUnauthorized": false,
-    "passphrase": "7layer"
-  },
+> [!NOTE]
+> In order to protect the gateways from the accidental mutations, by default, mutation based queries are disallowed. You must enable them by setting the _allowMutations_ field of the gateway profile to _true_.
+> 
+You are now ready to start using Graphman. 
 
-  "targetGateway": {
-    "address": "https://some-target-gateway:6443/graphman",
-    "certFilename": "authentication-certificate.pem",
-    "keyFilename": "authentication-certificate.key",
-    "rejectUnauthorized": false,
-    "passphrase": "7layer"
-  }
-}
-```
-
-You are now ready to start using Graphman. To bundle the entire configuration of the source gateway, run the
+To bundle the entire configuration of the gateway, run the
 following command:
 ```
-./graphman.sh export --using all --output mybundle.json
+./graphman.sh export --gateway source-gateway --using all --output mybundle.json
 ```
 
 You can apply this configuration bundle as-is to the target gateway.
 ```
-./graphman.sh import --input mybundle.json
+./graphman.sh import --gateway target-gateway --input mybundle.json
 ```
 
 Congratulations, you just packaged all the configuration from the source gateway, and applied it to the
 target gateway.
 
-> **Note**
+> [!TIP]
 > Use platform specific entrypoint to interact with the GRAPHMAN. 
 > 
 > - Windows - graphman.bat
 > 
 > - Linux - graphman.sh
 
-> **Note**
-> Running GRAPHMAN with no arguments shows the description about the supported operations. Try it out.
+> [!TIP]
+> Running GRAPHMAN with no arguments lists the supported operations and shows how to get started. 
+ 
+You can get more information about every operation by specifying the _--help_ parameter.
+```
+./graphman.sh <operation> --help
+```
 
-> **Warning**
+To know about client itself, now use the _**version**_ operation
+```
+./graphman.sh version
+```
+
+> [!WARNING]
 > Graphman is still under continuous development to extend its support to the gateway entities. 
 > As GraphQL schema is subjected to the frequent modifications, new or modified queries may not be compatible with the older gateways. 
-> Because of which, CLI is improved to work with multiple schemas. Use configuration file or CLI argument to decide the schema to work with.
-> - "schemaVersion": <schema-version>
-> - --schemaVersion <schema-version>
 > 
-> Supported schemas are:
-> - v10.1-CR04 (default) 
-> - v11.0-CR02
 > 
-
-> **Note**
+> Supported schema(s):
+> - v11.1.00
+>
 > Use the older clients (https://github.com/Layer7-Community/graphman-client/releases) to work with the earlier schemas.
 
 ## Graphman configuration bundles <a name="bundles"></a>
@@ -128,19 +124,22 @@ a jdbc connection:
 {
   "clusterProperties": [
     {
-      "name": "a",
-      "value": "a",
-      "description": "a cwp",
+      "goid": "e0440d109ed4d6f931cefd84b506c962"
+      "name": "some-cluster-property",
+      "checksum": "e0aa4e7fb2a69405c8aec3e242a8f7c99e4c9a76",
+      "description": "a custom property",
       "hiddenProperty": false,
-      "checksum": "e0aa4e7fb2a69405c8aec3e242a8f7c99e4c9a76"
+      "value": "hello"
     }
   ],
   "jdbcConnections": [
     {
+      "goid": "915f526e3a756f8d16eaff3058a25613"
       "name": "mydb",
+      "checksum": "15059c05def480b53e4a0b022da2b23e3881c500",
+      "enabled": true,
       "driverClass": "com.l7tech.jdbc.mysql.MySQLDriver",
       "jdbcUrl": "jdbc://mydb/mydb",
-      "enabled": true,
       "username": "hello",
       "password": "${secpass.mydb.plaintext}",
       "minPoolSize": 3,
@@ -150,8 +149,7 @@ a jdbc connection:
           "name": "EnableCancelTimeout",
           "value": "true"
         }
-      ],
-      "checksum": "15059c05def480b53e4a0b022da2b23e3881c500"
+      ]
     }
   ]
 }
@@ -161,23 +159,31 @@ a jdbc connection:
 Graphman configuration bundles are exported as JSON files but also have an 'exploded' representation where
 each configuration entity is separated in its own individual JSON file organized in a folder structure.
 
-To created an 'exploded' representation of a Graphman bundle, use this command:
+To create an 'exploded' representation of a Graphman bundle, use this command:
 ```
-./graphman.sh explode --input mybundle.json --output exploded
+./graphman.sh explode --input mybundle.json --output mybundle-exploded
 ```
 
-This will create a directory structure under exploded, which contains each configuration entity in its own
-file. You manipulate the configuration in this directory structure directly (changing JSON file properties, 
+This will create a directory structure under the _mybundle-exploded_ directory, which contains each configuration entity in its own
+file. 
+
+> [!TIP] Use level of explosion to separate binary data or code from the entity configuration
+> > --options.level 1 to explode cert or key binary data into separate files
+> 
+> > --options.level 2 to explode policy code into separate files
+
+
+You manipulate the configuration in this directory structure directly (changing JSON file properties, 
 delete some files, copy others, etc) and repackage it as a single bundle JSON by doing this reverse command.
 
 ```
-./graphman.sh implode --input exploded --output mynewbundle.json
+./graphman.sh implode --input mybundle-exploded --output mynewbundle.json
 ```
 
 ## Using the Graphman export command
 
 The Graphman export command lets you create a bundle for specific entities based on a query targetting those
-entities. The queries folder contains a number of sample queries that can be used for this purpose. The query
+entities. The **queries** folder contains a number of sample queries that can be used for this purpose. The query
 to use is provided to the command using the --using option. Here are some examples and how to use them.
 
 ### all
@@ -185,42 +191,57 @@ to use is provided to the command using the --using option. Here are some exampl
 This query lets you package the entire configuration of a gateway. No input parameters are needed for this
 one:
 ```
-./graphman.sh export --using all --output mybundle.json
+./graphman.sh export --gateway source-gateway --using all --output mybundle.json
 ```
 
 ### folder
+This sample query packages a combination of all policies and services
+ that are at a specific folder path location as well as in children sub-folders.
 
-This sample query packages a combination of all policy fragments, web API services, and soap services
-configuration entities that are at a specific folder path location as well as in children subfolders.
-
-To export all policy fragments, web API services, and soap services configurations from a folder
-/utils/foo and all its subfolders:
+To export all policies and services from a folder _/hello/world_ and all its sub-folders:
 ```
-./graphman.sh export --using folder --variables.folderPath /utils/foo --output folderUtilsFoo.json
-```
-> **Note**
-> Sometimes, folder query execution might get aborted due to the limits imposed for protection. 
-> Please adjust the allowed query complexity using the gateway's system property (com.l7tech.server.graphman.maxQueryComplexity=3000). 
-> For more information, please check the system properties section of the [graphman](https://techdocs.broadcom.com/us/en/ca-enterprise-software/layer7-api-management/api-gateway/10-1/apis-and-toolkits/graphman.html) page.
-
-### webApiService
-This query lets you package a particular web API service from the source gateway. You can package it with
-or without its dependencies. You identify which web API service to pull by providing the command the
-resolution path defined for this web API service.
-
-To export /hello-world service without dependencies:
-```
-./graphman.sh export --using webApiService --variables.resolutionPath /hello-world --output hello-world.json
-```
-To export /hello-world service along with its dependencies:
-```
-./graphman.sh export --using webApiService:full --variables.resolutionPath /hello-world --output hello-world.json
+./graphman.sh export --gateway source-gateway --using folder --variables.folderPath /hello/world --output hello-world.json
 ```
 
+### service
+This query lets you package a particular published service from the source gateway. You identify which service to pull by providing the command the
+resolution path defined for this service.
+
+To export a service with the _/hello-world_ resolution path:
+```
+./graphman.sh export --gateway source-gateway --using service --variables.resolutionPath /hello-world --output hello-world.json
+```
+
+### encass
+This query lets you package a particular encapsulated assertion from the source gateway. To export an encapsulated assertion with the _hello-world_ name:
+```
+./graphman.sh export --gateway source-gateway --using encass --variables.name hello-world --output hello-world.json
+```
+
+### policy
+This query lets you package a particular policy from the source gateway. To export a policy with the _hello-world_ name:
+```
+./graphman.sh export --gateway source-gateway --using policy --variables.name hello-world --output hello-world.json
+```
+
+> [!TIP]
+> To include the dependencies while using above queries, choose either of the below option
+>
+> using the query suffix
+>> <folder|service|encass|policy>**:full**
+>
+> using the additional parameter
+>> _--variables.includeAllDependencies true_
+
+> [!NOTE]
+> Sometimes, complex query execution might get aborted due to the limits imposed for protection.
+> Please adjust the allowed query max depth and complexity using the gateway's system properties.
+> For more information, please check the system properties section of the [graphman](https://techdocs.broadcom.com/us/en/ca-enterprise-software/layer7-api-management/api-gateway/11-1/apis-and-toolkits/graphman-management-api.html) page.
+> 
 ### General using queries and creating your own queries
 The folder 'queries' contains other queries you can use. Each query is defined in a .gql file and corresponding
 .json files to wrap the query and its variables. You will notice some of the .gql files contain raw graphql
-syntax (such as the example globalPoliciesAndTasks.gql) whereas others leverage a metadata mechanism that
+syntax (such as the example policy.gql) whereas others leverage a metadata mechanism that
 centralizes the definition of which properties to use per entity type.
 
 You can add your own queries by creating your own combo
@@ -231,27 +252,29 @@ You can add your own queries by creating your own combo
 Use this command to import a specified gateway configuration bundle to a target gateway.
 
 ```
-./graphman.sh import --input hello-world.json
+./graphman.sh import --gateway target-gateway --input hello-world.json
 ```
-You can override the gateway target details when you import bundles.
+You can specify the policy revision comment when you import bundles.
 ```
-./graphman.sh import --input hello-world.json --targetGateway.address https://some-target:8443/graphman --targetGateway.username admin --targetGateway.password changeit
+./graphman.sh import --gateway target-gateway --input hello-world.json --options.comment "hellow-world patch v1.2.34"
 ```
-It is recommended to install/delete bundles using the standard bundle operations. Standard mutation operations cover all the supported entity types and take care of their mutations in their order of dependency.
+It is recommended to install/delete bundles using the standard bundle operations. 
+Standard mutation operations cover all the supported entity types and take care of their mutations in their order of dependency. 
+Of course, the default mutation-based query is **install-bundle**.
 ```
-./graphman.sh import --using install-bundle --input hello-world.json
+./graphman.sh import --gateway target-gateway --using install-bundle --input hello-world.json
 ```
 ```
-./graphman.sh import --using delete-bundle --input hello-world.json
+./graphman.sh import --gateway target-gateway --using delete-bundle --input hello-world.json
 ```
 
 By default, mutation action is NEW_OR_UPDATE. You can override this using _--bundleDefaultAction_ option.
 ```
-./graphman.sh import --using install-bundle --input hello-world.json --bundleDefaultAction NEW_OR_EXISTING
+./graphman.sh import --gateway target-gateway --input hello-world.json --options.bundleDefaultAction NEW_OR_EXISTING
 ```
 
-> **NOTE**
-> Permitted mutation actions are:
+> [!NOTE]
+> Permitted entity mapping actions are:
 > - NEW_OR_UPDATE
 > - NEW_OR_EXISTING
 > - ALWAYS_CREATE_NEW
@@ -260,7 +283,7 @@ By default, mutation action is NEW_OR_UPDATE. You can override this using _--bun
 
 You can override mutation actions if exists using _--mappings_ option. For example, delete a bundle excluding the keys and trustedCerts.
 ```
-./graphman.sh import --using delete-bundle --input hello-world.json --mappings.action DELETE --mappings.keys.action IGNORE --mappings.trustedCerts.action IGNORE
+./graphman.sh import --gateway target-gateway --using delete-bundle --input hello-world.json --options.mappings.action DELETE --options.mappings.keys.action IGNORE --options.mappings.trustedCerts.action IGNORE
 ```
 
 ## Using the Graphman mappings command
@@ -272,22 +295,22 @@ Generate mapping instructions at the bundled entity level.
 ./graphman.sh mappings --input hello-world.json --mappings.action NEW_OR_EXISTING --mappings.level 2
 ```
 
-Generate entity level mapping instructions for webApiServices alone 
+Generate entity level mapping instructions for services alone 
 ```
-./graphman.sh mappings --input hello-world.json --mappings.action NEW_OR_EXISTING --mappings.webApiServices.level 2
+./graphman.sh mappings --input hello-world.json --mappings.action NEW_OR_EXISTING --mappings.services.level 2
 ```
 
 Generate mapping instructions for multiple entity classes
 ```
-./graphman.sh mappings --input hello-world.json --mappings.webApiServices.action NEW_OR_EXISTING --mappings.webApiServices.level 2 --mappings.encassConfigs.action IGNORE
+./graphman.sh mappings --input hello-world.json --mappings.services.action NEW_OR_EXISTING --mappings.services.level 2 --mappings.encassConfigs.action IGNORE
 ```
 
 ## Using the Graphman diff command
 
-To compare the configuration between the two gateways, you can diff them using graphman.
+To compare the configuration between the gateways or bundles, you can diff them using graphman.
 
 ```
-./graphman.sh diff
+./graphman.sh diff --input bundle1.json --input @some-gateway
 ```
 
 The output of diff includes the difference for entities and a mapping of goid conflicts.
@@ -399,7 +422,7 @@ Of all the entity types, two of them contain sensitive information which is neve
 - Keys (Keystore entries used for example by listeners)
 - Secrets (Secure Passwords and SSH keys)
 
-A encryption passphrase provided by the graphman requester is used to encrypt and decrype these secrets. This
+A encryption passphrase provided by the graphman requester is used to encrypt and decrypt these secrets. This
 encryption passphrase is set with HTTP header name `l7-passphrase`. If missing, graphman will use its local master
 passphrase to encrypt/decrypt these secrets. When using the utils .sh scripts provided, the encryption passphrase
 is read from the local target.properties.
@@ -408,8 +431,38 @@ For a bundle to be importable on target, provide the same encryption passphrase 
 during the creation of the bundle.
 
 The secret portion of the Key entity type is a .p12 (PKCS12) which is protected using the encryption passphrase.
-The secret portion of the Secret entity type is AES encrypted using the same encryption passphrase and can be
-decrypted/encrypted using this standard openssl command
+The secret portion of the exported Secret entity type is AES encrypted (but with proprietary key generation method) using the same encryption passphrase and can be
+re-encrypted for modification using this standard openssl command
 ```
-> echo  | openssl enc -d -aes-256-cbc -md sha256 -pass pass: -a
+> echo  | openssl enc -e -aes-256-cbc -md sha256 -pass pass: -a
 ```
+
+# Policy as code
+Policy code can be represented in newer formats i.e., **_json_** and **_yaml_**. By default, it will be in **_xml_**. Client can be configured to work with these newer formats.
+Use _policyCodeFormat_ global option to choose one of these formats. Exploding the bundle with level **2** makes the policy code separate from the usual configuration when needed. 
+When the policy code is authored outside the Layer7, it can be validated using the below operation.
+```
+./graphman.sh validate --input mybundle.json
+```
+> [!NOTE]
+> This operation requires third-party node package i.e., [ajv json schema validator](https://www.npmjs.com/package/ajv).
+>
+# Global options
+Client can be configured at global level to deal with certain configuration details. Use the **_options_** section of _graphman.configuration_ file
+- **log**: log level for the client. Permitted values are _nolog_, _warn_, _info_, _fine_, _debug_.  
+- **policyCodeFormat**: Policy code is now represented in multiple formats (_xml_, _json_, _yaml_). Use this option to choose one of it.
+- **keyFormat**: Key data can be managed in both _p12_ and _pem_ formats. Use this option to choose either of the one.
+
+# Deprecated entity types
+As part of extending the supportability and standardization, few of the existing entity types and their associated query-level field methods are deprecated. It is recommended to start using the latest GraphQL types in favour of extensibility and support.
+|Deprecated entity type| Use new GraphQL 
+- _webApiServices_, use **_services_** instead
+- _soapServices_, use **_services_** instead
+- _internalWebApiServices_, use **_services_** instead
+- _internalSoapServices_, use **_services_** instead
+- _policyFragments_, use **_policies_** instead
+- _fips_, use **_federatedIdps_** instead
+- _ldaps_, use **_ldapIdps_** instead
+- _fipUsers_, use **_federatedUsers_** instead
+- _fipGroups_, use **_federatedGroups_** instead
+

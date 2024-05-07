@@ -5,12 +5,15 @@
             "username": "admin",
             "password": "7layer",
             "rejectUnauthorized": false,
+            "keyFilename": null,
+            "certFilename": null,
             "passphrase": "7layer",
             "allowMutations": false
         }
     },
 
     "options": {
+        "log": "info",
         "policyCodeFormat": "xml",
         "keyFormat": "p12"
     }

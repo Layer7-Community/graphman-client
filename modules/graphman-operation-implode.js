@@ -3,27 +3,42 @@ const utils = require("./graphman-utils");
 const butils = require("./graphman-bundle");
 
 module.exports = {
+    /**
+     * Implodes directory of gateway configuration into bundle.
+     * It is inverse of Explode operation.
+     * @param params
+     * @param params.input name of the input file containing the gateway configuration as bundle
+     * @param params.output name of the output directory into which the gateway configuration will be exploded
+     * @param params.options name-value pairs used to customize explode operation
+     */
     run: function (params) {
         if (!params.input) {
-            throw "Missing --input parameter";
+            throw "--input parameter is missing";
         }
 
         const inputDir = params.input;
-        let bundle;
-        if (params.type === "type2") {
-            bundle = type2Imploder.implode(inputDir);
-        } else {
-            if (params.type && params.type !== "type1") utils.info("unrecognised exploded format " + params.type + ", fall backing to default format");
-            bundle = type1Imploder.implode(inputDir);
-        }
+        const bundle = type1Imploder.implode(inputDir);
 
         utils.writeResult(params.output, butils.sort(bundle));
     },
 
+    initParams: function (params, config) {
+        //do nothing
+        return params;
+    },
+
     usage: function () {
-        console.log("    implode --input <input-directory> [--output <output-file>] [<options>]");
-        console.log("      --type <exploded-format>");
-        console.log("        # <exploded-format> can be either type1 or type2. Default option is type1.");
+        console.log("implode --input <input-dir>");
+        console.log("  [--output <output-file>]");
+        console.log();
+        console.log("Implodes the gateway configuration from directory into a bundle.");
+        console.log();
+        console.log("  --input <input-dir>");
+        console.log("    specify the input directory that contains gateway configuration");
+        console.log();
+        console.log("  --output <output-file>");
+        console.log("    specify the file to capture the imploded gateway configuration as bundle");
+        console.log();
     }
 }
 
@@ -101,10 +116,19 @@ let type1Imploder = (function () {
     }
 
     function readFolderableEntity(dir, filename, bundle) {
+        const ref = {visited: false};
         Object.entries(butils.ENTITY_TYPE_PLURAL_TAG_FRIENDLY_NAME).forEach(([key, value]) => {
-            if (filename.endsWith(`.${value}.json`)) {
-                if (!bundle[key]) bundle[key] = [];
+            if (!ref.visited && filename.endsWith(`.${value}.json`)) {
+                ref.visited = true;
+
                 let entity = utils.readFile(`${dir}/${filename}`);
+
+                if (value === "policy") {
+                    key = entity.policyType ? "policies" : "policyFragments";
+                }
+
+                if (!bundle[key]) bundle[key] = [];
+
                 if (entity.policy) {
                     const xml = entity.policy.xml;
                     if (xml && xml.endsWith(".xml}")) {

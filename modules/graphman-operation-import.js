@@ -4,61 +4,46 @@ const butils = require("./graphman-bundle");
 const opRevise = require("./graphman-operation-revise");
 const graphman = require("./graphman");
 const queryBuilder = require("./graphql-query-builder");
-const PRE_BUNDLE_EXTN = utils.extension("graphman-pre-bundle");
+const preImportExtension = utils.extension("graphman-pre-bundle");
 
 module.exports = {
+    /**
+     * Imports gateway configuration using a specified mutation.
+     * @param params
+     * @param params.using mutation
+     * @param params.input name of the input file containing the gateway configuration as bundle
+     * @param params.variables name-value pairs used in mutation
+     * @param params.gateway name of the gateway profile
+     * @param params.output name of the output file
+     * @param params.options name-value pairs used to customize import operation
+     */
     run: function (params) {
         if (!params.input) {
-            throw "Missing --input argument";
+            throw "--input parameter is missing";
         }
 
-        const config = graphman.configuration();
-        const gateway = graphman.gatewayConfiguration(params.gateway) ||
-            graphman.overridenGatewayConfiguration(params.targetGateway) ||
-            config.defaultGateway;
-
+        const gateway = graphman.gatewayConfiguration(params.gateway);
         if (!gateway.address) {
             throw utils.newError(`${gateway.name} gateway details are missing`);
         }
 
         if (!gateway.allowMutations) {
             utils.warn(`${gateway.name} gateway is not opted for mutations, ignoring the operation`);
-            utils.warn("  please modify the gateway profile in the graphman configuration and try again");
+            utils.warn("  make sure the gateway profile is ready for mutations (.allowMutations=true)");
             return;
         }
 
-        const request = graphman.request(gateway);
-        const inputBundle = butils.sanitize(utils.readFile(params.input), butils.IMPORT_USE, {excludeGoids: params.excludeGoids});
+        const request = graphman.request(gateway, params.options);
+        const inputBundle = butils.sanitize(utils.readFile(params.input), butils.IMPORT_USE, params.options);
         butils.removeDuplicates(inputBundle);
+        butils.overrideMappings(inputBundle, params.options);
 
-        const using = params.using ? params.using : 'install-bundle';
-        const mappings = params.mappings ? utils.mappings(params.mappings) : null;
+        const revisedBundle = params.options.revise ? opRevise.revise(inputBundle) : inputBundle;
+        preImportExtension.call(revisedBundle);
 
-        if (!params.bundleDefaultAction) {
-            if (using === 'delete-bundle') params.bundleDefaultAction = 'DELETE';
-        }
-
-        if (params.bundleDefaultAction) {
-            if (using !== 'delete-bundle' && params.bundleDefaultAction === 'DELETE') {
-                utils.warn("DELETE action with the improper order of mutation operations may lead to failures");
-            }
-
-            if (using === 'delete-bundle' && params.bundleDefaultAction !== 'DELETE') {
-                utils.warn(`Unexpected action specified for the chosen mutation: using=${using} and bundleDefaultAction=${params.bundleDefaultAction}`);
-            }
-        }
-
-        butils.overrideMappings(inputBundle, {
-            bundleDefaultAction: params.bundleDefaultAction,
-            mappings: mappings
-        });
-
-
-        const revisedBundle = params.revise ? opRevise.revise(inputBundle) : inputBundle;
-
-        PRE_BUNDLE_EXTN.call(revisedBundle);
-
-        request.body = queryBuilder.build(using, Object.assign(revisedBundle, params.variables), graphman.configuration().options);
+        const query = queryBuilder.build(params.using, Object.assign(revisedBundle, params.variables), params.options);
+        delete query.options;
+        request.body = query;
 
         if (isPartsNeeded(revisedBundle)) {
             const boundary = "--------" + Date.now();
@@ -72,25 +57,85 @@ module.exports = {
         });
     },
 
+    initParams: function (params, config) {
+        params = Object.assign({
+            using: "install-bundle",
+            gateway: "default"
+        }, params);
+
+        params.options = Object.assign({
+            comment: null,
+            bundleDefaultAction: "NEW_OR_UPDATE",
+            excludeGoids: false,
+            forceDelete: false,
+            forceAdminPasswordReset: false,
+            replaceAllMatchingCertChain: false,
+            revise: false
+        }, config.options, params.options);
+
+        params.options.mappings = utils.mappings(params.options.mappings || {});
+
+        const using = params.using;
+        if (using === 'delete-bundle') {
+            params.options.bundleDefaultAction = 'DELETE';
+        } else if (params.options.bundleDefaultAction === 'DELETE') {
+            utils.warn("DELETE action with the improper order of mutation operations may lead to failures");
+        }
+
+        return params;
+    },
+
     usage: function () {
-        console.log("    import [--using <query-id>] --input <input-file> [--variables.<name> <value>,...] [--output <output-file>] [<options>]");
-        console.log("      --bundleDefaultAction <action>");
-        console.log("        # overrides the default mapping action at the bundle level.");
-
-        console.log("      --mappings.action <action>");
-        console.log("        # overrides the mapping action for any entity.");
-
-        console.log("      --mappings.<entity-type-plural-tag>.action <action>");
-        console.log("        # overrides the mapping action for the specified class of entities. This option can be repeatable.");
-
-        console.log("      --excludeGoids");
-        console.log("        # use this option to exclude Goids from the importing bundled entities.");
-        console.log("      --gateway <name>");
-        console.log("        # specify the name of gateway profile from the graphman configuration");
-        console.log("      --targetGateway.*");
-        console.log("        # (DEPRECATED, use --gateway option) use this option(s) to override the target gateway details from the graphman configuration");
-        console.log("      --revise");
-        console.log("        # to revise the importing bundled entities (especially for matching the GOIDs) with respect to target gateway configuration");
+        console.log("import [--using <mutation>] --input <input-file> [--variables.<name> <value>,...]");
+        console.log("  [--output <output-file>]");
+        console.log("  [--options.<name> <value>,...]");
+        console.log();
+        console.log("Imports gateway configuration using a mutation-based query.");
+        console.log("If no query is specified, it will be defaulted to the 'install-bundle' standard mutation-based query.");
+        console.log();
+        console.log("  --using <mutation>");
+        console.log("    specify the name of mutation-based query");
+        console.log();
+        console.log("  --input <input-file>");
+        console.log("    specify the name of input bundle file that contains gateway configuration");
+        console.log();
+        console.log("  --variables.<name> <value>");
+        console.log("    specify the name-value pair(s) for the variables section of the mutation-based query");
+        console.log();
+        console.log("  --gateway <name>");
+        console.log("    specify the name of gateway profile from the graphman configuration.");
+        console.log("    when skipped, defaulted to the 'default' gateway profile.");
+        console.log();
+        console.log("  --output <output-file>");
+        console.log("    specify the name of file to capture the result of the mutation.");
+        console.log("    when skipped, output will be written to the console.");
+        console.log();
+        console.log("  --options.<name> <value>");
+        console.log("    specify options as name-value pair(s) to customize the operation");
+        console.log("      .comment <some-text>");
+        console.log("        to leave the comment over the new policy revisions due to mutation");
+        console.log("      .bundleDefaultAction <action>");
+        console.log("        overrides the default mapping action at the bundle level.");
+        console.log("      .mappings.action <action>");
+        console.log("        overrides the mapping action for any entity.");
+        console.log("      .mappings.<entity-type-plural-name>.action <action>");
+        console.log("        overrides the mapping action for the specified class of entities. This option can be repeatable.");
+        console.log("      .excludeGoids false|true");
+        console.log("        use this option to exclude GOIDs from the importing bundled entities.");
+        console.log("      .forceDelete false|true");
+        console.log("        to force deleting the entities when required.");
+        console.log("      .forceAdminPasswordReset false|true");
+        console.log("        to force modifying the admin user's password.");
+        console.log("      .replaceAllMatchingCertChain false|true");
+        console.log("        to replace all matching cert chain for the keys when required.");
+        console.log("      .revise false|true");
+        console.log("        to revise the importing bundled entities (especially for matching the GOIDs) with respect to target gateway configuration.");
+        console.log();
+        console.log("    NOTE:");
+        console.log("      Use 'delete-bundle' standard mutation-based query for deleting the entities.");
+        console.log("      In the above, <action> refers to a valid entity mapping action.");
+        console.log("      Permitted values are NEW_OR_UPDATE, NEW_OR_EXISTING, ALWAYS_CREATE_NEW, DELETE and IGNORE");
+        console.log();
     }
 }
 

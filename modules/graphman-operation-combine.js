@@ -3,13 +3,18 @@ const utils = require("./graphman-utils");
 const butils = require("./graphman-bundle");
 
 module.exports = {
+    /**
+     * Combines two or more bundles into one.
+     * @param params
+     * @param params.input tow or more input bundle file(s)
+     */
     run: function (params) {
         if (!params.input) {
-            throw "Missing --input parameters";
+            throw "--input parameters are missing";
         }
 
         if (!Array.isArray(params.input) || params.input.length < 2) {
-            throw "Not enough input bundles, operation requires at least two bundles";
+            throw "not enough input bundles, operation requires at least two bundles";
         }
 
         let resultBundle = utils.readFile(params.input[0]);
@@ -22,9 +27,25 @@ module.exports = {
         utils.writeResult(params.output, butils.sort(resultBundle));
     },
 
+    initParams: function (params, config) {
+        // do nothing
+        return params;
+    },
+
     usage: function () {
-        console.log("    combine --input <input-file> [--input <input-file>,...] [--output <output-file>]");
-        console.log("        # when similar entities are found, entities from the rightmost bundle takes the precedence.");
+        console.log("combine --input <input-file> --input <input-file> [--input <input-file>,...]");
+        console.log("  [--output <output-file>]");
+        console.log();
+        console.log("Combines two or more bundles into one.");
+        console.log("When similar entities are encountered, entities from the rightmost bundle takes the precedence.");
+        console.log();
+        console.log("  --input <input-file>");
+        console.log("    specify two or more input bundles file(s)");
+        console.log();
+        console.log("  --output <output-file>");
+        console.log("    specify the file to capture the combined gateway configuration as bundle");
+        console.log();
+
     }
 }
 

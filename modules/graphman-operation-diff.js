@@ -6,6 +6,13 @@ const queryBuilder = require("./graphql-query-builder");
 const opExport = require("./graphman-operation-export");
 
 module.exports = {
+    /**
+     * Identifies the differences between bundles/gateways.
+     * @param params
+     * @param params.input bundle or gateway profile name
+     * @param params.output output file name
+     * NOTE: Use "@" as prefix to differentiate the gateway profile name from the bundle name.
+     */
     run: function (params) {
         const bundles = [];
 
@@ -13,7 +20,7 @@ module.exports = {
             bundles.push(readBundleFrom(params.input[0]));
             bundles.push(readBundleFrom(params.input[1]));
         } else {
-            throw utils.newError("not enough arguments")
+            throw utils.newError("not enough input parameters")
         }
 
         Promise.all(bundles).then(results => {
@@ -30,11 +37,26 @@ module.exports = {
         });
     },
 
+    initParams: function (params, config) {
+        //do nothing
+        return params;
+    },
+
     usage: function () {
-        console.log("    diff [--input <input-file-or-gateway> --input <input-file-or-gateway>] [--output <output-file>] [<options>]");
-        console.log("        # evaluates the differences between bundles or gateways.");
-        console.log("        # input can be a bundle file or a gateway name if it precedes with '@' special character.");
-        console.log("        # when gateway is specified as input, summary bundle will be pulled for comparison.");
+        console.log("diff --input <input-file-or-gateway> --input <input-file-or-gateway>");
+        console.log("  [--output <output-file>]");
+        console.log();
+        console.log("Evaluates the differences between bundles or gateways.");
+        console.log("Input can be a bundle file or a gateway profile name if it precedes with '@' special character.");
+        console.log("When gateway is specified as input, summary bundle will be pulled for comparison.");
+        console.log();
+        console.log("  --input <input-file-or-gateway-profile>");
+        console.log("    specify two input bundles file(s) for comparison");
+        console.log("    Use '@' special marker to treat the input as gateway profile name");
+        console.log();
+        console.log("  --output <output-file>");
+        console.log("    specify the file to capture the diff report");
+        console.log();
     }
 }
 

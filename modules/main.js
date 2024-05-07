@@ -11,15 +11,23 @@ try {
     init();
 
     const params = parse(args);
-    utils.logAt(params.log);
 
     // initialize configuration and schema metadata
     graphman.init(params);
 
-    if (!op || op === "help") {
-        require("./help").run(params, SUPPORTED_OPERATIONS);
+    if (!op) {
+        utils.error("operation is missing");
+        utils.print("  supported operations are [" + SUPPORTED_OPERATIONS + "]");
+        utils.print("  usage: <operation> <parameter>,...");
+        utils.print("  usage: <operation> --help");
+        utils.print();
     } else {
-        operation(op).run(params);
+        let operation = findOperation(op);
+        if (params.help) {
+            operation.usage();
+        } else {
+            operation.run(operation.initParams(params, graphman.configuration()));
+        }
     }
 } catch (e) {
     if (typeof e === 'string') {
@@ -39,7 +47,7 @@ function init() {
     }
 }
 
-function operation(name) {
+function findOperation(name) {
     if (!SUPPORTED_OPERATIONS.includes(name)) {
         throw "unsupported operation: " + name;
     } else {
