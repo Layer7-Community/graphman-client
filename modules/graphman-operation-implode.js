@@ -116,10 +116,19 @@ let type1Imploder = (function () {
     }
 
     function readFolderableEntity(dir, filename, bundle) {
+        const ref = {visited: false};
         Object.entries(butils.ENTITY_TYPE_PLURAL_TAG_FRIENDLY_NAME).forEach(([key, value]) => {
-            if (filename.endsWith(`.${value}.json`)) {
-                if (!bundle[key]) bundle[key] = [];
+            if (!ref.visited && filename.endsWith(`.${value}.json`)) {
+                ref.visited = true;
+
                 let entity = utils.readFile(`${dir}/${filename}`);
+
+                if (value === "policy") {
+                    key = entity.policyType ? "policies" : "policyFragments";
+                }
+
+                if (!bundle[key]) bundle[key] = [];
+
                 if (entity.policy) {
                     const xml = entity.policy.xml;
                     if (xml && xml.endsWith(".xml}")) {
