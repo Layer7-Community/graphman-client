@@ -256,7 +256,7 @@ Use this command to import a specified gateway configuration bundle to a target 
 ```
 You can specify the policy revision comment when you import bundles.
 ```
-./graphman.sh import --gateway target-gateway --input hello-world.json --options.comment "hellow-wrold patch v1.2.34"
+./graphman.sh import --gateway target-gateway --input hello-world.json --options.comment "hellow-world patch v1.2.34"
 ```
 It is recommended to install/delete bundles using the standard bundle operations. 
 Standard mutation operations cover all the supported entity types and take care of their mutations in their order of dependency. 

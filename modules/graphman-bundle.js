@@ -162,7 +162,9 @@ module.exports = {
         if (left.name && left.direction && left.providerType &&
             (left.name !== right.name || left.direction !== right.direction || left.providerType !== right.providerType)) return false;
 
-        return !(idRef !== 'name' && left.name && left.name !== right.name);
+        if (idRef !== 'name' && left.name && right.name && left.name !== right.name) return false;
+
+        return true;
     },
 
     entityIdRef: function (entity) {

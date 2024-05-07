@@ -83,7 +83,7 @@ module.exports = {
         let queryString = "";
         for (const key of ["activate", "comment", "forceAdminPasswordReset", "forceDelete", "replaceAllMatchingCertChain"]) {
             if (options.hasOwnProperty(key)) {
-                queryString += "&" + key + "=" + options[key];
+                queryString += "&" + key + "=" + encodeURIComponent(options[key]);
             }
         }
 
