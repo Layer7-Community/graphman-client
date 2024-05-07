@@ -109,7 +109,7 @@ To know about client itself, now use the _**version**_ operation
 > As GraphQL schema is subjected to the frequent modifications, new or modified queries may not be compatible with the older gateways. 
 > 
 > 
-> Supported schema(s):
+> Supported schema(s) (i.e., version of the Layer7 API Gateway)
 > - v11.1.00
 >
 > Use the older clients (https://github.com/Layer7-Community/graphman-client/releases) to work with the earlier schemas.
@@ -167,10 +167,11 @@ To create an 'exploded' representation of a Graphman bundle, use this command:
 This will create a directory structure under the _mybundle-exploded_ directory, which contains each configuration entity in its own
 file. 
 
-> [!TIP] Use level of explosion to separate binary data or code from the entity configuration
-> > --options.level 1 to explode cert or key binary data into separate files
+> [!TIP]
+> Use level of explosion to separate binary data or code from the entity configuration
+>> --options.level 1 to explode cert or key binary data into separate files
 > 
-> > --options.level 2 to explode policy code into separate files
+>> --options.level 2 to explode policy code into separate files
 
 
 You manipulate the configuration in this directory structure directly (changing JSON file properties, 
