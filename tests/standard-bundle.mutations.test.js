@@ -11,7 +11,7 @@ test("import entities with bundleDefaultAction=IGNORE", () => {
     const output = graphman("import",
         "--using", "install-bundle",
         "--input", standardBundleFile,
-        "--bundleDefaultAction", "IGNORE",
+        "--options.bundleDefaultAction", "IGNORE",
         "--force");
 
     metadata().typeInfos.forEach(typeInfo => {
@@ -30,7 +30,7 @@ test("import entities with bundleDefaultAction=DELETE", () => {
     const output = graphman("import",
         "--using", "delete-bundle",
         "--input", standardBundleFile,
-        "--bundleDefaultAction", "DELETE",
+        "--options.bundleDefaultAction", "DELETE",
         "--force");
 
     metadata().typeInfos.forEach(typeInfo => {
@@ -55,7 +55,7 @@ test("import entities with bundleDefaultAction=NEW_OR_EXISTING", () => {
     const output = graphman("import",
         "--using", "install-bundle",
         "--input", standardBundleFile,
-        "--bundleDefaultAction", "NEW_OR_EXISTING",
+        "--options.bundleDefaultAction", "NEW_OR_EXISTING",
         "--force");
 
     metadata().typeInfos.forEach(typeInfo => {
@@ -75,7 +75,7 @@ test("re-import entities with bundleDefaultAction=NEW_OR_EXISTING", () => {
     const output = graphman("import",
         "--using", "install-bundle",
         "--input", standardBundleFile,
-        "--bundleDefaultAction", "NEW_OR_EXISTING",
+        "--options.bundleDefaultAction", "NEW_OR_EXISTING",
         "--force");
 
     metadata().typeInfos.forEach(typeInfo => {
@@ -95,7 +95,7 @@ test("re-import entities with bundleDefaultAction=NEW_OR_UPDATE", () => {
     const output = graphman("import",
         "--using", "install-bundle",
         "--input", standardBundleFile,
-        "--bundleDefaultAction", "NEW_OR_UPDATE",
+        "--options.bundleDefaultAction", "NEW_OR_UPDATE",
         "--force");
 
     metadata().typeInfos.forEach(typeInfo => {
@@ -120,7 +120,7 @@ test("re-import entities with bundleDefaultAction=DELETE", () => {
     const output = graphman("import",
         "--using", "delete-bundle",
         "--input", standardBundleFile,
-        "--bundleDefaultAction", "DELETE",
+        "--options.bundleDefaultAction", "DELETE",
         "--force");
 
     metadata().typeInfos.forEach(typeInfo => {
@@ -140,7 +140,7 @@ test("re-import entities with bundleDefaultAction=DELETE", () => {
     const output = graphman("import",
         "--using", "delete-bundle",
         "--input", standardBundleFile,
-        "--bundleDefaultAction", "DELETE",
+        "--options.bundleDefaultAction", "DELETE",
         "--force");
 
     metadata().typeInfos.forEach(typeInfo => {
@@ -160,7 +160,7 @@ test("clean entities with bundleDefaultAction=DELETE", () => {
     const output = graphman("import",
         "--using", "delete-bundle",
         "--input", standardBundleFile,
-        "--bundleDefaultAction", "DELETE",
+        "--options.bundleDefaultAction", "DELETE",
         "--force");
 
     metadata().typeInfos.forEach(typeInfo => {
