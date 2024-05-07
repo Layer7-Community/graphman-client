@@ -437,6 +437,16 @@ re-encrypted for modification using this standard openssl command
 > echo  | openssl enc -e -aes-256-cbc -md sha256 -pass pass: -a
 ```
 
+# Policy as code
+Policy code can be represented in newer formats i.e., JSON and YAML. By default, it will be in XML. Client can be configured to work with these newer formats.
+Use _policyCodeFormat_ global option to choose one of these formats. Exploding the bundle with level 2 makes the policy code separate from the usual configuration when needed. 
+When the policy code is authored outside the Layer7, it can be validated using the below operation.
+```
+./graphman.sh validate --input mybundle.json
+```
+> [!NOTE]
+> This operation requires third-party node package i.e., [ajv json schema validator](https://www.npmjs.com/package/ajv).
+>
 # Global options
 Client can be configured at global level to deal with certain configuration details. Use the **_options_** section of _graphman.configuration_ file
 - **log**: log level for the client. Permitted values are _nolog_, _warn_, _info_, _fine_, _debug_.  
