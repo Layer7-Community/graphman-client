@@ -25,6 +25,7 @@ test("key explode intangible by openssl due to missing utf8 to binary encoding-D
     output = graphman("explode",
         "--input", "./key.json",
         "--output", "key",
+        "--options.level", "1",
         "--explodeKeys");
 
     // Test if ssl.p12 exploded is openssl readable.
@@ -57,6 +58,7 @@ test("key explode-implode key.json bundle-DE600179", () => {
     output = graphman("explode",
         "--input", "./key.json",
         "--output", "key",
+        "--options.level", "1",
         "--explodeKeys");
 
     // Cleanup if exists an imploded key-imploded.json
