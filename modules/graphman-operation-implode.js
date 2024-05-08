@@ -76,7 +76,7 @@ let type1Imploder = (function () {
                     if (type === "keys") {
                         if (entity.p12 && entity.p12.endsWith(".p12}")) {
                             const filename = entity.p12.match(/{(.+)}/)[1];
-                            entity.p12 = btoa(utils.readFile(`${typeDir}/${filename}`));
+                            entity.p12 = Buffer.from(utils.readFileBinary(`${typeDir}/${filename}`)).toString('base64');
                         }
 
                         if (entity.pem && entity.pem.endsWith(".pem}")) {

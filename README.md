@@ -16,6 +16,7 @@ provided Postman collection which provides samples for all the queries and mutat
 1. [Using in Postman](#postman)
 2. [Getting Started with the Command-line (CLI)](#cli)
 3. [Graphman bundles explained](#bundles)
+4. [Compatibility Matrix](#compatibility-matrix)
 
 # Graphman client CLI
 
@@ -113,6 +114,16 @@ To know about client itself, now use the _**version**_ operation
 > - v11.1.00
 >
 > Use the older clients (https://github.com/Layer7-Community/graphman-client/releases) to work with the earlier schemas.
+
+## Compatibility Matrix <a name="compatibility-matrix"></a>
+The following table describes the compatibility of the Graphman client with the targeting Layer7 API Gateways.
+
+|Graphman Client| Layer7 API Gateway      |
+|----------------------|------------------------|
+|v1.2|11.1.00|
+|v1.1|10.1 CR04 and 11.0 CR02|
+|v1.0.*|10.1 CR03 and 11.0 CR01|
+
 
 ## Graphman configuration bundles <a name="bundles"></a>
 
