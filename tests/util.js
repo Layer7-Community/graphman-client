@@ -51,8 +51,10 @@ module.exports = {
     graphman: function (...args) {
         const outputFile = wspace + "/output.json";
 
-        args.push("--output");
-        args.push(outputFile);
+        if (args.indexOf("--output") == -1) {
+            args.push("--output");
+            args.push(outputFile);
+        }
 
         if (fs.existsSync(outputFile)) fs.unlinkSync(outputFile);
         const stdOutput = String(cp.execFileSync(execFile, args));
