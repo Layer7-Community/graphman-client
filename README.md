@@ -405,7 +405,7 @@ Revises the bundle as per the options. This operation is useful
 - when 
 the specified bundle has goid/guid references that are out of sync with respect to the 
 target gateway.
-- when the specified bundle is out of sync with respect to the schema changes.
+- when the specified bundle is defined with the deprecated entity types.
 ```
 ./graphman.sh revise --input some-bundle.json --output revised-bundle.json
 ```
@@ -478,15 +478,21 @@ Client can be configured at global level to deal with certain configuration deta
 - **keyFormat**: Key data can be managed in both _p12_ and _pem_ formats. Use this option to choose either of the one.
 
 # Deprecated entity types
-As part of extending the supportability and standardization, few of the existing entity types and their associated query-level field methods are deprecated. It is recommended to start using the latest GraphQL types in favour of extensibility and support.
+As part of extending the supportability and standardization, few of the existing entity types and their associated query-level field methods are deprecated. 
+It is recommended to start using the latest GraphQL types in favour of extensibility and support.
 |Deprecated entity type| Use new GraphQL 
 - _webApiServices_, use **_services_** instead
 - _soapServices_, use **_services_** instead
 - _internalWebApiServices_, use **_services_** instead
 - _internalSoapServices_, use **_services_** instead
 - _policyFragments_, use **_policies_** instead
+- _globalPolicies_, use **_policies_** instead
+- _backgroundTaskPolicies_, use **_policies_** instead
 - _fips_, use **_federatedIdps_** instead
 - _ldaps_, use **_ldapIdps_** instead
 - _fipUsers_, use **_federatedUsers_** instead
 - _fipGroups_, use **_federatedGroups_** instead
 
+> [!NOTE]
+> Bundles with the deprecated entity types can be revised using the **revise** operation.
+> 
