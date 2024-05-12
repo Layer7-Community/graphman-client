@@ -20,6 +20,10 @@ module.exports = {
             throw "--input parameter is missing";
         }
 
+        if (!params.gateway) {
+            throw "--gateway parameter is missing";
+        }
+
         const gateway = graphman.gatewayConfiguration(params.gateway);
         if (!gateway.address) {
             throw utils.newError(`${gateway.name} gateway details are missing`);
@@ -86,7 +90,6 @@ module.exports = {
         console.log();
         console.log("  --gateway <name>");
         console.log("    specify the name of gateway profile from the graphman configuration.");
-        console.log("    when skipped, defaulted to the 'default' gateway profile.");
         console.log();
         console.log("  --output <output-file>");
         console.log("    specify the name of file to capture the renewed bundle.");
