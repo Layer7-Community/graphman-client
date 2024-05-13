@@ -498,3 +498,5 @@ It is recommended to start using the latest GraphQL types in favour of extensibi
 > [!NOTE]
 > Bundles with the deprecated entity types can be revised using the **revise** operation.
 > 
+> Previous support for LDAP-based IDP configurations is partial, hence it is recommended to re-export them again.
+> 
