@@ -4,7 +4,7 @@ const SCHEMA_METADATA = require("./graphman").schemaMetadata();
 const GOID_PLURAL_METHODS = ["fipUsers", "federatedUsers", "internalUsers", "fipGroups", "federatedGroups", "internalGroups", "ldaps", "ldapIdps", "fips", "federatedIdps", "trustedCerts"];
 const DEPRECATED_TYPES = [
     "webApiServices", "soapServices", "internalWebApiServices", "internalSoapServices",
-    "policyFragments",
+    "policyFragments", "globalPolicies", "backgroundTaskPolicies",
     "fips", "ldaps", "fipUsers", "fipGroups"
 ];
 

@@ -74,12 +74,12 @@ You are now ready to start using Graphman.
 To bundle the entire configuration of the gateway, run the
 following command:
 ```
-./graphman.sh export --gateway source-gateway --using all --output mybundle.json
+./graphman.sh export --gateway <source-gateway> --using all --output mybundle.json
 ```
 
 You can apply this configuration bundle as-is to the target gateway.
 ```
-./graphman.sh import --gateway target-gateway --input mybundle.json
+./graphman.sh import --gateway <target-gateway> --input mybundle.json
 ```
 
 Congratulations, you just packaged all the configuration from the source gateway, and applied it to the
@@ -118,11 +118,11 @@ To know about client itself, now use the _**version**_ operation
 ## Compatibility Matrix <a name="compatibility-matrix"></a>
 The following table describes the compatibility of the Graphman client with the targeting Layer7 API Gateways.
 
-|Graphman Client| Layer7 API Gateway      |
-|----------------------|------------------------|
-|v1.2|11.1.00|
-|v1.1|10.1 CR04 and 11.0 CR02|
-|v1.0.*|10.1 CR03 and 11.0 CR01|
+| Graphman Client | Layer7 API Gateway      |
+|-----------------|------------------------|
+| v1.2.*          |11.1.00|
+| v1.1            |10.1 CR04 and 11.0 CR02|
+| v1.0.*          |10.1 CR03 and 11.0 CR01|
 
 
 ## Graphman configuration bundles <a name="bundles"></a>
@@ -203,7 +203,7 @@ to use is provided to the command using the --using option. Here are some exampl
 This query lets you package the entire configuration of a gateway. No input parameters are needed for this
 one:
 ```
-./graphman.sh export --gateway source-gateway --using all --output mybundle.json
+./graphman.sh export --gateway <source-gateway> --using all --output mybundle.json
 ```
 
 ### folder
@@ -212,7 +212,7 @@ This sample query packages a combination of all policies and services
 
 To export all policies and services from a folder _/hello/world_ and all its sub-folders:
 ```
-./graphman.sh export --gateway source-gateway --using folder --variables.folderPath /hello/world --output hello-world.json
+./graphman.sh export --gateway <source-gateway> --using folder --variables.folderPath /hello/world --output hello-world.json
 ```
 
 ### service
@@ -221,19 +221,19 @@ resolution path defined for this service.
 
 To export a service with the _/hello-world_ resolution path:
 ```
-./graphman.sh export --gateway source-gateway --using service --variables.resolutionPath /hello-world --output hello-world.json
+./graphman.sh export --gateway <source-gateway> --using service --variables.resolutionPath /hello-world --output hello-world.json
 ```
 
 ### encass
 This query lets you package a particular encapsulated assertion from the source gateway. To export an encapsulated assertion with the _hello-world_ name:
 ```
-./graphman.sh export --gateway source-gateway --using encass --variables.name hello-world --output hello-world.json
+./graphman.sh export --gateway <source-gateway> --using encass --variables.name hello-world --output hello-world.json
 ```
 
 ### policy
 This query lets you package a particular policy from the source gateway. To export a policy with the _hello-world_ name:
 ```
-./graphman.sh export --gateway source-gateway --using policy --variables.name hello-world --output hello-world.json
+./graphman.sh export --gateway <source-gateway> --using policy --variables.name hello-world --output hello-world.json
 ```
 
 > [!TIP]
@@ -264,25 +264,25 @@ You can add your own queries by creating your own combo
 Use this command to import a specified gateway configuration bundle to a target gateway.
 
 ```
-./graphman.sh import --gateway target-gateway --input hello-world.json
+./graphman.sh import --gateway <target-gateway> --input hello-world.json
 ```
 You can specify the policy revision comment when you import bundles.
 ```
-./graphman.sh import --gateway target-gateway --input hello-world.json --options.comment "hellow-world patch v1.2.34"
+./graphman.sh import --gateway <target-gateway> --input hello-world.json --options.comment "hellow-world patch v1.2.34"
 ```
 It is recommended to install/delete bundles using the standard bundle operations. 
 Standard mutation operations cover all the supported entity types and take care of their mutations in their order of dependency. 
 Of course, the default mutation-based query is **install-bundle**.
 ```
-./graphman.sh import --gateway target-gateway --using install-bundle --input hello-world.json
+./graphman.sh import --gateway <target-gateway> --using install-bundle --input hello-world.json
 ```
 ```
-./graphman.sh import --gateway target-gateway --using delete-bundle --input hello-world.json
+./graphman.sh import --gateway <target-gateway> --using delete-bundle --input hello-world.json
 ```
 
 By default, mutation action is NEW_OR_UPDATE. You can override this using _--bundleDefaultAction_ option.
 ```
-./graphman.sh import --gateway target-gateway --input hello-world.json --options.bundleDefaultAction NEW_OR_EXISTING
+./graphman.sh import --gateway <target-gateway> --input hello-world.json --options.bundleDefaultAction NEW_OR_EXISTING
 ```
 
 > [!NOTE]
@@ -295,7 +295,7 @@ By default, mutation action is NEW_OR_UPDATE. You can override this using _--bun
 
 You can override mutation actions if exists using _--mappings_ option. For example, delete a bundle excluding the keys and trustedCerts.
 ```
-./graphman.sh import --gateway target-gateway --using delete-bundle --input hello-world.json --options.mappings.action DELETE --options.mappings.keys.action IGNORE --options.mappings.trustedCerts.action IGNORE
+./graphman.sh import --gateway <target-gateway> --using delete-bundle --input hello-world.json --options.mappings.action DELETE --options.mappings.keys.action IGNORE --options.mappings.trustedCerts.action IGNORE
 ```
 
 ## Using the Graphman mappings command
@@ -322,10 +322,14 @@ Generate mapping instructions for multiple entity classes
 To compare the configuration between the gateways or bundles, you can diff them using graphman.
 
 ```
-./graphman.sh diff --input bundle1.json --input @some-gateway
+./graphman.sh diff --input bundle1.json --input @<some-gateway>
 ```
 
 The output of diff includes the difference for entities and a mapping of goid conflicts.
+
+> [!NOTE]
+> Use '@' prefix to the input parameter for treating it as gateway profile name. 
+> Otherwise, it will be considered as bundle file.
 
 ### Bundle the difference between two gateways
 
@@ -336,7 +340,13 @@ this difference. You can use these bundles to bring up to date a target gateway 
 differences with a source gateway.
 
 ```
-./graphman.sh diff --renew --output deltaBundle.json
+./graphman.sh diff --input @<source-gateway> --input @<target-gateway> --output diff.json
+```
+
+Once the differences are identified, renew them using source gateway and finally import them into target gateway.
+```
+./graphman.sh renew --input diff.json --gateway <source-gateway> --output delta.json
+./graphman.sh import --input delta.json --gateway <target-gateway>
 ```
 
 ### Subtracting a bundle from another
@@ -378,7 +388,7 @@ you can remove from checksum property in whatToCut.json. For example if whatToCu
 }
 ```
 
-Then the subtract command will always remove the default ssl key and default listednPorts no matter their
+Then the subtract command will always remove the default ssl key and default listenPorts no matter their
 value in the source.
 
 
@@ -386,24 +396,26 @@ value in the source.
 
 You can combine two configuration bundles using the combine command:
 ```
-./graphman.sh combine --input bundle1.bundle --input bundle2.bundle--output full.bundle
+./graphman.sh combine --input bundle1.json --input bundle2.json--output full.json
 ```
 
 ## Using the Graphman revise command
 
-Revises the specified bundle using the target gateway. This operation is useful when 
+Revises the bundle as per the options. This operation is useful 
+- when 
 the specified bundle has goid/guid references that are out of sync with respect to the 
 target gateway.
+- when the specified bundle is defined with the deprecated entity types.
 ```
-./graphman.sh revise --input some-bundle.bundle --output renewed-bundle.bundle
+./graphman.sh revise --input some-bundle.json --output revised-bundle.json
 ```
 
 ## Using the Graphman renew command
 
-Renews the specified bundle using the source gateway. This operation is useful when 
+Renews the specified bundle using the gateway. This operation is useful when 
 the specified bundle is outdated or incomplete.  
 ```
-./graphman.sh renew --input some-bundle.bundle --output renewed-bundle.bundle
+./graphman.sh renew --input some-bundle.json --gateway <some-gateway> --output renewed-bundle.json
 ```
 
 # Using Graphman in Postman <a name="postman"></a>
@@ -466,15 +478,23 @@ Client can be configured at global level to deal with certain configuration deta
 - **keyFormat**: Key data can be managed in both _p12_ and _pem_ formats. Use this option to choose either of the one.
 
 # Deprecated entity types
-As part of extending the supportability and standardization, few of the existing entity types and their associated query-level field methods are deprecated. It is recommended to start using the latest GraphQL types in favour of extensibility and support.
-|Deprecated entity type| Use new GraphQL 
-- _webApiServices_, use **_services_** instead
-- _soapServices_, use **_services_** instead
-- _internalWebApiServices_, use **_services_** instead
-- _internalSoapServices_, use **_services_** instead
-- _policyFragments_, use **_policies_** instead
-- _fips_, use **_federatedIdps_** instead
-- _ldaps_, use **_ldapIdps_** instead
-- _fipUsers_, use **_federatedUsers_** instead
-- _fipGroups_, use **_federatedGroups_** instead
+As part of extending the supportability and standardization, few of the existing entity types and their associated query-level field methods are deprecated. 
+It is recommended to start using the latest GraphQL types in favour of extensibility and support.
 
+|Deprecated entity type|New entity type|
+|------------------------------|--------------------|
+|_webApiServices_|use **_services_** instead|
+|_soapServices_|use **_services_** instead|
+|_internalWebApiServices_|use **_services_** instead|
+|_internalSoapServices_|use **_services_** instead|
+|_policyFragments_|use **_policies_** instead|
+|_globalPolicies_|use **_policies_** instead|
+|_backgroundTaskPolicies_|use **_policies_** instead|
+|_fips_|use **_federatedIdps_** instead|
+|_fipUsers_|use **_federatedUsers_** instead|
+|_fipGroups_|use **_federatedGroups_** instead|
+|_ldaps_|use **_ldapIdps_** instead|
+
+> [!NOTE]
+> Bundles with the deprecated entity types can be revised using the **revise** operation.
+> 

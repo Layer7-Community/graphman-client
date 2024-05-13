@@ -1,7 +1,6 @@
 
 const utils = require("./graphman-utils");
 const butils = require("./graphman-bundle");
-const opRevise = require("./graphman-operation-revise");
 const graphman = require("./graphman");
 const queryBuilder = require("./graphql-query-builder");
 const preImportExtension = utils.extension("graphman-pre-bundle");
@@ -37,17 +36,15 @@ module.exports = {
         const inputBundle = butils.sanitize(utils.readFile(params.input), butils.IMPORT_USE, params.options);
         butils.removeDuplicates(inputBundle);
         butils.overrideMappings(inputBundle, params.options);
+        preImportExtension.call(inputBundle);
 
-        const revisedBundle = params.options.revise ? opRevise.revise(inputBundle) : inputBundle;
-        preImportExtension.call(revisedBundle);
-
-        const query = queryBuilder.build(params.using, Object.assign(revisedBundle, params.variables), params.options);
+        const query = queryBuilder.build(params.using, Object.assign(inputBundle, params.variables), params.options);
         delete query.options;
         request.body = query;
 
-        if (isPartsNeeded(revisedBundle)) {
+        if (isPartsNeeded(inputBundle)) {
             const boundary = "--------" + Date.now();
-            request.parts = buildParts(revisedBundle, utils.parentPath(params.input));
+            request.parts = buildParts(inputBundle, utils.parentPath(params.input));
             request.parts[0].boundary = boundary;
             request.headers["Content-Type"] = 'multipart/form-data; boundary='+boundary;
         }
@@ -69,8 +66,7 @@ module.exports = {
             excludeGoids: false,
             forceDelete: false,
             forceAdminPasswordReset: false,
-            replaceAllMatchingCertChain: false,
-            revise: false
+            replaceAllMatchingCertChain: false
         }, config.options, params.options);
 
         params.options.mappings = utils.mappings(params.options.mappings || {});
@@ -87,6 +83,7 @@ module.exports = {
 
     usage: function () {
         console.log("import [--using <mutation>] --input <input-file> [--variables.<name> <value>,...]");
+        console.log("  [--gateway <name>]");
         console.log("  [--output <output-file>]");
         console.log("  [--options.<name> <value>,...]");
         console.log();
@@ -128,8 +125,6 @@ module.exports = {
         console.log("        to force modifying the admin user's password.");
         console.log("      .replaceAllMatchingCertChain false|true");
         console.log("        to replace all matching cert chain for the keys when required.");
-        console.log("      .revise false|true");
-        console.log("        to revise the importing bundled entities (especially for matching the GOIDs) with respect to target gateway configuration.");
         console.log();
         console.log("    NOTE:");
         console.log("      Use 'delete-bundle' standard mutation-based query for deleting the entities.");
