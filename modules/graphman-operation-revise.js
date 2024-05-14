@@ -29,7 +29,16 @@ module.exports = {
 
     revise: function (bundle, options) {
         bundle = reviseBundleForGoidsAndGuids(bundle);
+
+        // remove properties section from the bundle temporarily
+        const properties = bundle.properties;
+        if (properties) delete bundle.properties;
+
         bundle = reviser.revise(bundle, options);
+
+        // restore the properties section so that it appears at the end
+        if (properties) bundle.properties = properties;
+
         return bundle;
     },
 
