@@ -34,10 +34,11 @@ try {
         utils.error(e);
     } else if (typeof e === 'object' && e.name === 'GraphmanOperationError') {
         utils.error(e.message);
-    } else if (utils.loggingAt('debug')) {
-        console.log(e);
     } else {
-        console.log("error encountered while processing the graphman operation, " + `${e.name}, ${e.message}` );
+        utils.error("error encountered while processing the graphman operation");
+        utils.error(`  name: ${e.name}`);
+        utils.error(`  message: ${e.message}`);
+        console.log(e);
     }
 }
 

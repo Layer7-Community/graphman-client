@@ -20,6 +20,10 @@ module.exports = {
             throw "--input parameter is missing";
         }
 
+        if (!params.gateway) {
+            throw "--gateway parameter is missing";
+        }
+
         const gateway = graphman.gatewayConfiguration(params.gateway);
         if (!gateway.address) {
             throw utils.newError(`${gateway.name} gateway details are missing`);
@@ -49,9 +53,9 @@ module.exports = {
         const promises = [];
 
         Object.keys(bundle).forEach(key => {
-            if (SCHEMA_METADATA.pluralMethods[key] && (!options.scope.length || options.scope.includes(key))) {
+            if (metadata.pluralMethods[key] && (!options.scope.length || options.scope.includes(key))) {
                 utils.info("renewing " + key);
-                promises.push(renewEntities(gateway, bundle[key], SCHEMA_METADATA.pluralMethods[key]));
+                promises.push(renewEntities(gateway, bundle[key], metadata.pluralMethods[key]));
             } else {
                 utils.info("ignoring " + key);
                 const obj = {};
@@ -64,10 +68,6 @@ module.exports = {
     },
 
     initParams: function (params, config) {
-        params = Object.assign({
-            gateway: "default"
-        }, params);
-
         params.options = Object.assign({scope: []}, params.options);
 
         return params;
@@ -86,7 +86,6 @@ module.exports = {
         console.log();
         console.log("  --gateway <name>");
         console.log("    specify the name of gateway profile from the graphman configuration.");
-        console.log("    when skipped, defaulted to the 'default' gateway profile.");
         console.log();
         console.log("  --output <output-file>");
         console.log("    specify the name of file to capture the renewed bundle.");
@@ -102,7 +101,7 @@ module.exports = {
 }
 
 function renewEntities(gateway, entities, type) {
-    const typeObj = SCHEMA_METADATA.types[type];
+    const typeObj = metadata.types[type];
 
     if (entities.length === 0) {
         const empty = {};
@@ -125,7 +124,8 @@ function renewEntities(gateway, entities, type) {
 
     const gql = {
         query: `${queryInfo.head} {\n ${queryInfo.body} }\n`,
-        variables: queryInfo.variables
+        variables: queryInfo.variables,
+        options: {}
     };
 
     gql.query = queryBuilder.expandQuery(gql.query, graphman.configuration().options);
