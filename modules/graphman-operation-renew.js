@@ -1,7 +1,7 @@
 
 const utils = require("./graphman-utils");
 const butils = require("./graphman-bundle");
-const queryBuilder = require("./graphql-query-builder");
+const gql = require("./graphql-query");
 const exporter = require("./graphman-operation-export");
 const graphman = require("./graphman");
 const metadata = graphman.schemaMetadata();
@@ -122,15 +122,15 @@ function renewEntities(gateway, entities, type) {
         buildQueryForEntities(entities, type, typeObj, queryInfo);
     }
 
-    const gql = {
+    const query = {
         query: `${queryInfo.head} {\n ${queryInfo.body} }\n`,
         variables: queryInfo.variables,
         options: {}
     };
 
-    gql.query = queryBuilder.expandQuery(gql.query, graphman.configuration().options);
-    gql.query = gql.query.replaceAll("hardwiredService{ {{HardwiredService}} }", "");
-    return renewInvoker(gateway, gql, typeObj);
+    query.query = gql.expand(query.query, {}, graphman.configuration().options);
+    query.query = query.query.replaceAll("hardwiredService{ {{HardwiredService}} }", "");
+    return renewInvoker(gateway, query, typeObj);
 }
 
 function buildQueryForSoapServiceEntities(entities, type, typeObj, queryInfo) {
