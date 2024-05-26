@@ -2,7 +2,7 @@
 const utils = require("./graphman-utils");
 const butils = require("./graphman-bundle");
 const queryBuilder = require("./graphql-query-builder");
-const opExport = require("./graphman-operation-export");
+const exporter = require("./graphman-operation-export");
 const graphman = require("./graphman");
 const metadata = graphman.schemaMetadata();
 
@@ -183,7 +183,7 @@ function buildQueryForEntities(entities, type, typeObj, queryInfo) {
 
 function renewInvoker(gateway, query, typeObj) {
     return new Promise(function (resolve) {
-        opExport.export(gateway, query, (data, parts) => {
+        exporter.export(gateway, query, (data, parts) => {
             const result = {};
 
             result[typeObj.pluralMethod] = [];

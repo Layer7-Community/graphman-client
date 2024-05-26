@@ -17,8 +17,8 @@ module.exports = {
         utils.info("supported schema(s) [" + metadata.schemaVersion + "]");
         utils.info("supported entity types:");
         Object.keys(metadata.types).sort().forEach(key => {
-            const value = metadata.types[key];
-            if (value && value.pluralMethod) utils.print(`         ${key} - ${value.pluralMethod}`);
+            const typeInfo = metadata.types[key];
+            if (typeInfo.isL7Entity) utils.print(`         ${key} - ${typeInfo.pluralName}`);
         });
         utils.print();
     },

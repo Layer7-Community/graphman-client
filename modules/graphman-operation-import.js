@@ -62,7 +62,7 @@ module.exports = {
 
         params.options = Object.assign({
             comment: null,
-            bundleDefaultAction: "NEW_OR_UPDATE",
+            bundleDefaultAction: null,
             excludeGoids: false,
             forceDelete: false,
             forceAdminPasswordReset: false,

@@ -30,7 +30,7 @@ module.exports = {
             utils.warn(`specified schema (${config.schemaVersion}) is missing, falling back to the default`);
         }
 
-        this.metadata = gqlschema.build(config.schemaVersion, false);
+        this.metadata = gqlschema.build(config.version, config.schemaVersion, false);
         this.loadedConfig = config;
     },
 
@@ -46,13 +46,31 @@ module.exports = {
         return this.metadata;
     },
 
+    queryFieldInfo: function (name) {
+        const queryInfo = this.metadata.types["Query"];
+        return queryInfo.fields.find(x => x.name === name);
+    },
+
+    queryFieldNamesByPattern: function (pattern) {
+        const queryInfo = this.metadata.types["Query"];
+        const regex = "^" + pattern.replaceAll("*", ".*") + "$";
+        return queryInfo.fields.filter(x => x.name.match(regex)).map(x => x.name);
+    },
+
+    typeInfoByTypeName: function (name) {
+        return this.metadata.types[name];
+    },
+
     typeInfoByPluralName: function (name) {
-        const typeName = this.metadata.pluralMethods[name];
-        return typeName ? this.metadata.types[typeName] : null;
+        return this.metadata.bundleTypes[name];
+    },
+
+    isPrimitiveField: function (fieldInfo) {
+        return !this.metadata.types[fieldInfo.dataType];
     },
 
     refreshSchemaMetadata: function () {
-        this.metadata = gqlschema.build(this.loadedConfig.schemaVersion, true);
+        this.metadata = gqlschema.build(this.loadedConfig.version, this.loadedConfig.schemaVersion, true);
     },
 
     request: function (gateway, options) {
