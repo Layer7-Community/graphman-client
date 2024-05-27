@@ -224,5 +224,5 @@ function splitTokens(text, delimiter) {
     if (!text) return [];
 
     text = text.trim();
-    return text.length === 0 ? [] : text.split(delimiter||",");
+    return text.length === 0 ? [] : Array.from(text.split(delimiter||",")).map(item => item.trim());
 }

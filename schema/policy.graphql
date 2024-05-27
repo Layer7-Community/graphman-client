@@ -92,7 +92,7 @@ extend type Mutation {
 
  """
  Wrapper for the policy XML and the dependencies they include
- > @l7-excluded-fields directDependencies,allDependencies
+ > @l7-excluded-fields json,yaml,code,directDependencies,allDependencies
  """
  type Policy {
     "The policy XML"
@@ -109,6 +109,10 @@ extend type Mutation {
     allDependencies: PolicyDependency
  }
 
+ """
+ Wrapper for the policy revision
+ > @l7-excluded-fields json,yaml,code
+ """
  type PolicyRevision {
     goid: ID!
     ordinal: Long!

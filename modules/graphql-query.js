@@ -115,17 +115,22 @@ function expandGraphQLSubQueryUsingTypeInfo(gql, typeInfo, suffix) {
         typeInfo.fields.forEach(fieldInfo => { // include fields
             if (typeInfo.summaryFields.length === 0 || typeInfo.summaryFields.includes(fieldInfo.name)) {
                 query += "\n" + fieldInfo.name;
-                if (!graphman.isPrimitiveField(fieldInfo)) query += ` {\n  {{${fieldInfo.dataType}}}\n}`;
+                if (!graphman.isPrimitiveField(fieldInfo)) {
+                    query += ` {\n  {{${fieldInfo.dataType}}}\n}`;
+                }
             }
         });
     } else {
-        const excludedFields = suffix && suffix.startsWith("-") ? suffix.substring(1).split(",") : [];
-        const includedFields = suffix && suffix.startsWith("+") ? suffix.substring(1).split(",") : [];
+        const excludedFields = suffix && suffix.startsWith("-") ? splitTokens(suffix.substring(1)) : [];
+        const includedFields = suffix && suffix.startsWith("+") ? splitTokens(suffix.substring(1)) : [];
 
         typeInfo.fields.forEach(fieldInfo => { // include fields
-            if ((!typeInfo.excludedFields.includes(fieldInfo.name) && !excludedFields.includes(fieldInfo.name)) || includedFields.includes(fieldInfo.name)) {
+            if ((!typeInfo.excludedFields.includes(fieldInfo.name) && !excludedFields.includes(fieldInfo.name)) ||
+                    includedFields.includes(fieldInfo.name)) {
                 query += "\n" + fieldInfo.name;
-                if (!graphman.isPrimitiveField(fieldInfo)) query += ` {\n  {{${fieldInfo.dataType}}}\n}`;
+                if (!graphman.isPrimitiveField(fieldInfo)) {
+                    query += ` {\n  {{${fieldInfo.dataType}}}\n}`;
+                }
             } else {
                 utils.info(`excluding the query field ${typeInfo.typeName}.${fieldInfo.name}`);
             }
@@ -173,4 +178,11 @@ function beautifyGraphQLQuery(gql, query) {
     });
 
     return result.query;
+}
+
+function splitTokens(text, delimiter) {
+    if (!text) return [];
+
+    text = text.trim();
+    return text.length === 0 ? [] : Array.from(text.split(delimiter||",")).map(item => item.trim());
 }
