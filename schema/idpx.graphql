@@ -140,7 +140,8 @@ A user in the internal identity provider.
 > @l7-entity
 > @l7-identity-fields login
 > @l7-summary-fields goid,name,login,checksum
-> @l7-excluded-fields memberOf
+> @l7-excluded-fields memberOf.*
+> @l7-included-fields memberOf.name
 """
 type InternalUser {
     goid : ID!
@@ -272,7 +273,8 @@ A user defined in a federated identity provider..
 > @l7-entity
 > @l7-identity-fields login,name,providerName
 > @l7-summary-fields goid,name,login,providerName,checksum
-> @l7-excluded-fields
+> @l7-excluded-fields memberOf.*
+> @l7-included-fields memberOf.providerName,memberOf.name
 """
 type FederatedUser {
     goid : ID!

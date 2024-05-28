@@ -139,6 +139,8 @@ function parseSchemaFile(file, onTypeCallback) {
 
             if (line.indexOf('}') !== -1) { // type definition ends
                 if (ref.tInfo) {
+                    ref.tInfo.excludedFields = normalizeFilteredFields(ref.tInfo.excludedFields, "-", ref.tInfo);
+                    ref.tInfo.includedFields = normalizeFilteredFields(ref.tInfo.includedFields, "+", ref.tInfo);
                     onTypeCallback(ref.tInfo);
                     ref.tInfo = null;
                     ref.mlcInfo = {};
@@ -177,6 +179,7 @@ function captureTypeInfoIfMatches(line, ref) {
 
         ref.tInfo.summaryFields = splitTokens(ref.mlcInfo["l7-summary-fields"]);
         ref.tInfo.excludedFields = splitTokens(ref.mlcInfo["l7-excluded-fields"]);
+        ref.tInfo.includedFields = splitTokens(ref.mlcInfo["l7-included-fields"]);
         ref.tInfo.identityFields = splitTokens(ref.mlcInfo["l7-identity-fields"]);
         ref.mlcInfo = {};
     }
@@ -197,6 +200,32 @@ function extractFieldArgs(text) {
         }
     });
     return result;
+}
+
+function normalizeFilteredFields(filteredFields, sign, typeInfo) {
+    const normalizedFields = [];
+
+    Array.from(filteredFields).forEach(item => {
+        const index = item.indexOf('.');
+
+        if (index !== -1 && index + 1 < item.length) {
+            const fieldName = item.substring(0, index);
+            const fieldSuffix = item.substring(index + 1);
+            const field = typeInfo.fields.find(item => item.name === fieldName);
+
+            if (field) {
+                if (field.suffix) {
+                    field.suffix += "," + sign + fieldSuffix;
+                } else {
+                    field.suffix = ":" + sign + fieldSuffix;
+                }
+            }
+        } else {
+            normalizedFields.push(item);
+        }
+    });
+
+    return normalizedFields;
 }
 
 function inspectTypeFields(metadata, typeInfo, callback) {

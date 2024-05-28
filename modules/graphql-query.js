@@ -121,15 +121,21 @@ function expandGraphQLSubQueryUsingTypeInfo(gql, typeInfo, suffix) {
             }
         });
     } else {
-        const excludedFields = suffix && suffix.startsWith("-") ? splitTokens(suffix.substring(1)) : [];
-        const includedFields = suffix && suffix.startsWith("+") ? splitTokens(suffix.substring(1)) : [];
+        const excludedFields = [];
+        const includedFields = [];
+
+        Array.from(splitTokens(suffix)).forEach(item => {
+            if (item.startsWith("-")) excludedFields.push(item.substring(1));
+            else if (item.startsWith("+")) includedFields.push(item.substring(1));
+            else includedFields.push(item);
+        });
 
         typeInfo.fields.forEach(fieldInfo => { // include fields
-            if ((!typeInfo.excludedFields.includes(fieldInfo.name) && !excludedFields.includes(fieldInfo.name)) ||
+            if ((!typeInfo.excludedFields.includes(fieldInfo.name) && !excludedFields.includes(fieldInfo.name) && !excludedFields.includes("*")) ||
                     includedFields.includes(fieldInfo.name)) {
                 query += "\n" + fieldInfo.name;
                 if (!graphman.isPrimitiveField(fieldInfo)) {
-                    query += ` {\n  {{${fieldInfo.dataType}}}\n}`;
+                    query += ` {\n  {{${fieldInfo.dataType}${fieldInfo.suffix || ""}}}\n}`;
                 }
             } else {
                 utils.info(`excluding the query field ${typeInfo.typeName}.${fieldInfo.name}`);
