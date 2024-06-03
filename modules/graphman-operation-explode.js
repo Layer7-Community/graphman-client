@@ -61,6 +61,16 @@ module.exports = {
         console.log("          - 1, binary data (p12, pem, etc) associated with the entities will be exploded into separate files");
         console.log("          - 2, policy code will be exploded into separate files");
         console.log();
+        console.log("      .decodeBase64 true|false");
+        console.log("        to decode Base64 encoded strings in policy code");
+        console.log("          - true, base64 encoded strings gets decoded");
+        console.log("          - false, default, base64 encoded strings won't get touched");
+        console.log();
+        console.log("      .noProperties true|false");
+        console.log("        to omit bundle-properties.json creation");
+        console.log("          - true, bundle-properties.json will not be created");
+        console.log("          - false, default, bundle-properties.json will be created");
+        console.log();
     }
 }
 
@@ -74,7 +84,7 @@ let type1Exploder = (function () {
                 if (Array.isArray(entities) && entities.length) {
                     utils.info(`exploding ${key}`);
                     entities.forEach(item => writeEntity(outputDir, key, item, options));
-                } else if (key === "properties") {
+                } else if (key === "properties" && ! options.noProperties) {
                     utils.info(`capturing ${key} to bundle-properties.json`);
                     utils.writeFile(`${outputDir}/bundle-properties.json`, entities);
                 }
@@ -129,7 +139,8 @@ let type1Exploder = (function () {
 
         if (options.level >= 2 && entity.policy) {
             if (entity.policy.xml) {
-                utils.writeFile(`${targetDir}/${filename}.xml`, entity.policy.xml);
+                if(options.decodeBase64) {utils.info("decoding"); utils.writeFile(`${targetDir}/${filename}.xml`, decodeBase64(entity.policy.xml)); }
+                else                     utils.writeFile(`${targetDir}/${filename}.xml`, entity.policy.xml);
                 entity.policy.xml = `{${filename}.xml}`;
             }
 
@@ -146,6 +157,48 @@ let type1Exploder = (function () {
 
         utils.writeFile(`${targetDir}/${filename}.json`, entity);
     }
+
+    function decodeBase64(plainXml) {
+            // simple search and replace loop
+            tagStart=-1;
+            tagStart=plainXml.indexOf('<L7p:Base64', 0);
+            while (tagStart != -1) {
+                b64start=plainXml.indexOf('"', tagStart)+1;
+                lineStart=plainXml.lastIndexOf("\n",tagStart)
+                indent=" ".repeat(b64start-lineStart+6);
+                b64end=plainXml.indexOf('\"/>',b64start);
+                encodedStr=plainXml.substring(b64start,b64end);
+                var decodedStr = Buffer.from(encodedStr, 'base64').toString();
+
+                if (encodedStr === "0"){
+                    plainXml=`${plainXml.substr(0,tagStart)}<L7p:DecodedBase64Zero${plainXml.substring(tagStart+11,b64start)}0${plainXml.substr(b64end)}`;
+                }
+                else{
+                    plainXml=`${plainXml.substr(0,tagStart)}<L7p:DecodedBase64${plainXml.substring(tagStart+11,b64start)}${escapeEot(decodedStr)}${plainXml.substr(b64end)}`;
+                }
+
+                tagStart=plainXml.indexOf('<L7p:Base64', 0);
+            }
+            return(plainXml);
+    }
+
+    function escapeXml(unsafe) {
+        return unsafe.replace(/[<>&'"]/g, function (c) {
+            switch (c) {
+                case '<': return '&lt;';
+                case '>': return '&gt;';
+                case '&': return '&amp;';
+                case '\'': return '&apos;';
+                case '"': return '&quot;';
+            }
+        });
+    }
+
+    function escapeEot(unsafe) {
+        //escape potential end of code characters '"/>' by '&quoted_end_of_tag';
+        return unsafe.replace(/"\/>/g,"&quoted_end_of_tag;");
+    }
+
 })();
 
 let type2Exploder = (function () {

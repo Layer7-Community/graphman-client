@@ -133,7 +133,7 @@ let type1Imploder = (function () {
                     const xml = entity.policy.xml;
                     if (xml && xml.endsWith(".xml}")) {
                         const filename = xml.match(/{(.+)}/)[1];
-                        entity.policy.xml = utils.readFile(`${dir}/${filename}`);
+                        entity.policy.xml = encodeBase64(utils.readFile(`${dir}/${filename}`));
                     }
 
                     const yaml = entity.policy.yaml;
@@ -145,6 +145,37 @@ let type1Imploder = (function () {
                 bundle[key].push(entity);
             }
         });
+    }
+
+    function encodeBase64(decodedXml) {
+            // handle Base64 encoded code, loop through all tags starting with DecodedBase64
+            tagStart=-1;
+            tagStart=decodedXml.indexOf('<L7p:DecodedBase64', 0);
+            while (tagStart != -1) {
+                b64start=decodedXml.indexOf('stringValue=\"', tagStart)+13;
+
+                b64end=decodedXml.indexOf('\"/>',b64start);
+                decodedStr=decodedXml.substring(b64start,b64end);
+
+                // 18: textlength of : <L7p:DecodedBase64 --> Zero starts at 18 (relative to tagStart)
+                if (decodedStr == "0" && decodedXml.indexOf("Zero",tagStart)-tagStart == 18) {
+                    encodedStr="0";
+                    orgTagStart = 22;
+                }
+                else {
+                    encodedStr = Buffer.from(undoEot(decodedStr)).toString('base64');
+                    orgTagStart = 18;
+                }
+
+                decodedXml=`${decodedXml.substr(0,tagStart)}<L7p:Base64${decodedXml.substring(tagStart+orgTagStart,b64start)}${encodedStr}${decodedXml.substr(b64end)}`;
+                tagStart=decodedXml.indexOf('<L7p:DecodedBase64', b64end);
+            }
+            return(decodedXml);
+    }
+
+    function undoEot(unsafe) {
+        //substitute all '&quoted_end_of_tag;' by '"/>'
+        return( unsafe.replace(/&quoted_end_of_tag;/g, "\"/>"));
     }
 
     function readCertFile(path, includeHeader) {
