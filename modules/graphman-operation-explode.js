@@ -182,18 +182,6 @@ let type1Exploder = (function () {
             return(plainXml);
     }
 
-    function escapeXml(unsafe) {
-        return unsafe.replace(/[<>&'"]/g, function (c) {
-            switch (c) {
-                case '<': return '&lt;';
-                case '>': return '&gt;';
-                case '&': return '&amp;';
-                case '\'': return '&apos;';
-                case '"': return '&quot;';
-            }
-        });
-    }
-
     function escapeEot(unsafe) {
         //escape potential end of code characters '"/>' by '&quoted_end_of_tag';
         return unsafe.replace(/"\/>/g,"&quoted_end_of_tag;");
