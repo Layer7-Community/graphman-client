@@ -18,7 +18,9 @@ module.exports = {
     init: function (params) {
         const config = JSON.parse(utils.readFile(utils.home() + "/graphman.configuration"));
         config.options = makeOptions(config.options || {});
-        utils.logAt(config.options.log);
+        if (params.options && params.options.log)
+             utils.logAt(params.options.log);
+        else utils.logAt(config.options.log);
 
         config.gateways = makeGateways(config.gateways || {});
         config.defaultGateway = config.gateways['default'];
@@ -80,6 +82,16 @@ module.exports = {
             body: {}
         };
 
+        // add proxy support
+        if (gateway.proxy) {
+            req.proxyInfo = gateway.proxy;
+        }
+
+        // ability to overwrite the port by parameter --sourceGateway.port nnnn
+        if (options.hasOwnProperty('port')) {
+            req.port = parseInt(options.port);
+        }
+
         let queryString = "";
         for (const key of ["activate", "comment", "forceAdminPasswordReset", "forceDelete", "replaceAllMatchingCertChain"]) {
             if (options.hasOwnProperty(key)) {
@@ -107,54 +119,153 @@ module.exports = {
 
     invoke: function (options, callback) {
         PRE_REQUEST_EXTN.call(options);
-        const req = ((!options.protocol||options.protocol === 'https'||options.protocol === 'https:') ? https : http).request(options, function(response) {
-            let respInfo = {initialized: false, chunks: []};
+        if (options.proxyInfo) {
+            // do proxy stuff
+            let proxyurl = new URL(options.proxyInfo);
 
-            response.on('data', function (chunk) {
-                if (!respInfo.initialized) {
-                    utils.debug("graphman http response headers", response.headers);
-                    respInfo = Object.assign(respInfo, hutils.parseHeader('contentType', response.headers['content-type']));
-                    respInfo.isMultipart = respInfo.contentType.startsWith("multipart/");
-                    respInfo.initialized = true;
-                    if (respInfo.isMultipart) utils.info("http multipart response is detected, boundary=" + respInfo.boundary);
+            // setup proxy request
+            var proxyreq_opt={
+                host    : proxyurl.host.replace(/:.*/,''),  // The proxy to use
+                port    : proxyurl.port,        // proxy port
+                protocol: proxyurl.protocol,
+                method  : 'CONNECT',
+                path    : options.protocol+"//"+options.host+((options.port==443) ? '': ':'+options.port)+options.path,
+                headers : {
+                    'Proxy-Connection': 'keep-alive'
                 }
+            }
 
-                respInfo.chunks.push(chunk);
-            });
+            // do proxy request
+            const proxyreq = ((!proxyreq_opt.protocol||proxyreq_opt.protocol === 'https'||proxyreq_opt.protocol === 'https:') ? https : http).request(proxyreq_opt, function(proxy_response) {
+                if(proxy_response.statusCode===301||proxy_response.statusCode===302) {
+                    var raw_headers=proxy_response.rawHeaders;
+                    console.log('Please redirect '+raw_headers[raw_headers.indexOf('Location')+1]);
+                    process.exit(1);
+                }
+                
+                let body='';
+                proxy_response.on('data',function(d){
+                    body += d
+                })
+                proxy_response.on('end', function(){});
+            }).on('connect',(response,socket,head)=>{
+                // the trick is to define and use an agent( here https), which re-uses the socket of the proxy connection.
+                const agent=new https.Agent({
+                    socket: socket // re-use the socket of the proxy connection
+                    //rejectUnauthorized: false //sometime when the CA was not qualified you could use this option 
+                })
+                
+                // now add agent to original options.
+                options.agent=agent;
 
-            response.on('end', function () {
-                let data = Buffer.concat(respInfo.chunks);
 
-                if (respInfo.contentType.startsWith('application/json')) {
-                    const jsonData = JSON.parse(data);
-                    utils.debug("graphman http response", jsonData);
-                    PRE_RESPONSE_EXTN.call(jsonData);
-                    callback(jsonData);
-                } else if (respInfo.contentType.startsWith('multipart/')) {
-                    utils.debug("graphman http multipart response");
-                    let parts = hutils.readParts(data, respInfo.boundary);
-                    callback(JSON.parse(parts[0].data), parts);
+                const req = ((!options.protocol||options.protocol === 'https'||options.protocol === 'https:') ? https : http).request(options, function(response) {
+                    let respInfo = {initialized: false, chunks: []};
+
+                    response.on('data', function (chunk) {
+                        if (!respInfo.initialized) {
+                            utils.debug("graphman http response headers", response.headers);
+                            respInfo = Object.assign(respInfo, hutils.parseHeader('contentType', response.headers['content-type']));
+                            respInfo.isMultipart = respInfo.contentType.startsWith("multipart/");
+                            respInfo.initialized = true;
+                            if (respInfo.isMultipart) utils.info("http multipart response is detected, boundary=" + respInfo.boundary);
+                        }
+
+                        respInfo.chunks.push(chunk);
+                    });
+
+                    response.on('end', function () {
+                        let data = Buffer.concat(respInfo.chunks);
+
+                        if (respInfo.contentType.startsWith('application/json')) {
+                            const jsonData = JSON.parse(data);
+                            utils.debug("graphman http response", jsonData);
+                            PRE_RESPONSE_EXTN.call(jsonData);
+                            callback(jsonData);
+                        } else if (respInfo.contentType.startsWith('multipart/')) {
+                            utils.debug("graphman http multipart response");
+                            let parts = hutils.readParts(data, respInfo.boundary);
+                            callback(JSON.parse(parts[0].data), parts);
+                        } else {
+                            utils.info("unexpected graphman http response");
+                            utils.info("Response Status Code: "+response.statusCode);
+                            utils.info(data);
+                            callback({errors: data, data: {}});
+                        }
+                    });
+                });
+                req.on('error', (err) => {
+                    utils.warn(`error encountered while processing the graphman request: ${err.message}`);
+                });
+
+                utils.debug("graphman http request", maskedHttpRequest(options));
+
+                if (isMultipart(options)) {
+                    hutils.writeParts(req, getPartsFromRawRequest(options));
                 } else {
-                    utils.info("unexpected graphman http response");
-                    utils.info(data);
-                    callback({errors: "no valid response from graphman"});
+                    req.write(JSON.stringify(options.body));
                 }
-            });
-        });
 
-        req.on('error', (err) => {
-            utils.warn(`error encountered while processing the graphman request: ${err.message}`);
-        });
+                req.end();
+            }).on('error', function(e) {
+                console.log("Got error: " + e.message+ " - exiting with 1");
+                process.exit(1);
+            }).setTimeout(3000)
 
-        utils.debug("graphman http request", maskedHttpRequest(options));
+            proxyreq.end();
 
-        if (isMultipart(options)) {
-            hutils.writeParts(req, getPartsFromRawRequest(options));
-        } else {
-            req.write(JSON.stringify(options.body));
         }
+        else {
+            // standard stuff
+            const req = ((!options.protocol||options.protocol === 'https'||options.protocol === 'https:') ? https : http).request(options, function(response) {
+                let respInfo = {initialized: false, chunks: []};
 
-        req.end();
+                response.on('data', function (chunk) {
+                    if (!respInfo.initialized) {
+                        utils.debug("graphman http response headers", response.headers);
+                        respInfo = Object.assign(respInfo, hutils.parseHeader('contentType', response.headers['content-type']));
+                        respInfo.isMultipart = respInfo.contentType.startsWith("multipart/");
+                        respInfo.initialized = true;
+                        if (respInfo.isMultipart) utils.info("http multipart response is detected, boundary=" + respInfo.boundary);
+                    }
+
+                    respInfo.chunks.push(chunk);
+                });
+
+                response.on('end', function () {
+                    let data = Buffer.concat(respInfo.chunks);
+
+                    if (respInfo.contentType.startsWith('application/json')) {
+                        const jsonData = JSON.parse(data);
+                        utils.debug("graphman http response", jsonData);
+                        PRE_RESPONSE_EXTN.call(jsonData);
+                        callback(jsonData);
+                    } else if (respInfo.contentType.startsWith('multipart/')) {
+                        utils.debug("graphman http multipart response");
+                        let parts = hutils.readParts(data, respInfo.boundary);
+                        callback(JSON.parse(parts[0].data), parts);
+                    } else {
+                        utils.info("unexpected graphman http response");
+                        utils.info("Response Status Code: "+response.statusCode);
+                        utils.info(data);
+                        callback({errors: data, data: {}});
+                    }
+                });
+            });
+            req.on('error', (err) => {
+                utils.warn(`error encountered while processing the graphman request: ${err.message}`);
+            });
+
+            utils.debug("graphman http request", maskedHttpRequest(options));
+
+            if (isMultipart(options)) {
+                hutils.writeParts(req, getPartsFromRawRequest(options));
+            } else {
+                req.write(JSON.stringify(options.body));
+            }
+
+            req.end();
+        }
     }
 }
 
