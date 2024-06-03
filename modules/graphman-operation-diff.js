@@ -28,7 +28,8 @@ module.exports = {
             const rightBundle = results[1];
             const diffBundle = {goidMappings: [], guidMappings: []};
 
-            if (params.fullDiff){
+            console.log("params"+JSON.stringify(params,null,4));
+            if (params.options && params.options.fullDiff){
                 diffBundle["updates"] = {};
                 diffBundle["inserts"] = {};
                 diffBundle["deletes"] = {};
@@ -66,8 +67,9 @@ module.exports = {
         console.log("  --output <output-file>");
         console.log("    specify the file to capture the diff report");
         console.log();
-        console.log("  --fullDiff");
-        console.log("    deviding resources into updates, inserts and deletes.");
+        console.log("  --options.fullDiff false|true");
+        console.log("    true  : deviding resources into updates, inserts and deletes.");
+        console.log("    false : default , normal diff.");
         
     }
 }
