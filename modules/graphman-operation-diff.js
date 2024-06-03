@@ -28,9 +28,18 @@ module.exports = {
             const rightBundle = results[1];
             const diffBundle = {goidMappings: [], guidMappings: []};
 
+            if (params.fullDiff){
+                diffBundle["updates"] = {};
+                diffBundle["inserts"] = {};
+                diffBundle["deletes"] = {};
+            }
+
             diff(leftBundle, rightBundle, diffBundle);
-            if (!diffBundle.goidMappings.length) delete diffBundle.goidMappings;
-            if (!diffBundle.guidMappings.length) delete diffBundle.guidMappings;
+            if (!diffBundle.goidMappings.length)                               delete diffBundle.goidMappings;
+            if (!diffBundle.guidMappings.length)                               delete diffBundle.guidMappings;
+            if (diffBundle.updates && !Object.keys(diffBundle.updates).length) delete diffBundle.updates;
+            if (diffBundle.inserts && !Object.keys(diffBundle.inserts).length) delete diffBundle.inserts;
+            if (diffBundle.deletes && !Object.keys(diffBundle.deletes).length) delete diffBundle.deletes;
 
             diffBundle.properties = leftBundle.properties;
             utils.writeResult(params.output, butils.sort(diffBundle));
@@ -57,6 +66,9 @@ module.exports = {
         console.log("  --output <output-file>");
         console.log("    specify the file to capture the diff report");
         console.log();
+        console.log("  --fullDiff");
+        console.log("    deviding resources into updates, inserts and deletes.");
+        
     }
 }
 
@@ -103,11 +115,23 @@ function diffEntities(leftEntities, rightEntities, resultEntities, resultBundle,
         const matchingEntity = butils.findMatchingEntity(rightEntities, left);
 
         if (!matchingEntity) {
-            utils.info("  selecting " + butils.entityDisplayName(left));
-            resultEntities.push(left);
+            utils.info("  selecting for insert " + butils.entityDisplayName(left));
+            if (resultBundle.inserts) {
+                if( !resultBundle.inserts[key]) resultBundle.inserts[key]=new Array();
+                resultBundle.inserts[key].push(left);
+            }
+            else {
+                resultEntities.push(left);
+            }
         } else if (matchingEntity.checksum != null && matchingEntity.checksum !== left.checksum) { // if matchingEntity.checksum is not present, we assume user explicitely wants to ignore same entity that have different value
-            utils.info("  selecting " + butils.entityDisplayName(left));
-            resultEntities.push(left);
+            utils.info("  selecting for update " + butils.entityDisplayName(left));
+            if (resultBundle.updates) {
+                if( !resultBundle.updates[key]) resultBundle.updates[key]=new Array();
+                resultBundle.updates[key].push(left);
+            }
+            else {
+                resultEntities.push(left);
+            }
         }
 
         if (matchingEntity) {
@@ -126,6 +150,10 @@ function diffEntities(leftEntities, rightEntities, resultEntities, resultBundle,
     rightEntities.forEach(right => {
         if (leftEntities.every(left => !butils.matchEntity(left, right))) {
             utils.info("  (opt) marking the target entity for deletion " + butils.entityDisplayName(right));
+            if (resultBundle.deletes) {
+                if( !resultBundle.deletes[key]) resultBundle.deletes[key]=new Array();
+                resultBundle.deletes[key].push(right);
+            }
         }
     });
 }
