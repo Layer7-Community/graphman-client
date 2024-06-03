@@ -116,8 +116,13 @@ module.exports = {
         console.log("  --filter.by <field-name>");
         console.log("    use this option to filter the exported entities by some field");
         console.log();
-        console.log("  --filter.[equals|startsWith|endsWith|contains] <value>");
+        console.log("  --filter.[equals|startsWith|endsWith|contains|lessThan|greaterThan] <value>");
         console.log("    use this option to choose the matching criteria to filter the exported entities");
+        console.log("    lessThan & greaterThan can take date values like 2024-05-31, to compare against date attributes");
+        console.log();
+        console.log("  --filter.not false|true");
+        console.log("    false - default");
+        console.log("    true - invert the condition");
         console.log();
         console.log("  --options.<name> <value>");
         console.log("    specify options as name-value pair(s) to customize the operation");
