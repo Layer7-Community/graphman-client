@@ -65,9 +65,9 @@ module.exports = {
 }
 
 let type1Exploder = (function () {
-	const BEGIN_CERT_HEADER = '-----BEGIN CERTIFICATE-----';
-	const END_CERT_HEADER = '-----END CERTIFICATE-----';
-	
+    const BEGIN_CERT_HEADER = '-----BEGIN CERTIFICATE-----';
+    const END_CERT_HEADER = '-----END CERTIFICATE-----';
+    
     return {
         explode: function (bundle, outputDir, options) {
             Object.entries(bundle).forEach(([key, entities]) => {
@@ -95,15 +95,30 @@ let type1Exploder = (function () {
         utils.info(`  ${displayName}`);
         const targetDir = entity.folderPath ? utils.safePath(dir, "tree", entity.folderPath) : utils.path(dir, key);
 
-        if (options.level >= 1 && key === "trustedCerts") {
+        if (options.level >= 1 && key.match(/trustedCerts|fipUsers|internalUsers|federatedUsers/)) {
             if (entity.certBase64) {
-				let pemData = BEGIN_CERT_HEADER;
-				pemData += '\r\n' + entity.certBase64;
-				pemData += '\r\n' + END_CERT_HEADER;
+                let pemData = BEGIN_CERT_HEADER;
+                pemData += '\r\n' + entity.certBase64;
+                pemData += '\r\n' + END_CERT_HEADER;
                 utils.writeFile(`${targetDir}/${filename}.pem`, pemData);
                 entity.certBase64 = `{${filename}.pem}`;
             }
         }
+
+        if (options.level >= 1 && key.match(/fips/)) {
+            if (entity.certificateReferences && Array.isArray(entity.certificateReferences) && entity.certificateReferences.length > 0) {
+                entity.certificateReferences.forEach(function (cert) {
+                    certFilename = utils.safeName(`${cert.name}-${cert.thumbprintSha1}`) + fileSuffix
+                    let pemData = BEGIN_CERT_HEADER;
+                    pemData += '\r\n' + cert.certBase64;
+                    pemData += '\r\n' + END_CERT_HEADER;
+                    utils.writeFile(`${targetDir}/${certFilename}.pem`, pemData);
+                    cert.certBase64 = `{${certFilename}.pem}`;
+                    utils.writeFile(`${targetDir}/${certFilename}.json`, cert);
+                });
+            }
+        }
+
 
         if (options.level >= 1 && key === "keys") {
             if (entity.p12) {

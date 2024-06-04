@@ -91,11 +91,23 @@ let type1Imploder = (function () {
                         }
                     }
 
-                    if (type === "trustedCerts") {
+                    if (type.match(/trustedCerts|fipUsers|internalUsers|federatedUsers/)) {
                         if (entity.certBase64 && entity.certBase64.endsWith(".pem}")) {
                             const filename = entity.certBase64.match(/{(.+)}/)[1];
                             let data = readCertFile(`${typeDir}/${filename}`, false);
                             entity.certBase64 = data[0];
+                        }
+                    }
+
+                    if (type.match(/fips/)) {
+                        if (entity.certificateReferences && Array.isArray(entity.certificateReferences) && entity.certificateReferences.length > 0) {
+                            entity.certificateReferences.forEach(function (cert) {
+                                if (cert.certBase64 && cert.certBase64.endsWith(".pem}")) {
+                                    const filename = cert.certBase64.match(/{(.+)}/)[1];
+                                    let data = readCertFile(`${typeDir}/${filename}`, false);
+                                    cert.certBase64 = data[0];
+                                }
+                            });
                         }
                     }
 
