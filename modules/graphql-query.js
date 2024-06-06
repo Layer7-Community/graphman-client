@@ -138,7 +138,7 @@ function expandGraphQLSubQueryUsingTypeInfo(gql, typeInfo, suffix) {
                     query += ` {\n  {{${fieldInfo.dataType}${fieldInfo.suffix || ""}}}\n}`;
                 }
             } else {
-                utils.info(`excluding the query field ${typeInfo.typeName}.${fieldInfo.name}`);
+                utils.fine(`excluding the query field ${typeInfo.typeName}.${fieldInfo.name}`);
             }
         });
     }

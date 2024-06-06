@@ -77,7 +77,7 @@ function readBundleFromGateway(gateway) {
         utils.info(`retrieving ${gateway.name} gateway configuration summary`);
         exporter.export(
             gateway,
-            gql.generate("summary", {}, graphman.configuration().options),
+            gql.generate("all:summary", {}, graphman.configuration().options),
             data => resolve(data.data)
         );
     });
