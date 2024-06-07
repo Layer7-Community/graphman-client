@@ -39,6 +39,12 @@ module.exports = {
     expand: function (query, variables, options) {
         const gql = {query: query, variables: variables || {}, options: options || {}};
         return expandGraphQLQuery(gql);
+    },
+
+    generateFor: function (entities, typeInfo, options) {
+        const gql = buildGraphQLQueryFor(entities, typeInfo);
+        gql.options = options || {};
+        return expandGraphQLQuery(gql);
     }
 }
 
@@ -81,6 +87,65 @@ function buildGraphQLQuery(queryPrefix, querySuffix) {
             `}\n`,
         args: qArgs
     };
+}
+
+/**
+ * Builds query for the specified entities
+ * @param entities entities to be renewed
+ * @param typeInfo type-info for the entities
+ */
+function buildGraphQLQueryFor(entities, typeInfo) {
+    const queryPrefix = typeInfo.pluralName;
+    const queryArgs = [];
+    const variables = {};
+    let subQuery = "";
+
+    Array.from(entities).forEach((item, index) => {
+        const gql = buildGraphQLSubQueryFor(item, typeInfo, "" + (index + 1), queryArgs);
+        subQuery += gql.query;
+        Object.assign(variables, gql.variables);
+    });
+
+    return {
+        query: `query ${queryPrefix}(${queryArgs.join(',')}) {\n` +
+            subQuery +
+            `}\n`,
+        variables: variables
+    };
+}
+
+function buildGraphQLSubQueryFor(entity, typeInfo, suffix, queryArgs) {
+    const fieldInfo = graphman.queryFieldInfo(
+        typeInfo.singleQueryMethod ||
+        typeInfo.singularName + "By" + pascalCasing(typeInfo.identityFields[0]));
+
+    const fieldArgs = [];
+    const variables = {};
+    if (fieldInfo.args) for (const argInfo of fieldInfo.args) {
+        addQueryArg(queryArgs, argInfo.name + suffix, argInfo.dataType);
+        addFieldMethodArg(fieldArgs, argInfo.name, argInfo.name + suffix);
+        variables[argInfo.name + suffix] = entity[argInfo.name];
+    }
+
+    return {
+        query: `` +
+            `    ${fieldInfo.name}${suffix}: ${fieldInfo.name}(${fieldArgs.join(',')}) {\n` +
+            `        {{${typeInfo.typeName}}}\n` +
+            `    }\n`,
+        variables: variables
+    };
+}
+
+function addQueryArg(args, name, dataType) {
+    args.push(`$${name}: ${dataType}`);
+}
+
+function addFieldMethodArg(args, name, variable) {
+    args.push(`${name}: $${variable}`);
+}
+
+function pascalCasing(text) {
+    return text.charAt(0).toUpperCase() + text.substring(1);
 }
 
 /**

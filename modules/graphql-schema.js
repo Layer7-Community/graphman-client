@@ -121,6 +121,7 @@ function buildV1(metadata, version, schemaVersion) {
  * @param metadataBase base configuration
  * @param metadataBase.deprecatedTypes list of deprecated types
  * @param metadataBase.goidRefTypes list of types that are referenced by goid
+ * @param metadataBase.singleQueryMethods list of pairs of type and single query method
  */
 function buildV1Extras(metadata, metadataBase) {
     Array.from(metadataBase.deprecatedTypes).forEach(item => {
@@ -134,6 +135,13 @@ function buildV1Extras(metadata, metadataBase) {
         const typeInfo = metadata.types[item];
         if (typeInfo) {
             typeInfo.goidRefEnabled = true;
+        }
+    });
+
+    Array.from(metadataBase.singleQueryMethods).forEach(item => {
+        const typeInfo = metadata.types[item[0]];
+        if (typeInfo) {
+            typeInfo.singleQueryMethod = item[1];
         }
     });
 }
@@ -218,7 +226,7 @@ function captureTypeInfoIfMatches(line, ref) {
 function captureFieldInfoIfMatches(line, ref) {
     const match = line.match(/\s+(\w+)\s*([(][^)]+[)])?\s*[:]\s*[\[]?(\w+)/); // field declaration, <field-name>: <field-type>
     if (match) {
-        ref.tInfo.fields.push({name: match[1], dataType: match[3], args: match[2] ? extractFieldArgs(match[2]) : undefined});
+        ref.tInfo.fields.push({name: match[1], dataType: match[3].trim(), args: match[2] ? extractFieldArgs(match[2]) : undefined});
     }
 }
 
@@ -226,7 +234,7 @@ function extractFieldArgs(text) {
     const result = [];
     Array.from(text.matchAll(/\s*(\w+)\s*[:]([^,)]+)/g)).forEach(match => {
         if (match) {
-            result.push({name: match[1], dataType: match[2]});
+            result.push({name: match[1], dataType: match[2].trim()});
         }
     });
     return result;

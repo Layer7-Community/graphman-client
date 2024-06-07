@@ -16,37 +16,32 @@
     "deprecatedTypes": [
         "WebApiService",
         "SoapService",
-        "internalWebApiServices",
-        "internalSoapServices",
-        "policyFragments",
-        "globalPolicies",
-        "backgroundTaskPolicies",
-        "fips",
-        "fipUsers",
-        "fipGroups",
-        "ldaps"
+        "InternalWebApiService",
+        "InternalSoapService",
+        "PolicyFragment",
+        "GlobalPolicy",
+        "BackgroundTaskPolicy",
+        "Fip",
+        "FipUser",
+        "FipGroup",
+        "Ldap"
     ],
 
     "goidRefTypes": [
-        "fips",
-        "fipUsers",
-        "fipGroups",
-        "federatedIdps",
-        "federatedUsers",
-        "federatedGroups",
-        "internalUsers",
-        "internalGroups",
-        "ldaps",
-        "ldapIdps",
-        "trustedCerts"
+        "Fip",
+        "FipUser",
+        "FipGroup",
+        "FederatedIdp",
+        "FederatedUser",
+        "FederatedGroup",
+        "InternalUser",
+        "InternalGroup",
+        "Ldap",
+        "LdapIdp",
+        "Certificate"
     ],
 
-    "typeInfoAdditionalDetails": [
-        {
-            "pluralName": "webApiServices",
-            "singularQueryMethod": {
-                "name": "webApiServiceByResolutionPath"
-            }
-        }
+    "singleQueryMethods": [
+        ["WebApiService", "webApiServiceByResolutionPath"]
     ]
 }
