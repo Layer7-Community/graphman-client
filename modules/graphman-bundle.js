@@ -1,17 +1,10 @@
 
 const utils = require("./graphman-utils");
 const metadata = require("./graphman").schemaMetadata();
-const GOID_PLURAL_METHODS = ["fipUsers", "federatedUsers", "internalUsers", "fipGroups", "federatedGroups", "internalGroups", "ldaps", "ldapIdps", "fips", "federatedIdps", "trustedCerts"];
-const DEPRECATED_TYPES = [
-    "webApiServices", "soapServices", "internalWebApiServices", "internalSoapServices",
-    "policyFragments", "globalPolicies", "backgroundTaskPolicies",
-    "fips", "ldaps", "fipUsers", "fipGroups"
-];
 
 module.exports = {
     EXPORT_USE: 'export',
     IMPORT_USE: 'import',
-    GOID_MAPPING_PLURAL_METHODS: GOID_PLURAL_METHODS,
     ENTITY_TYPE_PLURAL_TAG_FRIENDLY_NAME: {
         policies: 'policy',
         services: 'service',
@@ -285,14 +278,15 @@ let exportSanitizer = function () {
         Object.keys(obj).forEach(key => {
             const typeInfo = typeInfoFromVariableBundleName(key);
             const sanitizedKey = typeInfo ? typeInfo.pluralName : null;
-            const goidRequired = GOID_PLURAL_METHODS.includes(key) || (!options.excludeGoids);
 
             if (sanitizedKey) {
+                const goidRequired = typeInfo.goidRefEnabled || !options.excludeGoids;
+
                 if (!result[sanitizedKey]) result[sanitizedKey] = [];
                 if (!result.mappings[sanitizedKey]) result.mappings[sanitizedKey] = [];
                 if (!result.dependencyMappings[sanitizedKey]) result.dependencyMappings[sanitizedKey] = [];
 
-                if (DEPRECATED_TYPES.includes(sanitizedKey)) {
+                if (typeInfo.deprecated) {
                     utils.warn("found deprecated entity type: " + sanitizedKey + ", revise the query");
                 }
 
@@ -434,11 +428,14 @@ let importSanitizer = function () {
     return {
         sanitize: function (bundle, options) {
             Object.keys(bundle).forEach(key => {
-                const goidRequired = GOID_PLURAL_METHODS.includes(key);
+                const typeInfo = metadata.bundleTypes[key];
+                const goidRequired = typeInfo.goidRefEnabled;
                 const includeGoids = !options.excludeGoids;
                 utils.info("inspecting " + key);
 
-                if (DEPRECATED_TYPES.includes(key)) {
+                if (!typeInfo) {
+                    utils.warn("found unknown entity type: " + key);
+                } else if (typeInfo.deprecated) {
                     utils.warn("found deprecated entity type: " + key + ", revise the bundle");
                 }
 

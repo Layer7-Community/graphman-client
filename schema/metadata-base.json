@@ -13,6 +13,34 @@
         "JSON"
     ],
 
+    "deprecatedTypes": [
+        "WebApiService",
+        "SoapService",
+        "internalWebApiServices",
+        "internalSoapServices",
+        "policyFragments",
+        "globalPolicies",
+        "backgroundTaskPolicies",
+        "fips",
+        "fipUsers",
+        "fipGroups",
+        "ldaps"
+    ],
+
+    "goidRefTypes": [
+        "fips",
+        "fipUsers",
+        "fipGroups",
+        "federatedIdps",
+        "federatedUsers",
+        "federatedGroups",
+        "internalUsers",
+        "internalGroups",
+        "ldaps",
+        "ldapIdps",
+        "trustedCerts"
+    ],
+
     "typeInfoAdditionalDetails": [
         {
             "pluralName": "webApiServices",

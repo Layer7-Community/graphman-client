@@ -61,8 +61,8 @@ function buildGraphQLQuery(queryPrefix, querySuffix) {
     let qArgs = [];
 
     if (fieldInfo.args) for (const argInfo of fieldInfo.args) {
-        fArgs += "$" + argInfo.name + ": " + argInfo.dataType;
-        sArgs += argInfo.name + ": $" + argInfo.name;
+        fArgs += (fArgs.length > 1 ? ", $" : "$") + argInfo.name + ": " + argInfo.dataType;
+        sArgs += (sArgs.length > 1 ? ", " : "") + argInfo.name + ": $" + argInfo.name;
         qArgs.push(argInfo.name);
     }
 

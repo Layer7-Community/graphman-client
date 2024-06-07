@@ -111,7 +111,8 @@ function diffEntities(leftEntities, rightEntities, resultEntities, resultBundle,
         }
 
         if (matchingEntity) {
-            if (butils.GOID_MAPPING_PLURAL_METHODS.includes(key) && left.goid && matchingEntity.goid !== left.goid) {
+            const typeInfo = graphman.typeInfoByPluralName(key);
+            if (typeInfo && typeInfo.goidRefEnabled && left.goid && matchingEntity.goid !== left.goid) {
                 utils.info(`  required goid mapping for ` + butils.entityDisplayName(left) + `, source: ${left.goid}, target: ${matchingEntity.goid}`);
                 resultBundle.goidMappings.push({source: left.goid, target: matchingEntity.goid});
             }

@@ -11,10 +11,15 @@ module.exports = {
         }
 
         const metadataBase = utils.readFile(metadataBaseFile);
-        const metadata = {types: {}, subTypes: {}, primitiveTypes: metadataBase.primitiveTypes};
+        const metadata = {
+            types: {},
+            subTypes: {},
+            primitiveTypes: metadataBase.primitiveTypes
+        };
 
         metadata.types["HardwiredService"] = {category: "union", fields: []};
         buildV1(metadata, version, schemaVersion);
+        buildV1Extras(metadata, metadataBase);
         utils.writeFile(metadataFile, metadata);
 
         return buildV2(metadata);
@@ -111,6 +116,29 @@ function buildV1(metadata, version, schemaVersion) {
 }
 
 /**
+ * Populates extra type details from the base configuration
+ * @param metadata Graphman metadata
+ * @param metadataBase base configuration
+ * @param metadataBase.deprecatedTypes list of deprecated types
+ * @param metadataBase.goidRefTypes list of types that are referenced by goid
+ */
+function buildV1Extras(metadata, metadataBase) {
+    Array.from(metadataBase.deprecatedTypes).forEach(item => {
+        const typeInfo = metadata.types[item];
+        if (typeInfo) {
+            typeInfo.deprecated = true;
+        }
+    });
+
+    Array.from(metadataBase.goidRefTypes).forEach(item => {
+        const typeInfo = metadata.types[item];
+        if (typeInfo) {
+            typeInfo.goidRefEnabled = true;
+        }
+    });
+}
+
+/**
  * Parses the graphql schema files and extracts type information
  * @param file
  * @param onTypeCallback
@@ -163,6 +191,7 @@ function captureMultiLineCommentInfo(line, ref) {
     if (match) {
         ref.mlcInfo[match[1]] = match[2];
         if (match[1] === "l7-entity") ref.mlcInfo["is-l7-entity"] = true;
+        if (match[1] === "l7-deprecated") ref.mlcInfo["is-deprecated"] = true;
     }
 }
 
@@ -171,6 +200,7 @@ function captureTypeInfoIfMatches(line, ref) {
     if (match) {
         ref.tInfo = {category: match[1], typeName: match[2], fields: []};
         ref.tInfo.isL7Entity = ref.mlcInfo["is-l7-entity"];
+        ref.tInfo.deprecated = ref.mlcInfo["is-deprecated"];
 
         let names = splitTokens(ref.mlcInfo["l7-entity"], "|");
         if (names.length === 0) names = camelCaseNames(match[2]);
