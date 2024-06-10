@@ -42,6 +42,9 @@
     ],
 
     "singleQueryMethods": [
-        ["WebApiService", "webApiServiceByResolutionPath"]
+        ["WebApiService", "webApiServiceByResolutionPath"],
+        ["FederatedUser", "federatedUserByName"],
+        ["FipUser", "fipUserByName"],
+        ["InternalIdp", "internalIdps"]
     ]
 }

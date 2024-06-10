@@ -106,8 +106,11 @@ function buildGraphQLQueryFor(entities, typeInfo) {
         Object.assign(variables, gql.variables);
     });
 
+    const queryArgsPrefix = queryArgs.length > 0 ? "(" : "";
+    const queryArgsSuffix = queryArgs.length > 0 ? ")" : "";
+
     return {
-        query: `query ${queryPrefix}(${queryArgs.join(',')}) {\n` +
+        query: `query ${queryPrefix}${queryArgsPrefix}${queryArgs.join(',')}${queryArgsSuffix} {\n` +
             subQuery +
             `}\n`,
         variables: variables
@@ -115,9 +118,13 @@ function buildGraphQLQueryFor(entities, typeInfo) {
 }
 
 function buildGraphQLSubQueryFor(entity, typeInfo, suffix, queryArgs) {
-    const fieldInfo = graphman.queryFieldInfo(
-        typeInfo.singleQueryMethod ||
-        typeInfo.singularName + "By" + pascalCasing(typeInfo.identityFields[0]));
+    const fieldMethod = typeInfo.singleQueryMethod ||
+        typeInfo.singularName + "By" + pascalCasing(typeInfo.identityFields[0]);
+    const fieldInfo = graphman.queryFieldInfo(fieldMethod);
+
+    if (!fieldInfo) {
+        throw new Error("missing field information: " + fieldMethod);
+    }
 
     const fieldArgs = [];
     const variables = {};
@@ -127,9 +134,12 @@ function buildGraphQLSubQueryFor(entity, typeInfo, suffix, queryArgs) {
         variables[argInfo.name + suffix] = entity[argInfo.name];
     }
 
+    const fieldArgsPrefix = fieldArgs.length > 0 ? "(" : "";
+    const fieldArgsSuffix = fieldArgs.length > 0 ? ")" : "";
+
     return {
         query: `` +
-            `    ${fieldInfo.name}${suffix}: ${fieldInfo.name}(${fieldArgs.join(',')}) {\n` +
+            `    ${fieldInfo.name}${suffix}: ${fieldInfo.name}${fieldArgsPrefix}${fieldArgs.join(',')}${fieldArgsSuffix} {\n` +
             `        {{${typeInfo.typeName}}}\n` +
             `    }\n`,
         variables: variables
