@@ -2,7 +2,7 @@
 const utils = require("./graphman-utils");
 const butils = require("./graphman-bundle");
 const graphman = require("./graphman");
-const queryBuilder = require("./graphql-query-builder");
+const gql = require("./graphql-query");
 const postExportExtension = utils.extension("graphman-post-bundle");
 
 module.exports = {
@@ -23,7 +23,7 @@ module.exports = {
             throw utils.newError(`${gateway.name} gateway details are missing`);
         }
 
-        const query = queryBuilder.build(params.using, params.variables, params.options);
+        const query = gql.generate(params.using, params.variables, params.options);
         const startDate = Date.now();
 
         utils.fine("start time: " + startDate);

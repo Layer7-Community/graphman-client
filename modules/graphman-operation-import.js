@@ -2,7 +2,7 @@
 const utils = require("./graphman-utils");
 const butils = require("./graphman-bundle");
 const graphman = require("./graphman");
-const queryBuilder = require("./graphql-query-builder");
+const gql = require("./graphql-query");
 const preImportExtension = utils.extension("graphman-pre-bundle");
 
 module.exports = {
@@ -32,13 +32,13 @@ module.exports = {
             return;
         }
 
-        const request = graphman.request(gateway, params.options);
         const inputBundle = butils.sanitize(utils.readFile(params.input), butils.IMPORT_USE, params.options);
         butils.removeDuplicates(inputBundle);
         butils.overrideMappings(inputBundle, params.options);
         preImportExtension.call(inputBundle);
 
-        const query = queryBuilder.build(params.using, Object.assign(inputBundle, params.variables), params.options);
+        const query = gql.generate(params.using, Object.assign(inputBundle, params.variables), params.options);
+        const request = graphman.request(gateway, query.options);
         delete query.options;
         request.body = query;
 
@@ -62,7 +62,7 @@ module.exports = {
 
         params.options = Object.assign({
             comment: null,
-            bundleDefaultAction: "NEW_OR_UPDATE",
+            bundleDefaultAction: null,
             excludeGoids: false,
             forceDelete: false,
             forceAdminPasswordReset: false,

@@ -1,17 +1,10 @@
 
 const utils = require("./graphman-utils");
-const SCHEMA_METADATA = require("./graphman").schemaMetadata();
-const GOID_PLURAL_METHODS = ["fipUsers", "federatedUsers", "internalUsers", "fipGroups", "federatedGroups", "internalGroups", "ldaps", "ldapIdps", "fips", "federatedIdps", "trustedCerts"];
-const DEPRECATED_TYPES = [
-    "webApiServices", "soapServices", "internalWebApiServices", "internalSoapServices",
-    "policyFragments", "globalPolicies", "backgroundTaskPolicies",
-    "fips", "ldaps", "fipUsers", "fipGroups"
-];
+const metadata = require("./graphman").schemaMetadata();
 
 module.exports = {
     EXPORT_USE: 'export',
     IMPORT_USE: 'import',
-    GOID_MAPPING_PLURAL_METHODS: GOID_PLURAL_METHODS,
     ENTITY_TYPE_PLURAL_TAG_FRIENDLY_NAME: {
         policies: 'policy',
         services: 'service',
@@ -258,13 +251,13 @@ let exportSanitizer = function () {
     };
 
     function typeInfoFromVariableBundleName (key) {
-        let typeName = SCHEMA_METADATA.pluralMethods[key];
-        if (typeName) return SCHEMA_METADATA.types[typeName];
+        let typeInfo = metadata.bundleTypes[key];
+        if (typeInfo) return typeInfo;
 
-        const types = Object.values(SCHEMA_METADATA.types);
+        const types = Object.values(metadata.types);
 
-        for (var item of types) {
-            if (item.prefix && key.startsWith(item.prefix)) {
+        for (const item of types) {
+            if (item.isL7Entity && (key.startsWith(item.singularName) || key.startsWith(item.pluralName))) {
                 return item;
             }
         }
@@ -284,15 +277,16 @@ let exportSanitizer = function () {
     function sanitizeBundleInternal(obj, result, options, dependencies) {
         Object.keys(obj).forEach(key => {
             const typeInfo = typeInfoFromVariableBundleName(key);
-            const sanitizedKey = typeInfo ? typeInfo.pluralMethod : null;
-            const goidRequired = GOID_PLURAL_METHODS.includes(key) || (!options.excludeGoids);
+            const sanitizedKey = typeInfo ? typeInfo.pluralName : null;
 
             if (sanitizedKey) {
+                const goidRequired = typeInfo.goidRefEnabled || !options.excludeGoids;
+
                 if (!result[sanitizedKey]) result[sanitizedKey] = [];
                 if (!result.mappings[sanitizedKey]) result.mappings[sanitizedKey] = [];
                 if (!result.dependencyMappings[sanitizedKey]) result.dependencyMappings[sanitizedKey] = [];
 
-                if (DEPRECATED_TYPES.includes(sanitizedKey)) {
+                if (typeInfo.deprecated) {
                     utils.warn("found deprecated entity type: " + sanitizedKey + ", revise the query");
                 }
 
@@ -349,13 +343,11 @@ let exportSanitizer = function () {
     }
 
     function createMappingInstruction(obj, typeInfo, options, dependencies) {
-        typeInfo = SCHEMA_METADATA.bundleTypes[typeInfo.pluralMethod];
-        const actions = options.mappings[typeInfo.bundleName] || options.mappings['default'];
+        const actions = options.mappings[typeInfo.pluralName] || options.mappings['default'];
         const instruction = {action: actions.action, level: actions.level};
 
         if (!instruction.action || !instruction.level || instruction.level === '0') return null;
 
-        instruction[typeInfo.identityField] = obj[typeInfo.identityField];
         typeInfo.identityFields.forEach(field => instruction[field] = obj[field]);
 
         if (dependencies) {
@@ -381,7 +373,7 @@ let exportSanitizer = function () {
 
             if (dependencyEntityMappings) {
                 dependencyEntityMappings.forEach(item => {
-                    if (!isDuplicateMatchingInstruction(entityMappings, item, SCHEMA_METADATA.bundleTypes[key])) {
+                    if (!isDuplicateMatchingInstruction(entityMappings, item, metadata.bundleTypes[key])) {
                         entityMappings.push(item);
                     }
                 });
@@ -406,22 +398,24 @@ let exportSanitizer = function () {
             let entityMappings = mappings[key];
             const list = [];
             entityMappings.forEach(item => {
-                if (!isDuplicateMatchingInstruction(list, item, SCHEMA_METADATA.bundleTypes[key])) list.push(item);
+                if (!isDuplicateMatchingInstruction(list, item, metadata.bundleTypes[key])) list.push(item);
             });
             mappings[key] = list;
         });
     }
 
     function isDuplicateMatchingInstruction(list, ele, typeInfo) {
-        for (var item of list) {
-            if (ele[typeInfo.identityField] === item[typeInfo.identityField]) {
-                if (typeInfo.identityFields.length === 0) return true;
+        for (const item of list) {
+            let match = true;
 
-                for (var field of typeInfo.identityFields) {
-                    if (ele[field] !== item[field]) return false;
+            for (const field of typeInfo.identityFields) {
+                if (ele[field] !== item[field]) {
+                    match = false;
+                    break;
                 }
-                return true;
             }
+
+            if (match) return true;
         }
 
         return false;
@@ -434,11 +428,14 @@ let importSanitizer = function () {
     return {
         sanitize: function (bundle, options) {
             Object.keys(bundle).forEach(key => {
-                const goidRequired = GOID_PLURAL_METHODS.includes(key);
+                const typeInfo = metadata.bundleTypes[key];
+                const goidRequired = typeInfo.goidRefEnabled;
                 const includeGoids = !options.excludeGoids;
                 utils.info("inspecting " + key);
 
-                if (DEPRECATED_TYPES.includes(key)) {
+                if (!typeInfo) {
+                    utils.warn("found unknown entity type: " + key);
+                } else if (typeInfo.deprecated) {
                     utils.warn("found deprecated entity type: " + key + ", revise the bundle");
                 }
 

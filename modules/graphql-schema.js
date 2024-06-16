@@ -2,112 +2,294 @@
 const utils = require("./graphman-utils");
 
 module.exports = {
-    build: function (schemaVersion, refresh) {
+    build: function (version, schemaVersion, refresh) {
         const metadataBaseFile = utils.schemaMetadataBaseFile(schemaVersion);
         const metadataFile = utils.schemaMetadataFile(schemaVersion);
 
         if (!refresh && utils.existsFile(metadataFile)) {
-            return utils.readFile(metadataFile);
+            return buildV2(utils.readFile(metadataFile));
         }
 
-        const metadata = utils.readFile(metadataBaseFile);
-        build(metadata, schemaVersion);
+        const metadataBase = utils.readFile(metadataBaseFile);
+        const metadata = {
+            types: {},
+            subTypes: {},
+            primitiveTypes: metadataBase.primitiveTypes
+        };
+
+        metadata.types["HardwiredService"] = {category: "union", fields: []};
+        buildV1(metadata, version, schemaVersion);
+        buildV1Extras(metadata, metadataBase);
         utils.writeFile(metadataFile, metadata);
 
-        return metadata;
-    },
+        return buildV2(metadata);
+    }
 };
 
-function build(metadata, schemaVersion) {
-    metadata.schemaVersion = schemaVersion;
+function buildV2(metadata) {
     metadata.bundleTypes = {};
 
-    // construct map from the base schema details
-    metadata.typeInfos.forEach(item => {
-        metadata.bundleTypes[item.bundleName] = item;
+    Object.values(metadata.types).forEach(typeInfo => {
+        if (typeInfo.isL7Entity) {
+            metadata.bundleTypes[typeInfo.pluralName] = typeInfo;
+        }
     });
+
+    metadata.bundleTypes["internalSchemas"] = metadata.types["Schema"];
+    metadata.bundleTypes["internalDtds"] = metadata.types["Dtd"];
+    metadata.types["HardwiredService"] = Object.assign(
+        {},
+        metadata.types["L7Service"],
+        {category: "union", isL7Entity: false}
+    );
+
+    return metadata;
+}
+
+function buildV1(metadata, version, schemaVersion) {
+    metadata.version = version;
+    metadata.schemaVersion = schemaVersion;
 
     // start parsing the graphql schema files
     const schemaDir = utils.schemaDir(schemaVersion);
     utils.listDir(schemaDir).forEach(file => {
         if (file.endsWith(".graphql")) {
-            parseSchemaFile(schemaDir + "/" + file, metadata);
+            parseSchemaFile(schemaDir + "/" + file, typeInfo => {
+                if (typeInfo.isL7Entity) {
+                    utils.fine("  capturing type: " + typeInfo.typeName);
+                    metadata.types[typeInfo.typeName] = typeInfo;
+                } else if (typeInfo.category === 'enum') {
+                    utils.fine("  capturing sub-type as primitive: " + typeInfo.typeName);
+                    metadata.primitiveTypes.push(typeInfo.typeName);
+                } else {
+                    utils.fine("  capturing sub-type: " + typeInfo.typeName);
+
+                    if (typeInfo.typeName === "Query" || typeInfo.typeName === "Mutation") {
+                        const existing = metadata.subTypes[typeInfo.typeName];
+                        if (existing) {
+                            typeInfo.fields = existing.fields.concat(typeInfo.fields);
+                        }
+                    }
+
+                    metadata.subTypes[typeInfo.typeName] = typeInfo;
+                }
+            });
         }
     });
 
-    Object.entries(metadata.types).forEach(([key, value]) => {
-        // to retrieve type using its plural method
-        metadata.pluralMethods[value.pluralMethod] = key;
+    // identify the required sub-types by inspecting the main type fields
+    const reqSubTypes = {};
 
-        // define summary fields
-        if (!value.summaryFields || !Array.isArray(value.summaryFields) || value.summaryFields.length === 0) {
-            const sFields = value.summaryFields = ["goid"];
-            if (value.fields.includes("guid")) sFields.push("guid");
-            if (value.idFields) value.idFields.forEach(item => sFields.push(item));
-            else if (value.idField) sFields.push(value.idField);
-            sFields.push("checksum");
-        }
+    reqSubTypes["Query"] = metadata.subTypes["Query"];
 
-        // restore the enum type fields
-        value.fields.forEach((field, index) => {
-            const tokens = field.split(/[{}]/); // <field-name> { {{<field-type>}} }
-            if (tokens && metadata.enumTypes.includes(tokens[3])) {
-                value.fields[index] = tokens[0];
+    Object.entries(metadata.types).forEach(([key, typeInfo]) => {
+        inspectTypeFields(metadata, typeInfo, (fieldInfo, subTypeInfo) => {
+            if (!reqSubTypes[subTypeInfo.typeName]) {
+                reqSubTypes[subTypeInfo.typeName] = subTypeInfo;
+                return true;
             }
+
+            return false;
         });
     });
 
-    metadata.pluralMethods["internalSchemas"] = "Schema";
-    metadata.pluralMethods["internalDtds"] = "Dtd";
+    // promote the required sub-types as main types
+    Object.entries(metadata.subTypes).forEach(([key, typeInfo]) => {
+        if (!reqSubTypes[key]) {
+            utils.fine("  ignoring sub-type: " + typeInfo.typeName);
+        } else {
+            utils.fine("  promoting sub-type: " + typeInfo.typeName);
+            metadata.types[key] = typeInfo;
+        }
+    });
+
+    // sort the fields in Query sub-type
+    metadata.subTypes["Query"].fields.sort((a, b) => {
+        if (a.name < b.name) return -1;
+        else if (a.name > b.name) return 1;
+        else return 0;
+    });
+
+    delete metadata.subTypes;
+
+    return metadata;
 }
 
-function parseSchemaFile(file, metadata) {
+/**
+ * Populates extra type details from the base configuration
+ * @param metadata Graphman metadata
+ * @param metadataBase base configuration
+ * @param metadataBase.deprecatedTypes list of deprecated types
+ * @param metadataBase.goidRefTypes list of types that are referenced by goid
+ * @param metadataBase.singleQueryMethods list of pairs of type and single query method
+ */
+function buildV1Extras(metadata, metadataBase) {
+    Array.from(metadataBase.deprecatedTypes).forEach(item => {
+        const typeInfo = metadata.types[item];
+        if (typeInfo) {
+            typeInfo.deprecated = true;
+        }
+    });
+
+    Array.from(metadataBase.goidRefTypes).forEach(item => {
+        const typeInfo = metadata.types[item];
+        if (typeInfo) {
+            typeInfo.goidRefEnabled = true;
+        }
+    });
+
+    Array.from(metadataBase.singleQueryMethods).forEach(item => {
+        const typeInfo = metadata.types[item[0]];
+        if (typeInfo) {
+            typeInfo.singleQueryMethod = item[1];
+        }
+    });
+}
+
+/**
+ * Parses the graphql schema files and extracts type information
+ * @param file
+ * @param onTypeCallback
+ */
+function parseSchemaFile(file, onTypeCallback) {
     const lines = utils.readFile(file).split(/\r?\n/);
-    let obj = null;
-    let multilineComment = false;
+    const ref = {
+        tInfo: null, //type-info
+        mlcInfo: {}, // multi-line comment-info
+        mlc: false
+    };
 
-    for (var line of lines) {
-        if (line.match(/^\s*"""/)) {
-            multilineComment = !multilineComment;
+    for (const line of lines) {
+        if (isMultiLineComment(line)) {
+            ref.mlc = !ref.mlc;
             continue;
         }
 
-        if (multilineComment || line.match(/^\s*"/) || line.match(/^\s*#/)) {
-            continue;
-        }
+        if (ref.mlc) captureMultiLineCommentInfo(line, ref);
+        if (ref.mlc || isSingleLineComment(line)) continue;
 
-        if (!obj) {
-            const match = line.match(/(type|enum)\s+(\w+)/);
-            const typeType = match ? match[1] : null;
-            const typeName = match ? match[2] : null;
-            if (typeType === 'enum') {
-                metadata.enumTypes.push(typeName);
-            } else if (typeType === 'type') {
-                obj = metadata.types[typeName];
-                if (!obj) obj = metadata.types[typeName] = {};
-                if (!obj.fields) obj.fields = [];
-                if (!obj.summaryFields) obj.summaryFields = [];
-            }
+        if (!ref.tInfo) {
+            captureTypeInfoIfMatches(line, ref);
         } else {
-            const match = line.match(/\s+(\w+)\s*[:]\s*[\[]?(\w+)/); // field declaration, <field-name>: <field-type>
-            const fieldName = match ? match[1] : null;
-            const fieldType = match ? match[2] : null;
-
-            if (fieldName) {
-                if (fieldType && !metadata.parserHints.excludedDataTypes.includes(fieldType)) {
-                    if (metadata.parserHints.excludedFields[fieldType]) {
-                        obj.fields.push(fieldName + "{ {{" + fieldType + ":-" + metadata.parserHints.excludedFields[fieldType] + "}} }");
-                    } else {
-                        obj.fields.push(fieldName + "{ {{" + fieldType + "}} }");
-                    }
-                } else {
-                    obj.fields.push(fieldName);
-                }
-            }
+            captureFieldInfoIfMatches(line, ref);
 
             if (line.indexOf('}') !== -1) { // type definition ends
-                obj = null;
+                if (ref.tInfo) {
+                    ref.tInfo.excludedFields = normalizeFilteredFields(ref.tInfo.excludedFields, "-", ref.tInfo);
+                    ref.tInfo.includedFields = normalizeFilteredFields(ref.tInfo.includedFields, "+", ref.tInfo);
+                    onTypeCallback(ref.tInfo);
+                    ref.tInfo = null;
+                    ref.mlcInfo = {};
+                }
             }
         }
     }
+}
+
+function isMultiLineComment(line) {
+    return line.match(/^\s*"""/);
+}
+
+function isSingleLineComment(line) {
+    return line.match(/^\s*"/) || line.match(/^\s*#/);
+}
+
+function captureMultiLineCommentInfo(line, ref) {
+    const match = line.match(/@([-\w]+)\s*(.*)/);
+    if (match) {
+        ref.mlcInfo[match[1]] = match[2];
+        if (match[1] === "l7-entity") ref.mlcInfo["is-l7-entity"] = true;
+        if (match[1] === "l7-deprecated") ref.mlcInfo["is-deprecated"] = true;
+    }
+}
+
+function captureTypeInfoIfMatches(line, ref) {
+    const match = line.match(/(type|enum|interface)\s+(\w+)/);
+    if (match) {
+        ref.tInfo = {category: match[1], typeName: match[2], fields: []};
+        ref.tInfo.isL7Entity = ref.mlcInfo["is-l7-entity"];
+        ref.tInfo.deprecated = ref.mlcInfo["is-deprecated"];
+
+        let names = splitTokens(ref.mlcInfo["l7-entity"], "|");
+        if (names.length === 0) names = camelCaseNames(match[2]);
+        if (names.length > 0) ref.tInfo.singularName = names[0];
+        if (names.length > 1) ref.tInfo.pluralName = names[1];
+
+        ref.tInfo.summaryFields = splitTokens(ref.mlcInfo["l7-summary-fields"]);
+        ref.tInfo.excludedFields = splitTokens(ref.mlcInfo["l7-excluded-fields"]);
+        ref.tInfo.includedFields = splitTokens(ref.mlcInfo["l7-included-fields"]);
+        ref.tInfo.identityFields = splitTokens(ref.mlcInfo["l7-identity-fields"]);
+        ref.mlcInfo = {};
+    }
+}
+
+function captureFieldInfoIfMatches(line, ref) {
+    const match = line.match(/\s+(\w+)\s*([(][^)]+[)])?\s*[:]\s*[\[]?(\w+)/); // field declaration, <field-name>: <field-type>
+    if (match) {
+        ref.tInfo.fields.push({name: match[1], dataType: match[3].trim(), args: match[2] ? extractFieldArgs(match[2]) : undefined});
+    }
+}
+
+function extractFieldArgs(text) {
+    const result = [];
+    Array.from(text.matchAll(/\s*(\w+)\s*[:]([^,)]+)/g)).forEach(match => {
+        if (match) {
+            result.push({name: match[1], dataType: match[2].trim()});
+        }
+    });
+    return result;
+}
+
+function normalizeFilteredFields(filteredFields, sign, typeInfo) {
+    const normalizedFields = [];
+
+    Array.from(filteredFields).forEach(item => {
+        const index = item.indexOf('.');
+
+        if (index !== -1 && index + 1 < item.length) {
+            const fieldName = item.substring(0, index);
+            const fieldSuffix = item.substring(index + 1);
+            const field = typeInfo.fields.find(item => item.name === fieldName);
+
+            if (field) {
+                if (field.suffix) {
+                    field.suffix += "," + sign + fieldSuffix;
+                } else {
+                    field.suffix = ":" + sign + fieldSuffix;
+                }
+            }
+        } else {
+            normalizedFields.push(item);
+        }
+    });
+
+    return normalizedFields;
+}
+
+function inspectTypeFields(metadata, typeInfo, callback) {
+    for (const fieldInfo of typeInfo.fields) {
+        if (!metadata.primitiveTypes.includes(fieldInfo.dataType)) {
+            const subTypeInfo = metadata.subTypes[fieldInfo.dataType];
+            if (subTypeInfo) {
+                if (callback(fieldInfo, subTypeInfo)) {
+                    inspectTypeFields(metadata, subTypeInfo, callback);
+                }
+            } else if (!metadata.types[fieldInfo.dataType]) {
+                utils.warn(`  missing sub-type: ${fieldInfo.dataType}, ref: ${typeInfo.typeName}.${fieldInfo.name}`);
+            }
+        }
+    }
+}
+
+function camelCaseNames(typeName) {
+    const singularName = typeName.charAt(0).toLowerCase() + typeName.substring(1);
+    const pluralName = singularName.endsWith("y") ? singularName.substring(0, singularName.length - 1) + "ies" : singularName + "s";
+    return [singularName, pluralName];
+}
+
+function splitTokens(text, delimiter) {
+    if (!text) return [];
+
+    text = text.trim();
+    return text.length === 0 ? [] : Array.from(text.split(delimiter||",")).map(item => item.trim());
 }

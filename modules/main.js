@@ -1,6 +1,6 @@
 
 const GRAPHMAN_HOME = 'GRAPHMAN_HOME';
-const SUPPORTED_OPERATIONS = ["version", "export", "import", "explode", "implode", "combine", "diff", "renew", "revise", "mappings", "schema", "validate"];
+const SUPPORTED_OPERATIONS = ["version", "describe", "export", "import", "explode", "implode", "combine", "diff", "renew", "revise", "mappings", "schema", "validate"];
 const GRAPHMAN_OPERATION_MODULE_PREFIX = "./graphman-operation-";
 const args = process.argv.slice(2);
 const op = args[0];
