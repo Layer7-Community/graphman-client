@@ -11,6 +11,7 @@ try {
     init();
 
     const params = parse(args);
+    params.options = params.options || {};
 
     // initialize configuration and schema metadata
     graphman.init(params);

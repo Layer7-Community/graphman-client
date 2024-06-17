@@ -17,10 +17,23 @@ module.exports = {
 
     init: function (params) {
         const config = JSON.parse(utils.readFile(utils.home() + "/graphman.configuration"));
+
+        // override configured options using params if specified
         config.options = makeOptions(config.options || {});
+        Object.assign(config.options, params.options);
+
+        // set the client log level
         utils.logAt(config.options.log);
 
         config.gateways = makeGateways(config.gateways || {});
+
+        // override configured gateway details using params if specified
+        if (params.gateways) Object.keys(params.gateways).forEach(key => {
+            const gateway = params.gateways[key];
+            config.gateways[key] = config.gateways[key] || {};
+            Object.assign(config.gateways[key], gateway);
+        });
+
         config.defaultGateway = config.gateways['default'];
 
         config.version = VERSION;
