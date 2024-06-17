@@ -23,6 +23,17 @@ module.exports = {
         utils.writeFile(metadataFile, metadata);
 
         return buildV2(metadata);
+    },
+
+    availableSchemas: function () {
+        const schemas = [];
+        const path = utils.schemasDir();
+
+        utils.listDir(path).forEach(item => {
+            if (utils.isDirectory(utils.path(path, item))) schemas.push(item);
+        });
+
+        return schemas;
     }
 };
 

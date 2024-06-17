@@ -1,6 +1,7 @@
 
 const VERSION = "v1.3.00 (dev)";
 const SCHEMA_VERSION = "v11.1.00";
+const SCHEMA_VERSIONS = [SCHEMA_VERSION];
 
 const utils = require("./graphman-utils");
 const hutils = require("./http-utils");
@@ -38,7 +39,9 @@ module.exports = {
 
         config.version = VERSION;
         config.defaultSchemaVersion = SCHEMA_VERSION;
-        config.schemaVersion = params.options.schema || SCHEMA_VERSION;
+        config.supportedSchemaVersions = SCHEMA_VERSIONS;
+        config.schemaVersion = params.options.schema || config.options.schema || SCHEMA_VERSION;
+        config.schemaVersions = gqlschema.availableSchemas();
 
         this.metadata = gqlschema.build(config.version, config.schemaVersion, false);
         this.loadedConfig = config;
@@ -214,6 +217,7 @@ function getPartsFromRawRequest(options) {
 function makeOptions(options) {
     return Object.assign({
         "log": "info",
+        "schema": SCHEMA_VERSION,
         "policyCodeFormat": "xml",
         "keyFormat": "p12"
     }, options);
