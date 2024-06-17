@@ -38,10 +38,7 @@ module.exports = {
 
         config.version = VERSION;
         config.defaultSchemaVersion = SCHEMA_VERSION;
-        config.schemaVersion = params.schemaVersion || config.schemaVersion || SCHEMA_VERSION;
-        if (config.schemaVersion !== SCHEMA_VERSION && utils.schemaDir(config.schemaVersion) === utils.schemaDir()) {
-            utils.warn(`specified schema (${config.schemaVersion}) is missing, falling back to the default`);
-        }
+        config.schemaVersion = params.options.schema || SCHEMA_VERSION;
 
         this.metadata = gqlschema.build(config.version, config.schemaVersion, false);
         this.loadedConfig = config;

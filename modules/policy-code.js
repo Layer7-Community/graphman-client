@@ -1,5 +1,6 @@
 
 const utils = require("./graphman-utils");
+const graphman = require("./graphman");
 const vRef = {validator: null};
 const knownAssertions = ["All", "OneOrMore", "Comment", "SetVariable", "Include", "Encapsulated", "HardcodedResponse"];
 
@@ -17,7 +18,7 @@ function buildValidatorIfRequired() {
     if (!vRef.validator) {
         const Ajv2020 = require("ajv/dist/2020");
         const ajv = new Ajv2020();
-        vRef.validator = ajv.compile(utils.readFile(utils.policySchemaFile()));
+        vRef.validator = ajv.compile(utils.readFile(utils.policySchemaFile(graphman.configuration().schemaVersion)));
     }
 }
 

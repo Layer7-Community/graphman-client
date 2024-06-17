@@ -50,10 +50,24 @@ function isMutationBasedQuery(path) {
 }
 
 function availableQueries(callback) {
-    utils.listDir(utils.queriesDir()).forEach(item => {
+    const queries = [];
+    const path = utils.path(utils.queriesDir(), graphman.configuration().schemaVersion);
+
+    if (utils.existsFile(path)) availableQueriesIn(path, (name, isMutation) => {
+        callback(name, isMutation);
+        queries.push(name);
+    });
+
+    availableQueriesIn(utils.queriesDir(), (name, isMutation) => {
+        if (!queries.includes(name)) callback(name, isMutation);
+    });
+}
+
+function availableQueriesIn(path, callback) {
+    utils.listDir(path).forEach(item => {
         if (item.endsWith(".json")) {
             const name = item.substring(0, item.length - 5);
-            const isMutation = isMutationBasedQuery(utils.path(utils.queriesDir(), name + ".gql"));
+            const isMutation = isMutationBasedQuery(utils.path(path, name + ".gql"));
             callback(name, isMutation);
         }
     });

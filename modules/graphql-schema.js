@@ -49,11 +49,13 @@ function buildV2(metadata) {
 function buildV1(metadata, version, schemaVersion) {
     metadata.version = version;
     metadata.schemaVersion = schemaVersion;
+    metadata.processedFiles = 0;
 
     // start parsing the graphql schema files
     const schemaDir = utils.schemaDir(schemaVersion);
     utils.listDir(schemaDir).forEach(file => {
         if (file.endsWith(".graphql")) {
+            metadata.processedFiles++;
             parseSchemaFile(schemaDir + "/" + file, typeInfo => {
                 if (typeInfo.isL7Entity) {
                     utils.fine("  capturing type: " + typeInfo.typeName);
@@ -76,6 +78,10 @@ function buildV1(metadata, version, schemaVersion) {
             });
         }
     });
+
+    if (metadata.processedFiles === 0) {
+        throw utils.newError("schema file(s) are missing, path=" + schemaDir + "/*.graphql");
+    }
 
     // identify the required sub-types by inspecting the main type fields
     const reqSubTypes = {};
@@ -111,6 +117,7 @@ function buildV1(metadata, version, schemaVersion) {
     });
 
     delete metadata.subTypes;
+    delete metadata.processedFiles;
 
     return metadata;
 }

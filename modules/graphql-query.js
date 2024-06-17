@@ -1,17 +1,11 @@
 
 const utils = require("./graphman-utils");
 const graphman = require("./graphman");
-const config = graphman.configuration();
-const queriesDir = utils.queriesDir(config.schemaVersion);
-
-if (config.defaultSchemaVersion !== config.schemaVersion && queriesDir === utils.queriesDir()) {
-    utils.warn(`specified schema (${config.schemaVersion}) queries are missing, falling back to the default`);
-}
 
 module.exports = {
     generate: function (query, variables, options) {
         const [queryPrefix, querySuffix] = query.split(":");
-        const queryFilename = utils.path(queriesDir, queryPrefix + ".json");
+        const queryFilename = utils.queryFile(queryPrefix, graphman.configuration().schemaVersion);
         const gql = utils.existsFile(queryFilename) ? utils.readFile(queryFilename) : buildGraphQLQuery(queryPrefix, querySuffix);
 
         gql.variables = Object.assign(gql.variables || {}, variables);
@@ -174,7 +168,7 @@ function expandGraphQLQuery(gql) {
 function expandGraphQLSubQuery(gql, query) {
     return query.replaceAll(/{{([^}]+)}}/g, function (subtext, subgroup) {
         if (subgroup.endsWith(".gql")) {
-            return expandGraphQLSubQuery(gql, utils.readFile(utils.path(queriesDir, subgroup)));
+            return expandGraphQLSubQuery(gql, utils.readFile(utils.queryFile(subgroup, graphman.configuration().schemaVersion)));
         }else {
             const [prefix, suffix] = subgroup.split(":");
             const typeInfo = graphman.typeInfoByTypeName(prefix);

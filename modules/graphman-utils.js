@@ -58,12 +58,12 @@ module.exports = {
     },
 
     schemaDir: function (schemaVersion) {
-        if (schemaVersion) {
-            const path = this.path(SCHEMA_DIR, schemaVersion);
-            return this.existsFile(path) ? path : SCHEMA_DIR;
+        const path = this.path(SCHEMA_DIR, schemaVersion);
+        if (!this.existsFile(path)) {
+            throw this.newError("schema directory is missing, path=" + path);
         }
 
-        return SCHEMA_DIR;
+        return path;
     },
 
     schemaMetadataBaseFile: function (schemaVersion) {
@@ -74,17 +74,18 @@ module.exports = {
         return this.path(this.schemaDir(schemaVersion), SCHEMA_METADATA_FILE);
     },
 
-    policySchemaFile: function () {
-      return this.path(SCHEMA_DIR, POLICY_SCHEMA_FILE)
+    policySchemaFile: function (schemaVersion) {
+      return this.path(this.schemaDir(schemaVersion), POLICY_SCHEMA_FILE)
     },
 
-    queriesDir: function (schemaVersion) {
-        if (schemaVersion) {
-            const path = this.path(QUERIES_DIR, schemaVersion);
-            return this.existsFile(path) ? path : QUERIES_DIR;
-        }
-
+    queriesDir: function () {
         return QUERIES_DIR;
+    },
+
+    queryFile: function (query, schemaVersion) {
+       const path = this.path(this.queriesDir(), schemaVersion, query + ".json");
+       if (this.existsFile(path)) return path;
+       return this.path(this.queriesDir(), query + ".json");
     },
 
     isDirectory: function (fd) {
