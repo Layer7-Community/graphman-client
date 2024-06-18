@@ -100,7 +100,9 @@ function reviseServicesAs11100(entities, services, options) {
             wssProcessingEnabled: item.wssProcessingEnabled,
             laxResolution: item.laxResolution,
             properties: item.properties,
+            wsdlUrl: item.wsdlUrl,
             wsdl: item.wsdl,
+            wsdlResources: item.wsdlResources,
             policy: item.policy
         });
     });
