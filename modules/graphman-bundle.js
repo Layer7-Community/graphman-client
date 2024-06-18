@@ -451,8 +451,7 @@ let importSanitizer = function () {
         sanitize: function (bundle, options) {
             Object.keys(bundle).forEach(key => {
                 const typeInfo = metadata.bundleTypes[key];
-                const goidRequired = typeInfo.goidRefEnabled;
-                const includeGoids = !options.excludeGoids;
+
                 utils.info("inspecting " + key);
 
                 if (!typeInfo) {
@@ -460,6 +459,9 @@ let importSanitizer = function () {
                 } else if (typeInfo.deprecated) {
                     utils.warn("found deprecated entity type: " + key + ", revise the bundle");
                 }
+
+                const goidRequired = typeInfo ? typeInfo.goidRefEnabled : false;
+                const includeGoids = !options.excludeGoids;
 
                 if (Array.isArray(bundle[key])) {
                     bundle[key].forEach(item => sanitizeEntity(item, key, goidRequired || includeGoids));
