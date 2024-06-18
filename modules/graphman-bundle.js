@@ -1,6 +1,18 @@
 
 const utils = require("./graphman-utils");
+const graphman = require("./graphman");
 const metadata = require("./graphman").schemaMetadata();
+const fileSuffixes = {
+    policies: '.policy',
+    services: '.service',
+    policyFragments: '.policy',
+    webApiServices: '.webapi',
+    soapServices: '.soap',
+    internalWebApiServices: '.internal-webapi',
+    internalSoapServices: '.internal-soap',
+    globalPolicies: '.global',
+    backgroundTaskPolicies: '.bgpolicy'
+};
 
 module.exports = {
     EXPORT_USE: 'export',
@@ -15,6 +27,12 @@ module.exports = {
         internalSoapServices: 'internal-soap',
         globalPolicies: 'global',
         backgroundTaskPolicies: 'bgpolicy'
+    },
+
+    forEach: function (bundle, callback) {
+        Object.entries(bundle).forEach(([key, entities]) => {
+            callback(key, entities, graphman.typeInfoByPluralName(key));
+        });
     },
 
     sort: function (bundle) {
@@ -200,6 +218,10 @@ module.exports = {
         } else {
             return entityName;
         }
+    },
+
+    entityFileSuffixByPluralName: function (pluralName) {
+        return fileSuffixes[pluralName];
     }
 }
 

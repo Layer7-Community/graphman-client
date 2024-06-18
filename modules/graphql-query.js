@@ -5,7 +5,7 @@ const graphman = require("./graphman");
 module.exports = {
     generate: function (query, variables, options) {
         const [queryPrefix, querySuffix] = query.split(":");
-        const queryFilename = utils.queryFile(queryPrefix, graphman.configuration().schemaVersion);
+        const queryFilename = utils.queryFile(queryPrefix + ".json", graphman.configuration().schemaVersion);
         const gql = utils.existsFile(queryFilename) ? utils.readFile(queryFilename) : buildGraphQLQuery(queryPrefix, querySuffix);
 
         gql.variables = Object.assign(gql.variables || {}, variables);

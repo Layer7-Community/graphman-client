@@ -87,9 +87,9 @@ module.exports = {
     },
 
     queryFile: function (query, schemaVersion) {
-       const path = this.path(this.queriesDir(), schemaVersion, query + ".json");
+       const path = this.path(this.queriesDir(), schemaVersion, query);
        if (this.existsFile(path)) return path;
-       return this.path(this.queriesDir(), query + ".json");
+       return this.path(this.queriesDir(), query);
     },
 
     isDirectory: function (fd) {
