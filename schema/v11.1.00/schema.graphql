@@ -73,6 +73,7 @@ type ActiveConnectorsPayload implements EntityMutationsPayload {
     "The mutated active connectors"
     activeConnectors: [ActiveConnector]!
 }
+
 extend type Query {
     "Get all administrative user account properties : logonMaxAllowableAttempts, logonLockoutTime, logonSessionExpiry, logonInactivityPeriod"
     administrativeUserAccountProperties : [AdministrativeUserAccountProperty!]!
@@ -128,7 +129,9 @@ type AdministrativeUserAccountPropertiesPayload implements EntityMutationsPayloa
     status: [EntityMutationStatus!]!
     detailedStatus: [EntityMutationDetailedStatus!]!
     administrativeUserAccountProperties: [AdministrativeUserAccountProperty]!
-}extend type Query {
+}
+
+extend type Query {
     "Get all Cassandra Connections"
     cassandraConnections : [CassandraConnection!]!
     "Get Cassandra Connection by name"
@@ -230,6 +233,7 @@ type CassandraConnectionsPayload implements EntityMutationsPayload {
     "The mutated Cassandra connections."
     cassandraConnections: [CassandraConnection]!
 }
+
 extend type Query {
     "Get all cluster nodes information"
     clusterInfo : ClusterInfo!
@@ -316,6 +320,7 @@ type ClusterPropertiesPayload implements EntityMutationsPayload {
     detailedStatus: [EntityMutationDetailedStatus!]!
     clusterProperties: [ClusterProperty]!
 }
+
 extend type Query {
   customKeyValues: [CustomKeyValue!]!
   "Get the Custom Key value with the given key name"
@@ -370,6 +375,7 @@ type CustomKeyValuePayload implements EntityMutationsPayload {
     detailedStatus: [EntityMutationDetailedStatus!]!
     customKeyValues: [CustomKeyValue]!
 }
+
 extend type Query {
   "Get all email listeners"
   emailListeners : [EmailListener!]!
@@ -620,6 +626,7 @@ type EncassConfigsPayload implements EntityMutationsPayload {
     detailedStatus: [EntityMutationDetailedStatus!]!
     encassConfigs: [EncassConfig]!
 }
+
 extend type Query {
   "Get all Folders"
   folders: [Folder!]!
@@ -669,7 +676,9 @@ type FoldersPayload {
     status: [EntityMutationStatus!]!
     detailedStatus: [EntityMutationDetailedStatus!]!
     folders: [Folder]!
-}extend type Query {
+}
+
+extend type Query {
     "Get xml schemas configured on this gateway"
     schemas : [Schema!]!
     "The schema given its system id"
@@ -783,6 +792,7 @@ type SchemasPayload implements EntityMutationsPayload {
     detailedStatus: [EntityMutationDetailedStatus!]!
     schemas: [Schema]!
 }
+
 extend type Query {
     "Get all http configuration"
     httpConfigurations : [HttpConfiguration!]!
@@ -935,7 +945,9 @@ input HttpProxyConfigurationInput {
      protocol : HttpScheme = ANY
      "The path of the http configuration"
      path : String
- }extend type Query {
+ }
+
+ extend type Query {
     "Get all fips configurations"
     fips : [Fip!]! @deprecated(reason: "Use 'federatedIdps' instead.")
     "Get all fip users"
@@ -1278,7 +1290,9 @@ type PasswdStrategy {
 input PasswdStrategyInput {
     "Possible values are 0 for CLEAR, 1 for HASHED"
     val : Int!
-}extend type Query {
+}
+
+extend type Query {
     "Get internal IDPs."
     internalIdps: [InternalIdp!]!
     "Get all internal users"
@@ -1803,6 +1817,7 @@ type LdapIdpsPayload implements EntityMutationsPayload {
     detailedStatus: [EntityMutationDetailedStatus!]!
     ldapIdps: [LdapIdp]!
 }
+
 extend type Query {
     "Get all JDBC Connections"
     jdbcConnections : [JdbcConnection!]!
@@ -1934,6 +1949,7 @@ type JdbcConnectionsPayload implements EntityMutationsPayload {
     "The created/updated JDBC connections."
     jdbcConnections: [JdbcConnection]!
 }
+
 extend type Query {
     "Get all JMS Destinations"
     jmsDestinations : [JmsDestination!]!
@@ -2096,6 +2112,7 @@ type JmsDestinationsPayload implements EntityMutationsPayload {
     "The created/updated JMS destinations."
     jmsDestinations: [JmsDestination]!
 }
+
 extend type Mutation {
    "Generate Certificate Signing Request"
     generateCSR(alias: String!, params: CSRGenerateParamsInput!) : KeyCSRPayload
@@ -2197,7 +2214,9 @@ input KeyCertChainParamsInput {
 type ReplaceCertChainPayload {
     "List of updated key aliases"
     affectedKeyAliases : [String!]
-}extend type Query {
+}
+
+extend type Query {
     "Get all listen ports"
     listenPorts : [ListenPort!]!
     "Get the listen port by name"
@@ -2362,6 +2381,7 @@ type ListenPortsPayload implements EntityMutationsPayload {
     detailedStatus: [EntityMutationDetailedStatus!]!
     listenPorts: [ListenPort]!
 }
+
 extend type Query {
     "Get All LogSinks"
     logSinks: [LogSink!]!
@@ -2483,7 +2503,9 @@ type LogSinksPayload implements EntityMutationsPayload {
     status: [EntityMutationStatus!]!
     detailedStatus: [EntityMutationDetailedStatus!]!
     logSinks: [LogSink]!
-}extend type Query {
+}
+
+extend type Query {
     "Get Password Policy"
     passwordPolicy : PasswordPolicy!
     "Get Password Policies"
@@ -2849,6 +2871,7 @@ extend type Mutation {
     "The policy code"
     code: JSON
  }
+
 extend type Query {
     "Get all policy fragments"
     policyFragments : [PolicyFragment!]! @deprecated(reason: "Use 'policies' instead.")
@@ -2991,6 +3014,7 @@ type GlobalPoliciesPayload implements EntityMutationsPayload {
     detailedStatus: [EntityMutationDetailedStatus!]!
     globalPolicies: [GlobalPolicy]!
 }
+
 extend type Query {
     "Get Service Resolution Config"
     serviceResolutionConfig : ServiceResolutionConfig!
@@ -3052,7 +3076,9 @@ type ServiceResolutionConfig {
     useSoapAction : Boolean!
     "Use SOAP body child namespace"
     useSoapBodyChildNamespace : Boolean!
-}extend type Query {
+}
+
+extend type Query {
     "Get all RevocationCheckPolicies"
     revocationCheckPolicies: [RevocationCheckPolicy!]!
     "Get the RevocationCheckPolicy by name"
@@ -3294,6 +3320,7 @@ scalar JSON
 #"A File part information from the multi-part message"
 #"This scalar implementation is partial, hence commenting for now"
 #scalar FilePart
+
 extend type Query {
     "Retrieves all scheduled tasks"
     scheduledTasks: [ScheduledTask!]!
@@ -3440,6 +3467,7 @@ type BackgroundTaskPoliciesPayload implements EntityMutationsPayload {
     detailedStatus: [EntityMutationDetailedStatus!]!
     backgroundTaskPolicies: [BackgroundTaskPolicy]!
 }
+
 extend type Query {
     "Retrieves all secrets"
     secrets : [Secret!]!
@@ -3929,6 +3957,7 @@ input L7ServicePartialInput {
     "This will be ignored during the mutation"
     policyRevisions: [PolicyRevisionInput!]
 }
+
 extend type Query {
     "Get all siteminder configurations"
     smConfigs : [SMConfig!]!
@@ -4034,6 +4063,7 @@ type SMConfigsPayload implements EntityMutationsPayload {
     detailedStatus: [EntityMutationDetailedStatus!]!
     smConfigs: [SMConfig]!
 }
+
 extend type Query {
     "Get all soap services"
     soapServices : [SoapService]! @deprecated(reason: "Use 'services' instead.")
@@ -4214,6 +4244,7 @@ type InternalSoapServicesPayload implements EntityMutationsPayload {
     detailedStatus: [EntityMutationDetailedStatus!]!
     internalSoapServices: [InternalSoapService]!
 }
+
 extend type Query {
     "Retrieves all trusted certificates"
     trustedCerts : [Certificate!]!
@@ -4383,6 +4414,7 @@ type TrustedCertsPayload implements EntityMutationsPayload {
     detailedStatus: [EntityMutationDetailedStatus!]!
     trustedCerts: [Certificate]!
 }
+
 extend type Query {
   "Get all webApi services"
   webApiServices : [WebApiService]! @deprecated(reason: "Use 'services' instead.")
