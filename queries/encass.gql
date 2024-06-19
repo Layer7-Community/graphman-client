@@ -3,11 +3,11 @@ query encassByName ($name: String!, $policyName: String!, $includeAllDependencie
         {{EncassConfig}}
     }
     policyByName(name: $policyName) {
-        {{L7Policy:-policy,policyRevision,policyRevisions}}
+        {{L7Policy:-policy}}
         policy {
             xml
             allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency:-policyFragments,ldaps,fips,fipUsers,fipGroups}}
+                {{PolicyDependency:-policyFragments,-ldaps,-fips,-fipUsers,-fipGroups}}
             }
         }
     }

@@ -1,15 +1,15 @@
 query all {
     services {
-        {{L7Service:-policyRevision,policyRevisions}}
+        {{L7Service}}
     }
     encassConfigs {
         {{EncassConfig}}
     }
     policies {
-        {{L7Policy:-policyRevision,policyRevisions}}
+        {{L7Policy}}
     }
     activeConnectors {
-        {{ActiveConnector:-hardwiredService}}
+        {{ActiveConnector}}
     }
     cassandraConnections {
         {{CassandraConnection}}
@@ -21,16 +21,16 @@ query all {
         {{Dtd}}
     }
     emailListeners {
-        {{EmailListener:-hardwiredService}}
+        {{EmailListener}}
     }
     federatedIdps {
         {{FederatedIdp}}
     }
     federatedGroups {
-        {{FederatedGroup:-members}}
+        {{FederatedGroup}}
     }
     federatedUsers {
-        {{FederatedUser:-memberOf}}
+        {{FederatedUser}}
     }
     internalDtds {
         {{Dtd}}
@@ -51,13 +51,13 @@ query all {
         {{JmsDestination}}
     }
     keys {
-        {{Key:-pem}}
+        {{Key}}
     }
     ldapIdps {
         {{LdapIdp}}
     }
     listenPorts {
-        {{ListenPort:-hardwiredService}}
+        {{ListenPort}}
     }
     scheduledTasks {
         {{ScheduledTask}}
@@ -69,7 +69,7 @@ query all {
         {{Secret}}
     }
     serverModuleFiles {
-        {{ServerModuleFile:-filePartName}}
+        {{ServerModuleFile}}
     }
     smConfigs {
         {{SMConfig}}

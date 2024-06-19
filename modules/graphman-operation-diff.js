@@ -2,8 +2,8 @@
 const graphman = require("./graphman");
 const utils = require("./graphman-utils");
 const butils = require("./graphman-bundle");
-const queryBuilder = require("./graphql-query-builder");
-const opExport = require("./graphman-operation-export");
+const gql = require("./graphql-query");
+const exporter = require("./graphman-operation-export");
 
 module.exports = {
     /**
@@ -75,9 +75,9 @@ function readBundleFrom(fileOrGateway) {
 function readBundleFromGateway(gateway) {
     return new Promise(function (resolve) {
         utils.info(`retrieving ${gateway.name} gateway configuration summary`);
-        opExport.export(
+        exporter.export(
             gateway,
-            queryBuilder.build("summary", {}, graphman.configuration().options),
+            gql.generate("all:summary", {}, graphman.configuration().options),
             data => resolve(data.data)
         );
     });
@@ -111,7 +111,8 @@ function diffEntities(leftEntities, rightEntities, resultEntities, resultBundle,
         }
 
         if (matchingEntity) {
-            if (butils.GOID_MAPPING_PLURAL_METHODS.includes(key) && left.goid && matchingEntity.goid !== left.goid) {
+            const typeInfo = graphman.typeInfoByPluralName(key);
+            if (typeInfo && typeInfo.goidRefEnabled && left.goid && matchingEntity.goid !== left.goid) {
                 utils.info(`  required goid mapping for ` + butils.entityDisplayName(left) + `, source: ${left.goid}, target: ${matchingEntity.goid}`);
                 resultBundle.goidMappings.push({source: left.goid, target: matchingEntity.goid});
             }

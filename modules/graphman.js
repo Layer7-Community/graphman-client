@@ -1,6 +1,7 @@
 
 const VERSION = "v1.3.00 (dev)";
 const SCHEMA_VERSION = "v11.1.00";
+const SCHEMA_VERSIONS = [SCHEMA_VERSION, "v11.1.1"];
 
 const utils = require("./graphman-utils");
 const hutils = require("./http-utils");
@@ -17,20 +18,32 @@ module.exports = {
 
     init: function (params) {
         const config = JSON.parse(utils.readFile(utils.home() + "/graphman.configuration"));
+
+        // override configured options using params if specified
         config.options = makeOptions(config.options || {});
+        Object.assign(config.options, params.options);
+
+        // set the client log level
         utils.logAt(config.options.log);
 
         config.gateways = makeGateways(config.gateways || {});
+
+        // override configured gateway details using params if specified
+        if (params.gateways) Object.keys(params.gateways).forEach(key => {
+            const gateway = params.gateways[key];
+            config.gateways[key] = config.gateways[key] || {};
+            Object.assign(config.gateways[key], gateway);
+        });
+
         config.defaultGateway = config.gateways['default'];
 
         config.version = VERSION;
         config.defaultSchemaVersion = SCHEMA_VERSION;
-        config.schemaVersion = params.schemaVersion || config.schemaVersion || SCHEMA_VERSION;
-        if (config.schemaVersion !== SCHEMA_VERSION && utils.schemaDir(config.schemaVersion) === utils.schemaDir()) {
-            utils.warn(`specified schema (${config.schemaVersion}) is missing, falling back to the default`);
-        }
+        config.supportedSchemaVersions = SCHEMA_VERSIONS;
+        config.schemaVersion = params.options.schema || config.options.schema || SCHEMA_VERSION;
+        config.schemaVersions = gqlschema.availableSchemas();
 
-        this.metadata = gqlschema.build(config.schemaVersion, false);
+        this.metadata = gqlschema.build(config.version, config.schemaVersion, false);
         this.loadedConfig = config;
     },
 
@@ -46,13 +59,31 @@ module.exports = {
         return this.metadata;
     },
 
+    queryFieldInfo: function (name) {
+        const queryInfo = this.metadata.types["Query"];
+        return queryInfo.fields.find(x => x.name === name);
+    },
+
+    queryFieldNamesByPattern: function (pattern) {
+        const queryInfo = this.metadata.types["Query"];
+        const regex = "^" + pattern.replaceAll("*", ".*") + "$";
+        return queryInfo.fields.filter(x => x.name.match(regex)).map(x => x.name);
+    },
+
+    typeInfoByTypeName: function (name) {
+        return this.metadata.types[name];
+    },
+
     typeInfoByPluralName: function (name) {
-        const typeName = this.metadata.pluralMethods[name];
-        return typeName ? this.metadata.types[typeName] : null;
+        return this.metadata.bundleTypes[name];
+    },
+
+    isPrimitiveField: function (fieldInfo) {
+        return !this.metadata.types[fieldInfo.dataType];
     },
 
     refreshSchemaMetadata: function () {
-        this.metadata = gqlschema.build(this.loadedConfig.schemaVersion, true);
+        this.metadata = gqlschema.build(this.loadedConfig.version, this.loadedConfig.schemaVersion, true);
     },
 
     request: function (gateway, options) {
@@ -186,6 +217,7 @@ function getPartsFromRawRequest(options) {
 function makeOptions(options) {
     return Object.assign({
         "log": "info",
+        "schema": SCHEMA_VERSION,
         "policyCodeFormat": "xml",
         "keyFormat": "p12"
     }, options);
