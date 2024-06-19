@@ -10,7 +10,7 @@ module.exports = {
     run: function (params) {
         const config = graphman.configuration();
         utils.print("graphman client " + config.version);
-        utils.print(`  schema ${config.defaultSchemaVersion}`);
+        utils.print(`  schema ${config.schemaVersion}`);
         utils.print(`  supported schema(s) [${config.supportedSchemaVersions.join(',')}]`);
         utils.print(`  available schema(s) [${config.schemaVersions.join(',')}]`);
         utils.print(`  running from ` + process.env.GRAPHMAN_HOME);

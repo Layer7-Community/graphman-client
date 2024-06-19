@@ -36,7 +36,7 @@ module.exports = {
     },
 
     generateFor: function (entities, typeInfo, options) {
-        const gql = buildGraphQLQueryFor(entities, typeInfo);
+        const gql = buildGraphQLQueryFor(entities, typeInfo, options);
         gql.options = options || {};
         return expandGraphQLQuery(gql);
     }
@@ -87,15 +87,16 @@ function buildGraphQLQuery(queryPrefix, querySuffix) {
  * Builds query for the specified entities
  * @param entities entities to be renewed
  * @param typeInfo type-info for the entities
+ * @param options
  */
-function buildGraphQLQueryFor(entities, typeInfo) {
+function buildGraphQLQueryFor(entities, typeInfo, options) {
     const queryPrefix = typeInfo.pluralName;
     const queryArgs = [];
     const variables = {};
     let subQuery = "";
 
     Array.from(entities).forEach((item, index) => {
-        const gql = buildGraphQLSubQueryFor(item, typeInfo, "" + (index + 1), queryArgs);
+        const gql = buildGraphQLSubQueryFor(item, typeInfo, "" + (index + 1), queryArgs, options);
         subQuery += gql.query;
         Object.assign(variables, gql.variables);
     });
@@ -111,10 +112,15 @@ function buildGraphQLQueryFor(entities, typeInfo) {
     };
 }
 
-function buildGraphQLSubQueryFor(entity, typeInfo, suffix, queryArgs) {
-    const fieldMethod = typeInfo.singleQueryMethod ||
-        typeInfo.singularName + "By" + pascalCasing(typeInfo.identityFields[0]);
-    const fieldInfo = graphman.queryFieldInfo(fieldMethod);
+function buildGraphQLSubQueryFor(entity, typeInfo, suffix, queryArgs, options) {
+    let fieldMethod = typeInfo.singularName + "ByGoid";
+    let fieldInfo = options.useGoids ? graphman.queryFieldInfo(fieldMethod) : null;
+
+    if (!fieldInfo) {
+        fieldMethod = typeInfo.singleQueryMethod || typeInfo.singularName + "By" + pascalCasing(typeInfo.identityFields[0]);
+        fieldInfo = graphman.queryFieldInfo(fieldMethod);
+    }
+
 
     if (!fieldInfo) {
         throw new Error("missing field information: " + fieldMethod);

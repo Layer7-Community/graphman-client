@@ -55,7 +55,7 @@ module.exports = {
             const typeInfo = graphman.typeInfoByPluralName(key);
             if (typeInfo && (!options.scope.length || options.scope.includes(key))) {
                 utils.info("renewing " + key);
-                promises.push(renewEntities(gateway, bundle[key], typeInfo));
+                promises.push(renewEntities(gateway, bundle[key], typeInfo, options));
             } else {
                 utils.info("ignoring " + key);
                 const obj = {};
@@ -68,7 +68,7 @@ module.exports = {
     },
 
     initParams: function (params, config) {
-        params.options = Object.assign({scope: []}, params.options);
+        params.options = Object.assign({scope: [], useGoids: false}, params.options);
 
         return params;
     },
@@ -96,18 +96,21 @@ module.exports = {
         console.log("      .scope <enity-type-plural-name>");
         console.log("        select one or more entity types for renew operation.");
         console.log("        by default, all the entity types will be considered for operation's scope.");
+        console.log("      .useGoids false|true");
+        console.log("        true to use goids to renew the entities.");
+        console.log("        by default, entities will be renewed using their identity details.");
         console.log();
     }
 }
 
-function renewEntities(gateway, entities, typeInfo) {
+function renewEntities(gateway, entities, typeInfo, options) {
     if (entities.length === 0) {
         const empty = {};
         empty[typeInfo.pluralName] = [];
         return Promise.resolve(empty);
     }
 
-    const query = gql.generateFor(entities, typeInfo, {});
+    const query = gql.generateFor(entities, typeInfo, options);
     return renewInvoker(gateway, query, typeInfo);
 }
 
