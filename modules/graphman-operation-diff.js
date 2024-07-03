@@ -10,7 +10,10 @@ module.exports = {
      * Identifies the differences between bundles/gateways.
      * @param params
      * @param params.input bundle or gateway profile name
+     * @param params.input-report input report file name
      * @param params.output output file name
+     * @param params.output-report output report file name
+     * @param params.options
      * NOTE: Use "@" as prefix to differentiate the gateway profile name from the bundle name.
      */
     run: function (params) {
@@ -19,32 +22,40 @@ module.exports = {
         if (Array.isArray(params.input) && params.input.length >= 2) {
             bundles.push(readBundleFrom(params.input[0]));
             bundles.push(readBundleFrom(params.input[1]));
+
+            Promise.all(bundles).then(results => {
+                const leftBundle = results[0];
+                const rightBundle = results[1];
+                const bundle = {goidMappings: [], guidMappings: []};
+                const report = {inserts: {}, updates: {}, deletes: {}, diffs: {}, mappings: {goids: [], guids: []}};
+
+                diffReport(leftBundle, rightBundle, report, params.options || {});
+                diffBundle(report, bundle, params.options || {});
+
+                utils.writeResult(params.output, butils.sort(bundle));
+                if (params["output-report"]) utils.writeResult(params["output-report"], report);
+            });
+        } else if (params["input-report"]) {
+            const report = utils.readFile(params["input-report"]);
+            const bundle = {goidMappings: [], guidMappings: []};
+
+            diffBundle(report, bundle, params.options || {});
+            utils.writeResult(params.output, butils.sort(bundle));
+            if (params["output-report"]) utils.writeResult(params["output-report"], report);
         } else {
             throw utils.newError("not enough input parameters")
         }
-
-        Promise.all(bundles).then(results => {
-            const leftBundle = results[0];
-            const rightBundle = results[1];
-            const diffBundle = {goidMappings: [], guidMappings: []};
-
-            diff(leftBundle, rightBundle, diffBundle);
-            if (!diffBundle.goidMappings.length) delete diffBundle.goidMappings;
-            if (!diffBundle.guidMappings.length) delete diffBundle.guidMappings;
-
-            diffBundle.properties = leftBundle.properties;
-            utils.writeResult(params.output, butils.sort(diffBundle));
-        });
     },
 
     initParams: function (params, config) {
-        //do nothing
+        params.options = Object.assign({report: {}, bundle: {}}, params.options);
         return params;
     },
 
     usage: function () {
         console.log("diff --input <input-file-or-gateway> --input <input-file-or-gateway>");
         console.log("  [--output <output-file>]");
+        console.log("  [--output-report <output-report-file>]");
         console.log();
         console.log("Evaluates the differences between bundles or gateways.");
         console.log("Input can be a bundle file or a gateway profile name if it precedes with '@' special character.");
@@ -55,6 +66,8 @@ module.exports = {
         console.log("    Use '@' special marker to treat the input as gateway profile name");
         console.log();
         console.log("  --output <output-file>");
+        console.log("    specify the file to capture the diff bundle");
+        console.log("  --output-report <output-report-file>");
         console.log("    specify the file to capture the diff report");
         console.log();
     }
@@ -83,22 +96,89 @@ function readBundleFromGateway(gateway) {
     });
 }
 
-function diff(leftBundle, rightBundle, resultBundle) {
-    Object.keys(leftBundle).forEach(key => {
-        if (Array.isArray(leftBundle[key])) {
-            utils.info("inspecting " + key);
-            resultBundle[key] = resultBundle[key]||[];
-            diffEntities(leftBundle[key], rightBundle[key]||[], resultBundle[key], resultBundle, key);
-            if (resultBundle[key].length === 0) {
-                delete resultBundle[key];
+function diffReport(leftBundle, rightBundle, diffReport, options) {
+    butils.forEach(leftBundle, (key, leftEntities, typeInfo) => {
+        utils.info("inspecting " + key);
+        diffEntities(leftEntities, rightBundle[key], diffReport, typeInfo, options);
+    });
+
+    return diffReport;
+}
+
+function diffEntities(leftEntities, rightEntities, diffReport, typeInfo, options) {
+    // iterate through the left entities,
+    // bucket it into diff-report, depending on the match in the right entities
+    leftEntities.forEach(leftEntity => {
+        const rightEntity = rightEntities.find(x => butils.isEntityMatches(leftEntity, x, typeInfo));
+
+        if (rightEntity == null) {
+            utils.info("  selecting " + butils.entityName(leftEntity, typeInfo) + ", category=inserts");
+            const inserts = butils.withArray(diffReport.inserts, typeInfo);
+            inserts.push(leftEntity);
+        } else if (leftEntity.checksum !== rightEntity.checksum) {
+            const details = [];
+            if (!butils.isObjectEquals(leftEntity, rightEntity, "$", item => details.push(item))) {
+                if (details.length === 1 && details[0].path === "$.checksum") {
+                    utils.info("  not selecting " + butils.entityName(leftEntity, typeInfo) + ", only the checksum is different");
+                } else {
+                    utils.info("  selecting " + butils.entityName(leftEntity, typeInfo) + ", category=updates");
+                    const updates = butils.withArray(diffReport.updates, typeInfo);
+                    updates.push(leftEntity);
+
+                    const diffs = butils.withArray(diffReport.diffs, typeInfo);
+                    diffs.push({source: butils.toPartialEntity(leftEntity, typeInfo), details: details});
+                }
+            } else {
+                utils.info("  not selecting " + butils.entityName(leftEntity, typeInfo) + ", only the checksum is different");
             }
         }
     });
 
-    return resultBundle;
+    //Now, iterate through the right entities
+    // find the un-matched ones w.r.t. left entities, and bucket them into diff-report
+    rightEntities.forEach(rightEntity => {
+        if (!leftEntities.find(x => butils.isEntityMatches(x, rightEntity, typeInfo))) {
+            utils.info("  selecting " + butils.entityName(rightEntity, typeInfo) + ", category=deletes");
+            const deletes = butils.withArray(diffReport.deletes, typeInfo);
+            deletes.push(rightEntity);
+        }
+    });
 }
 
-function diffEntities(leftEntities, rightEntities, resultEntities, resultBundle, key) {
+function diffBundle(diffReport, diffBundle, options) {
+    butils.forEach(diffReport.inserts, (key, entities, typeInfo) => {
+        utils.info(`  adding new ${key}`);
+        const array = butils.withArray(diffBundle, typeInfo);
+        entities.forEach(item => {
+            utils.info(`    ${butils.entityName(item, typeInfo)}`);
+            array.push(item);
+        });
+    });
+
+    butils.forEach(diffReport.updates, (key, entities, typeInfo) => {
+        utils.info(`  adding modified ${key}`);
+        const array = butils.withArray(diffBundle, typeInfo);
+        entities.forEach(item => {
+            utils.info(`    ${butils.entityName(item, typeInfo)}`);
+            array.push(item);
+        });
+    });
+
+    if (!options.excludeDeletes) butils.forEach(diffReport.deletes, (key, entities, typeInfo) => {
+        utils.info(`  marking few ${key} for deletion`);
+        diffBundle.properties = {mappings: {}};
+        const array = butils.withArray(diffBundle.properties.mappings, typeInfo);
+        entities.forEach(item => {
+            utils.info(`    ${butils.entityName(item, typeInfo)}`);
+            array.push(item);
+        });
+    });
+
+    if (!diffBundle.goidMappings.length) delete diffBundle.goidMappings;
+    if (!diffBundle.guidMappings.length) delete diffBundle.guidMappings;
+}
+
+function diffEntities1(leftEntities, rightEntities, resultEntities, resultBundle, key) {
     leftEntities.forEach(left => {
         const matchingEntity = butils.findMatchingEntity(rightEntities, left);
 

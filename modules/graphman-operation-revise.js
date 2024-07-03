@@ -81,28 +81,28 @@ function reviseBundleForGoidsAndGuids (bundle) {
     delete bundle.guidMappings;
 
     if (goidMappings.length > 0 || guidMappings.length > 0) {
-        Object.keys(bundle).filter(key => Array.isArray(bundle[key])).forEach(key => {
+        butils.forEach(bundle, (key, entities, typeInfo) => {
             utils.info("inspecting " + key);
-            if (goidMappings.length) reviseEntities(bundle[key], goidMappings);
-            if (guidMappings.length) reviseEntities(bundle[key], guidMappings);
+            if (goidMappings.length) reviseEntities(entities, typeInfo, goidMappings);
+            if (guidMappings.length) reviseEntities(entities, typeInfo, guidMappings);
         });
     }
 
     return bundle;
 }
 
-function reviseEntities(entities, mappings) {
+function reviseEntities(entities, typeInfo, mappings) {
     entities.forEach(entity => {
         if (entity.policy && entity.policy.xml) {
-            reviseEntity(entity, mappings);
+            reviseEntity(entity, typeInfo, mappings);
         }
     });
 }
 
-function reviseEntity(entity, mappings) {
+function reviseEntity(entity, typeInfo, mappings) {
     mappings.forEach(mapping => {
         entity.policy.xml = entity.policy.xml.replaceAll(mapping.source, function (match) {
-            const name = butils.entityDisplayName(entity);
+            const name = butils.entityName(entity, typeInfo);
             utils.info(`  revising ${name}, replacing ${mapping.source} with ${mapping.target}`);
             return mapping.target;
         });

@@ -161,16 +161,14 @@ let type1Exploder = (function () {
     return {
         explode: function (bundle, outputDir, options) {
             butils.forEach(bundle, (key, entities, typeInfo) => {
-                if (typeInfo) {
-                    if (entities.length) utils.info(`exploding ${key}`);
-                    entities.forEach(item => writeEntity(outputDir, key, item, typeInfo, options));
-                } else if (key === "properties") {
-                    utils.info(`capturing ${key} to bundle-properties.json`);
-                    utils.writeFile(`${outputDir}/bundle-properties.json`, entities);
-                } else {
-                    utils.warn("unknown entities, key=" + key + ", ignoring them");
-                }
+                utils.info(`exploding ${key}`);
+                entities.forEach(item => writeEntity(outputDir, key, item, typeInfo, options));
             });
+
+            if (bundle.properties) {
+                utils.info(`capturing properties to bundle-properties.json`);
+                utils.writeFile(`${outputDir}/bundle-properties.json`, bundle.properties);
+            }
         }
     };
 

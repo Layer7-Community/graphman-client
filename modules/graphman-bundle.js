@@ -29,31 +29,51 @@ module.exports = {
         backgroundTaskPolicies: 'bgpolicy'
     },
 
-    forEach: function (bundle, callback) {
+    /**
+     * Recommended way to iterate through the bundled entities.
+     * Callback will be invoked for every class of entities in the bundle. They will be invoked with the key, entities and type-info as arguments
+     * @param bundle input bundle
+     * @param knownEntitiesCallback callback function for the known entities
+     * @param unknownEntitiesCallback callback function for the unknown entities
+     */
+    forEach: function (bundle, knownEntitiesCallback, unknownEntitiesCallback) {
         Object.entries(bundle).forEach(([key, entities]) => {
-            callback(key, entities, graphman.typeInfoByPluralName(key));
+            const typeInfo = graphman.typeInfoByPluralName(key);
+            if (typeInfo) {
+                if (entities.length) knownEntitiesCallback(key, entities, typeInfo);
+            } else if (unknownEntitiesCallback) {
+                unknownEntitiesCallback(key, entities, typeInfo);
+            } else {
+                utils.warn("unknown entities, " + key);
+            }
         });
     },
 
+    /**
+     * Sorts the bundle entities
+     * @param bundle bundle
+     * @returns sorted bundle
+     */
     sort: function (bundle) {
-        const comparator = (left, right) => {
-            const lname = this.entityName(left);
-            const rname = this.entityName(right);
+        const sorted = {};
 
-            if (lname < rname) return -1;
-            else if (lname > rname) return 1;
-            else return 0;
-        };
+        Object.keys(bundle)
+            .sort()
+            .filter(key => Array.isArray(bundle[key]))
+            .forEach(key => {
+                const typeInfo = graphman.typeInfoByPluralName(key);
+                sorted[key] = bundle[key].sort((left, right) => {
+                    const lname = this.entityName(left, typeInfo);
+                    const rname = this.entityName(right, typeInfo);
 
-        if (Array.isArray(bundle)) {
-            bundle.sort(comparator);
-        } else {
-            Object.keys(bundle).filter(key => Array.isArray(bundle[key])).forEach(key => {
-                bundle[key].sort(comparator);
+                    if (lname < rname) return -1;
+                    else if (lname > rname) return 1;
+                    else return 0;
+                })
             });
-        }
 
-        return bundle;
+        sorted.properties = bundle.properties;
+        return sorted;
     },
 
     sanitize: function (bundle, use, options) {
@@ -151,6 +171,196 @@ module.exports = {
         });
     },
 
+    withArray: function (bundle, typeInfo) {
+        const entities = bundle[typeInfo.pluralName] || [];
+
+        if (entities.length === 0) {
+            bundle[typeInfo.pluralName] = entities;
+        }
+
+        return entities;
+    },
+
+    toPartialEntity: function (entity, typeInfo) {
+        const obj = {};
+        typeInfo.identityFields.forEach(field => obj[field] = entity[field]);
+        return obj;
+    },
+
+    isEntityMatches: function (left, right, typeInfo) {
+        if (typeInfo.identityFields.length === 1) {
+            const fieldName = typeInfo.identityFields[0];
+            return left[fieldName] === right[fieldName];
+        } else {
+            let looped = false;
+
+            for (const fieldName of typeInfo.identityFields) {
+                if (left[fieldName] !== undefined && right[fieldName] !== undefined) {
+                    looped = true;
+                    if (typeof left[fieldName] !== 'object') {
+                        if (left[fieldName] !== right[fieldName]) {
+                            return false;
+                        }
+                    } else if (!this.isObjectEquals(left[fieldName], right[fieldName])) {
+                        return false;
+                    }
+                }
+            }
+
+            return looped;
+        }
+    },
+
+    isArrayEquals: function (left, right, fieldPath, callback) {
+        if (!Array.isArray(left) || !Array.isArray(right) || left.length !== right.length) {
+            if (callback) {
+                callback({
+                    path: fieldPath,
+                    left: left,
+                    right: right
+                });
+            }
+            return false;
+        }
+
+        let equals = true;
+        for (let index = 0; index < left.length; index++) {
+            const leftItem = left[index];
+            if (typeof leftItem !== 'object') {
+                if (leftItem !== right[index]) {
+                    if (callback) {
+                        callback({
+                            path: fieldPath + "[" + index + "]",
+                            left: leftItem,
+                            right: right[index]
+                        });
+                        equals = false;
+                    } else {
+                        return false;
+                    }
+                }
+            } else {
+                if (!this.isObjectEquals(leftItem, right[index], fieldPath + "[" + index + "]", callback)) {
+                    if (callback) {
+                        equals = false;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return equals;
+    },
+
+    isObjectEquals: function (left, right, fieldPath, callback) {
+        if (Array.isArray(left)) {
+            return this.isArrayEquals(left, right, fieldPath, callback);
+        }
+
+        let equals = true;
+        for (const key of Object.keys(left)) {
+            const data = {
+                path: fieldPath + "." + key,
+                left: left[key],
+                right: right[key]
+            };
+
+            if (!right.hasOwnProperty(key)) { // is field itself missing?
+                if (callback) {
+                    data.right = null;
+                    callback(data);
+                    equals = false;
+                } else {
+                    return false;
+                }
+            } else if (left[key] == null && right[key] != null) { // special case: are they both nulls?
+                if (callback) {
+                    callback(data);
+                    equals = false;
+                } else {
+                    return false;
+                }
+            } else if (typeof left[key] !== typeof right[key]) { // are they differ by type?
+                if (callback) {
+                    callback(data);
+                    equals = false;
+                } else {
+                    return false;
+                }
+            } else if (typeof left[key] !== 'object') { // finally, are they differ by value?
+                if (left[key] !== right[key]) {
+                    if (callback) {
+                        callback(data);
+                        equals = false;
+                    } else {
+                        return false;
+                    }
+                }
+            } else {
+                if (!this.isObjectEquals(left[key], right[key], fieldPath + "." + key, callback)) {
+                    if (callback) {
+                        equals = false;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        // how about new fields from the right?
+        for (const key of Object.keys(right)) {
+            if (!left.hasOwnProperty(key)) {
+                if (callback) {
+                    callback({
+                        path: fieldPath ? fieldPath + "." + key : key,
+                        left: null,
+                        right: right[key]
+                    });
+                    equals = false;
+                } else {
+                    return false;
+                }
+            }
+        }
+
+        return equals;
+    },
+
+    entityName: function (entity, typeInfo) {
+        if (typeInfo.identityFields.length === 1 && typeInfo.identityFields[0] === "name") {
+            return entity.name;
+        }
+
+        return entity.name ?
+            entity.name + "-[" + this.entityId(entity, typeInfo) + "]" :
+            this.entityId(entity, typeInfo);
+    },
+
+    entityId: function (entity, typeInfo) {
+        let eid = "";
+
+        for (const fieldName of typeInfo.identityFields) {
+            const separator = eid.length > 0 ? "-" : "";
+            const fieldValue = entity[fieldName];
+
+            if (typeof fieldValue !== 'object') {
+                eid += separator + fieldValue;
+            } else if (fieldName === 'resolvers') { // special case
+                if (fieldValue["baseUri"]) {
+                    eid += separator + fieldValue["baseUri"];
+                }
+
+                const soapActions = fieldValue["soapActions"];
+                if (Array.isArray(soapActions) && soapActions.length) {
+                    eid += separator + soapActions.sort()[0];
+                }
+            }
+        }
+
+        return eid;
+    },
+
     findMatchingEntity: function (list, entity) {
         for (var item of list) {
             if (this.matchEntity(entity, item)) {
@@ -192,7 +402,7 @@ module.exports = {
         return null;
     },
 
-    entityName: function (entity, attr) {
+    entityNameLegacy: function (entity, attr) {
         const idRef = this.entityIdRef(entity);
         if (attr) attr.ref = idRef;
 
@@ -211,7 +421,7 @@ module.exports = {
 
     entityDisplayName: function (entity) {
         const attr = {};
-        const entityName = this.entityName(entity, attr);
+        const entityName = this.entityNameLegacy(entity, attr);
 
         if (entity.name) {
             return attr.ref !== 'name' ? entity.name + "-" + entityName : entityName;
