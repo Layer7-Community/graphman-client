@@ -173,7 +173,7 @@ let type1Exploder = (function () {
     };
 
     function writeEntity(dir, key, entity, typeInfo, options) {
-        let displayName = butils.entityDisplayName(entity);
+        let displayName = butils.entityName(entity, typeInfo);
         if (!displayName) {
             displayName = entity.checksum || Date.now().toString(36) + Math.random().toString(36).substring(2);
             utils.warn("forced to use alternative entity display name for ", entity);

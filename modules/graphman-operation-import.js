@@ -32,8 +32,8 @@ module.exports = {
             return;
         }
 
-        const inputBundle = butils.sanitize(utils.readFile(params.input), butils.IMPORT_USE, params.options);
-        butils.removeDuplicates(inputBundle);
+        let inputBundle = butils.sanitize(utils.readFile(params.input), butils.IMPORT_USE, params.options);
+        inputBundle = butils.removeDuplicates(inputBundle);
         butils.overrideMappings(inputBundle, params.options);
         preImportExtension.call(inputBundle);
 

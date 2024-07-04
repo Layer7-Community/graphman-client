@@ -20,7 +20,7 @@ module.exports = {
 
         if (params.options.normalize) {
             bundle = butils.sanitize(bundle, butils.IMPORT_USE, params.options);
-            butils.removeDuplicates(bundle);
+            bundle = butils.removeDuplicates(bundle);
         }
 
         this.revise(bundle, params.options);

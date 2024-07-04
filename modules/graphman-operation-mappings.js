@@ -12,8 +12,8 @@ module.exports = {
             throw "--input parameter is missing";
         }
 
-        const inputBundle = utils.readFile(params.input);
-        butils.removeDuplicates(inputBundle);
+        let inputBundle = utils.readFile(params.input);
+        inputBundle = butils.removeDuplicates(inputBundle);
 
         const mappings = utils.mappings(params.mappings);
 

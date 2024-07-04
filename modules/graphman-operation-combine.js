@@ -6,7 +6,8 @@ module.exports = {
     /**
      * Combines two or more bundles into one.
      * @param params
-     * @param params.input tow or more input bundle file(s)
+     * @param params.input two or more input bundle file(s)
+     * @param params.output output bundle
      */
     run: function (params) {
         if (!params.input) {
@@ -17,14 +18,13 @@ module.exports = {
             throw "not enough input bundles, operation requires at least two bundles";
         }
 
-        let resultBundle = utils.readFile(params.input[0]);
-        params.input.slice(1).forEach(item => {
+        let bundle = {};
+        for (const item of params.input) {
             utils.info("processing " + item);
-            const bundle = utils.readFile(item);
-            resultBundle = combine(resultBundle, bundle);
-        });
+            bundle = combine(bundle, utils.readFile(item));
+        }
 
-        utils.writeResult(params.output, butils.sort(resultBundle));
+        utils.writeResult(params.output, butils.sort(bundle));
     },
 
     initParams: function (params, config) {
@@ -49,29 +49,31 @@ module.exports = {
     }
 }
 
-function combine(left, right) { // right takes the precedence
+/**
+ * Combines left and right bundles into result bundle.
+ * Right bundled entities take precedence.
+ * @param left left bundle
+ * @param right right bundle
+ * @returns result bundle
+ */
+function combine(left, right) {
     const result = {};
 
-    Object.keys(left).forEach(key => {
-        result[key] = right[key] || left[key];
-
-        if (Array.isArray(left[key])) {
-            left[key].forEach(item => {
-                if (!butils.findMatchingEntity(result[key], item)) {
-                    result[key].push(item);
-                }
-            })
-        }
+    // copy entities from right
+    butils.forEach(right, (key, entities, typeInfo) => {
+        const list = butils.withArray(result, typeInfo);
+        entities.forEach(item => list.push(item));
     });
 
-    Object.keys(right).forEach(key => {
-        if (!result[key]) result[key] = right[key];
-    });
-
-    Object.keys(result).forEach(key => {
-        if (Array.isArray(result[key]) && result[key].length === 0) {
-            delete result[key];
-        }
+    // copy non-duplicate entities from left
+    butils.forEach(left, (key, entities, typeInfo) => {
+        const list = butils.withArray(result, typeInfo);
+        entities.forEach(item => {
+            const found = list.find(x => butils.isEntityMatches(x, item, typeInfo));
+            if (!found) {
+                list.push(item);
+            }
+        });
     });
 
     return result;

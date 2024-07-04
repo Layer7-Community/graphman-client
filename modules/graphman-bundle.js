@@ -42,7 +42,7 @@ module.exports = {
             if (typeInfo) {
                 if (entities.length) knownEntitiesCallback(key, entities, typeInfo);
             } else if (unknownEntitiesCallback) {
-                unknownEntitiesCallback(key, entities, typeInfo);
+                unknownEntitiesCallback(key, entities);
             } else {
                 utils.warn("unknown entities, " + key);
             }
@@ -89,16 +89,23 @@ module.exports = {
     },
 
     removeDuplicates: function (bundle) {
-        Object.keys(bundle).filter(key => Array.isArray(bundle[key])).forEach(key => {
-            const list = [];
-            bundle[key].forEach(item => {
-                if (!this.findMatchingEntity(list, item)) list.push(item);
+        const result = {};
+
+        this.forEach(bundle, (key, entities, typeInfo) => {
+            const list = this.withArray(result, typeInfo);
+            entities.forEach(item => {
+                const found = list.find(x => this.isEntityMatches(x, item, typeInfo));
+                if (!found) {
+                    list.push(item);
+                } else {
+                    utils.info("found duplicate entity, " + key + "." + this.entityName(item, typeInfo));
+                }
             });
-            bundle[key] = list;
-            if (bundle[key].length === 0) {
-                delete bundle[key];
-            }
+        }, (key, value) => {
+            result[key] = value;
         });
+
+        return result;
     },
 
     mappingInstruction: function (action, entity, typeInfo) {
@@ -368,101 +375,9 @@ module.exports = {
         return eid;
     },
 
-    findMatchingEntity: function (list, entity) {
-        for (var item of list) {
-            if (this.matchEntity(entity, item)) {
-                return item;
-            }
-        }
-
-        return null;
-    },
-
-    matchEntity: function (left, right) {
-        const idRef = this.entityIdRef(left);
-
-        if (!idRef) return false;
-        else if (idRef === 'resolvers') {
-            if (!matchSoapResolvers(left, right)) return false;
-        }
-        else if (left[idRef] !== right[idRef]) return false;
-
-        if (left.name && left.direction && left.providerType &&
-            (left.name !== right.name || left.direction !== right.direction || left.providerType !== right.providerType)) return false;
-
-        if (idRef !== 'name' && left.name && right.name && left.name !== right.name) return false;
-
-        return true;
-    },
-
-    entityIdRef: function (entity) {
-        if (entity.systemId) return 'systemId';
-        if (entity.thumbprintSha1) return 'thumbprintSha1';
-        if (entity.resolvers) return 'resolvers';
-        if (entity.resolutionPath) return 'resolutionPath';
-        if (entity.alias) return 'alias';
-        if (entity.tag) return 'tag';
-        if (entity.providerName) return 'providerName';
-        if (entity.login) return 'login';
-        if (entity.name) return 'name';
-
-        return null;
-    },
-
-    entityNameLegacy: function (entity, attr) {
-        const idRef = this.entityIdRef(entity);
-        if (attr) attr.ref = idRef;
-
-        if (entity.providerType && entity.direction && entity.name) {
-            return entity.direction + "-" + entity.providerType + "-" + entity.name;
-        } else if (entity.providerName) {
-            return entity.providerName + "-" + entity.name;
-        } else if (entity.resolvers) {
-            const baseUri = entity.resolvers.baseUri ? "-" + entity.resolvers.baseUri : "";
-            const soapAction = Array.isArray(entity.resolvers.soapActions) && entity.resolvers.soapActions.length > 0 ? "-" + entity.resolvers.soapActions.sort()[0] : "";
-            return entity.resolvers.resolutionPath + baseUri + soapAction;
-        } else {
-            return idRef ? entity[idRef] :null;
-        }
-    },
-
-    entityDisplayName: function (entity) {
-        const attr = {};
-        const entityName = this.entityNameLegacy(entity, attr);
-
-        if (entity.name) {
-            return attr.ref !== 'name' ? entity.name + "-" + entityName : entityName;
-        } else {
-            return entityName;
-        }
-    },
-
     entityFileSuffixByPluralName: function (pluralName) {
         return fileSuffixes[pluralName];
     }
-}
-
-function matchSoapResolvers(left, right) {
-    if (left.resolvers && right.resolvers) {
-        if (left.resolvers.baseUri && left.resolvers.baseUri !== right.resolvers.baseUri) {
-            return false;
-        }
-
-        if (Array.isArray(left.resolvers.soapActions) && Array.isArray(right.resolvers.soapActions)) {
-            if (left.resolvers.soapActions.length !== right.resolvers.soapActions.length) {
-                return false;
-            }
-
-            for (var item of left.resolvers.soapActions) {
-                if (!right.resolvers.soapActions.includes(item)) {
-                    return false;
-                }
-            }
-        }
-
-        return left.resolvers.resolutionPath === right.resolvers.resolutionPath;
-    }
-    return false;
 }
 
 let exportSanitizer = function () {

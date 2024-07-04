@@ -134,7 +134,7 @@ module.exports = {
 function onExportDataCallback(data, parts, params) {
     if (data.data) {
         data = butils.sanitize(data.data, butils.EXPORT_USE, params.options);
-        butils.removeDuplicates(data);
+        data = butils.removeDuplicates(data);
         butils.filter(data, params.filter);
         postExportExtension.call(data, parts);
         utils.writeResult(params.output, butils.sort(data));
