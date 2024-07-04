@@ -101,6 +101,13 @@ module.exports = {
         });
     },
 
+    mappingInstruction: function (action, entity, typeInfo) {
+        return {
+            action: action,
+            source: this.toPartialEntity(entity, typeInfo)
+        };
+    },
+
     overrideMappings: function (bundle, options) {
         const properties = bundle.properties = bundle.properties || {};
         const mappings = properties.mappings = properties.mappings || {};

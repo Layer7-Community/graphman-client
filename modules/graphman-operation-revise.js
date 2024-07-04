@@ -28,14 +28,13 @@ module.exports = {
     },
 
     revise: function (bundle, options) {
-        bundle = reviseBundleForGoidsAndGuids(bundle);
         // remove properties section from the bundle temporarily
         const properties = bundle.properties;
         if (properties) delete bundle.properties;
 
         bundle = reviser.revise(bundle, options);
 
-        // restore the properties section so that it appears at the end
+        // restore properties section so that it appears at the end
         if (properties) bundle.properties = properties;
         return bundle;
     },
@@ -55,7 +54,6 @@ module.exports = {
         console.log("  [--options.<name> <value>,...]");
         console.log();
         console.log("Revises the input bundle as per the specified options.");
-        console.log("  supports revising the bundle as per the GOID and/or GUID mappings");
         console.log("  supports revising the bundle as per the schema changes");
         console.log();
         console.log("  --input <input-file>");
@@ -73,39 +71,3 @@ module.exports = {
         console.log("        use this option to exclude Goids from the bundled entities. This option is applicable only when normalize option is selected.");
     }
 }
-
-function reviseBundleForGoidsAndGuids (bundle) {
-    const goidMappings = bundle.goidMappings || [];
-    const guidMappings = bundle.guidMappings || [];
-    delete bundle.goidMappings;
-    delete bundle.guidMappings;
-
-    if (goidMappings.length > 0 || guidMappings.length > 0) {
-        butils.forEach(bundle, (key, entities, typeInfo) => {
-            utils.info("inspecting " + key);
-            if (goidMappings.length) reviseEntities(entities, typeInfo, goidMappings);
-            if (guidMappings.length) reviseEntities(entities, typeInfo, guidMappings);
-        });
-    }
-
-    return bundle;
-}
-
-function reviseEntities(entities, typeInfo, mappings) {
-    entities.forEach(entity => {
-        if (entity.policy && entity.policy.xml) {
-            reviseEntity(entity, typeInfo, mappings);
-        }
-    });
-}
-
-function reviseEntity(entity, typeInfo, mappings) {
-    mappings.forEach(mapping => {
-        entity.policy.xml = entity.policy.xml.replaceAll(mapping.source, function (match) {
-            const name = butils.entityName(entity, typeInfo);
-            utils.info(`  revising ${name}, replacing ${mapping.source} with ${mapping.target}`);
-            return mapping.target;
-        });
-    });
-}
-

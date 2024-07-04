@@ -14,6 +14,7 @@ module.exports = {
      * @param params.output output file name
      * @param params.output-report output report file name
      * @param params.options
+     * @param params.options.includeDeletes flag to decide including entities from the deletes section
      * NOTE: Use "@" as prefix to differentiate the gateway profile name from the bundle name.
      */
     run: function (params) {
@@ -26,20 +27,20 @@ module.exports = {
             Promise.all(bundles).then(results => {
                 const leftBundle = results[0];
                 const rightBundle = results[1];
-                const bundle = {goidMappings: [], guidMappings: []};
+                const bundle = {};
                 const report = {inserts: {}, updates: {}, deletes: {}, diffs: {}, mappings: {goids: [], guids: []}};
 
-                diffReport(leftBundle, rightBundle, report, params.options || {});
-                diffBundle(report, bundle, params.options || {});
+                diffReport(leftBundle, rightBundle, report);
+                diffBundle(report, bundle, params.options, false);
 
                 utils.writeResult(params.output, butils.sort(bundle));
                 if (params["output-report"]) utils.writeResult(params["output-report"], report);
             });
         } else if (params["input-report"]) {
             const report = utils.readFile(params["input-report"]);
-            const bundle = {goidMappings: [], guidMappings: []};
+            const bundle = {};
 
-            diffBundle(report, bundle, params.options || {});
+            diffBundle(report, bundle, params.options, true);
             utils.writeResult(params.output, butils.sort(bundle));
             if (params["output-report"]) utils.writeResult(params["output-report"], report);
         } else {
@@ -48,14 +49,16 @@ module.exports = {
     },
 
     initParams: function (params, config) {
-        params.options = Object.assign({report: {}, bundle: {}}, params.options);
+        params.options = Object.assign({includeDeletes: false}, params.options);
         return params;
     },
 
     usage: function () {
         console.log("diff --input <input-file-or-gateway> --input <input-file-or-gateway>");
+        console.log("  [--input-report <input-report-file>]");
         console.log("  [--output <output-file>]");
         console.log("  [--output-report <output-report-file>]");
+        console.log("  [--options.<name> <value>,...]");
         console.log();
         console.log("Evaluates the differences between bundles or gateways.");
         console.log("Input can be a bundle file or a gateway profile name if it precedes with '@' special character.");
@@ -65,10 +68,20 @@ module.exports = {
         console.log("    specify two input bundles file(s) for comparison");
         console.log("    Use '@' special marker to treat the input as gateway profile name");
         console.log();
+        console.log("  --input-report <input-report-file>");
+        console.log("    specify the input diff report file to generate the diff bundle");
+        console.log("    NOTE: this parameter will be ignored if the input parameter is specified");
+        console.log();
         console.log("  --output <output-file>");
         console.log("    specify the file to capture the diff bundle");
+        console.log();
         console.log("  --output-report <output-report-file>");
         console.log("    specify the file to capture the diff report");
+        console.log();
+        console.log("  --options.<name> <value>");
+        console.log("    specify options as name-value pair(s) to customize the operation");
+        console.log("      .includeDeletes false|true");
+        console.log("        use this option to include entities from the deletes section.");
         console.log();
     }
 }
@@ -96,16 +109,16 @@ function readBundleFromGateway(gateway) {
     });
 }
 
-function diffReport(leftBundle, rightBundle, diffReport, options) {
+function diffReport(leftBundle, rightBundle, report) {
     butils.forEach(leftBundle, (key, leftEntities, typeInfo) => {
         utils.info("inspecting " + key);
-        diffEntities(leftEntities, rightBundle[key], diffReport, typeInfo, options);
+        diffEntities(leftEntities, rightBundle[key], report, typeInfo);
     });
 
-    return diffReport;
+    return report;
 }
 
-function diffEntities(leftEntities, rightEntities, diffReport, typeInfo, options) {
+function diffEntities(leftEntities, rightEntities, report, typeInfo) {
     // iterate through the left entities,
     // bucket it into diff-report, depending on the match in the right entities
     leftEntities.forEach(leftEntity => {
@@ -113,7 +126,7 @@ function diffEntities(leftEntities, rightEntities, diffReport, typeInfo, options
 
         if (rightEntity == null) {
             utils.info("  selecting " + butils.entityName(leftEntity, typeInfo) + ", category=inserts");
-            const inserts = butils.withArray(diffReport.inserts, typeInfo);
+            const inserts = butils.withArray(report.inserts, typeInfo);
             inserts.push(leftEntity);
         } else if (leftEntity.checksum !== rightEntity.checksum) {
             const details = [];
@@ -122,14 +135,26 @@ function diffEntities(leftEntities, rightEntities, diffReport, typeInfo, options
                     utils.info("  not selecting " + butils.entityName(leftEntity, typeInfo) + ", only the checksum is different");
                 } else {
                     utils.info("  selecting " + butils.entityName(leftEntity, typeInfo) + ", category=updates");
-                    const updates = butils.withArray(diffReport.updates, typeInfo);
+                    const updates = butils.withArray(report.updates, typeInfo);
                     updates.push(leftEntity);
 
-                    const diffs = butils.withArray(diffReport.diffs, typeInfo);
+                    const diffs = butils.withArray(report.diffs, typeInfo);
                     diffs.push({source: butils.toPartialEntity(leftEntity, typeInfo), details: details});
                 }
             } else {
                 utils.info("  not selecting " + butils.entityName(leftEntity, typeInfo) + ", only the checksum is different");
+            }
+        }
+
+        if (rightEntity != null && typeInfo.goidRefEnabled) {
+            if (leftEntity.goid && rightEntity.goid !== leftEntity.goid) {
+                utils.info(`  selecting ` + butils.entityName(leftEntity, typeInfo) + `, category=goid-mappings`);
+                report.mappings.goids.push({left: leftEntity.goid, right: rightEntity.goid});
+            }
+
+            if (leftEntity.guid && rightEntity.guid !== leftEntity.guid) {
+                utils.info(`  selecting ` + butils.entityName(leftEntity, typeInfo) + `, category=guid-mappings`);
+                report.mappings.guids.push({left: leftEntity.guid, right: rightEntity.guid});
             }
         }
     });
@@ -139,74 +164,71 @@ function diffEntities(leftEntities, rightEntities, diffReport, typeInfo, options
     rightEntities.forEach(rightEntity => {
         if (!leftEntities.find(x => butils.isEntityMatches(x, rightEntity, typeInfo))) {
             utils.info("  selecting " + butils.entityName(rightEntity, typeInfo) + ", category=deletes");
-            const deletes = butils.withArray(diffReport.deletes, typeInfo);
+            const deletes = butils.withArray(report.deletes, typeInfo);
             deletes.push(rightEntity);
         }
     });
 }
 
-function diffBundle(diffReport, diffBundle, options) {
-    butils.forEach(diffReport.inserts, (key, entities, typeInfo) => {
-        utils.info(`  adding new ${key}`);
-        const array = butils.withArray(diffBundle, typeInfo);
+function diffBundle(report, bundle, options, verbose) {
+    butils.forEach(report.inserts, (key, entities, typeInfo) => {
+        if (verbose) utils.info(`adding ${key}, category=inserts`);
+        const array = butils.withArray(bundle, typeInfo);
         entities.forEach(item => {
-            utils.info(`    ${butils.entityName(item, typeInfo)}`);
+            utils.info(`  ${butils.entityName(item, typeInfo)}`);
             array.push(item);
         });
     });
 
-    butils.forEach(diffReport.updates, (key, entities, typeInfo) => {
-        utils.info(`  adding modified ${key}`);
-        const array = butils.withArray(diffBundle, typeInfo);
+    butils.forEach(report.updates, (key, entities, typeInfo) => {
+        if (verbose) utils.info(`adding ${key}, category=updates`);
+        const array = butils.withArray(bundle, typeInfo);
         entities.forEach(item => {
-            utils.info(`    ${butils.entityName(item, typeInfo)}`);
+            utils.info(`  ${butils.entityName(item, typeInfo)}`);
             array.push(item);
         });
     });
 
-    if (!options.excludeDeletes) butils.forEach(diffReport.deletes, (key, entities, typeInfo) => {
-        utils.info(`  marking few ${key} for deletion`);
-        diffBundle.properties = {mappings: {}};
-        const array = butils.withArray(diffBundle.properties.mappings, typeInfo);
+    if (options.includeDeletes) butils.forEach(report.deletes, (key, entities, typeInfo) => {
+        if (verbose) utils.info(`adding ${key}, category=deletes`);
+        bundle.properties = {mappings: {}};
+        const array = butils.withArray(bundle.properties.mappings, typeInfo);
         entities.forEach(item => {
-            utils.info(`    ${butils.entityName(item, typeInfo)}`);
-            array.push(item);
+            utils.info(`  ${butils.entityName(item, typeInfo)}`);
+            array.push(butils.mappingInstruction('DELETE', item, typeInfo));
         });
     });
 
-    if (!diffBundle.goidMappings.length) delete diffBundle.goidMappings;
-    if (!diffBundle.guidMappings.length) delete diffBundle.guidMappings;
+    butils.forEach(bundle, (key, entities, typeInfo) => {
+        if (report.mappings.goids.length) reviseEntities(entities, typeInfo, report.mappings.goids);
+        if (report.mappings.guids.length) reviseEntities(entities, typeInfo, report.mappings.guids);
+    });
 }
 
-function diffEntities1(leftEntities, rightEntities, resultEntities, resultBundle, key) {
-    leftEntities.forEach(left => {
-        const matchingEntity = butils.findMatchingEntity(rightEntities, left);
-
-        if (!matchingEntity) {
-            utils.info("  selecting " + butils.entityDisplayName(left));
-            resultEntities.push(left);
-        } else if (matchingEntity.checksum != null && matchingEntity.checksum !== left.checksum) { // if matchingEntity.checksum is not present, we assume user explicitely wants to ignore same entity that have different value
-            utils.info("  selecting " + butils.entityDisplayName(left));
-            resultEntities.push(left);
-        }
-
-        if (matchingEntity) {
-            const typeInfo = graphman.typeInfoByPluralName(key);
-            if (typeInfo && typeInfo.goidRefEnabled && left.goid && matchingEntity.goid !== left.goid) {
-                utils.info(`  required goid mapping for ` + butils.entityDisplayName(left) + `, source: ${left.goid}, target: ${matchingEntity.goid}`);
-                resultBundle.goidMappings.push({source: left.goid, target: matchingEntity.goid});
-            }
-
-            if ((key === 'policyFragments' || key === "encassConfigs") && left.guid && matchingEntity.guid !== left.guid) {
-                utils.info(`  required guid mapping for ` + butils.entityDisplayName(left) + `, source: ${left.guid}, target: ${matchingEntity.guid}`);
-                resultBundle.guidMappings.push({source: left.guid, target: matchingEntity.guid});
-            }
+function reviseEntities(entities, typeInfo, mappings) {
+    entities.forEach(entity => {
+        if (entity.policy) {
+            reviseEntity(entity, typeInfo, mappings);
         }
     });
+}
 
-    rightEntities.forEach(right => {
-        if (leftEntities.every(left => !butils.matchEntity(left, right))) {
-            utils.info("  (opt) marking the target entity for deletion " + butils.entityDisplayName(right));
-        }
+function reviseEntity(entity, typeInfo, mappings) {
+    const name = butils.entityName(entity, typeInfo);
+    mappings.forEach(mapping => {
+        if (entity.policy.xml) entity.policy.xml = entity.policy.xml.replaceAll(mapping.left, function (match) {
+            utils.info(`  revising ${name}, replacing ${mapping.left} with ${mapping.right}`);
+            return mapping.right;
+        });
+
+        if (entity.policy.json) entity.policy.json = entity.policy.json.replaceAll(mapping.left, function (match) {
+            utils.info(`  revising ${name}, replacing ${mapping.left} with ${mapping.right}`);
+            return mapping.right;
+        });
+
+        if (entity.policy.yaml) entity.policy.yaml = entity.policy.yaml.replaceAll(mapping.left, function (match) {
+            utils.info(`  revising ${name}, replacing ${mapping.left} with ${mapping.right}`);
+            return mapping.right;
+        });
     });
 }
