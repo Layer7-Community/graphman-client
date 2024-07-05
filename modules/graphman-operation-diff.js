@@ -9,7 +9,8 @@ module.exports = {
     /**
      * Identifies the differences between bundles/gateways.
      * @param params
-     * @param params.input bundle or gateway profile name
+     * @param params.input-source source bundle or source gateway profile name
+     * @param params.input-target target bundle or tagert gateway profile name
      * @param params.input-report input report file name
      * @param params.output output file name
      * @param params.output-report output report file name
@@ -20,9 +21,9 @@ module.exports = {
     run: function (params) {
         const bundles = [];
 
-        if (Array.isArray(params.input) && params.input.length >= 2) {
-            bundles.push(readBundleFrom(params.input[0]));
-            bundles.push(readBundleFrom(params.input[1]));
+        if (params["input-source"] && params["input-target"]) {
+            bundles.push(readBundleFrom(params["input-source"]));
+            bundles.push(readBundleFrom(params["input-target"]));
 
             Promise.all(bundles).then(results => {
                 const leftBundle = results[0];
@@ -54,7 +55,7 @@ module.exports = {
     },
 
     usage: function () {
-        console.log("diff --input <input-file-or-gateway> --input <input-file-or-gateway>");
+        console.log("diff --input-source <input-file-or-gateway> --input-target <input-file-or-gateway>");
         console.log("  [--input-report <input-report-file>]");
         console.log("  [--output <output-file>]");
         console.log("  [--output-report <output-report-file>]");
@@ -63,9 +64,14 @@ module.exports = {
         console.log("Evaluates the differences between bundles or gateways.");
         console.log("Input can be a bundle file or a gateway profile name if it precedes with '@' special character.");
         console.log("When gateway is specified as input, summary bundle will be pulled for comparison.");
+        console.log("Differences are computed such that what can be done to the target to match with the given source.");
         console.log();
-        console.log("  --input <input-file-or-gateway-profile>");
-        console.log("    specify two input bundles file(s) for comparison");
+        console.log("  --input-source <input-file-or-gateway-profile>");
+        console.log("    specify source input bundle file for comparison");
+        console.log("    Use '@' special marker to treat the input as gateway profile name");
+        console.log();
+        console.log("  --input-target <input-file-or-gateway-profile>");
+        console.log("    specify target input bundle file for comparison");
         console.log("    Use '@' special marker to treat the input as gateway profile name");
         console.log();
         console.log("  --input-report <input-report-file>");

@@ -146,8 +146,14 @@ let type1Exploder = (function () {
                     delete entity.policy.yaml;
                     delete entity.policy.code;
                 } else if (entity.policy.json) {
-                    entity.policy.code = JSON.parse(entity.policy.json);
-                    delete entity.policy.json;
+                    utils.writeFile(`${outputDir}/${filename}.cjson`, JSON.parse(entity.policy.json));
+                    entity.policy.json = `{${filename}.cjson}`;
+                    delete entity.policy.code;
+                    delete entity.policy.yaml;
+                } else if (entity.policy.code) {
+                    utils.writeFile(`${outputDir}/${filename}.cjson`, entity.policy.code);
+                    entity.policy.json = `{${filename}.cjson}`;
+                    delete entity.policy.code;
                     delete entity.policy.yaml;
                 } else if (entity.policy.yaml) {
                     utils.writeFile(`${outputDir}/${filename}.yaml`, entity.policy.yaml);

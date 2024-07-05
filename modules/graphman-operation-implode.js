@@ -131,13 +131,16 @@ let type1Imploder = (function () {
 
                 if (entity.policy) {
                     const xml = entity.policy.xml;
+                    const json = entity.policy.json;
+                    const yaml = entity.policy.yaml;
+
                     if (xml && xml.endsWith(".xml}")) {
                         const filename = xml.match(/{(.+)}/)[1];
                         entity.policy.xml = utils.readFile(`${dir}/${filename}`);
-                    }
-
-                    const yaml = entity.policy.yaml;
-                    if (yaml && yaml.endsWith(".yaml}")) {
+                    } else if (json && json.endsWith(".cjson}")) {
+                        const filename = json.match(/{(.+)}/)[1];
+                        entity.policy.json = JSON.stringify(JSON.parse(utils.readFile(`${dir}/${filename}`)), null, 0);
+                    } else if (yaml && yaml.endsWith(".yaml}")) {
                         const filename = yaml.match(/{(.+)}/)[1];
                         entity.policy.yaml = utils.readFile(`${dir}/${filename}`);
                     }

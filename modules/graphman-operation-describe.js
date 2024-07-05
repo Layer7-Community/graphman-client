@@ -8,7 +8,7 @@ module.exports = {
      * Describes queries
      * @param params
      * @param params.query query name
-     * @param params.queries
+     * @param params.options
      */
     run: function (params) {
         if (!params.query) {
@@ -18,7 +18,7 @@ module.exports = {
         if (typeof params.query === 'object') {
             printAvailableQueries();
         } else {
-            describeQuery(params.query);
+            describeQuery(params.query, params.options);
         }
     },
 
@@ -39,6 +39,9 @@ module.exports = {
         console.log();
         console.log("  --output <output-file>");
         console.log("    specify the file to capture the important part of the described result");
+        console.log();
+        console.log("  --options.<name> <value>");
+        console.log("    specify options as name-value pair(s) to customize the operation");
         console.log();
     }
 }
@@ -73,17 +76,17 @@ function availableQueriesIn(path, callback) {
     });
 }
 
-function describeQuery(queryName) {
+function describeQuery(queryName, options) {
     utils.info("query", queryName);
     if (queryName.indexOf("*") === -1) {
-        const query = gql.generate(queryName, {}, {describeQuery: true});
+        const query = gql.generate(queryName, {}, Object.assign({describeQuery: true}, options));
         utils.print(query.query);
     } else {
         const queryNames = graphman.queryFieldNamesByPattern(queryName);
         if (queryNames.length === 0) {
             utils.info("no matches found");
         } else if (queryNames.length === 1) {
-            const query = gql.generate(queryNames[0], {}, {describeQuery: true});
+            const query = gql.generate(queryNames[0], {}, Object.assign({describeQuery: true}, options));
             utils.print(query.query);
         } else {
             utils.info(`${queryNames.length} matches found`);
