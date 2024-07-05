@@ -3,7 +3,6 @@ const utils = require("./graphman-utils");
 const butils = require("./graphman-bundle");
 const graphman = require("./graphman");
 const gql = require("./graphql-query");
-const postExportExtension = utils.extension("graphman-post-bundle");
 
 module.exports = {
     /**
@@ -136,7 +135,7 @@ function onExportDataCallback(data, parts, params) {
         data = butils.sanitize(data.data, butils.EXPORT_USE, params.options);
         data = butils.removeDuplicates(data);
         butils.filter(data, params.filter);
-        postExportExtension.call(data, parts);
+        data = utils.extension("post-export").apply(data, parts);
         utils.writeResult(params.output, butils.sort(data));
         if (parts) utils.writePartsResult(utils.parentPath(params.output), parts);
 

@@ -16,6 +16,9 @@ const FINE_LEVEL = 3;
 const DEBUG_LEVEL = 10;
 let logLevel = INFO_LEVEL;
 
+const defaultExtn = {ref: {apply: function (input) {return input;}}};
+const extns = {};
+
 class GraphmanOperationError extends Error {
     constructor(message) {
         super(message);
@@ -231,8 +234,30 @@ module.exports = {
         return num.toString().padStart(places, '0');
     },
 
+    /**
+     * register the enabled extensions
+     * @param listOrItem one or more enabled extension names
+     */
+    extensions: function (listOrItem) {
+        if (Array.isArray(listOrItem)) {
+            listOrItem.forEach(item => extns[item] = {ref: null});
+        } else {
+            extns[listOrItem] = {ref: null};
+        }
+    },
+
+    /**
+     * Load and get the extension
+     * @param ref extension name
+     * @returns {{apply: function(*): *}}
+     */
     extension: function (ref) {
-        return this.existsFile(MODULES_DIR + "/extn/" + ref + ".js") ? require("./extn/" + ref) : {call: function () {}};
+        const extn = extns[ref] || defaultExtn;
+        if (!extn.ref) {
+            extn.ref = this.existsFile(MODULES_DIR + "/extn/graphman-extension-" + ref + ".js") ? require("./extn/graphman-extension-" + ref) : defaultExtn.ref;
+        }
+
+        return extn.ref;
     },
 
     mappings: function (actions) {

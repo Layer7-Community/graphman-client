@@ -27,7 +27,9 @@ try {
         if (params.help) {
             operation.usage();
         } else {
-            operation.run(operation.initParams(params, graphman.configuration()));
+            const config = graphman.configuration();
+            utils.extensions(config.options.extensions);
+            operation.run(operation.initParams(params, config));
         }
     }
 } catch (e) {

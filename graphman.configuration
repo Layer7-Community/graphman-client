@@ -16,6 +16,7 @@
         "log": "info",
         "schema": null,
         "policyCodeFormat": "xml",
-        "keyFormat": "p12"
+        "keyFormat": "p12",
+        "extensions": []
     }
 }

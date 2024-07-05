@@ -125,6 +125,8 @@ function diffReport(leftBundle, rightBundle, report) {
 }
 
 function diffEntities(leftEntities, rightEntities, report, typeInfo) {
+    const multiLineTextDiffExtension = utils.extension("multiline-text-diff");
+
     // iterate through the left entities,
     // bucket it into diff-report, depending on the match in the right entities
     leftEntities.forEach(leftEntity => {
@@ -136,7 +138,11 @@ function diffEntities(leftEntities, rightEntities, report, typeInfo) {
             inserts.push(leftEntity);
         } else if (leftEntity.checksum !== rightEntity.checksum) {
             const details = [];
-            if (!butils.isObjectEquals(leftEntity, rightEntity, "$", item => details.push(item))) {
+            const objectEqualsCallback = item => {
+                details.push(multiLineTextDiffExtension.apply({path: item.path, source: item.left, target: item.right}, typeInfo));
+            };
+
+            if (!butils.isObjectEquals(leftEntity, rightEntity, "$", objectEqualsCallback)) {
                 if (details.length === 1 && details[0].path === "$.checksum") {
                     utils.info("  not selecting " + butils.entityName(leftEntity, typeInfo) + ", only the checksum is different");
                 } else {

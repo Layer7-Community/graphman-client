@@ -7,8 +7,6 @@ const utils = require("./graphman-utils");
 const hutils = require("./http-utils");
 const gqlschema = require("./graphql-schema");
 
-const PRE_REQUEST_EXTN = utils.extension("graphman-pre-request");
-const PRE_RESPONSE_EXTN = utils.extension("graphman-pre-response");
 const http = require("http");
 const https = require("https");
 
@@ -137,7 +135,7 @@ module.exports = {
     },
 
     invoke: function (options, callback) {
-        PRE_REQUEST_EXTN.call(options);
+        options = utils.extension("pre-request").apply(options);
         const req = ((!options.protocol||options.protocol === 'https'||options.protocol === 'https:') ? https : http).request(options, function(response) {
             let respInfo = {initialized: false, chunks: []};
 
@@ -159,7 +157,6 @@ module.exports = {
                 if (respInfo.contentType.startsWith('application/json')) {
                     const jsonData = JSON.parse(data);
                     utils.debug("graphman http response", jsonData);
-                    PRE_RESPONSE_EXTN.call(jsonData);
                     callback(jsonData);
                 } else if (respInfo.contentType.startsWith('multipart/')) {
                     utils.debug("graphman http multipart response");

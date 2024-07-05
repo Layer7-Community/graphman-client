@@ -3,7 +3,6 @@ const utils = require("./graphman-utils");
 const butils = require("./graphman-bundle");
 const graphman = require("./graphman");
 const gql = require("./graphql-query");
-const preImportExtension = utils.extension("graphman-pre-bundle");
 
 module.exports = {
     /**
@@ -35,7 +34,7 @@ module.exports = {
         let inputBundle = butils.sanitize(utils.readFile(params.input), butils.IMPORT_USE, params.options);
         inputBundle = butils.removeDuplicates(inputBundle);
         butils.overrideMappings(inputBundle, params.options);
-        preImportExtension.call(inputBundle);
+        inputBundle = utils.extension("pre-import").apply(inputBundle);
 
         const query = gql.generate(params.using, Object.assign(inputBundle, params.variables), params.options);
         const request = graphman.request(gateway, query.options);
