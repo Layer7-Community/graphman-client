@@ -116,33 +116,51 @@ function readBundleFromGateway(gateway) {
 }
 
 function diffReport(leftBundle, rightBundle, report) {
+    const multiLineTextDiffExtension = utils.extension("multiline-text-diff");
+
     butils.forEach(leftBundle, (key, leftEntities, typeInfo) => {
         utils.info("inspecting " + key);
-        diffEntities(leftEntities, rightBundle[key], report, typeInfo);
+        diffEntities(leftEntities, rightBundle[key], report, typeInfo, multiLineTextDiffExtension);
     });
 
     return report;
 }
 
-function diffEntities(leftEntities, rightEntities, report, typeInfo) {
-    const multiLineTextDiffExtension = utils.extension("multiline-text-diff");
-
+/**
+ * To identify the differences among class-of entities
+ * @param leftEntities entities from left bundle
+ * @param rightEntities entities from right bundle
+ * @param report diff report
+ * @param typeInfo type-info about class
+ * @param multiLineTextDiffExtension multiline text deff extension
+ */
+function diffEntities(leftEntities, rightEntities, report, typeInfo, multiLineTextDiffExtension) {
     // iterate through the left entities,
     // bucket it into diff-report, depending on the match in the right entities
     leftEntities.forEach(leftEntity => {
         const rightEntity = rightEntities.find(x => butils.isEntityMatches(leftEntity, x, typeInfo));
-
         if (rightEntity == null) {
             utils.info("  selecting " + butils.entityName(leftEntity, typeInfo) + ", category=inserts");
             const inserts = butils.withArray(report.inserts, typeInfo);
             inserts.push(leftEntity);
         } else if (leftEntity.checksum !== rightEntity.checksum) {
             const details = [];
-            const objectEqualsCallback = item => {
-                details.push(multiLineTextDiffExtension.apply({path: item.path, source: item.left, target: item.right}, typeInfo));
-            };
+            const codeRef = makeEntityReadyForEqualityCheck(leftEntity, rightEntity);
 
-            if (!butils.isObjectEquals(leftEntity, rightEntity, "$", objectEqualsCallback)) {
+            // compare objects
+            const equals = butils.isObjectEquals(leftEntity, rightEntity, "$", item => {
+                details.push(multiLineTextDiffExtension.apply({
+                    path: item.path,
+                    source: item.left,
+                    target: item.right
+                }, typeInfo));
+            });
+
+            // restore policy code
+            if (codeRef.left) leftEntity.policy.code = codeRef.left;
+            if (codeRef.right) rightEntity.policy.code = codeRef.right;
+
+            if (!equals) {
                 if (details.length === 1 && details[0].path === "$.checksum") {
                     utils.info("  not selecting " + butils.entityName(leftEntity, typeInfo) + ", only the checksum is different");
                 } else {
@@ -180,6 +198,30 @@ function diffEntities(leftEntities, rightEntities, report, typeInfo) {
             deletes.push(rightEntity);
         }
     });
+}
+
+/**
+ * Makes the entities comparison friendly.
+ * If entity possesses policy code, it will be re-written as string.
+ * @param leftEntity
+ * @param rightEntity
+ * @returns code-ref object
+ */
+function makeEntityReadyForEqualityCheck(leftEntity, rightEntity) {
+    const codeRef = {left: null, right: null};
+
+    // capture policy code and re-write it as string for comparison friendly
+    if (leftEntity.policy) {
+        codeRef.left = leftEntity.policy.code;
+        leftEntity.policy.code = JSON.stringify(codeRef.left, null, 0);
+    }
+
+    if (rightEntity.policy) {
+        codeRef.right = rightEntity.policy.code;
+        rightEntity.policy.code = JSON.stringify(codeRef.right, null, 0);
+    }
+
+    return codeRef;
 }
 
 function diffBundle(report, bundle, options, verbose) {

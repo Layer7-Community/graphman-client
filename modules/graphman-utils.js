@@ -252,9 +252,20 @@ module.exports = {
      * @returns {{apply: function(*): *}}
      */
     extension: function (ref) {
-        const extn = extns[ref] || defaultExtn;
+        let extn = extns[ref];
+        if (!extn) {
+            this.warn(ref + " graphman extension is not enabled, falling back to the default");
+            extn = defaultExtn;
+        }
+
         if (!extn.ref) {
-            extn.ref = this.existsFile(MODULES_DIR + "/extn/graphman-extension-" + ref + ".js") ? require("./extn/graphman-extension-" + ref) : defaultExtn.ref;
+            const filename = MODULES_DIR + "/extn/graphman-extension-" + ref + ".js";
+            if (this.existsFile(filename)) {
+                extn.ref = require("./extn/graphman-extension-" + ref);
+            } else {
+                this.warn(ref + ` graphman extension file (${filename}) is missing, falling back to the default`);
+                extn.ref = defaultExtn.ref;
+            }
         }
 
         return extn.ref;

@@ -357,17 +357,18 @@ module.exports = {
         for (const fieldName of typeInfo.identityFields) {
             const separator = eid.length > 0 ? "-" : "";
             const fieldValue = entity[fieldName];
+            if (fieldValue) {
+                if (typeof fieldValue !== 'object') {
+                    eid += separator + fieldValue;
+                } else if (fieldName === 'resolvers') { // special case
+                    if (fieldValue["baseUri"]) {
+                        eid += separator + fieldValue["baseUri"];
+                    }
 
-            if (typeof fieldValue !== 'object') {
-                eid += separator + fieldValue;
-            } else if (fieldName === 'resolvers') { // special case
-                if (fieldValue["baseUri"]) {
-                    eid += separator + fieldValue["baseUri"];
-                }
-
-                const soapActions = fieldValue["soapActions"];
-                if (Array.isArray(soapActions) && soapActions.length) {
-                    eid += separator + soapActions.sort()[0];
+                    const soapActions = fieldValue["soapActions"];
+                    if (Array.isArray(soapActions) && soapActions.length) {
+                        eid += separator + soapActions.sort()[0];
+                    }
                 }
             }
         }

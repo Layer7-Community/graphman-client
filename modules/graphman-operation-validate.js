@@ -14,6 +14,7 @@ module.exports = {
         }
 
         const input = utils.readFile(params.input);
+        pcode.init();
         validateBundle(input);
     },
 
@@ -44,7 +45,7 @@ function validateBundle(bundle) {
  * @param typeInfo.bundleName name of the entity type in plural form
  */
 function validateEntities(entities, typeInfo) {
-    utils.info("validating " + typeInfo.bundleName);
+    utils.info("validating " + typeInfo.pluralName);
     for (const entity of entities) {
         const statusRef = {errors: []};
         pcode.validate(entity, typeInfo, statusInfo => {
@@ -54,7 +55,7 @@ function validateEntities(entities, typeInfo) {
             }
         });
 
-        utils.info("  validating policy of " + entity.name + ": " + (statusRef.errors.length === 0 ? "ok" : "error(s)"));
+        utils.info("  validating " + entity.name + ": " + (statusRef.errors.length === 0 ? "ok" : "error(s)"));
         for (const error of statusRef.errors) utils.warn(error);
     }
 }
