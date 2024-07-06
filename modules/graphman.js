@@ -10,6 +10,11 @@ const gqlschema = require("./graphql-schema");
 const http = require("http");
 const https = require("https");
 
+/**
+ * Responsible to
+ * - load configuration and metadata
+ * - posts the query/mutation requests to the gateway's graphman service.
+ */
 module.exports = {
     loadedConfig: null,
     metadata: null,
@@ -84,6 +89,12 @@ module.exports = {
         this.metadata = gqlschema.build(this.loadedConfig.version, this.loadedConfig.schemaVersion, true);
     },
 
+    /**
+     * Prepares the graphman request
+     * @param gateway target gateway
+     * @param options query parameters
+     * @return http request object
+     */
     request: function (gateway, options) {
         const url = new URL(gateway.address);
         const headers = {
@@ -127,13 +138,18 @@ module.exports = {
         } else if (gateway.username && gateway.password) {
             req.auth = gateway.username + ":" + gateway.password;
         } else {
-            throw new Error("Authentication details are missing. Please provide either basic authentication (username/password) or mTLS based authentication (keyFilename/certFilename)");
+            throw new Error("gateway credentials are missing, provide either basic authentication (username / password) or mTLS based authentication (keyFilename / certFilename)");
         }
 
         req.minVersion = req.maxVersion = gateway.tlsProtocol || "TLSv1.2";
         return req;
     },
 
+    /**
+     * Makes the http request to the gateway's graphman service
+     * @param options
+     * @param callback
+     */
     invoke: function (options, callback) {
         options = utils.extension("pre-request").apply(options);
         const req = ((!options.protocol||options.protocol === 'https'||options.protocol === 'https:') ? https : http).request(options, function(response) {

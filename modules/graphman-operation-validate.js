@@ -42,7 +42,7 @@ function validateBundle(bundle) {
  *
  * @param entities bundled entities
  * @param typeInfo entity type info
- * @param typeInfo.bundleName name of the entity type in plural form
+ * @param typeInfo.pluralName name of the entity type in plural form
  */
 function validateEntities(entities, typeInfo) {
     utils.info("validating " + typeInfo.pluralName);

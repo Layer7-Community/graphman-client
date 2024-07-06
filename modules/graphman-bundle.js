@@ -17,17 +17,6 @@ const fileSuffixes = {
 module.exports = {
     EXPORT_USE: 'export',
     IMPORT_USE: 'import',
-    ENTITY_TYPE_PLURAL_TAG_FRIENDLY_NAME: {
-        policies: 'policy',
-        services: 'service',
-        policyFragments: 'policy',
-        webApiServices: 'webapi',
-        soapServices: 'soap',
-        internalWebApiServices: 'internal-webapi',
-        internalSoapServices: 'internal-soap',
-        globalPolicies: 'global',
-        backgroundTaskPolicies: 'bgpolicy'
-    },
 
     /**
      * Recommended way to iterate through the bundled entities.
@@ -62,14 +51,19 @@ module.exports = {
             .filter(key => Array.isArray(bundle[key]))
             .forEach(key => {
                 const typeInfo = graphman.typeInfoByPluralName(key);
-                sorted[key] = bundle[key].sort((left, right) => {
-                    const lname = this.entityName(left, typeInfo);
-                    const rname = this.entityName(right, typeInfo);
+                if (typeInfo) {
+                    sorted[key] = bundle[key].sort((left, right) => {
+                        const lname = this.entityName(left, typeInfo);
+                        const rname = this.entityName(right, typeInfo);
 
-                    if (lname < rname) return -1;
-                    else if (lname > rname) return 1;
-                    else return 0;
-                })
+                        if (lname < rname) return -1;
+                        else if (lname > rname) return 1;
+                        else return 0;
+                    });
+                } else {
+                    utils.warn("unknown entities, " + key);
+                    sorted[key] = bundle[key];
+                }
             });
 
         sorted.properties = bundle.properties;
@@ -378,6 +372,11 @@ module.exports = {
 
     entityFileSuffixByPluralName: function (pluralName) {
         return fileSuffixes[pluralName];
+    },
+
+    entityPluralNameByFile: function (filename) {
+        return Object.keys(fileSuffixes)
+            .find(item => filename.endsWith(fileSuffixes[item] + ".json"));
     }
 }
 

@@ -1,4 +1,16 @@
+
+/**
+ * CLI argument parser
+ * @type {{parse: (function(*): boolean|*)}}
+ */
 module.exports = {
+    /**
+     * Parses the CLI arguments.
+     * Supports dot notation such that one or more arguments together results a complex object as an argument.
+     * Normalizes the values to matching data types (number, boolean, string).
+     * @param args
+     * @return {boolean|*}
+     */
     parse: function (args) {
         const params = {__unknowns:[]};
         const argsWatcher = [];
