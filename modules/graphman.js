@@ -3,6 +3,7 @@ const VERSION = "v1.3.00 (dev)";
 const SCHEMA_VERSION = "v11.1.00";
 const SCHEMA_VERSIONS = [SCHEMA_VERSION, "v11.1.1"];
 
+const SUPPORTED_EXTENSIONS = ["multiline-text-diff", "policy-code-validator"];
 const SCHEMA_FEATURE_LIST = {
     "v11.1.1": ["mappings", "mappings-source"]
 }
@@ -47,6 +48,7 @@ module.exports = {
         config.version = VERSION;
         config.defaultSchemaVersion = SCHEMA_VERSION;
         config.supportedSchemaVersions = SCHEMA_VERSIONS;
+        config.supportedExtensions = SUPPORTED_EXTENSIONS;
         config.schemaVersion = params.options.schema || config.options.schema || SCHEMA_VERSION;
         config.schemaVersions = gqlschema.availableSchemas();
 

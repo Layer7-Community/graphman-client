@@ -241,9 +241,11 @@ module.exports = {
     extensions: function (listOrItem) {
         if (Array.isArray(listOrItem)) {
             listOrItem.forEach(item => extns[item] = {ref: null});
-        } else {
+        } else if (listOrItem) {
             extns[listOrItem] = {ref: null};
         }
+
+        return Object.keys(extns);
     },
 
     /**
