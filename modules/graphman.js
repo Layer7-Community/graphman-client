@@ -3,6 +3,10 @@ const VERSION = "v1.3.00 (dev)";
 const SCHEMA_VERSION = "v11.1.00";
 const SCHEMA_VERSIONS = [SCHEMA_VERSION, "v11.1.1"];
 
+const SCHEMA_FEATURE_LIST = {
+    "v11.1.1": ["mappings", "mappings-source"]
+}
+
 const utils = require("./graphman-utils");
 const hutils = require("./http-utils");
 const gqlschema = require("./graphql-schema");
@@ -87,6 +91,11 @@ module.exports = {
 
     refreshSchemaMetadata: function () {
         this.metadata = gqlschema.build(this.loadedConfig.version, this.loadedConfig.schemaVersion, true);
+    },
+
+    supportsFeature: function (featureName) {
+        const list = SCHEMA_FEATURE_LIST[this.loadedConfig.schemaVersion]||[];
+        return list.includes(featureName);
     },
 
     /**

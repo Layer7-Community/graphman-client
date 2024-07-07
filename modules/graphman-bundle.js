@@ -465,7 +465,7 @@ let exportSanitizer = function () {
 
     function addEntity(entity, result, typeInfo, options, dependencies, sanitizedKey) {
         if (dependencies && options.excludeDependencies) {
-            utils.info(`excluding the dependency ${sanitizedKey} - ${entity[typeInfo.idField]}`);
+            utils.info(`excluding the dependency ${sanitizedKey} - ${this.entityName(entity, typeInfo)}`);
             if (entity.mappingInstruction) result.dependencyMappings[sanitizedKey].push(entity.mappingInstruction);
         } else {
             result[sanitizedKey].push(entity);
@@ -502,7 +502,12 @@ let exportSanitizer = function () {
 
         if (!instruction.action || !instruction.level || instruction.level === '0') return null;
 
-        typeInfo.identityFields.forEach(field => instruction[field] = obj[field]);
+        if (graphman.supportsFeature("mappings-source")) {
+            const source = instruction["source"] = {};
+            typeInfo.identityFields.forEach(field => source[field] = obj[field]);
+        } else {
+            typeInfo.identityFields.forEach(field => instruction[field] = obj[field]);
+        }
 
         if (dependencies) {
             if (options.excludeDependencies) {
