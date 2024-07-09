@@ -138,7 +138,8 @@ type AdministrativeUserAccountPropertiesPayload implements EntityMutationsPayloa
     status: [EntityMutationStatus!]!
     detailedStatus: [EntityMutationDetailedStatus!]!
     administrativeUserAccountProperties: [AdministrativeUserAccountProperty]!
-}#
+}
+#
 # Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
 
@@ -147,6 +148,9 @@ extend type Query {
     auditConfigurations: [AuditConfiguration!]!
 }
 
+extend type Mutation {
+    setAuditConfigurations(input : [AuditConfigurationInput!]!): AuditConfigurationsPayload!
+}
 """
 An Audit Configuration.
 > @l7-entity
@@ -169,7 +173,43 @@ type AuditConfiguration {
     ftpConfig: AuditFtpConfiguration
 }
 
+
+input AuditConfigurationInput {
+    "The internal entity unique identifier"
+    goid: ID
+    "log sink unique name"
+    name: String!
+    "Lookup Policy Name"
+    lookupPolicyName: String
+    "Sink Policy Name"
+    sinkPolicyName: String
+    "FTP Client Configuration"
+    ftpConfig: AuditFtpConfigurationInput
+}
+
+
 type AuditFtpConfiguration {
+    "Host of FTP Server"
+    host: String!
+    "Port of FTP Server"
+    port: Int!
+    "FTP connection timeout"
+    timeout: Int!
+    "FTP user"
+    user: String!
+    "FTP password"
+    password: String
+    "Directory in FTP Server"
+    directory: String
+    "To verify server certification"
+    verifyServerCert: Boolean!
+    "Security Type"
+    security: AuditFtpSecurityType!
+    "Whether this Audit Configuration is enabled"
+    enabled: Boolean!
+}
+
+input AuditFtpConfigurationInput {
     "Host of FTP Server"
     host: String!
     "Port of FTP Server"
@@ -195,7 +235,14 @@ enum AuditFtpSecurityType {
     FTP_UNSECURED,
     FTPS_EXPLICIT,
     FTPS_IMPLICIT
-}#
+}
+
+type AuditConfigurationsPayload implements EntityMutationsPayload {
+    status: [EntityMutationStatus!]!
+    detailedStatus: [EntityMutationDetailedStatus!]!
+    auditConfigurations: [AuditConfiguration]!
+}
+#
 # Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
 
@@ -255,6 +302,9 @@ input BundleEntityMappingsInput {
     trustedCerts:[TrustedCertsMappingInstructionInput!]
     webApiServices:[WebApiServiceMappingInstructionInput!]
     internalWebApiServices:[WebApiServiceMappingInstructionInput!]
+    genericEntities:[NamedEntityMappingInstructionInput!]
+    roles:[NamedEntityMappingInstructionInput!]
+    auditConfigurations:[NamedEntityMappingInstructionInput!]
 }
 
 input NamedEntityMappingInstructionInput {
@@ -299,10 +349,13 @@ input NamedEntityRefInput {
       ScheduledTask
       Secret
       SmConfig
+      GenericEntity
+      Role
+      AuditConfiguration
+
     """
     name: String!
 }
-
 #
 # Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
@@ -435,7 +488,6 @@ type ClusterNodeInfo {
     "cluster node uptime"
     uptime : Long!
 }
-
 #
 # Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
@@ -578,7 +630,8 @@ input CustomKeyValueMappingInstructionInput{
 input CustomKeyValueRefInput{
     "The custom key"
     key: String!
-}#
+}
+#
 # Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
 
@@ -904,7 +957,71 @@ input FolderMappingInstructionInput {
 input FolderRefInput {
     "The folder Path"
     path: String!
-}#
+}
+#
+# Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
+#
+
+extend type Query {
+    "Get all generic entities"
+    genericEntities: [GenericEntity!]!
+    "Retrieves a role by goid"
+    genericEntityByGoid(goid: String!) : GenericEntity
+    "Retrieves a generic entity by name"
+    genericEntityByName(name: String!): GenericEntity
+}
+
+extend type Mutation {
+  """
+  Create or update existing generic entities.
+  Match is carried by name. If match is found, it will be updated. Otherwise, it will be created.
+  """
+  setGenericEntities(input: [GenericEntityInput!]!): GenericEntitiesPayload!
+
+  "Delete existing generic entity. Match is carried by name."
+  deleteGenericEntities(names: [String!]!): GenericEntitiesPayload!
+}
+
+"Generic entity details"
+type GenericEntity {
+    goid : ID!
+    " unique name"
+    name: String!
+    "The configuration checksum"
+    checksum: String!
+    "description"
+    description: String
+    "value xml"
+    valueXml: String
+    "Whether this Generic entity is enabled"
+    enabled: Boolean!
+    "Absolute entity class name of Generic Entity"
+    entityClassName: String
+}
+
+input GenericEntityInput {
+    goid : ID
+    " unique name"
+    name: String!
+    "The configuration checksum"
+    checksum: String
+    "description"
+    description: String
+    "value xml"
+    valueXml: String
+    "Whether this Generic entity is enabled"
+    enabled: Boolean!
+    "Absolute entity class name of Generic Entity"
+    entityClassName: String!
+}
+
+type GenericEntitiesPayload implements EntityMutationsPayload {
+    status: [EntityMutationStatus!]!
+    detailedStatus: [EntityMutationDetailedStatus!]!
+    "The mutated generic entities"
+    genericEntities: [GenericEntity]!
+}
+#
 # Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
 
@@ -1235,7 +1352,8 @@ input HttpProxyConfigurationInput {
      protocol: HttpScheme = ANY
      "The path of the http configuration"
      path: String
- }#
+ }
+#
 # Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
 
@@ -1617,7 +1735,8 @@ input FipUserRefInput {
     name: String!
     " The name of the FiP this user is defined as part of "
     providerName: String!
-}#
+}
+#
 # Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
 
@@ -1717,6 +1836,14 @@ extend type Mutation {
     deleteLdapIdps(names: [String!]!) : LdapIdpsPayload
 }
 
+enum IdpType {
+    INTERNAL
+    FEDERATED
+    LDAP
+    SIMPLE_LDAP
+    POLICY_BACKED
+}
+
 " Indicate how to search for group or user. Provide either a name pattern, a subject dn and or a goid. "
 input IdpFilter {
     " The name of the FiP provider, or 'Internal' "
@@ -1789,7 +1916,9 @@ type InternalUser {
     lastName : String
     email : String
 
-    " List of groups this is member of "
+    "Whether to replace existing group memberships or not"
+    replaceGroupMemberships: Boolean
+    "List of groups this is member of "
     memberOf : [InternalGroup!]!
 
     # possible future expansion expiration, accountExpiration
@@ -1815,6 +1944,8 @@ input InternalUserInput {
     name : String
     "If provided, will try to honour at creation time"
     goid : ID
+    "Whether to replace existing group memberships or not"
+    replaceGroupMemberships: Boolean = false
     "The list of internal group details (names) that this user is member of. If you pass empty array, will reset memberships. If absent, does not affect memberships for current users."
     memberOf : [MembershipInput!]
     login : String!
@@ -1921,7 +2052,9 @@ type FederatedUser {
     firstName : String
     lastName : String
     email : String
-    " The list of Federated groups this user belongs to "
+    "Whether to replace existing group memberships or not"
+    replaceGroupMemberships: Boolean
+    "The list of Federated groups this user belongs to "
     memberOf : [FederatedGroup!]!
 }
 
@@ -1967,6 +2100,8 @@ input FederatedUserInput {
     goid : ID
     " The name of the FiP this user is defined as part of "
     providerName : String!
+    "Whether to replace existing group memberships or not"
+    replaceGroupMemberships: Boolean = false
     "The list of fip group details (names) that this user is member of. If you pass empty array, will reset memberships. If absent, does not affect memberships for current user."
     memberOf : [MembershipInput!]
     login : String
@@ -2199,7 +2334,8 @@ input InternalUserMappingInstructionInput{
 
 input InternalUserRefInput {
     login: String!
-}#
+}
+#
 # Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
 
@@ -2520,7 +2656,8 @@ input JmsDestinationRefInput {
     direction: String!
     "The JMS provider type"
     providerType: String!
-}#
+}
+#
 # Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
 
@@ -2642,7 +2779,8 @@ input KeyRefInput {
     alias: String!
     "The KeyStoreId"
     keystoreId: String!
-}#
+}
+#
 # Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
 
@@ -2940,7 +3078,8 @@ type LogSinksPayload implements EntityMutationsPayload {
     status: [EntityMutationStatus!]!
     detailedStatus: [EntityMutationDetailedStatus!]!
     logSinks: [LogSink]!
-}#
+}
+#
 # Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
 
@@ -3048,7 +3187,8 @@ input PasswordPolicyMappingInstructionInput{
 input PasswordPolicyRefInput {
     "The internal entity unique identifier"
     goid: ID!
-}#
+}
+#
 # Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
 
@@ -3255,6 +3395,8 @@ extend type Mutation {
     simpleLdapIdps : [SimpleLdapIdp]
     "Policy Backed Idps"
     policyBackedIdps : [PolicyBackedIdp]
+    "Generic Entities"
+    genericEntities : [GenericEntity]
  }
 
  input PolicyInput {
@@ -3516,7 +3658,8 @@ input GlobalPolicyRefInput {
       pre-service
     """
     tag: String!
-}#
+}
+#
 # Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
 
@@ -3596,7 +3739,8 @@ input ServiceResolutionConfigsMappingInstructionInput{
 input ServiceResolutionConfigRefInput {
     "The internal entity unique identifier"
     goid: ID!
-}#
+}
+#
 # Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
 
@@ -3728,30 +3872,184 @@ extend type Query {
     roleByGoid(goid: String!) : Role
     "Retrieves a role by name"
     roleByName(name: String!) : Role
+
+    "Get all users"
+    idpUsers(providerType: IdpType!, providerName: String!): [UserRef]
+    "Get user by login id"
+    idpUserByLogin(providerType: IdpType!, providerName: String!, login: String!): UserRef
+    "Get user by SubjectDn"
+    idpUserBySubjectDn(providerType: IdpType!, providerName: String!, subjectDn: String!): UserRef
+
+    "Get all groups"
+    idpGroups(providerType: IdpType!, providerName: String!): [GroupRef]
+    "Get group by name"
+    idpGroupByName(providerType: IdpType!, providerName: String!, name: String!): GroupRef
+    "Get group by subjectDn"
+    idpGroupBySubjectDn(providerType: IdpType!, providerName: String!, subjectDn: String!): GroupRef
 }
 
-enum Tag { ADMIN }
+extend type Mutation {
+    """
+    Update Roles with user/group assignees.
+    Note: Creating a role is unsupported.
+    """
+    setRoles(input: [RoleInput!]!): RolesPayload
+
+    """
+    Deletes roles. Only custom roles can be deleted.
+    """
+    deleteRoles(roles: [String!]!): RolesPayload
+
+    "Adds user to the role"
+    addUserToRole(role: String!, user: UserRefInput!): RolePayload
+
+    "Removes user from the role"
+    removeUserFromRole(role: String!, user: UserRefInput!): RolePayload
+
+    "Adds group to the role"
+    addGroupToRole(role: String!, group: GroupRefInput!): RolePayload
+
+    "Removes group from the role"
+    removeGroupFromRole(role: String!, group: GroupRefInput!): RolePayload
+
+    "Adds user to the group"
+    addUserToGroup(group: String!, user: UserRefInput!): GroupRefPayload
+
+    "Removes user to the group"
+    removeUserFromGroup(group: String!, user: UserRefInput!): GroupRefPayload
+}
+
+enum Tag {
+    ADMIN
+}
+
+enum RoleType {
+    SYSTEM,
+    CUSTOM
+}
 
 """
-An Role Configuration.
+A Role Configuration.
 > @l7-entity
 > @l7-identity-fields name
-> @l7-summary-fields goid,name,description,checksum
+> @l7-summary-fields goid,name,checksum
 > @l7-excluded-fields
 """
 type Role {
     "The goid for the Role"
     goid : ID!
-    "Name of a Role"
+    "Name of a role"
     name : String!
-    "Tag: Either Admin or Null"
-    tag: Tag
     "The configuration checksum"
     checksum: String
+
+    "Type of a role"
+    roleType: RoleType!
     "Description of the role. This is optional"
     description : String
+    "Tag: Either Admin or Null"
+    tag: Tag
+
+    "Whether to replace the existing assignees with the specified users/groups"
+    replaceAssignees: Boolean
+    "One or more users assigned to the role"
+    userAssignees: [UserRef!]
+    "One or more groups assigned to the role"
+    groupAssignees: [GroupRef!]
 }
 
+"Role configuration"
+input RoleInput {
+    "The goid for the Role"
+    goid : ID
+    "Name of a Role"
+    name : String!
+    "The configuration checksum"
+    checksum: String
+
+    "Type of a role"
+    roleType: RoleType!
+    "Description of the role. This is optional"
+    description : String
+    "Tag: Either Admin or Null"
+    tag: Tag
+    "Whether to replace the existing assignees with the specified users/groups"
+    replaceAssignees: Boolean = false
+    "One or more users assigned to the role"
+    userAssignees: [UserRefInput!] = []
+    "One or more groups assigned to the role"
+    groupAssignees: [GroupRefInput!] = []
+}
+
+type RolePayload implements EntityMutationPayload {
+    status: EntityMutationStatus!
+    detailedStatus: EntityMutationDetailedStatus!
+    role: Role
+}
+
+type GroupRefPayload implements EntityMutationPayload {
+    status: EntityMutationStatus!
+    detailedStatus: EntityMutationDetailedStatus!
+    group: GroupRef
+}
+
+type RolesPayload implements EntityMutationsPayload {
+    status: [EntityMutationStatus!]!
+    detailedStatus: [EntityMutationDetailedStatus!]!
+    roles: [Role]!
+}
+
+"IDP User Reference"
+type UserRef {
+    "The name of user"
+    name: String
+    "The login identity of user"
+    login: String
+    "The DN of user"
+    subjectDn: String
+    "The name of identity provider that the user belongs to"
+    providerName: String!
+    "The type of identity provider that the user belongs to"
+    providerType: IdpType!
+}
+
+"IDP Group Reference"
+type GroupRef {
+    "The name of group"
+    name: String
+    "The subject dn of group"
+    subjectDn: String
+    "The name of identity provider that the group belongs to"
+    providerName: String!
+    "The type of identity provider that the group belongs to"
+    providerType: IdpType!
+}
+
+"IDP User Reference input"
+input UserRefInput {
+    "The name of user"
+    name: String
+    "The login identity of user"
+    login: String
+    "The DN of user"
+    subjectDn: String
+    "The name of identity provider that the user belongs to"
+    providerName: String!
+    "The type of identity provider that the user belongs to"
+    providerType: IdpType!
+}
+
+"IDP Group Reference input"
+input GroupRefInput {
+    "The name of group"
+    name: String
+    "The subjectDn of group"
+    subjectDn: String
+    "The name of identity provider that the group belongs to"
+    providerName: String!
+    "The type of identity provider that the group belongs to"
+    providerType: IdpType!
+}
 #
 # Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
@@ -4238,7 +4536,6 @@ type KeysPayload implements EntityMutationsPayload {
     detailedStatus: [EntityMutationDetailedStatus!]!
     keys : [Key]!
 }
-
 #
 # Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
@@ -4602,7 +4899,6 @@ input ServiceRefInput {
     "The service resolvers. They can be used to identify services."
     resolvers: ServiceResolversInput
 }
-
 #
 # Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
@@ -4926,7 +5222,8 @@ input SoapServiceRefInput {
     resolutionPath: String!
     "Soap service resolvers"
     resolvers: SoapServiceResolverInput
-}#
+}
+#
 # Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
 
