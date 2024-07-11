@@ -1,7 +1,7 @@
 
 const VERSION = "v1.3.00 (dev)";
-const SCHEMA_VERSION = "v11.1.00";
-const SCHEMA_VERSIONS = [SCHEMA_VERSION, "v11.1.1"];
+const SCHEMA_VERSION = "v11.1.1";
+const SCHEMA_VERSIONS = [SCHEMA_VERSION, "v11.1.00"];
 
 const SUPPORTED_EXTENSIONS = ["multiline-text-diff", "policy-code-validator"];
 const SCHEMA_FEATURE_LIST = {

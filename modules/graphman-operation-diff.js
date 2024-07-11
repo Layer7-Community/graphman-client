@@ -15,6 +15,8 @@ module.exports = {
      * @param params.output output file name
      * @param params.output-report output report file name
      * @param params.options
+     * @param params.options.includeInserts flag to decide including entities from the includes section
+     * @param params.options.includeUpdates flag to decide including entities from the updates section
      * @param params.options.includeDeletes flag to decide including entities from the deletes section
      * NOTE: Use "@" as prefix to differentiate the gateway profile name from the bundle name.
      */
@@ -50,7 +52,7 @@ module.exports = {
     },
 
     initParams: function (params, config) {
-        params.options = Object.assign({includeDeletes: false}, params.options);
+        params.options = Object.assign({includeInserts: true, includeUpdates: true, includeDeletes: false}, params.options);
         return params;
     },
 
@@ -86,8 +88,12 @@ module.exports = {
         console.log();
         console.log("  --options.<name> <value>");
         console.log("    specify options as name-value pair(s) to customize the operation");
+        console.log("      .includeInserts true|false");
+        console.log("        decides whether to include entities from the inserts section.");
+        console.log("      .includeUpdates true|false");
+        console.log("        decides whether to include entities from the update section.");
         console.log("      .includeDeletes false|true");
-        console.log("        use this option to include entities from the deletes section.");
+        console.log("        decides whether to include entities from the deletes section.");
         console.log();
     }
 }
@@ -225,20 +231,20 @@ function makeEntityReadyForEqualityCheck(leftEntity, rightEntity) {
 }
 
 function diffBundle(report, bundle, options, verbose) {
-    butils.forEach(report.inserts, (key, entities, typeInfo) => {
+    if (options.includeInserts) butils.forEach(report.inserts, (key, entities, typeInfo) => {
         if (verbose) utils.info(`adding ${key}, category=inserts`);
         const array = butils.withArray(bundle, typeInfo);
         entities.forEach(item => {
-            utils.info(`  ${butils.entityName(item, typeInfo)}`);
+            if (verbose) utils.info(`  ${butils.entityName(item, typeInfo)}`);
             array.push(item);
         });
     });
 
-    butils.forEach(report.updates, (key, entities, typeInfo) => {
+    if (options.includeUpdates) butils.forEach(report.updates, (key, entities, typeInfo) => {
         if (verbose) utils.info(`adding ${key}, category=updates`);
         const array = butils.withArray(bundle, typeInfo);
         entities.forEach(item => {
-            utils.info(`  ${butils.entityName(item, typeInfo)}`);
+            if (verbose) utils.info(`  ${butils.entityName(item, typeInfo)}`);
             array.push(item);
         });
     });
@@ -248,7 +254,7 @@ function diffBundle(report, bundle, options, verbose) {
         bundle.properties = {mappings: {}};
         const array = butils.withArray(bundle.properties.mappings, typeInfo);
         entities.forEach(item => {
-            utils.info(`  ${butils.entityName(item, typeInfo)}`);
+            if (verbose) utils.info(`  ${butils.entityName(item, typeInfo)}`);
             array.push(butils.mappingInstruction('DELETE', item, typeInfo));
         });
     });
