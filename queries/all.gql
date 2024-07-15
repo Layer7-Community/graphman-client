@@ -1,12 +1,18 @@
-query all {
+query all($includePolicyRevisions: Boolean = false, $includeRoles: Boolean = false) {
     services {
         {{L7Service}}
+        policyRevisions @include (if: $includePolicyRevisions) {
+            {{PolicyRevision}}
+        }
     }
     encassConfigs {
         {{EncassConfig}}
     }
     policies {
         {{L7Policy}}
+        policyRevisions @include (if: $includePolicyRevisions) {
+            {{PolicyRevision}}
+        }
     }
     activeConnectors {
         {{ActiveConnector}}
@@ -37,6 +43,9 @@ query all {
     }
     internalUsers {
         {{InternalUser}}
+    }
+    genericEntities {
+        {{GenericEntity}}
     }
     jdbcConnections {
         {{JdbcConnection}}
@@ -77,6 +86,9 @@ query all {
     logSinks {
         {{LogSink}}
     }
+    auditConfigurations {
+        {{AuditConfiguration}}
+    }
     httpConfigurations {
         {{HttpConfiguration}}
     }
@@ -91,5 +103,8 @@ query all {
     }
     internalIdps {
         {{InternalIdp}}
+    }
+    roles @include (if: $includeRoles){
+        {{Role}}
     }
 }
