@@ -13,10 +13,12 @@ module.exports = {
 
         if (querySuffix === "full") {
             gql.variables.includeAllDependencies = true;
+            gql.variables.includePolicyRevisions = options.includePolicyRevisions;
             gql.options.full = true;
         }
 
         if (querySuffix === "summary") {
+            gql.variables.includePolicyRevisions = false;
             gql.options.summary = true;
         }
 

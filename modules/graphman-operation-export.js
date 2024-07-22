@@ -61,7 +61,8 @@ module.exports = {
         params.options = Object.assign({
             bundleDefaultAction: "NEW_OR_UPDATE",
             excludeDependencies: false,
-            excludeGoids: false
+            excludeGoids: false,
+            includePolicyRevisions: false
         }, config.options, params.options);
 
         params.options.mappings = utils.mappings({});
@@ -122,6 +123,8 @@ module.exports = {
         console.log("    specify options as name-value pair(s) to customize the operation");
         console.log("      .bundleDefaultAction <action>");
         console.log("        default mapping action at the bundle level.");
+        console.log("      .includePolicyRevisions false|true");
+        console.log("        use this option to include policy revisions for the exported service/policy entities.");
         console.log("      .excludeDependencies false|true");
         console.log("        use this option to exclude dependency entities from the exported bundled entities.");
         console.log("      .excludeGoids false|true");

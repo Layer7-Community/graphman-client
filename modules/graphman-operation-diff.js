@@ -129,6 +129,18 @@ function diffReport(leftBundle, rightBundle, report) {
         diffEntities(leftEntities, rightBundle[key], report, typeInfo, multiLineTextDiffExtension);
     });
 
+    butils.forEach(rightBundle, (key, rightEntities, typeInfo) => {
+        const leftEntities = leftBundle[key];
+        if (!leftEntities || leftEntities.length === 0) {
+            utils.info("inspecting " + key);
+            rightEntities.forEach(rightEntity => {
+                utils.info("  selecting " + butils.entityName(rightEntity, typeInfo) + ", category=deletes");
+                const deletes = butils.withArray(report.deletes, typeInfo);
+                deletes.push(rightEntity);
+            });
+        }
+    });
+
     return report;
 }
 
@@ -144,7 +156,7 @@ function diffEntities(leftEntities, rightEntities, report, typeInfo, multiLineTe
     // iterate through the left entities,
     // bucket it into diff-report, depending on the match in the right entities
     leftEntities.forEach(leftEntity => {
-        const rightEntity = rightEntities.find(x => butils.isEntityMatches(leftEntity, x, typeInfo));
+        const rightEntity = rightEntities ? rightEntities.find(x => butils.isEntityMatches(leftEntity, x, typeInfo)) : null;
         if (rightEntity == null) {
             utils.info("  selecting " + butils.entityName(leftEntity, typeInfo) + ", category=inserts");
             const inserts = butils.withArray(report.inserts, typeInfo);
@@ -197,7 +209,7 @@ function diffEntities(leftEntities, rightEntities, report, typeInfo, multiLineTe
 
     //Now, iterate through the right entities
     // find the un-matched ones w.r.t. left entities, and bucket them into diff-report
-    rightEntities.forEach(rightEntity => {
+    if (rightEntities) rightEntities.forEach(rightEntity => {
         if (!leftEntities.find(x => butils.isEntityMatches(x, rightEntity, typeInfo))) {
             utils.info("  selecting " + butils.entityName(rightEntity, typeInfo) + ", category=deletes");
             const deletes = butils.withArray(report.deletes, typeInfo);

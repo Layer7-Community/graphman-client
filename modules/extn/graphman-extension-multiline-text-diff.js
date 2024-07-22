@@ -12,7 +12,8 @@ module.exports = {
      */
     apply: function (input) {
         if (input.path.endsWith(".policy.xml") || input.path.endsWith(".policy.json") || input.path.endsWith(".policy.yaml")) {
-            input.diff = diffExtn.createTwoFilesPatch("target", "source", input.target, input.source);
+            input.diff = diffExtn.createTwoFilesPatch("target", "source", input.target, input.source,
+                undefined, undefined, {ignoreWhitespace: true, stripTrailingCr: true});
             input.diff = input.diff.split("\n");
         }
 

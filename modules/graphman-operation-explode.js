@@ -60,6 +60,8 @@ module.exports = {
         console.log("          - 0, default level where the individual entities will be exploded into separate files");
         console.log("          - 1, binary data (p12, pem, etc) associated with the entities will be exploded into separate files");
         console.log("          - 2, policy code will be exploded into separate files");
+        console.log("      .includePolicyRevisions false|true");
+        console.log("        use this option to include policy revisions for the exported service/policy entities.");
         console.log();
     }
 }
