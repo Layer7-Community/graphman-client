@@ -1,5 +1,4 @@
-query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = false) {
-    
+query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = false, $includePolicyRevision: Boolean = false, $includePolicyRevisions: Boolean = false) {
     servicesByFolderPath (folderPath: $folderPath) {
         {{L7Service:-policy}}
         policy {
@@ -7,6 +6,12 @@ query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = f
             allDependencies @include (if: $includeAllDependencies) {
                 {{PolicyDependency:-policyFragments,-ldaps,-fips,-fipUsers,-fipGroups}}
             }
+        }
+        policyRevision @include (if: $includePolicyRevision) {
+            {{PolicyRevision}}
+        }
+        policyRevisions @include (if: $includePolicyRevisions) {
+            {{PolicyRevision}}
         }
     }
 
@@ -22,6 +27,11 @@ query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = f
                 {{PolicyDependency:-policyFragments,-ldaps,-fips,-fipUsers,-fipGroups}}
             }
         }
+        policyRevision @include (if: $includePolicyRevision) {
+            {{PolicyRevision}}
+        }
+        policyRevisions @include (if: $includePolicyRevisions) {
+            {{PolicyRevision}}
+        }
     }
-	
 }

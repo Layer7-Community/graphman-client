@@ -1,6 +1,9 @@
-query all($includePolicyRevisions: Boolean = false, $includeRoles: Boolean = false) {
+query all($includePolicyRevision: Boolean = false, $includePolicyRevisions: Boolean = false, $includeRoles: Boolean = false) {
     services {
         {{L7Service}}
+        policyRevision @include (if: $includePolicyRevision) {
+            {{PolicyRevision}}
+        }
         policyRevisions @include (if: $includePolicyRevisions) {
             {{PolicyRevision}}
         }
@@ -10,6 +13,9 @@ query all($includePolicyRevisions: Boolean = false, $includeRoles: Boolean = fal
     }
     policies {
         {{L7Policy}}
+        policyRevision @include (if: $includePolicyRevision) {
+            {{PolicyRevision}}
+        }
         policyRevisions @include (if: $includePolicyRevisions) {
             {{PolicyRevision}}
         }
@@ -17,11 +23,17 @@ query all($includePolicyRevisions: Boolean = false, $includeRoles: Boolean = fal
     activeConnectors {
         {{ActiveConnector}}
     }
+    auditConfigurations {
+        {{AuditConfiguration}}
+    }
     cassandraConnections {
         {{CassandraConnection}}
     }
     clusterProperties {
         {{ClusterProperty}}
+    }
+    customKeyValues {
+        {{CustomKeyValue}}
     }
     dtds {
         {{Dtd}}
@@ -38,14 +50,20 @@ query all($includePolicyRevisions: Boolean = false, $includeRoles: Boolean = fal
     federatedUsers {
         {{FederatedUser}}
     }
+    genericEntities {
+        {{GenericEntity}}
+    }
+    httpConfigurations {
+        {{HttpConfiguration}}
+    }
+    internalIdps {
+        {{InternalIdp}}
+    }
     internalGroups {
         {{InternalGroup}}
     }
     internalUsers {
         {{InternalUser}}
-    }
-    genericEntities {
-        {{GenericEntity}}
     }
     jdbcConnections {
         {{JdbcConnection}}
@@ -62,6 +80,18 @@ query all($includePolicyRevisions: Boolean = false, $includeRoles: Boolean = fal
     listenPorts {
         {{ListenPort}}
     }
+    logSinks {
+        {{LogSink}}
+    }
+    policyBackedIdps {
+        {{PolicyBackedIdp}}
+    }
+    revocationCheckPolicies {
+        {{RevocationCheckPolicy}}
+    }
+    roles @include (if: $includeRoles){
+        {{Role}}
+    }
     scheduledTasks {
         {{ScheduledTask}}
     }
@@ -74,37 +104,13 @@ query all($includePolicyRevisions: Boolean = false, $includeRoles: Boolean = fal
     serverModuleFiles {
         {{ServerModuleFile}}
     }
-    smConfigs {
-        {{SMConfig}}
-    }
-    revocationCheckPolicies {
-        {{RevocationCheckPolicy}}
-    }
-    trustedCerts {
-        {{Certificate}}
-    }
-    logSinks {
-        {{LogSink}}
-    }
-    auditConfigurations {
-        {{AuditConfiguration}}
-    }
-    httpConfigurations {
-        {{HttpConfiguration}}
-    }
-    customKeyValues {
-        {{CustomKeyValue}}
-    }
     simpleLdapIdps {
         {{SimpleLdapIdp}}
     }
-    policyBackedIdps {
-        {{PolicyBackedIdp}}
+    smConfigs {
+        {{SMConfig}}
     }
-    internalIdps {
-        {{InternalIdp}}
-    }
-    roles @include (if: $includeRoles){
-        {{Role}}
+    trustedCerts {
+        {{Certificate}}
     }
 }

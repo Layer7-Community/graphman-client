@@ -1,4 +1,4 @@
-query encassByName ($name: String!, $policyName: String!, $includeAllDependencies: Boolean = false) {
+query encassByName ($name: String!, $policyName: String!, $includeAllDependencies: Boolean = false, $includePolicyRevision: Boolean = false, $includePolicyRevisions: Boolean = false) {
     encassConfigByName (name: $name) {
         {{EncassConfig}}
     }
@@ -9,6 +9,12 @@ query encassByName ($name: String!, $policyName: String!, $includeAllDependencie
             allDependencies @include (if: $includeAllDependencies) {
                 {{PolicyDependency:-policyFragments,-ldaps,-fips,-fipUsers,-fipGroups}}
             }
+        }
+        policyRevision @include (if: $includePolicyRevision) {
+            {{PolicyRevision}}
+        }
+        policyRevisions @include (if: $includePolicyRevisions) {
+            {{PolicyRevision}}
         }
     }
 }

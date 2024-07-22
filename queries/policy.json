@@ -1,6 +1,9 @@
 {
   "query": "{{policy.gql}}",
   "variables": {
-    "name": "?"
+    "name": "?",
+    "includeAllDependencies": false,
+    "includePolicyRevision": false,
+    "includePolicyRevisions": false
   }
 }

@@ -1,6 +1,9 @@
 {
   "query": "{{service.gql}}",
   "variables": {
-    "name": "?"
+    "resolutionPath": "?",
+    "includeAllDependencies": false,
+    "includePolicyRevision": false,
+    "includePolicyRevisions": false
   }
 }
