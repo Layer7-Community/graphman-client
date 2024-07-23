@@ -181,6 +181,8 @@ input AuditConfigurationInput {
     name: String!
     "Lookup Policy Name"
     lookupPolicyName: String
+    "The configuration checksum"
+    checksum: String
     "Sink Policy Name"
     sinkPolicyName: String
     "FTP Client Configuration"
@@ -223,7 +225,7 @@ input AuditFtpConfigurationInput {
     "Directory in FTP Server"
     directory: String
     "To verify server certification"
-    verifyServerCert: Boolean!
+    verifyServerCert: Boolean = false
     "Security Type"
     security: AuditFtpSecurityType!
     "Whether this Audit Configuration is enabled"
@@ -1003,7 +1005,7 @@ type GenericEntity {
     "Absolute entity class name of Generic Entity"
     entityClassName: String!
     "XML representation of underlying entity details"
-    valueXml: String!
+    valueXml: String
 }
 
 input GenericEntityInput {
