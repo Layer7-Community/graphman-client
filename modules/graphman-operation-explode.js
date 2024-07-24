@@ -60,10 +60,18 @@ module.exports = {
         console.log("          - 0, default level where the individual entities will be exploded into separate files");
         console.log("          - 1, binary data (p12, pem, etc) associated with the entities will be exploded into separate files");
         console.log("          - 2, policy code will be exploded into separate files");
-        console.log("      .includePolicyRevisions false|true");
-        console.log("        use this option to include policy revisions for the exported service/policy entities.");
         console.log();
     }
+}
+
+function explodeFile(path, filename, data) {
+    utils.writeFile(utils.path(path, filename), data);
+    return `{{${filename}}`;
+}
+
+function explodeFileBinary(path, filename, data) {
+    utils.writeFileBinary(utils.path(path, filename), data);
+    return `{{${filename}}`;
 }
 
 let type1Exploder = (function () {
@@ -85,12 +93,10 @@ let type1Exploder = (function () {
 
                 // make sure the key details exploded from one of the available (p12, pem)
                 if (entity.p12) {
-                    utils.writeFileBinary(`${outputDir}/${filename}.p12`, Buffer.from(entity.p12, 'base64'));
-                    entity.p12 = `{${filename}.p12}`;
+                    entity.p12 = explodeFileBinary(outputDir, filename + ".p12", Buffer.from(entity.p12, 'base64'));
                     delete entity.pem;
                 } else if (entity.pem) {
-                    utils.writeFile(`${outputDir}/${filename}.pem`, entity.pem);
-                    entity.pem = `{${filename}.pem}`;
+                    entity.pem = explodeFile(outputDir, filename + ".pem", entity.pem);
                 }
 
                 if (entity.certChain) {
@@ -99,8 +105,7 @@ let type1Exploder = (function () {
                         data += entity.certChain[index].trim();
                         data += "\r\n";
                     }
-                    utils.writeFile(`${outputDir}/${filename}.certchain.pem`, data);
-                    entity.certChain = `{${filename}.certchain.pem}`;
+                    entity.certChain = explodeFile(outputDir, filename + ".certchain.pem", data);
                 }
             }
         },
@@ -121,8 +126,7 @@ let type1Exploder = (function () {
                     let pemData = BEGIN_CERT_HEADER;
                     pemData += '\r\n' + entity.certBase64;
                     pemData += '\r\n' + END_CERT_HEADER;
-                    utils.writeFile(`${outputDir}/${filename}.pem`, pemData);
-                    entity.certBase64 = `{${filename}.pem}`;
+                    entity.certBase64 = explodeFile(outputDir, filename + ".pem", pemData);
                 }
             }
         },
@@ -138,29 +142,36 @@ let type1Exploder = (function () {
              */
             explode: function (outputDir, filename, entity, typeInfo, options) {
                 if (options.level < 2) return;
-                if (!entity.policy) return;
 
                 // make sure the policy details exploded from one of the available (xml, json, yaml, code)
-                if (entity.policy.xml) {
-                    utils.writeFile(`${outputDir}/${filename}.xml`, entity.policy.xml);
-                    entity.policy.xml = `{${filename}.xml}`;
-                    delete entity.policy.json;
-                    delete entity.policy.yaml;
-                    delete entity.policy.code;
-                } else if (entity.policy.json) {
-                    utils.writeFile(`${outputDir}/${filename}.cjson`, JSON.parse(entity.policy.json));
-                    entity.policy.json = `{${filename}.cjson}`;
-                    delete entity.policy.code;
-                    delete entity.policy.yaml;
-                } else if (entity.policy.code) {
-                    utils.writeFile(`${outputDir}/${filename}.cjson`, entity.policy.code);
-                    entity.policy.json = `{${filename}.cjson}`;
-                    delete entity.policy.code;
-                    delete entity.policy.yaml;
-                } else if (entity.policy.yaml) {
-                    utils.writeFile(`${outputDir}/${filename}.yaml`, entity.policy.yaml);
-                    entity.policy.yaml = `{${filename}.yaml}`;
-                    delete entity.policy.code;
+                if (entity.policy) {
+                    this.explodePolicy(outputDir, filename, entity.policy);
+                }
+
+                if (Array.isArray(entity.policyRevisions)) {
+                    entity.policyRevisions.forEach(item =>
+                        this.explodePolicy(outputDir, filename + "-revision-" + item.ordinal, item));
+                }
+            },
+
+            explodePolicy: function (outputDir, filename, policy) {
+                if (policy.xml) {
+                    policy.xml = explodeFile(outputDir, filename + ".xml", policy.xml);
+                    delete policy.json;
+                    delete policy.yaml;
+                    delete policy.code;
+                } else if (policy.json) {
+                    policy.json = explodeFile(outputDir, filename + ".cjson", JSON.parse(policy.json));
+                    delete policy.code;
+                    delete policy.yaml;
+                } else if (policy.code) {
+                    utils.writeFile(`${outputDir}/${filename}.cjson`, policy.code);
+                    policy.json = explodeFile(outputDir, filename + ".cjson", policy.code);
+                    delete policy.code;
+                    delete policy.yaml;
+                } else if (policy.yaml) {
+                    policy.yaml = explodeFile(outputDir, filename + ".yaml", policy.yaml);
+                    delete policy.code;
                 }
             }
         }

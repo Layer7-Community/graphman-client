@@ -6,7 +6,9 @@ module.exports = {
     generate: function (query, variables, options) {
         const [queryPrefix, querySuffix] = query.split(":");
         const queryFilename = utils.queryFile(queryPrefix + ".json", graphman.configuration().schemaVersion);
-        const gql = utils.existsFile(queryFilename) ? utils.readFile(queryFilename) : buildGraphQLQuery(queryPrefix, querySuffix);
+        const gql = utils.existsFile(queryFilename) ?
+            utils.readFile(queryFilename) :
+            buildGraphQLQuery(queryPrefix, buildQuerySuffix(querySuffix, options));
 
         gql.variables = Object.assign(gql.variables || {}, variables);
         gql.options = options || {};
@@ -44,6 +46,14 @@ module.exports = {
     }
 }
 
+function buildQuerySuffix(querySuffix, options) {
+    if (options.includePolicyRevisions) {
+        return querySuffix ? querySuffix + ",+policyRevisions" : "+policyRevisions";
+    }
+
+    return querySuffix;
+}
+
 /**
  * Builds simple list all query for known types
  * @param queryPrefix pluralMethod of a known type
@@ -75,10 +85,12 @@ function buildGraphQLQuery(queryPrefix, querySuffix) {
         fArgs = sArgs = "";
     }
 
+    const suffix = querySuffix ? ":" + querySuffix : "";
+
     return {
         query: `query ${queryPrefix}${fArgs} {\n` +
             `    ${queryPrefix}${sArgs} {\n` +
-            `        {{${typeInfo.typeName}}}\n` +
+            `        {{${typeInfo.typeName}${suffix}}}\n` +
             `    }\n` +
             `}\n`,
         args: qArgs

@@ -46,14 +46,14 @@ module.exports = {
 let type1Imploder = (function () {
     const subImploders = {
         "keys": {
-            apply: function (entity, typeDir) {
-                return implodeKey(entity, typeDir);
+            apply: function (entity, inputDir) {
+                return implodeKey(entity, inputDir);
             }
         },
 
         "trustedCerts": {
-            apply: function (entity, typeDir) {
-                return implodeTrustedCert(entity, typeDir);
+            apply: function (entity, inputDir) {
+                return implodeTrustedCert(entity, inputDir);
             }
         }
     };
@@ -90,14 +90,14 @@ let type1Imploder = (function () {
         }
     };
 
-    function readEntities(typeDir, pluralName, typeInfo, bundle) {
+    function readEntities(inputDir, pluralName, typeInfo, bundle) {
         const entities = butils.withArray(bundle, typeInfo);
-        utils.listDir(typeDir).forEach(item => {
+        utils.listDir(inputDir).forEach(item => {
             if (item.endsWith(".json")) {
                 utils.info(`  ${item}`);
-                const entity = utils.readFile(`${typeDir}/${item}`);
+                const entity = utils.readFile(`${inputDir}/${item}`);
                 const subImploder = subImploders[typeInfo.pluralName];
-                entities.push(subImploder ? subImploder.apply(entity, typeDir) : entity);
+                entities.push(subImploder ? subImploder.apply(entity, inputDir) : entity);
             }
         });
     }
@@ -125,71 +125,80 @@ let type1Imploder = (function () {
             }
 
             const entities = butils.withArray(bundle, typeInfo);
-            entities.push(implodePolicyCode(entity, path));
-        } else {
-            utils.warn("unknown file, " + utils.path(path, filename));
+            entities.push(implodeServiceOrPolicy(entity, path));
         }
     }
 
-    function implodePolicyCode(entity, typeDir) {
-        if (entity.policy) {
-            const xml = entity.policy.xml;
-            const json = entity.policy.json;
-            const yaml = entity.policy.yaml;
+    function isValueFileReferenced(data) {
+        return data && data.startsWith("{") && data.endsWith("}");
+    }
 
-            if (xml && xml.endsWith(".xml}")) {
-                const filename = xml.match(/{(.+)}/)[1];
-                entity.policy.xml = utils.readFile(`${typeDir}/${filename}`);
-            } else if (json && json.endsWith(".cjson}")) {
-                const filename = json.match(/{(.+)}/)[1];
-                entity.policy.json = JSON.stringify(JSON.parse(utils.readFile(`${typeDir}/${filename}`)), null, 0);
-            } else if (yaml && yaml.endsWith(".yaml}")) {
-                const filename = yaml.match(/{(.+)}/)[1];
-                entity.policy.yaml = utils.readFile(`${typeDir}/${filename}`);
-            }
+    function implodeFile(data, path) {
+        const filename = data.match(/{([^{}]+)}/)[1];
+        return utils.readFile(`${path}/${filename}`);
+    }
+
+    function implodeFileBinary(data, path) {
+        const filename = data.match(/{([^{}]+)}/)[1];
+        return utils.readFileBinary(`${path}/${filename}`);
+    }
+
+    function implodeServiceOrPolicy(entity, inputDir) {
+        if (entity.policy) {
+            implodePolicyCode(entity, entity.policy, inputDir);
+        }
+
+        if (Array.isArray(entity.policyRevisions)) {
+            entity.policyRevisions.forEach(item => implodePolicyCode(entity, item, inputDir));
         }
 
         return entity;
     }
 
-    function implodeKey(entity, typeDir) {
-        if (entity.p12 && entity.p12.endsWith(".p12}")) {
-            const filename = entity.p12.match(/{(.+)}/)[1];
-            entity.p12 = Buffer.from(utils.readFileBinary(`${typeDir}/${filename}`)).toString('base64');
+    function implodePolicyCode(entity, policy, inputDir) {
+        if (isValueFileReferenced(policy.xml)) {
+            policy.xml = implodeFile(policy.xml, inputDir);
+        } else if (isValueFileReferenced(policy.json)) {
+            policy.json = JSON.stringify(JSON.parse(implodeFile(policy.json, inputDir)), null, 0);
+        } else if (isValueFileReferenced(policy.yaml)) {
+            policy.yaml = implodeFile(policy.yaml, inputDir);
         }
 
-        if (entity.pem && entity.pem.endsWith(".pem}")) {
-            const filename = entity.pem.match(/{(.+)}/)[1];
-            entity.pem = utils.readFile(`${typeDir}/${filename}`);
+        return entity;
+    }
+
+    function implodeKey(entity, inputDir) {
+        if (isValueFileReferenced(entity.p12)) {
+            entity.p12 = Buffer.from(implodeFileBinary(entity.p12, inputDir)).toString('base64');
+        }
+
+        if (isValueFileReferenced(entity.pem)) {
+            entity.pem = implodeFile(entity.pem, inputDir);
         }
 
         const certChain = entity.certChain;
-        if (certChain && typeof certChain === 'string' && certChain.endsWith(".certchain.pem}")) {
-            const filename = certChain.match(/{(.+)}/)[1];
-            entity.certChain = readCertFile(`${typeDir}/${filename}`);
+        if (certChain && typeof certChain === 'string' && isValueFileReferenced(certChain)) {
+            entity.certChain = readCertFile(implodeFile(certChain, inputDir), true);
         }
 
         return entity;
     }
 
-    function implodeTrustedCert(entity, typeDir) {
-        if (entity.certBase64 && entity.certBase64.endsWith(".pem}")) {
-            const filename = entity.certBase64.match(/{(.+)}/)[1];
-            let data = readCertFile(`${typeDir}/${filename}`, false);
+    function implodeTrustedCert(entity, inputDir) {
+        if (isValueFileReferenced(entity.certBase64)) {
+            let data = readCertFile(implodeFile(entity.certBase64, inputDir), false);
             entity.certBase64 = data[0];
         }
 
         return entity;
     }
 
-    function readCertFile(path, includeHeader) {
-        const lines = utils.readFile(path).split(/\r?\n/);
+    function readCertFile(content, includeHeader) {
+        const lines = content.split(/\r?\n/);
         const certs = [];
         let data = null;
 
-        includeHeader = includeHeader !== undefined ? includeHeader : true;
-
-        for (var line of lines) {
+        for (const line of lines) {
             if (data == null) {
                 if (line.indexOf("-BEGIN CERTIFICATE-") !== -1) {
                     data = includeHeader ? line : "";
