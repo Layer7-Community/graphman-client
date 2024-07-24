@@ -53,7 +53,19 @@ let type1Imploder = (function () {
 
         "trustedCerts": {
             apply: function (entity, inputDir) {
-                return implodeTrustedCert(entity, inputDir);
+                return implodeEntityCert(entity, inputDir);
+            }
+        },
+
+        "internalUsers": {
+            apply: function (entity, inputDir) {
+                return implodeEntityCert(entity, inputDir);
+            }
+        },
+
+        "federatedUsers": {
+            apply: function (entity, inputDir) {
+                return implodeEntityCert(entity, inputDir);
             }
         }
     };
@@ -184,7 +196,7 @@ let type1Imploder = (function () {
         return entity;
     }
 
-    function implodeTrustedCert(entity, inputDir) {
+    function implodeEntityCert(entity, inputDir) {
         if (isValueFileReferenced(entity.certBase64)) {
             let data = readCertFile(implodeFile(entity.certBase64, inputDir), false);
             entity.certBase64 = data[0];

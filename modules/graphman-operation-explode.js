@@ -130,6 +130,27 @@ let type1Exploder = (function () {
                 }
             }
         },
+        {
+            /**
+             * Explodes user cert details
+             * @param outputDir output directory
+             * @param filename name of the file (without extension)
+             * @param entity user entity
+             * @param typeInfo type-information
+             * @param options explode options
+             */
+            explode: function (outputDir, filename, entity, typeInfo, options) {
+                if (options.level < 1) return;
+                if (typeInfo.pluralName !== "internalUsers" && typeInfo.pluralName !== "federatedUsers") return;
+
+                if (entity.certBase64) {
+                    let pemData = BEGIN_CERT_HEADER;
+                    pemData += '\r\n' + entity.certBase64;
+                    pemData += '\r\n' + END_CERT_HEADER;
+                    entity.certBase64 = explodeFile(outputDir, filename + ".pem", pemData);
+                }
+            }
+        },
 
         {
             /**
