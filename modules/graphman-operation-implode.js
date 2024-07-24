@@ -59,6 +59,10 @@ let type1Imploder = (function () {
 
         "internalUsers": {
             apply: function (entity, inputDir) {
+                if (isValueFileReferenced(entity.sshPublicKey)) {
+                    entity.sshPublicKey = implodeFile(entity.sshPublicKey, inputDir);
+                }
+
                 return implodeEntityCert(entity, inputDir);
             }
         },

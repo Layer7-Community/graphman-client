@@ -149,6 +149,10 @@ let type1Exploder = (function () {
                     pemData += '\r\n' + END_CERT_HEADER;
                     entity.certBase64 = explodeFile(outputDir, filename + ".pem", pemData);
                 }
+
+                if (entity.sshPublicKey) {
+                    entity.sshPublicKey = explodeFile(outputDir, filename + ".pub", entity.sshPublicKey);
+                }
             }
         },
 
