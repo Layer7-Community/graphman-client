@@ -8,6 +8,11 @@ const SCHEMA_FEATURE_LIST = {
     "v11.1.1": ["mappings", "mappings-source"]
 }
 
+const SUPPORTED_REQUEST_LEVEL_OPTIONS = [
+    "activate", "comment", "forceAdminPasswordReset", "forceDelete", "replaceAllMatchingCertChain",
+    "migratePolicyRevisions", "override.replaceRoleAssignees", "override.replaceUserGroupMemberships"
+];
+
 const utils = require("./graphman-utils");
 const hutils = require("./http-utils");
 const gqlschema = require("./graphql-schema");
@@ -132,9 +137,11 @@ module.exports = {
         };
 
         let queryString = "";
-        for (const key of ["activate", "comment", "forceAdminPasswordReset", "forceDelete", "replaceAllMatchingCertChain"]) {
+        for (const rkey of SUPPORTED_REQUEST_LEVEL_OPTIONS) {
+            const tokens = rkey.split('.');
+            const key = tokens.length <= 1 ? rkey : tokens[0] + tokens.slice(1).map(item => pascalCasing(item)).join();
             if (options.hasOwnProperty(key) && options[key] !== null) {
-                queryString += "&" + key + "=" + encodeURIComponent(options[key]);
+                queryString += "&" + rkey + "=" + encodeURIComponent(options[key]);
             }
         }
 
@@ -269,4 +276,12 @@ function makeGateways(gateways) {
 
     Object.entries(gateways).forEach(([key, item]) => item['name'] = key);
     return gateways;
+}
+
+function pascalCasing(text) {
+    if (text.length > 0) {
+        text = text.charAt(0).toUpperCase() + (text.length > 1 ? text.substring(1) : "");
+    }
+
+    return text;
 }

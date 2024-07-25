@@ -448,12 +448,16 @@ let exportSanitizer = function () {
                     if (obj[key].length) utils.info(`sanitizing ${key} to ${sanitizedKey}`);
                     obj[key].forEach(item => {
                         const entity = sanitizeEntity(item, result, typeInfo, options, dependencies, goidRequired);
-                        addEntity(entity, result, typeInfo, options, dependencies, sanitizedKey);
+                        if (entity) {
+                            addEntity(entity, result, typeInfo, options, dependencies, sanitizedKey);
+                        }
                     });
                 } else {
                     utils.info(`sanitizing ${key} to ${sanitizedKey}`);
                     const entity = sanitizeEntity(obj[key], result, typeInfo, options, dependencies, goidRequired);
-                    addEntity(entity, result, typeInfo, options, dependencies, sanitizedKey);
+                    if (entity) {
+                        addEntity(entity, result, typeInfo, options, dependencies, sanitizedKey);
+                    }
                 }
             } else if (key === 'properties') {
                 result[key] = obj[key];
@@ -492,6 +496,14 @@ let exportSanitizer = function () {
 
         if (obj.filePartName) delete obj.filePartName;
         if (!goidRequired) delete obj.goid;
+
+        // mutations over roles are partially supported; ignore roles with no assignees if required
+        if (typeInfo.pluralName === "roles" && options.excludeRolesIfRequired) {
+            if (Array.isArray(obj.userAssignees) && obj.userAssignees.length === 0 &&
+                Array.isArray(obj.groupAssignees) && obj.groupAssignees.length === 0) {
+                return null;
+            }
+        }
 
         return obj;
     }
