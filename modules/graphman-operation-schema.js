@@ -18,11 +18,11 @@ module.exports = {
         }
 
         const metadata = graphman.schemaMetadata();
-        utils.info("supported schema(s) [" + metadata.schemaVersion + "]");
-        utils.info("supported entity types:");
+        utils.info("schema " + metadata.schemaVersion);
+        utils.info("available entity types:");
         Object.keys(metadata.types).sort().forEach(key => {
             const typeInfo = metadata.types[key];
-            if (typeInfo.isL7Entity) utils.print(`         ${key} - ${typeInfo.pluralName}`);
+            if (typeInfo.isL7Entity) utils.print(`         ${key} - ${typeInfo.pluralName}` + (typeInfo.isL7Entity && typeInfo.deprecated ? " (deprecated)" : ""));
         });
         utils.print();
     },

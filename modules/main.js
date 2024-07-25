@@ -43,7 +43,7 @@ function main() {
                 operation.usage();
             } else {
                 const config = graphman.configuration();
-                utils.extensions(config.options.extensions || []);
+                utils.extensions(config.options.extensions);
                 operation.run(operation.initParams(params, config));
             }
         }

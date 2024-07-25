@@ -14,10 +14,8 @@ module.exports = {
         const config = graphman.configuration();
         utils.print("graphman client " + config.version);
         utils.print(`  schema ${config.schemaVersion}`);
-        utils.print(`  supported schema(s) [${config.supportedSchemaVersions.join(',')}]`);
-        utils.print(`  available schema(s) [${config.schemaVersions.join(',')}]`);
-        utils.print(`  supported extension(s) [${config.supportedExtensions.join(',')}]`);
-        utils.print(`  enabled extension(s) [${utils.extensions().join(',')}]`);
+        utils.print(`  supported schema(s) [${config.supportedSchemaVersions.join(', ')}]`);
+        utils.print(`  supported extension(s) [${config.supportedExtensions.join(', ')}]`);
         utils.print(`  running from ` + process.env.GRAPHMAN_HOME);
         utils.print();
     },

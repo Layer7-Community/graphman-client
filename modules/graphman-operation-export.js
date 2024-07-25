@@ -141,7 +141,7 @@ function onExportDataCallback(data, parts, params) {
         data = butils.sanitize(data.data, butils.EXPORT_USE, params.options);
         data = butils.removeDuplicates(data);
         butils.filter(data, params.filter);
-        data = utils.extension("post-export").apply(data, parts);
+        data = utils.extension("post-export").apply(data, params.options);
         utils.writeResult(params.output, butils.sort(data));
         if (parts) utils.writePartsResult(utils.parentPath(params.output), parts);
 

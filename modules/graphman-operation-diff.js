@@ -36,7 +36,7 @@ module.exports = {
                 const bundle = {};
                 const report = {inserts: {}, updates: {}, deletes: {}, diffs: {}, mappings: {goids: [], guids: []}};
 
-                diffReport(leftBundle, rightBundle, report);
+                diffReport(leftBundle, rightBundle, report, params.options);
                 diffBundle(report, bundle, params.options, false);
 
                 utils.writeResult(params.output, butils.sort(bundle));
@@ -124,12 +124,12 @@ function readBundleFromGateway(gateway) {
     });
 }
 
-function diffReport(leftBundle, rightBundle, report) {
+function diffReport(leftBundle, rightBundle, report, options) {
     const multiLineTextDiffExtension = utils.extension("multiline-text-diff");
 
     butils.forEach(leftBundle, (key, leftEntities, typeInfo) => {
         utils.info("inspecting " + key);
-        diffEntities(leftEntities, rightBundle[key], report, typeInfo, multiLineTextDiffExtension);
+        diffEntities(leftEntities, rightBundle[key], report, typeInfo, options, multiLineTextDiffExtension);
     });
 
     butils.forEach(rightBundle, (key, rightEntities, typeInfo) => {
@@ -153,9 +153,10 @@ function diffReport(leftBundle, rightBundle, report) {
  * @param rightEntities entities from right bundle
  * @param report diff report
  * @param typeInfo type-info about class
+ * @param options
  * @param multiLineTextDiffExtension multiline text deff extension
  */
-function diffEntities(leftEntities, rightEntities, report, typeInfo, multiLineTextDiffExtension) {
+function diffEntities(leftEntities, rightEntities, report, typeInfo, options, multiLineTextDiffExtension) {
     // iterate through the left entities,
     // bucket it into diff-report, depending on the match in the right entities
     leftEntities.forEach(leftEntity => {
@@ -174,7 +175,7 @@ function diffEntities(leftEntities, rightEntities, report, typeInfo, multiLineTe
                     path: item.path,
                     source: item.left,
                     target: item.right
-                }, typeInfo));
+                }, typeInfo.pluralName, options));
             });
 
             // restore policy code

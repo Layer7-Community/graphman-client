@@ -6,7 +6,7 @@ const VERSION = "v1.3.00 (dev)";
 const SCHEMA_VERSION = "v11.1.1";
 const SCHEMA_VERSIONS = [SCHEMA_VERSION, "v11.1.00"];
 
-const SUPPORTED_EXTENSIONS = ["multiline-text-diff", "policy-code-validator"];
+const SUPPORTED_EXTENSIONS = ["pre-request", "post-export", "pre-import", "multiline-text-diff", "policy-code-validator"];
 const SCHEMA_FEATURE_LIST = {
     "v11.1.1": ["mappings", "mappings-source"]
 }
@@ -253,7 +253,8 @@ function makeOptions(options) {
         "log": "info",
         "schema": SCHEMA_VERSION,
         "policyCodeFormat": "xml",
-        "keyFormat": "p12"
+        "keyFormat": "p12",
+        "extensions": ["pre-request", "post-export", "pre-import"]
     }, options);
 }
 

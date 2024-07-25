@@ -37,7 +37,7 @@ module.exports = {
         let inputBundle = butils.sanitize(utils.readFile(params.input), butils.IMPORT_USE, params.options);
         inputBundle = butils.removeDuplicates(inputBundle);
         butils.overrideMappings(inputBundle, params.options);
-        inputBundle = utils.extension("pre-import").apply(inputBundle);
+        inputBundle = utils.extension("pre-import").apply(inputBundle, params.options);
 
         const query = gql.generate(params.using, Object.assign(inputBundle, params.variables), params.options);
         const request = graphman.request(gateway, query.options);
