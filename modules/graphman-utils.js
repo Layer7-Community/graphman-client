@@ -1,3 +1,6 @@
+/*
+ * Copyright ©  2024. Broadcom Inc. and/or its subsidiaries. All Rights Reserved.
+ */
 
 const fs = require("fs");
 const putil = require("path");

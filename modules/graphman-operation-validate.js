@@ -1,3 +1,7 @@
+/*
+ * Copyright ©  2024. Broadcom Inc. and/or its subsidiaries. All Rights Reserved.
+ */
+
 const utils = require("./graphman-utils");
 const graphman = require("./graphman");
 const pcode = require("./policy-code");
