@@ -17,6 +17,6 @@
         "schema": null,
         "policyCodeFormat": "xml",
         "keyFormat": "p12",
-        "extensions": []
+        "extensions": ["pre-request", "post-export", "pre-import"]
     }
 }
