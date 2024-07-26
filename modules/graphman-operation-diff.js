@@ -7,6 +7,7 @@ const utils = require("./graphman-utils");
 const butils = require("./graphman-bundle");
 const gql = require("./graphql-query");
 const exporter = require("./graphman-operation-export");
+const renewer = require("./graphman-operation-renew");
 
 module.exports = {
     /**
@@ -21,6 +22,7 @@ module.exports = {
      * @param params.options.includeInserts flag to decide including entities from the includes section
      * @param params.options.includeUpdates flag to decide including entities from the updates section
      * @param params.options.includeDeletes flag to decide including entities from the deletes section
+     * @param params.options.renewEntities flag to decide renewing the entities from the respective gateways
      * NOTE: Use "@" as prefix to differentiate the gateway profile name from the bundle name.
      */
     run: function (params) {
@@ -33,14 +35,24 @@ module.exports = {
             Promise.all(bundles).then(results => {
                 const leftBundle = results[0];
                 const rightBundle = results[1];
-                const bundle = {};
                 const report = {inserts: {}, updates: {}, deletes: {}, diffs: {}, mappings: {goids: [], guids: []}};
 
                 diffReport(leftBundle, rightBundle, report, params.options);
-                diffBundle(report, bundle, params.options, false);
+                if (params.options.renewEntities) {
+                    diffRenewReport(leftBundle, rightBundle, report, params.options, renewedReport => {
+                        const bundle = {};
+                        diffBundle(renewedReport, bundle, params.options, false);
 
-                utils.writeResult(params.output, butils.sort(bundle));
-                if (params["output-report"]) utils.writeResult(params["output-report"], report);
+                        utils.writeResult(params.output, butils.sort(bundle));
+                        if (params["output-report"]) utils.writeResult(params["output-report"], sortReport(renewedReport));
+                    });
+                } else {
+                    const bundle = {};
+                    diffBundle(report, bundle, params.options, false);
+
+                    utils.writeResult(params.output, butils.sort(bundle));
+                    if (params["output-report"]) utils.writeResult(params["output-report"], sortReport(report));
+                }
             });
         } else if (params["input-report"]) {
             const report = utils.readFile(params["input-report"]);
@@ -48,7 +60,6 @@ module.exports = {
 
             diffBundle(report, bundle, params.options, true);
             utils.writeResult(params.output, butils.sort(bundle));
-            if (params["output-report"]) utils.writeResult(params["output-report"], report);
         } else {
             throw utils.newError("not enough input parameters")
         }
@@ -97,6 +108,8 @@ module.exports = {
         console.log("        decides whether to include entities from the update section.");
         console.log("      .includeDeletes false|true");
         console.log("        decides whether to include entities from the deletes section.");
+        console.log("      .renewEntities false|true");
+        console.log("        decides whether to renew entities from the respective gateways when specified.");
         console.log();
     }
 }
@@ -119,7 +132,18 @@ function readBundleFromGateway(gateway) {
         exporter.export(
             gateway,
             gql.generate("all:summary", {}, graphman.configuration().options),
-            data => resolve(data.data)
+            data => {
+                if (data.errors) {
+                    utils.warn(`errors detected while retrieving ${gateway.name} gateway configuration summary`, data.errors);
+                }
+
+                const bundle = data.data || {};
+                bundle.properties = bundle.properties || {};
+                bundle.properties.meta = bundle.properties.meta || {};
+                bundle.properties.meta.summary = true;
+                bundle.properties.meta.gateway = gateway.name;
+                resolve(bundle);
+            }
         );
     });
 }
@@ -145,6 +169,89 @@ function diffReport(leftBundle, rightBundle, report, options) {
     });
 
     return report;
+}
+
+function sortReport(report) {
+    report.inserts = butils.sort(report.inserts);
+    report.updates = butils.sort(report.updates);
+    report.deletes = butils.sort(report.deletes);
+    return report;
+}
+
+function diffRenewReport(leftBundle, rightBundle, report, options, callback) {
+    let promises = [];
+
+    if (leftBundle.properties.meta.summary) {
+        const gateway = graphman.gatewayConfiguration(leftBundle.properties.meta.gateway);
+
+        // renew inserts section using the source gateway
+        promises.push(new Promise(function (resolve) {
+            renewBundle(gateway, report.inserts, Object.assign(options, {scope: [], useGoids: true}), resolve);
+        }));
+
+        // renew updates section using the source gateway
+        promises.push(new Promise(function (resolve) {
+            renewBundle(gateway, report.updates, Object.assign(options, {scope: [], useGoids: true}), resolve);
+        }));
+    } else {
+        promises.push(new Promise(function (resolve) {
+            resolve(report.inserts);
+        }));
+
+        promises.push(new Promise(function (resolve) {
+            resolve(report.updates);
+        }));
+    }
+
+    if (rightBundle.properties.meta.summary) {
+        const gateway = graphman.gatewayConfiguration(rightBundle.properties.meta.gateway);
+
+        // renew updates section using the target gateway
+        promises.push(new Promise(function (resolve) {
+            renewBundle(gateway, report.updates, Object.assign(options, {scope: [], useGoids: false}), resolve);
+        }));
+    }
+
+    // generate report using the renewed details
+    Promise.all(promises).then(results => {
+        const renewedReport = {
+            inserts: results[0],
+            updates: results[1],
+            deletes: report.deletes,
+            diffs: {},
+            mappings: {goids: [], guids: []}
+        };
+
+        if (results.length <= 2) {
+            renewedReport.diffs = report.diffs;
+            renewedReport.mappings = report.mappings;
+            callback(renewedReport);
+        } else {
+            const multiLineTextDiffExtension = utils.extension("multiline-text-diff");
+            const leftUpdateBundle = results[1];
+            const rightUpdateBundle = results[2];
+
+            butils.forEach(leftUpdateBundle, (key, leftEntities, typeInfo) => {
+                utils.info("re-inspecting " + key);
+                diffEntities(leftEntities, rightUpdateBundle[key], renewedReport, typeInfo, options, multiLineTextDiffExtension);
+            });
+
+            callback(renewedReport);
+        }
+    });
+
+}
+
+function renewBundle(gateway, bundle, options, callback) {
+    if (!gateway.address) {
+        throw utils.newError(`${gateway.name} gateway details are missing`);
+    }
+
+    Promise.all(renewer.renew(gateway, bundle, options)).then(results => {
+        const renewedBundle = {};
+        results.forEach(item => Object.assign(renewedBundle, item));
+        callback(butils.sort(renewedBundle));
+    });
 }
 
 /**
