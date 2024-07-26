@@ -38,13 +38,19 @@
         "InternalGroup",
         "Ldap",
         "LdapIdp",
-        "Certificate"
+        "Certificate",
+        "PasswordPolicy",
+        "ServiceResolutionConfig"
     ],
 
     "singleQueryMethods": [
-        ["WebApiService", "webApiServiceByResolutionPath"],
+        ["HttpConfiguration", "httpConfigurationsByHost"],
+        ["Certificate", "trustedCertByThumbprint"],
         ["FederatedUser", "federatedUserByName"],
         ["FipUser", "fipUserByName"],
-        ["InternalIdp", "internalIdps"]
+        ["InternalIdp", "internalIdps"],
+        ["SoapService", "soapServiceByResolver"],
+        ["InternalSoapService", "internalSoapServiceByResolver"],
+        ["L7Service", "serviceByResolvers"]
     ]
 }

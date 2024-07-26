@@ -517,12 +517,8 @@ let exportSanitizer = function () {
 
         if (!instruction.action || !instruction.level || instruction.level === '0') return null;
 
-        if (graphman.supportsFeature("mappings-source")) {
-            const source = instruction["source"] = {};
-            typeInfo.identityFields.forEach(field => source[field] = obj[field]);
-        } else {
-            typeInfo.identityFields.forEach(field => instruction[field] = obj[field]);
-        }
+        let source = graphman.supportsFeature("mappings-source") ? (instruction["source"] = {}) : instruction;
+        typeInfo.identityFields.forEach(field => source[field] = obj[field]);
 
         if (dependencies) {
             if (options.excludeDependencies) {
@@ -581,9 +577,11 @@ let exportSanitizer = function () {
     function isDuplicateMatchingInstruction(list, ele, typeInfo) {
         for (const item of list) {
             let match = true;
+            let eleSource = ele.source ? ele.source : ele;
+            let itemSource = item.source ? item.source : item;
 
             for (const field of typeInfo.identityFields) {
-                if (ele[field] !== item[field]) {
+                if (eleSource[field] !== itemSource[field]) {
                     match = false;
                     break;
                 }

@@ -138,7 +138,6 @@ function buildGraphQLSubQueryFor(entity, typeInfo, suffix, queryArgs, options) {
         fieldInfo = graphman.queryFieldInfo(fieldMethod);
     }
 
-
     if (!fieldInfo) {
         throw new Error("missing field information: " + fieldMethod);
     }
@@ -149,6 +148,20 @@ function buildGraphQLSubQueryFor(entity, typeInfo, suffix, queryArgs, options) {
         addQueryArg(queryArgs, argInfo.name + suffix, argInfo.dataType);
         addFieldMethodArg(fieldArgs, argInfo.name, argInfo.name + suffix);
         variables[argInfo.name + suffix] = entity[argInfo.name];
+    }
+
+    if (!options.useGoids) {
+        if (typeInfo.pluralName === "soapServices" || typeInfo.pluralName === "internalSoapServices") {
+            // special-case: where argument name (resolver) is different from the field name (resolvers)
+            variables["resolver" + suffix] = entity["resolvers"];
+        } else if (typeInfo.pluralName === "services") {
+            if (entity.serviceType === "WEB_API" || entity.serviceType === "INTERNAL_WEB_API") {
+                // special-case: where argument value (resolvers) is missing from the entity
+                variables["resolvers" + suffix] = {
+                    "resolutionPath": entity.resolutionPath
+                };
+            }
+        }
     }
 
     const fieldArgsPrefix = fieldArgs.length > 0 ? "(" : "";
