@@ -102,6 +102,10 @@ module.exports = {
         console.log("      .useGoids false|true");
         console.log("        true to use goids to renew the entities.");
         console.log("        by default, entities will be renewed using their identity details.");
+        console.log("      .includePolicyRevisions false|true");
+        console.log("        use this option to include policy revisions for the exported service/policy entities.");
+        console.log("      .includeMultipartFields false|true");
+        console.log("        use this option to include multipart fields (filePartName) so that server module file will be fully exported.");
         console.log();
     }
 }

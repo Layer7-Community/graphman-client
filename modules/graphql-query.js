@@ -231,7 +231,7 @@ function expandGraphQLSubQueryUsingTypeInfo(gql, typeInfo, suffix) {
             if (gql.options.includePolicyRevisions && !includedFields.includes("policyRevisions")) {
                 includedFields.push("policyRevisions");
             }
-            if (gql.options.acceptMultipartResponse && !includedFields.includes("filePartName")) {
+            if (gql.options.includeMultipartFields && !includedFields.includes("filePartName")) {
                 includedFields.push("filePartName");
             }
         }
