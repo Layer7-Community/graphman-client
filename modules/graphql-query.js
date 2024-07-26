@@ -11,7 +11,7 @@ module.exports = {
         const queryFilename = utils.queryFile(queryPrefix + ".json", graphman.configuration().schemaVersion);
         const gql = utils.existsFile(queryFilename) ?
             utils.readFile(queryFilename) :
-            buildGraphQLQuery(queryPrefix, buildQuerySuffix(querySuffix, options));
+            buildGraphQLQuery(queryPrefix, querySuffix);
 
         gql.variables = Object.assign(gql.variables || {}, variables);
         gql.options = options || {};
@@ -47,14 +47,6 @@ module.exports = {
         gql.options = options || {};
         return expandGraphQLQuery(gql);
     }
-}
-
-function buildQuerySuffix(querySuffix, options) {
-    if (options.includePolicyRevisions) {
-        return querySuffix ? querySuffix + ",+policyRevisions" : "+policyRevisions";
-    }
-
-    return querySuffix;
 }
 
 /**
@@ -234,6 +226,15 @@ function expandGraphQLSubQueryUsingTypeInfo(gql, typeInfo, suffix) {
             else if (item.startsWith("+")) includedFields.push(item.substring(1));
             else includedFields.push(item);
         });
+
+        if (gql.options && (!suffix || suffix.length === 0)) {
+            if (gql.options.includePolicyRevisions && !includedFields.includes("policyRevisions")) {
+                includedFields.push("policyRevisions");
+            }
+            if (gql.options.acceptMultipartResponse && !includedFields.includes("filePartName")) {
+                includedFields.push("filePartName");
+            }
+        }
 
         typeInfo.fields.forEach(fieldInfo => { // include fields
             if ((!typeInfo.excludedFields.includes(fieldInfo.name) && !excludedFields.includes(fieldInfo.name) && !excludedFields.includes("*")) ||

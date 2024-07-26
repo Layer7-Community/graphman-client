@@ -68,6 +68,10 @@ module.exports = {
             includePolicyRevisions: false
         }, config.options, params.options);
 
+        if (params.variables.includePolicyRevisions === undefined) {
+            params.variables.includePolicyRevisions = params.options.includePolicyRevisions;
+        }
+
         params.options.mappings = utils.mappings({});
 
         // special post processing for encass query
