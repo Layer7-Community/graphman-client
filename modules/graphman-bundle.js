@@ -359,12 +359,7 @@ module.exports = {
                     eid += separator + fieldValue;
                 } else if (fieldName === 'resolvers') { // special case
                     if (fieldValue["baseUri"]) {
-                        eid += separator + fieldValue["baseUri"];
-                    }
-
-                    const soapActions = fieldValue["soapActions"];
-                    if (Array.isArray(soapActions) && soapActions.length) {
-                        eid += separator + soapActions.sort()[0];
+                        eid += separator + sanitizeBaseUri(fieldValue["baseUri"]);
                     }
                 }
             }
@@ -381,6 +376,11 @@ module.exports = {
         return Object.keys(fileSuffixes)
             .find(item => filename.endsWith(fileSuffixes[item] + ".json"));
     }
+}
+
+function sanitizeBaseUri(text) {
+    const index = text.indexOf("//");
+    return index !== -1 ? text.substring(index + 2) : text;
 }
 
 let exportSanitizer = function () {

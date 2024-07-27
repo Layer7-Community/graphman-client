@@ -153,7 +153,10 @@ let type1Imploder = (function () {
     }
 
     function implodeFile(data, path) {
-        const filename = data.match(/{([^{}]+)}/)[1];
+        let filename = data.startsWith("{{") && data.endsWith("}}") ?
+            data.substring(2, data.length - 2) :
+            data.substring(1, data.length - 1);
+
         return utils.readFile(`${path}/${filename}`);
     }
 
@@ -169,6 +172,18 @@ let type1Imploder = (function () {
 
         if (Array.isArray(entity.policyRevisions)) {
             entity.policyRevisions.forEach(item => implodePolicyCode(entity, item, inputDir));
+        }
+
+        if (isValueFileReferenced(entity.wsdl)) {
+            entity.wsdl = implodeFile(entity.wsdl, inputDir);
+        }
+
+        if (Array.isArray(entity.wsdlResources)) {
+            entity.wsdlResources.forEach(item => {
+                if (isValueFileReferenced(item.content)) {
+                    item.content = implodeFile(item.content, inputDir);
+                }
+            });
         }
 
         return entity;

@@ -69,12 +69,12 @@ module.exports = {
 
 function explodeFile(path, filename, data) {
     utils.writeFile(utils.path(path, filename), data);
-    return `{{${filename}}`;
+    return `{{${filename}}}`;
 }
 
 function explodeFileBinary(path, filename, data) {
     utils.writeFileBinary(utils.path(path, filename), data);
-    return `{{${filename}}`;
+    return `{{${filename}}}`;
 }
 
 let type1Exploder = (function () {
@@ -155,6 +155,28 @@ let type1Exploder = (function () {
 
                 if (entity.sshPublicKey) {
                     entity.sshPublicKey = explodeFile(outputDir, filename + ".pub", entity.sshPublicKey);
+                }
+            }
+        },
+
+        {
+            /**
+             * Explodes wsdl details
+             * @param outputDir output directory
+             * @param filename name of the file (without extension)
+             * @param entity any entity containing wsdl details (services)
+             * @param typeInfo type-information
+             * @param options explode options
+             */
+            explode: function (outputDir, filename, entity, typeInfo, options) {
+                if (options.level < 1) return;
+
+                if (entity.wsdl) {
+                    entity.wsdl = explodeFile(outputDir, filename + ".wsdl", entity.wsdl);
+                    if (Array.isArray(entity.wsdlResources)) {
+                        entity.wsdlResources.forEach((item, index) =>
+                            item.content = explodeFile(outputDir, `${filename}-wsdl-resource-${index + 1}.xml`, item.content));
+                    }
                 }
             }
         },
