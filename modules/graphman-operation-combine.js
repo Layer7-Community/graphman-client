@@ -9,20 +9,20 @@ module.exports = {
     /**
      * Combines two or more bundles into one.
      * @param params
-     * @param params.input two or more input bundle file(s)
+     * @param params.inputs two or more input bundle file(s)
      * @param params.output output bundle
      */
     run: function (params) {
-        if (!params.input) {
-            throw "--input parameters are missing";
+        if (!params.inputs) {
+            throw "--inputs parameters are missing";
         }
 
-        if (!Array.isArray(params.input) || params.input.length < 2) {
+        if (!Array.isArray(params.inputs) || params.inputs.length < 2) {
             throw "not enough input bundles, operation requires at least two bundles";
         }
 
         let bundle = {};
-        for (const item of params.input) {
+        for (const item of params.inputs) {
             utils.info("processing " + item);
             bundle = combine(bundle, utils.readFile(item));
         }
@@ -36,13 +36,13 @@ module.exports = {
     },
 
     usage: function () {
-        console.log("combine --input <input-file> --input <input-file> [--input <input-file>,...]");
+        console.log("combine --inputs <input-file> <input-file> ...");
         console.log("  [--output <output-file>]");
         console.log();
         console.log("Combines two or more bundles into one.");
         console.log("When similar entities are encountered, entities from the rightmost bundle takes the precedence.");
         console.log();
-        console.log("  --input <input-file>");
+        console.log("  --inputs <input-file> <input-file> ...");
         console.log("    specify two or more input bundles file(s)");
         console.log();
         console.log("  --output <output-file>");

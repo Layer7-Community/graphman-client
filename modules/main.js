@@ -7,7 +7,7 @@ const SUPPORTED_OPERATIONS = [
     "version", "describe",
     "export", "import",
     "explode", "implode",
-    "combine", "diff", "renew", "revise",
+    "combine", "slice", "diff", "renew", "revise",
     "mappings", "schema", "validate"
 ];
 const GRAPHMAN_OPERATION_MODULE_PREFIX = "./graphman-operation-";
@@ -50,13 +50,16 @@ function main() {
     } catch (e) {
         if (typeof e === 'string') {
             utils.error(e);
+            utils.print();
         } else if (typeof e === 'object' && e.name === 'GraphmanOperationError') {
             utils.error(e.message);
+            utils.print();
         } else {
             utils.error("error encountered while processing the graphman operation");
             utils.error(`  name: ${e.name}`);
             utils.error(`  message: ${e.message}`);
             console.log(e);
+            utils.print();
         }
     }
 }
