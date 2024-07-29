@@ -1,9 +1,11 @@
+/*
+ * Copyright ©  2024. Broadcom Inc. and/or its subsidiaries. All Rights Reserved.
+ */
 
 const utils = require("./graphman-utils");
 const butils = require("./graphman-bundle");
 const graphman = require("./graphman");
-const queryBuilder = require("./graphql-query-builder");
-const postExportExtension = utils.extension("graphman-post-bundle");
+const gql = require("./graphql-query");
 
 module.exports = {
     /**
@@ -23,7 +25,7 @@ module.exports = {
             throw utils.newError(`${gateway.name} gateway details are missing`);
         }
 
-        const query = queryBuilder.build(params.using, params.variables, params.options);
+        const query = gql.generate(params.using, params.variables, params.options);
         const startDate = Date.now();
 
         utils.fine("start time: " + startDate);
@@ -62,8 +64,13 @@ module.exports = {
         params.options = Object.assign({
             bundleDefaultAction: "NEW_OR_UPDATE",
             excludeDependencies: false,
-            excludeGoids: false
+            excludeGoids: false,
+            includePolicyRevisions: false
         }, config.options, params.options);
+
+        if (params.variables.includePolicyRevisions === undefined) {
+            params.variables.includePolicyRevisions = params.options.includePolicyRevisions;
+        }
 
         params.options.mappings = utils.mappings({});
 
@@ -123,6 +130,11 @@ module.exports = {
         console.log("    specify options as name-value pair(s) to customize the operation");
         console.log("      .bundleDefaultAction <action>");
         console.log("        default mapping action at the bundle level.");
+        console.log("      .includePolicyRevisions false|true");
+        console.log("        use this option to include policy revisions for the exported service/policy entities.");
+        console.log("      .includeMultipartFields false|true");
+        console.log("        use this option to include multipart fields (filePartName) so that server module file will be fully exported.");
+
         console.log("      .excludeDependencies false|true");
         console.log("        use this option to exclude dependency entities from the exported bundled entities.");
         console.log("      .excludeGoids false|true");
@@ -134,9 +146,9 @@ module.exports = {
 function onExportDataCallback(data, parts, params) {
     if (data.data) {
         data = butils.sanitize(data.data, butils.EXPORT_USE, params.options);
-        butils.removeDuplicates(data);
+        data = butils.removeDuplicates(data);
         butils.filter(data, params.filter);
-        postExportExtension.call(data, parts);
+        data = utils.extension("post-export").apply(data, params.options);
         utils.writeResult(params.output, butils.sort(data));
         if (parts) utils.writePartsResult(utils.parentPath(params.output), parts);
 

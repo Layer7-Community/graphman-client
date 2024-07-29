@@ -1,17 +1,17 @@
 query serviceByResolutionPath ($resolutionPath: String!, $includeAllDependencies: Boolean = false, $includePolicyRevision: Boolean = false, $includePolicyRevisions: Boolean = false) {
-    serviceByResolutionPath (resolutionPath: $resolutionPath) {
-        {{L7Service:-policy,policyRevision,policyRevisions}}
+    servicesByResolutionPath (resolutionPath: $resolutionPath) {
+        {{L7Service:-policy}}
          policy {
             xml
             allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency:-policyFragments,ldaps,fips,fipUsers,fipGroups}}
+                {{PolicyDependency:-policyFragments,-ldaps,-fips,-fipUsers,-fipGroups}}
             }
         }
         policyRevision @include (if: $includePolicyRevision) {
-            {{PolicyRevision:-json,yaml,code}}
+            {{PolicyRevision}}
         }
         policyRevisions @include (if: $includePolicyRevisions) {
-            {{PolicyRevision:-json,yaml,code}}
+            {{PolicyRevision}}
         }
     }
 }

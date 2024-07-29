@@ -1,0 +1,28 @@
+{
+    "clusterProperties": [
+        {
+            "goid": "4c2752779997ae0109fee535b212e21b",
+            "name": "greetings",
+            "checksum": "52c966172677c386a1ab81a84e3cb0486c7db1f4",
+            "description": "",
+            "hiddenProperty": false,
+            "value": "Hello, World!"
+        },
+        {
+            "goid": "90fad4db3a40b94ce88a9c4650d447fb",
+            "name": "some-cwp",
+            "checksum": "15efa8c44f1cca94bc4514d6ef90b7b5b01e5569",
+            "description": "some cluster property",
+            "hiddenProperty": false,
+            "value": "some-value"
+        },
+        {
+            "goid": "90fad4db3a40b94ce88a9c4650d447fd",
+            "name": "some-other-cwp",
+            "checksum": "cdc66fb93b8c97af467f0419526559b0f5dead30",
+            "description": "",
+            "hiddenProperty": false,
+            "value": "some-other-value"
+        }
+    ]
+}

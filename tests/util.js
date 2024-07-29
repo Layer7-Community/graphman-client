@@ -2,16 +2,18 @@
 const fs = require('fs');
 const cp = require('child_process');
 
-const metadata = JSON.parse(fs.readFileSync("schema/metadata-base.json"));
+const metadata = JSON.parse(fs.readFileSync("schema/v11.1.1/metadata.json"));
 let execFile = "graphman.bat";
 let wspace = "build/tests";
 
 metadata.typeInfoByBundleName = {};
 metadata.typeInfoByTypeName = {};
 
-metadata.typeInfos.forEach(item => {
-    metadata.typeInfoByBundleName[item.bundleName] = item;
-    metadata.typeInfoByTypeName[item.typeName.toLowerCase()] = item;
+Object.entries(metadata.types).forEach(([key, item]) => {
+    if (item.isL7Entity) {
+        metadata.typeInfoByBundleName[item.bundleName] = item;
+        metadata.typeInfoByTypeName[item.typeName.toLowerCase()] = item;
+    }
 });
 
 metadata.mutationMethod = function (bundleName, prefix) {

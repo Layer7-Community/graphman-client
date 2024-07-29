@@ -1,12 +1,17 @@
-query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = false) {
-    
+query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = false, $includePolicyRevision: Boolean = false, $includePolicyRevisions: Boolean = false) {
     servicesByFolderPath (folderPath: $folderPath) {
-        {{L7Service:-policy,policyRevision,policyRevisions}}
+        {{L7Service:-policy}}
         policy {
             xml
             allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency:-policyFragments,ldaps,fips,fipUsers,fipGroups}}
+                {{PolicyDependency:-policyFragments,-ldaps,-fips,-fipUsers,-fipGroups}}
             }
+        }
+        policyRevision @include (if: $includePolicyRevision) {
+            {{PolicyRevision}}
+        }
+        policyRevisions @include (if: $includePolicyRevisions) {
+            {{PolicyRevision}}
         }
     }
 
@@ -15,13 +20,18 @@ query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = f
     }
 
 	policiesByFolderPath (folderPath: $folderPath) {
-        {{L7Policy:-policy,policyRevision,policyRevisions}}
+        {{L7Policy:-policy}}
         policy {
             xml
             allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency:-policyFragments,ldaps,fips,fipUsers,fipGroups}}
+                {{PolicyDependency:-policyFragments,-ldaps,-fips,-fipUsers,-fipGroups}}
             }
         }
+        policyRevision @include (if: $includePolicyRevision) {
+            {{PolicyRevision}}
+        }
+        policyRevisions @include (if: $includePolicyRevisions) {
+            {{PolicyRevision}}
+        }
     }
-	
 }

@@ -1,6 +1,9 @@
 {
   "query": "{{folder.gql}}",
   "variables": {
-    "folderPath": "?"
+    "folderPath": "?",
+    "includeAllDependencies": false,
+    "includePolicyRevision": false,
+    "includePolicyRevisions": false
   }
 }

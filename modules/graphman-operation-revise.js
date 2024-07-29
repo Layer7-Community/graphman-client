@@ -1,3 +1,6 @@
+/*
+ * Copyright ©  2024. Broadcom Inc. and/or its subsidiaries. All Rights Reserved.
+ */
 
 const utils = require("./graphman-utils");
 const butils = require("./graphman-bundle");
@@ -20,7 +23,7 @@ module.exports = {
 
         if (params.options.normalize) {
             bundle = butils.sanitize(bundle, butils.IMPORT_USE, params.options);
-            butils.removeDuplicates(bundle);
+            bundle = butils.removeDuplicates(bundle);
         }
 
         this.revise(bundle, params.options);
@@ -28,14 +31,13 @@ module.exports = {
     },
 
     revise: function (bundle, options) {
-        bundle = reviseBundleForGoidsAndGuids(bundle);
         // remove properties section from the bundle temporarily
         const properties = bundle.properties;
         if (properties) delete bundle.properties;
 
         bundle = reviser.revise(bundle, options);
 
-        // restore the properties section so that it appears at the end
+        // restore properties section so that it appears at the end
         if (properties) bundle.properties = properties;
         return bundle;
     },
@@ -55,7 +57,6 @@ module.exports = {
         console.log("  [--options.<name> <value>,...]");
         console.log();
         console.log("Revises the input bundle as per the specified options.");
-        console.log("  supports revising the bundle as per the GOID and/or GUID mappings");
         console.log("  supports revising the bundle as per the schema changes");
         console.log();
         console.log("  --input <input-file>");
@@ -73,39 +74,3 @@ module.exports = {
         console.log("        use this option to exclude Goids from the bundled entities. This option is applicable only when normalize option is selected.");
     }
 }
-
-function reviseBundleForGoidsAndGuids (bundle) {
-    const goidMappings = bundle.goidMappings || [];
-    const guidMappings = bundle.guidMappings || [];
-    delete bundle.goidMappings;
-    delete bundle.guidMappings;
-
-    if (goidMappings.length > 0 || guidMappings.length > 0) {
-        Object.keys(bundle).filter(key => Array.isArray(bundle[key])).forEach(key => {
-            utils.info("inspecting " + key);
-            if (goidMappings.length) reviseEntities(bundle[key], goidMappings);
-            if (guidMappings.length) reviseEntities(bundle[key], guidMappings);
-        });
-    }
-
-    return bundle;
-}
-
-function reviseEntities(entities, mappings) {
-    entities.forEach(entity => {
-        if (entity.policy && entity.policy.xml) {
-            reviseEntity(entity, mappings);
-        }
-    });
-}
-
-function reviseEntity(entity, mappings) {
-    mappings.forEach(mapping => {
-        entity.policy.xml = entity.policy.xml.replaceAll(mapping.source, function (match) {
-            const name = butils.entityDisplayName(entity);
-            utils.info(`  revising ${name}, replacing ${mapping.source} with ${mapping.target}`);
-            return mapping.target;
-        });
-    });
-}
-

@@ -1,3 +1,7 @@
+/*
+ * Copyright ©  2024. Broadcom Inc. and/or its subsidiaries. All Rights Reserved.
+ */
+
 const utils = require("./graphman-utils");
 const graphman = require("./graphman");
 const pcode = require("./policy-code");
@@ -14,6 +18,7 @@ module.exports = {
         }
 
         const input = utils.readFile(params.input);
+        pcode.init();
         validateBundle(input);
     },
 
@@ -41,10 +46,10 @@ function validateBundle(bundle) {
  *
  * @param entities bundled entities
  * @param typeInfo entity type info
- * @param typeInfo.bundleName name of the entity type in plural form
+ * @param typeInfo.pluralName name of the entity type in plural form
  */
 function validateEntities(entities, typeInfo) {
-    utils.info("validating " + typeInfo.bundleName);
+    utils.info("validating " + typeInfo.pluralName);
     for (const entity of entities) {
         const statusRef = {errors: []};
         pcode.validate(entity, typeInfo, statusInfo => {
@@ -54,7 +59,7 @@ function validateEntities(entities, typeInfo) {
             }
         });
 
-        utils.info("  validating policy of " + entity.name + ": " + (statusRef.errors.length === 0 ? "ok" : "error(s)"));
+        utils.info("  validating " + entity.name + ": " + (statusRef.errors.length === 0 ? "ok" : "error(s)"));
         for (const error of statusRef.errors) utils.warn(error);
     }
 }

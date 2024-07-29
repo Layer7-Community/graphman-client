@@ -2,7 +2,7 @@ mutation applyBundle (
     $administrativeUserAccountProperties: [AdministrativeUserAccountPropertyInput!]!=[],
     $passwordPolicies: [PasswordPolicyInput!]!=[],
     $serviceResolutionConfigs:[ServiceResolutionConfigInput!]!=[]) {
-        setAdministrativeUserAccountProperties(input: $administrativeUserAccountProperties) {administrativeUserAccountProperties {goid} detailedStatus {status description}}
-        setPasswordPolicies(input: $passwordPolicies) {passwordPolicies {goid} detailedStatus {status description}}
-        setServiceResolutionConfigs(input: $serviceResolutionConfigs) {serviceResolutionConfigs {goid} detailedStatus {status description}}
+        setAdministrativeUserAccountProperties(input: $administrativeUserAccountProperties) {detailedStatus {status description source{name value} target{name value}}}
+        setPasswordPolicies(input: $passwordPolicies) {detailedStatus {status description source{name value} target{name value}}}
+        setServiceResolutionConfigs(input: $serviceResolutionConfigs) {detailedStatus {status description source{name value} target{name value}}}
 }

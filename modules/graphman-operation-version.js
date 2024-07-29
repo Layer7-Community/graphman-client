@@ -1,3 +1,6 @@
+/*
+ * Copyright ©  2024. Broadcom Inc. and/or its subsidiaries. All Rights Reserved.
+ */
 
 const graphman = require("./graphman");
 const utils = require("./graphman-utils");
@@ -10,8 +13,11 @@ module.exports = {
     run: function (params) {
         const config = graphman.configuration();
         utils.print("graphman client " + config.version);
-        utils.print(`  supported schema(s) [${config.schemaVersion}]`);
-        utils.print(`  running from ` + process.env.GRAPHMAN_HOME);
+        utils.print(`  schema ${config.schemaVersion}`);
+        utils.print(`  supported schema(s) [${config.supportedSchemaVersions.join(', ')}]`);
+        utils.print(`  supported extension(s) [${config.supportedExtensions.join(', ')}]`);
+        utils.print("  github: " + graphman.githubLink());
+        utils.print(`  running from ` + process.env.GRAPHMAN_HOME)
         utils.print();
     },
 

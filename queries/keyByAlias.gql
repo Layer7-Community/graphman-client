@@ -1,5 +1,0 @@
-query keyByAlias($alias: String!) {
-    keyByAlias(alias : $alias) {
-        {{Key:-pem}}
-    }
-}

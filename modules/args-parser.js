@@ -1,56 +1,95 @@
+/*
+ * Copyright ©  2024. Broadcom Inc. and/or its subsidiaries. All Rights Reserved.
+ */
+
+/**
+ * CLI argument parser
+ * @type {{parse: (function(*): boolean|*)}}
+ */
 module.exports = {
+    /**
+     * Parses the CLI arguments.
+     * Supports dot notation such that one or more arguments together results a complex object as an argument.
+     * Normalizes the values to matching data types (number, boolean, string).
+     * @param args
+     * @return {boolean|*}
+     */
     parse: function (args) {
         const params = {__unknowns:[]};
-        const argsWatcher = [];
+        let argName, argValue;
 
-        args.forEach(arg => {
+        for (let arg of args) {
             if (arg.startsWith("--")) {
-                arg = arg.substring(2);
-                var tokens = arg.split(".");
-                obj = params[tokens[0]];
-                if (!obj) obj = params[tokens[0]] = {};
-                argsWatcher.push([obj, tokens.length >= 2 ? tokens[1] : '__value', tokens]);
-            } else {
-                const argObj = argsWatcher.pop();
-                if (argObj) {
-                    if (argObj[2].length > 2) {
-                        buildArg(argObj, arg);
+                if (argName && argValue === undefined) {
+                    setParam(params, argName, true, true);
+                }
+
+                if (arg.length > 2) {
+                    argName = arg.substring(2);
+                    const sepIndex = argName.indexOf("=");
+                    if (sepIndex !== -1) {
+                        argValue = argName.substring(sepIndex + 1);
+                        argName = argName.substring(0, sepIndex);
+                        setParam(params, argName, argValue, true);
                     } else {
-                        var prop = argObj[0][argObj[1]];
-                        if (!prop) argObj[0][argObj[1]] = arg;
-                        else if (!Array.isArray(prop)) argObj[0][argObj[1]] = [prop, arg];
-                        else argObj[0][argObj[1]].push(arg);
+                        argValue = undefined;
                     }
-                } else params.__unknowns.push(arg);
+                }
+            } else if (argName) {
+                const overwrite = (argValue === undefined);
+                argValue = arg;
+                setParam(params, argName, argValue, overwrite);
             }
-        });
+        }
+
+        if (argName && argValue === undefined) {
+            setParam(params, argName, true, true);
+        }
 
         return normalize(params);
     }
 }
 
-function buildArg(argObj, value) {
-    var index = 1;
-    var obj = argObj[0];
-
-    while (index < argObj[2].length - 1) {
-        var tobj = obj[argObj[2][index]];
-        if (!tobj) tobj = obj[argObj[2][index]] = {};
-        obj = tobj;
-        index++;
+function setParam(params, ref, value, overwrite) {
+    const refTokens = ref.split(".");
+    let param = params[refTokens[0]];
+    if (!param) {
+        param = params[refTokens[0]] = {};
     }
 
-    var prop = obj[argObj[2][index]];
-    if (!prop) obj[argObj[2][index]] = value;
-    else if (!Array.isArray(prop)) obj[argObj[2][index]] = [prop, value];
-    else obj[argObj[2][index]].push(value);
+    let parentObjRef = null;
+    let objRef = param;
+
+    if (refTokens.length > 1) for (let i = 1; i < refTokens.length; i++) {
+        parentObjRef = objRef;
+        objRef = parentObjRef[refTokens[i]];
+        if (!objRef) {
+            objRef = parentObjRef[refTokens[i]] = {};
+        }
+    }
+
+    if (overwrite) {
+        objRef["__value"] = value;
+    } else {
+        let objRefValue = objRef["__value"];
+        if (objRefValue === undefined) {
+            objRef["__value"] = value;
+        } else {
+            if (!Array.isArray(objRefValue)) {
+                objRefValue = objRef["__value"] = [objRefValue];
+            }
+
+            objRefValue.push(value);
+        }
+    }
 }
 
 function normalize(obj) {
     if (typeof obj !== 'object') {
         if (obj === 'true') return true;
         if (obj === 'false') return false;
-        return obj;
+        const num = parseInt(obj);
+        return isNaN(num) ? obj : num;
     }
 
     Object.entries(obj).forEach(([key, value]) => {

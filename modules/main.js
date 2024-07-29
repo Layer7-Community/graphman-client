@@ -1,44 +1,69 @@
+/*
+ * Copyright ©  2024. Broadcom Inc. and/or its subsidiaries. All Rights Reserved.
+ */
 
 const GRAPHMAN_HOME = 'GRAPHMAN_HOME';
-const SUPPORTED_OPERATIONS = ["version", "export", "import", "explode", "implode", "combine", "diff", "renew", "revise", "mappings", "schema", "validate"];
+const SUPPORTED_OPERATIONS = [
+    "version", "describe",
+    "export", "import",
+    "explode", "implode",
+    "combine", "slice", "diff", "renew", "revise",
+    "mappings", "schema", "validate"
+];
 const GRAPHMAN_OPERATION_MODULE_PREFIX = "./graphman-operation-";
 const args = process.argv.slice(2);
 const op = args[0];
 const utils = require("./graphman-utils");
 const graphman = require("./graphman");
 
-try {
-    init();
+main();
 
-    const params = parse(args);
+/**
+ * Entry point
+ */
+function main() {
+    try {
+        init();
 
-    // initialize configuration and schema metadata
-    graphman.init(params);
+        const params = parse(args);
+        params.options = params.options || {};
 
-    if (!op) {
-        utils.error("operation is missing");
-        utils.print("  supported operations are [" + SUPPORTED_OPERATIONS + "]");
-        utils.print("  usage: <operation> <parameter>,...");
-        utils.print("  usage: <operation> --help");
-        utils.print();
-    } else {
-        let operation = findOperation(op);
-        if (params.help) {
-            operation.usage();
+        // initialize configuration and schema metadata
+        graphman.init(params);
+
+        if (!op) {
+            utils.error("operation is missing");
+            utils.print("  supported operations:");
+            SUPPORTED_OPERATIONS.forEach(item => utils.print("    " + item));
+            utils.print();
+            utils.print("  usage: <operation> <parameter>,...");
+            utils.print("  usage: <operation> --help");
+            utils.print("  github: " + graphman.githubLink());
+            utils.print();
         } else {
-            operation.run(operation.initParams(params, graphman.configuration()));
+            let operation = findOperation(op);
+            if (params.help) {
+                operation.usage();
+            } else {
+                const config = graphman.configuration();
+                utils.extensions(config.options.extensions);
+                operation.run(operation.initParams(params, config));
+            }
         }
-    }
-} catch (e) {
-    if (typeof e === 'string') {
-        utils.error(e);
-    } else if (typeof e === 'object' && e.name === 'GraphmanOperationError') {
-        utils.error(e.message);
-    } else {
-        utils.error("error encountered while processing the graphman operation");
-        utils.error(`  name: ${e.name}`);
-        utils.error(`  message: ${e.message}`);
-        console.log(e);
+    } catch (e) {
+        if (typeof e === 'string') {
+            utils.error(e);
+            utils.print();
+        } else if (typeof e === 'object' && e.name === 'GraphmanOperationError') {
+            utils.error(e.message);
+            utils.print();
+        } else {
+            utils.error("error encountered while processing the graphman operation");
+            utils.error(`  name: ${e.name}`);
+            utils.error(`  message: ${e.message}`);
+            console.log(e);
+            utils.print();
+        }
     }
 }
 

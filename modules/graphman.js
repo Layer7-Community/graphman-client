@@ -1,36 +1,67 @@
+/*
+ * Copyright ©  2024. Broadcom Inc. and/or its subsidiaries. All Rights Reserved.
+ */
 
 const VERSION = "v1.3.00 (dev)";
-const SCHEMA_VERSION = "v11.1.00";
+const SCHEMA_VERSION = "v11.1.1";
+const SCHEMA_VERSIONS = [SCHEMA_VERSION, "v11.1.00"];
+const GITHUB_LINK = "https://github.com/Layer7-Community/graphman-client";
+
+const SUPPORTED_EXTENSIONS = ["pre-request", "post-export", "pre-import", "multiline-text-diff", "policy-code-validator"];
+const SCHEMA_FEATURE_LIST = {
+    "v11.1.1": ["mappings", "mappings-source"]
+}
+
+const SUPPORTED_REQUEST_LEVEL_OPTIONS = [
+    "activate", "comment", "forceAdminPasswordReset", "forceDelete", "replaceAllMatchingCertChain",
+    "migratePolicyRevisions", "override.replaceRoleAssignees", "override.replaceUserGroupMemberships"
+];
 
 const utils = require("./graphman-utils");
 const hutils = require("./http-utils");
 const gqlschema = require("./graphql-schema");
 
-const PRE_REQUEST_EXTN = utils.extension("graphman-pre-request");
-const PRE_RESPONSE_EXTN = utils.extension("graphman-pre-response");
 const http = require("http");
 const https = require("https");
 
+/**
+ * Responsible to
+ * - load configuration and metadata
+ * - posts the query/mutation requests to the gateway's graphman service.
+ */
 module.exports = {
     loadedConfig: null,
     metadata: null,
 
     init: function (params) {
         const config = JSON.parse(utils.readFile(utils.home() + "/graphman.configuration"));
+
+        // override configured options using params if specified
         config.options = makeOptions(config.options || {});
+        Object.assign(config.options, params.options);
+
+        // set the client log level
         utils.logAt(config.options.log);
 
         config.gateways = makeGateways(config.gateways || {});
+
+        // override configured gateway details using params if specified
+        if (params.gateways) Object.keys(params.gateways).forEach(key => {
+            const gateway = params.gateways[key];
+            config.gateways[key] = config.gateways[key] || {};
+            Object.assign(config.gateways[key], gateway);
+        });
+
         config.defaultGateway = config.gateways['default'];
 
         config.version = VERSION;
         config.defaultSchemaVersion = SCHEMA_VERSION;
-        config.schemaVersion = params.schemaVersion || config.schemaVersion || SCHEMA_VERSION;
-        if (config.schemaVersion !== SCHEMA_VERSION && utils.schemaDir(config.schemaVersion) === utils.schemaDir()) {
-            utils.warn(`specified schema (${config.schemaVersion}) is missing, falling back to the default`);
-        }
+        config.supportedSchemaVersions = SCHEMA_VERSIONS;
+        config.supportedExtensions = SUPPORTED_EXTENSIONS;
+        config.schemaVersion = params.options.schema || config.options.schema || SCHEMA_VERSION;
+        config.schemaVersions = gqlschema.availableSchemas();
 
-        this.metadata = gqlschema.build(config.schemaVersion, false);
+        this.metadata = gqlschema.build(config.version, config.schemaVersion, false);
         this.loadedConfig = config;
     },
 
@@ -46,15 +77,48 @@ module.exports = {
         return this.metadata;
     },
 
+    queryFieldInfo: function (name) {
+        const queryInfo = this.metadata.types["Query"];
+        return queryInfo.fields.find(x => x.name === name);
+    },
+
+    queryFieldNamesByPattern: function (pattern) {
+        const queryInfo = this.metadata.types["Query"];
+        const regex = "^" + pattern.replaceAll("*", ".*") + "$";
+        return queryInfo.fields.filter(x => x.name.match(regex)).map(x => x.name);
+    },
+
+    typeInfoByTypeName: function (name) {
+        return this.metadata.types[name];
+    },
+
     typeInfoByPluralName: function (name) {
-        const typeName = this.metadata.pluralMethods[name];
-        return typeName ? this.metadata.types[typeName] : null;
+        return this.metadata.bundleTypes[name];
+    },
+
+    isPrimitiveField: function (fieldInfo) {
+        return !this.metadata.types[fieldInfo.dataType];
     },
 
     refreshSchemaMetadata: function () {
-        this.metadata = gqlschema.build(this.loadedConfig.schemaVersion, true);
+        this.metadata = gqlschema.build(this.loadedConfig.version, this.loadedConfig.schemaVersion, true);
     },
 
+    supportsFeature: function (featureName) {
+        const list = SCHEMA_FEATURE_LIST[this.loadedConfig.schemaVersion]||[];
+        return list.includes(featureName);
+    },
+
+    githubLink: function () {
+        return GITHUB_LINK;
+    },
+
+    /**
+     * Prepares the graphman request
+     * @param gateway target gateway
+     * @param options query parameters
+     * @return http request object
+     */
     request: function (gateway, options) {
         const url = new URL(gateway.address);
         const headers = {
@@ -81,9 +145,11 @@ module.exports = {
         };
 
         let queryString = "";
-        for (const key of ["activate", "comment", "forceAdminPasswordReset", "forceDelete", "replaceAllMatchingCertChain"]) {
-            if (options.hasOwnProperty(key)) {
-                queryString += "&" + key + "=" + encodeURIComponent(options[key]);
+        for (const rkey of SUPPORTED_REQUEST_LEVEL_OPTIONS) {
+            const tokens = rkey.split('.');
+            const key = tokens.length <= 1 ? rkey : tokens[0] + tokens.slice(1).map(item => pascalCasing(item)).join();
+            if (options.hasOwnProperty(key) && options[key] !== null) {
+                queryString += "&" + rkey + "=" + encodeURIComponent(options[key]);
             }
         }
 
@@ -98,15 +164,20 @@ module.exports = {
         } else if (gateway.username && gateway.password) {
             req.auth = gateway.username + ":" + gateway.password;
         } else {
-            throw new Error("Authentication details are missing. Please provide either basic authentication (username/password) or mTLS based authentication (keyFilename/certFilename)");
+            throw new Error("gateway credentials are missing, provide either basic authentication (username / password) or mTLS based authentication (keyFilename / certFilename)");
         }
 
         req.minVersion = req.maxVersion = gateway.tlsProtocol || "TLSv1.2";
         return req;
     },
 
+    /**
+     * Makes the http request to the gateway's graphman service
+     * @param options
+     * @param callback
+     */
     invoke: function (options, callback) {
-        PRE_REQUEST_EXTN.call(options);
+        options = utils.extension("pre-request").apply(options);
         const req = ((!options.protocol||options.protocol === 'https'||options.protocol === 'https:') ? https : http).request(options, function(response) {
             let respInfo = {initialized: false, chunks: []};
 
@@ -128,7 +199,6 @@ module.exports = {
                 if (respInfo.contentType.startsWith('application/json')) {
                     const jsonData = JSON.parse(data);
                     utils.debug("graphman http response", jsonData);
-                    PRE_RESPONSE_EXTN.call(jsonData);
                     callback(jsonData);
                 } else if (respInfo.contentType.startsWith('multipart/')) {
                     utils.debug("graphman http multipart response");
@@ -186,8 +256,10 @@ function getPartsFromRawRequest(options) {
 function makeOptions(options) {
     return Object.assign({
         "log": "info",
+        "schema": SCHEMA_VERSION,
         "policyCodeFormat": "xml",
-        "keyFormat": "p12"
+        "keyFormat": "p12",
+        "extensions": ["pre-request", "post-export", "pre-import"]
     }, options);
 }
 
@@ -213,4 +285,12 @@ function makeGateways(gateways) {
 
     Object.entries(gateways).forEach(([key, item]) => item['name'] = key);
     return gateways;
+}
+
+function pascalCasing(text) {
+    if (text.length > 0) {
+        text = text.charAt(0).toUpperCase() + (text.length > 1 ? text.substring(1) : "");
+    }
+
+    return text;
 }

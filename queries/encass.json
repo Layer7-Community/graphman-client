@@ -2,6 +2,9 @@
   "query": "{{encass.gql}}",
   "variables": {
     "name": "?",
-    "policyName": "?"
+    "policyName": "?",
+    "includeAllDependencies": false,
+    "includePolicyRevision": false,
+    "includePolicyRevisions": false
   }
 }

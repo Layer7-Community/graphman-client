@@ -1,25 +1,33 @@
+/*
+ * Copyright ©  2024. Broadcom Inc. and/or its subsidiaries. All Rights Reserved.
+ */
 
 const utils = require("./graphman-utils");
-const vRef = {validator: null};
+const graphman = require("./graphman");
+const vRef = {validator: null, schema: null};
 const knownAssertions = ["All", "OneOrMore", "Comment", "SetVariable", "Include", "Encapsulated", "HardcodedResponse"];
 
 module.exports = {
+    init: function() {
+        if (!vRef.validator && !vRef.schema) {
+            if (!vRef.schema) {
+                vRef.schema = utils.readFile(utils.policySchemaFile(graphman.configuration().schemaVersion));
+            }
+
+            vRef.validator = utils.extension("policy-code-validator").apply(vRef.schema);
+            if (vRef.validator === vRef.schema) {
+                vRef.validator = null;
+            }
+        }
+    },
+
     validate: function (entity, typeInfo, callback) {
-        buildValidatorIfRequired();
-        if (entity.policy) {
+        if (entity.policy && vRef.validator) {
             if (entity.policy.json) validatePolicyCode(JSON.parse(entity.policy.json), callback);
             else if (entity.policy.code) validatePolicyCode(entity.policy.code, callback);
         }
     }
 };
-
-function buildValidatorIfRequired() {
-    if (!vRef.validator) {
-        const Ajv2020 = require("ajv/dist/2020");
-        const ajv = new Ajv2020();
-        vRef.validator = ajv.compile(utils.readFile(utils.policySchemaFile()));
-    }
-}
 
 function validatePolicyCode(code, callback) {
     const children = code["All"];

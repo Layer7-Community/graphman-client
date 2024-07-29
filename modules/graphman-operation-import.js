@@ -1,9 +1,11 @@
+/*
+ * Copyright ©  2024. Broadcom Inc. and/or its subsidiaries. All Rights Reserved.
+ */
 
 const utils = require("./graphman-utils");
 const butils = require("./graphman-bundle");
 const graphman = require("./graphman");
-const queryBuilder = require("./graphql-query-builder");
-const preImportExtension = utils.extension("graphman-pre-bundle");
+const gql = require("./graphql-query");
 
 module.exports = {
     /**
@@ -32,13 +34,13 @@ module.exports = {
             return;
         }
 
-        const request = graphman.request(gateway, params.options);
-        const inputBundle = butils.sanitize(utils.readFile(params.input), butils.IMPORT_USE, params.options);
-        butils.removeDuplicates(inputBundle);
+        let inputBundle = butils.sanitize(utils.readFile(params.input), butils.IMPORT_USE, params.options);
+        inputBundle = butils.removeDuplicates(inputBundle);
         butils.overrideMappings(inputBundle, params.options);
-        preImportExtension.call(inputBundle);
+        inputBundle = utils.extension("pre-import").apply(inputBundle, params.options);
 
-        const query = queryBuilder.build(params.using, Object.assign(inputBundle, params.variables), params.options);
+        const query = gql.generate(params.using, Object.assign(inputBundle, params.variables), params.options);
+        const request = graphman.request(gateway, query.options);
         delete query.options;
         request.body = query;
 
@@ -62,7 +64,7 @@ module.exports = {
 
         params.options = Object.assign({
             comment: null,
-            bundleDefaultAction: "NEW_OR_UPDATE",
+            bundleDefaultAction: null,
             excludeGoids: false,
             forceDelete: false,
             forceAdminPasswordReset: false,
@@ -109,8 +111,6 @@ module.exports = {
         console.log();
         console.log("  --options.<name> <value>");
         console.log("    specify options as name-value pair(s) to customize the operation");
-        console.log("      .comment <some-text>");
-        console.log("        to leave the comment over the new policy revisions due to mutation");
         console.log("      .bundleDefaultAction <action>");
         console.log("        overrides the default mapping action at the bundle level.");
         console.log("      .mappings.action <action>");
@@ -119,12 +119,20 @@ module.exports = {
         console.log("        overrides the mapping action for the specified class of entities. This option can be repeatable.");
         console.log("      .excludeGoids false|true");
         console.log("        use this option to exclude GOIDs from the importing bundled entities.");
+        console.log("      .comment <some-text>");
+        console.log("        to leave the comment over the new policy revisions due to mutation");
         console.log("      .forceDelete false|true");
         console.log("        to force deleting the entities when required.");
         console.log("      .forceAdminPasswordReset false|true");
         console.log("        to force modifying the admin user's password.");
         console.log("      .replaceAllMatchingCertChain false|true");
         console.log("        to replace all matching cert chain for the keys when required.");
+        console.log("      .overrideReplaceRoleAssignees undefined|false|true");
+        console.log("        when specified, to override replaceRoleAssignees flag over the role entities.");
+        console.log("      .overrideReplaceUserGroupMemberships undefined|false|true");
+        console.log("        when specified, to override replaceMemberships flag over the user/group entities.");
+        console.log("      .migratePolicyRevisions false|true");
+        console.log("        to migrate the policies and services along with their revisions.");
         console.log();
         console.log("    NOTE:");
         console.log("      Use 'delete-bundle' standard mutation-based query for deleting the entities.");

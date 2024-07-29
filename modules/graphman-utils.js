@@ -1,3 +1,6 @@
+/*
+ * Copyright ©  2024. Broadcom Inc. and/or its subsidiaries. All Rights Reserved.
+ */
 
 const fs = require("fs");
 const putil = require("path");
@@ -15,6 +18,9 @@ const INFO_LEVEL = 2;
 const FINE_LEVEL = 3;
 const DEBUG_LEVEL = 10;
 let logLevel = INFO_LEVEL;
+
+const defaultExtn = {ref: {apply: function (input) {return input;}}};
+const extns = {};
 
 class GraphmanOperationError extends Error {
     constructor(message) {
@@ -57,13 +63,17 @@ module.exports = {
         return MODULES_DIR;
     },
 
+    schemasDir: function () {
+        return SCHEMA_DIR;
+    },
+
     schemaDir: function (schemaVersion) {
-        if (schemaVersion) {
-            const path = this.path(SCHEMA_DIR, schemaVersion);
-            return this.existsFile(path) ? path : SCHEMA_DIR;
+        const path = this.path(SCHEMA_DIR, schemaVersion);
+        if (!this.existsFile(path)) {
+            throw this.newError("schema directory is missing, path=" + path);
         }
 
-        return SCHEMA_DIR;
+        return path;
     },
 
     schemaMetadataBaseFile: function (schemaVersion) {
@@ -74,17 +84,18 @@ module.exports = {
         return this.path(this.schemaDir(schemaVersion), SCHEMA_METADATA_FILE);
     },
 
-    policySchemaFile: function () {
-      return this.path(SCHEMA_DIR, POLICY_SCHEMA_FILE)
+    policySchemaFile: function (schemaVersion) {
+      return this.path(this.schemaDir(schemaVersion), POLICY_SCHEMA_FILE)
     },
 
-    queriesDir: function (schemaVersion) {
-        if (schemaVersion) {
-            const path = this.path(QUERIES_DIR, schemaVersion);
-            return this.existsFile(path) ? path : QUERIES_DIR;
-        }
-
+    queriesDir: function () {
         return QUERIES_DIR;
+    },
+
+    queryFile: function (query, schemaVersion) {
+       const path = this.path(this.queriesDir(), schemaVersion, query);
+       if (this.existsFile(path)) return path;
+       return this.path(this.queriesDir(), query);
     },
 
     isDirectory: function (fd) {
@@ -226,8 +237,43 @@ module.exports = {
         return num.toString().padStart(places, '0');
     },
 
+    /**
+     * register the enabled extensions
+     * @param listOrItem one or more enabled extension names
+     */
+    extensions: function (listOrItem) {
+        if (Array.isArray(listOrItem)) {
+            listOrItem.forEach(item => extns[item] = {ref: null});
+        } else if (listOrItem) {
+            extns[listOrItem] = {ref: null};
+        }
+
+        return Object.keys(extns);
+    },
+
+    /**
+     * Load and get the extension
+     * @param ref extension name
+     * @returns {{apply: function(*): *}}
+     */
     extension: function (ref) {
-        return this.existsFile(MODULES_DIR + "/extn/" + ref + ".js") ? require("./extn/" + ref) : {call: function () {}};
+        let extn = extns[ref];
+        if (!extn) {
+            this.warn(ref + " graphman extension is not enabled, falling back to the default");
+            extn = defaultExtn;
+        }
+
+        if (!extn.ref) {
+            const filename = MODULES_DIR + "/extn/graphman-extension-" + ref + ".js";
+            if (this.existsFile(filename)) {
+                extn.ref = require("./extn/graphman-extension-" + ref);
+            } else {
+                this.warn(ref + ` graphman extension file (${filename}) is missing, falling back to the default`);
+                extn.ref = defaultExtn.ref;
+            }
+        }
+
+        return extn.ref;
     },
 
     mappings: function (actions) {

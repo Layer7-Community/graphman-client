@@ -1,48 +1,76 @@
+/*
+ * Copyright ©  2024. Broadcom Inc. and/or its subsidiaries. All Rights Reserved.
+ */
 
 const utils = require("./graphman-utils");
-const SCHEMA_METADATA = require("./graphman").schemaMetadata();
-const GOID_PLURAL_METHODS = ["fipUsers", "federatedUsers", "internalUsers", "fipGroups", "federatedGroups", "internalGroups", "ldaps", "ldapIdps", "fips", "federatedIdps", "trustedCerts"];
-const DEPRECATED_TYPES = [
-    "webApiServices", "soapServices", "internalWebApiServices", "internalSoapServices",
-    "policyFragments", "globalPolicies", "backgroundTaskPolicies",
-    "fips", "ldaps", "fipUsers", "fipGroups"
-];
+const graphman = require("./graphman");
+const metadata = require("./graphman").schemaMetadata();
+const fileSuffixes = {
+    policies: '.policy',
+    services: '.service',
+    policyFragments: '.policy',
+    webApiServices: '.webapi',
+    soapServices: '.soap',
+    internalWebApiServices: '.internal-webapi',
+    internalSoapServices: '.internal-soap',
+    globalPolicies: '.global',
+    backgroundTaskPolicies: '.bgpolicy'
+};
 
 module.exports = {
     EXPORT_USE: 'export',
     IMPORT_USE: 'import',
-    GOID_MAPPING_PLURAL_METHODS: GOID_PLURAL_METHODS,
-    ENTITY_TYPE_PLURAL_TAG_FRIENDLY_NAME: {
-        policies: 'policy',
-        services: 'service',
-        policyFragments: 'policy',
-        webApiServices: 'webapi',
-        soapServices: 'soap',
-        internalWebApiServices: 'internal-webapi',
-        internalSoapServices: 'internal-soap',
-        globalPolicies: 'global',
-        backgroundTaskPolicies: 'bgpolicy'
+
+    /**
+     * Recommended way to iterate through the bundled entities.
+     * Callback will be invoked for every class of entities in the bundle. They will be invoked with the key, entities and type-info as arguments
+     * @param bundle input bundle
+     * @param knownEntitiesCallback callback function for the known entities
+     * @param unknownEntitiesCallback callback function for the unknown entities
+     */
+    forEach: function (bundle, knownEntitiesCallback, unknownEntitiesCallback) {
+        Object.entries(bundle).forEach(([key, entities]) => {
+            const typeInfo = graphman.typeInfoByPluralName(key);
+            if (typeInfo) {
+                if (entities.length) knownEntitiesCallback(key, entities, typeInfo);
+            } else if (unknownEntitiesCallback) {
+                unknownEntitiesCallback(key, entities);
+            } else {
+                utils.warn("unknown entities, " + key);
+            }
+        });
     },
 
+    /**
+     * Sorts the bundle entities
+     * @param bundle bundle
+     * @returns sorted bundle
+     */
     sort: function (bundle) {
-        const comparator = (left, right) => {
-            const lname = this.entityName(left);
-            const rname = this.entityName(right);
+        const sorted = {};
 
-            if (lname < rname) return -1;
-            else if (lname > rname) return 1;
-            else return 0;
-        };
+        Object.keys(bundle)
+            .sort()
+            .filter(key => Array.isArray(bundle[key]))
+            .forEach(key => {
+                const typeInfo = graphman.typeInfoByPluralName(key);
+                if (typeInfo) {
+                    sorted[key] = bundle[key].sort((left, right) => {
+                        const lname = this.entityName(left, typeInfo);
+                        const rname = this.entityName(right, typeInfo);
 
-        if (Array.isArray(bundle)) {
-            bundle.sort(comparator);
-        } else {
-            Object.keys(bundle).filter(key => Array.isArray(bundle[key])).forEach(key => {
-                bundle[key].sort(comparator);
+                        if (lname < rname) return -1;
+                        else if (lname > rname) return 1;
+                        else return 0;
+                    });
+                } else {
+                    utils.warn("unknown entities, " + key);
+                    sorted[key] = bundle[key];
+                }
             });
-        }
 
-        return bundle;
+        sorted.properties = bundle.properties;
+        return sorted;
     },
 
     sanitize: function (bundle, use, options) {
@@ -58,16 +86,30 @@ module.exports = {
     },
 
     removeDuplicates: function (bundle) {
-        Object.keys(bundle).filter(key => Array.isArray(bundle[key])).forEach(key => {
-            const list = [];
-            bundle[key].forEach(item => {
-                if (!this.findMatchingEntity(list, item)) list.push(item);
+        const result = {};
+
+        this.forEach(bundle, (key, entities, typeInfo) => {
+            const list = this.withArray(result, typeInfo);
+            entities.forEach(item => {
+                const found = list.find(x => this.isEntityMatches(x, item, typeInfo));
+                if (!found) {
+                    list.push(item);
+                } else {
+                    utils.info("found duplicate entity, " + key + "." + this.entityName(item, typeInfo));
+                }
             });
-            bundle[key] = list;
-            if (bundle[key].length === 0) {
-                delete bundle[key];
-            }
+        }, (key, value) => {
+            result[key] = value;
         });
+
+        return result;
+    },
+
+    mappingInstruction: function (action, entity, typeInfo) {
+        return {
+            action: action,
+            source: this.toPartialEntity(entity, typeInfo)
+        };
     },
 
     overrideMappings: function (bundle, options) {
@@ -140,97 +182,214 @@ module.exports = {
         });
     },
 
-    findMatchingEntity: function (list, entity) {
-        for (var item of list) {
-            if (this.matchEntity(entity, item)) {
-                return item;
+    withArray: function (bundle, typeInfo) {
+        const entities = bundle[typeInfo.pluralName] || [];
+
+        if (entities.length === 0) {
+            bundle[typeInfo.pluralName] = entities;
+        }
+
+        return entities;
+    },
+
+    toPartialEntity: function (entity, typeInfo) {
+        const obj = {};
+        typeInfo.identityFields.forEach(field => obj[field] = entity[field]);
+        return obj;
+    },
+
+    isEntityMatches: function (left, right, typeInfo) {
+        if (typeInfo.identityFields.length === 1) {
+            const fieldName = typeInfo.identityFields[0];
+            return left[fieldName] === right[fieldName];
+        } else {
+            let looped = false;
+
+            for (const fieldName of typeInfo.identityFields) {
+                if (left[fieldName] !== undefined && right[fieldName] !== undefined) {
+                    looped = true;
+                    if (typeof left[fieldName] !== 'object') {
+                        if (left[fieldName] !== right[fieldName]) {
+                            return false;
+                        }
+                    } else if (!this.isObjectEquals(left[fieldName], right[fieldName])) {
+                        return false;
+                    }
+                }
             }
-        }
 
-        return null;
-    },
-
-    matchEntity: function (left, right) {
-        const idRef = this.entityIdRef(left);
-
-        if (!idRef) return false;
-        else if (idRef === 'resolvers') {
-            if (!matchSoapResolvers(left, right)) return false;
-        }
-        else if (left[idRef] !== right[idRef]) return false;
-
-        if (left.name && left.direction && left.providerType &&
-            (left.name !== right.name || left.direction !== right.direction || left.providerType !== right.providerType)) return false;
-
-        if (idRef !== 'name' && left.name && right.name && left.name !== right.name) return false;
-
-        return true;
-    },
-
-    entityIdRef: function (entity) {
-        if (entity.systemId) return 'systemId';
-        if (entity.thumbprintSha1) return 'thumbprintSha1';
-        if (entity.resolvers) return 'resolvers';
-        if (entity.resolutionPath) return 'resolutionPath';
-        if (entity.alias) return 'alias';
-        if (entity.tag) return 'tag';
-        if (entity.providerName) return 'providerName';
-        if (entity.login) return 'login';
-        if (entity.name) return 'name';
-
-        return null;
-    },
-
-    entityName: function (entity, attr) {
-        const idRef = this.entityIdRef(entity);
-        if (attr) attr.ref = idRef;
-
-        if (entity.providerType && entity.direction && entity.name) {
-            return entity.direction + "-" + entity.providerType + "-" + entity.name;
-        } else if (entity.providerName) {
-            return entity.providerName + "-" + entity.name;
-        } else if (entity.resolvers) {
-            const baseUri = entity.resolvers.baseUri ? "-" + entity.resolvers.baseUri : "";
-            const soapAction = Array.isArray(entity.resolvers.soapActions) && entity.resolvers.soapActions.length > 0 ? "-" + entity.resolvers.soapActions.sort()[0] : "";
-            return entity.resolvers.resolutionPath + baseUri + soapAction;
-        } else {
-            return idRef ? entity[idRef] :null;
+            return looped;
         }
     },
 
-    entityDisplayName: function (entity) {
-        const attr = {};
-        const entityName = this.entityName(entity, attr);
-
-        if (entity.name) {
-            return attr.ref !== 'name' ? entity.name + "-" + entityName : entityName;
-        } else {
-            return entityName;
-        }
-    }
-}
-
-function matchSoapResolvers(left, right) {
-    if (left.resolvers && right.resolvers) {
-        if (left.resolvers.baseUri && left.resolvers.baseUri !== right.resolvers.baseUri) {
+    isArrayEquals: function (left, right, fieldPath, callback) {
+        if (!Array.isArray(left) || !Array.isArray(right) || left.length !== right.length) {
+            if (callback) {
+                callback({
+                    path: fieldPath,
+                    left: left,
+                    right: right
+                });
+            }
             return false;
         }
 
-        if (Array.isArray(left.resolvers.soapActions) && Array.isArray(right.resolvers.soapActions)) {
-            if (left.resolvers.soapActions.length !== right.resolvers.soapActions.length) {
-                return false;
+        let equals = true;
+        for (let index = 0; index < left.length; index++) {
+            const leftItem = left[index];
+            if (typeof leftItem !== 'object') {
+                if (leftItem !== right[index]) {
+                    if (callback) {
+                        callback({
+                            path: fieldPath + "[" + index + "]",
+                            left: leftItem,
+                            right: right[index]
+                        });
+                        equals = false;
+                    } else {
+                        return false;
+                    }
+                }
+            } else {
+                if (!this.isObjectEquals(leftItem, right[index], fieldPath + "[" + index + "]", callback)) {
+                    if (callback) {
+                        equals = false;
+                    } else {
+                        return false;
+                    }
+                }
             }
+        }
 
-            for (var item of left.resolvers.soapActions) {
-                if (!right.resolvers.soapActions.includes(item)) {
+        return equals;
+    },
+
+    isObjectEquals: function (left, right, fieldPath, callback) {
+        if (Array.isArray(left)) {
+            return this.isArrayEquals(left, right, fieldPath, callback);
+        }
+
+        let equals = true;
+        for (const key of Object.keys(left)) {
+            const data = {
+                path: fieldPath + "." + key,
+                left: left[key],
+                right: right[key]
+            };
+
+            if (!right.hasOwnProperty(key)) { // is field itself missing?
+                if (callback) {
+                    data.right = null;
+                    callback(data);
+                    equals = false;
+                } else {
+                    return false;
+                }
+            } else if (left[key] == null) { // special case: field specified, but left is null
+                if (right[key] !== null) {
+                    if (callback) {
+                        callback(data);
+                        equals = false;
+                    } else {
+                        return false;
+                    }
+                }
+            } else if (right[key] == null) { // special case: field specified, but right is null
+                if (callback) {
+                    callback(data);
+                    equals = false;
+                } else {
+                    return false;
+                }
+            } else if (typeof left[key] !== typeof right[key]) { // are they differ by type?
+                if (callback) {
+                    callback(data);
+                    equals = false;
+                } else {
+                    return false;
+                }
+            } else if (typeof left[key] !== 'object') { // finally, are they differ by value?
+                if (left[key] !== right[key]) {
+                    if (callback) {
+                        callback(data);
+                        equals = false;
+                    } else {
+                        return false;
+                    }
+                }
+            } else {
+                if (!this.isObjectEquals(left[key], right[key], fieldPath + "." + key, callback)) {
+                    if (callback) {
+                        equals = false;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        // how about new fields from the right?
+        for (const key of Object.keys(right)) {
+            if (!left.hasOwnProperty(key)) {
+                if (callback) {
+                    callback({
+                        path: fieldPath ? fieldPath + "." + key : key,
+                        left: null,
+                        right: right[key]
+                    });
+                    equals = false;
+                } else {
                     return false;
                 }
             }
         }
 
-        return left.resolvers.resolutionPath === right.resolvers.resolutionPath;
+        return equals;
+    },
+
+    entityName: function (entity, typeInfo) {
+        if (typeInfo.identityFields.length === 1 && typeInfo.identityFields[0] === "name") {
+            return entity.name;
+        }
+
+        return entity.name ?
+            entity.name + "-[" + this.entityId(entity, typeInfo) + "]" :
+            this.entityId(entity, typeInfo);
+    },
+
+    entityId: function (entity, typeInfo) {
+        let eid = "";
+
+        for (const fieldName of typeInfo.identityFields) {
+            const separator = eid.length > 0 ? "-" : "";
+            const fieldValue = entity[fieldName];
+            if (fieldValue) {
+                if (typeof fieldValue !== 'object') {
+                    eid += separator + fieldValue;
+                } else if (fieldName === 'resolvers') { // special case
+                    if (fieldValue["baseUri"]) {
+                        eid += separator + sanitizeBaseUri(fieldValue["baseUri"]);
+                    }
+                }
+            }
+        }
+
+        return eid;
+    },
+
+    entityFileSuffixByPluralName: function (pluralName) {
+        return fileSuffixes[pluralName];
+    },
+
+    entityPluralNameByFile: function (filename) {
+        return Object.keys(fileSuffixes)
+            .find(item => filename.endsWith(fileSuffixes[item] + ".json"));
     }
-    return false;
+}
+
+function sanitizeBaseUri(text) {
+    const index = text.indexOf("//");
+    return index !== -1 ? text.substring(index + 2) : text;
 }
 
 let exportSanitizer = function () {
@@ -258,13 +417,13 @@ let exportSanitizer = function () {
     };
 
     function typeInfoFromVariableBundleName (key) {
-        let typeName = SCHEMA_METADATA.pluralMethods[key];
-        if (typeName) return SCHEMA_METADATA.types[typeName];
+        let typeInfo = metadata.bundleTypes[key];
+        if (typeInfo) return typeInfo;
 
-        const types = Object.values(SCHEMA_METADATA.types);
+        const types = Object.values(metadata.types);
 
-        for (var item of types) {
-            if (item.prefix && key.startsWith(item.prefix)) {
+        for (const item of types) {
+            if (item.isL7Entity && (key.startsWith(item.singularName) || key.startsWith(item.pluralName))) {
                 return item;
             }
         }
@@ -284,15 +443,16 @@ let exportSanitizer = function () {
     function sanitizeBundleInternal(obj, result, options, dependencies) {
         Object.keys(obj).forEach(key => {
             const typeInfo = typeInfoFromVariableBundleName(key);
-            const sanitizedKey = typeInfo ? typeInfo.pluralMethod : null;
-            const goidRequired = GOID_PLURAL_METHODS.includes(key) || (!options.excludeGoids);
+            const sanitizedKey = typeInfo ? typeInfo.pluralName : null;
 
             if (sanitizedKey) {
+                const goidRequired = typeInfo.goidRefEnabled || !options.excludeGoids;
+
                 if (!result[sanitizedKey]) result[sanitizedKey] = [];
                 if (!result.mappings[sanitizedKey]) result.mappings[sanitizedKey] = [];
                 if (!result.dependencyMappings[sanitizedKey]) result.dependencyMappings[sanitizedKey] = [];
 
-                if (DEPRECATED_TYPES.includes(sanitizedKey)) {
+                if (typeInfo.deprecated) {
                     utils.warn("found deprecated entity type: " + sanitizedKey + ", revise the query");
                 }
 
@@ -300,12 +460,16 @@ let exportSanitizer = function () {
                     if (obj[key].length) utils.info(`sanitizing ${key} to ${sanitizedKey}`);
                     obj[key].forEach(item => {
                         const entity = sanitizeEntity(item, result, typeInfo, options, dependencies, goidRequired);
-                        addEntity(entity, result, typeInfo, options, dependencies, sanitizedKey);
+                        if (entity) {
+                            addEntity(entity, result, typeInfo, options, dependencies, sanitizedKey);
+                        }
                     });
                 } else {
                     utils.info(`sanitizing ${key} to ${sanitizedKey}`);
                     const entity = sanitizeEntity(obj[key], result, typeInfo, options, dependencies, goidRequired);
-                    addEntity(entity, result, typeInfo, options, dependencies, sanitizedKey);
+                    if (entity) {
+                        addEntity(entity, result, typeInfo, options, dependencies, sanitizedKey);
+                    }
                 }
             } else if (key === 'properties') {
                 result[key] = obj[key];
@@ -317,7 +481,7 @@ let exportSanitizer = function () {
 
     function addEntity(entity, result, typeInfo, options, dependencies, sanitizedKey) {
         if (dependencies && options.excludeDependencies) {
-            utils.info(`excluding the dependency ${sanitizedKey} - ${entity[typeInfo.idField]}`);
+            utils.info(`excluding the dependency ${sanitizedKey} - ${this.entityName(entity, typeInfo)}`);
             if (entity.mappingInstruction) result.dependencyMappings[sanitizedKey].push(entity.mappingInstruction);
         } else {
             result[sanitizedKey].push(entity);
@@ -345,18 +509,25 @@ let exportSanitizer = function () {
         if (obj.filePartName) delete obj.filePartName;
         if (!goidRequired) delete obj.goid;
 
+        // mutations over roles are partially supported; ignore roles with no assignees if required
+        if (typeInfo.pluralName === "roles" && options.excludeRolesIfRequired) {
+            if (Array.isArray(obj.userAssignees) && obj.userAssignees.length === 0 &&
+                Array.isArray(obj.groupAssignees) && obj.groupAssignees.length === 0) {
+                return null;
+            }
+        }
+
         return obj;
     }
 
     function createMappingInstruction(obj, typeInfo, options, dependencies) {
-        typeInfo = SCHEMA_METADATA.bundleTypes[typeInfo.pluralMethod];
-        const actions = options.mappings[typeInfo.bundleName] || options.mappings['default'];
+        const actions = options.mappings[typeInfo.pluralName] || options.mappings['default'];
         const instruction = {action: actions.action, level: actions.level};
 
         if (!instruction.action || !instruction.level || instruction.level === '0') return null;
 
-        instruction[typeInfo.identityField] = obj[typeInfo.identityField];
-        typeInfo.identityFields.forEach(field => instruction[field] = obj[field]);
+        let source = graphman.supportsFeature("mappings-source") ? (instruction["source"] = {}) : instruction;
+        typeInfo.identityFields.forEach(field => source[field] = obj[field]);
 
         if (dependencies) {
             if (options.excludeDependencies) {
@@ -381,7 +552,7 @@ let exportSanitizer = function () {
 
             if (dependencyEntityMappings) {
                 dependencyEntityMappings.forEach(item => {
-                    if (!isDuplicateMatchingInstruction(entityMappings, item, SCHEMA_METADATA.bundleTypes[key])) {
+                    if (!isDuplicateMatchingInstruction(entityMappings, item, metadata.bundleTypes[key])) {
                         entityMappings.push(item);
                     }
                 });
@@ -406,22 +577,26 @@ let exportSanitizer = function () {
             let entityMappings = mappings[key];
             const list = [];
             entityMappings.forEach(item => {
-                if (!isDuplicateMatchingInstruction(list, item, SCHEMA_METADATA.bundleTypes[key])) list.push(item);
+                if (!isDuplicateMatchingInstruction(list, item, metadata.bundleTypes[key])) list.push(item);
             });
             mappings[key] = list;
         });
     }
 
     function isDuplicateMatchingInstruction(list, ele, typeInfo) {
-        for (var item of list) {
-            if (ele[typeInfo.identityField] === item[typeInfo.identityField]) {
-                if (typeInfo.identityFields.length === 0) return true;
+        for (const item of list) {
+            let match = true;
+            let eleSource = ele.source ? ele.source : ele;
+            let itemSource = item.source ? item.source : item;
 
-                for (var field of typeInfo.identityFields) {
-                    if (ele[field] !== item[field]) return false;
+            for (const field of typeInfo.identityFields) {
+                if (eleSource[field] !== itemSource[field]) {
+                    match = false;
+                    break;
                 }
-                return true;
             }
+
+            if (match) return true;
         }
 
         return false;
@@ -434,13 +609,18 @@ let importSanitizer = function () {
     return {
         sanitize: function (bundle, options) {
             Object.keys(bundle).forEach(key => {
-                const goidRequired = GOID_PLURAL_METHODS.includes(key);
-                const includeGoids = !options.excludeGoids;
+                const typeInfo = metadata.bundleTypes[key];
+
                 utils.info("inspecting " + key);
 
-                if (DEPRECATED_TYPES.includes(key)) {
+                if (!typeInfo) {
+                    utils.warn("found unknown entity type: " + key);
+                } else if (typeInfo.deprecated) {
                     utils.warn("found deprecated entity type: " + key + ", revise the bundle");
                 }
+
+                const goidRequired = typeInfo ? typeInfo.goidRefEnabled : false;
+                const includeGoids = !options.excludeGoids;
 
                 if (Array.isArray(bundle[key])) {
                     bundle[key].forEach(item => sanitizeEntity(item, key, goidRequired || includeGoids));

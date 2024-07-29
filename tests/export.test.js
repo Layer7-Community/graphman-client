@@ -1,10 +1,5 @@
 const util = require("./util");
-const {expectArray} = util;
 const {graphman} = util;
-const {metadata} = util;
-
-const standardBundleFile = "samples/standard-bundle.json";
-const standardBundle = util.readFileAsJson(standardBundleFile);
 
 test("export entities with unknown query", () => {
     const output = graphman("export",
@@ -15,8 +10,25 @@ test("export entities with unknown query", () => {
 
 test("export entities with unknown gateway profile", () => {
     const output = graphman("export",
-        "--using", "summary",
+        "--using", "all:summary",
         "--gateway", "unknown-gateway");
 
     expect(output.stdout).toEqual(expect.stringContaining("unknown-gateway gateway details are missing"));
+});
+
+test("try importing few cluster properties using default gateway profile", () => {
+    const output  = graphman("import",
+        "--input", "samples/cluster-properties.json");
+    expect(output.stdout).toEqual(expect.stringContaining("default gateway is not opted for mutations, ignoring the operation"));
+});
+
+test("export cluster properties using default gateway profile", () => {
+    const output = graphman("export",
+        "--using", "clusterProperties:summary");
+
+    expect(output["clusterProperties"]).toMatchObject(expect.arrayContaining([{
+        goid: expect.any(String),
+        name: "cluster.hostname",
+        checksum: expect.any(String)
+    }]));
 });

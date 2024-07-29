@@ -1,3 +1,6 @@
+/*
+ * Copyright ©  2024. Broadcom Inc. and/or its subsidiaries. All Rights Reserved.
+ */
 
 const utils = require("./graphman-utils");
 const butils = require("./graphman-bundle");
@@ -12,8 +15,8 @@ module.exports = {
             throw "--input parameter is missing";
         }
 
-        const inputBundle = utils.readFile(params.input);
-        butils.removeDuplicates(inputBundle);
+        let inputBundle = utils.readFile(params.input);
+        inputBundle = butils.removeDuplicates(inputBundle);
 
         const mappings = utils.mappings(params.mappings);
 

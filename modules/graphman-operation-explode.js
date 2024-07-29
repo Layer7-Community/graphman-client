@@ -1,3 +1,6 @@
+/*
+ * Copyright ©  2024. Broadcom Inc. and/or its subsidiaries. All Rights Reserved.
+ */
 
 const utils = require("./graphman-utils");
 const butils = require("./graphman-bundle");
@@ -64,177 +67,193 @@ module.exports = {
     }
 }
 
+function explodeFile(path, filename, data) {
+    utils.writeFile(utils.path(path, filename), data);
+    return `{{${filename}}}`;
+}
+
+function explodeFileBinary(path, filename, data) {
+    utils.writeFileBinary(utils.path(path, filename), data);
+    return `{{${filename}}}`;
+}
+
 let type1Exploder = (function () {
 	const BEGIN_CERT_HEADER = '-----BEGIN CERTIFICATE-----';
 	const END_CERT_HEADER = '-----END CERTIFICATE-----';
+    const subExploders = [
+        {
+            /**
+             * Explodes key details
+             * @param outputDir output directory
+             * @param filename name of the file (without extension)
+             * @param entity key entity
+             * @param typeInfo type-information
+             * @param options explode options
+             */
+            explode: function (outputDir, filename, entity, typeInfo, options) {
+                if (options.level < 1) return;
+                if (typeInfo.pluralName !== "keys") return;
+
+                // make sure the key details exploded from one of the available (p12, pem)
+                if (entity.p12) {
+                    entity.p12 = explodeFileBinary(outputDir, filename + ".p12", Buffer.from(entity.p12, 'base64'));
+                    delete entity.pem;
+                } else if (entity.pem) {
+                    entity.pem = explodeFile(outputDir, filename + ".pem", entity.pem);
+                }
+
+                if (entity.certChain) {
+                    let data = "";
+                    for (let index in entity.certChain) {
+                        data += entity.certChain[index].trim();
+                        data += "\r\n";
+                    }
+                    entity.certChain = explodeFile(outputDir, filename + ".certchain.pem", data);
+                }
+            }
+        },
+        {
+            /**
+             * Explodes trusted cert details
+             * @param outputDir output directory
+             * @param filename name of the file (without extension)
+             * @param entity trusted cert entity
+             * @param typeInfo type-information
+             * @param options explode options
+             */
+            explode: function (outputDir, filename, entity, typeInfo, options) {
+                if (options.level < 1) return;
+                if (typeInfo.pluralName !== "trustedCerts") return;
+
+                if (entity.certBase64) {
+                    let pemData = BEGIN_CERT_HEADER;
+                    pemData += '\r\n' + entity.certBase64;
+                    pemData += '\r\n' + END_CERT_HEADER;
+                    entity.certBase64 = explodeFile(outputDir, filename + ".pem", pemData);
+                }
+            }
+        },
+        {
+            /**
+             * Explodes user cert details
+             * @param outputDir output directory
+             * @param filename name of the file (without extension)
+             * @param entity user entity
+             * @param typeInfo type-information
+             * @param options explode options
+             */
+            explode: function (outputDir, filename, entity, typeInfo, options) {
+                if (options.level < 1) return;
+                if (typeInfo.pluralName !== "internalUsers" && typeInfo.pluralName !== "federatedUsers") return;
+
+                if (entity.certBase64) {
+                    let pemData = BEGIN_CERT_HEADER;
+                    pemData += '\r\n' + entity.certBase64;
+                    pemData += '\r\n' + END_CERT_HEADER;
+                    entity.certBase64 = explodeFile(outputDir, filename + ".pem", pemData);
+                }
+
+                if (entity.sshPublicKey) {
+                    entity.sshPublicKey = explodeFile(outputDir, filename + ".pub", entity.sshPublicKey);
+                }
+            }
+        },
+
+        {
+            /**
+             * Explodes wsdl details
+             * @param outputDir output directory
+             * @param filename name of the file (without extension)
+             * @param entity any entity containing wsdl details (services)
+             * @param typeInfo type-information
+             * @param options explode options
+             */
+            explode: function (outputDir, filename, entity, typeInfo, options) {
+                if (options.level < 1) return;
+
+                if (entity.wsdl) {
+                    entity.wsdl = explodeFile(outputDir, filename + ".wsdl", entity.wsdl);
+                    if (Array.isArray(entity.wsdlResources)) {
+                        entity.wsdlResources.forEach((item, index) =>
+                            item.content = explodeFile(outputDir, `${filename}-wsdl-resource-${index + 1}.xml`, item.content));
+                    }
+                }
+            }
+        },
+
+        {
+            /**
+             * Explodes policy details
+             * @param outputDir output directory
+             * @param filename name of the file (without extension)
+             * @param entity any entity containing policy details (services, policies)
+             * @param typeInfo type-information
+             * @param options explode options
+             */
+            explode: function (outputDir, filename, entity, typeInfo, options) {
+                if (options.level < 2) return;
+
+                // make sure the policy details exploded from one of the available (xml, json, yaml, code)
+                if (entity.policy) {
+                    this.explodePolicy(outputDir, filename, entity.policy);
+                }
+
+                if (Array.isArray(entity.policyRevisions)) {
+                    entity.policyRevisions.forEach(item =>
+                        this.explodePolicy(outputDir, filename + "-revision-" + item.ordinal, item));
+                }
+            },
+
+            explodePolicy: function (outputDir, filename, policy) {
+                if (policy.xml) {
+                    policy.xml = explodeFile(outputDir, filename + ".xml", policy.xml);
+                    delete policy.json;
+                    delete policy.yaml;
+                    delete policy.code;
+                } else if (policy.json) {
+                    policy.json = explodeFile(outputDir, filename + ".cjson", JSON.parse(policy.json));
+                    delete policy.code;
+                    delete policy.yaml;
+                } else if (policy.code) {
+                    utils.writeFile(`${outputDir}/${filename}.cjson`, policy.code);
+                    policy.json = explodeFile(outputDir, filename + ".cjson", policy.code);
+                    delete policy.code;
+                    delete policy.yaml;
+                } else if (policy.yaml) {
+                    policy.yaml = explodeFile(outputDir, filename + ".yaml", policy.yaml);
+                    delete policy.code;
+                }
+            }
+        }
+    ];
 	
     return {
         explode: function (bundle, outputDir, options) {
-            Object.entries(bundle).forEach(([key, entities]) => {
-                if (Array.isArray(entities) && entities.length) {
-                    utils.info(`exploding ${key}`);
-                    entities.forEach(item => writeEntity(outputDir, key, item, options));
-                } else if (key === "properties") {
-                    utils.info(`capturing ${key} to bundle-properties.json`);
-                    utils.writeFile(`${outputDir}/bundle-properties.json`, entities);
-                }
+            butils.forEach(bundle, (key, entities, typeInfo) => {
+                utils.info(`exploding ${key}`);
+                entities.forEach(item => writeEntity(outputDir, key, item, typeInfo, options));
             });
+
+            if (bundle.properties) {
+                utils.info(`capturing properties to bundle-properties.json`);
+                utils.writeFile(`${outputDir}/bundle-properties.json`, bundle.properties);
+            }
         }
     };
 
-    function writeEntity(dir, key, entity, options) {
-        let displayName = butils.entityDisplayName(entity);
+    function writeEntity(dir, key, entity, typeInfo, options) {
+        let displayName = butils.entityName(entity, typeInfo);
         if (!displayName) {
             displayName = entity.checksum || Date.now().toString(36) + Math.random().toString(36).substring(2);
             utils.warn("forced to use alternative entity display name for ", entity);
         }
 
-        let fileSuffix = butils.ENTITY_TYPE_PLURAL_TAG_FRIENDLY_NAME[key];
-        fileSuffix = fileSuffix ? "." + fileSuffix : "";
-        const filename = utils.safeName(displayName) + fileSuffix;
+        const fileSuffix = butils.entityFileSuffixByPluralName(key);
+        const filename = utils.safeName(displayName) + (fileSuffix ? fileSuffix : "");
         utils.info(`  ${displayName}`);
         const targetDir = entity.folderPath ? utils.safePath(dir, "tree", entity.folderPath) : utils.path(dir, key);
 
-        if (options.level >= 1 && key === "trustedCerts") {
-            if (entity.certBase64) {
-				let pemData = BEGIN_CERT_HEADER;
-				pemData += '\r\n' + entity.certBase64;
-				pemData += '\r\n' + END_CERT_HEADER;
-                utils.writeFile(`${targetDir}/${filename}.pem`, pemData);
-                entity.certBase64 = `{${filename}.pem}`;
-            }
-        }
-
-        if (options.level >= 1 && key === "keys") {
-            if (entity.p12) {
-                utils.writeFileBinary(`${targetDir}/${filename}.p12`, Buffer.from(entity.p12, 'base64'));
-                entity.p12 = `{${filename}.p12}`;
-            }
-
-            if (entity.pem) {
-                utils.writeFile(`${targetDir}/${filename}.pem`, entity.pem);
-                entity.pem = `{${filename}.pem}`;
-            }
-
-            if (entity.certChain) {
-                let data = "";
-                for (var index in entity.certChain) {
-                    data += entity.certChain[index].trim();
-                    data += "\r\n";
-                }
-                utils.writeFile(`${targetDir}/${filename}.certchain.pem`, data);
-                entity.certChain = `{${filename}.certchain.pem}`;
-            }
-        }
-
-        if (options.level >= 2 && entity.policy) {
-            if (entity.policy.xml) {
-                utils.writeFile(`${targetDir}/${filename}.xml`, entity.policy.xml);
-                entity.policy.xml = `{${filename}.xml}`;
-            }
-
-            if (entity.policy.json && !entity.policy.code) {
-                entity.policy.code = JSON.parse(entity.policy.json);
-                delete entity.policy.json;
-            }
-
-            if (entity.policy.yaml) {
-                utils.writeFile(`${targetDir}/${filename}.yaml`, entity.policy.yaml);
-                entity.policy.yaml = `{${filename}.yaml}`;
-            }
-        }
-
+        subExploders.forEach(item => item.explode(targetDir, filename, entity, typeInfo, options));
         utils.writeFile(`${targetDir}/${filename}.json`, entity);
-    }
-})();
-
-let type2Exploder = (function () {
-    return {
-        explode: function (bundle, dir) {
-            Object.entries(bundle).forEach(([key, entities]) => {
-                if (entities.length) {
-                    utils.info("exploding " + key);
-                    writeEntities(entities, key, dir);
-                }
-            });
-        }
-    };
-
-    function writeEntities(entities, pluralMethod, dir) {
-        if (pluralMethod === "policyFragments" || pluralMethod === "backgroundTaskPolicies" || pluralMethod === "globalPolicies") {
-            entities.forEach(entity => writePolicy(entity, dir));
-        } else if (pluralMethod === "webApiServices") {
-            entities.forEach(entity => writePolicy(entity, dir, "service-"));
-        } else if (pluralMethod === "soapServices") {
-            entities.forEach(entity => {
-                writePolicy(entity, dir, "service-");
-                writeSoapServiceWsdl(entity, dir);
-            });
-        } else if (pluralMethod === "trustedCerts") {
-            entities.forEach(entity => writeTrustedCert(entity, dir));
-        } else if (pluralMethod === "keys") {
-            entities.forEach(entity => writeKey(entity, dir));
-        }
-
-        if (entities.length) {
-            const filename = utils.path(dir, pluralMethod + ".json");
-            const existingEntities = utils.existsFile(filename) ? utils.readFile(filename) : [];
-
-            existingEntities.forEach(item => {
-                if (!butils.findMatchingEntity(entities, item)) {
-                    entities.push(item);
-                } else {
-                    utils.info("  overwriting " + butils.entityDisplayName(item));
-                }
-            });
-
-            utils.writeFile(filename, butils.sort(entities));
-        }
-    }
-
-    function writePolicy(entity, baseDir, prefix) {
-        let resolutionPath = entity.resolutionPath || (entity.resolvers ? entity.resolvers.resolutionPath : null);
-        let extraName = resolutionPath ? `-[${resolutionPath}]` : "";
-        let filepath = utils.safePath("policies", entity.folderPath);
-        let filename = utils.safeName((prefix || "") + entity.name + extraName + ".xml");
-
-        utils.info(`  writing to ${filepath + "/" + filename}`);
-        utils.writeFile(utils.path(baseDir, filepath, filename), entity.policy.xml);
-        entity.policy.xml = `{{${filepath + "/" + filename}}}`;
-    }
-
-    function writeSoapServiceWsdl(entity, baseDir) {
-        const filename = entity.policy.xml.substring(2, entity.policy.xml.length - 2 - ".xml".length) + ".wsdl";
-        utils.info(`  writing to ${filename}`);
-        utils.writeFile(utils.path(baseDir, filename), entity.wsdl);
-        entity.wsdl = `{{${filename}}}`;
-    }
-
-    function writeTrustedCert(entity, baseDir) {
-        let extraName = `-[${entity.thumbprintSha1}]`;
-        let filepath = utils.safePath("trustedCerts");
-        let filename = utils.safeName(entity.name + extraName + ".cert");
-
-        utils.info(`  writing to ${filepath + "/" + filename}`);
-        utils.writeFile(utils.path(baseDir, filepath, filename), entity.certBase64);
-        entity.certBase64 = `{{${filepath + "/" + filename}}}`;
-    }
-
-    function writeKey(entity, baseDir) {
-        let filepath = utils.safePath("keys");
-        let filename = utils.safeName(entity.alias + ".pfx");
-
-        utils.info(`  writing to ${filepath + "/" + filename}`);
-        utils.writeFile(utils.path(baseDir, filepath, filename), entity.p12);
-        entity.p12 = `{{${filepath + "/" + filename}}}`;
-
-        if (entity.certChain) {
-            entity.certChain.forEach((cert, index) => {
-                let filename2 = utils.safeName(`${entity.alias}-${utils.zeroPad(index + 1, 2)}.cert`);
-                utils.info(`  writing to ${filepath + "/" + filename2}`);
-                utils.writeFile(utils.path(baseDir, filepath, filename2), cert);
-                entity.certChain[index] = `{{${filepath + "/" + filename2}}}`;
-            });
-        }
     }
 })();

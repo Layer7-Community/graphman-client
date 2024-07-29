@@ -1,6 +1,10 @@
+/*
+ * Copyright ©  2024. Broadcom Inc. and/or its subsidiaries. All Rights Reserved.
+ */
 
 const utils = require("./graphman-utils");
 const butils = require("./graphman-bundle");
+const graphman = require("./graphman");
 
 module.exports = {
     /**
@@ -43,15 +47,56 @@ module.exports = {
 }
 
 let type1Imploder = (function () {
+    const subImploders = {
+        "keys": {
+            apply: function (entity, inputDir) {
+                return implodeKey(entity, inputDir);
+            }
+        },
+
+        "trustedCerts": {
+            apply: function (entity, inputDir) {
+                return implodeEntityCert(entity, inputDir);
+            }
+        },
+
+        "internalUsers": {
+            apply: function (entity, inputDir) {
+                if (isValueFileReferenced(entity.sshPublicKey)) {
+                    entity.sshPublicKey = implodeFile(entity.sshPublicKey, inputDir);
+                }
+
+                return implodeEntityCert(entity, inputDir);
+            }
+        },
+
+        "federatedUsers": {
+            apply: function (entity, inputDir) {
+                return implodeEntityCert(entity, inputDir);
+            }
+        }
+    };
+
     return {
         implode: function (inputDir) {
             const bundle = {};
 
+            if (!utils.existsFile(inputDir) || !utils.isDirectory(inputDir)) {
+                throw utils.newError(`directory does not exist or not a directory, ${inputDir}`);
+            }
+
             utils.listDir(inputDir).forEach(item => {
-                let subDir = inputDir + "/" + item;
+                const subDir = inputDir + "/" + item;
                 if (utils.isDirectory(subDir)) {
-                    utils.info("imploding " + item);
-                    readEntities(subDir, item, bundle);
+                    const typeInfo = graphman.typeInfoByPluralName(item);
+                    if (typeInfo) {
+                        utils.info("imploding " + item);
+                        readEntities(subDir, item, typeInfo, bundle);
+                    } else if (item === "tree") {
+                        readFolderableEntities(subDir, bundle);
+                    } else {
+                        utils.info("unknown entities, " + item);
+                    }
                 }
             });
 
@@ -64,45 +109,16 @@ let type1Imploder = (function () {
         }
     };
 
-    function readEntities(typeDir, type, bundle) {
-        if (type === 'tree') {
-            readFolderableEntities(typeDir, bundle);
-        } else {
-            if (!bundle[type]) bundle[type] = [];
-            utils.listDir(typeDir).forEach(item => {
-                if (item.endsWith(".json")) {
-                    utils.info(`  ${item}`);
-                    let entity = utils.readFile(`${typeDir}/${item}`);
-                    if (type === "keys") {
-                        if (entity.p12 && entity.p12.endsWith(".p12}")) {
-                            const filename = entity.p12.match(/{(.+)}/)[1];
-                            entity.p12 = Buffer.from(utils.readFileBinary(`${typeDir}/${filename}`)).toString('base64');
-                        }
-
-                        if (entity.pem && entity.pem.endsWith(".pem}")) {
-                            const filename = entity.pem.match(/{(.+)}/)[1];
-                            entity.pem = utils.readFile(`${typeDir}/${filename}`);
-                        }
-
-                        const certChain = entity.certChain;
-                        if (certChain && typeof certChain === 'string' && certChain.endsWith(".certchain.pem}")) {
-                            const filename = certChain.match(/{(.+)}/)[1];
-                            entity.certChain = readCertFile(`${typeDir}/${filename}`);
-                        }
-                    }
-
-                    if (type === "trustedCerts") {
-                        if (entity.certBase64 && entity.certBase64.endsWith(".pem}")) {
-                            const filename = entity.certBase64.match(/{(.+)}/)[1];
-                            let data = readCertFile(`${typeDir}/${filename}`, false);
-                            entity.certBase64 = data[0];
-                        }
-                    }
-
-                    bundle[type].push(entity);
-                }
-            });
-        }
+    function readEntities(inputDir, pluralName, typeInfo, bundle) {
+        const entities = butils.withArray(bundle, typeInfo);
+        utils.listDir(inputDir).forEach(item => {
+            if (item.endsWith(".json")) {
+                utils.info(`  ${item}`);
+                const entity = utils.readFile(`${inputDir}/${item}`);
+                const subImploder = subImploders[typeInfo.pluralName];
+                entities.push(subImploder ? subImploder.apply(entity, inputDir) : entity);
+            }
+        });
     }
 
     function readFolderableEntities(dir, bundle) {
@@ -115,46 +131,108 @@ let type1Imploder = (function () {
         });
     }
 
-    function readFolderableEntity(dir, filename, bundle) {
-        const ref = {visited: false};
-        Object.entries(butils.ENTITY_TYPE_PLURAL_TAG_FRIENDLY_NAME).forEach(([key, value]) => {
-            if (!ref.visited && filename.endsWith(`.${value}.json`)) {
-                ref.visited = true;
+    function readFolderableEntity(path, filename, bundle) {
+        const pluralName = butils.entityPluralNameByFile(filename);
+        let typeInfo = pluralName ? graphman.typeInfoByPluralName(pluralName) : null;
 
-                let entity = utils.readFile(`${dir}/${filename}`);
+        if (typeInfo) {
+            const entity = utils.readFile(`${path}/${filename}`);
 
-                if (value === "policy") {
-                    key = entity.policyType ? "policies" : "policyFragments";
-                }
-
-                if (!bundle[key]) bundle[key] = [];
-
-                if (entity.policy) {
-                    const xml = entity.policy.xml;
-                    if (xml && xml.endsWith(".xml}")) {
-                        const filename = xml.match(/{(.+)}/)[1];
-                        entity.policy.xml = utils.readFile(`${dir}/${filename}`);
-                    }
-
-                    const yaml = entity.policy.yaml;
-                    if (yaml && yaml.endsWith(".yaml}")) {
-                        const filename = yaml.match(/{(.+)}/)[1];
-                        entity.policy.yaml = utils.readFile(`${dir}/${filename}`);
-                    }
-                }
-                bundle[key].push(entity);
+            // for backward compatibility, check whether the entity is of type policy fragment
+            if (filename.endsWith(".policy.json") && !entity.policyType) {
+                typeInfo = graphman.typeInfoByPluralName("policyFragments");
             }
-        });
+
+            const entities = butils.withArray(bundle, typeInfo);
+            entities.push(implodeServiceOrPolicy(entity, path));
+        }
     }
 
-    function readCertFile(path, includeHeader) {
-        const lines = utils.readFile(path).split(/\r?\n/);
+    function isValueFileReferenced(data) {
+        return data && data.startsWith("{") && data.endsWith("}");
+    }
+
+    function implodeFile(data, path) {
+        let filename = data.startsWith("{{") && data.endsWith("}}") ?
+            data.substring(2, data.length - 2) :
+            data.substring(1, data.length - 1);
+
+        return utils.readFile(`${path}/${filename}`);
+    }
+
+    function implodeFileBinary(data, path) {
+        const filename = data.match(/{([^{}]+)}/)[1];
+        return utils.readFileBinary(`${path}/${filename}`);
+    }
+
+    function implodeServiceOrPolicy(entity, inputDir) {
+        if (entity.policy) {
+            implodePolicyCode(entity, entity.policy, inputDir);
+        }
+
+        if (Array.isArray(entity.policyRevisions)) {
+            entity.policyRevisions.forEach(item => implodePolicyCode(entity, item, inputDir));
+        }
+
+        if (isValueFileReferenced(entity.wsdl)) {
+            entity.wsdl = implodeFile(entity.wsdl, inputDir);
+        }
+
+        if (Array.isArray(entity.wsdlResources)) {
+            entity.wsdlResources.forEach(item => {
+                if (isValueFileReferenced(item.content)) {
+                    item.content = implodeFile(item.content, inputDir);
+                }
+            });
+        }
+
+        return entity;
+    }
+
+    function implodePolicyCode(entity, policy, inputDir) {
+        if (isValueFileReferenced(policy.xml)) {
+            policy.xml = implodeFile(policy.xml, inputDir);
+        } else if (isValueFileReferenced(policy.json)) {
+            policy.json = JSON.stringify(JSON.parse(implodeFile(policy.json, inputDir)), null, 0);
+        } else if (isValueFileReferenced(policy.yaml)) {
+            policy.yaml = implodeFile(policy.yaml, inputDir);
+        }
+
+        return entity;
+    }
+
+    function implodeKey(entity, inputDir) {
+        if (isValueFileReferenced(entity.p12)) {
+            entity.p12 = Buffer.from(implodeFileBinary(entity.p12, inputDir)).toString('base64');
+        }
+
+        if (isValueFileReferenced(entity.pem)) {
+            entity.pem = implodeFile(entity.pem, inputDir);
+        }
+
+        const certChain = entity.certChain;
+        if (certChain && typeof certChain === 'string' && isValueFileReferenced(certChain)) {
+            entity.certChain = readCertFile(implodeFile(certChain, inputDir), true);
+        }
+
+        return entity;
+    }
+
+    function implodeEntityCert(entity, inputDir) {
+        if (isValueFileReferenced(entity.certBase64)) {
+            let data = readCertFile(implodeFile(entity.certBase64, inputDir), false);
+            entity.certBase64 = data[0];
+        }
+
+        return entity;
+    }
+
+    function readCertFile(content, includeHeader) {
+        const lines = content.split(/\r?\n/);
         const certs = [];
         let data = null;
 
-        includeHeader = includeHeader !== undefined ? includeHeader : true;
-
-        for (var line of lines) {
+        for (const line of lines) {
             if (data == null) {
                 if (line.indexOf("-BEGIN CERTIFICATE-") !== -1) {
                     data = includeHeader ? line : "";
@@ -171,100 +249,5 @@ let type1Imploder = (function () {
         }
 
         return certs;
-    }
-})();
-
-let type2Imploder = (function () {
-    return {
-        implode: function (inputDir) {
-            const bundle = {};
-
-            utils.listDir(inputDir).forEach(item => {
-                if (item.endsWith(".json")) {
-                    const key = item.substring(0, item.length - ".json".length);
-                    utils.info("imploding " + key);
-                    bundle[key] = utils.readFile(utils.path(inputDir, item));
-                    readEntities(inputDir, bundle[key], key);
-                    if (!bundle[key].length) delete bundle[key];
-                }
-            });
-
-            return bundle;
-        }
-    };
-
-    function readEntities(dir, entities, pluralMethod) {
-        if (pluralMethod === "policyFragments" || pluralMethod === "backgroundTaskPolicies" || pluralMethod === "globalPolicies") {
-            entities.forEach(entity => readPolicy(entity, dir));
-        } else if (pluralMethod === "webApiServices") {
-            entities.forEach(entity => readPolicy(entity, dir, "service-"));
-        } else if (pluralMethod === "soapServices") {
-            entities.forEach(entity => {
-                readPolicy(entity, dir, "service-");
-                readSoapServiceWsdl(entity, dir);
-            });
-        } else if (pluralMethod === "trustedCerts") {
-            entities.forEach(entity => readTrustedCert(entity, dir));
-        } else if (pluralMethod === "keys") {
-            entities.forEach(entity => readKey(entity, dir));
-        }
-    }
-
-    function readPolicy(entity, dir) {
-        const filepath = decodeFilepath(entity, dir, entity.policy.xml);
-        if (filepath) {
-            entity.policy.xml = utils.readFile(filepath);
-        }
-    }
-
-    function readSoapServiceWsdl(entity, dir) {
-        const filepath = decodeFilepath(entity, dir, entity.wsdl);
-        if (filepath) {
-            entity.wsdl = utils.readFile(filepath);
-        }
-    }
-
-    function readTrustedCert(entity, dir) {
-        const filepath = decodeFilepath(entity, dir, entity.certBase64);
-        if (filepath) {
-            entity.certBase64 = utils.readFile(filepath);
-        }
-    }
-
-    function readKey(entity, dir) {
-        const filepath = decodeFilepath(entity, dir, entity.p12);
-        if (filepath) {
-            entity.p12 = utils.readFile(filepath);
-        }
-
-        if (entity.certChain) {
-            entity.certChain.forEach((cert, index) => {
-                const filepath2 = decodeFilepath(entity, dir, cert);
-                if (filepath2) {
-                    entity.certChain[index] = utils.readFile(filepath2);
-                }
-            });
-        }
-    }
-
-    function decodeFilepath(entity, dir, text) {
-        const filename = decodeFilename(text);
-        const filepath = utils.path(dir, filename);
-
-        if (!utils.existsFile(filepath)) {
-            utils.warn(`${filepath} file is missing for ` + butils.entityDisplayName(entity));
-            return null;
-        }
-
-        utils.info("  reading from " + filepath);
-        return filepath;
-    }
-
-    function decodeFilename(text) {
-        if (text && text.startsWith("{{") && text.endsWith("}}")) {
-            return text.substring(2, text.length - 2);
-        } else {
-            return "";
-        }
     }
 })();
