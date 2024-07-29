@@ -14,6 +14,7 @@ module.exports = {
      * @param params
      * @param params.input name of the input file containing the gateway configuration as bundle
      * @param params.gateway name of the gateway profile
+     * @param params.sections one or more sections of the bundle
      * @param params.output name of the output file
      * @param params.options name-value pairs used to customize renew operation
      */
@@ -33,7 +34,7 @@ module.exports = {
 
         const bundle = utils.readFile(params.input);
 
-        Promise.all(this.renew(gateway, bundle, params.options)).then(results => {
+        Promise.all(this.renew(gateway, bundle, params.sections, params.options)).then(results => {
             const renewedBundle = {};
 
             results.forEach(item => {
@@ -51,12 +52,12 @@ module.exports = {
         });
     },
 
-    renew: function (gateway, bundle, options) {
+    renew: function (gateway, bundle, sections, options) {
         const promises = [];
 
         Object.keys(bundle).forEach(key => {
             const typeInfo = graphman.typeInfoByPluralName(key);
-            if (typeInfo && (!options.scope.length || options.scope.includes(key))) {
+            if (typeInfo && (sections.includes("*") || sections.includes(key))) {
                 utils.info("renewing " + key);
                 promises.push(renewEntities(gateway, bundle[key], typeInfo, options));
             } else {
@@ -71,7 +72,12 @@ module.exports = {
     },
 
     initParams: function (params, config) {
-        params.options = Object.assign({scope: [], useGoids: false}, params.options);
+        params.sections = params.sections || ["*"];
+        if (!Array.isArray(params.sections)) {
+            params.sections = [params.sections];
+        }
+
+        params.options = Object.assign({useGoids: false}, params.options);
 
         return params;
     },
@@ -89,6 +95,13 @@ module.exports = {
         console.log();
         console.log("  --gateway <name>");
         console.log("    specify the name of gateway profile from the graphman configuration.");
+        console.log();
+        console.log("  --sections <section> <section> ...");
+        console.log("    specify one or more sections of the bundle for inclusion");
+        console.log("    section refers to the plural name of the entity type");
+        console.log("    * is a special section name, used to refer all the sections of a bundle");
+        console.log("    use '-' prefix to exclude the section");
+        console.log("    by default, all the sections of the bundle will be considered for operation's scope.");
         console.log();
         console.log("  --output <output-file>");
         console.log("    specify the name of file to capture the renewed bundle.");

@@ -56,10 +56,8 @@ module.exports = {
     },
 
     initParams: function (params, config) {
-        if (params.sections) {
-            if (!Array.isArray(params.sections)) {
-                params.sections = [params.sections];
-            }
+        if (params.sections && !Array.isArray(params.sections)) {
+            params.sections = [params.sections];
         }
 
         return params;

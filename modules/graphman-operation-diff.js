@@ -186,12 +186,12 @@ function diffRenewReport(leftBundle, rightBundle, report, options, callback) {
 
         // renew inserts section using the source gateway
         promises.push(new Promise(function (resolve) {
-            renewBundle(gateway, report.inserts, Object.assign(options, {scope: [], useGoids: true}), resolve);
+            renewBundle(gateway, report.inserts, ["*"], Object.assign(options, {useGoids: true}), resolve);
         }));
 
         // renew updates section using the source gateway
         promises.push(new Promise(function (resolve) {
-            renewBundle(gateway, report.updates, Object.assign(options, {scope: [], useGoids: true}), resolve);
+            renewBundle(gateway, report.updates, ["*"], Object.assign(options, {useGoids: true}), resolve);
         }));
     } else {
         promises.push(new Promise(function (resolve) {
@@ -208,7 +208,7 @@ function diffRenewReport(leftBundle, rightBundle, report, options, callback) {
 
         // renew updates section using the target gateway
         promises.push(new Promise(function (resolve) {
-            renewBundle(gateway, report.updates, Object.assign(options, {scope: [], useGoids: false}), resolve);
+            renewBundle(gateway, report.updates, ["*"], Object.assign(options, {useGoids: false}), resolve);
         }));
     }
 
@@ -242,12 +242,12 @@ function diffRenewReport(leftBundle, rightBundle, report, options, callback) {
 
 }
 
-function renewBundle(gateway, bundle, options, callback) {
+function renewBundle(gateway, bundle, sections, options, callback) {
     if (!gateway.address) {
         throw utils.newError(`${gateway.name} gateway details are missing`);
     }
 
-    Promise.all(renewer.renew(gateway, bundle, options)).then(results => {
+    Promise.all(renewer.renew(gateway, bundle, sections, options)).then(results => {
         const renewedBundle = {};
         results.forEach(item => Object.assign(renewedBundle, item));
         callback(butils.sort(renewedBundle));
@@ -272,7 +272,9 @@ function diffEntities(leftEntities, rightEntities, report, typeInfo, options, mu
             utils.info("  selecting " + butils.entityName(leftEntity, typeInfo) + ", category=inserts");
             const inserts = butils.withArray(report.inserts, typeInfo);
             inserts.push(leftEntity);
-        } else if (leftEntity.checksum !== rightEntity.checksum) {
+        } else if (rightEntity.checksum === undefined) {
+            utils.info("  ignoring " + butils.entityName(leftEntity, typeInfo) + ", target entity checksum is undefined");
+        } else if (leftEntity.checksum === undefined || leftEntity.checksum !== rightEntity.checksum) {
             const details = [];
             const codeRef = makeEntityReadyForEqualityCheck(leftEntity, rightEntity);
 
@@ -298,7 +300,9 @@ function diffEntities(leftEntities, rightEntities, report, typeInfo, options, mu
                     updates.push(leftEntity);
 
                     const diffs = butils.withArray(report.diffs, typeInfo);
-                    diffs.push({source: butils.toPartialEntity(leftEntity, typeInfo), details: details});
+                    const record = butils.toPartialEntity(leftEntity, typeInfo);
+                    record.details = details;
+                    diffs.push(record);
                 }
             } else {
                 utils.info("  not selecting " + butils.entityName(leftEntity, typeInfo) + ", only the checksum is different");
