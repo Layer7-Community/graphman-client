@@ -26,7 +26,14 @@ module.exports = {
 
                 if (arg.length > 2) {
                     argName = arg.substring(2);
-                    argValue = undefined;
+                    const sepIndex = argName.indexOf("=");
+                    if (sepIndex !== -1) {
+                        argValue = argName.substring(sepIndex + 1);
+                        argName = argName.substring(0, sepIndex);
+                        setParam(params, argName, argValue, true);
+                    } else {
+                        argValue = undefined;
+                    }
                 }
             } else if (argName) {
                 const overwrite = (argValue === undefined);

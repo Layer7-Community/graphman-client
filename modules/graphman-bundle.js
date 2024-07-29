@@ -285,7 +285,16 @@ module.exports = {
                 } else {
                     return false;
                 }
-            } else if (left[key] == null && right[key] != null) { // special case: are they both nulls?
+            } else if (left[key] == null) { // special case: field specified, but left is null
+                if (right[key] !== null) {
+                    if (callback) {
+                        callback(data);
+                        equals = false;
+                    } else {
+                        return false;
+                    }
+                }
+            } else if (right[key] == null) { // special case: field specified, but right is null
                 if (callback) {
                     callback(data);
                     equals = false;

@@ -1,5 +1,5 @@
 query serviceByResolutionPath ($resolutionPath: String!, $includeAllDependencies: Boolean = false, $includePolicyRevision: Boolean = false, $includePolicyRevisions: Boolean = false) {
-    serviceByResolutionPath (resolutionPath: $resolutionPath) {
+    servicesByResolutionPath (resolutionPath: $resolutionPath) {
         {{L7Service:-policy}}
          policy {
             xml
