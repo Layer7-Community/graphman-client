@@ -33,9 +33,12 @@ function main() {
 
         if (!op) {
             utils.error("operation is missing");
-            utils.print("  supported operations are [" + SUPPORTED_OPERATIONS + "]");
+            utils.print("  supported operations:");
+            SUPPORTED_OPERATIONS.forEach(item => utils.print("    " + item));
+            utils.print();
             utils.print("  usage: <operation> <parameter>,...");
             utils.print("  usage: <operation> --help");
+            utils.print("  github: " + graphman.githubLink());
             utils.print();
         } else {
             let operation = findOperation(op);

@@ -5,6 +5,7 @@
 const VERSION = "v1.3.00 (dev)";
 const SCHEMA_VERSION = "v11.1.1";
 const SCHEMA_VERSIONS = [SCHEMA_VERSION, "v11.1.00"];
+const GITHUB_LINK = "https://github.com/Layer7-Community/graphman-client";
 
 const SUPPORTED_EXTENSIONS = ["pre-request", "post-export", "pre-import", "multiline-text-diff", "policy-code-validator"];
 const SCHEMA_FEATURE_LIST = {
@@ -106,6 +107,10 @@ module.exports = {
     supportsFeature: function (featureName) {
         const list = SCHEMA_FEATURE_LIST[this.loadedConfig.schemaVersion]||[];
         return list.includes(featureName);
+    },
+
+    githubLink: function () {
+        return GITHUB_LINK;
     },
 
     /**
