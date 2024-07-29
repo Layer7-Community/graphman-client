@@ -43,15 +43,21 @@ module.exports = {
                         const bundle = {};
                         diffBundle(renewedReport, bundle, params.options, false);
 
+                        if (params["output-report"]) {
+                            utils.writeResult(params["output-report"], sortReport(renewedReport));
+                        }
+
                         utils.writeResult(params.output, butils.sort(bundle));
-                        if (params["output-report"]) utils.writeResult(params["output-report"], sortReport(renewedReport));
                     });
                 } else {
                     const bundle = {};
                     diffBundle(report, bundle, params.options, false);
 
+                    if (params["output-report"]) {
+                        utils.writeResult(params["output-report"], sortReport(report));
+                    }
+
                     utils.writeResult(params.output, butils.sort(bundle));
-                    if (params["output-report"]) utils.writeResult(params["output-report"], sortReport(report));
                 }
             });
         } else if (params["input-report"]) {

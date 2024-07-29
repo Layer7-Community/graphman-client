@@ -123,7 +123,7 @@ function buildGraphQLQueryFor(entities, typeInfo, options) {
 
 function buildGraphQLSubQueryFor(entity, typeInfo, suffix, queryArgs, options) {
     let fieldMethod = typeInfo.singularName + "ByGoid";
-    let fieldInfo = options.useGoids ? graphman.queryFieldInfo(fieldMethod) : null;
+    let fieldInfo = options.useGoids && entity.goid ? graphman.queryFieldInfo(fieldMethod) : null;
 
     if (!fieldInfo) {
         fieldMethod = typeInfo.singleQueryMethod || typeInfo.singularName + "By" + pascalCasing(typeInfo.identityFields[0]);

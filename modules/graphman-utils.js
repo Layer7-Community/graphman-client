@@ -215,6 +215,7 @@ module.exports = {
             this.writeFile(file, bundle);
         } else {
             this.print(bundle);
+            this.print();
         }
     },
 
