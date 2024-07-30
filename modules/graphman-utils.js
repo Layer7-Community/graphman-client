@@ -17,7 +17,9 @@ const WARN_LEVEL = 1;
 const INFO_LEVEL = 2;
 const FINE_LEVEL = 3;
 const DEBUG_LEVEL = 10;
+
 let logLevel = INFO_LEVEL;
+let workspace = process.env.GRAPHMAN_WORKSPACE;
 
 const defaultExtn = {ref: {apply: function (input) {return input;}}};
 const extns = {};
@@ -53,6 +55,22 @@ module.exports = {
         } else if (level === 'nolog') {
             logLevel = NONE_LEVEL;
         }
+    },
+
+    wspaceAt: function (path) {
+        if (!this.existsFile(path)) {
+            throw this.newError("workspace directory does not exist, " + path);
+        }
+
+        if (!this.isDirectory(path)) {
+            throw this.newError("incorrect workspace directory, " + path);
+        }
+
+        workspace = path;
+    },
+
+    wspace: function () {
+        return workspace;
     },
 
     home: function () {
