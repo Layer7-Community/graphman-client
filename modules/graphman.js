@@ -58,7 +58,7 @@ module.exports = {
         config.defaultSchemaVersion = SCHEMA_VERSION;
         config.supportedSchemaVersions = SCHEMA_VERSIONS;
         config.supportedExtensions = SUPPORTED_EXTENSIONS;
-        config.schemaVersion = params.options.schema || config.options.schema || SCHEMA_VERSION;
+        config.schemaVersion = String(params.options.schema) || config.options.schema || SCHEMA_VERSION;
         config.schemaVersions = gqlschema.availableSchemas();
 
         this.metadata = gqlschema.build(config.version, config.schemaVersion, false);
