@@ -11,6 +11,10 @@ if (!process.env[GRAPHMAN_HOME]) {
     process.env[GRAPHMAN_HOME] = __dirname;
 }
 
-const graphman = require("@layer7/graphman");
-graphman.init({workspace: process.env[GRAPHMAN_WORKSPACE] || process.cwd()});
-graphman.call(op, args);
+try {
+    const graphman = require("@layer7/graphman");
+    graphman.init({workspace: process.env[GRAPHMAN_WORKSPACE] || process.cwd()});
+    graphman.call(op, args);
+} catch (e) {
+    console.log("unexpected error encountered, " + e);
+}

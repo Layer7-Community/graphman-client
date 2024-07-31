@@ -7,9 +7,7 @@ const graphman = require("./graphman");
 
 module.exports = {
     init: function (options) {
-        utils.info("using workspace1,", utils.workspace());
         graphman.workspace(options.workspace);
-        utils.info("using workspace2,", utils.workspace());
     },
 
     call: function (op, args) {
