@@ -16,8 +16,10 @@ module.exports = {
         utils.print(`  schema ${config.schemaVersion}`);
         utils.print(`  supported schema(s) [${config.supportedSchemaVersions.join(', ')}]`);
         utils.print(`  supported extension(s) [${config.supportedExtensions.join(', ')}]`);
-        utils.print("  github: " + graphman.githubLink());
-        utils.print(`  running from ` + process.env.GRAPHMAN_HOME)
+        utils.print("  workspace " + utils.workspace());
+        utils.print("  home " + utils.home());
+        utils.print("  github " + graphman.githubLink());
+        utils.print("  running from " + process.env.GRAPHMAN_HOME);
         utils.print();
     },
 

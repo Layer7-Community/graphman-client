@@ -42,12 +42,12 @@ module.exports = {
     metadata: null,
 
     init: function (params) {
-        if (params.wspace) {
-            utils.wspaceAt(params.wspace);
+        if (params.workspace) {
+            utils.workspace(params.workspace);
         }
 
-        utils.info("using workspace,", utils.wspace());
-        const configFile = utils.wspace() + "/graphman.configuration";
+        utils.info("using workspace,", utils.workspace());
+        const configFile = utils.workspace() + "/graphman.configuration";
         const config = utils.existsFile(configFile) ? JSON.parse(utils.readFile(configFile)) : {};
 
         // override configured options using params if specified
@@ -77,6 +77,10 @@ module.exports = {
 
         this.metadata = gqlschema.build(config.version, config.schemaVersion, false);
         this.loadedConfig = config;
+    },
+
+    workspace: function (path) {
+       return utils.workspace(path);
     },
 
     configuration: function () {
@@ -177,8 +181,8 @@ module.exports = {
 
         if (gateway.keyFilename && gateway.certFilename) {
             // This expects the certificate.pem and certificate.key file(s) to be in the graphman-client directory. 
-            req.key = utils.readFileBinary(utils.path(utils.wspace(), gateway.keyFilename));
-            req.cert = utils.readFileBinary(utils.path(utils.wspace(), gateway.certFilename));
+            req.key = utils.readFileBinary(utils.path(utils.workspace(), gateway.keyFilename));
+            req.cert = utils.readFileBinary(utils.path(utils.workspace(), gateway.certFilename));
         } else if (gateway.username && gateway.password) {
             req.auth = gateway.username + ":" + gateway.password;
         } else {

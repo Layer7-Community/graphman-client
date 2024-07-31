@@ -5,4 +5,4 @@ if [ -z "$GRAPHMAN_HOME" ]; then
   exit 1
 fi
 
-node "$GRAPHMAN_HOME/main.js" "$@"
+node "$GRAPHMAN_HOME/cli-main.js" "$@"

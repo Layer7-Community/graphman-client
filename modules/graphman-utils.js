@@ -4,7 +4,7 @@
 
 const fs = require("fs");
 const putil = require("path");
-const HOME_DIR = process.env.GRAPHMAN_HOME;
+const HOME_DIR = putil.dirname(__dirname);
 const MODULES_DIR = HOME_DIR + "/modules";
 const QUERIES_DIR = HOME_DIR + "/queries";
 const SCHEMA_DIR = HOME_DIR + "/schema";
@@ -19,7 +19,7 @@ const FINE_LEVEL = 3;
 const DEBUG_LEVEL = 10;
 
 let logLevel = INFO_LEVEL;
-let workspace = process.env.GRAPHMAN_WORKSPACE;
+let workspaceDir = HOME_DIR;
 
 const defaultExtn = {ref: {apply: function (input) {return input;}}};
 const extns = {};
@@ -57,20 +57,20 @@ module.exports = {
         }
     },
 
-    wspaceAt: function (path) {
-        if (!this.existsFile(path)) {
-            throw this.newError("workspace directory does not exist, " + path);
+    workspace: function (path) {
+        if (path) {
+            if (!this.existsFile(path)) {
+                throw this.newError("workspace directory does not exist, " + path);
+            }
+
+            if (!this.isDirectory(path)) {
+                throw this.newError("incorrect workspace directory, " + path);
+            }
+
+            workspaceDir = path;
         }
 
-        if (!this.isDirectory(path)) {
-            throw this.newError("incorrect workspace directory, " + path);
-        }
-
-        workspace = path;
-    },
-
-    wspace: function () {
-        return workspace;
+        return workspaceDir;
     },
 
     home: function () {
@@ -196,11 +196,14 @@ module.exports = {
     log: function (prefix, ...args) {
         let text = prefix;
 
-        if (args[0].length > 0) args[0].forEach(item => text += " " + this.pretty(item));
+        if (args[0].length > 0) {
+            args[0].forEach(item => {
+                const isObj = (typeof item === 'object');
+                text += " " + (isObj ? replaceNewLineMarkers(this.pretty(item)) : this.pretty(item));
+            });
+        }
 
-        console.log(text
-            .replaceAll("\\r\\n", "\n")
-            .replaceAll("\\n", "\n"));
+        console.log(text);
     },
 
     error: function (message, ...args) {
@@ -331,4 +334,10 @@ module.exports = {
 
         throw "invalid mapping action " + action + (type ? " specified for " + type : "");
     }
+}
+
+function replaceNewLineMarkers(data) {
+    return data
+        .replaceAll("\\r\\n", "\n")
+        .replaceAll("\\n", "\n");
 }
