@@ -2,82 +2,61 @@
  * Copyright ©  2024. Broadcom Inc. and/or its subsidiaries. All Rights Reserved.
  */
 
-const GRAPHMAN_HOME = 'GRAPHMAN_HOME';
-const SUPPORTED_OPERATIONS = [
-    "version", "describe",
-    "export", "import",
-    "explode", "implode",
-    "combine", "slice", "diff", "renew", "revise",
-    "mappings", "schema", "validate"
-];
-const GRAPHMAN_OPERATION_MODULE_PREFIX = "./graphman-operation-";
-const args = process.argv.slice(2);
-const op = args[0];
 const utils = require("./graphman-utils");
 const graphman = require("./graphman");
 
-main();
+module.exports = {
+    call: function (home, op, args) {
+        try {
+            const params = parse(args);
+            params.options = params.options || {};
 
-/**
- * Entry point
- */
-function main() {
-    try {
-        init();
+            // initialize configuration and schema metadata
+            graphman.init(home, params);
 
-        const params = parse(args);
-        params.options = params.options || {};
-
-        // initialize configuration and schema metadata
-        graphman.init(params);
-
-        if (!op) {
-            utils.error("operation is missing");
-            utils.print("  supported operations:");
-            SUPPORTED_OPERATIONS.forEach(item => utils.print("    " + item));
-            utils.print();
-            utils.print("  usage: <operation> <parameter>,...");
-            utils.print("  usage: <operation> --help");
-            utils.print("  github: " + graphman.githubLink());
-            utils.print();
-        } else {
-            let operation = findOperation(op);
-            if (params.help) {
-                operation.usage();
+            if (!op) {
+                utils.error("operation is missing");
+                utils.print("  supported operations:");
+                graphman.supportedOperations()
+                    .forEach(item => utils.print("    " + item));
+                utils.print();
+                utils.print("  usage: <operation> <parameter>,...");
+                utils.print("  usage: <operation> --help");
+                utils.print("  github: " + graphman.githubLink());
+                utils.print();
             } else {
-                const config = graphman.configuration();
-                utils.extensions(config.options.extensions);
-                operation.run(operation.initParams(params, config));
+                let operation = findOperation(graphman, op);
+                if (params.help) {
+                    operation.usage();
+                } else {
+                    const config = graphman.configuration();
+                    utils.extensions(config.options.extensions);
+                    operation.run(operation.initParams(params, config));
+                }
+            }
+        } catch (e) {
+            if (typeof e === 'string') {
+                utils.error(e);
+                utils.print();
+            } else if (typeof e === 'object' && e.name === 'GraphmanOperationError') {
+                utils.error(e.message);
+                utils.print();
+            } else {
+                utils.error("error encountered while processing the graphman operation");
+                utils.error(`  name: ${e.name}`);
+                utils.error(`  message: ${e.message}`);
+                console.log(e);
+                utils.print();
             }
         }
-    } catch (e) {
-        if (typeof e === 'string') {
-            utils.error(e);
-            utils.print();
-        } else if (typeof e === 'object' && e.name === 'GraphmanOperationError') {
-            utils.error(e.message);
-            utils.print();
-        } else {
-            utils.error("error encountered while processing the graphman operation");
-            utils.error(`  name: ${e.name}`);
-            utils.error(`  message: ${e.message}`);
-            console.log(e);
-            utils.print();
-        }
     }
 }
 
-function init() {
-    if (!process.env[GRAPHMAN_HOME]) {
-        throw GRAPHMAN_HOME + " environment variable is not defined";
-    }
-}
-
-function findOperation(name) {
-    if (!SUPPORTED_OPERATIONS.includes(name)) {
+function findOperation(graphman, name) {
+    if (!graphman.supportedOperations().includes(name)) {
         throw "unsupported operation: " + name;
     } else {
-        return require(GRAPHMAN_OPERATION_MODULE_PREFIX + name);
+        return require("./graphman-operation-" + name);
     }
 }
 

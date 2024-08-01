@@ -5,6 +5,6 @@ if "%GRAPHMAN_HOME%"=="" (
   goto :end
 )
 
-node "%GRAPHMAN_HOME%\modules\main.js" %*
+node "%GRAPHMAN_HOME%\cli-main.js" %*
 
 : end

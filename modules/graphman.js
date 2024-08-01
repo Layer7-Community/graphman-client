@@ -7,6 +7,14 @@ const SCHEMA_VERSION = "v11.1.1";
 const SCHEMA_VERSIONS = [SCHEMA_VERSION, "v11.1.00"];
 const GITHUB_LINK = "https://github.com/Layer7-Community/graphman-client";
 
+const SUPPORTED_OPERATIONS = [
+    "version", "describe",
+    "export", "import",
+    "explode", "implode",
+    "combine", "slice", "diff", "renew", "revise",
+    "mappings", "schema", "validate"
+];
+
 const SUPPORTED_EXTENSIONS = ["pre-request", "post-export", "pre-import", "multiline-text-diff", "policy-code-validator"];
 const SCHEMA_FEATURE_LIST = {
     "v11.1.1": ["mappings", "mappings-source"]
@@ -33,8 +41,11 @@ module.exports = {
     loadedConfig: null,
     metadata: null,
 
-    init: function (params) {
-        const config = JSON.parse(utils.readFile(utils.home() + "/graphman.configuration"));
+    init: function (home, params) {
+        utils.wrapperHome(home);
+
+        const configFile = utils.wrapperHome() + "/graphman.configuration";
+        const config = utils.existsFile(configFile) ? JSON.parse(utils.readFile(configFile)) : {};
 
         // override configured options using params if specified
         config.options = makeOptions(config.options || {});
@@ -51,8 +62,6 @@ module.exports = {
             config.gateways[key] = config.gateways[key] || {};
             Object.assign(config.gateways[key], gateway);
         });
-
-        config.defaultGateway = config.gateways['default'];
 
         config.version = VERSION;
         config.defaultSchemaVersion = SCHEMA_VERSION;
@@ -109,6 +118,10 @@ module.exports = {
         return list.includes(featureName);
     },
 
+    supportedOperations: function () {
+        return SUPPORTED_OPERATIONS;
+    },
+
     githubLink: function () {
         return GITHUB_LINK;
     },
@@ -159,8 +172,8 @@ module.exports = {
 
         if (gateway.keyFilename && gateway.certFilename) {
             // This expects the certificate.pem and certificate.key file(s) to be in the graphman-client directory. 
-            req.key = utils.readFileBinary(utils.path(utils.home(), gateway.keyFilename));
-            req.cert = utils.readFileBinary(utils.path(utils.home(), gateway.certFilename));
+            req.key = utils.readFileBinary(utils.path(utils.wrapperHome(), gateway.keyFilename));
+            req.cert = utils.readFileBinary(utils.path(utils.wrapperHome(), gateway.certFilename));
         } else if (gateway.username && gateway.password) {
             req.auth = gateway.username + ":" + gateway.password;
         } else {
