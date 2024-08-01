@@ -4,7 +4,7 @@
 
 const fs = require("fs");
 const putil = require("path");
-const HOME_DIR = process.env.GRAPHMAN_HOME;
+const HOME_DIR = putil.dirname(__dirname);
 const MODULES_DIR = HOME_DIR + "/modules";
 const QUERIES_DIR = HOME_DIR + "/queries";
 const SCHEMA_DIR = HOME_DIR + "/schema";
@@ -17,7 +17,9 @@ const WARN_LEVEL = 1;
 const INFO_LEVEL = 2;
 const FINE_LEVEL = 3;
 const DEBUG_LEVEL = 10;
+
 let logLevel = INFO_LEVEL;
+let wrapperDir = HOME_DIR;
 
 const defaultExtn = {ref: {apply: function (input) {return input;}}};
 const extns = {};
@@ -55,12 +57,28 @@ module.exports = {
         }
     },
 
+    wrapperHome: function (path) {
+        if (path) {
+            if (!this.existsFile(path)) {
+                throw this.newError("wrapper home directory does not exist, " + path);
+            }
+
+            if (!this.isDirectory(path)) {
+                throw this.newError("incorrect wrapper home directory, " + path);
+            }
+
+            wrapperDir = path;
+        }
+
+        return wrapperDir;
+    },
+
     home: function () {
         return HOME_DIR;
     },
 
-    modulesDir: function () {
-        return MODULES_DIR;
+    modulesDir: function (workspace) {
+        return workspace ? this.path(workspace, "modules") : MODULES_DIR;
     },
 
     schemasDir: function () {
@@ -88,14 +106,22 @@ module.exports = {
       return this.path(this.schemaDir(schemaVersion), POLICY_SCHEMA_FILE)
     },
 
-    queriesDir: function () {
-        return QUERIES_DIR;
+    queriesDir: function (workspace) {
+        return workspace ? this.path(workspace, "queries") : QUERIES_DIR;
     },
 
     queryFile: function (query, schemaVersion) {
-       const path = this.path(this.queriesDir(), schemaVersion, query);
-       if (this.existsFile(path)) return path;
-       return this.path(this.queriesDir(), query);
+        let path = this.path(this.queriesDir(this.wrapperHome()), schemaVersion, query);
+        if (this.existsFile(path)) {
+            return path;
+        }
+
+        path = this.path(this.queriesDir(), schemaVersion, query);
+        if (this.existsFile(path)) {
+            return path;
+        }
+
+        return this.path(this.queriesDir(), query);
     },
 
     isDirectory: function (fd) {
@@ -178,11 +204,14 @@ module.exports = {
     log: function (prefix, ...args) {
         let text = prefix;
 
-        if (args[0].length > 0) args[0].forEach(item => text += " " + this.pretty(item));
+        if (args[0].length > 0) {
+            args[0].forEach(item => {
+                const isObj = (typeof item === 'object');
+                text += " " + (isObj ? replaceNewLineMarkers(this.pretty(item)) : this.pretty(item));
+            });
+        }
 
-        console.log(text
-            .replaceAll("\\r\\n", "\n")
-            .replaceAll("\\n", "\n"));
+        console.log(text);
     },
 
     error: function (message, ...args) {
@@ -264,13 +293,20 @@ module.exports = {
         }
 
         if (!extn.ref) {
-            const filename = MODULES_DIR + "/extn/graphman-extension-" + ref + ".js";
+            let filename = this.modulesDir(this.wrapperHome()) + "/extn/graphman-extension-" + ref + ".js";
             if (this.existsFile(filename)) {
-                extn.ref = require("./extn/graphman-extension-" + ref);
-            } else {
-                this.warn(ref + ` graphman extension file (${filename}) is missing, falling back to the default`);
-                extn.ref = defaultExtn.ref;
+                extn.ref = require(filename);
+                return extn.ref;
             }
+
+            filename = this.modulesDir() + "/extn/graphman-extension-" + ref + ".js";
+            if (this.existsFile(filename)) {
+                extn.ref = require(filename);
+                return extn.ref;
+            }
+
+            this.warn(ref + ` graphman extension file (${filename}) is missing, falling back to the default`);
+            extn.ref = defaultExtn.ref;
         }
 
         return extn.ref;
@@ -313,4 +349,10 @@ module.exports = {
 
         throw "invalid mapping action " + action + (type ? " specified for " + type : "");
     }
+}
+
+function replaceNewLineMarkers(data) {
+    return data
+        .replaceAll("\\r\\n", "\n")
+        .replaceAll("\\n", "\n");
 }
