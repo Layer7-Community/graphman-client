@@ -6,17 +6,13 @@ const utils = require("./graphman-utils");
 const graphman = require("./graphman");
 
 module.exports = {
-    init: function (options) {
-        graphman.workspace(options.workspace);
-    },
-
-    call: function (op, args) {
+    call: function (home, op, args) {
         try {
             const params = parse(args);
             params.options = params.options || {};
 
             // initialize configuration and schema metadata
-            graphman.init(params);
+            graphman.init(home, params);
 
             if (!op) {
                 utils.error("operation is missing");

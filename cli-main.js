@@ -2,19 +2,26 @@
  * Copyright ©  2024. Broadcom Inc. and/or its subsidiaries. All Rights Reserved.
  */
 
-const GRAPHMAN_HOME = 'GRAPHMAN_HOME';
-const GRAPHMAN_WORKSPACE = 'GRAPHMAN_WORKSPACE';
+const home = process.env.GRAPHMAN_HOME || __dirname;
 const args = process.argv.slice(2);
 const op = args[0];
+graphman("@layer7/graphman")
+    .call(home, op, args);
 
-if (!process.env[GRAPHMAN_HOME]) {
-    process.env[GRAPHMAN_HOME] = __dirname;
-}
+function graphman(module) {
+    try {
+        return require(module);
+    } catch (e) {
+        if (e.code !== 'MODULE_NOT_FOUND') {
+            console.log("unexpected error encountered, " + e.message);
+            console.log(e);
+            console.log();
+        }
 
-try {
-    const graphman = require("@layer7/graphman");
-    graphman.init({workspace: process.env[GRAPHMAN_WORKSPACE] || process.cwd()});
-    graphman.call(op, args);
-} catch (e) {
-    console.log("unexpected error encountered, " + e);
+        console.log(module + " npm module is not available");
+        console.log("please refer the github link for installation: https://github.com/Layer7-Community/graphman-client")
+        console.log();
+    }
+
+    return {call: function (){}};
 }
