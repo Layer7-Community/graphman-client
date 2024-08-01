@@ -347,7 +347,7 @@ function replaceNewLineMarkers(data) {
 
 function loadExtension(utils, path, ref) {
     try {
-        let filename = path + "/extn/graphman-extension-" + ref + ".js";
+        let filename = path + "/graphman-extension-" + ref + ".js";
         if (utils.existsFile(filename)) {
             return require(filename);
         } else {
