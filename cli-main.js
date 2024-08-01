@@ -5,8 +5,17 @@
 const home = process.env.GRAPHMAN_HOME || __dirname;
 const args = process.argv.slice(2);
 const op = args[0];
-graphman("@layer7/graphman")
-    .call(home, op, args);
+const fs = require("fs");
+
+if (fs.existsSync(home + "/modules/main.js")) {
+    // running the client from cloned repo
+    require("./modules/main")
+        .call(home, op, args);
+} else {
+    //running the client using npm module
+    graphman("@layer7/graphman")
+        .call(home, op, args);
+}
 
 function graphman(module) {
     try {
