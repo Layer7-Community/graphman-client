@@ -51,6 +51,7 @@ module.exports = {
             utils.writeResult(params.output, butils.sort(renewedBundle));
         }).catch(error => {
             utils.error("errors encountered while renewing the entities", error);
+            utils.print();
         });
     },
 
