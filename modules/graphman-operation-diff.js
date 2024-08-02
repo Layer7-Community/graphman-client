@@ -30,7 +30,7 @@ module.exports = {
 
         if (params["input-source"] && params["input-target"]) {
             bundles.push(readBundleFrom(params["input-source"]));
-            bundles.push(readBundleFrom(params["input-target"]));console.log("hello");
+            bundles.push(readBundleFrom(params["input-target"]));
 
             Promise.all(bundles).then(results => {
                 const leftBundle = results[0];
@@ -60,8 +60,7 @@ module.exports = {
                     utils.writeResult(params.output, butils.sort(bundle));
                 }
             }).catch(error => {
-                utils.error("errors encountered while analyzing the differences");
-                utils.error("  ", error);
+                utils.error("errors encountered while analyzing the differences", error);
                 utils.print();
             });
         } else if (params["input-report"]) {
@@ -130,13 +129,7 @@ function readBundleFrom(fileOrGateway) {
         if (!gateway.address) throw utils.newError(`${gateway.name} gateway details are missing`);
         return readBundleFromGateway(gateway);
     } else {
-        return new Promise(function (resolve, reject) {
-            try {
-                resolve(utils.readFile(fileOrGateway));
-            } catch (e) {
-                reject(e);
-            }
-        });
+        return Promise.resolve(utils.readFile(fileOrGateway));
     }
 }
 
@@ -258,8 +251,7 @@ function diffRenewReport(leftBundle, rightBundle, report, options, callback) {
             callback(renewedReport);
         }
     }).catch(error => {
-        utils.error("errors encountered while renewing the entities");
-        utils.error("  ", error);
+        utils.error("errors encountered while renewing the entities", error);
         utils.print();
     });
 
