@@ -13,10 +13,10 @@ bundled for your domain-specific use case. To help dive into that layer, power u
 provided Postman collection which provides samples for all the queries and mutations supported by Graphman.
 
 # Jump to
-1. [Using in Postman](#postman)
 2. [Getting Started with the Command-line (CLI)](#cli)
 3. [Graphman bundles explained](#bundles)
 4. [Compatibility Matrix](#compatibility-matrix)
+5. [Using in Postman](#postman)
 
 # Graphman client CLI
 
@@ -31,11 +31,18 @@ node -v
 If node is not already installed on your system, you can download it from https://nodejs.org/en/download/.
 Minimum version that is expected to work with is 16.+.
 
-Next, set the environmental variable **GRAPHMAN_HOME** to the path where this packaged is installed. For
-example:
-```
-export GRAPHMAN_HOME=~/dev/mygraphmanclient
-```
+Download one of the released [Graphman client distributions](https://github.com/Layer7-Community/graphman-client/releases), and follow the below steps to install the client:
+- unzip the wrapper archive
+  - `tar -xvf layer7-graphman-wrapper.tar.gz`
+- cd to the wrapper directory
+  - `cd /path/to/layer7-graphman-wrapper`
+- install the **@layer7/graphman** npm module
+  - `npm install layer7-graphman-<version>.tgz`
+- set the environment variable **GRAPHMAN_HOME** to the path where this wrapper is unzipped. 
+  - `export GRAPHMAN_HOME=/path/to/layer7-graphman-wrapper`
+- verify the installation by running the version command
+  - `graphman.sh version` 
+
 > [!TIP]
 > Make sure adding the node and graphman client paths to the **PATH** environment variable so that client can be used from any directory workspace.
 
