@@ -2,7 +2,7 @@
  * Copyright ©  2024. Broadcom Inc. and/or its subsidiaries. All Rights Reserved.
  */
 
-const VERSION = "v1.3.00 (dev)";
+const VERSION = "v1.3.00";
 const SCHEMA_VERSION = "v11.1.1";
 const SCHEMA_VERSIONS = [SCHEMA_VERSION, "v11.1.00"];
 const GITHUB_LINK = "https://github.com/Layer7-Community/graphman-client";

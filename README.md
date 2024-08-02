@@ -13,10 +13,10 @@ bundled for your domain-specific use case. To help dive into that layer, power u
 provided Postman collection which provides samples for all the queries and mutations supported by Graphman.
 
 # Jump to
-1. [Using in Postman](#postman)
-2. [Getting Started with the Command-line (CLI)](#cli)
-3. [Graphman bundles explained](#bundles)
-4. [Compatibility Matrix](#compatibility-matrix)
+1. [Getting Started with the Command-line (CLI)](#cli)
+2. [Graphman bundles explained](#bundles)
+3. [Compatibility Matrix](#compatibility-matrix)
+4. [Using in Postman](#postman)
 
 # Graphman client CLI
 
@@ -31,11 +31,18 @@ node -v
 If node is not already installed on your system, you can download it from https://nodejs.org/en/download/.
 Minimum version that is expected to work with is 16.+.
 
-Next, set the environmental variable **GRAPHMAN_HOME** to the path where this packaged is installed. For
-example:
-```
-export GRAPHMAN_HOME=~/dev/mygraphmanclient
-```
+Download one of the released [Graphman client distributions](https://github.com/Layer7-Community/graphman-client/releases), and follow the below steps to install the client:
+- unzip the wrapper archive
+  - `tar -xvf layer7-graphman-wrapper.tar.gz`
+- cd to the wrapper directory
+  - `cd /path/to/layer7-graphman-wrapper`
+- install the **@layer7/graphman** npm module
+  - `npm install layer7-graphman-<version>.tgz`
+- set the environment variable **GRAPHMAN_HOME** to the path where this wrapper is unzipped. 
+  - `export GRAPHMAN_HOME=/path/to/layer7-graphman-wrapper`
+- verify the installation by running the version command
+  - `graphman.sh version` 
+
 > [!TIP]
 > Make sure adding the node and graphman client paths to the **PATH** environment variable so that client can be used from any directory workspace.
 
@@ -68,18 +75,19 @@ Choose one of the gateway profile as part of _--gateway_ parameter while working
 
 > [!NOTE]
 > In order to protect the gateways from the accidental mutations, by default, mutation based queries are disallowed. You must enable them by setting the _allowMutations_ field of the gateway profile to _true_.
+> It is recommended to set this value to false in the profile, and override it from the CLI arguments (`--gateways.<profile>.allowMutations`).
 > 
 You are now ready to start using Graphman. 
 
 To bundle the entire configuration of the gateway, run the
 following command:
 ```
-./graphman.sh export --gateway <source-gateway> --using all --output mybundle.json
+./graphman.sh export --gateway <source-gateway> --using all --output source-bundle.json
 ```
 
 You can apply this configuration bundle as-is to the target gateway.
 ```
-./graphman.sh import --gateway <target-gateway> --input mybundle.json
+./graphman.sh import --gateway <target-gateway> --input source-bundle.json
 ```
 
 Congratulations, you just packaged all the configuration from the source gateway, and applied it to the
@@ -111,18 +119,22 @@ To know about client itself, now use the _**version**_ operation
 > 
 > 
 > Supported schema(s) (i.e., version of the Layer7 API Gateway)
-> - v11.1.00
->
+- v11.1.1 (default)
+- v11.1.00
+
+> Switch to the one of the above supported schemas using CLI argument (`--options.schema <schema>`) 
+
 > Use the older clients (https://github.com/Layer7-Community/graphman-client/releases) to work with the earlier schemas.
 
 ## Compatibility Matrix <a name="compatibility-matrix"></a>
 The following table describes the compatibility of the Graphman client with the targeting Layer7 API Gateways.
 
-| Graphman Client | Layer7 API Gateway      |
-|-----------------|------------------------|
-| v1.2.*          |11.1.00|
-| v1.1            |10.1 CR04 and 11.0 CR02|
-| v1.0.*          |10.1 CR03 and 11.0 CR01|
+| Graphman Client | Layer7 API Gateway                   |
+|-----------------|--------------------------------------|
+| v1.3.*          | v11.1.00, v11.1.00                   |
+| v1.2.*          | v11.1.00                             |
+| v1.1            | v10.1 CR04, v11.0 CR02               |
+| v1.0.*          | v10.1 CR03, v11.0 CR01               |
 
 
 ## Graphman configuration bundles <a name="bundles"></a>
@@ -481,19 +493,19 @@ Client can be configured at global level to deal with certain configuration deta
 As part of extending the supportability and standardization, few of the existing entity types and their associated query-level field methods are deprecated. 
 It is recommended to start using the latest GraphQL types in favour of extensibility and support.
 
-|Deprecated entity type|New entity type|
-|------------------------------|--------------------|
-|_webApiServices_|use **_services_** instead|
-|_soapServices_|use **_services_** instead|
-|_internalWebApiServices_|use **_services_** instead|
-|_internalSoapServices_|use **_services_** instead|
-|_policyFragments_|use **_policies_** instead|
-|_globalPolicies_|use **_policies_** instead|
-|_backgroundTaskPolicies_|use **_policies_** instead|
-|_fips_|use **_federatedIdps_** instead|
-|_fipUsers_|use **_federatedUsers_** instead|
-|_fipGroups_|use **_federatedGroups_** instead|
-|_ldaps_|use **_ldapIdps_** instead|
+| Deprecated entity type   | New entity type                   |
+|--------------------------|-----------------------------------|
+| _webApiServices_         | use **_services_** instead        |
+| _soapServices_           | use **_services_** instead        |
+| _internalWebApiServices_ | use **_services_** instead        |
+| _internalSoapServices_   | use **_services_** instead        |
+| _policyFragments_        | use **_policies_** instead        |
+| _globalPolicies_         | use **_policies_** instead        |
+| _backgroundTaskPolicies_ | use **_policies_** instead        |
+| _fips_                   | use **_federatedIdps_** instead   |
+| _fipUsers_               | use **_federatedUsers_** instead  |
+| _fipGroups_              | use **_federatedGroups_** instead |
+| _ldaps_                  | use **_ldapIdps_** instead        |
 
 > [!NOTE]
 > Bundles with the deprecated entity types can be revised using the **revise** operation.
