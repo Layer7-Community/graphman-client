@@ -75,18 +75,19 @@ Choose one of the gateway profile as part of _--gateway_ parameter while working
 
 > [!NOTE]
 > In order to protect the gateways from the accidental mutations, by default, mutation based queries are disallowed. You must enable them by setting the _allowMutations_ field of the gateway profile to _true_.
+> It is recommended to set this value to false in the profile, and override it from the CLI arguments (`--gateways.<profile>.allowMutations`).
 > 
 You are now ready to start using Graphman. 
 
 To bundle the entire configuration of the gateway, run the
 following command:
 ```
-./graphman.sh export --gateway <source-gateway> --using all --output mybundle.json
+./graphman.sh export --gateway <source-gateway> --using all --output source-bundle.json
 ```
 
 You can apply this configuration bundle as-is to the target gateway.
 ```
-./graphman.sh import --gateway <target-gateway> --input mybundle.json
+./graphman.sh import --gateway <target-gateway> --input source-bundle.json
 ```
 
 Congratulations, you just packaged all the configuration from the source gateway, and applied it to the
@@ -118,18 +119,22 @@ To know about client itself, now use the _**version**_ operation
 > 
 > 
 > Supported schema(s) (i.e., version of the Layer7 API Gateway)
-> - v11.1.00
->
+- v11.1.1 (default)
+- v11.1.00
+
+> Switch to the one of the above supported schemas using CLI argument (`--options.schema <schema>`) 
+
 > Use the older clients (https://github.com/Layer7-Community/graphman-client/releases) to work with the earlier schemas.
 
 ## Compatibility Matrix <a name="compatibility-matrix"></a>
 The following table describes the compatibility of the Graphman client with the targeting Layer7 API Gateways.
 
-| Graphman Client | Layer7 API Gateway      |
-|-----------------|------------------------|
-| v1.2.*          |11.1.00|
-| v1.1            |10.1 CR04 and 11.0 CR02|
-| v1.0.*          |10.1 CR03 and 11.0 CR01|
+| Graphman Client | Layer7 API Gateway                   |
+|-----------------|--------------------------------------|
+| v1.3.*          | v11.1.00, v11.1.00                   |
+| v1.2.*          | v11.1.00                             |
+| v1.1            | v10.1 CR04, v11.0 CR02               |
+| v1.0.*          | v10.1 CR03, v11.0 CR01               |
 
 
 ## Graphman configuration bundles <a name="bundles"></a>
