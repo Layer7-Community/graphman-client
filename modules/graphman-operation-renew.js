@@ -49,6 +49,8 @@ module.exports = {
             });
 
             utils.writeResult(params.output, butils.sort(renewedBundle));
+        }).catch(error => {
+            utils.error("errors encountered while renewing the entities", error);
         });
     },
 
@@ -135,13 +137,15 @@ function renewEntities(gateway, entities, typeInfo, options) {
 }
 
 function renewInvoker(gateway, query, typeInfo) {
-    return new Promise(function (resolve) {
+    return new Promise(function (resolve, reject) {
         exporter.export(gateway, query, (data, parts) => {
             const result = {};
 
             result[typeInfo.pluralName] = [];
             if (data.errors) {
-                utils.warn("error encountered while renewing the entity", query, data.errors);
+                utils.warn("error encountered while renewing ", typeInfo.pluralName, query.variables);
+                reject(data.errors);
+                return;
             }
 
             Object.keys(data.data || {}).forEach(key => {
