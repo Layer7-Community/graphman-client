@@ -13,10 +13,10 @@ bundled for your domain-specific use case. To help dive into that layer, power u
 provided Postman collection which provides samples for all the queries and mutations supported by Graphman.
 
 # Jump to
-2. [Getting Started with the Command-line (CLI)](#cli)
-3. [Graphman bundles explained](#bundles)
-4. [Compatibility Matrix](#compatibility-matrix)
-5. [Using in Postman](#postman)
+1. [Getting Started with the Command-line (CLI)](#cli)
+2. [Graphman bundles explained](#bundles)
+3. [Compatibility Matrix](#compatibility-matrix)
+4. [Using in Postman](#postman)
 
 # Graphman client CLI
 
@@ -493,19 +493,19 @@ Client can be configured at global level to deal with certain configuration deta
 As part of extending the supportability and standardization, few of the existing entity types and their associated query-level field methods are deprecated. 
 It is recommended to start using the latest GraphQL types in favour of extensibility and support.
 
-|Deprecated entity type|New entity type|
-|------------------------------|--------------------|
-|_webApiServices_|use **_services_** instead|
-|_soapServices_|use **_services_** instead|
-|_internalWebApiServices_|use **_services_** instead|
-|_internalSoapServices_|use **_services_** instead|
-|_policyFragments_|use **_policies_** instead|
-|_globalPolicies_|use **_policies_** instead|
-|_backgroundTaskPolicies_|use **_policies_** instead|
-|_fips_|use **_federatedIdps_** instead|
-|_fipUsers_|use **_federatedUsers_** instead|
-|_fipGroups_|use **_federatedGroups_** instead|
-|_ldaps_|use **_ldapIdps_** instead|
+| Deprecated entity type   | New entity type                   |
+|--------------------------|-----------------------------------|
+| _webApiServices_         | use **_services_** instead        |
+| _soapServices_           | use **_services_** instead        |
+| _internalWebApiServices_ | use **_services_** instead        |
+| _internalSoapServices_   | use **_services_** instead        |
+| _policyFragments_        | use **_policies_** instead        |
+| _globalPolicies_         | use **_policies_** instead        |
+| _backgroundTaskPolicies_ | use **_policies_** instead        |
+| _fips_                   | use **_federatedIdps_** instead   |
+| _fipUsers_               | use **_federatedUsers_** instead  |
+| _fipGroups_              | use **_federatedGroups_** instead |
+| _ldaps_                  | use **_ldapIdps_** instead        |
 
 > [!NOTE]
 > Bundles with the deprecated entity types can be revised using the **revise** operation.
