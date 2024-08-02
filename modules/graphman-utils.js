@@ -244,6 +244,7 @@ module.exports = {
             this.writeFile(file, bundle);
         } else {
             this.print(bundle);
+            this.print();
         }
     },
 
@@ -293,20 +294,7 @@ module.exports = {
         }
 
         if (!extn.ref) {
-            let filename = this.modulesDir(this.wrapperHome()) + "/extn/graphman-extension-" + ref + ".js";
-            if (this.existsFile(filename)) {
-                extn.ref = require(filename);
-                return extn.ref;
-            }
-
-            filename = this.modulesDir() + "/extn/graphman-extension-" + ref + ".js";
-            if (this.existsFile(filename)) {
-                extn.ref = require(filename);
-                return extn.ref;
-            }
-
-            this.warn(ref + ` graphman extension file (${filename}) is missing, falling back to the default`);
-            extn.ref = defaultExtn.ref;
+            extn.ref = loadExtension(this, this.modulesDir(this.wrapperHome()), ref);
         }
 
         return extn.ref;
@@ -355,4 +343,19 @@ function replaceNewLineMarkers(data) {
     return data
         .replaceAll("\\r\\n", "\n")
         .replaceAll("\\n", "\n");
+}
+
+function loadExtension(utils, path, ref) {
+    try {
+        let filename = path + "/graphman-extension-" + ref + ".js";
+        if (utils.existsFile(filename)) {
+            return require(filename);
+        } else {
+            utils.info(ref + " extension is missing, falling back to the default");
+        }
+    } catch (e) {
+        utils.warn(`failed to load the ${ref} extension, cause=${e.code}, falling back to the default`);
+    }
+
+    return defaultExtn.ref;
 }

@@ -31,6 +31,7 @@ module.exports = {
         if (!gateway.allowMutations) {
             utils.warn(`${gateway.name} gateway is not opted for mutations, ignoring the operation`);
             utils.warn("  make sure the gateway profile is ready for mutations (.allowMutations=true)");
+            utils.print();
             return;
         }
 

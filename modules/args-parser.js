@@ -89,7 +89,7 @@ function normalize(obj) {
         if (obj === 'true') return true;
         if (obj === 'false') return false;
         const num = parseInt(obj);
-        return isNaN(num) ? obj : num;
+        return isNaN(num) || String(num) !== obj ? obj : num;
     }
 
     Object.entries(obj).forEach(([key, value]) => {

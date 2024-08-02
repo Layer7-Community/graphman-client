@@ -43,16 +43,25 @@ module.exports = {
                         const bundle = {};
                         diffBundle(renewedReport, bundle, params.options, false);
 
+                        if (params["output-report"]) {
+                            utils.writeResult(params["output-report"], sortReport(renewedReport));
+                        }
+
                         utils.writeResult(params.output, butils.sort(bundle));
-                        if (params["output-report"]) utils.writeResult(params["output-report"], sortReport(renewedReport));
                     });
                 } else {
                     const bundle = {};
                     diffBundle(report, bundle, params.options, false);
 
+                    if (params["output-report"]) {
+                        utils.writeResult(params["output-report"], sortReport(report));
+                    }
+
                     utils.writeResult(params.output, butils.sort(bundle));
-                    if (params["output-report"]) utils.writeResult(params["output-report"], sortReport(report));
                 }
+            }).catch(error => {
+                utils.error("errors encountered while analyzing the differences", error);
+                utils.print();
             });
         } else if (params["input-report"]) {
             const report = utils.readFile(params["input-report"]);
@@ -120,31 +129,34 @@ function readBundleFrom(fileOrGateway) {
         if (!gateway.address) throw utils.newError(`${gateway.name} gateway details are missing`);
         return readBundleFromGateway(gateway);
     } else {
-        return new Promise(function (resolve) {
-            resolve(utils.readFile(fileOrGateway));
-        });
+        return Promise.resolve(utils.readFile(fileOrGateway));
     }
 }
 
 function readBundleFromGateway(gateway) {
-    return new Promise(function (resolve) {
+    return new Promise(function (resolve, reject) {
         utils.info(`retrieving ${gateway.name} gateway configuration summary`);
-        exporter.export(
-            gateway,
-            gql.generate("all:summary", {}, graphman.configuration().options),
-            data => {
-                if (data.errors) {
-                    utils.warn(`errors detected while retrieving ${gateway.name} gateway configuration summary`, data.errors);
-                }
+        try {
+            exporter.export(
+                gateway,
+                gql.generate("all:summary", {}, graphman.configuration().options),
+                data => {
+                    if (data.errors) {
+                        utils.warn(`errors detected while retrieving ${gateway.name} gateway configuration summary`);
+                        reject(data.errors);
+                    }
 
-                const bundle = data.data || {};
-                bundle.properties = bundle.properties || {};
-                bundle.properties.meta = bundle.properties.meta || {};
-                bundle.properties.meta.summary = true;
-                bundle.properties.meta.gateway = gateway.name;
-                resolve(bundle);
-            }
-        );
+                    const bundle = data.data || {};
+                    bundle.properties = bundle.properties || {};
+                    bundle.properties.meta = bundle.properties.meta || {};
+                    bundle.properties.meta.summary = true;
+                    bundle.properties.meta.gateway = gateway.name;
+                    resolve(bundle);
+                }
+            );
+        } catch (error) {
+            reject(error);
+        }
     });
 }
 
@@ -185,13 +197,13 @@ function diffRenewReport(leftBundle, rightBundle, report, options, callback) {
         const gateway = graphman.gatewayConfiguration(leftBundle.properties.meta.gateway);
 
         // renew inserts section using the source gateway
-        promises.push(new Promise(function (resolve) {
-            renewBundle(gateway, report.inserts, ["*"], Object.assign(options, {useGoids: true}), resolve);
+        promises.push(new Promise(function (resolve, reject) {
+            renewBundle(gateway, report.inserts, ["*"], Object.assign(options, {useGoids: true}), resolve, reject);
         }));
 
         // renew updates section using the source gateway
-        promises.push(new Promise(function (resolve) {
-            renewBundle(gateway, report.updates, ["*"], Object.assign(options, {useGoids: true}), resolve);
+        promises.push(new Promise(function (resolve, reject) {
+            renewBundle(gateway, report.updates, ["*"], Object.assign(options, {useGoids: true}), resolve, reject);
         }));
     } else {
         promises.push(new Promise(function (resolve) {
@@ -207,8 +219,8 @@ function diffRenewReport(leftBundle, rightBundle, report, options, callback) {
         const gateway = graphman.gatewayConfiguration(rightBundle.properties.meta.gateway);
 
         // renew updates section using the target gateway
-        promises.push(new Promise(function (resolve) {
-            renewBundle(gateway, report.updates, ["*"], Object.assign(options, {useGoids: false}), resolve);
+        promises.push(new Promise(function (resolve, reject) {
+            renewBundle(gateway, report.updates, ["*"], Object.assign(options, {useGoids: false}), resolve, reject);
         }));
     }
 
@@ -238,20 +250,23 @@ function diffRenewReport(leftBundle, rightBundle, report, options, callback) {
 
             callback(renewedReport);
         }
+    }).catch(error => {
+        utils.error("errors encountered while renewing the entities", error);
+        utils.print();
     });
 
 }
 
-function renewBundle(gateway, bundle, sections, options, callback) {
+function renewBundle(gateway, bundle, sections, options, resolve, reject) {
     if (!gateway.address) {
-        throw utils.newError(`${gateway.name} gateway details are missing`);
+        reject(utils.newError(`${gateway.name} gateway details are missing`));
     }
 
     Promise.all(renewer.renew(gateway, bundle, sections, options)).then(results => {
         const renewedBundle = {};
         results.forEach(item => Object.assign(renewedBundle, item));
-        callback(butils.sort(renewedBundle));
-    });
+        resolve(butils.sort(renewedBundle));
+    }).catch(error => reject(error));
 }
 
 /**
