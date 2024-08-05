@@ -86,7 +86,7 @@ module.exports = {
     },
 
     usage: function () {
-        console.log("renew --input <input-file> --gateway <name>");
+        console.log("renew --input <input-file> --gateway <name> [--sections <section>...]");
         console.log("  [--output <output-file>]");
         console.log("  [--options.<name> <value>,...]");
         console.log();
@@ -112,9 +112,6 @@ module.exports = {
         console.log();
         console.log("  --options.<name> <value>");
         console.log("    specify options as name-value pair(s) to customize the operation");
-        console.log("      .scope <enity-type-plural-name>");
-        console.log("        select one or more entity types for renew operation.");
-        console.log("        by default, all the entity types will be considered for operation's scope.");
         console.log("      .useGoids false|true");
         console.log("        true to use goids to renew the entities.");
         console.log("        by default, entities will be renewed using their identity details.");

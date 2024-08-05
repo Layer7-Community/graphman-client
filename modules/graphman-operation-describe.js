@@ -14,14 +14,10 @@ module.exports = {
      * @param params.options
      */
     run: function (params) {
-        if (!params.query) {
-            throw "--query parameters are missing";
-        }
-
-        if (typeof params.query === 'object') {
-            printAvailableQueries();
-        } else {
+        if (params.query) {
             describeQuery(params.query, params.options);
+        } else {
+            printAvailableQueries();
         }
     },
 
@@ -31,7 +27,7 @@ module.exports = {
     },
 
     usage: function () {
-        console.log("describe --query [<query-name>]]");
+        console.log("describe [--query <query-name>]");
         console.log("  [--output <output-file>]");
         console.log();
         console.log("Describes queries about their fields, arguments, etc.");
@@ -57,15 +53,15 @@ function isMutationBasedQuery(path) {
 
 function availableQueries(callback) {
     const queries = [];
-    const path = utils.path(utils.queriesDir(), graphman.configuration().schemaVersion);
+    const paths = utils.queryDirs(graphman.configuration().schemaVersion);
 
-    if (utils.existsFile(path)) availableQueriesIn(path, (name, isMutation) => {
-        callback(name, isMutation);
-        queries.push(name);
-    });
-
-    availableQueriesIn(utils.queriesDir(), (name, isMutation) => {
-        if (!queries.includes(name)) callback(name, isMutation);
+    paths.forEach(path => {
+        if (utils.existsFile(path)) availableQueriesIn(path, (name, isMutation) => {
+            if (!queries.includes(name)) {
+                callback(name, isMutation);
+                queries.push(name);
+            }
+        });
     });
 }
 
@@ -85,7 +81,7 @@ function describeQuery(queryName, options) {
         const query = gql.generate(queryName, {}, Object.assign({describeQuery: true}, options));
         utils.print(query.query);
     } else {
-        const queryNames = graphman.queryFieldNamesByPattern(queryName);
+        const queryNames = graphman.queryNamesByPattern(queryName);
         if (queryNames.length === 0) {
             utils.info("no matches found");
         } else if (queryNames.length === 1) {
