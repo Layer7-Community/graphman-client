@@ -44,8 +44,7 @@ module.exports = {
     init: function (home, params) {
         utils.wrapperHome(home);
 
-        const configFile = utils.wrapperHome() + "/graphman.configuration";
-        const config = utils.existsFile(configFile) ? JSON.parse(utils.readFile(configFile)) : {};
+        const config = loadConfig(utils.wrapperHome() + "/graphman.configuration");
 
         // override configured options using params if specified
         config.options = makeOptions(config.options || {});
@@ -288,6 +287,15 @@ function getPartsFromRawRequest(options) {
     }
 
     return options.parts;
+}
+
+function loadConfig(configFile) {
+    try {
+        return utils.existsFile(configFile) ? JSON.parse(utils.readFile(configFile)) : {};
+    } catch (e) {
+        utils.warn(`error loading graphman.configuration, cause=${e.message}`);
+        throw utils.newError("failed to load configuration");
+    }
 }
 
 function makeOptions(options) {

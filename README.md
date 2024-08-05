@@ -592,28 +592,6 @@ target gateway.
 graphman.sh revise --input some-bundle.json --output revised-bundle.json
 ```
 
-# Using Graphman in Postman <a name="postman"></a>
-
-Use the collection provided in this package by importing it in Postman. Once in Postman, select
-the root node of the Collection and open the documentation to get started. Assign two placeholder
-variables {{source_gw}} and {{target_gw}} to point to your gateways as well as the admin credentials
-as illustrated below.
-
-![The postman collection's root node](img/postman2.png "Collection root")
-
-The Postman collection contains sample Graphman requests organized in categories:
-- Bundles and migration - samples showing how to create and apply samples according to different bundling strategies
-- Config entities - For each entity types, how to create, read, update, delete (CRUD) those entities
-- Summary and compare - Queries that compare various aspect of configuration between two gateways
-
-Each request can be use as-is and has its own documentation.
-![A postman sample request with documentation](img/postman1.png "Documentation for each sample")
-
-Some folders contain multiple requests that work together via environment variables and are meant to be used sequentially.
-For example under Bundle and Migration, a graphql query creates a graphman bundle which is then used as input in a graphql mutation.
-
-You can create your own folder and copy/paste sample graphman requests into it to create your own configuration flow.
-
 # Dealing with secrets in the gateway configuration
 
 Of all the entity types, two of them contain sensitive information which is never in clear:
@@ -654,6 +632,41 @@ Client can be configured at global level to deal with certain configuration deta
 > [!NOTE]
 > Global options from the configuration file can be overridden using the CLI argument (`--options.<name> <value>`). 
 
+# Extensions
+Graphman Client introduces few extension points that are open to change. So that, user can extend the existing functionality (especially by loading the third-party modules).
+By default, not all the extensions are enabled for use. Needed extensions can be enabled either by configuration file or using `--options.extensions` CLI argument.
+
+For example:
+`--options.extensions multiline-text-diff policy-code-validator`
+
+- pre-request
+  - enables the extension to modify the graphman service request (http). 
+  - commands (like **export**, **import**, **renew**, etc) that require interactions with the graphman service use it.
+  - ref: _modules/graphman-extension-pre-request.js_
+- post-export
+  - enables the extension to act on the exported configuration prior to writing it the console or file. 
+  - **export** command uses it.
+  - ref: _modules/graphman-extension-post-export.js_
+- pre-import
+  - enables the extension to act on the input prior to submitting it for import.
+  - **import** command uses it.
+  - ref: _modules/graphman-extension-pre-import.js_
+- multiline-text-diff
+  - enables the extension to compute the line level differences for the multiline text.
+  - **diff** command uses it.
+  - ref: _modules/graphman-extension-multiline-text-diff.js_
+  - default implementation uses the [diff](https://www.npmjs.com/package/diff) third-party module. By default, it is not enabled for use. 
+  - once enabled, make sure this package is installed, available for use
+    - `npm install diff`
+- policy-code-validator
+  - enables the extensions to compile the json schema that is needed for policy code validation. 
+  - **validate** command uses it.
+  - ref: _modules/graphman-extension-policy-code-validator.js_
+  - default implementation uses the [ajv](https://www.npmjs.com/package/ajv) third-party module. By default, it is not enabled for use.
+  - once enabled, make sure this package is installed, available for use
+  - `npm install ajv`
+
+
 # Deprecated entity types
 As part of extending the supportability and standardization, few of the existing entity types and their associated query-level field methods are deprecated. 
 It is recommended to start using the latest GraphQL types in favour of extensibility and support.
@@ -676,4 +689,26 @@ It is recommended to start using the latest GraphQL types in favour of extensibi
 > Bundles with the deprecated entity types can be revised using the **revise** operation.
 > 
 > Previous support for LDAP-based IDP configurations is partial, hence it is recommended to re-export them again.
-> 
+>
+
+# Using Graphman in Postman <a name="postman"></a>
+Use the collection provided in this package by importing it in Postman. Once in Postman, select
+the root node of the Collection and open the documentation to get started. Assign two placeholder
+variables {{source_gw}} and {{target_gw}} to point to your gateways as well as the admin credentials
+as illustrated below.
+
+![The postman collection's root node](img/postman2.png "Collection root")
+
+The Postman collection contains sample Graphman requests organized in categories:
+- Bundles and migration - samples showing how to create and apply samples according to different bundling strategies
+- Config entities - For each entity types, how to create, read, update, delete (CRUD) those entities
+- Summary and compare - Queries that compare various aspect of configuration between two gateways
+
+Each request can be use as-is and has its own documentation.
+![A postman sample request with documentation](img/postman1.png "Documentation for each sample")
+
+Some folders contain multiple requests that work together via environment variables and are meant to be used sequentially.
+For example under Bundle and Migration, a graphql query creates a graphman bundle which is then used as input in a graphql mutation.
+
+You can create your own folder and copy/paste sample graphman requests into it to create your own configuration flow.
+
