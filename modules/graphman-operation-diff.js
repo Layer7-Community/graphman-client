@@ -359,12 +359,12 @@ function makeEntityReadyForEqualityCheck(leftEntity, rightEntity) {
     const codeRef = {left: null, right: null};
 
     // capture policy code and re-write it as string for comparison friendly
-    if (leftEntity.policy) {
+    if (leftEntity.policy  && leftEntity.policy.code) {
         codeRef.left = leftEntity.policy.code;
         leftEntity.policy.code = JSON.stringify(codeRef.left, null, 0);
     }
 
-    if (rightEntity.policy) {
+    if (rightEntity.policy && rightEntity.policy.code) {
         codeRef.right = rightEntity.policy.code;
         rightEntity.policy.code = JSON.stringify(codeRef.right, null, 0);
     }

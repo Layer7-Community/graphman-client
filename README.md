@@ -220,6 +220,7 @@ graphman.sh export --gateway <source-gateway> --using all --output mybundle.json
 - specify `--options.policyCodeFormat <format>` to choose one of the supported policy code formats (`xml|json|yaml|code`) for export
 - specify `--options.keyFormat <format>` to choose one of the supported key formats (`p12|pem`) for export
 - use `--options.includePolicyRevisions` flag to include policy revisions along with the **policies** and **services** for export
+- use `--options.includeMultipartFields` flag to include multipart fields (filePartName) so that server module file will be fully exported
 - NOTE: Above options are applicable to the **export** operation irrespective of the query being used.
 
 ### all:summary
@@ -404,6 +405,11 @@ You can override mutation actions if exists using _--mappings_ option. For examp
 graphman.sh import --gateway <target-gateway> --using delete-bundle --input hello-world.json --options.mappings.action DELETE --options.mappings.keys.action IGNORE --options.mappings.trustedCerts.action IGNORE
 ```
 
+In case if you are interested to migrate policies and services along with their revisions, try importing the bundle with the revisions with the `migratePolicyRevisions` option.
+```
+graphman.sh import --gateway <target-gateway> --input hello-world-with-policy-revisions.json --options.migratePolicyRevisions
+```
+
 ## Using mappings command
 Sometimes, we may require greater level of control over the bundle mutations. For which, one can take advantage of the mappings to specify the mutation actions at the entity level.
 mappings command helps us to generate the mapping instructions with fine level of control. 
@@ -426,34 +432,89 @@ graphman.sh mappings --input hello-world.json --mappings.services.action NEW_OR_
 ## Using diff command
 
 To compare the configuration between the gateways or bundles, you can diff them using graphman.
-
 ```
-graphman.sh diff --input bundle1.json --input @<some-gateway>
+graphman.sh diff --input-source bundle1.json --input-target bundle2.json --output delta.json
 ```
 
-The output of diff includes the difference for entities and a mapping of goid conflicts.
+The output of diff includes the difference for entities and a mapping of goid conflicts. More precisely, what is to be applied to the **target** to match it with the **source**. 
+By default, missing entities and modified entities will be included into the delta. You may choose to remove the extra entities from the **target**  by `--options.includeDeletes` option.
+```
+graphman.sh diff --input-source bundle1.json --input-target bundle2.json --output delta.json --options.includeDeletes
+```
 
 > [!NOTE]
 > Use '@' prefix to the input parameter for treating it as gateway profile name. 
 > Otherwise, it will be considered as bundle file.
 
-### Bundle the difference between two gateways
+### Bundle the delta between two gateways
 
 Graphman helps you bundle the delta between two gateways.
 
 You can use the difference between two gateways to produce a configuration bundle that contains
-this difference. You can use these bundles to bring up to date a target gateway based on its 
-differences with a source gateway.
+this difference. You can use these bundles to bring up to date a **target** gateway based on its 
+differences with a **source** gateway.
 
 ```
-graphman.sh diff --input @<source-gateway> --input @<target-gateway> --output diff.json
+graphman.sh diff --input-source @<source-gateway> --input-target @<target-gateway> --output delta.json
 ```
 
-Once the differences are identified, renew them using source gateway and finally import them into target gateway.
+As the diff command uses the summary bundle for identifying the differences between gateways, resultant delta bundle is loaded with the partial entity details, hence it is not import ready. So, either we should be instructing the diff command to renew the delta entities using the **source** gateway or renew them separately.
 ```
-graphman.sh renew --input diff.json --gateway <source-gateway> --output delta.json
-graphman.sh import --input delta.json --gateway <target-gateway>
+graphman.sh diff --input-source @<source-gateway> --input-target @<target-gateway> --output delta.json --options.renewEntities
+  (or)
+graphman.sh renew --input delta.json --gateway <source-gateway> --output delta-renewed.json  
 ```
+
+Once the differences are identified with full entity details, delta bundle is import ready. After successful import, the **target** environment should be matching with that of the **source** gateway.
+
+### Report about the differences
+Sometimes, you might be curious to observe the differences closely. For which, diff command can be instructed to capture the report.
+```
+graphman.sh diff --input-source bundle1.json --input-target bundle2.json --output delta.json --output-report delta-report.json
+```
+
+This report organizes the differences in 4 categories.
+- inserts
+  - entities from this category are entirely missing from the **target** environment.
+- updates
+  - entities from this category are different by one or more fields.
+- deletes
+  - entities from this category exist with the **target** environment, but missing from the **source**. In other words, they can be seen as unwanted entities, hence they are deletable.
+- diffs
+  - this category exemplifies the **updates** section such that what portion of the entity is different. All the differences are captured at the entity property level as a linear list.
+  - For example:
+    ```
+      "diffs": {
+        "services": [
+        {
+          "resolutionPath": "/some-service",
+          "serviceType": "WEB_API",
+          "details": [
+            {
+              "path": "$.checksum",
+              "source": "0413eafd68e5b2cc5bd1a0fe6f5bacca861146c3",
+              "target": "534c3f33415a355bdd36328ddcc454635c73c9b7"
+            },
+            {
+              "path": "$.tracingEnabled",
+              "source": true,
+              "target": false
+            },
+            {
+              "path": "$.wssProcessingEnabled",
+              "source": true,
+              "target": false
+            },
+            {
+              "path": "$.properties[0].value",
+              "source": "Hello World!",
+              "target": "Hello!"
+            }
+          ]
+        }
+      ]
+    }
+    ```
 
 ### Subtracting a bundle from another
 
@@ -464,11 +525,11 @@ Why would you need to do this? For example, you want to remove an overlap betwee
 type configuration from a service and all its dependencies (e.g. you end up with unwanted OTK
 config entities in a bundle). To perform this operation, use the diff command:
 ```
-graphman.sh diff --input tooBig.json --input whatToCut.json --output trimmed.json
+graphman.sh diff --input-source big-bundle.json --input-target what-to-cut.json --output trimmed.json
 ```
 
-If you wish to subtract entities from whatToCut.json even if they are different from tooBig.json
-you can remove from checksum property in whatToCut.json. For example if whatToCut.json contains:
+If you wish to subtract entities from what-to-cut.json even if they are different from big-bundle.json
+you can remove from checksum property in what-to-cut.json. For example if what-to-cut.json contains:
 
 ```
 {
