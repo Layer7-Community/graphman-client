@@ -88,7 +88,7 @@ module.exports = {
     schemaDir: function (schemaVersion) {
         const path = this.path(SCHEMA_DIR, schemaVersion);
         if (!this.existsFile(path)) {
-            throw this.newError("schema directory is missing, path=" + path);
+            throw this.newError("unsupported schema, " + schemaVersion);
         }
 
         return path;
@@ -110,18 +110,19 @@ module.exports = {
         return workspace ? this.path(workspace, "queries") : QUERIES_DIR;
     },
 
+    queryDirs: function (schemaVersion) {
+        return [
+            this.path(this.queriesDir(this.wrapperHome()), schemaVersion),
+            this.path(this.queriesDir(this.wrapperHome())),
+            this.path(this.queriesDir(), schemaVersion),
+            this.queriesDir()
+        ];
+    },
+
     queryFile: function (query, schemaVersion) {
-        let path = this.path(this.queriesDir(this.wrapperHome()), schemaVersion, query);
-        if (this.existsFile(path)) {
-            return path;
-        }
-
-        path = this.path(this.queriesDir(), schemaVersion, query);
-        if (this.existsFile(path)) {
-            return path;
-        }
-
-        return this.path(this.queriesDir(), query);
+        const paths = this.queryDirs(schemaVersion);
+        const path = paths.find(item => this.existsFile(this.path(item, query)));
+        return path ? this.path(path, query) : this.path(paths[0], query);
     },
 
     isDirectory: function (fd) {

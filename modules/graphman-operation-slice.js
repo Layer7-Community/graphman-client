@@ -64,7 +64,7 @@ module.exports = {
     },
 
     usage: function () {
-        console.log("slice --input <input-file> ");
+        console.log("slice --input <input-file> [--sections <section>...]");
         console.log("  [--output <output-file>]");
         console.log();
         console.log("Slices the bundle as per the choice.");

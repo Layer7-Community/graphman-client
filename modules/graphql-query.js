@@ -60,7 +60,8 @@ function buildGraphQLQuery(queryPrefix, querySuffix) {
     const typeInfo = fieldInfo ? graphman.typeInfoByTypeName(fieldInfo.dataType) : null;
 
     if (!typeInfo) {
-        throw "unrecognized query " + queryPrefix;
+        utils.warn("no matching query definition available from " + utils.queriesDir(utils.wrapperHome()));
+        throw "unrecognized query, " + queryPrefix;
     }
 
     let fArgs = "(";

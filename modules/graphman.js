@@ -97,6 +97,30 @@ module.exports = {
         return queryInfo.fields.filter(x => x.name.match(regex)).map(x => x.name);
     },
 
+    queryNamesByPattern: function (pattern) {
+        const regex = "^" + pattern.replaceAll("*", ".*") + "$";
+        const result = [];
+
+        utils.queryDirs(this.configuration().schemaVersion).forEach(path => {
+            if (utils.existsFile(path)) utils.listDir(path).forEach(item => {
+                if (utils.isFile(utils.path(path, item)) && item.endsWith(".json")) {
+                    const queryName = item.substring(0, item.length - 5);
+                    if (queryName.match(regex) && !result.includes(queryName)) {
+                        result.push(queryName);
+                    }
+                }
+            });
+        });
+
+        this.queryFieldNamesByPattern(pattern).forEach(item => {
+            if (!result.includes(item)) {
+                result.push(item);
+            }
+        });
+
+        return result;
+    },
+
     typeInfoByTypeName: function (name) {
         return this.metadata.types[name];
     },
