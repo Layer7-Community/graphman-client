@@ -61,7 +61,7 @@ function buildGraphQLQuery(queryPrefix, querySuffix) {
 
     if (!typeInfo) {
         utils.warn("no matching query definition available from " + utils.queriesDir(utils.wrapperHome()));
-        throw "unrecognized query, " + queryPrefix;
+        throw "unrecognized query " + queryPrefix;
     }
 
     let fArgs = "(";
