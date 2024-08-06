@@ -28,7 +28,7 @@ function graphman(module) {
         }
 
         console.log(module + " npm module is not available");
-        console.log("please refer the github link for installation: https://github.com/Layer7-Community/graphman-client")
+        console.log("please refer the github link for [Getting Started with the CLI]: https://github.com/Layer7-Community/graphman-client?tab=readme-ov-file#cli")
         console.log();
     }
 
