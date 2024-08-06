@@ -70,7 +70,7 @@ module.exports = {
             diffBundle(report, bundle, params.options, true);
             utils.writeResult(params.output, butils.sort(bundle));
         } else {
-            throw utils.newError("not enough input parameters")
+            throw utils.newError("not enough input parameters");
         }
     },
 
@@ -101,7 +101,7 @@ module.exports = {
         console.log();
         console.log("  --input-report <input-report-file>");
         console.log("    specify the input diff report file to generate the diff bundle");
-        console.log("    NOTE: this parameter will be ignored if the input parameter is specified");
+        console.log("    NOTE: this parameter will be ignored if the source and target input parameters are specified");
         console.log();
         console.log("  --output <output-file>");
         console.log("    specify the file to capture the diff bundle");

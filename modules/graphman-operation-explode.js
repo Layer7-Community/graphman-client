@@ -61,7 +61,7 @@ module.exports = {
         console.log("      .level 0|1|2");
         console.log("        to decide the level of explode operation");
         console.log("          - 0, default level where the individual entities will be exploded into separate files");
-        console.log("          - 1, binary data (p12, pem, etc) associated with the entities will be exploded into separate files");
+        console.log("          - 1, wsdl resources and cert and key binary data (in p12 and pem formats) associated with the entities will be exploded into separate files");
         console.log("          - 2, policy code will be exploded into separate files");
         console.log();
     }
