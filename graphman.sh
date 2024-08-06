@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 if [ -z "$GRAPHMAN_HOME" ]; then
   echo "GRAPHMAN_HOME environment variable is not defined"

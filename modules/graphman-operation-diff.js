@@ -70,7 +70,7 @@ module.exports = {
             diffBundle(report, bundle, params.options, true);
             utils.writeResult(params.output, butils.sort(bundle));
         } else {
-            throw utils.newError("not enough input parameters")
+            throw utils.newError("not enough input parameters");
         }
     },
 
@@ -101,7 +101,7 @@ module.exports = {
         console.log();
         console.log("  --input-report <input-report-file>");
         console.log("    specify the input diff report file to generate the diff bundle");
-        console.log("    NOTE: this parameter will be ignored if the input parameter is specified");
+        console.log("    NOTE: this parameter will be ignored if the source and target input parameters are specified");
         console.log();
         console.log("  --output <output-file>");
         console.log("    specify the file to capture the diff bundle");
@@ -226,19 +226,11 @@ function diffRenewReport(leftBundle, rightBundle, report, options, callback) {
 
     // generate report using the renewed details
     Promise.all(promises).then(results => {
-        const renewedReport = {
-            inserts: results[0],
-            updates: results[1],
-            deletes: report.deletes,
-            diffs: {},
-            mappings: {goids: [], guids: []}
-        };
-
         if (results.length <= 2) {
-            renewedReport.diffs = report.diffs;
-            renewedReport.mappings = report.mappings;
+            const renewedReport = {inserts: results[0], updates: results[1], deletes: report.deletes, diffs: report.diffs, mappings: report.mappings};
             callback(renewedReport);
         } else {
+            const renewedReport = {inserts: {}, updates: {}, deletes: {}, diffs: {}, mappings: {goids: [], guids: []}};
             const multiLineTextDiffExtension = utils.extension("multiline-text-diff");
             const leftUpdateBundle = results[1];
             const rightUpdateBundle = results[2];
@@ -254,7 +246,6 @@ function diffRenewReport(leftBundle, rightBundle, report, options, callback) {
         utils.error("errors encountered while renewing the entities", error);
         utils.print();
     });
-
 }
 
 function renewBundle(gateway, bundle, sections, options, resolve, reject) {
