@@ -9,6 +9,7 @@ test("sanitize bundle for import", () => {
     const bundle = tUtils.readFileAsJson("samples/bundle.import-sanitizer.sample.json");
 
     expect(bundle.fipGroups[0].members).toBeDefined();
+    expect(bundle.federatedGroups[0].members).toBeDefined();
     expect(bundle.internalGroups[0].members).toBeDefined();
     expect(bundle.serverModuleFiles[0].filePartName).toBeDefined();
     expect(bundle.serverModuleFiles[0].moduleStates).toBeDefined();
@@ -23,6 +24,7 @@ test("sanitize bundle for import", () => {
     bUtils.sanitize(bundle, bUtils.IMPORT_USE, {});
 
     expect(bundle.fipGroups[0].members).not.toBeDefined();
+    expect(bundle.federatedGroups[0].members).not.toBeDefined();
     expect(bundle.internalGroups[0].members).not.toBeDefined();
     expect(bundle.serverModuleFiles[0].filePartName).not.toBeDefined();
     expect(bundle.serverModuleFiles[0].moduleStates).not.toBeDefined();

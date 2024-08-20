@@ -23,6 +23,13 @@
         }
     ],
 
+    "federatedGroups": [
+        {
+            "name": "some-federated-group",
+            "members": {}
+        }
+    ],
+
     "internalGroups": [
         {
             "name": "some-internal-group",
