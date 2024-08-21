@@ -1,0 +1,72 @@
+{
+    "trustedCerts": [
+        {
+            "name": "some-cert",
+            "revocationCheckPolicy": {}
+        }
+    ],
+
+    "fips": [
+        {
+            "name": "some-fip",
+            "certificateReferences": [{
+                "name": "some-cert",
+                "revocationCheckPolicy": {}
+            }]
+        }
+    ],
+
+    "fipGroups": [
+        {
+            "name": "some-fip-group",
+            "members": {}
+        }
+    ],
+
+    "federatedGroups": [
+        {
+            "name": "some-federated-group",
+            "members": {}
+        }
+    ],
+
+    "internalGroups": [
+        {
+            "name": "some-internal-group",
+            "members": {}
+        }
+    ],
+
+    "serverModuleFiles": [
+        {
+            "name": "some-module",
+            "filePartName": "some-part",
+            "moduleStates": {},
+            "moduleStateSummary": {}
+        }
+    ],
+
+    "activeConnectors": [
+        {
+            "name": "some-active-connector",
+            "hardwiredServiceName": "some-hardwired-service",
+            "hardwiredService": {}
+        }
+    ],
+
+    "emailListeners": [
+        {
+            "name": "some-email-listener",
+            "hardwiredServiceName": "some-hardwired-service",
+            "hardwiredService": {}
+        }
+    ],
+
+    "listenPorts": [
+        {
+            "name": "some-listen-port",
+            "hardwiredServiceName": "some-hardwired-service",
+            "hardwiredService": {}
+        }
+    ]
+}

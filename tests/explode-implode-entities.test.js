@@ -1,6 +1,6 @@
-const util = require("./util");
+const tUtils = require("./utils");
 const cp = require('child_process');
-const {graphman} = util;
+const {graphman} = tUtils;
 
 test("key explode intangible by openssl due to missing utf8 to binary encoding-DE600179", () => {
 

@@ -77,9 +77,9 @@ module.exports = {
         use = use || this.EXPORT_USE;
 
         if (use === this.EXPORT_USE) {
-            return exportSanitizer.sanitize(bundle, options);
+            return exportSanitizer.sanitize(bundle, options, this);
         } else if (use === this.IMPORT_USE) {
-            return importSanitizer.sanitize(bundle, options);
+            return importSanitizer.sanitize(bundle, options, this);
         } else {
             utils.warn("incorrect [use] specified for bundle sanitization: " + use);
         }
@@ -606,64 +606,53 @@ let exportSanitizer = function () {
 }();
 
 let importSanitizer = function () {
-    return {
-        sanitize: function (bundle, options) {
-            Object.keys(bundle).forEach(key => {
-                const typeInfo = metadata.bundleTypes[key];
+    const interestedSections = [
+        "activeConnectors", "emailListeners", "listenPorts",
+        "internalGroups", "fipGroups", "federatedGroups",
+        "serverModuleFiles",
+        "trustedCerts"
+    ];
 
+    return {
+        sanitize: function (bundle, options, butils) {
+            butils.forEach(bundle, (key, entities, typeInfo) => {
                 utils.info("inspecting " + key);
 
-                if (!typeInfo) {
-                    utils.warn("found unknown entity type: " + key);
-                } else if (typeInfo.deprecated) {
+                if (typeInfo.deprecated) {
                     utils.warn("found deprecated entity type: " + key + ", revise the bundle");
                 }
 
                 const goidRequired = typeInfo ? typeInfo.goidRefEnabled : false;
                 const includeGoids = !options.excludeGoids;
 
-                if (Array.isArray(bundle[key])) {
-                    bundle[key].forEach(item => sanitizeEntity(item, key, goidRequired || includeGoids));
-                    if (bundle[key].length === 0) {
-                        delete bundle[key];
+                entities.forEach(entity => {
+                    if (!goidRequired && !includeGoids) {
+                        delete entity.goid;
                     }
-                } else if (key !== "properties") {
-                    sanitizeEntity(bundle[key], key, goidRequired || includeGoids);
-                }
+
+                    if (interestedSections.includes(typeInfo.pluralName)) {
+                        sanitizeEntity(entity, typeInfo, butils);
+                    }
+
+                    if (typeInfo.pluralName === "fips") {
+                        if (Array.isArray(entity.certificateReferences)) {
+                            const certTypeInfo = graphman.typeInfoByTypeName("Certificate");
+                            entity.certificateReferences.forEach(certRef => sanitizeEntity(certRef, certTypeInfo, butils));
+                        }
+                    }
+                });
             });
 
             return bundle;
         }
     };
 
-    function sanitizeEntity(entity, pluralMethod, goidRequired) {
-        if (!goidRequired) delete entity.goid;
-
-        if (pluralMethod === "internalGroups") {
-            if (entity.members) {
-                utils.info(`removing members field(s) from internalGroups ${entity.name}`);
-                delete entity.members;
+    function sanitizeEntity(entity, typeInfo, butils) {
+        if (typeInfo.excludedFields.length > 0) typeInfo.excludedFields.forEach(field => {
+            if (entity.hasOwnProperty(field)) {
+                utils.info(`  removing ${field} field from the entity ` + butils.entityName(entity, typeInfo));
+                delete entity[field];
             }
-        } else if (pluralMethod === "fipGroups") {
-            if (entity.members) {
-                utils.info(`removing members field(s) from fipGroups ${entity.name}`);
-                delete entity.members;
-            }
-        } else if (pluralMethod === "serverModuleFiles") {
-            if (entity.filePartName||entity.moduleStates||entity.moduleStateSummary) {
-                utils.info(`removing filePartName|moduleStates|moduleStateSummary field(s) from serverModuleFiles ${entity.name}`);
-                delete entity.filePartName;
-                delete entity.moduleStates;
-                delete entity.moduleStateSummary;
-            }
-        } else if (pluralMethod === "trustedCerts") {
-            if (entity.revocationCheckPolicy) {
-                utils.info(`removing revocationCheckPolicy field(s) from trustedCerts ${entity.name}`);
-                delete entity.revocationCheckPolicy;
-            }
-        } else if (entity.hardwiredService) {
-            utils.info(`removing hardwiredService field from ${pluralMethod} ${entity.name}`);
-            delete entity.hardwiredService;
-        }
+        });
     }
 }();
