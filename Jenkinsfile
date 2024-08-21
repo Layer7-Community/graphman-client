@@ -11,6 +11,11 @@ pipeline {
     }
     parameters {
         string(name: 'VAR_jdk_version', defaultValue: 'jdk11.0.18_10', description: 'JDK Version')
+        booleanParam(
+            defaultValue: false,
+            description: 'true to publish the build artifacts to the artifactory.',
+            name: 'PUBLISH_TO_ARTIFACTORY'
+        )
     }
     stages {
         stage('Update Java') {
@@ -36,6 +41,7 @@ pipeline {
             }
         }
         stage('Publish to Artifactory') {
+            when { expression { params.PUBLISH_TO_ARTIFACTORY }}
             steps {
                 sh '''
                    export layer7Graphman=$(ls -d ./build/dist/layer7-graphman-1*)
