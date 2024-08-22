@@ -1,11 +1,11 @@
 
-const util = require("./util");
-const {expectArray} = util;
-const {graphman} = util;
-const {metadata} = util;
+const tUtils = require("./utils");
+const {expectArray} = tUtils;
+const {graphman} = tUtils;
+const {metadata} = tUtils;
 
 const standardBundleFile = "samples/standard-bundle.json";
-const standardBundle = util.readFileAsJson(standardBundleFile);
+const standardBundle = tUtils.readFileAsJson(standardBundleFile);
 
 test("import entities with bundleDefaultAction=IGNORE", () => {
     const output = graphman("import",

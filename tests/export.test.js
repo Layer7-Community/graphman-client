@@ -1,5 +1,5 @@
-const util = require("./util");
-const {graphman} = util;
+const tUtils = require("./utils");
+const {graphman} = tUtils;
 
 test("export entities with unknown query", () => {
     const output = graphman("export",

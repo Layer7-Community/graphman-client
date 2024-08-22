@@ -1,5 +1,6 @@
 
-const parser = require("../modules/args-parser");
+const tUtils = require("./utils");
+const parser = tUtils.load("args-parser");
 
 test("test simple arguments", () => {
     const params = parser.parse([
