@@ -148,8 +148,9 @@ let type1Imploder = (function () {
         }
     }
 
-    function isValueFileReferenced(data) {
-        return data && data.startsWith("{") && data.endsWith("}");
+    function isValueFileReferenced(data, fileExtension) {
+        return data && data.startsWith("{") && data.endsWith("}") &&
+            (!fileExtension || (data.endsWith(fileExtension + "}") || data.endsWith(fileExtension + "}}")));
     }
 
     function implodeFile(data, path) {
@@ -192,7 +193,7 @@ let type1Imploder = (function () {
     function implodePolicyCode(entity, policy, inputDir) {
         if (isValueFileReferenced(policy.xml)) {
             policy.xml = implodeFile(policy.xml, inputDir);
-        } else if (isValueFileReferenced(policy.json)) {
+        } else if (isValueFileReferenced(policy.json, ".cjson")) {
             policy.json = JSON.stringify(JSON.parse(implodeFile(policy.json, inputDir)), null, 0);
         } else if (isValueFileReferenced(policy.yaml)) {
             policy.yaml = implodeFile(policy.yaml, inputDir);
