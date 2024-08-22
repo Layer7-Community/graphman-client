@@ -51,9 +51,10 @@ pipeline {
                    echo @local:registry=https://${ARTIFACTORY_ARTIFACT_NPM_PATH}>./.npmrc
                    echo //${ARTIFACTORY_ARTIFACT_NPM_PATH}:_auth=${artifactoryCredentials}>>./.npmrc
                    echo email=$ARTIFACTORY_EMAIL>>./.npmrc
+                   echo always-auth=true>>./.npmrc
+                   cat ./npmrc
                    npm publish ${layer7Graphman} --registry https://${ARTIFACTORY_ARTIFACT_NPM_PATH}
                    npm publish ${layer7GraphmanWrapper} --registry https://${ARTIFACTORY_ARTIFACT_NPM_PATH}
-                   cat ./npmrc
                    rm -rf ./.npmrc
                    #curl -v -i -u $ARTIFACTORY_CREDS_USR:$ARTIFACTORY_CREDS_PSW  -T ${layer7Graphman}  "${ARTIFACTORY_UPLOAD_PATH}"
                    #curl -v -i -u $ARTIFACTORY_CREDS_USR:$ARTIFACTORY_CREDS_PSW  -T ${layer7GraphmanWrapper}  "${ARTIFACTORY_UPLOAD_PATH}"
