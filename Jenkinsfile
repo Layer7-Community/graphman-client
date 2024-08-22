@@ -33,7 +33,7 @@ pipeline {
             steps {
                 echo "Building graphman-client ..."
                 script {
-                    sh './build.sh
+                    sh './build.sh'
                     sh "mkdir -p BuildArtifact"
                     sh "du -h"
                     sh "cp ./build/dist/layer7-graphman* BuildArtifact"
