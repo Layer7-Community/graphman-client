@@ -7,7 +7,9 @@ pipeline {
         ARTIFACTORY_USER = "$ARTIFACTORY_CREDS_USR"
         ARTIFACTORY_PASSWORD = "$ARTIFACTORY_CREDS_PSW"
         ARTIFACTORY_ARTIFACT_PATH = 'https://usw1.packages.broadcom.com/artifactory'
+        ARTIFACTORY_ARTIFACT_NPM_PATH = '${env.ARTIFACTORY_ARTIFACT_PATH}/api/npm/apim-npm-dev-local'
         ARTIFACTORY_UPLOAD_PATH = "${env.ARTIFACTORY_ARTIFACT_PATH}/apim-npm-dev-local/graphman-client/"
+        ARTIFACTORY_EMAIL = 'bld-apim.teamcity@broadcom.com'
     }
     parameters {
         string(name: 'VAR_jdk_version', defaultValue: 'jdk11.0.18_10', description: 'JDK Version')
@@ -44,11 +46,17 @@ pipeline {
             when { expression { params.PUBLISH_TO_ARTIFACTORY }}
             steps {
                 sh '''
-                   export layer7Graphman=$(ls -d ./build/dist/layer7-graphman-1*)
-                   export layer7GraphmanWrapper=$(ls -d ./build/dist/layer7-graphman-w*)
+                   export layer7Graphman=$(ls -d ./build/dist/layer7-graphman-*.tgz)
+                   export layer7GraphmanWrapper=$(ls -d ./build/dist/layer7-graphman-wrapper*)
 
-                   curl -v -i -u $ARTIFACTORY_CREDS_USR:$ARTIFACTORY_CREDS_PSW  -T ${layer7Graphman}  "${ARTIFACTORY_UPLOAD_PATH}"
-                   curl -v -i -u $ARTIFACTORY_CREDS_USR:$ARTIFACTORY_CREDS_PSW  -T ${layer7GraphmanWrapper}  "${ARTIFACTORY_UPLOAD_PATH}"
+                   artifactoryCredentials=$(echo -n $ARTIFACTORY_CREDS_USR:$ARTIFACTORY_CREDS_PSW|base64)
+                   echo _auth=${artifactoryCredentials}>./.npmrc
+                   echo email=$ARTIFACTORY_EMAIL>./.npmrc
+                   npm publish ${layer7Graphman} --registry ${ARTIFACTORY_ARTIFACT_NPM_PATH}
+                   npm publish ${layer7GraphmanWrapper} --registry ${ARTIFACTORY_ARTIFACT_NPM_PATH}
+                   rm -rf ./.npmrc
+                   #curl -v -i -u $ARTIFACTORY_CREDS_USR:$ARTIFACTORY_CREDS_PSW  -T ${layer7Graphman}  "${ARTIFACTORY_UPLOAD_PATH}"
+                   #curl -v -i -u $ARTIFACTORY_CREDS_USR:$ARTIFACTORY_CREDS_PSW  -T ${layer7GraphmanWrapper}  "${ARTIFACTORY_UPLOAD_PATH}"
 
                    '''
                 echo "published Graphman-client artifacts to artifactory"
