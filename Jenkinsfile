@@ -48,11 +48,11 @@ pipeline {
                    export layer7GraphmanWrapper=$(ls -d ./build/dist/layer7-graphman-wrapper*)
 
                    artifactoryCredentials=$(echo -n $ARTIFACTORY_CREDS_USR:$ARTIFACTORY_CREDS_PSW|base64 --wrap=0)
-                   echo @local:registry=https://${ARTIFACTORY_ARTIFACT_NPM_PATH}>./.npmrc
-                   echo //${ARTIFACTORY_ARTIFACT_NPM_PATH}:_auth=${artifactoryCredentials}>>./.npmrc
-                   echo email=$ARTIFACTORY_EMAIL>>./.npmrc
-                   echo always-auth=true>>./.npmrc
-                   cat ./npmrc
+                   echo @local:registry=https://${ARTIFACTORY_ARTIFACT_NPM_PATH} > ./.npmrc
+                   echo //${ARTIFACTORY_ARTIFACT_NPM_PATH}:_auth=${artifactoryCredentials} >> ./.npmrc
+                   echo email=$ARTIFACTORY_EMAIL >> ./.npmrc
+                   echo always-auth=true >> ./.npmrc
+                   cat ./.npmrc
                    npm publish ${layer7Graphman} --registry https://${ARTIFACTORY_ARTIFACT_NPM_PATH}
                    npm publish ${layer7GraphmanWrapper} --registry https://${ARTIFACTORY_ARTIFACT_NPM_PATH}
                    rm -rf ./.npmrc
