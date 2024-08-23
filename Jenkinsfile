@@ -56,7 +56,7 @@ pipeline {
                    layer7Graphman=$(ls -d ./build/dist/layer7-graphman-*.tgz)
                    layer7GraphmanWrapper=$(ls -d ./build/dist/layer7-graphman-cli-*.tar.gz)
                    npm publish ${layer7Graphman} --registry https://${ARTIFACTORY_ARTIFACT_NPM_PATH}
-                   curl -v -i -u $ARTIFACTORY_CREDS_USR:$ARTIFACTORY_CREDS_PSW  -T ${layer7GraphmanWrapper}  "${ARTIFACTORY_UPLOAD_PATH}"
+                   #curl -v -i -u $ARTIFACTORY_CREDS_USR:$ARTIFACTORY_CREDS_PSW  -T ${layer7GraphmanWrapper}  "${ARTIFACTORY_UPLOAD_PATH}"
                    rm -rf ./.npmrc
                    '''
                 echo "published Graphman-client artifacts to artifactory"
