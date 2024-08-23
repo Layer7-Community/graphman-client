@@ -6,7 +6,7 @@ pipeline {
         ARTIFACTORY_CREDS = credentials('ARTIFACTORY_USERNAME_TOKEN')
         ARTIFACTORY_ARTIFACT_PATH = 'usw1.packages.broadcom.com/artifactory'
         ARTIFACTORY_ARTIFACT_NPM_PATH = "${env.ARTIFACTORY_ARTIFACT_PATH}/api/npm/apim-npm-dev-local/"
-        ARTIFACTORY_UPLOAD_PATH = "${env.ARTIFACTORY_ARTIFACT_PATH}/apim-npm-dev-local/@layer7/graphman/-/@layer7/"
+        ARTIFACTORY_UPLOAD_PATH = "${env.ARTIFACTORY_ARTIFACT_PATH}/apim-npm-dev-local/graphman-cli/"
         ARTIFACTORY_EMAIL = 'bld-apim.teamcity@broadcom.com'
     }
     parameters {
