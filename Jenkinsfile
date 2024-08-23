@@ -36,7 +36,7 @@ pipeline {
                     sh './build.sh'
                     sh "mkdir -p BuildArtifact"
                     sh "du -h"
-                    sh "cp ./build/dist/graphman-* BuildArtifact"
+                    sh "cp ./build/dist/layer7-graphman-* BuildArtifact"
                 }
             }
         }
@@ -53,8 +53,8 @@ pipeline {
                    cat ./.npmrc
 
                    echo start publishing the artifacts
-                   layer7Graphman=$(ls -d ./build/dist/graphman-*.tgz)
-                   layer7GraphmanWrapper=$(ls -d ./build/dist/graphman-cli-*.tar.gz)
+                   layer7Graphman=$(ls -d ./build/dist/layer7-graphman-*.tgz)
+                   layer7GraphmanWrapper=$(ls -d ./build/dist/layer7-graphman-cli-*.tar.gz)
                    npm publish ${layer7Graphman} --registry https://${ARTIFACTORY_ARTIFACT_NPM_PATH}
                    curl -v -i -u $ARTIFACTORY_CREDS_USR:$ARTIFACTORY_CREDS_PSW  -T ${layer7GraphmanWrapper}  "${ARTIFACTORY_UPLOAD_PATH}"
                    rm -rf ./.npmrc
