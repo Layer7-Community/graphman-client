@@ -5,7 +5,7 @@ pipeline {
     environment {
         ARTIFACTORY_CREDS = credentials('ARTIFACTORY_USERNAME_TOKEN')
         ARTIFACTORY_ARTIFACT_PATH = 'usw1.packages.broadcom.com/artifactory'
-        ARTIFACTORY_ARTIFACT_NPM_PATH = "${env.ARTIFACTORY_ARTIFACT_PATH}/api/npm/apim-npm-dev-local"
+        ARTIFACTORY_ARTIFACT_NPM_PATH = "${env.ARTIFACTORY_ARTIFACT_PATH}/api/npm/apim-npm-dev-local/"
         ARTIFACTORY_EMAIL = 'bld-apim.teamcity@broadcom.com'
     }
     parameters {
@@ -46,7 +46,7 @@ pipeline {
                    echo prepare per-project npmrc file
                    artifactoryCredentials=$(echo -n $ARTIFACTORY_CREDS_USR:$ARTIFACTORY_CREDS_PSW|base64 --wrap=0)
                    echo registry=https://$ARTIFACTORY_ARTIFACT_NPM_PATH > ./.npmrc
-                   echo //$ARTIFACTORY_ARTIFACT_NPM_PATH:_auth=$artifactoryCredentials >> ./.npmrc
+                   echo _auth=$artifactoryCredentials >> ./.npmrc
                    echo email=$ARTIFACTORY_EMAIL >> ./.npmrc
                    echo always-auth=true >> ./.npmrc
                    cat ./.npmrc
