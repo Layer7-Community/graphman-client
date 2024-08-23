@@ -2,6 +2,7 @@
  * Copyright ©  2024. Broadcom Inc. and/or its subsidiaries. All Rights Reserved.
  */
 
+const module = process.env.GRAPHMAN_MODULE || "@layer7/graphman";
 const home = process.env.GRAPHMAN_HOME || __dirname;
 const args = process.argv.slice(2);
 const op = args[0];
@@ -13,7 +14,7 @@ if (fs.existsSync(home + "/modules/main.js")) {
         .call(home, op, args);
 } else {
     //running the client using npm module
-    graphman("@layer7/graphman")
+    graphman(module)
         .call(home, op, args);
 }
 

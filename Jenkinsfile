@@ -6,6 +6,7 @@ pipeline {
         ARTIFACTORY_CREDS = credentials('ARTIFACTORY_USERNAME_TOKEN')
         ARTIFACTORY_ARTIFACT_PATH = 'usw1.packages.broadcom.com/artifactory'
         ARTIFACTORY_ARTIFACT_NPM_PATH = "${env.ARTIFACTORY_ARTIFACT_PATH}/api/npm/apim-npm-dev-local/"
+        ARTIFACTORY_UPLOAD_PATH = "${env.ARTIFACTORY_ARTIFACT_PATH}/apim-npm-dev-local/@layer7/graphman/-/@layer7/"
         ARTIFACTORY_EMAIL = 'bld-apim.teamcity@broadcom.com'
     }
     parameters {
@@ -35,7 +36,7 @@ pipeline {
                     sh './build.sh'
                     sh "mkdir -p BuildArtifact"
                     sh "du -h"
-                    sh "cp ./build/dist/layer7-graphman* BuildArtifact"
+                    sh "cp ./build/dist/graphman-* BuildArtifact"
                 }
             }
         }
@@ -52,10 +53,10 @@ pipeline {
                    cat ./.npmrc
 
                    echo start publishing the artifacts
-                   export layer7Graphman=$(ls -d ./build/dist/layer7-graphman-*.tgz)
-                   export layer7GraphmanWrapper=$(ls -d ./build/dist/layer7-graphman-wrapper*)
+                   layer7Graphman=$(ls -d ./build/dist/graphman-*.tgz)
+                   layer7GraphmanWrapper=$(ls -d ./build/dist/graphman-cli-*.tar.gz)
                    npm publish ${layer7Graphman} --registry https://${ARTIFACTORY_ARTIFACT_NPM_PATH}
-                   npm publish ${layer7GraphmanWrapper} --registry https://${ARTIFACTORY_ARTIFACT_NPM_PATH}
+                   curl -v -i -u $ARTIFACTORY_CREDS_USR:$ARTIFACTORY_CREDS_PSW  -T ${layer7GraphmanWrapper}  "${ARTIFACTORY_UPLOAD_PATH}"
                    rm -rf ./.npmrc
                    '''
                 echo "published Graphman-client artifacts to artifactory"
