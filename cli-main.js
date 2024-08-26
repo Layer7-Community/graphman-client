@@ -2,19 +2,20 @@
  * Copyright ©  2024. Broadcom Inc. and/or its subsidiaries. All Rights Reserved.
  */
 
-const home = process.env.GRAPHMAN_HOME || __dirname;
+const l7Module = process.env.GRAPHMAN_MODULE || "@layer7/graphman";
+const l7Home = process.env.GRAPHMAN_HOME || __dirname;
 const args = process.argv.slice(2);
 const op = args[0];
 const fs = require("fs");
 
-if (fs.existsSync(home + "/modules/main.js")) {
+if (fs.existsSync(l7Home + "/modules/main.js")) {
     // running the client from cloned repo
     require("./modules/main")
-        .call(home, op, args);
+        .call(l7Home, op, args);
 } else {
     //running the client using npm module
-    graphman("@layer7/graphman")
-        .call(home, op, args);
+    graphman(l7Module)
+        .call(l7Home, op, args);
 }
 
 function graphman(module) {

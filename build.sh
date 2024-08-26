@@ -1,7 +1,7 @@
 
 distDir=build/dist
 packageDir=build/layer7-graphman
-wrapperDir=build/layer7-graphman-wrapper
+wrapperDir=build/layer7-graphman-cli
 
 # copy required files to build main package
 echo cleaning build directory
@@ -31,11 +31,15 @@ cp cli-main.js $wrapperDir/.
 cp graphman.* $wrapperDir/.
 cp LICENSE.md $wrapperDir/
 pushd build>/dev/null
-tar -czvf layer7-graphman-wrapper.tar.gz *-wrapper
+tar -czvf layer7-graphman-cli.tar.gz *-cli
 popd>/dev/null
 
 mv $packageDir/*.tgz build/dist/.
-mv build/*.tar.gz build/dist/.
+
+distPkg=$(ls -d ./build/dist/layer7-graphman-*.tgz)
+distPkg=${distPkg/graphman/graphman-cli}
+distPkg=${distPkg/%.tgz/.tar.gz}
+mv build/*.tar.gz $distPkg
 echo build completed
 echo distribution packages
 ls -l build/dist
