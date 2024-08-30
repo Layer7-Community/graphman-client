@@ -1,0 +1,36 @@
+{
+    "globalPolicies": [
+        {
+            "goid": "7f2bf48f249c4d054254e23cdb83278d",
+            "guid": "fc0b8f85-478e-4715-8eac-e2d30dceef60",
+            "name": "msg-completed",
+            "tag": "message-completed",
+            "checksum": "8b19acd50b0d880760d66212181a44e9379e5d6b",
+            "folderPath": "/",
+            "policy": {
+                "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:CommentAssertion>\n            <L7p:Comment stringValue=\"Policy Fragment: message-completed\"/>\n        </L7p:CommentAssertion>\n        <L7p:AuditDetailAssertion>\n            <L7p:Detail stringValue=\"msg-completed for ${service.name}\"/>\n        </L7p:AuditDetailAssertion>\n    </wsp:All>\n</wsp:Policy>\n"
+            }
+        },
+        {
+            "goid": "7f2bf48f249c4d054254e23cdb832946",
+            "guid": "bdd54d73-f7b2-401b-8afe-32771d340ac7",
+            "name": "msg-received",
+            "tag": "message-received",
+            "checksum": "c9a222d8d2fc5d420e3613ceb67f2bfb4323d440",
+            "folderPath": "/",
+            "policy": {
+                "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:CommentAssertion>\n            <L7p:Comment stringValue=\"Policy Fragment: msg-received\"/>\n        </L7p:CommentAssertion>\n    </wsp:All>\n</wsp:Policy>\n"
+            }
+        }
+    ],
+    "properties": {
+        "meta": {
+            "id": "5ed3e5e2-7e4c-4594-9272-f8c96bd1ce7d",
+            "name": "Gateway Graphman Bundle - 2024-08-30T07:17:18.935Z",
+            "author": "admin",
+            "hostname": "localhost",
+            "timestamp": "2024-08-30T07:17:18.935Z"
+        },
+        "defaultAction": "NEW_OR_UPDATE"
+    }
+}
