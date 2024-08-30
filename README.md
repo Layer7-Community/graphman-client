@@ -31,6 +31,16 @@ node -v
 If node is not already installed on your system, you can download it from https://nodejs.org/en/download/.
 Minimum version that is expected to work with is 16.+.
 
+#### Install the graphman client from Broadcom's npm registry
+- Starting from 1.3.2 releases, install the client directly from the registry
+  - `npm install @layer7/graphman --global --registry https://packages.broadcom.com/artifactory/api/npm/layer7-npm`
+- verify the installation by running the version command
+  - `graphman version`
+
+#### Update the graphman client from registry
+  - `npm update --global`
+
+#### Install the graphman client using the git release distributions
 Download one of the released [Graphman client distributions](https://github.com/Layer7-Community/graphman-client/releases), and follow the below steps to install the client:
 - unzip the wrapper archive
   - `tar -xvf layer7-graphman-wrapper.tar.gz`
