@@ -20,7 +20,7 @@ cp LICENSE.md $packageDir/
 cp package.json $packageDir/
 cp cli-main.js $packageDir/
 pushd $packageDir>/dev/null
-rm -rf modules/graphman-extension-*.js
+
 npm pack
 popd>/dev/null
 
