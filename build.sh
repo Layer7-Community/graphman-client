@@ -27,8 +27,7 @@ pushd $packageDir>/dev/null
 if [[ $branchName == release/* ]]; then
     sed -i -E "s/\"version\": \"[^\"]+\"/\"version\": \"${branchName:8}.$buildNumber\"/g" package.json
 else
-    export pkgVersionSuffix=-SNAPSHOT
-    sed -i -E "s/\"version\": \"([^.]+)[.]([^.]+)[^\"]+\"/\"version\": \"\1.\2.$buildNumber\", \"snapshot\": true/g" package.json
+    sed -i -E "s/\"version\": \"([^.]+)[.]([^.]+)[^\"]+\"/\"version\": \"\1.\2.$buildNumber-SNAPSHOT\"/g" package.json
 fi
 
 npm pack
@@ -46,11 +45,6 @@ tar -czvf layer7-graphman-cli.tar.gz *-cli
 popd>/dev/null
 
 mv $packageDir/*.tgz build/dist/.
-
-distPkg=$(ls -d ./build/dist/layer7-graphman-*.tgz)
-if [[ -n "$pkgVersionSuffix" ]]; then
-    mv $distPkg ${distPkg/%.tgz/-SNAPSHOT.tgz}
-fi
 
 distPkg=$(ls -d ./build/dist/layer7-graphman-*.tgz)
 distPkg=${distPkg/graphman/graphman-cli}
