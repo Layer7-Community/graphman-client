@@ -61,7 +61,7 @@ module.exports = {
             Object.assign(config.gateways[key], gateway);
         });
 
-        config.version = PACKAGE.snapshot ? PACKAGE.version + "-SNAPSHOT" : PACKAGE.version;
+        config.version = PACKAGE.version;
         config.defaultSchemaVersion = SCHEMA_VERSION;
         config.supportedSchemaVersions = SCHEMA_VERSIONS;
         config.supportedExtensions = SUPPORTED_EXTENSIONS;

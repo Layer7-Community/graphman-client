@@ -50,6 +50,8 @@ distPkg=$(ls -d ./build/dist/layer7-graphman-*.tgz)
 distPkg=${distPkg/graphman/graphman-cli}
 distPkg=${distPkg/%.tgz/.tar.gz}
 mv build/*.tar.gz $distPkg
+rm -rf $packageDir
+rm -rf $wrapperDir
 echo build completed
 echo distribution packages
 ls -l build/dist
