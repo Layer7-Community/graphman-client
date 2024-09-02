@@ -24,8 +24,8 @@ cp cli-main.js $packageDir/
 pushd $packageDir>/dev/null
 
 # update version in package.json
-if [[ $branchName == release/* ]]; then
-    sed -i -E "s/\"version\": \"[^\"]+\"/\"version\": \"${branchName:8}.$buildNumber\"/g" package.json
+if [[ $branchName == release/v* ]]; then
+    sed -i -E "s/\"version\": \"[^\"]+\"/\"version\": \"${branchName:9}.$buildNumber\"/g" package.json
 else
     sed -i -E "s/\"version\": \"([^.]+)[.]([^.]+)[^\"]+\"/\"version\": \"\1.\2.$buildNumber-SNAPSHOT\"/g" package.json
 fi

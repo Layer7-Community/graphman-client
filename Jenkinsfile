@@ -6,7 +6,7 @@ pipeline {
         ARTIFACTORY_CREDS = credentials('ARTIFACTORY_USERNAME_TOKEN')
         ARTIFACTORY_ARTIFACT_PATH = 'usw1.packages.broadcom.com/artifactory'
         ARTIFACTORY_ARTIFACT_NPM_DEV_PATH = "${env.ARTIFACTORY_ARTIFACT_PATH}/api/npm/apim-npm-dev-local/"
-        ARTIFACTORY_ARTIFACT_NPM_RELEASE_PATH = "${env.ARTIFACTORY_ARTIFACT_PATH}/api/npm/apim-npm-dev-local/"
+        ARTIFACTORY_ARTIFACT_NPM_RELEASE_PATH = "${env.ARTIFACTORY_ARTIFACT_PATH}/api/npm/apim-npm-release-local/"
         ARTIFACTORY_UPLOAD_PATH = "${env.ARTIFACTORY_ARTIFACT_PATH}/apim-npm-dev-local/graphman-cli/"
         ARTIFACTORY_EMAIL = 'bld-apim.teamcity@broadcom.com'
     }
@@ -47,7 +47,7 @@ pipeline {
                 sh '''
                    echo prepare per-project npmrc file
                    export ARTIFACTORY_ARTIFACT_NPM_PATH=$ARTIFACTORY_ARTIFACT_NPM_DEV_PATH
-                   if [[ $branchName == release/* ]]; then export ARTIFACTORY_ARTIFACT_NPM_PATH=$ARTIFACTORY_ARTIFACT_NPM_RELEASE_PATH; fi
+                   if [[ $branchName == release/v* ]]; then export ARTIFACTORY_ARTIFACT_NPM_PATH=$ARTIFACTORY_ARTIFACT_NPM_RELEASE_PATH; fi
                    artifactoryCredentials=$(echo -n $ARTIFACTORY_CREDS_USR:$ARTIFACTORY_CREDS_PSW|base64 --wrap=0)
                    echo registry=https://$ARTIFACTORY_ARTIFACT_NPM_PATH > ./.npmrc
                    echo _auth=$artifactoryCredentials >> ./.npmrc
