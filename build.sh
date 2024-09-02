@@ -1,4 +1,6 @@
 
+buildNumber=$1
+branchName=$2
 distDir=build/dist
 packageDir=build/layer7-graphman
 wrapperDir=build/layer7-graphman-cli
@@ -20,6 +22,14 @@ cp LICENSE.md $packageDir/
 cp package.json $packageDir/
 cp cli-main.js $packageDir/
 pushd $packageDir>/dev/null
+
+# update version in package.json
+if [[ $branchName == release/* ]]; then
+    pkgVersion=${branchName:8}
+    sed -E "s/\"version\": \"[^\"]+\"/\"version\": \"$pkgVersion.$buildNumber\"/g" package.json
+else
+    sed -E "s/\"version\": \"([^.]+)[.]([^.]+)[^\"]+\"/\"version\": \"\1.\2.$buildNumber-SNAPSHOT\"/g" package.json
+fi
 
 npm pack
 popd>/dev/null

@@ -5,7 +5,8 @@ pipeline {
     environment {
         ARTIFACTORY_CREDS = credentials('ARTIFACTORY_USERNAME_TOKEN')
         ARTIFACTORY_ARTIFACT_PATH = 'usw1.packages.broadcom.com/artifactory'
-        ARTIFACTORY_ARTIFACT_NPM_PATH = "${env.ARTIFACTORY_ARTIFACT_PATH}/api/npm/apim-npm-dev-local/"
+        ARTIFACTORY_ARTIFACT_NPM_DEV_PATH = "${env.ARTIFACTORY_ARTIFACT_PATH}/api/npm/apim-npm-dev-local/"
+        ARTIFACTORY_ARTIFACT_NPM_RELEASE_PATH = "${env.ARTIFACTORY_ARTIFACT_PATH}/api/npm/apim-npm-dev-local/"
         ARTIFACTORY_UPLOAD_PATH = "${env.ARTIFACTORY_ARTIFACT_PATH}/apim-npm-dev-local/graphman-cli/"
         ARTIFACTORY_EMAIL = 'bld-apim.teamcity@broadcom.com'
     }
@@ -33,7 +34,7 @@ pipeline {
             steps {
                 echo "Building graphman-client ..."
                 script {
-                    sh './build.sh'
+                    sh './build.sh $BUILD_NUMBER $BRANCH_NAME'
                     sh "mkdir -p BuildArtifact"
                     sh "du -h"
                     sh "cp ./build/dist/layer7-graphman-* BuildArtifact"
@@ -45,6 +46,8 @@ pipeline {
             steps {
                 sh '''
                    echo prepare per-project npmrc file
+                   export ARTIFACTORY_ARTIFACT_NPM_PATH=$ARTIFACTORY_ARTIFACT_NPM_DEV_PATH
+                   if [[ $branchName == release/* ]]; then export ARTIFACTORY_ARTIFACT_NPM_PATH=$ARTIFACTORY_ARTIFACT_NPM_RELEASE_PATH; fi
                    artifactoryCredentials=$(echo -n $ARTIFACTORY_CREDS_USR:$ARTIFACTORY_CREDS_PSW|base64 --wrap=0)
                    echo registry=https://$ARTIFACTORY_ARTIFACT_NPM_PATH > ./.npmrc
                    echo _auth=$artifactoryCredentials >> ./.npmrc
@@ -54,9 +57,7 @@ pipeline {
 
                    echo start publishing the artifacts
                    layer7Graphman=$(ls -d ./build/dist/layer7-graphman-*.tgz)
-                   layer7GraphmanWrapper=$(ls -d ./build/dist/layer7-graphman-cli-*.tar.gz)
                    npm publish ${layer7Graphman} --registry https://${ARTIFACTORY_ARTIFACT_NPM_PATH}
-                   #curl -v -i -u $ARTIFACTORY_CREDS_USR:$ARTIFACTORY_CREDS_PSW  -T ${layer7GraphmanWrapper}  "${ARTIFACTORY_UPLOAD_PATH}"
                    rm -rf ./.npmrc
                    '''
                 echo "published Graphman-client artifacts to artifactory"
