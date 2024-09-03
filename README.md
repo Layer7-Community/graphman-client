@@ -36,9 +36,10 @@ Minimum version that is expected to work with is 16.+.
   - `npm install @layer7/graphman --global --registry https://packages.broadcom.com/artifactory/api/npm/layer7-npm`
 - verify the installation by running the version command
   - `graphman version`
-- choose some directory to keep the custom queries, extensions and configuration file and set the GRAPHMAN_HOME environment variable to it.
+- choose some directory to keep the custom queries, extensions and configuration files and set the **GRAPHMAN_HOME** environment variable to it.
+  - `export GRAPHMAN_HOME=/path/to/layer7-graphman-home`
+
 > [!NOTE] As the module is installed globally, graphman client can be executed from any directory workspace.
->
 
 #### Update the graphman client from registry
 - installed client (from Broadcom's registry) can be updated to the latest available.
@@ -50,9 +51,9 @@ Minimum version that is expected to work with is 16.+.
 
 #### Uninstall the graphman client
 - starting from 1.3.* releases, client should be uninstalled using npm.
-  - npm uninstall @layer7/graphman --global
+  - `npm uninstall @layer7/graphman --global`
 - in particular to the 1.3.00 release, cd to the home directory and run the npm-uninstall command.
-  - npm uninstall @layer7/graphman
+  - `npm uninstall @layer7/graphman`
 - remove the client's home directory path from the PATH environment variable
 - delete the client's home directory itself
 
