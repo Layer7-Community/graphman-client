@@ -47,7 +47,7 @@ pipeline {
                 sh '''
                    echo prepare per-project npmrc file
                    export ARTIFACTORY_ARTIFACT_NPM_PATH=$ARTIFACTORY_ARTIFACT_NPM_DEV_PATH
-                   if [[ $branchName == release/v* ]]; then export ARTIFACTORY_ARTIFACT_NPM_PATH=$ARTIFACTORY_ARTIFACT_NPM_RELEASE_PATH; fi
+                   if [[ $BRANCH_NAME == release/v* ]]; then export ARTIFACTORY_ARTIFACT_NPM_PATH=$ARTIFACTORY_ARTIFACT_NPM_RELEASE_PATH; fi
                    artifactoryCredentials=$(echo -n $ARTIFACTORY_CREDS_USR:$ARTIFACTORY_CREDS_PSW|base64 --wrap=0)
                    echo registry=https://$ARTIFACTORY_ARTIFACT_NPM_PATH > ./.npmrc
                    echo _auth=$artifactoryCredentials >> ./.npmrc
