@@ -146,6 +146,7 @@ graphman.sh version
 > Supported schema(s) (i.e., version of the Layer7 API Gateway)
 - v11.1.1 (default)
 - v11.1.00
+- v11.0.00-CR03
 
 > Switch to the one of the above supported schemas using CLI argument (`--options.schema <schema>`) 
 
