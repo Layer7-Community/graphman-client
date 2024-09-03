@@ -60,11 +60,11 @@ module.exports = {
     wrapperHome: function (path) {
         if (path) {
             if (!this.existsFile(path)) {
-                throw this.newError("wrapper home directory does not exist, " + path);
+                throw this.newError("home directory does not exist, " + path);
             }
 
             if (!this.isDirectory(path)) {
-                throw this.newError("incorrect wrapper home directory, " + path);
+                throw this.newError("incorrect home directory, " + path);
             }
 
             wrapperDir = path;
@@ -295,7 +295,7 @@ module.exports = {
         }
 
         if (!extn.ref) {
-            extn.ref = loadExtension(this, this.modulesDir(this.wrapperHome()), ref);
+            extn.ref = loadExtension(this, ref);
         }
 
         return extn.ref;
@@ -346,14 +346,19 @@ function replaceNewLineMarkers(data) {
         .replaceAll("\\n", "\n");
 }
 
-function loadExtension(utils, path, ref) {
+function loadExtension(utils, ref) {
     try {
-        let filename = path + "/graphman-extension-" + ref + ".js";
+        let filename = utils.modulesDir(utils.wrapperHome()) + "/graphman-extension-" + ref + ".js";
         if (utils.existsFile(filename)) {
             return require(filename);
-        } else {
-            utils.info(ref + " extension is missing, falling back to the default");
         }
+
+        filename = utils.modulesDir(utils.home()) + "/graphman-extension-" + ref + ".js";
+        if (utils.existsFile(filename)) {
+            return require(filename);
+        }
+
+        utils.info(ref + " extension is missing, falling back to the default");
     } catch (e) {
         utils.warn(`failed to load the ${ref} extension, cause=${e.code}, falling back to the default`);
     }

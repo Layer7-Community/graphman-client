@@ -2,10 +2,9 @@
  * Copyright ©  2024. Broadcom Inc. and/or its subsidiaries. All Rights Reserved.
  */
 
-const VERSION = "v1.3.1";
+const PACKAGE = require("../package.json");
 const SCHEMA_VERSION = "v11.1.1";
 const SCHEMA_VERSIONS = [SCHEMA_VERSION, "v11.1.00"];
-const GITHUB_LINK = "https://github.com/Layer7-Community/graphman-client";
 
 const SUPPORTED_OPERATIONS = [
     "version", "describe",
@@ -62,7 +61,7 @@ module.exports = {
             Object.assign(config.gateways[key], gateway);
         });
 
-        config.version = VERSION;
+        config.version = "v" + PACKAGE.version;
         config.defaultSchemaVersion = SCHEMA_VERSION;
         config.supportedSchemaVersions = SCHEMA_VERSIONS;
         config.supportedExtensions = SUPPORTED_EXTENSIONS;
@@ -146,7 +145,7 @@ module.exports = {
     },
 
     githubLink: function () {
-        return GITHUB_LINK;
+        return PACKAGE.repository;
     },
 
     /**

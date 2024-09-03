@@ -5,7 +5,7 @@ lets you retrieve full or partial gateway configuration from a Layer7 Gateway wi
 bundle configuration for the purposes of applying configuration as code and apply configuration to a
 gateway.
 
-Graphman is a GraphQL API but you don't need prior experience with, or an understanding of GraphQL to use it
+Graphman is a GraphQL API, but you don't need prior experience with, or an understanding of GraphQL to use it
 with this client. This client abstracts out the GraphQL API layer by providing commands to perform common
 Graphman operations. Power users can dive into the GraphQL layer to create their own queries that can then be
 used with this client. Custom GraphQL queries let you control the specific configuration that needs to be
@@ -31,6 +31,34 @@ node -v
 If node is not already installed on your system, you can download it from https://nodejs.org/en/download/.
 Minimum version that is expected to work with is 16.+.
 
+#### Install the graphman client from Broadcom's npm registry
+- starting from 1.3.2 releases, install the client directly from the registry
+  - `npm install @layer7/graphman --global --registry https://packages.broadcom.com/artifactory/api/npm/layer7-npm`
+- verify the installation by running the version command
+  - `graphman version`
+- choose some directory to keep the custom queries, extensions and configuration files and set the **GRAPHMAN_HOME** environment variable to it.
+  - `export GRAPHMAN_HOME=/path/to/layer7-graphman-home`
+
+> [!NOTE] 
+> As the module is installed globally, graphman client can be executed from any directory workspace.
+
+#### Update the graphman client from registry
+- installed client (from Broadcom's registry) can be updated to the latest available.
+  - `npm update @layer7/graphman --global`
+- in case if you want to update the client to a particular release, specify release version.
+  - `npm update @layer7/graphman@<some-release-version> --global`
+- verify the update by running the version command
+  - `graphman version`
+
+#### Uninstall the graphman client
+- starting from 1.3.* releases, client should be uninstalled using npm.
+  - `npm uninstall @layer7/graphman --global`
+- in particular to the 1.3.00 release, cd to the home directory and run the npm-uninstall command.
+  - `npm uninstall @layer7/graphman`
+- remove the client's home directory path from the PATH environment variable
+- delete the client's home directory itself
+
+#### Install the graphman client using the git release distributions
 Download one of the released [Graphman client distributions](https://github.com/Layer7-Community/graphman-client/releases), and follow the below steps to install the client:
 - unzip the wrapper archive
   - `tar -xvf layer7-graphman-wrapper.tar.gz`
@@ -44,9 +72,9 @@ Download one of the released [Graphman client distributions](https://github.com/
   - `graphman.sh version` 
 
 > [!TIP]
-> Make sure adding the node and graphman client paths to the **PATH** environment variable so that client can be used from any directory workspace.
+> Make sure adding the graphman client home directory to the **PATH** environment variable so that client can be used from any directory workspace.
 
-Then, you configure the one or more gateway profiles (under _gateways_ section) to interact with by editing the _**graphman.configuration**_ file. 
+Then, you may configure one or more gateway profiles (under _gateways_ section) to interact with by editing the _**graphman.configuration**_ file. 
 Choose one of the gateway profile as part of _--gateway_ parameter while working with CLI. When this parameter is omitted, it will be defaulted to the **_default_** gateway profile.
 ```
 {
