@@ -4,7 +4,7 @@
 
 const PACKAGE = require("../package.json");
 const SCHEMA_VERSION = "v11.1.1";
-const SCHEMA_VERSIONS = [SCHEMA_VERSION, "v11.1.00"];
+const SCHEMA_VERSIONS = [SCHEMA_VERSION, "v11.1.00", "v11.0.00-CR03"];
 
 const SUPPORTED_OPERATIONS = [
     "version", "describe",
