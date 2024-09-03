@@ -3305,7 +3305,7 @@ extend type Mutation {
  """
  type Policy {
     "The policy XML"
-    xml: String
+    xml: String!
     "Entities that are directly referred to inside the policy XML"
     directDependencies: PolicyDependency
     "Entities that are directly referred to inside the policy XML in addition to ones in policy dependencies. More than second level, this keep going as deep as needed until no dependencies are found"
@@ -3323,7 +3323,7 @@ extend type Mutation {
     author: String
     time: DateTime!
     "The policy XML"
-    xml: String
+    xml: String!
  }
 
  """
@@ -3401,7 +3401,7 @@ extend type Mutation {
 
  input PolicyInput {
    "The policy xml"
-   xml: String
+   xml: String!
  }
 
  input L7PolicyInput {
@@ -3458,7 +3458,7 @@ extend type Mutation {
     author: String
     time: DateTime
     "The policy XML"
-    xml: String
+    xml: String!
  }
 
 input PolicyMappingInstructionInput{
