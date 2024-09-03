@@ -5,7 +5,7 @@ lets you retrieve full or partial gateway configuration from a Layer7 Gateway wi
 bundle configuration for the purposes of applying configuration as code and apply configuration to a
 gateway.
 
-Graphman is a GraphQL API but you don't need prior experience with, or an understanding of GraphQL to use it
+Graphman is a GraphQL API, but you don't need prior experience with, or an understanding of GraphQL to use it
 with this client. This client abstracts out the GraphQL API layer by providing commands to perform common
 Graphman operations. Power users can dive into the GraphQL layer to create their own queries that can then be
 used with this client. Custom GraphQL queries let you control the specific configuration that needs to be
@@ -39,7 +39,8 @@ Minimum version that is expected to work with is 16.+.
 - choose some directory to keep the custom queries, extensions and configuration files and set the **GRAPHMAN_HOME** environment variable to it.
   - `export GRAPHMAN_HOME=/path/to/layer7-graphman-home`
 
-> [!NOTE] As the module is installed globally, graphman client can be executed from any directory workspace.
+> [!NOTE] 
+> As the module is installed globally, graphman client can be executed from any directory workspace.
 
 #### Update the graphman client from registry
 - installed client (from Broadcom's registry) can be updated to the latest available.
