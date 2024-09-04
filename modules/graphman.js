@@ -16,7 +16,9 @@ const SUPPORTED_OPERATIONS = [
 
 const SUPPORTED_EXTENSIONS = ["pre-request", "post-export", "pre-import", "multiline-text-diff", "policy-code-validator"];
 const SCHEMA_FEATURE_LIST = {
-    "v11.1.1": ["mappings", "mappings-source"]
+    "v11.1.00": ["mappings", "mappings-source", "policy-as-code"],
+    "v11.1.1": ["mappings", "mappings-source", "policy-as-code"],
+    "v11.0.00-CR03": ["mappings", "mappings-source"]
 }
 
 const SUPPORTED_REQUEST_LEVEL_OPTIONS = [
