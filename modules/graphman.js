@@ -11,7 +11,8 @@ const SUPPORTED_OPERATIONS = [
     "export", "import",
     "explode", "implode",
     "combine", "slice", "diff", "renew", "revise",
-    "mappings", "schema", "validate"
+    "mappings", "schema", "validate",
+    "config"
 ];
 
 const SUPPORTED_EXTENSIONS = ["pre-request", "post-export", "pre-import", "multiline-text-diff", "policy-code-validator"];
@@ -72,6 +73,13 @@ module.exports = {
 
         this.metadata = gqlschema.build(config.version, config.schemaVersion, false);
         this.loadedConfig = config;
+    },
+
+    defaultConfiguration: function () {
+        return {
+            gateways: makeGateways({}),
+            options: makeOptions({})
+        }
     },
 
     configuration: function () {

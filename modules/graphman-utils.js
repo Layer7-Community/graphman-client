@@ -237,8 +237,8 @@ module.exports = {
         if (logLevel >= DEBUG_LEVEL) this.log("[debug] " + message, args);
     },
 
-    pretty: function (data) {
-        return typeof data === 'object' ? JSON.stringify(data, null, 2) : data;
+    pretty: function (data, space) {
+        return typeof data === 'object' ? JSON.stringify(data, null, space || 2) : data;
     },
 
     writeResult: function (file, bundle) {
@@ -276,6 +276,14 @@ module.exports = {
 
     base64StringDecode: function (data) {
         return Buffer.from(data, 'base64').toString('utf-8')
+    },
+
+    encodeSecret: function (secret) {
+        if (secret) {
+            return SECRET_BASE64_PREFIX + this.base64StringEncode(secret);
+        }
+
+        return secret;
     },
 
     decodeSecret: function (secret) {
