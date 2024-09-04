@@ -79,7 +79,7 @@ function initHome(home, options) {
     const configFile = utils.path(home, CONFIG_FILE);
     if (!utils.existsFile(configFile)) {
         utils.info("  creating default configuration");
-        utils.writeFile(configFile, utils.pretty(graphman.defaultConfiguration(), 4));
+        utils.writeFile(configFile, utils.pretty(graphman.defaultConfiguration()));
     }
 
     const config = JSON.parse(utils.readFile(configFile));
@@ -95,7 +95,7 @@ function initHome(home, options) {
             }
         });
 
-        utils.writeFile(configFile, utils.pretty(config, 4));
+        utils.writeFile(configFile, utils.pretty(config));
     }
 
     utils.info("make sure defining the environment variable, GRAPHMAN_HOME=" + home);
