@@ -163,7 +163,7 @@ module.exports = {
         };
 
         if (gateway.passphrase) {
-            headers['x-l7-passphrase'] = Buffer.from(gateway.passphrase).toString('base64');
+            headers['x-l7-passphrase'] = utils.base64StringEncode(utils.decodeSecret(gateway.passphrase));
         }
 
         if (gateway.rejectUnauthorized === undefined) {
@@ -199,7 +199,7 @@ module.exports = {
             req.key = utils.readFileBinary(utils.path(utils.wrapperHome(), gateway.keyFilename));
             req.cert = utils.readFileBinary(utils.path(utils.wrapperHome(), gateway.certFilename));
         } else if (gateway.username && gateway.password) {
-            req.auth = gateway.username + ":" + gateway.password;
+            req.auth = gateway.username + ":" + utils.decodeSecret(gateway.password);
         } else {
             throw new Error("gateway credentials are missing, provide either basic authentication (username / password) or mTLS based authentication (keyFilename / certFilename)");
         }
@@ -234,7 +234,7 @@ module.exports = {
                 let data = Buffer.concat(respInfo.chunks);
 
                 if (respInfo.contentType.startsWith('application/json')) {
-                    const jsonData = JSON.parse(data);
+                    const jsonData = JSON.parse(data.toString('utf-8'));
                     utils.debug("graphman http response", jsonData);
                     callback(jsonData);
                 } else if (respInfo.contentType.startsWith('multipart/')) {
@@ -243,7 +243,7 @@ module.exports = {
                     callback(JSON.parse(parts[0].data), parts);
                 } else {
                     utils.info("unexpected graphman http response");
-                    utils.info(data);
+                    utils.info(data.toString('utf-8'));
                     callback({errors: "no valid response from graphman"});
                 }
             });
