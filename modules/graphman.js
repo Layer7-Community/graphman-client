@@ -214,7 +214,7 @@ module.exports = {
      * @param callback
      */
     invoke: function (options, callback) {
-        options = utils.extension("pre-request").apply(options);
+        options = utils.extension("pre-request").apply(options, {});
         const req = ((!options.protocol||options.protocol === 'https'||options.protocol === 'https:') ? https : http).request(options, function(response) {
             let respInfo = {initialized: false, chunks: []};
 

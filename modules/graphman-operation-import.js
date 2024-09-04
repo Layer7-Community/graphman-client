@@ -38,7 +38,7 @@ module.exports = {
         let inputBundle = butils.sanitize(utils.readFile(params.input), butils.IMPORT_USE, params.options);
         inputBundle = butils.removeDuplicates(inputBundle);
         butils.overrideMappings(inputBundle, params.options);
-        inputBundle = utils.extension("pre-import").apply(inputBundle, params.options);
+        inputBundle = utils.extension("pre-import").apply(inputBundle, {options: params.options});
 
         const query = gql.generate(params.using, Object.assign(inputBundle, params.variables), params.options);
         if (!query.query.startsWith("mutation")) {

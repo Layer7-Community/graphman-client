@@ -9,9 +9,10 @@ module.exports = {
     /**
      * Extension to construct the json schema validator
      * @param input json schema
+     * @param context partial execution context
      * @return schema validator
      */
-    apply: function (input) {
+    apply: function (input, context) {
         return ajv.compile(input);
     }
 }

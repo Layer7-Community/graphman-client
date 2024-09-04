@@ -14,7 +14,7 @@ module.exports = {
                 vRef.schema = utils.readFile(utils.policySchemaFile(graphman.configuration().schemaVersion));
             }
 
-            vRef.validator = utils.extension("policy-code-validator").apply(vRef.schema);
+            vRef.validator = utils.extension("policy-code-validator").apply(vRef.schema, {});
             if (vRef.validator === vRef.schema) {
                 vRef.validator = null;
             }
