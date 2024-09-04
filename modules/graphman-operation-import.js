@@ -41,6 +41,11 @@ module.exports = {
         inputBundle = utils.extension("pre-import").apply(inputBundle, params.options);
 
         const query = gql.generate(params.using, Object.assign(inputBundle, params.variables), params.options);
+        if (!query.query.startsWith("mutation")) {
+            utils.info("invalid query for import operation", query);
+            throw "invalid query for import operation";
+        }
+
         const request = graphman.request(gateway, query.options);
         delete query.options;
         request.body = query;
