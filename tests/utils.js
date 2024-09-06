@@ -59,7 +59,7 @@ function init() {
     const tConfig = {
         home: process.env.GRAPHMAN_HOME,
         execFile: process.env.GRAPHMAN_ENTRYPOINT || "graphman.sh",
-        workspace: (process.env.GRAPHMAN_HOME || "build") + "/tests",
+        workspace: (process.env.GRAPHMAN_HOME + "/build" || "build") + "/tests",
         schemaVersion: process.env.GRAPHMAN_SCHEMA || "v11.1.1"
     };
 
