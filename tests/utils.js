@@ -74,21 +74,25 @@ function init() {
 }
 
 function initMetadata(tConfig) {
-    const metadata = JSON.parse(fs.readFileSync(tConfig.home + "/schema/" + tConfig.schemaVersion + "/metadata.json"));
+    const metadata = JSON.parse(fs.readFileSync(tConfig.home + "/schema/" + tConfig.schemaVersion + "/metadata.json", 'utf-8'));
     metadata.typeInfoByBundleName = {};
     metadata.typeInfoByTypeName = {};
 
     Object.entries(metadata.types).forEach(([key, item]) => {
         if (item.isL7Entity) {
-            metadata.typeInfoByBundleName[item.bundleName] = item;
+            metadata.typeInfoByBundleName[item.pluralName] = item;
             metadata.typeInfoByTypeName[item.typeName.toLowerCase()] = item;
         }
     });
 
-    metadata.mutationMethod = function (bundleName, prefix) {
-        return bundleName === "smConfigs" ?
-            prefix + bundleName.substring(0, 2).toUpperCase() + bundleName.substring(2) :
-            prefix + bundleName.substring(0, 1).toUpperCase() + bundleName.substring(1);
+    metadata.typeInfos = function () {
+        return Object.values(metadata.types).filter(item => item.isL7Entity);
+    };
+
+    metadata.mutationMethod = function (pluralName, prefix) {
+        return pluralName === "smConfigs" ?
+            prefix + pluralName.substring(0, 2).toUpperCase() + pluralName.substring(2) :
+            prefix + pluralName.substring(0, 1).toUpperCase() + pluralName.substring(1);
     };
 
     metadata.typeInfoByVariableBundleName = function (arg) {
