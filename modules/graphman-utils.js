@@ -18,10 +18,12 @@ const INFO_LEVEL = 2;
 const FINE_LEVEL = 3;
 const DEBUG_LEVEL = 10;
 
+const SECRET_BASE64_PREFIX = "$b64.";
+
 let logLevel = INFO_LEVEL;
 let wrapperDir = HOME_DIR;
 
-const defaultExtn = {ref: {apply: function (input) {return input;}}};
+const defaultExtn = {ref: {apply: function (input, context) {return input;}}};
 const extns = {};
 
 class GraphmanOperationError extends Error {
@@ -235,8 +237,8 @@ module.exports = {
         if (logLevel >= DEBUG_LEVEL) this.log("[debug] " + message, args);
     },
 
-    pretty: function (data) {
-        return typeof data === 'object' ? JSON.stringify(data, null, 2) : data;
+    pretty: function (data, space) {
+        return typeof data === 'object' ? JSON.stringify(data, null, space || 2) : data;
     },
 
     writeResult: function (file, bundle) {
@@ -268,6 +270,30 @@ module.exports = {
         return num.toString().padStart(places, '0');
     },
 
+    base64StringEncode: function (data) {
+        return Buffer.from(data).toString('base64');
+    },
+
+    base64StringDecode: function (data) {
+        return Buffer.from(data, 'base64').toString('utf-8')
+    },
+
+    encodeSecret: function (secret) {
+        if (secret) {
+            return SECRET_BASE64_PREFIX + this.base64StringEncode(secret);
+        }
+
+        return secret;
+    },
+
+    decodeSecret: function (secret) {
+        if (secret && secret.startsWith(SECRET_BASE64_PREFIX)) {
+            return this.base64StringDecode(secret.substring(SECRET_BASE64_PREFIX.length));
+        }
+
+        return secret;
+    },
+
     /**
      * register the enabled extensions
      * @param listOrItem one or more enabled extension names
@@ -285,7 +311,7 @@ module.exports = {
     /**
      * Load and get the extension
      * @param ref extension name
-     * @returns {{apply: function(*): *}}
+     * @returns {{apply: function(*, *): *}}
      */
     extension: function (ref) {
         let extn = extns[ref];

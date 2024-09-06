@@ -4,19 +4,22 @@
 
 const PACKAGE = require("../package.json");
 const SCHEMA_VERSION = "v11.1.1";
-const SCHEMA_VERSIONS = [SCHEMA_VERSION, "v11.1.00"];
+const SCHEMA_VERSIONS = [SCHEMA_VERSION, "v11.1.00", "v11.0.00-CR03"];
 
 const SUPPORTED_OPERATIONS = [
     "version", "describe",
     "export", "import",
     "explode", "implode",
     "combine", "slice", "diff", "renew", "revise",
-    "mappings", "schema", "validate"
+    "mappings", "schema", "validate",
+    "config"
 ];
 
 const SUPPORTED_EXTENSIONS = ["pre-request", "post-export", "pre-import", "multiline-text-diff", "policy-code-validator"];
 const SCHEMA_FEATURE_LIST = {
-    "v11.1.1": ["mappings", "mappings-source"]
+    "v11.1.00": ["mappings", "mappings-source", "policy-as-code"],
+    "v11.1.1": ["mappings", "mappings-source", "policy-as-code"],
+    "v11.0.00-CR03": ["mappings", "mappings-source"]
 }
 
 const SUPPORTED_REQUEST_LEVEL_OPTIONS = [
@@ -70,6 +73,13 @@ module.exports = {
 
         this.metadata = gqlschema.build(config.version, config.schemaVersion, false);
         this.loadedConfig = config;
+    },
+
+    defaultConfiguration: function () {
+        return {
+            gateways: makeGateways({}),
+            options: makeOptions({})
+        }
     },
 
     configuration: function () {
@@ -161,7 +171,7 @@ module.exports = {
         };
 
         if (gateway.passphrase) {
-            headers['x-l7-passphrase'] = Buffer.from(gateway.passphrase).toString('base64');
+            headers['x-l7-passphrase'] = utils.base64StringEncode(utils.decodeSecret(gateway.passphrase));
         }
 
         if (gateway.rejectUnauthorized === undefined) {
@@ -197,7 +207,7 @@ module.exports = {
             req.key = utils.readFileBinary(utils.path(utils.wrapperHome(), gateway.keyFilename));
             req.cert = utils.readFileBinary(utils.path(utils.wrapperHome(), gateway.certFilename));
         } else if (gateway.username && gateway.password) {
-            req.auth = gateway.username + ":" + gateway.password;
+            req.auth = gateway.username + ":" + utils.decodeSecret(gateway.password);
         } else {
             throw new Error("gateway credentials are missing, provide either basic authentication (username / password) or mTLS based authentication (keyFilename / certFilename)");
         }
@@ -212,7 +222,7 @@ module.exports = {
      * @param callback
      */
     invoke: function (options, callback) {
-        options = utils.extension("pre-request").apply(options);
+        options = utils.extension("pre-request").apply(options, {});
         const req = ((!options.protocol||options.protocol === 'https'||options.protocol === 'https:') ? https : http).request(options, function(response) {
             let respInfo = {initialized: false, chunks: []};
 
@@ -232,7 +242,7 @@ module.exports = {
                 let data = Buffer.concat(respInfo.chunks);
 
                 if (respInfo.contentType.startsWith('application/json')) {
-                    const jsonData = JSON.parse(data);
+                    const jsonData = JSON.parse(data.toString('utf-8'));
                     utils.debug("graphman http response", jsonData);
                     callback(jsonData);
                 } else if (respInfo.contentType.startsWith('multipart/')) {
@@ -241,7 +251,7 @@ module.exports = {
                     callback(JSON.parse(parts[0].data), parts);
                 } else {
                     utils.info("unexpected graphman http response");
-                    utils.info(data);
+                    utils.info(data.toString('utf-8'));
                     callback({errors: "no valid response from graphman"});
                 }
             });

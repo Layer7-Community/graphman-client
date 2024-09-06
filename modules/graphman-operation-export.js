@@ -134,6 +134,8 @@ module.exports = {
         console.log("        use this option to include policy revisions for the exported service/policy entities.");
         console.log("      .includeMultipartFields false|true");
         console.log("        use this option to include multipart fields (filePartName) so that server module file will be fully exported.");
+        console.log("      .excludeRolesIfRequired false|true");
+        console.log("        use this option to exclude roles with no user and group assignees.");
 
         console.log("      .excludeDependencies false|true");
         console.log("        use this option to exclude dependency entities from the exported bundled entities.");
@@ -148,7 +150,7 @@ function onExportDataCallback(data, parts, params) {
         data = butils.sanitize(data.data, butils.EXPORT_USE, params.options);
         data = butils.removeDuplicates(data);
         butils.filter(data, params.filter);
-        data = utils.extension("post-export").apply(data, params.options);
+        data = utils.extension("post-export").apply(data, {options: params.options});
         utils.writeResult(params.output, butils.sort(data));
         if (parts) utils.writePartsResult(utils.parentPath(params.output), parts);
 

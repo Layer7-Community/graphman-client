@@ -81,15 +81,20 @@ module.exports = {
 
     usage: function () {
         console.log("diff --input-source <input-file-or-gateway> --input-target <input-file-or-gateway>");
-        console.log("  [--input-report <input-report-file>]");
         console.log("  [--output <output-file>]");
         console.log("  [--output-report <output-report-file>]");
+        console.log("  [--options.<name> <value>,...]");
+        console.log();
+        console.log("diff --input-report <input-report-file>");
+        console.log("  [--output <output-file>]");
         console.log("  [--options.<name> <value>,...]");
         console.log();
         console.log("Evaluates the differences between bundles or gateways.");
         console.log("Input can be a bundle file or a gateway profile name if it precedes with '@' special character.");
         console.log("When gateway is specified as input, summary bundle will be pulled for comparison.");
         console.log("Differences are computed such that what can be done to the target to match with the given source.");
+        console.log("The difference bundle and it's comprehensive report will be generated.");
+        console.log("The difference report can be used to re-generate the difference bundle when required.");
         console.log();
         console.log("  --input-source <input-file-or-gateway-profile>");
         console.log("    specify source input bundle file for comparison");
@@ -290,7 +295,7 @@ function diffEntities(leftEntities, rightEntities, report, typeInfo, options, mu
                     path: item.path,
                     source: item.left,
                     target: item.right
-                }, typeInfo.pluralName, options));
+                }, {typeInfo: {pluralName: typeInfo.pluralName}, options: options}));
             });
 
             // restore policy code

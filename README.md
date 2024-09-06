@@ -31,7 +31,7 @@ node -v
 If node is not already installed on your system, you can download it from https://nodejs.org/en/download/.
 Minimum version that is expected to work with is 16.+.
 
-#### Install the graphman client from Broadcom's npm registry
+### Install the graphman client from Broadcom's npm registry
 - starting from 1.3.2 releases, install the client directly from the registry
   - `npm install @layer7/graphman --global --registry https://packages.broadcom.com/artifactory/api/npm/layer7-npm`
 - verify the installation by running the version command
@@ -42,15 +42,15 @@ Minimum version that is expected to work with is 16.+.
 > [!NOTE] 
 > As the module is installed globally, graphman client can be executed from any directory workspace.
 
-#### Update the graphman client from registry
+### Update the graphman client from registry
 - installed client (from Broadcom's registry) can be updated to the latest available.
-  - `npm update @layer7/graphman --global`
+  - `npm update @layer7/graphman --global --registry https://packages.broadcom.com/artifactory/api/npm/layer7-npm`
 - in case if you want to update the client to a particular release, specify release version.
-  - `npm update @layer7/graphman@<some-release-version> --global`
+  - `npm update @layer7/graphman@<some-release-version> --global --registry https://packages.broadcom.com/artifactory/api/npm/layer7-npm`
 - verify the update by running the version command
   - `graphman version`
 
-#### Uninstall the graphman client
+### Uninstall the graphman client
 - starting from 1.3.* releases, client should be uninstalled using npm.
   - `npm uninstall @layer7/graphman --global`
 - in particular to the 1.3.00 release, cd to the home directory and run the npm-uninstall command.
@@ -58,7 +58,7 @@ Minimum version that is expected to work with is 16.+.
 - remove the client's home directory path from the PATH environment variable
 - delete the client's home directory itself
 
-#### Install the graphman client using the git release distributions
+### Install the graphman client using the git release distributions
 Download one of the released [Graphman client distributions](https://github.com/Layer7-Community/graphman-client/releases), and follow the below steps to install the client:
 - unzip the wrapper archive
   - `tar -xvf layer7-graphman-wrapper.tar.gz`
@@ -70,10 +70,7 @@ Download one of the released [Graphman client distributions](https://github.com/
   - `export GRAPHMAN_HOME=/path/to/layer7-graphman-wrapper`
 - verify the installation by running the version command
   - `graphman.sh version` 
-
-> [!TIP]
-> Make sure adding the graphman client home directory to the **PATH** environment variable so that client can be used from any directory workspace.
-
+  
 Then, you may configure one or more gateway profiles (under _gateways_ section) to interact with by editing the _**graphman.configuration**_ file. 
 Choose one of the gateway profile as part of _--gateway_ parameter while working with CLI. When this parameter is omitted, it will be defaulted to the **_default_** gateway profile.
 ```
@@ -149,6 +146,7 @@ graphman.sh version
 > Supported schema(s) (i.e., version of the Layer7 API Gateway)
 - v11.1.1 (default)
 - v11.1.00
+- v11.0.00-CR03
 
 > Switch to the one of the above supported schemas using CLI argument (`--options.schema <schema>`) 
 
