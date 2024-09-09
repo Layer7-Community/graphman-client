@@ -7,9 +7,10 @@ module.exports = {
      * Extension to process the bundle to be imported
      * diff operation uses this extension for capturing the policy code differences.
      * @param input bundle to be imported
-     * @param options CLI options
+     * @param context partial execution context
+     * @param context.options CLI options
      */
-    apply: function (input, options) {
+    apply: function (input, context) {
         return input;
     }
 }

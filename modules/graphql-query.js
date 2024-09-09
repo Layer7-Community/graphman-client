@@ -256,9 +256,13 @@ function expandGraphQLSubQueryUsingTypeInfo(gql, typeInfo, suffix) {
 function substituteGraphQLSubQueryFields(gql, query) {
     // substitute alternative field for policy code (xml or json or yaml or code)
     if (gql.options.policyCodeFormat && gql.options.policyCodeFormat !== "xml") {
-        query = query.replaceAll(/(policy|policyRevision|policyRevisions)[^{]*[{][^}]+}/g, function (subtext) {
-            return subtext.replace("xml", gql.options.policyCodeFormat);
-        });
+        if (graphman.supportsFeature("policy-as-code")) {
+            query = query.replaceAll(/(policy|policyRevision|policyRevisions)[^{]*[{][^}]+}/g, function (subtext) {
+                return subtext.replace("xml", gql.options.policyCodeFormat);
+            });
+        } else {
+            utils.warn("policy-as-code feature is not supported for the selected schema");
+        }
     }
 
     // substitute alternative field for key detail (p12 or pem)
