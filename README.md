@@ -668,18 +668,18 @@ For example:
   - ref: _modules/graphman-extension-multiline-text-diff.js_
   - default implementation uses the [diff](https://www.npmjs.com/package/diff) third-party module. By default, it is not enabled for use. 
   - once enabled, make sure this package is installed, available for use
-    - `npm install diff`
+    - `npm install diff@5.2.0 --global`
 - policy-code-validator
   - enables the extensions to compile the json schema that is needed for policy code validation. 
   - **validate** command uses it.
   - ref: _modules/graphman-extension-policy-code-validator.js_
   - default implementation uses the [ajv](https://www.npmjs.com/package/ajv) third-party module. By default, it is not enabled for use.
   - once enabled, make sure this package is installed, available for use
-  - `npm install ajv`
+  - `npm install ajv --global`
 
 > [!NOTE]
-> When the extensions are loaded from the globally installed graphman package, 
-make sure the required third-party packages are also installed globally (using --global option).
+> When the extensions are customized and configured to load from the home directory, their third-party packages might not get loaded.     
+This can be resolved by installing them local to the home directory (i.e., repeat npm-install for the third-party packages without --global option).
 
 # Deprecated entity types
 As part of extending the supportability and standardization, few of the existing entity types and their associated query-level field methods are deprecated. 
