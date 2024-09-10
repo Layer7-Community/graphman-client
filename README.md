@@ -14,7 +14,7 @@ bundled for your domain-specific use case. To help dive into that layer, power u
 provided Postman collection which provides samples for all the queries and mutations supported by Graphman.
 
 # Jump to
-1. [Getting Started with the Command-line (CLI)](#cli)
+1. [Getting Started](#cli)
 2. [Graphman bundles explained](#bundles)
 3. [Compatibility Matrix](#compatibility-matrix)
 4. [Using in Postman](#postman)
@@ -42,7 +42,7 @@ Minimum version that is expected to work with is 16.+.
 > As the module is installed globally, graphman client can be executed from any directory workspace. And, no extension is needed to refer it.
 
 > [!NOTE]
-> Please refer the [Previous Releases](docs/previous-releases.md) page for installing the older clients
+> Please refer the [Previous Releases'](docs/previous-releases.md) page for installing the older clients
 
 ### Update the graphman client from registry
 - installed client (from Broadcom's registry) can be updated to the latest available.
