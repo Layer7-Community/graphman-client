@@ -677,6 +677,9 @@ For example:
   - once enabled, make sure this package is installed, available for use
   - `npm install ajv`
 
+> [!NOTE]
+> When the extensions are loaded from the globally installed graphman package, 
+make sure the required third-party packages are also installed globally (using --global option).
 
 # Deprecated entity types
 As part of extending the supportability and standardization, few of the existing entity types and their associated query-level field methods are deprecated. 
