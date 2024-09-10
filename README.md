@@ -1,8 +1,9 @@
-# Graphman client
+# Graphman Client
+
+Graphman Client is a stand-alone, [node.js](https://nodejs.org/en/about) based command-line tool for interacting with the Graphman API.
 
 Graphman is an API running on a Layer7 Gateway for interacting with the gateway configuration. This API
-lets you retrieve full or partial gateway configuration from a Layer7 Gateway with Graphman running on it,
-bundle configuration for the purposes of applying configuration as code and apply configuration to a
+lets you retrieve full or partial gateway configuration as a bundle for the purposes of applying configuration as code and apply configuration to a
 gateway.
 
 Graphman is a GraphQL API, but you don't need prior experience with, or an understanding of GraphQL to use it
@@ -18,11 +19,9 @@ provided Postman collection which provides samples for all the queries and mutat
 3. [Compatibility Matrix](#compatibility-matrix)
 4. [Using in Postman](#postman)
 
-# Graphman client CLI
+## Getting Started <a name="cli"></a>
 
-## Getting Started with the CLI <a name="cli"></a>
-
-To get started with the command line interface, you need to have node.js installed on your system. You can
+To get started with the command line interface, you need to have [node.js](https://nodejs.org/en/about) installed on your system. You can
 check that you have node installed by running this command:
 ```
 node -v
@@ -32,7 +31,7 @@ If node is not already installed on your system, you can download it from https:
 Minimum version that is expected to work with is 16.+.
 
 ### Install the graphman client from Broadcom's npm registry
-- starting from 1.3.2 releases, install the client directly from the registry
+- install the client directly from the registry
   - `npm install @layer7/graphman --global --registry https://packages.broadcom.com/artifactory/api/npm/layer7-npm`
 - verify the installation by running the version command
   - `graphman version`
@@ -40,7 +39,10 @@ Minimum version that is expected to work with is 16.+.
   - `export GRAPHMAN_HOME=/path/to/layer7-graphman-home`
 
 > [!NOTE] 
-> As the module is installed globally, graphman client can be executed from any directory workspace.
+> As the module is installed globally, graphman client can be executed from any directory workspace. And, no extension is needed to refer it.
+
+> [!NOTE]
+> Please refer the [Previous Releases](docs/previous-releases.md) page for installing the older clients
 
 ### Update the graphman client from registry
 - installed client (from Broadcom's registry) can be updated to the latest available.
@@ -50,6 +52,9 @@ Minimum version that is expected to work with is 16.+.
 - verify the update by running the version command
   - `graphman version`
 
+> [!NOTE]
+> npm-update is not applicable if the existing client was not installed from the registry. You must uninstall it and continue installing it from registry.
+
 ### Uninstall the graphman client
 - starting from 1.3.* releases, client should be uninstalled using npm.
   - `npm uninstall @layer7/graphman --global`
@@ -57,19 +62,6 @@ Minimum version that is expected to work with is 16.+.
   - `npm uninstall @layer7/graphman`
 - remove the client's home directory path from the PATH environment variable
 - delete the client's home directory itself
-
-### Install the graphman client using the git release distributions
-Download one of the released [Graphman client distributions](https://github.com/Layer7-Community/graphman-client/releases), and follow the below steps to install the client:
-- unzip the wrapper archive
-  - `tar -xvf layer7-graphman-wrapper.tar.gz`
-- cd to the wrapper directory
-  - `cd /path/to/layer7-graphman-wrapper`
-- install the **@layer7/graphman** npm module
-  - `npm install layer7-graphman-<version>.tgz`
-- set the environment variable **GRAPHMAN_HOME** to the path where this wrapper is unzipped. 
-  - `export GRAPHMAN_HOME=/path/to/layer7-graphman-wrapper`
-- verify the installation by running the version command
-  - `graphman.sh version` 
   
 Then, you may configure one or more gateway profiles (under _gateways_ section) to interact with by editing the _**graphman.configuration**_ file. 
 Choose one of the gateway profile as part of _--gateway_ parameter while working with CLI. When this parameter is omitted, it will be defaulted to the **_default_** gateway profile.
@@ -119,13 +111,6 @@ Congratulations, you just packaged all the configuration from the source gateway
 target gateway.
 
 > [!TIP]
-> Use platform specific entrypoint to interact with the GRAPHMAN. 
-> 
-> - Windows - graphman.bat
-> 
-> - Linux - graphman.sh
-
-> [!TIP]
 > Running GRAPHMAN with no arguments lists the supported operations and shows how to get started. 
  
 You can get more information about every operation by specifying the _--help_ parameter.
@@ -155,12 +140,12 @@ graphman.sh version
 ## Compatibility Matrix <a name="compatibility-matrix"></a>
 The following table describes the compatibility of the Graphman client with the targeting Layer7 API Gateways.
 
-| Graphman Client | Layer7 API Gateway     |
-|-----------------|------------------------|
-| v1.3.*          | v11.1.1, v11.1.00      |
-| v1.2.*          | v11.1.00               |
-| v1.1            | v10.1 CR04, v11.0 CR02 |
-| v1.0.*          | v10.1 CR03, v11.0 CR01 |
+| Graphman Client | Layer7 API Gateway               |
+|-----------------|----------------------------------|
+| v1.3.*          | v11.1.1, v11.1.00, v11.0.00-CR03 |
+| v1.2.*          | v11.1.00                         |
+| v1.1            | v10.1 CR04, v11.0 CR02           |
+| v1.0.*          | v10.1 CR03, v11.0 CR01           |
 
 
 ## Graphman configuration bundles <a name="bundles"></a>
