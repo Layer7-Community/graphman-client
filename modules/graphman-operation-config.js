@@ -19,12 +19,15 @@ module.exports = {
         } else {
             const home = process.env.GRAPHMAN_HOME;
             const configFile = utils.path(home, CONFIG_FILE);
-            if (utils.existsFile(configFile)) {
+            if (!home) {
+                utils.warn("home directory is not configured");
+                utils.warn("did you forget to configure the GRAPHMAN_HOME environment variable?");
+            } else if (utils.existsFile(configFile)) {
                 utils.info("home", home);
                 utils.info("configuration");
                 utils.print(utils.readFile(configFile));
             } else {
-                utils.warn("configuration is missing", configFile);
+                utils.warn("configuration is missing,", configFile);
             }
             utils.print();
         }
