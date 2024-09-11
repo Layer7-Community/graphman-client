@@ -3,14 +3,14 @@
         "clusterProperties": [
             {
                 "goid": "33aa783389dbe37fa942bb781a5d6337",
-                "name": "cwp-1",
+                "name": "cwp-new-1",
                 "checksum": "dc2291019747d7a034aaccbe9ef952fbba846563",
                 "hiddenProperty": false,
                 "value": "30"
             },
             {
                 "goid": "1b86bc096b781a557932b91adc09c5d6",
-                "name": "cwp-2",
+                "name": "cwp-new-2",
                 "checksum": "e7ece13bb1c30fe81816f115a7f5e6785c618e82",
                 "hiddenProperty": false,
                 "value": "40"
@@ -20,7 +20,7 @@
             {
                 "goid": "da58533697cfbeed8d6e7d7ca08c85c4",
                 "guid": "05b0aec4-c37e-4030-8a7f-2db610a23ad8",
-                "name": "some-policy",
+                "name": "policy-new-1",
                 "policyType": "FRAGMENT",
                 "checksum": "196aa03c31281bffe0f8ecc4aca97f079cf8841f",
                 "folderPath": "/",
@@ -34,8 +34,8 @@
             {
                 "goid": "97c4b8b0ff10788a901de6accd100390",
                 "guid": "0f3d2d57-4c07-4924-b470-d661465a24a4",
-                "name": "hello-world",
-                "resolutionPath": "/hello-world",
+                "name": "service-new-1",
+                "resolutionPath": "/service-new-1",
                 "serviceType": "WEB_API",
                 "checksum": "f47239631c5e3311b971048be07b13edbaed91ed",
                 "enabled": true,
@@ -117,7 +117,7 @@
         "trustedCerts": [
             {
                 "goid": "fe006715fb26afdcd1344d613d76bcb1",
-                "name": "AutoTrustSslKey",
+                "name": "cert-delete-1",
                 "subjectDn": "cn=ssg111.broadcom.net",
                 "thumbprintSha1": "MXAEyUit8a29J+JDoWfGY6lam34=",
                 "checksum": "e4f7c1e64c29f91f262e459425a1c4faa4d6e68c"
