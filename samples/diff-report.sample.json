@@ -1,0 +1,180 @@
+{
+    "inserts": {
+        "clusterProperties": [
+            {
+                "goid": "33aa783389dbe37fa942bb781a5d6337",
+                "name": "cwp-1",
+                "checksum": "dc2291019747d7a034aaccbe9ef952fbba846563",
+                "hiddenProperty": false,
+                "value": "30"
+            },
+            {
+                "goid": "1b86bc096b781a557932b91adc09c5d6",
+                "name": "cwp-2",
+                "checksum": "e7ece13bb1c30fe81816f115a7f5e6785c618e82",
+                "hiddenProperty": false,
+                "value": "40"
+            }
+        ],
+        "policies": [
+            {
+                "goid": "da58533697cfbeed8d6e7d7ca08c85c4",
+                "guid": "05b0aec4-c37e-4030-8a7f-2db610a23ad8",
+                "name": "some-policy",
+                "policyType": "FRAGMENT",
+                "checksum": "196aa03c31281bffe0f8ecc4aca97f079cf8841f",
+                "folderPath": "/",
+                "soap": false,
+                "policy": {
+                    "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:CommentAssertion>\n            <L7p:Comment stringValue=\"Policy Fragment: some-policy\"/>\n        </L7p:CommentAssertion>\n        <L7p:AuditDetailAssertion>\n            <L7p:Detail stringValue=\"Hello!\"/>\n        </L7p:AuditDetailAssertion>\n    </wsp:All>\n</wsp:Policy>\n"
+                }
+            }
+        ],
+        "services": [
+            {
+                "goid": "97c4b8b0ff10788a901de6accd100390",
+                "guid": "0f3d2d57-4c07-4924-b470-d661465a24a4",
+                "name": "hello-world",
+                "resolutionPath": "/hello-world",
+                "serviceType": "WEB_API",
+                "checksum": "f47239631c5e3311b971048be07b13edbaed91ed",
+                "enabled": true,
+                "folderPath": "/hello-world",
+                "methodsAllowed": [
+                    "GET",
+                    "POST",
+                    "PUT",
+                    "DELETE"
+                ],
+                "tracingEnabled": false,
+                "wssProcessingEnabled": false,
+                "laxResolution": false,
+                "policy": {
+                    "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:AuditAssertion/>\n        <L7p:Include>\n            <L7p:PolicyGuid stringValue=\"05b0aec4-c37e-4030-8a7f-2db610a23ad8\"/>\n            <L7p:PolicyName stringValue=\"some-policy\"/>\n        </L7p:Include>\n        <L7p:CustomAssertion>\n            <L7p:base64SerializedValue>rO0ABXNyADFjb20ubDd0ZWNoLnBvbGljeS5hc3NlcnRpb24uQ3VzdG9tQXNzZXJ0aW9uSG9sZGVyZtcreFwddTICAAlaAAxpc1VpQXV0b09wZW5MAApjYXRlZ29yaWVzdAAPTGphdmEvdXRpbC9TZXQ7TAAIY2F0ZWdvcnl0ACpMY29tL2w3dGVjaC9wb2xpY3kvYXNzZXJ0aW9uL2V4dC9DYXRlZ29yeTtMAA9jdXN0b21Bc3NlcnRpb250ADFMY29tL2w3dGVjaC9wb2xpY3kvYXNzZXJ0aW9uL2V4dC9DdXN0b21Bc3NlcnRpb247TAAUY3VzdG9tTW9kdWxlRmlsZU5hbWV0ABJMamF2YS9sYW5nL1N0cmluZztMAA9kZXNjcmlwdGlvblRleHRxAH4ABEwAD3BhbGV0dGVOb2RlTmFtZXEAfgAETAAOcG9saWN5Tm9kZU5hbWVxAH4ABEwAHnJlZ2lzdGVyZWRDdXN0b21GZWF0dXJlU2V0TmFtZXEAfgAEeHIAJWNvbS5sN3RlY2gucG9saWN5LmFzc2VydGlvbi5Bc3NlcnRpb27bX2OZPL2isQIAAloAB2VuYWJsZWRMABBhc3NlcnRpb25Db21tZW50dAAvTGNvbS9sN3RlY2gvcG9saWN5L2Fzc2VydGlvbi9Bc3NlcnRpb24kQ29tbWVudDt4cAFwAXNyABFqYXZhLnV0aWwuSGFzaFNldLpEhZWWuLc0AwAAeHB3DAAAABA/QAAAAAAAAXNyAChjb20ubDd0ZWNoLnBvbGljeS5hc3NlcnRpb24uZXh0LkNhdGVnb3J5WrCcZaFE/jUCAAJJAAVteUtleUwABm15TmFtZXEAfgAEeHAAAAALdAAQQ3VzdG9tQXNzZXJ0aW9uc3hwc3IAJmNvbS5sN3RlY2guY3VzdG9tLmRlbGF5LkRlbGF5QXNzZXJ0aW9u13KryuLuWYUCAAFMAA1kZWxheU1pbGxpU2VjcQB+AAR4cHQABDEyMzR0ADQ5MTRkMzg1Y2UyZWM3MzQ3YjIzMDA1MTE5N2Q2YmFjMmVmOTdjNDQwNjBiOWY1NWYuamFydAAFRGVsYXl0AAVEZWxheXQABURlbGF5cA==</L7p:base64SerializedValue>\n        </L7p:CustomAssertion>\n        <L7p:HardcodedResponse>\n            <L7p:Base64ResponseBody stringValue=\"SGVsbG8sICR7cmVxdWVzdC50Y3AucmVtb3RlSXB9OiR7cmVxdWVzdC50Y3AucmVtb3RlUG9ydH0hCg==\"/>\n            <L7p:ResponseContentType stringValue=\"text/plain; charset=UTF-8\"/>\n        </L7p:HardcodedResponse>\n    </wsp:All>\n</wsp:Policy>\n"
+                }
+            }
+        ]
+    },
+    "updates": {
+        "clusterProperties": [
+            {
+                "goid": "c090fe5ab5ac0bde7452e1e1c9854696",
+                "name": "cwp-modified-1",
+                "checksum": "64ee013f402d5f9366b0b7066efae8d02b87deb4",
+                "hiddenProperty": true,
+                "value": "00000000000000000000000000000002:ssl"
+            },
+            {
+                "goid": "c090fe5ab5ac0bde7452e1e1c9854696",
+                "name": "cwp-modified-2",
+                "checksum": "64ee013f402d5f9366b0b7066efae8d02b87deb4",
+                "hiddenProperty": true,
+                "value": "00000000000000000000000000000002:ssl"
+            }
+        ],
+        "services": [
+            {
+                "goid": "e379df4446136e5f7295d08131c8ab74",
+                "guid": "f1dd992a-f584-4abe-a333-8ba1b1734004",
+                "name": "service-modified-1",
+                "resolutionPath": "/service-modified-1",
+                "serviceType": "WEB_API",
+                "checksum": "04afcec197b723b5dc66a82dc519ac388b9f20de",
+                "enabled": true,
+                "folderPath": "/",
+                "methodsAllowed": [
+                    "GET",
+                    "POST",
+                    "PUT",
+                    "DELETE"
+                ],
+                "tracingEnabled": false,
+                "wssProcessingEnabled": true,
+                "laxResolution": false,
+                "policy": {
+                    "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\r\n    <wsp:All wsp:Usage=\"Required\">\r\n        <wsp:OneOrMore wsp:Usage=\"Required\">\r\n            <L7p:SslAssertion>\r\n                <L7p:RequireClientAuthentication booleanValue=\"true\"/>\r\n            </L7p:SslAssertion>\r\n            <wsp:All wsp:Usage=\"Required\">\r\n                <L7p:SslAssertion/>\r\n                <L7p:HttpBasic/>\r\n            </wsp:All>\r\n            <L7p:assertionComment>\r\n                <L7p:Properties mapValue=\"included\">\r\n                    <L7p:entry>\r\n                        <L7p:key stringValue=\"RIGHT.COMMENT\"/>\r\n                        <L7p:value stringValue=\"~ enforce security checks\"/>\r\n                    </L7p:entry>\r\n                </L7p:Properties>\r\n            </L7p:assertionComment>\r\n        </wsp:OneOrMore>\r\n        <L7p:CustomizeErrorResponse>\r\n            <L7p:Content stringValue=\"${error_description}\"/>\r\n            <L7p:ExtraHeaders nameValuePairArray=\"included\"/>\r\n        </L7p:CustomizeErrorResponse>\r\n        <wsp:OneOrMore wsp:Usage=\"Required\">\r\n            <L7p:Authentication>\r\n                <L7p:IdentityProviderOid goidValue=\"0000000000000000fffffffffffffffe\"/>\r\n            </L7p:Authentication>\r\n            <wsp:All wsp:Usage=\"Required\">\r\n                <L7p:SetVariable>\r\n                    <L7p:Base64Expression stringValue=\"QXV0aGVudGljYXRpb24gZmFpbGVkLg==\"/>\r\n                    <L7p:VariableToSet stringValue=\"error_description\"/>\r\n                </L7p:SetVariable>\r\n                <L7p:FalseAssertion/>\r\n            </wsp:All>\r\n            <L7p:assertionComment>\r\n                <L7p:Properties mapValue=\"included\">\r\n                    <L7p:entry>\r\n                        <L7p:key stringValue=\"RIGHT.COMMENT\"/>\r\n                        <L7p:value stringValue=\"~ enforce authz\"/>\r\n                    </L7p:entry>\r\n                </L7p:Properties>\r\n            </L7p:assertionComment>\r\n        </wsp:OneOrMore>\r\n        <L7p:SetVariable>\r\n            <L7p:Base64Expression stringValue=\"RXJyb3IgZW5jb3VudGVyZWQgaW4gcHJvY2Vzc2luZyB0aGUgcmVxdWVzdC4gUGxlYXNlIGNoZWNrIHRoZSBTU0cgYXVkaXRzL2xvZ3MvYWRtaW5pc3RyYXRvciBmb3IgbW9yZSBpbmZvcm1hdGlvbiBhYm91dCB0aGUgcHJvYmxlbS4=\"/>\r\n            <L7p:VariableToSet stringValue=\"error_description\"/>\r\n        </L7p:SetVariable>\r\n        <L7p:CustomizeErrorResponse>\r\n            <L7p:Content stringValueReference=\"inline\"><![CDATA[{\r\n\"errors\": [\r\n    {\r\n        \"message\": \"${error_description}\"\r\n    }\r\n]\r\n}]]></L7p:Content>\r\n            <L7p:ContentType stringValue=\"application/json; charset=UTF-8\"/>\r\n            <L7p:ExtraHeaders nameValuePairArray=\"included\"/>\r\n            <L7p:HttpStatus stringValue=\"200\"/>\r\n        </L7p:CustomizeErrorResponse>\r\n        <L7p:GatewayGraphQL/>\r\n    </wsp:All>\r\n</wsp:Policy>\r\n"
+                }
+            }
+        ]
+    },
+    "deletes": {
+        "clusterProperties": [
+            {
+                "goid": "c090fe6bh5ac0bde7452e1e1b9854696",
+                "name": "cwp-delete-1",
+                "checksum": "64ee013f402d5f9366b0b7066efae8d02b87deb4",
+                "hiddenProperty": true,
+                "value": "00000000000000000000000000000002:ssl"
+            },
+            {
+                "goid": "c090fe5cd4ac0bde7342e1e1c9854696",
+                "name": "cwp-delete-2",
+                "checksum": "64ee013f402d5f6786b0b7066efae8d02b87deb4",
+                "hiddenProperty": true,
+                "value": "00000000000000000000000000000002:ssl"
+            }
+        ],
+        "trustedCerts": [
+            {
+                "goid": "fe006715fb26afdcd1344d613d76bcb1",
+                "name": "AutoTrustSslKey",
+                "subjectDn": "cn=ssg111.broadcom.net",
+                "thumbprintSha1": "MXAEyUit8a29J+JDoWfGY6lam34=",
+                "checksum": "e4f7c1e64c29f91f262e459425a1c4faa4d6e68c"
+            }
+        ],
+        "services": [
+            {
+                "goid": "e379df4446136e5f7295d08131c8ab74",
+                "guid": "f1dd992a-f584-4abe-a333-8ba1b1734004",
+                "name": "service-delete-1",
+                "resolutionPath": "/service-delete-1",
+                "serviceType": "WEB_API",
+                "checksum": "04afcec197b723b5dc66a82dc519ac388b9f20de",
+                "enabled": true,
+                "folderPath": "/",
+                "methodsAllowed": [
+                    "GET",
+                    "POST",
+                    "PUT",
+                    "DELETE"
+                ],
+                "tracingEnabled": false,
+                "wssProcessingEnabled": true,
+                "laxResolution": false,
+                "policy": {
+                    "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\r\n    <wsp:All wsp:Usage=\"Required\">\r\n        <wsp:OneOrMore wsp:Usage=\"Required\">\r\n            <L7p:SslAssertion>\r\n                <L7p:RequireClientAuthentication booleanValue=\"true\"/>\r\n            </L7p:SslAssertion>\r\n            <wsp:All wsp:Usage=\"Required\">\r\n                <L7p:SslAssertion/>\r\n                <L7p:HttpBasic/>\r\n            </wsp:All>\r\n            <L7p:assertionComment>\r\n                <L7p:Properties mapValue=\"included\">\r\n                    <L7p:entry>\r\n                        <L7p:key stringValue=\"RIGHT.COMMENT\"/>\r\n                        <L7p:value stringValue=\"~ enforce security checks\"/>\r\n                    </L7p:entry>\r\n                </L7p:Properties>\r\n            </L7p:assertionComment>\r\n        </wsp:OneOrMore>\r\n        <L7p:CustomizeErrorResponse>\r\n            <L7p:Content stringValue=\"${error_description}\"/>\r\n            <L7p:ExtraHeaders nameValuePairArray=\"included\"/>\r\n        </L7p:CustomizeErrorResponse>\r\n        <wsp:OneOrMore wsp:Usage=\"Required\">\r\n            <L7p:Authentication>\r\n                <L7p:IdentityProviderOid goidValue=\"0000000000000000fffffffffffffffe\"/>\r\n            </L7p:Authentication>\r\n            <wsp:All wsp:Usage=\"Required\">\r\n                <L7p:SetVariable>\r\n                    <L7p:Base64Expression stringValue=\"QXV0aGVudGljYXRpb24gZmFpbGVkLg==\"/>\r\n                    <L7p:VariableToSet stringValue=\"error_description\"/>\r\n                </L7p:SetVariable>\r\n                <L7p:FalseAssertion/>\r\n            </wsp:All>\r\n            <L7p:assertionComment>\r\n                <L7p:Properties mapValue=\"included\">\r\n                    <L7p:entry>\r\n                        <L7p:key stringValue=\"RIGHT.COMMENT\"/>\r\n                        <L7p:value stringValue=\"~ enforce authz\"/>\r\n                    </L7p:entry>\r\n                </L7p:Properties>\r\n            </L7p:assertionComment>\r\n        </wsp:OneOrMore>\r\n        <L7p:SetVariable>\r\n            <L7p:Base64Expression stringValue=\"RXJyb3IgZW5jb3VudGVyZWQgaW4gcHJvY2Vzc2luZyB0aGUgcmVxdWVzdC4gUGxlYXNlIGNoZWNrIHRoZSBTU0cgYXVkaXRzL2xvZ3MvYWRtaW5pc3RyYXRvciBmb3IgbW9yZSBpbmZvcm1hdGlvbiBhYm91dCB0aGUgcHJvYmxlbS4=\"/>\r\n            <L7p:VariableToSet stringValue=\"error_description\"/>\r\n        </L7p:SetVariable>\r\n        <L7p:CustomizeErrorResponse>\r\n            <L7p:Content stringValueReference=\"inline\"><![CDATA[{\r\n\"errors\": [\r\n    {\r\n        \"message\": \"${error_description}\"\r\n    }\r\n]\r\n}]]></L7p:Content>\r\n            <L7p:ContentType stringValue=\"application/json; charset=UTF-8\"/>\r\n            <L7p:ExtraHeaders nameValuePairArray=\"included\"/>\r\n            <L7p:HttpStatus stringValue=\"200\"/>\r\n        </L7p:CustomizeErrorResponse>\r\n        <L7p:GatewayGraphQL/>\r\n    </wsp:All>\r\n</wsp:Policy>\r\n"
+                }
+            }]
+    },
+    "diffs": {
+        "clusterProperties": [
+            {
+                "source": {
+                    "name": "keyStore.defaultSsl.alias"
+                },
+                "details": [
+                    {
+                        "path": "$.goid",
+                        "source": "c090fe5ab5ac0bde7452e1e1c9854696",
+                        "target": "fe006715fb26afdcd1344d613d76bcb2"
+                    },
+                    {
+                        "path": "$.checksum",
+                        "source": "64ee013f402d5f9366b0b7066efae8d02b87deb4",
+                        "target": "3c2adb85c6f0d55e9aef665eef59dbcb95153fad"
+                    },
+                    {
+                        "path": "$.value",
+                        "source": "00000000000000000000000000000002:ssl",
+                        "target": "00000000000000000000000000000002:SSL"
+                    }
+                ]
+            }
+        ]
+    },
+    "mappings": {
+        "goids": [],
+        "guids": []
+    }
+}
