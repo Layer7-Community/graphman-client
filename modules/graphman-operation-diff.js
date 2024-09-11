@@ -22,6 +22,7 @@ module.exports = {
      * @param params.options.includeInserts flag to decide including entities from the includes section
      * @param params.options.includeUpdates flag to decide including entities from the updates section
      * @param params.options.includeDeletes flag to decide including entities from the deletes section
+     * @param params.options.useNoDefMappings flag to decide nodef mappings for deletion
      * @param params.options.renewEntities flag to decide renewing the entities from the respective gateways
      * NOTE: Use "@" as prefix to differentiate the gateway profile name from the bundle name.
      */
@@ -122,6 +123,8 @@ module.exports = {
         console.log("        decides whether to include entities from the update section.");
         console.log("      .includeDeletes false|true");
         console.log("        decides whether to include entities from the deletes section.");
+        console.log("      .useNoDefMappings false|true");
+        console.log("        decides whether to use nodef mappings (only for deletion).");
         console.log("      .renewEntities false|true");
         console.log("        decides whether to renew entities from the respective gateways when specified.");
         console.log();
@@ -389,18 +392,29 @@ function diffBundle(report, bundle, options, verbose) {
 
     if (options.includeDeletes) butils.forEach(report.deletes, (key, entities, typeInfo) => {
         if (verbose) utils.info(`adding ${key}, category=deletes`);
-        bundle.properties = {mappings: {}};
-        const array = butils.withArray(bundle.properties.mappings, typeInfo);
+
+        initializeBundleProperties(bundle);
+        const array = butils.withArray(bundle, typeInfo);
+        const array2 = butils.withArray(bundle.properties.mappings, typeInfo);
         entities.forEach(item => {
             if (verbose) utils.info(`  ${butils.entityName(item, typeInfo)}`);
-            array.push(butils.mappingInstruction('DELETE', item, typeInfo));
+            if (!options.useNoDefMappings) array.push(item);
+            array2.push(butils.mappingInstruction('DELETE', item, typeInfo, {nodef: options.useNoDefMappings}));
         });
+
+        if (array.length === 0) delete bundle[typeInfo.pluralName];
+        if (array2.length === 0) delete bundle.properties.mappings[typeInfo.pluralName];
     });
 
     butils.forEach(bundle, (key, entities, typeInfo) => {
         if (report.mappings.goids.length) reviseEntities(entities, typeInfo, report.mappings.goids);
         if (report.mappings.guids.length) reviseEntities(entities, typeInfo, report.mappings.guids);
     });
+}
+
+function initializeBundleProperties(bundle) {
+    if (!bundle.properties) bundle.properties = {};
+    if (!bundle.properties.mappings) bundle.properties.mappings = {};
 }
 
 function reviseEntities(entities, typeInfo, mappings) {
