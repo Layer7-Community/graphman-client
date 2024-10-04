@@ -105,8 +105,14 @@ module.exports = {
         return result;
     },
 
-    mappingInstruction: function (action, entity, typeInfo) {
+    mappingInstruction: function (action, entity, typeInfo, flags) {
+        flags = flags || {};
+
         return {
+            "default": flags["default"],
+            nodef: flags.nodef,
+            failOnNew: flags.failOnNew,
+            failOnExisting: flags.failOnExisting,
             action: action,
             source: this.toPartialEntity(entity, typeInfo)
         };
