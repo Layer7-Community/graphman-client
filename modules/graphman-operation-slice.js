@@ -52,11 +52,19 @@ module.exports = {
             }
         }
 
+        if (params.filter) {
+            butils.filter(result, params.filter);
+        }
+
         utils.writeResult(params.output, butils.sort(result));
     },
 
     initParams: function (params, config) {
-        if (params.sections && !Array.isArray(params.sections)) {
+        if (!params.sections) {
+            params.sections = [];
+        }
+
+        if (!Array.isArray(params.sections)) {
             params.sections = [params.sections];
         }
 
