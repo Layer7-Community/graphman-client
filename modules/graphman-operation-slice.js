@@ -53,6 +53,7 @@ module.exports = {
         }
 
         if (params.filter) {
+            delete params.filter.by;
             butils.filter(result, params.filter);
         }
 
@@ -91,6 +92,7 @@ module.exports = {
         console.log("    use this option to filter the entities by one or more fields at section level");
         console.log("    section refers to the plural name of the entity type");
         console.log("    multiple fields used for section-level filtering will be chained together by and-logic");
+        console.log("    use '*' as a section for defining the global level filter; will only be used when no specific filters are defined for a given section");
         console.log("    supported matching criteria are");
         console.log("      eq, equals");
         console.log("      neq, not equals");

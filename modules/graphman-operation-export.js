@@ -124,6 +124,7 @@ module.exports = {
         console.log("    use this option to filter the exported entities by one or more fields at section level");
         console.log("    section refers to the plural name of the entity type");
         console.log("    multiple fields used for section-level filtering will be chained together by and-logic");
+        console.log("    use '*' as a section for defining the global level filter; will only be used when no specific filters are defined for a given section");
         console.log("    supported matching criteria are");
         console.log("      eq, equals");
         console.log("      neq, not equals");
@@ -134,10 +135,9 @@ module.exports = {
         console.log("      lte, less than or equals");
         console.log("    default matching criteria is [eq].");
         console.log();
-        console.log("  --filter.by <field-name> [[<matching-criteria>.]<field-value>]");
+        console.log("  (deprecated) --filter.by <field-name>");
         console.log("    use this option to filter the exported entities by some field.");
-        console.log("    optionally, required field value can also be specified with or without matching criteria.");
-        console.log("    refer the --filter.<section>.<field-name> argument to know more about field matching criteria");
+        console.log("    refer the --filter.<section>.<field-name> for alternative");
         console.log();
         console.log("  (deprecated) --filter.[equals|startsWith|endsWith|contains] <value>");
         console.log("    use this option to choose the matching criteria to filter the exported entities");
