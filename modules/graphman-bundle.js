@@ -163,6 +163,7 @@ module.exports = {
     },
 
     filter: function (bundle, filter) {
+        // TODO: filter.latest is temporary flag
         if (filter && filter.latest) {
             const predicates = filterer.buildPredicates(filter);
             Object.keys(bundle)
