@@ -163,7 +163,7 @@ module.exports = {
     },
 
     filter: function (bundle, filter) {
-        if (filter.latest) {
+        if (filter && filter.latest) {
             const predicates = filterer.buildPredicates(filter);
             Object.keys(bundle)
                 .map(item => graphman.typeInfoByPluralName(item))
@@ -738,9 +738,10 @@ let filterer = function () {
     const supported_predicates_regex = /^(eq|neq|regex|gt|gte|lt|lte)[.]/;
 
     function toPredicateFieldConfig(name, value) {
-        const match = value.match(supported_predicates_regex);
+        const valueString = String(value);
+        const match = valueString.match(supported_predicates_regex);
         const pfConfig = match ?
-            {name: name, criteria: match[1], value: value.substring(match[1].length + 1)} :
+            {name: name, criteria: match[1], value: valueString.substring(match[1].length + 1)} :
             {name: name, criteria: 'eq', value: value};
         if (pfConfig.criteria === "regex") {
             pfConfig.value = new RegExp(pfConfig.value);
