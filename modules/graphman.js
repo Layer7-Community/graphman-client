@@ -220,9 +220,10 @@ module.exports = {
      * Makes the http request to the gateway's graphman service
      * @param options
      * @param callback
+     * @param cli_options
      */
-    invoke: function (options, callback) {
-        options = utils.extension("pre-request").apply(options, {});
+    invoke: function (options, callback, cli_options) {
+        options = utils.extension("pre-request").apply(options, cli_options);
         const req = ((!options.protocol||options.protocol === 'https'||options.protocol === 'https:') ? https : http).request(options, function(response) {
             let respInfo = {initialized: false, chunks: []};
 
