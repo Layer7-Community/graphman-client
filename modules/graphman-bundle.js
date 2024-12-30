@@ -163,6 +163,16 @@ module.exports = {
     },
 
     filter: function (bundle, filter) {
+        // TODO: filter.latest is temporary flag
+        if (filter && filter.latest) {
+            const predicates = filterer.buildPredicates(filter);
+            Object.keys(bundle)
+                .map(item => graphman.typeInfoByPluralName(item))
+                .filter(item => item)
+                .forEach(typeInfo => filterer.filterEntities(bundle, typeInfo, predicates));
+            return;
+        }
+
         if (!filter || !filter.by) return;
         if (!filter.equals && !filter.startsWith && !filter.endsWith && !filter.contains) return;
 
@@ -660,5 +670,168 @@ let importSanitizer = function () {
                 delete entity[field];
             }
         });
+    }
+}();
+
+let filterer = function () {
+    const supported_predicates = {
+        'eq': {
+            test: function (actualValue, expectedValue) {
+                return actualValue === expectedValue;
+            }
+        },
+
+        'neq': {
+            test: function (actualValue, expectedValue) {
+                return actualValue !== expectedValue;
+            }
+        },
+
+        'eq%': {
+            test: function (actualValue, expectedValue) {
+                return typeof actualValue === 'string' && actualValue.startsWith(expectedValue);
+            }
+        },
+
+        '%eq': {
+            test: function (actualValue, expectedValue) {
+                return typeof actualValue === 'string' && actualValue.endsWith(expectedValue);
+            }
+        },
+
+        '%eq%': {
+            test: function (actualValue, expectedValue) {
+                return typeof actualValue === 'string' && actualValue.includes(expectedValue);
+            }
+        },
+
+        'regex': {
+            test: function (actualValue, expectedPattern) {
+                return typeof actualValue === 'string' && expectedPattern.test(actualValue);
+            }
+        },
+
+        'gt': {
+            test: function (actualValue, expectedValue) {
+                return actualValue > expectedValue;
+            }
+        },
+
+        'gte': {
+            test: function (actualValue, expectedValue) {
+                return actualValue >= expectedValue;
+            }
+        },
+
+        'lt': {
+            test: function (actualValue, expectedValue) {
+                return actualValue < expectedValue;
+            }
+        },
+
+        'lte': {
+            test: function (actualValue, expectedValue) {
+                return actualValue <= expectedValue;
+            }
+        },
+    };
+
+    const supported_predicates_regex = /^(eq|neq|regex|gt|gte|lt|lte)[.]/;
+
+    function toPredicateFieldConfig(name, value) {
+        const valueString = String(value);
+        const match = valueString.match(supported_predicates_regex);
+        const pfConfig = match ?
+            {name: name, criteria: match[1], value: valueString.substring(match[1].length + 1)} :
+            {name: name, criteria: 'eq', value: value};
+        if (pfConfig.criteria === "regex") {
+            pfConfig.value = new RegExp(pfConfig.value);
+        }
+        return pfConfig;
+    }
+
+    function buildPredicate(filterSection) {
+        if (!filterSection) {
+            return null;
+        }
+
+        const pfConfigs = Object.keys(filterSection)
+            .map(fieldName => toPredicateFieldConfig(fieldName, filterSection[fieldName]));
+
+        return function (entity, typeInfo) {
+            return pfConfigs.every(pfConfig => {
+                const predicate = supported_predicates[pfConfig.criteria];
+                if (predicate) {
+                    return predicate.test(entity[pfConfig.name], pfConfig.value, pfConfig);
+                } else {
+                    return true;
+                }
+            });
+        };
+    }
+
+    function buildDefaultPredicate(filter) {
+        let defaultPredicate = buildPredicate(filter['*']) || function (entity, typeInfo) {
+            return true;
+        };
+
+        if (!filter.by) {
+            return defaultPredicate;
+        }
+
+        const pfConfig = {name: filter.by, criteria: 'eq', value: null};
+        if (filter.equals) {
+            pfConfig.value = filter.equals;
+        } else if (filter.startsWith) {
+            pfConfig.value = filter.startsWith;
+            pfConfig.criteria = 'eq%';
+        } else if (filter.endsWith) {
+            pfConfig.value = filter.endsWith;
+            pfConfig.criteria = '%eq';
+        } else if (filter.contains) {
+            pfConfig.value = filter.contains;
+            pfConfig.criteria = '%eq%';
+        } else {
+            utils.warn('expected value is missing for the filter, ignoring it');
+            pfConfig.criteria = '';
+        }
+
+        const predicate = supported_predicates[pfConfig.criteria];
+        if (predicate) defaultPredicate = function (entity, typeInfo) {
+            return predicate.test(entity[pfConfig.name], pfConfig.value, pfConfig);
+        };
+
+        return defaultPredicate;
+    }
+
+    return {
+        filterEntities: function (bundle, typeInfo, predicates) {
+            const entities = bundle[typeInfo.pluralName];
+
+            if (entities) {
+                const predicate = predicates.get([typeInfo.pluralName]);
+                const result = entities.filter(item => predicate(item, typeInfo));
+                if (result.length === 0) {
+                    delete bundle[typeInfo.pluralName];
+                } else {
+                    bundle[typeInfo.pluralName] = result;
+                }
+            }
+        },
+
+        buildPredicates: function (filter) {
+            const predicates = {
+                get: function (section) {
+                    if (predicates[section] === undefined) {
+                        predicates[section] = buildPredicate(filter[section]) || predicates['default'];
+                    }
+
+                    return predicates[section];
+                }
+            };
+
+            predicates['default'] = buildDefaultPredicate(filter);
+            return predicates;
+        }
     }
 }();
