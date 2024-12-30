@@ -49,9 +49,10 @@ module.exports = {
 
         utils.info(`exporting from ${gateway.name||gateway.address} gateway`);
         const request = graphman.request(gateway, query.options);
+        cli_options=Object.assign({},query.options);
         delete query.options;
         request.body = query;
-        graphman.invoke(request, callback);
+        graphman.invoke(request, callback, cli_options);
     },
 
     initParams: function (params, config) {
