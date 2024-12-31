@@ -27,6 +27,9 @@ module.exports = {
             bundle = combine(bundle, utils.readFile(item));
         }
 
+        // post execution of extension:
+        bundle = utils.extension("post-combine").apply(bundle, params.inputs, params.options);
+
         utils.writeResult(params.output, butils.sort(bundle));
     },
 
