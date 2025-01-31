@@ -290,7 +290,7 @@ function diffEntities(leftEntities, rightEntities, report, typeInfo, options, mu
             utils.info("  ignoring " + butils.entityName(leftEntity, typeInfo) + ", target entity checksum is undefined");
         } else if (leftEntity.checksum === undefined || leftEntity.checksum !== rightEntity.checksum) {
             const details = [];
-            const codeRef = makeEntityReadyForEqualityCheck(leftEntity, rightEntity);
+            const diffEntitiesEqContext = diffEntitiesBeforeEqualityCheck(leftEntity, rightEntity);
 
             // compare objects
             const equals = butils.isObjectEquals(leftEntity, rightEntity, "$", item => {
@@ -302,8 +302,7 @@ function diffEntities(leftEntities, rightEntities, report, typeInfo, options, mu
             });
 
             // restore policy code
-            if (codeRef.left) leftEntity.policy.code = codeRef.left;
-            if (codeRef.right) rightEntity.policy.code = codeRef.right;
+            diffEntitiesAfterEqualityCheck(leftEntity, rightEntity, diffEntitiesEqContext);
 
             if (!equals) {
                 if (details.length === 1 && details[0].path === "$.checksum") {
@@ -354,21 +353,52 @@ function diffEntities(leftEntities, rightEntities, report, typeInfo, options, mu
  * @param rightEntity
  * @returns code-ref object
  */
-function makeEntityReadyForEqualityCheck(leftEntity, rightEntity) {
-    const codeRef = {left: null, right: null};
+function diffEntitiesBeforeEqualityCheck(leftEntity, rightEntity) {
+    const context = {modified: false, left: {}, right: {}};
 
     // capture policy code and re-write it as string for comparison friendly
-    if (leftEntity.policy  && leftEntity.policy.code) {
-        codeRef.left = leftEntity.policy.code;
-        leftEntity.policy.code = JSON.stringify(codeRef.left, null, 0);
+    context.modified |= diffEntityBeforeEqualityCheck(leftEntity, context.left);
+    context.modified |= diffEntityBeforeEqualityCheck(rightEntity, context.right);
+
+    return context;
+}
+
+/**
+ * Restores the entities using context.
+ * @param leftEntity
+ * @param rightEntity
+ * @param context
+ */
+function diffEntitiesAfterEqualityCheck(leftEntity, rightEntity, context) {
+    if (context.modified) {
+        diffEntityAfterEqualityCheck(leftEntity, context.left);
+        diffEntityAfterEqualityCheck(rightEntity, context.right);
+    }
+}
+
+function diffEntityBeforeEqualityCheck(entity, context) {
+    let modified = false;
+
+    if (entity.policy) {
+        if (entity.policy.code) {
+            context.policyCode = entity.policy.code;
+            entity.policy.code = JSON.stringify(entity.policy.code, null, 4);
+            modified = true;
+        }
+
+        if (entity.policy.json) {
+            context.policyJson = entity.policy.json;
+            entity.policy.json = JSON.stringify(JSON.parse(entity.policy.json), null, 4);
+            modified = true;
+        }
     }
 
-    if (rightEntity.policy && rightEntity.policy.code) {
-        codeRef.right = rightEntity.policy.code;
-        rightEntity.policy.code = JSON.stringify(codeRef.right, null, 0);
-    }
+    return modified;
+}
 
-    return codeRef;
+function diffEntityAfterEqualityCheck(entity, context) {
+    if (context.policyCode) entity.policy.code = context.policyCode;
+    if (context.policyJson) entity.policy.json = context.policyJson;
 }
 
 function diffBundle(report, bundle, options, verbose) {
