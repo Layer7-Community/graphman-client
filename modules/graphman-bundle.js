@@ -106,9 +106,9 @@ module.exports = {
     },
 
     reviseIDReferences: function (bundle, idMappings) {
-        this.forEach(bundle, (key, entities, typeInfo) => {
-            if (idMappings.mappings.goids.length) reviseIDReferences(entities, typeInfo, idMappings.mappings.goids);
-            if (idMappings.mappings.guids.length) reviseIDReferences(entities, typeInfo, idMappings.mappings.guids);
+        if (idMappings.mappings) this.forEach(bundle, (key, entities, typeInfo) => {
+            if (idMappings.mappings.goids.length) reviseIDReferences(entities, typeInfo, idMappings.mappings.goids, this);
+            if (idMappings.mappings.guids.length) reviseIDReferences(entities, typeInfo, idMappings.mappings.guids, this);
         });
     },
 
@@ -400,16 +400,16 @@ module.exports = {
     }
 }
 
-function reviseIDReferences(entities, typeInfo, mappings) {
+function reviseIDReferences(entities, typeInfo, mappings, butils) {
     entities.forEach(entity => {
         if (entity.policy) {
-            reviseIDReferencesInPolicies(entity, typeInfo, mappings);
+            reviseIDReferencesInPolicies(entity, typeInfo, mappings, butils);
         }
     });
 }
 
-function reviseIDReferencesInPolicies(entity, typeInfo, mappings) {
-    const name = this.entityName(entity, typeInfo);
+function reviseIDReferencesInPolicies(entity, typeInfo, mappings, butils) {
+    const name = butils.entityName(entity, typeInfo);
     mappings.forEach(mapping => {
         if (entity.policy.xml) entity.policy.xml = entity.policy.xml.replaceAll(mapping.left, function (match) {
             utils.info(`  revising ${name}, replacing ${mapping.left} with ${mapping.right}`);

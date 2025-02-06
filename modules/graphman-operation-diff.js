@@ -71,6 +71,8 @@ module.exports = {
                 }
             }).catch(error => {
                 utils.error("errors encountered while analyzing the differences", error);
+                utils.error(`  name: ${error.name}`);
+                utils.error(`  message: ${error.message}`);
                 utils.print();
             });
         } else if (params["input-report"]) {
