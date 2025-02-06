@@ -18,6 +18,7 @@ module.exports = {
      * @param params.input-report input report file name
      * @param params.output output file name
      * @param params.output-report output report file name
+     * @param params.output-id-mappings output id-mappings file name
      * @param params.options
      * @param params.options.includeInserts flag to decide including entities from the includes section
      * @param params.options.includeUpdates flag to decide including entities from the updates section
@@ -48,6 +49,10 @@ module.exports = {
                             utils.writeResult(params["output-report"], sortReport(renewedReport));
                         }
 
+                        if (params["output-id-mappings"]) {
+                            utils.writeResult(params["output-id-mappings"], {mappings: renewedReport.mappings});
+                        }
+
                         utils.writeResult(params.output, butils.sort(bundle));
                     });
                 } else {
@@ -56,6 +61,10 @@ module.exports = {
 
                     if (params["output-report"]) {
                         utils.writeResult(params["output-report"], sortReport(report));
+                    }
+
+                    if (params["output-id-mappings"]) {
+                        utils.writeResult(params["output-id-mappings"], {mappings: report.mappings});
                     }
 
                     utils.writeResult(params.output, butils.sort(bundle));
@@ -77,6 +86,17 @@ module.exports = {
 
     initParams: function (params, config) {
         params.options = Object.assign({includeInserts: true, includeUpdates: true, includeDeletes: false}, params.options);
+
+        const output = params.output;
+        const JSON_SUFFIX = ".json";
+        if (output) {
+            if (output.endsWith(JSON_SUFFIX)) {
+                const outputPrefix = output.substring(0, output.length - JSON_SUFFIX.length);
+                if (!params["output-report"]) params["output-report"] = outputPrefix + ".diff-report" + JSON_SUFFIX;
+                if (!params["output-id-mappings"]) params["output-id-mappings"] = outputPrefix + ".id-mappings" + JSON_SUFFIX;
+            }
+        }
+
         return params;
     },
 
@@ -84,6 +104,7 @@ module.exports = {
         console.log("diff --input-source <input-file-or-gateway> --input-target <input-file-or-gateway>");
         console.log("  [--output <output-file>]");
         console.log("  [--output-report <output-report-file>]");
+        console.log("  [--output-id-mappings <output-id-mappings-file>]");
         console.log("  [--options.<name> <value>,...]");
         console.log();
         console.log("diff --input-report <input-report-file>");
@@ -114,6 +135,9 @@ module.exports = {
         console.log();
         console.log("  --output-report <output-report-file>");
         console.log("    specify the file to capture the diff report");
+        console.log();
+        console.log("  --output-id-mappings <output-id-mappings-file>");
+        console.log("    specify the file to capture the goid/guid mappings between source and target environments");
         console.log();
         console.log("  --options.<name> <value>");
         console.log("    specify options as name-value pair(s) to customize the operation");
@@ -322,7 +346,7 @@ function diffEntities(leftEntities, rightEntities, report, typeInfo, options, mu
             }
         }
 
-        if (rightEntity != null && typeInfo.goidRefEnabled) {
+        if (rightEntity != null) {
             if (leftEntity.goid && rightEntity.goid !== leftEntity.goid) {
                 utils.info(`  selecting ` + butils.entityName(leftEntity, typeInfo) + `, category=goid-mappings`);
                 report.mappings.goids.push({left: leftEntity.goid, right: rightEntity.goid});
@@ -436,41 +460,10 @@ function diffBundle(report, bundle, options, verbose) {
         if (array2.length === 0) delete bundle.properties.mappings[typeInfo.pluralName];
     });
 
-    butils.forEach(bundle, (key, entities, typeInfo) => {
-        if (report.mappings.goids.length) reviseEntities(entities, typeInfo, report.mappings.goids);
-        if (report.mappings.guids.length) reviseEntities(entities, typeInfo, report.mappings.guids);
-    });
+    butils.reviseIDReferences(bundle, report);
 }
 
 function initializeBundleProperties(bundle) {
     if (!bundle.properties) bundle.properties = {};
     if (!bundle.properties.mappings) bundle.properties.mappings = {};
-}
-
-function reviseEntities(entities, typeInfo, mappings) {
-    entities.forEach(entity => {
-        if (entity.policy) {
-            reviseEntity(entity, typeInfo, mappings);
-        }
-    });
-}
-
-function reviseEntity(entity, typeInfo, mappings) {
-    const name = butils.entityName(entity, typeInfo);
-    mappings.forEach(mapping => {
-        if (entity.policy.xml) entity.policy.xml = entity.policy.xml.replaceAll(mapping.left, function (match) {
-            utils.info(`  revising ${name}, replacing ${mapping.left} with ${mapping.right}`);
-            return mapping.right;
-        });
-
-        if (entity.policy.json) entity.policy.json = entity.policy.json.replaceAll(mapping.left, function (match) {
-            utils.info(`  revising ${name}, replacing ${mapping.left} with ${mapping.right}`);
-            return mapping.right;
-        });
-
-        if (entity.policy.yaml) entity.policy.yaml = entity.policy.yaml.replaceAll(mapping.left, function (match) {
-            utils.info(`  revising ${name}, replacing ${mapping.left} with ${mapping.right}`);
-            return mapping.right;
-        });
-    });
 }

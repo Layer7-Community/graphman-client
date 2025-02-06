@@ -105,6 +105,13 @@ module.exports = {
         return result;
     },
 
+    reviseIDReferences: function (bundle, idMappings) {
+        this.forEach(bundle, (key, entities, typeInfo) => {
+            if (idMappings.mappings.goids.length) reviseIDReferences(entities, typeInfo, idMappings.mappings.goids);
+            if (idMappings.mappings.guids.length) reviseIDReferences(entities, typeInfo, idMappings.mappings.guids);
+        });
+    },
+
     mappingInstruction: function (action, entity, typeInfo, flags) {
         flags = flags || {};
 
@@ -391,6 +398,34 @@ module.exports = {
         return Object.keys(fileSuffixes)
             .find(item => filename.endsWith(fileSuffixes[item] + ".json"));
     }
+}
+
+function reviseIDReferences(entities, typeInfo, mappings) {
+    entities.forEach(entity => {
+        if (entity.policy) {
+            reviseIDReferencesInPolicies(entity, typeInfo, mappings);
+        }
+    });
+}
+
+function reviseIDReferencesInPolicies(entity, typeInfo, mappings) {
+    const name = this.entityName(entity, typeInfo);
+    mappings.forEach(mapping => {
+        if (entity.policy.xml) entity.policy.xml = entity.policy.xml.replaceAll(mapping.left, function (match) {
+            utils.info(`  revising ${name}, replacing ${mapping.left} with ${mapping.right}`);
+            return mapping.right;
+        });
+
+        if (entity.policy.json) entity.policy.json = entity.policy.json.replaceAll(mapping.left, function (match) {
+            utils.info(`  revising ${name}, replacing ${mapping.left} with ${mapping.right}`);
+            return mapping.right;
+        });
+
+        if (entity.policy.yaml) entity.policy.yaml = entity.policy.yaml.replaceAll(mapping.left, function (match) {
+            utils.info(`  revising ${name}, replacing ${mapping.left} with ${mapping.right}`);
+            return mapping.right;
+        });
+    });
 }
 
 function sanitizeBaseUri(text) {
