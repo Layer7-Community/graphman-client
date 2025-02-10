@@ -671,6 +671,14 @@ let importSanitizer = function () {
                         delete entity.goid;
                     }
 
+                    // convert policy-code into json-string equivalent
+                    if (entity.policy && entity.policy.code) {
+                        if (!entity.policy.json) {
+                            entity.policy.json = JSON.stringify(entity.policy.json, null, 4);
+                            delete entity.policy.code;
+                        }
+                    }
+
                     if (interestedSections.includes(typeInfo.pluralName)) {
                         sanitizeEntity(entity, typeInfo, butils);
                     }

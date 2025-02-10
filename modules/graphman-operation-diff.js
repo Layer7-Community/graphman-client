@@ -71,8 +71,8 @@ module.exports = {
                 }
             }).catch(error => {
                 utils.error("errors encountered while analyzing the differences", error);
-                utils.error(`  name: ${error.name}`);
-                utils.error(`  message: ${error.message}`);
+                if (error.name) utils.error(`  name: ${error.name}`);
+                if (error.message) utils.error(`  message: ${error.message}`);
                 utils.print();
             });
         } else if (params["input-report"]) {
@@ -177,7 +177,13 @@ function readBundleFromGateway(gateway) {
                 data => {
                     if (data.errors) {
                         utils.warn(`errors detected while retrieving ${gateway.name} gateway configuration summary`);
-                        reject(data.errors);
+
+                        // if there's no data, report the errors via reject; otherwise, log them and proceed.
+                        if (!data.data) {
+                            reject(data.errors);
+                        } else {
+                            utils.error("errors encountered while analyzing the differences", data.errors);
+                        }
                     }
 
                     const bundle = data.data || {};
