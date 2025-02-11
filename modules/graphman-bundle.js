@@ -674,7 +674,8 @@ let importSanitizer = function () {
                     // convert policy-code into json-string equivalent
                     if (entity.policy && entity.policy.code) {
                         if (!entity.policy.json) {
-                            entity.policy.json = JSON.stringify(entity.policy.json, null, 4);
+                            utils.info(`  transforming the code field for the entity ` + butils.entityName(entity, typeInfo));
+                            entity.policy.json = JSON.stringify(entity.policy.code, null, 4);
                             delete entity.policy.code;
                         }
                     }
