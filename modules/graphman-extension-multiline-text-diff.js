@@ -3,6 +3,7 @@
  */
 
 const diffExtn = require('diff');
+const policyCodePathRegex = new RegExp("[.]policy[.](xml|json|yaml|code)$");
 
 module.exports = {
     /**
@@ -17,7 +18,7 @@ module.exports = {
      * @param context.typeInfo.pluralName input type information
      */
     apply: function (input, context) {
-        if (input.path.endsWith(".policy.xml") || input.path.endsWith(".policy.json") || input.path.endsWith(".policy.yaml")) {
+        if (policyCodePathRegex.test(input.path)) {
             input.diff = diffExtn.createTwoFilesPatch(
                 "target", "source",
                 input.target, input.source,
