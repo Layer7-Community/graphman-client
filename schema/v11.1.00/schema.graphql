@@ -2638,7 +2638,7 @@ extend type Mutation {
  A Layer7 gateway policy
 > @l7-entity policy|policies
 > @l7-identity-fields name,policyType
-> @l7-summary-fields goid,name,policyType,tag,subTag,checksum
+> @l7-summary-fields goid,guid,name,policyType,tag,subTag,checksum
 > @l7-excluded-fields policyRevision,policyRevisions
  """
  type L7Policy {

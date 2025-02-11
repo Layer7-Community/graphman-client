@@ -13,6 +13,7 @@ module.exports = {
      * @param params
      * @param params.using mutation
      * @param params.input name of the input file containing the gateway configuration as bundle
+     * @param params.input-id-mappings name of the input file containing the id-mappings
      * @param params.variables name-value pairs used in mutation
      * @param params.gateway name of the gateway profile
      * @param params.output name of the output file
@@ -35,9 +36,12 @@ module.exports = {
             return;
         }
 
+        const inputIDMappings = params["input-id-mappings"] ? utils.readFile(params["input-id-mappings"]) : {};
         let inputBundle = butils.sanitize(utils.readFile(params.input), butils.IMPORT_USE, params.options);
         inputBundle = butils.removeDuplicates(inputBundle);
         butils.overrideMappings(inputBundle, params.options);
+        butils.reviseIDReferences(inputBundle, inputIDMappings);
+
         inputBundle = utils.extension("pre-import").apply(inputBundle, {options: params.options});
 
         const query = gql.generate(params.using, Object.assign(inputBundle, params.variables), params.options);
@@ -103,6 +107,9 @@ module.exports = {
         console.log();
         console.log("  --input <input-file>");
         console.log("    specify the name of input bundle file that contains gateway configuration");
+        console.log();
+        console.log("  --input-id-mappings <input-id-mappings-file>");
+        console.log("    specify the name of input file that contains id-mappings (i.e., goid/guid mapping differences identified between source and target environments)");
         console.log();
         console.log("  --variables.<name> <value>");
         console.log("    specify the name-value pair(s) for the variables section of the mutation-based query");

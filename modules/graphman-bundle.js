@@ -105,6 +105,13 @@ module.exports = {
         return result;
     },
 
+    reviseIDReferences: function (bundle, idMappings) {
+        if (idMappings.mappings) this.forEach(bundle, (key, entities, typeInfo) => {
+            if (idMappings.mappings.goids.length) reviseIDReferences(entities, typeInfo, idMappings.mappings.goids, this);
+            if (idMappings.mappings.guids.length) reviseIDReferences(entities, typeInfo, idMappings.mappings.guids, this);
+        });
+    },
+
     mappingInstruction: function (action, entity, typeInfo, flags) {
         flags = flags || {};
 
@@ -393,6 +400,34 @@ module.exports = {
     }
 }
 
+function reviseIDReferences(entities, typeInfo, mappings, butils) {
+    entities.forEach(entity => {
+        if (entity.policy) {
+            reviseIDReferencesInPolicies(entity, typeInfo, mappings, butils);
+        }
+    });
+}
+
+function reviseIDReferencesInPolicies(entity, typeInfo, mappings, butils) {
+    const name = butils.entityName(entity, typeInfo);
+    mappings.forEach(mapping => {
+        if (entity.policy.xml) entity.policy.xml = entity.policy.xml.replaceAll(mapping.left, function (match) {
+            utils.info(`  revising ${name}, replacing ${mapping.left} with ${mapping.right}`);
+            return mapping.right;
+        });
+
+        if (entity.policy.json) entity.policy.json = entity.policy.json.replaceAll(mapping.left, function (match) {
+            utils.info(`  revising ${name}, replacing ${mapping.left} with ${mapping.right}`);
+            return mapping.right;
+        });
+
+        if (entity.policy.yaml) entity.policy.yaml = entity.policy.yaml.replaceAll(mapping.left, function (match) {
+            utils.info(`  revising ${name}, replacing ${mapping.left} with ${mapping.right}`);
+            return mapping.right;
+        });
+    });
+}
+
 function sanitizeBaseUri(text) {
     const index = text.indexOf("//");
     return index !== -1 ? text.substring(index + 2) : text;
@@ -634,6 +669,15 @@ let importSanitizer = function () {
                 entities.forEach(entity => {
                     if (!goidRequired && !includeGoids) {
                         delete entity.goid;
+                    }
+
+                    // convert policy-code into json-string equivalent
+                    if (entity.policy && entity.policy.code) {
+                        if (!entity.policy.json) {
+                            utils.info(`  transforming the code field for the entity ` + butils.entityName(entity, typeInfo));
+                            entity.policy.json = JSON.stringify(entity.policy.code, null, 4);
+                            delete entity.policy.code;
+                        }
                     }
 
                     if (interestedSections.includes(typeInfo.pluralName)) {
