@@ -21,7 +21,7 @@ module.exports = {
         const mappings = utils.mappings(params.mappings);
 
         const data = butils.sanitize(inputBundle, butils.EXPORT_USE, {
-            bundleDefaultAction: params.bundleDefaultAction,
+            bundleDefaultAction: params.options.bundleDefaultAction,
             mappings: mappings
         });
 
