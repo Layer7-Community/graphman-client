@@ -165,6 +165,8 @@ type AuditConfiguration {
     name: String!
     "The configuration checksum"
     checksum: String!
+    "Whether to save the audit records always to the internal database"
+    alwaysSaveInternal: Boolean!
     "Lookup Policy Name"
     lookupPolicyName: String
     "Sink Policy Name"
@@ -183,6 +185,8 @@ input AuditConfigurationInput {
     lookupPolicyName: String
     "The configuration checksum"
     checksum: String
+    "Whether to save the audit records always to the internal database"
+    alwaysSaveInternal: Boolean = true
     "Sink Policy Name"
     sinkPolicyName: String
     "FTP Client Configuration"
@@ -2349,7 +2353,7 @@ input InternalUserRefInput {
     login: String!
 }
 #
-# Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
+# Copyright (c) 2025. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
 
 extend type Query {
@@ -2370,12 +2374,17 @@ extend type Mutation {
     createJdbcConnection(input : JdbcConnectionInput!): JdbcConnectionPayload!
 
     """
-    Update an existing JDBC connection.
-    If no JDBC connection with the same name exist, the update will fail
-    NOTE: This is experimental method, likely to be removed or revised in future.
+    Update an existing JDBC connection. Match is carried by refInput
     """
-    updateJdbcConnection(input: JdbcConnectionPartialInput!): JdbcConnectionPayload!
+    updateJdbcConnection(refInput: JdbcConnectionRefInput!, input: JdbcConnectionPartialInput!): JdbcConnectionPayload!
 
+    """
+    Update an existing JDBC connection with new properties. Match is carried by refInput.
+    If a property is new, it will be added; if the value is new, it will be updated.
+    If only the property name is specified without a value, the property will be deleted.
+    Providing empty input properties will preserve the current properties and will not delete any existing ones.
+    """
+    updateJdbcConnectionProperties(refInput: JdbcConnectionRefInput!,  properties: [EntityPropertyPartialInput!]!): JdbcConnectionPayload!
     """
     Create or update JDBC connections.
     If JDBC connection with the same name exist, the JDBC connection will be updated.
@@ -2451,7 +2460,7 @@ input JdbcConnectionInput {
 
 input JdbcConnectionPartialInput {
     "The JDBC Connection name"
-    name : String!
+    name : String
     "The JDBC driver class name"
     driverClass: String
     "The JDBC url"
@@ -2468,6 +2477,12 @@ input JdbcConnectionPartialInput {
     maxPoolSize: PositiveInt
     "The JDBC connection properties excluding 'user' and 'password'.  When specified, will replace all existing properties"
     properties: [EntityPropertyInput!]
+}
+
+"Reference input to identify the entity"
+input JdbcConnectionRefInput {
+    "The JDBC Connection name"
+    name: String!
 }
 
 type JdbcConnectionPayload implements EntityMutationPayload {
@@ -2670,7 +2685,58 @@ input JmsDestinationRefInput {
     "The JMS provider type"
     providerType: String!
 }
-#
+extend type Query {
+    """
+    (Experimental)
+    Get the Kerberos configurations.
+    """
+    kerberosConfigs: [KerberosConfig!]!
+}
+
+extend type Mutation {
+    """
+    (Experimental)
+    Create/update the Kerberos configurations.
+    Automatically generates the Kerberos login config file, "login.config", and Kerberos config file, "krb5.conf" (unless the cluster-wide property kerberos.krb5Config.overwrite=false and it is set in the mutation).
+    """
+    setKerberosConfigs(input: [KerberosConfigInput!]!): KerberosConfigPayload
+
+    """
+    (Experimental)
+    Delete the Kerberos keytab. The config files "krb5.conf" and "login.config" are not deleted.
+    """
+    deleteKerberosConfigs(names: [String]): KerberosConfigPayload
+}
+
+type KerberosConfig {
+    """
+    The encrypted Kerberos keytab.
+    """
+    keytab: String
+
+    """
+    The Kerberos configuration, "krb5.conf".
+    """
+    conf: String
+}
+
+type KerberosConfigPayload {
+    status: [EntityMutationStatus!]!
+    detailedStatus: [EntityMutationDetailedStatus!]!
+    kerberosConfigs: [KerberosConfig]!
+}
+
+input KerberosConfigInput {
+    """
+    The encrypted Kerberos keytab.
+    """
+    keytab: String
+
+    """
+    The Kerberos configuration, "krb5.conf" in its INI format.
+    """
+    conf: String
+}#
 # Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
 
@@ -2794,7 +2860,7 @@ input KeyRefInput {
     keystoreId: String!
 }
 #
-# Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
+# Copyright (c) 2025. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
 
 extend type Query {
@@ -2820,6 +2886,19 @@ extend type Mutation {
 
     "Delete existing listen ports. Match is carried by name."
     deleteListenPorts(names: [String!]!): ListenPortsPayload!
+
+    """
+    Update an existing ListenPort. Match is carried by refInput.
+    """
+    updateListenPort(refInput: ListenPortRefInput!, input: ListenPortPartialInput!): ListenPortPayload!
+
+    """
+    Update an existing ListenPort with new properties. Match is carried by refInput.
+    If a property is new, it will be added; if the value is new, it will be updated.
+    If only the property name is specified without a value, the property will be deleted.
+    Providing empty input properties will preserve the current properties and will not delete any existing ones.
+    """
+    updateListenPortProperties(refInput: ListenPortRefInput!, properties: [EntityPropertyPartialInput!]!): ListenPortPayload!
 }
 
 enum ListenPortFeature {
@@ -2944,6 +3023,48 @@ input ListenPortInput {
     checksum : String
 }
 
+"Reference input to identify the entity"
+input ListenPortRefInput {
+    "The listen port configuration name"
+    name: String!
+}
+
+input ListenPortPartialInput {
+    "The internal entity unique identifier"
+    goid: ID
+    "The listen port configuration name"
+    name: String
+    "Whether this listen port configuration is enabled to listen for traffic on the specified port"
+    enabled: Boolean
+    """
+    Protocol (scheme). Possible values are:
+    HTTP
+    HTTPS
+    HTTP2
+    HTTP2 (Secure)
+    FTP
+    FTPS
+    l7.raw.tcp
+    SSH2
+    """
+    protocol: String
+    """
+    The ListenPort's port number
+    Note: If the listen port is using the SSH2 protocol, avoid using port 22, as it may conflict with the default SSH port 22 on Linux or Unix systems.
+    """
+    port : PositiveInt
+    "The name of the published service hardwired to the listen port"
+    hardwiredServiceName: String
+    "Which Gateway services can be accessed through this listen port"
+    enabledFeatures: [ListenPortFeature!]
+    "The listen port tls settings"
+    tlsSettings: ListenPortTlsSettingsInput
+    "The listen port properties"
+    properties: [EntityPropertyInput!]
+    "Ignored at creation time but can be used to compare bundle with gw state"
+    checksum : String
+}
+
 input ListenPortTlsSettingsInput {
     "Specify whether the client must present a certificate to authenticate: NONE/OPTIONAL/REQUIRED"
     clientAuthentication: ListenPortClientAuth!
@@ -2957,6 +3078,12 @@ input ListenPortTlsSettingsInput {
     cipherSuites: [String!]
     "Enforces cipher suites usage in the order of preference"
     useCipherSuitesOrder: Boolean!
+}
+
+type ListenPortPayload implements EntityMutationPayload {
+    status: EntityMutationStatus!
+    detailedStatus: EntityMutationDetailedStatus!
+    listenPort: ListenPort
 }
 
 type ListenPortsPayload implements EntityMutationsPayload {
@@ -3202,7 +3329,7 @@ input PasswordPolicyRefInput {
     goid: ID!
 }
 #
-# Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
+# Copyright (c) 2025. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
 
 extend type Query {
@@ -3237,6 +3364,9 @@ extend type Mutation {
 
     "Delete policies"
     deletePolicies(names: [String!]!) : L7PoliciesPayload!
+
+    "Update existing revision (comment and/or active) for the specified policy"
+    updatePolicyRevision(input: L7PolicyPartialInput!, revision: Long!, activate: Boolean!, comment: String) : L7PolicyPayload!
 
     "Update existing revision (comment and/or active) for the policies"
     updatePoliciesRevision(input: [L7PolicyPartialInput!]!, activate: Boolean!, comment: String) : L7PoliciesPayload!
@@ -3275,6 +3405,12 @@ extend type Mutation {
     policyRevision: PolicyRevision
     policyRevisions: [PolicyRevision!]!
  }
+
+  type L7PolicyPayload implements EntityMutationPayload {
+    status: EntityMutationStatus!
+    detailedStatus: EntityMutationDetailedStatus!
+    policy: L7Policy
+  }
 
   type L7PoliciesPayload implements EntityMutationsPayload {
     status: [EntityMutationStatus!]!
@@ -3540,7 +3676,7 @@ extend type Mutation {
 """
 A Global policy.
 > @l7-entity
-> @l7-identity-fields tag
+> @l7-identity-fields name
 > @l7-summary-fields goid,guid,name,tag,checksum
 > @l7-excluded-fields
 > @l7-deprecated Use 'L7Policy' instead.
@@ -4064,7 +4200,7 @@ input GroupRefInput {
     providerType: IdpType!
 }
 #
-# Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
+# Copyright (c) 2025. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
 
 type Query {
@@ -4113,6 +4249,11 @@ type EntityProperty {
 input EntityPropertyInput {
     name: String!
     value: String!
+}
+
+input EntityPropertyPartialInput {
+    name: String!
+    value: String
 }
 
 enum EntityMutationAction {
@@ -4667,7 +4808,7 @@ type ServerModuleFilesPayload implements EntityMutationsPayload {
     serverModuleFiles: [ServerModuleFile]!
 }
 #
-# Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
+# Copyright (c) 2025. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
 
 extend type Query {
@@ -4701,6 +4842,9 @@ extend type Query {
     "Get service by resolvers"
     serviceByResolvers(resolvers: ServiceResolversInput!) : L7Service
 
+    "Get services by resolvers"
+    servicesByResolvers(resolvers: ServiceResolversInput!) : [L7Service!]!
+
     "Get service and it's revision by resolvers and revision ordinal"
     serviceByResolversAndRevision(resolvers: ServiceResolversInput!, revision: Long!) : L7Service
 }
@@ -4709,8 +4853,23 @@ extend type Mutation {
     "Create or update services"
     setServices(input: [L7ServiceInput!]!) : L7ServicesPayload!
 
+    "Update an existing service.Match is carried by refInput"
+
+    updateService(refInput: ServiceRefInput!,  input: L7ServicePartialInput!) : L7ServicePayload!
+
+    """
+    Update an existing Service with new properties. Match is carried by refInput.
+    If a property is new, it will be added; if the value is new, it will be updated.
+    If only the property name is specified without a value, the property will be deleted.
+    Providing empty input properties will preserve the current properties and will not delete any existing ones.
+    """
+    updateServiceProperties(refInput: ServiceRefInput!, properties: [EntityPropertyPartialInput!]!) : L7ServicePayload!
+
     "Delete services"
     deleteServices(resolvers: [ServiceResolversInput!]!) : L7ServicesPayload!
+
+    "Update existing revision (comment and/or active) for the specified service"
+    updateServiceRevision(input: L7ServicePartialInput!, revision: Long!, activate: Boolean!, comment: String) : L7ServicePayload!
 
     "Update existing revision (comment and/or active) for the services"
     updateServicesRevision(input: [L7ServicePartialInput!]!, activate: Boolean!, comment: String) : L7ServicesPayload!
@@ -4793,6 +4952,12 @@ type L7ServicesPayload implements EntityMutationsPayload {
     services: [L7Service]!
 }
 
+type L7ServicePayload implements EntityMutationPayload {
+    status: EntityMutationStatus!
+    detailedStatus: EntityMutationDetailedStatus!
+    service: L7Service
+}
+
 enum L7ServiceType {
     WEB_API
     SOAP
@@ -4858,11 +5023,11 @@ input L7ServicePartialInput {
     "The name of the service"
     name: String
     "The resolution path to the service"
-    resolutionPath: String!
+    resolutionPath: String
     "The service resolvers. They can be used to identify services."
     resolvers: ServiceResolversInput
     "The type of service"
-    serviceType: L7ServiceType!
+    serviceType: L7ServiceType
     "The configuration checksum"
     checksum: String
 
