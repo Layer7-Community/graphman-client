@@ -77,21 +77,32 @@ module.exports = {
 
         // special post processing for encass query
         if (params.using === "encass" || params.using.startsWith("encass:")) {
-            params.variables.policyName = params.variables.policyName || params.variables.name;
+            params.variables.policyName = params.variables.policyName || params.variables.name || "?";
 
             const operation = this;
             params.onExportDataCallback = function (data, parts, params) {
                 const encassConfigByName = data.data ? data.data.encassConfigByName : null;
                 const policyByName = data.data ? data.data.policyByName : null;
+
+                if (!encassConfigByName || !encassConfigByName.policyName) {
+                    if (policyByName) {
+                        delete data.data.policyByName;
+                    }
+
+                    onExportDataCallback(data, parts, params);
+                    return;
+                }
+
                 // retry export operation if encass policy is not retrieved in the first attempt
-                if (encassConfigByName && encassConfigByName.policyName && !(policyByName && policyByName.name)) {
+                if (!policyByName || !policyByName.name) {
                     delete params.onExportDataCallback;
                     utils.info("retrying export operation to retrieve encass and it's backing policy details")
                     params.variables.policyName = encassConfigByName.policyName;
                     operation.run(params);
-                } else {
-                    onExportDataCallback(data, parts, params);
+                    return;
                 }
+
+                onExportDataCallback(data, parts, params);
             };
         }
 
