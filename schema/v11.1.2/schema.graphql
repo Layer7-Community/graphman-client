@@ -2708,6 +2708,13 @@ extend type Mutation {
     deleteKerberosConfigs(names: [String]): KerberosConfigPayload
 }
 
+"""
+A Kerberos configuration.
+> @l7-entity
+> @l7-identity-fields conf
+> @l7-summary-fields conf
+> @l7-excluded-fields
+"""
 type KerberosConfig {
     """
     The encrypted Kerberos keytab.
@@ -2736,7 +2743,9 @@ input KerberosConfigInput {
     The Kerberos configuration, "krb5.conf" in its INI format.
     """
     conf: String
-}#
+}
+
+#
 # Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
 
