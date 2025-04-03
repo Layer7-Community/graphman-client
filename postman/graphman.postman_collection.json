@@ -253,7 +253,7 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "query serviceWithDependencies ($resolutionPath: String!) {\n    serviceByResolutionPath (resolutionPath: $resolutionPath) {\n        goid\n        guid\n        name\n        resolutionPath\n        checksum\n\n        enabled\n        folderPath\n        methodsAllowed\n        properties {name value}\n        tracingEnabled\n        wssProcessingEnabled\n        policy {\n            xml\n            allDependencies {\n                encassConfigs {\n                    goid guid name checksum \n                    description policyName \n                    encassArgs { name type ordinal guiPrompt guiLabel } \n                    encassResults{ name type } \n                    properties { name value }\n                }\n                policyFragments {\n                    goid guid name checksum \n                    folderPath soap \n                    policy { xml }\n                }\n\n                activeConnectors {\n                    goid name checksum \n                    enabled connectorType hardwiredServiceName \n                    properties { name value } \n                    advancedProperties { name value }\n                }\n                dtds {\n                    goid systemId checksum \n                    publicId description content\n                }\n                cassandraConnections {\n                    goid name checksum \n                    enabled keyspace contactPoints port compression username securePasswordName sslEnabled cipherSuites \n                    properties { name value }\n                }\n                clusterProperties {\n                    goid name checksum \n                    description hiddenProperty value\n                }\n                emailListeners {\n                    goid name checksum \n                    enabled serverType hostname port folder deleteOnReceive username password hardwiredServiceName sslEnabled pollInterval sizeLimit \n                    properties { name value }\n                }\n                fips {\n                    goid name checksum \n                    enableCredentialTypeSaml enableCredentialTypeX509 certificateValidation \n                    certificateReferences { \n                        goid name subjectDn thumbprintSha1 checksum \n                        verifyHostname trustAnchor trustedFor revocationCheckPolicyType \n                        revocationCheckPolicy { goid name } \n                        notBefore notAfter certBase64 \n                    }\n                }\n                fipGroups {\n                    goid name providerName checksum \n                    description \n                    members { \n                        goid name login providerName checksum \n                        subjectDn certBase64 firstName lastName email \n                    }\n                }\n                fipUsers {\n                    goid name login providerName checksum \n                    subjectDn certBase64 firstName lastName email \n                    memberOf { \n                        goid name providerName checksum \n                        description \n                    }\n                }\n                internalGroups {\n                    goid name checksum \n                    description \n                    members { \n                        goid name login checksum \n                        enabled password certBase64 firstName lastName email \n                    }\n                }\n                internalUsers {\n                    goid name login checksum \n                    enabled password certBase64 firstName lastName email \n                    memberOf { goid name checksum description }\n                }\n                jdbcConnections {\n                    goid name checksum \n                    enabled driverClass jdbcUrl username password minPoolSize maxPoolSize \n                    properties { name value }\n                }\n                jmsDestinations {\n                    goid connectionGoid name direction providerType checksum \n                    enabled template initialContextFactoryClassname connectionFactoryName jndiUrl jndiUsername jndiPassword \n                    jndiSslDetails { sslEnabled sslForAuthenticationOnly sslVerifyServerCertificate sslVerifyServerHostname sslClientKeyAlias } \n                    destinationType destinationName destinationUsername destinationPassword \n                    destinationSslDetails { sslEnabled sslForAuthenticationOnly sslVerifyServerCertificate sslVerifyServerHostname sslClientKeyAlias } \n                    properties { name value }\n                }\n                keys {\n                    goid keystoreId alias checksum \n                    keyType subjectDn p12 certChain\n                }\n                ldapIdps {\n                    goid name checksum \n                    ldapType serverUrls useSslClientAuth sslClientKeyAlias searchBase \n                    writable writeBase bindDn bindPassword specifiedAttributes\n                    userMappings { \n                        objClass nameAttrName loginAttrName passwdAttrName \n                        firstNameAttrName lastNameAttrName emailNameAttrName kerberosAttrName kerberosEnterpriseAttrName\n                        userCertAttrName passwdType { val } \n                    }             \n                    groupMappings { \n                        objClass nameAttrName memberAttrName memberStrategy { val } \n                    } \n                    properties { name value } ntlmProperties{ name value }        \n                }\n                simpleLdapIdps {\n                    goid name checksum \n                    serverUrls useSslClientAuth sslClientKeyAlias bindDnPatternPrefix bindDnPatternSuffix properties { name value }        \n                }\n                federatedIdps {\n                    goid name checksum \n                    supportsSAML supportsX509 certValidation \n                    trustedCerts { name subjectDn thumbprintSha1 }\n                }\n                policyBackedIdps {\n                    goid name checksum \n                    authPolicyName defaultRoleName properties { name value }        \n                }\n                listenPorts {\n                    goid name checksum \n                    enabled protocol port hardwiredServiceName enabledFeatures \n                    tlsSettings { clientAuthentication keystoreId keyAlias tlsVersions cipherSuites useCipherSuitesOrder } \n                    properties { name value }\n                }\n                schemas {\n                    goid systemId checksum \n                    targetNs description content\n                }\n                secrets {\n                    goid name checksum \n                    description secret secretType variableReferencable\n                }\n                serverModuleFiles {\n                    goid name checksum \n                    moduleType moduleSha256 signature signerCertBase64 \n                    properties { name value } \n                    moduleStates { nodeId nodeName state description } \n                    moduleStateSummary { state description }\n                }\n                smConfigs {\n                    goid name checksum \n                    enabled agentHost agentIP agentHostConfig agentSecret cryptoMode ipCheckEnabled updateSSOToken clusterFailoverThreshold nonClusterFailover username securePasswordName \n                    properties { name value }\n                }\n                revocationCheckPolicies {\n                goid name checksum defaultPolicy defaultSuccess\n                continueOnServerUnavailable\n                    revocationCheckPolicyItems {\n                        ... on RevocationCheckPolicyItem {\n                        type url allowIssuerSignature\n                        nonceUsage signerThumbprintSha1s\n                        }\n                    }\n                }\n                trustedCerts {\n                    goid name subjectDn thumbprintSha1 checksum \n                    verifyHostname trustAnchor trustedFor revocationCheckPolicyType \n                    revocationCheckPolicy { goid name } \n                    notBefore notAfter certBase64\n                }\n                customKeyValues {\n                    goid key checksum \n                    value\n                }\n            }\n        }\n    }\n}",
+								"query": "query serviceWithDependencies ($resolutionPath: String!) {\n    serviceByResolutionPath (resolutionPath: $resolutionPath) {\n        goid\n        guid\n        name\n        resolutionPath\n        resolvers {\n            soapActions\n            baseUri\n            resolutionPath\n        }\n        serviceType\n        checksum\n        enabled\n        folderPath\n        soapVersion\n        methodsAllowed\n        tracingEnabled\n        wssProcessingEnabled\n        laxResolution\n        properties {\n            name\n            value\n        }\n        wsdlUrl\n        wsdl\n        wsdlResources {\n            uri\n            content\n        }\n        policy {\n            xml\n            #json # to retrive policy code in JSON format\n            #yaml # to retrive policy code in YAML format\n            #code # to retrive policy code in JSON object (which in-lined to the rest of the configuration)\n            allDependencies {\n                encassConfigs {\n                    goid guid name checksum \n                    description policyName \n                    encassArgs { name type ordinal guiPrompt guiLabel } \n                    encassResults{ name type } \n                    properties { name value }\n                }\n                policyFragments {\n                    goid guid name checksum \n                    folderPath soap \n                    policy { xml }\n                }\n\n                activeConnectors {\n                    goid name checksum \n                    enabled connectorType hardwiredServiceName \n                    properties { name value } \n                    advancedProperties { name value }\n                }\n                dtds {\n                    goid systemId checksum \n                    publicId description content\n                }\n                cassandraConnections {\n                    goid name checksum \n                    enabled keyspace contactPoints port compression username securePasswordName sslEnabled cipherSuites \n                    properties { name value }\n                }\n                clusterProperties {\n                    goid name checksum \n                    description hiddenProperty value\n                }\n                emailListeners {\n                    goid name checksum \n                    enabled serverType hostname port folder deleteOnReceive username password hardwiredServiceName sslEnabled pollInterval sizeLimit \n                    properties { name value }\n                }\n                fips {\n                    goid name checksum \n                    enableCredentialTypeSaml enableCredentialTypeX509 certificateValidation \n                    certificateReferences { \n                        goid name subjectDn thumbprintSha1 checksum \n                        verifyHostname trustAnchor trustedFor revocationCheckPolicyType \n                        revocationCheckPolicy { goid name } \n                        notBefore notAfter certBase64 \n                    }\n                }\n                fipGroups {\n                    goid name providerName checksum \n                    description \n                    members { \n                        goid name login providerName checksum \n                        subjectDn certBase64 firstName lastName email \n                    }\n                }\n                fipUsers {\n                    goid name login providerName checksum \n                    subjectDn certBase64 firstName lastName email \n                    memberOf { \n                        goid name providerName checksum \n                        description \n                    }\n                }\n                internalGroups {\n                    goid name checksum \n                    description \n                    members { \n                        goid name login checksum \n                        enabled password certBase64 firstName lastName email \n                    }\n                }\n                internalUsers {\n                    goid name login checksum \n                    enabled password certBase64 firstName lastName email \n                    memberOf { goid name checksum description }\n                }\n                jdbcConnections {\n                    goid name checksum \n                    enabled driverClass jdbcUrl username password minPoolSize maxPoolSize \n                    properties { name value }\n                }\n                jmsDestinations {\n                    goid connectionGoid name direction providerType checksum \n                    enabled template initialContextFactoryClassname connectionFactoryName jndiUrl jndiUsername jndiPassword \n                    jndiSslDetails { sslEnabled sslForAuthenticationOnly sslVerifyServerCertificate sslVerifyServerHostname sslClientKeyAlias } \n                    destinationType destinationName destinationUsername destinationPassword \n                    destinationSslDetails { sslEnabled sslForAuthenticationOnly sslVerifyServerCertificate sslVerifyServerHostname sslClientKeyAlias } \n                    properties { name value }\n                }\n                keys {\n                    goid keystoreId alias checksum \n                    keyType subjectDn p12 certChain\n                }\n                ldapIdps {\n                    goid name checksum \n                    ldapType serverUrls useSslClientAuth sslClientKeyAlias searchBase \n                    writable writeBase bindDn bindPassword specifiedAttributes\n                    userMappings { \n                        objClass nameAttrName loginAttrName passwdAttrName \n                        firstNameAttrName lastNameAttrName emailNameAttrName kerberosAttrName kerberosEnterpriseAttrName\n                        userCertAttrName passwdType { val } \n                    }             \n                    groupMappings { \n                        objClass nameAttrName memberAttrName memberStrategy { val } \n                    } \n                    properties { name value } ntlmProperties{ name value }        \n                }\n                simpleLdapIdps {\n                    goid name checksum \n                    serverUrls useSslClientAuth sslClientKeyAlias bindDnPatternPrefix bindDnPatternSuffix properties { name value }        \n                }\n                federatedIdps {\n                    goid name checksum \n                    supportsSAML supportsX509 certValidation \n                    trustedCerts { name subjectDn thumbprintSha1 }\n                }\n                policyBackedIdps {\n                    goid name checksum \n                    authPolicyName defaultRoleName properties { name value }        \n                }\n                listenPorts {\n                    goid name checksum \n                    enabled protocol port hardwiredServiceName enabledFeatures \n                    tlsSettings { clientAuthentication keystoreId keyAlias tlsVersions cipherSuites useCipherSuitesOrder } \n                    properties { name value }\n                }\n                schemas {\n                    goid systemId checksum \n                    targetNs description content\n                }\n                secrets {\n                    goid name checksum \n                    description secret secretType variableReferencable\n                }\n                serverModuleFiles {\n                    goid name checksum \n                    moduleType moduleSha256 signature signerCertBase64 \n                    properties { name value } \n                    moduleStates { nodeId nodeName state description } \n                    moduleStateSummary { state description }\n                }\n                smConfigs {\n                    goid name checksum \n                    enabled agentHost agentIP agentHostConfig agentSecret cryptoMode ipCheckEnabled updateSSOToken clusterFailoverThreshold nonClusterFailover username securePasswordName \n                    properties { name value }\n                }\n                revocationCheckPolicies {\n                goid name checksum defaultPolicy defaultSuccess\n                continueOnServerUnavailable\n                    revocationCheckPolicyItems {\n                        ... on RevocationCheckPolicyItem {\n                        type url allowIssuerSignature\n                        nonceUsage signerThumbprintSha1s\n                        }\n                    }\n                }\n                trustedCerts {\n                    goid name subjectDn thumbprintSha1 checksum \n                    verifyHostname trustAnchor trustedFor revocationCheckPolicyType \n                    revocationCheckPolicy { goid name } \n                    notBefore notAfter certBase64\n                }\n                customKeyValues {\n                    goid key checksum \n                    value\n                }\n            }\n        }\n    }\n}",
 								"variables": "{\n    \"resolutionPath\" : \"/some-webapi\"\n}"
 							}
 						},
@@ -3161,7 +3161,7 @@
 											"mode": "graphql",
 											"graphql": {
 												"query": "mutation setJdbcConnections($jdbcConnections: [JdbcConnectionInput!]!) {\n    setJdbcConnections(input: $jdbcConnections) {\n        detailedStatus {\n            action status description\n            source {name value}\n            target {name value}\n        }\n    }\n}",
-												"variables": "{  \n  \"jdbcConnections\": [\n    {\n      \"name\": \"some-jdbc-connection\",\n      \"enabled\": true,\n      \"driverClass\": \"com.mysql.jdbc.Driver\",\n      \"jdbcUrl\": \"jdbc:mysql://some-host:3306/some-db\",\n      \"username\": \"\",\n      \"password\": \"\",\n      \"minPoolSize\": 3,\n      \"maxPoolSize\": 15,\n      \"properties\": [\n        {\n          \"name\": \"EnableCancelTimeout\",\n          \"value\": \"true\"\n        }\n      ]\n    },\n    {\n      \"name\": \"some-other-jdbc-connection\",\n      \"enabled\": true,\n      \"driverClass\": \"com.mysql.jdbc.Driver\",\n      \"jdbcUrl\": \"jdbc:mysql://some-host:3306/some-db\",\n      \"username\": \"some-user\",\n      \"password\": \"JEw3RXYwMiSYdiDXf0GfXyx7xuyVqWlE8yY/G1juFZr9NQTNL2WkYg==\",\n      \"minPoolSize\": 3,\n      \"maxPoolSize\": 15,\n      \"properties\": [\n        {\n          \"name\": \"EnableCancelTimeout\",\n          \"value\": \"true\"\n        }\n      ]\n    }\n  ]\n}"
+												"variables": "{  \n  \"jdbcConnections\": [\n    {\n      \"name\": \"some-jdbc-connection\",\n      \"enabled\": true,\n      \"driverClass\": \"com.mysql.jdbc.Driver\",\n      \"jdbcUrl\": \"jdbc:mysql://some-host:3306/some-db\",\n      \"username\": \"\",\n      \"password\": \"\",\n      \"minPoolSize\": 3,\n      \"maxPoolSize\": 15,\n      \"properties\": [\n      {\n        \"name\": \"EnableCancelTimeout\",\n        \"value\": \"false\"\n      },\n      {\n        \"name\": \"EncryptionMethod\",\n        \"value\": \"noEncryption\"\n      },\n      {\n        \"name\": \"ResultSetMetaDataOptions\",\n        \"value\": \"1\"\n      }\n    ]\n    },\n    {\n      \"name\": \"some-other-jdbc-connection\",\n      \"enabled\": true,\n      \"driverClass\": \"com.mysql.jdbc.Driver\",\n      \"jdbcUrl\": \"jdbc:mysql://some-host:3306/some-db\",\n      \"username\": \"some-user\",\n      \"password\": \"JEw3RXYwMiSYdiDXf0GfXyx7xuyVqWlE8yY/G1juFZr9NQTNL2WkYg==\",\n      \"minPoolSize\": 3,\n      \"maxPoolSize\": 15,\n      \"properties\": [\n        {\n          \"name\": \"EnableCancelTimeout\",\n          \"value\": \"true\"\n        }\n      ]\n    }\n  ]\n}"
 											}
 										},
 										"url": {
@@ -3171,27 +3171,6 @@
 											]
 										},
 										"description": "# Set JDBC Connections\n\nSet multiple JDBC Connections altogether"
-									},
-									"response": []
-								},
-								{
-									"name": "Update JDBC Connection (experimental)",
-									"request": {
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "graphql",
-											"graphql": {
-												"query": "mutation updateJdbcConnection($jdbcConnection: JdbcConnectionPartialInput!) {\n    updateJdbcConnection (input: $jdbcConnection) {\n        detailedStatus {\n            action status description\n            source {name value}\n            target {name value}\n        }\n        jdbcConnection {\n            goid\n            name\n            checksum\n\n            # modified field\n            username \n            password\n            minPoolSize\n        }\n    }\n}",
-												"variables": "{\n  \"jdbcConnection\": {\n    \"name\": \"some-other-jdbc-connection\",\n\n    \"username\": \"some-other-user\",\n    \"password\": \"changeit\",\n    \"minPoolSize\": 3\n  }\n}"
-											}
-										},
-										"url": {
-											"raw": "{{target_gw}}",
-											"host": [
-												"{{target_gw}}"
-											]
-										}
 									},
 									"response": []
 								},
@@ -3214,6 +3193,48 @@
 											]
 										},
 										"description": "# Delete JDBC Connection"
+									},
+									"response": []
+								},
+								{
+									"name": "Update JDBC Connection",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation updateJdbcConnection(\n    $jdbcConnectionRefInput: JdbcConnectionRefInput!\n    $jdbcConnection: JdbcConnectionPartialInput!\n) {\n    updateJdbcConnection(refInput: $jdbcConnectionRefInput, input: $jdbcConnection) {\n       detailedStatus {\n            action\n            status\n            description\n            source {name value}\n            target {name value}\n        }\n    }\n}\n \n",
+												"variables": "{\n        \"jdbcConnectionRefInput\": {\n            \"name\": \"some-jdbc-connection\"\n        },\n        \"jdbcConnection\": {\n            \"driverClass\": \"oracle.jdbc.driver.OracleDriver\"\n        }\n    }\n \n"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update JDBC Connection Properties",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation UpdateJdbcConnectionProperties(\n    $jdbcConnectionRefInput: JdbcConnectionRefInput!\n    $jdbcConnectionProperties: [EntityPropertyPartialInput!]!\n) {\n    updateJdbcConnectionProperties(\n        refInput: $jdbcConnectionRefInput\n        properties: $jdbcConnectionProperties\n    ) {\n        detailedStatus {\n            action\n            status\n            description\n            source {name value}\n            target {name value}\n        }\n    }\n}\n \n",
+												"variables": "{\n        \"jdbcConnectionRefInput\": {\n            \"name\": \"some-jdbc-connection\"\n        },\n        \"jdbcConnectionProperties\": [\n            {\n                \"name\": \"MaxPooledStatements\",\n                \"value\": \"250\"\n            },\n            {\n                \"name\": \"EnableCancelTimeout\",\n                \"value\": \"true\"\n            },\n            {\n                \"name\": \"ResultSetMetaDataOptions\"\n            }\n        ]\n    }\n \n"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										}
 									},
 									"response": []
 								}
@@ -3514,7 +3535,7 @@
 											"mode": "graphql",
 											"graphql": {
 												"query": "mutation setListenPorts (\n    $listenPorts: [ListenPortInput!]!, \n    $webApiServices: [WebApiServiceInput!]!) {\n    # Ensure the availability of listen port dependencies\n    setWebApiServices(input: $webApiServices) {\n        detailedStatus {\n            action status description\n            source {name value}\n            target {name value}\n        }\n    }\n    setListenPorts (input: $listenPorts) {\n        detailedStatus {\n            action status description\n            source {name value}\n            target {name value}\n        }\n    }\n}",
-												"variables": "{\n  \"listenPorts\": [\n    {\n      \"name\": \"some-listen-port (18443)\",\n      \"enabled\": true,\n      \"protocol\": \"HTTPS\",\n      \"port\": 18443,\n      \"enabledFeatures\": [\n        \"PUBLISHED_SERVICE_MESSAGE_INPUT\",\n        \"POLICY_MANAGER_ACCESS\",\n        \"POLICY_DOWNLOAD_SERVICE\",\n        \"PING_SERVICE\",\n        \"WS_TRUST_SECURITY_TOKEN_SERVICE\",\n        \"CERTIFICATE_SIGNING_SERVICE\",\n        \"PASSWORD_CHANGING_SERVICE\",\n        \"WSDL_DOWNLOAD_SERVICE\",\n        \"SNMP_QUERY_SERVICE\",\n        \"BUILT_IN_SERVICES\"\n      ],\n      \"tlsSettings\": {\n        \"clientAuthentication\": \"OPTIONAL\",\n        \"tlsVersions\": [\n          \"TLSv1.2\",\n          \"TLSv1.3\"\n        ],\n        \"useCipherSuitesOrder\": true\n      },\n      \"properties\": [\n        {\n          \"name\": \"enableWebSocket\",\n          \"value\": \"false\"\n        },\n        {\n          \"name\": \"useExtendedFtpCommandSet\",\n          \"value\": \"false\"\n        }\n      ]\n    },\n    {\n      \"name\": \"some-other-listen-port (28443)\",\n      \"enabled\": true,\n      \"protocol\": \"HTTPS\",\n      \"port\": 28443,\n      \"hardwiredServiceName\": \"some-backend\",\n      \"enabledFeatures\": [\n        \"PUBLISHED_SERVICE_MESSAGE_INPUT\",\n        \"POLICY_MANAGER_ACCESS\",\n        \"POLICY_DOWNLOAD_SERVICE\",\n        \"PING_SERVICE\",\n        \"WS_TRUST_SECURITY_TOKEN_SERVICE\",\n        \"CERTIFICATE_SIGNING_SERVICE\",\n        \"PASSWORD_CHANGING_SERVICE\",\n        \"WSDL_DOWNLOAD_SERVICE\",\n        \"SNMP_QUERY_SERVICE\",\n        \"BUILT_IN_SERVICES\"\n      ],\n      \"tlsSettings\": {\n        \"clientAuthentication\": \"REQUIRED\",\n        \"keystoreId\": \"00000000000000000000000000000002\",\n        \"keyAlias\": \"some-host\",\n        \"tlsVersions\": [\n          \"TLSv1.2\",\n          \"TLSv1.3\"\n        ],\n        \"useCipherSuitesOrder\": true\n      },\n      \"properties\": [\n        {\n          \"name\": \"threadPoolSize\",\n          \"value\": \"32\"\n        },\n        {\n          \"name\": \"enableWebSocket\",\n          \"value\": \"true\"\n        },\n        {\n          \"name\": \"overrideContentType\",\n          \"value\": \"application/json; charset=utf-8\"\n        },\n        {\n          \"name\": \"useExtendedFtpCommandSet\",\n          \"value\": \"false\"\n        },\n        {\n          \"name\": \"requestSizeLimit\",\n          \"value\": \"2048\"\n        }\n      ]\n    }\n  ],\n  \"webApiServices\": [\n    {\n      \"name\": \"some-backend\",\n      \"resolutionPath\": \"/some-backend\",\n      \"enabled\": true,\n      \"folderPath\": \"/\",\n      \"methodsAllowed\": [\n        \"GET\",\n        \"POST\",\n        \"PUT\",\n        \"DELETE\"\n      ],\n      \"tracingEnabled\": false,\n      \"wssProcessingEnabled\": false,\n      \"policy\": {\n        \"xml\": \"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?><wsp:Policy xmlns:L7p=\\\"http://www.layer7tech.com/ws/policy\\\" xmlns:wsp=\\\"http://schemas.xmlsoap.org/ws/2002/12/policy\\\"><wsp:All wsp:Usage=\\\"Required\\\"><L7p:HardcodedResponse>\\t<L7p:Base64ResponseBody stringValue=\\\"WyJoZWxsbyBmcm9tICR7c2VydmljZS5uYW1lfSJd\\\"/>\\t<L7p:ResponseContentType stringValue=\\\"application/json; charset=UTF-8\\\"/></L7p:HardcodedResponse></wsp:All></wsp:Policy>\"\n      }\n    }\n  ]\n}"
+												"variables": "{\n  \"listenPorts\": [\n    {\n      \"name\": \"some-listen-port\",\n      \"enabled\": true,\n      \"protocol\": \"HTTPS\",\n      \"port\": 18443,\n      \"enabledFeatures\": [\n        \"PUBLISHED_SERVICE_MESSAGE_INPUT\",\n        \"POLICY_MANAGER_ACCESS\",\n        \"POLICY_DOWNLOAD_SERVICE\",\n        \"PING_SERVICE\",\n        \"WS_TRUST_SECURITY_TOKEN_SERVICE\",\n        \"CERTIFICATE_SIGNING_SERVICE\",\n        \"PASSWORD_CHANGING_SERVICE\",\n        \"WSDL_DOWNLOAD_SERVICE\",\n        \"SNMP_QUERY_SERVICE\",\n        \"BUILT_IN_SERVICES\"\n      ],\n      \"tlsSettings\": {\n        \"clientAuthentication\": \"OPTIONAL\",\n        \"tlsVersions\": [\n          \"TLSv1.2\",\n          \"TLSv1.3\"\n        ],\n        \"useCipherSuitesOrder\": true\n      },\n      \"properties\": [\n        {\n          \"name\": \"threadPoolSize\",\n          \"value\": \"32\"\n        },\n        {\n          \"name\": \"enableWebSocket\",\n          \"value\": \"true\"\n        },\n        {\n          \"name\": \"overrideContentType\",\n          \"value\": \"application/json; charset=utf-8\"\n        },\n        {\n          \"name\": \"useExtendedFtpCommandSet\",\n          \"value\": \"false\"\n        }\n      ]\n    },\n    {\n      \"name\": \"some-other-listen-port (28443)\",\n      \"enabled\": true,\n      \"protocol\": \"HTTPS\",\n      \"port\": 28443,\n      \"hardwiredServiceName\": \"some-backend\",\n      \"enabledFeatures\": [\n        \"PUBLISHED_SERVICE_MESSAGE_INPUT\",\n        \"POLICY_MANAGER_ACCESS\",\n        \"POLICY_DOWNLOAD_SERVICE\",\n        \"PING_SERVICE\",\n        \"WS_TRUST_SECURITY_TOKEN_SERVICE\",\n        \"CERTIFICATE_SIGNING_SERVICE\",\n        \"PASSWORD_CHANGING_SERVICE\",\n        \"WSDL_DOWNLOAD_SERVICE\",\n        \"SNMP_QUERY_SERVICE\",\n        \"BUILT_IN_SERVICES\"\n      ],\n      \"tlsSettings\": {\n        \"clientAuthentication\": \"REQUIRED\",\n        \"keystoreId\": \"00000000000000000000000000000002\",\n        \"keyAlias\": \"some-host\",\n        \"tlsVersions\": [\n          \"TLSv1.2\",\n          \"TLSv1.3\"\n        ],\n        \"useCipherSuitesOrder\": true\n      },\n      \"properties\": [\n        {\n          \"name\": \"enableWebSocket\",\n          \"value\": \"false\"\n        },\n        {\n          \"name\": \"useExtendedFtpCommandSet\",\n          \"value\": \"false\"\n        }\n      ]\n    }\n  ],\n  \"webApiServices\": [\n    {\n      \"name\": \"some-backend\",\n      \"resolutionPath\": \"/some-backend\",\n      \"enabled\": true,\n      \"folderPath\": \"/\",\n      \"methodsAllowed\": [\n        \"GET\",\n        \"POST\",\n        \"PUT\",\n        \"DELETE\"\n      ],\n      \"tracingEnabled\": false,\n      \"wssProcessingEnabled\": false,\n      \"policy\": {\n        \"xml\": \"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?><wsp:Policy xmlns:L7p=\\\"http://www.layer7tech.com/ws/policy\\\" xmlns:wsp=\\\"http://schemas.xmlsoap.org/ws/2002/12/policy\\\"><wsp:All wsp:Usage=\\\"Required\\\"><L7p:HardcodedResponse>\\t<L7p:Base64ResponseBody stringValue=\\\"WyJoZWxsbyBmcm9tICR7c2VydmljZS5uYW1lfSJd\\\"/>\\t<L7p:ResponseContentType stringValue=\\\"application/json; charset=UTF-8\\\"/></L7p:HardcodedResponse></wsp:All></wsp:Policy>\"\n      }\n    }\n  ]\n}"
 											}
 										},
 										"url": {
@@ -3548,6 +3569,48 @@
 											"graphql": {
 												"query": "mutation deleteListenPorts (\n    $listenPorts: [String!]!,\n    $webApiServices: [String!]!) {\n    deleteListenPorts (names: $listenPorts) {\n        detailedStatus {\n            action status description\n            source {name value}\n            target {name value}\n        }\n    }\n\n    deleteWebApiServices(resolutionPaths: $webApiServices) {\n        detailedStatus {\n            action status description\n            source {name value}\n            target {name value}\n        }\n    }\n}",
 												"variables": "{\n    \"listenPorts\": [\n        \"some-listen-port (18443)\",\n        \"some-other-listen-port (28443)\"\n    ],\n\n    \"webApiServices\": [\"/some-backend\"]\n}"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update Listen Port",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation UpdateListenPort(\n    $listenPortRefInput: ListenPortRefInput!\n    $listenPort: ListenPortPartialInput!\n) {\n    updateListenPort(refInput: $listenPortRefInput, input: $listenPort) {\n        detailedStatus {\n            action\n            status\n            description\n            source {name value}\n            target {name value}\n        }\n    }\n}\n \n",
+												"variables": "{\n    \"listenPortRefInput\": {\n        \"name\": \"some-listen-port\"\n    },\n    \"listenPort\": {\n        \"port\": 19443\n    }\n}\n \n"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update ListenPort Properties",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation UpdateListenPortProperties(\n    $listenPortRefInput: ListenPortRefInput!\n    $listenPortPrpperties: [EntityPropertyPartialInput!]!\n) {\n    updateListenPortProperties(\n        refInput: $listenPortRefInput\n        properties: $listenPortPrpperties\n    ) {\n        detailedStatus {\n            action\n            status\n            description\n            source {name value}\n            target {name value}\n        }\n    }\n}\n \n",
+												"variables": "{\n        \"listenPortRefInput\": {\n            \"name\": \"some-listen-port\"\n        },\n        \"listenPortPrpperties\": [\n            {\n                \"name\": \"useExtendedFtpCommandSet\",\n                \"value\": \"true\"\n            },\n            {\n                \"name\": \"requestSizeLimit\",\n                \"value\": \"2048\"\n            },\n            {\n                \"name\": \"threadPoolSize\"\n            }\n        ]\n    }\n \n"
 											}
 										},
 										"url": {
@@ -4362,6 +4425,48 @@
 											]
 										},
 										"description": "# Set Web Api Services\n\nCreate multiple web API services on the target gateway.\n\nInput: See sample for input. Here is a sample:\n\n``` json\n{  \"input\": {    \"name\" : \"New service created\",    \"folderPath\" : \"/migrationTest\",    \"resolutionPath\": \"/testNewService17\",            \"methodsAllowed\": [                \"GET\",                \"POST\",                \"PUT\",                \"DELETE\"            ],            \"enabled\": true,            \"policy\": {                \"xml\": \"wsp:Policy...\"            }  }}\n\n```"
+									},
+									"response": []
+								},
+								{
+									"name": "Update Service Revision",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation UpdateServiceRevision($service: L7ServicePartialInput!,\n    $revision: Long!,\n    $activate: Boolean!, $comment: String) {\n    updateServiceRevision(input: $service, revision: $revision, activate: $activate, comment: $comment) {\n        detailedStatus {\n            action\n            status\n            description\n            source {name value}\n            target {name value}\n        }\n    }\n}",
+												"variables": "{\n    \"service\": {\n        \"name\": \"some-webapi\",\n        \"resolutionPath\": \"/some-webapi\",\n        \"serviceType\": \"WEB_API\"\n    },\n    \"revision\": 1,\n    \"activate\": true\n}"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update Policy Revision",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation UpdatePolicyRevision( $policy: L7PolicyPartialInput!,\n    $revision: Long!,\n    $activate: Boolean!\n    $comment: String) {\n    updatePolicyRevision(input: $policy, revision: $revision, activate: $activate, comment: $comment) {\n        detailedStatus {\n            action\n            status\n            description\n            source {name value}\n            target {name value}\n        }\n    }\n}\n",
+												"variables": "{\n    \"policy\": {\n        \"name\": \"some-policy\",\n        \"policyType\": \"FRAGMENT\"\n    },\n    \"revision\": 2,\n    \"activate\": true\n}"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										}
 									},
 									"response": []
 								}
@@ -5509,7 +5614,7 @@
 										"body": {
 											"mode": "graphql",
 											"graphql": {
-												"query": "query services  {\n    services  {\n        goid\n        name\n        resolutionPath\n        checksum\n\n        enabled\n        folderPath\n        methodsAllowed\n        properties {name value}\n        tracingEnabled\n        wssProcessingEnabled\n\n        policy {xml json yaml code}\n        policyRevision{\n            goid\n            ordinal\n            xml\n            json\n            yaml\n            code\n        }\n    }\n}",
+												"query": "query services  {\n    services  {\n        goid\n        guid\n        name\n        resolutionPath\n        resolvers {\n            soapActions\n            baseUri\n            resolutionPath\n        }\n        serviceType\n        checksum\n        enabled\n        folderPath\n        soapVersion\n        methodsAllowed\n        tracingEnabled\n        wssProcessingEnabled\n        laxResolution\n        properties {\n            name\n            value\n        }\n        wsdlUrl\n        wsdl\n        wsdlResources {\n            uri\n            content\n        }\n        policy {\n            xml\n            #json # to retrive policy code in JSON format\n            #yaml # to retrive policy code in YAML format\n            #code # to retrive policy code in JSON object (which in-lined to the rest of the configuration)\n        }\n        policyRevision{\n            goid\n            ordinal\n            xml\n            #json\n            #yaml\n            #code\n        }\n    }\n}",
 												"variables": "{}"
 											}
 										},
@@ -5531,8 +5636,8 @@
 										"body": {
 											"mode": "graphql",
 											"graphql": {
-												"query": "query servicesByResolutionPath($resolutionPath: String!)  {\n    servicesByResolutionPath(resolutionPath:$resolutionPath)  {\n        goid\n        name\n        resolutionPath\n        checksum\n\n        enabled\n        folderPath\n        methodsAllowed\n        properties {name value}\n        tracingEnabled\n        wssProcessingEnabled\n\n        policy {xml json yaml code}\n        policyRevision{\n            goid\n            ordinal\n            xml\n            json\n            yaml\n            code\n        }\n    }\n}",
-												"variables": "{\n    \"resolutionPath\" : \"/some-webapi\"\n}"
+												"query": "query servicesByResolutionPath($resolutionPath: String!)  {\n    servicesByResolutionPath(resolutionPath:$resolutionPath)  {\n        goid\n        guid\n        name\n        resolutionPath\n        resolvers {\n            soapActions\n            baseUri\n            resolutionPath\n        }\n        serviceType\n        checksum\n        enabled\n        folderPath\n        soapVersion\n        methodsAllowed\n        tracingEnabled\n        wssProcessingEnabled\n        laxResolution\n        properties {\n            name\n            value\n        }\n        wsdlUrl\n        wsdl\n        wsdlResources {\n            uri\n            content\n        }\n        policy {\n            xml\n            #json # to retrive policy code in JSON format\n            #yaml # to retrive policy code in YAML format\n            #code # to retrive policy code in JSON object (which in-lined to the rest of the configuration)\n        }\n    }\n}",
+												"variables": "{\n    \"resolutionPath\" : \"/some-web-api\"\n}"
 											}
 										},
 										"url": {
@@ -5571,7 +5676,7 @@
 											"mode": "graphql",
 											"graphql": {
 												"query": "mutation setServices (\n    $input: [L7ServiceInput!]!,\n    $clusterProperties: [ClusterPropertyInput!]!) {\n    # Ensure the availability of Web API service dependencies\n    setClusterProperties(input: $clusterProperties) {\n        detailedStatus {\n            action status description\n            source {name value}\n            target {name value}\n        }\n    }\n    setServices (input: $input) {\n        detailedStatus {\n            action status description\n            source {name value}\n            target {name value}\n        }\n    }\n}",
-												"variables": "{\n  \"input\": [\n    {\n      \"name\": \"some-webapi\",\n      \"resolutionPath\": \"/some-webapi\",\n      \"enabled\": true,\n      \"serviceType\": \"WEB_API\",\n      \"folderPath\": \"/graphman-tests/webApiServices\",\n      \"methodsAllowed\": [\n        \"GET\",\n        \"POST\",\n        \"PUT\",\n        \"DELETE\"\n      ],\n      \"policy\": {\n        \"xml\": \"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?>\\n<wsp:Policy xmlns:L7p=\\\"http://www.layer7tech.com/ws/policy\\\" xmlns:wsp=\\\"http://schemas.xmlsoap.org/ws/2002/12/policy\\\">\\n    <wsp:All wsp:Usage=\\\"Required\\\">\\n        <wsp:OneOrMore wsp:Usage=\\\"Required\\\">\\n            <wsp:All wsp:Usage=\\\"Required\\\">\\n                <L7p:ComparisonAssertion>\\n                    <L7p:Expression1 stringValue=\\\"${gateway.greetings}\\\"/>\\n                    <L7p:Expression2 stringValue=\\\"\\\"/>\\n                    <L7p:ExpressionIsVariable booleanValue=\\\"false\\\"/>\\n                    <L7p:Negate booleanValue=\\\"true\\\"/>\\n                    <L7p:Operator operator=\\\"EMPTY\\\"/>\\n                    <L7p:Predicates predicates=\\\"included\\\">\\n                        <L7p:item binary=\\\"included\\\">\\n                            <L7p:Negated booleanValue=\\\"true\\\"/>\\n                            <L7p:Operator operator=\\\"EMPTY\\\"/>\\n                            <L7p:RightValue stringValue=\\\"\\\"/>\\n                        </L7p:item>\\n                    </L7p:Predicates>\\n                </L7p:ComparisonAssertion>\\n                <L7p:SetVariable>\\n                    <L7p:Base64Expression stringValue=\\\"JHtnYXRld2F5LmdyZWV0aW5nc30=\\\"/>\\n                    <L7p:VariableToSet stringValue=\\\"greetings\\\"/>\\n                </L7p:SetVariable>\\n            </wsp:All>\\n            <L7p:SetVariable>\\n                <L7p:Base64Expression stringValue=\\\"SGVsbG8sIFdvcmxkIQ==\\\"/>\\n                <L7p:VariableToSet stringValue=\\\"greetings\\\"/>\\n            </L7p:SetVariable>\\n        </wsp:OneOrMore>\\n        <L7p:HardcodedResponse>\\n            <L7p:Base64ResponseBody stringValue=\\\"JHtncmVldGluZ3N9\\\"/>\\n            <L7p:ResponseContentType stringValue=\\\"text/plain; charset=UTF-8\\\"/>\\n        </L7p:HardcodedResponse>\\n    </wsp:All>\\n</wsp:Policy>\\n\"\n      },\n      \"tracingEnabled\": false,\n      \"wssProcessingEnabled\": false\n    },\n    {\n      \"name\": \"jsonpolicy-webapi\",\n      \"resolutionPath\": \"/jsonpolicy-webapi\",\n      \"enabled\": true,\n      \"serviceType\": \"WEB_API\",\n      \"folderPath\": \"/graphman-tests/webApiServices\",\n      \"methodsAllowed\": [\n        \"GET\",\n        \"POST\",\n        \"PUT\",\n        \"DELETE\"\n      ],\n      \"policy\": {\n        \"json\": \"{\\\"All\\\":[{\\\"SetVariable\\\":{\\\"expression\\\":\\\"${some-output}, \\\\\\\"hello from ${policy.name}\\\\\\\"\\\",\\\"variable\\\":\\\"some-output\\\"}}]}\"\n      },\n      \"tracingEnabled\": false,\n      \"wssProcessingEnabled\": false\n    },\n    {\n      \"name\": \"yamlpolicy-webapi\",\n      \"resolutionPath\": \"/yamlpolicy-webapi\",\n      \"enabled\": true,\n      \"serviceType\": \"WEB_API\",\n      \"folderPath\": \"/graphman-tests/webApiServices\",\n      \"methodsAllowed\": [\n        \"GET\",\n        \"POST\",\n        \"PUT\",\n        \"DELETE\"\n      ],\n      \"policy\": {\n        \"yaml\": \"---\\nAll:\\n- Comment: \\\"Policy Fragment: some-policy-fragment\\\"\\n- SetVariable:\\n    expression: \\\"${some-output}, \\\\\\\"hello from ${policy.name}\\\\\\\"\\\"\\n    contentType: \\\"text/plain; charset=utf-8\\\"\\n    dataType: \\\"message\\\"\\n    variable: \\\"some-output\\\"\\n    variable: \\\"some-output\\\"\\n- Include:\\n    policyGuid: \\\"ffe348a7-8255-4c3b-ba18-021ec626dd0d\\\"\\n    policyName: \\\"some-inner-policy-fragment\\\"\\n- Encapsulated:\\n    encassGuid: \\\"5047edc8-9df8-4e57-9e75-74221139c520\\\"\\n    encassName: \\\"some-encass\\\"\\n- OneOrMore:\\n  - \\\"True\\\": {}\\n\"\n      },\n      \"tracingEnabled\": false,\n      \"wssProcessingEnabled\": false\n    },\n    {\n      \"name\": \"codepolicy-webapi\",\n      \"resolutionPath\": \"/codepolicy-webapi\",\n      \"enabled\": true,\n      \"serviceType\": \"WEB_API\",\n      \"folderPath\": \"/graphman-tests/webApiServices\",\n      \"methodsAllowed\": [\n        \"GET\",\n        \"POST\",\n        \"PUT\",\n        \"DELETE\"\n      ],\n      \"policy\": {\n        \"code\": {\n          \"All\": [\n            {\n              \"Comment\": \"Policy Fragment: some-policy-fragment\"\n            },\n            {\n              \"SetVariable\": {\n                \"expression\": \"${some-output}, \\\"hello from ${policy.name}\\\"\",\n                \"contentType\": \"text/plain; charset=utf-8\",\n                \"dataType\": \"message\",\n                \"variable\": \"some-output\"\n              }\n            },\n            {\n              \"Include\": {\n                \"policyGuid\": \"ffe348a7-8255-4c3b-ba18-021ec626dd0d\",\n                \"policyName\": \"some-inner-policy-fragment\"\n              }\n            },\n            {\n              \"Encapsulated\": {\n                \"encassGuid\": \"5047edc8-9df8-4e57-9e75-74221139c520\",\n                \"encassName\": \"some-encass\"\n              }\n            },\n            {\n              \"OneOrMore\": [\n                {\n                  \"True\": {}\n                }\n              ]\n            }\n          ]\n        }\n      },\n      \"tracingEnabled\": false,\n      \"wssProcessingEnabled\": false\n    }\n  ],\n  \"clusterProperties\": [\n    {\n      \"name\": \"greetings\",\n      \"value\": \"Hello, World!\"\n    }\n  ]\n}\n"
+												"variables": "{\n  \"input\": [\n    {\n      \"name\": \"some-web-api\",\n      \"resolutionPath\": \"/some-web-api\",\n      \"enabled\": true,\n      \"serviceType\": \"WEB_API\",\n      \"folderPath\": \"/graphman-tests/webApiServices\",\n      \"methodsAllowed\": [\n        \"GET\",\n        \"POST\",\n        \"PUT\",\n        \"DELETE\"\n      ],\n      \"properties\": [\n                {\n                    \"name\": \"PropertyA\",\n                    \"value\": \"32\"\n                },\n                {\n                    \"name\": \"PropertyB\",\n                    \"value\": \"false\"\n                },\n                {\n                    \"name\": \"PropertyC\",\n                    \"value\": \"internal\"\n                }\n            ],\n      \"policy\": {\n        \"xml\": \"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?>\\n<wsp:Policy xmlns:L7p=\\\"http://www.layer7tech.com/ws/policy\\\" xmlns:wsp=\\\"http://schemas.xmlsoap.org/ws/2002/12/policy\\\">\\n    <wsp:All wsp:Usage=\\\"Required\\\">\\n        <wsp:OneOrMore wsp:Usage=\\\"Required\\\">\\n            <wsp:All wsp:Usage=\\\"Required\\\">\\n                <L7p:ComparisonAssertion>\\n                    <L7p:Expression1 stringValue=\\\"${gateway.greetings}\\\"/>\\n                    <L7p:Expression2 stringValue=\\\"\\\"/>\\n                    <L7p:ExpressionIsVariable booleanValue=\\\"false\\\"/>\\n                    <L7p:Negate booleanValue=\\\"true\\\"/>\\n                    <L7p:Operator operator=\\\"EMPTY\\\"/>\\n                    <L7p:Predicates predicates=\\\"included\\\">\\n                        <L7p:item binary=\\\"included\\\">\\n                            <L7p:Negated booleanValue=\\\"true\\\"/>\\n                            <L7p:Operator operator=\\\"EMPTY\\\"/>\\n                            <L7p:RightValue stringValue=\\\"\\\"/>\\n                        </L7p:item>\\n                    </L7p:Predicates>\\n                </L7p:ComparisonAssertion>\\n                <L7p:SetVariable>\\n                    <L7p:Base64Expression stringValue=\\\"JHtnYXRld2F5LmdyZWV0aW5nc30=\\\"/>\\n                    <L7p:VariableToSet stringValue=\\\"greetings\\\"/>\\n                </L7p:SetVariable>\\n            </wsp:All>\\n            <L7p:SetVariable>\\n                <L7p:Base64Expression stringValue=\\\"SGVsbG8sIFdvcmxkIQ==\\\"/>\\n                <L7p:VariableToSet stringValue=\\\"greetings\\\"/>\\n            </L7p:SetVariable>\\n        </wsp:OneOrMore>\\n        <L7p:HardcodedResponse>\\n            <L7p:Base64ResponseBody stringValue=\\\"JHtncmVldGluZ3N9\\\"/>\\n            <L7p:ResponseContentType stringValue=\\\"text/plain; charset=UTF-8\\\"/>\\n        </L7p:HardcodedResponse>\\n    </wsp:All>\\n</wsp:Policy>\\n\"\n      },\n      \"tracingEnabled\": false,\n      \"wssProcessingEnabled\": false\n    },\n    {\n      \"name\": \"jsonpolicy-webapi\",\n      \"resolutionPath\": \"/jsonpolicy-webapi\",\n      \"enabled\": true,\n      \"serviceType\": \"WEB_API\",\n      \"folderPath\": \"/graphman-tests/webApiServices\",\n      \"methodsAllowed\": [\n        \"GET\",\n        \"POST\",\n        \"PUT\",\n        \"DELETE\"\n      ],\n      \"policy\": {\n        \"json\": \"{\\\"All\\\":[{\\\"SetVariable\\\":{\\\"expression\\\":\\\"${some-output}, \\\\\\\"hello from ${policy.name}\\\\\\\"\\\",\\\"variable\\\":\\\"some-output\\\"}}]}\"\n      },\n      \"tracingEnabled\": false,\n      \"wssProcessingEnabled\": false\n    },\n    {\n      \"name\": \"yamlpolicy-webapi\",\n      \"resolutionPath\": \"/yamlpolicy-webapi\",\n      \"enabled\": true,\n      \"serviceType\": \"WEB_API\",\n      \"folderPath\": \"/graphman-tests/webApiServices\",\n      \"methodsAllowed\": [\n        \"GET\",\n        \"POST\",\n        \"PUT\",\n        \"DELETE\"\n      ],\n      \"policy\": {\n        \"yaml\": \"---\\nAll:\\n- Comment: \\\"Policy Fragment: some-policy-fragment\\\"\\n- SetVariable:\\n    expression: \\\"${some-output}, \\\\\\\"hello from ${policy.name}\\\\\\\"\\\"\\n    contentType: \\\"text/plain; charset=utf-8\\\"\\n    dataType: \\\"message\\\"\\n    variable: \\\"some-output\\\"\\n    variable: \\\"some-output\\\"\\n- Include:\\n    policyGuid: \\\"ffe348a7-8255-4c3b-ba18-021ec626dd0d\\\"\\n    policyName: \\\"some-inner-policy-fragment\\\"\\n- Encapsulated:\\n    encassGuid: \\\"5047edc8-9df8-4e57-9e75-74221139c520\\\"\\n    encassName: \\\"some-encass\\\"\\n- OneOrMore:\\n  - \\\"True\\\": {}\\n\"\n      },\n      \"tracingEnabled\": false,\n      \"wssProcessingEnabled\": false\n    },\n    {\n      \"name\": \"codepolicy-webapi\",\n      \"resolutionPath\": \"/codepolicy-webapi\",\n      \"enabled\": true,\n      \"serviceType\": \"WEB_API\",\n      \"folderPath\": \"/graphman-tests/webApiServices\",\n      \"methodsAllowed\": [\n        \"GET\",\n        \"POST\",\n        \"PUT\",\n        \"DELETE\"\n      ],\n      \"policy\": {\n        \"code\": {\n          \"All\": [\n            {\n              \"Comment\": \"Policy Fragment: some-policy-fragment\"\n            },\n            {\n              \"SetVariable\": {\n                \"expression\": \"${some-output}, \\\"hello from ${policy.name}\\\"\",\n                \"contentType\": \"text/plain; charset=utf-8\",\n                \"dataType\": \"message\",\n                \"variable\": \"some-output\"\n              }\n            },\n            {\n              \"Include\": {\n                \"policyGuid\": \"ffe348a7-8255-4c3b-ba18-021ec626dd0d\",\n                \"policyName\": \"some-inner-policy-fragment\"\n              }\n            },\n            {\n              \"Encapsulated\": {\n                \"encassGuid\": \"5047edc8-9df8-4e57-9e75-74221139c520\",\n                \"encassName\": \"some-encass\"\n              }\n            },\n            {\n              \"OneOrMore\": [\n                {\n                  \"True\": {}\n                }\n              ]\n            }\n          ]\n        }\n      },\n      \"tracingEnabled\": false,\n      \"wssProcessingEnabled\": false\n    }\n  ],\n  \"clusterProperties\": [\n    {\n      \"name\": \"greetings\",\n      \"value\": \"Hello, World!\"\n    }\n  ]\n}\n"
 											}
 										},
 										"url": {
@@ -5615,6 +5720,48 @@
 											]
 										},
 										"description": "# Set Web Api Services\n\nCreate multiple web API services on the target gateway.\n\nInput: See sample for input. Here is a sample:\n\n``` json\n{  \"input\": {    \"name\" : \"New service created\",    \"folderPath\" : \"/migrationTest\",    \"resolutionPath\": \"/testNewService17\",            \"methodsAllowed\": [                \"GET\",                \"POST\",                \"PUT\",                \"DELETE\"            ],            \"enabled\": true,            \"policy\": {                \"xml\": \"wsp:Policy...\"            }  }}\n\n```"
+									},
+									"response": []
+								},
+								{
+									"name": "Update Service",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation updateService(\n    $serviceRefInput: ServiceRefInput!\n    $service: L7ServicePartialInput!\n) {\n    updateService(refInput: $serviceRefInput, input: $service) {\n       detailedStatus {\n            action\n            status\n            description\n            source {name value}\n            target {name value}\n        }\n    }\n}\n \n",
+												"variables": "{\n        \"serviceRefInput\": {\n            \"serviceType\": \"WEB_API\",\n            \"resolutionPath\": \"/some-web-api\"\n        },\n        \"service\": {\n            \"name\": \"updated-some-web-api\",\n            \"resolutionPath\": \"/updated-web-api\"\n        }\n}\n \n"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update Service Properties",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation updateServiceProperties(\n    $serviceRef: ServiceRefInput!\n    $prop: [EntityPropertyPartialInput!]!\n) {\n    updateServiceProperties(refInput: $serviceRef, properties: $prop) {\n        detailedStatus {\n            action\n            status\n            description\n            source {name value}\n            target {name value}\n        }\n    }\n}\n \n",
+												"variables": "{\n        \"serviceRef\": {\n            \"serviceType\": \"WEB_API\",\n            \"resolutionPath\": \"/some-web-api\"\n        },\n        \"prop\": [\n            {\n                \"name\": \"PropertyC\",\n                \"value\": \"External\"\n            },\n            {\n                \"name\": \"PropertyD\",\n                \"value\": \"1094\"\n            },\n            {\n                \"name\": \"PropertyA\"\n            }\n        ]\n    }\n \n"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										}
 									},
 									"response": []
 								}
@@ -6306,6 +6453,195 @@
 						}
 					],
 					"description": "# Web API Services\n\nHow to query and mutate published services of type Web API (REST apis)"
+				},
+				{
+					"name": "Folders",
+					"item": [
+						{
+							"name": "Mutation",
+							"item": [
+								{
+									"name": "Create Nested Folders",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation setFolders($folders: [FolderInput!]!) {\n  setFolders(input: $folders) {\n    detailedStatus {\n            action\n            status\n            description\n            source {name value}\n            target {name value}\n        }\n  }\n}\n",
+												"variables": "{\n        \"folders\": [\n            {\n                \"name\": \"GrandParentFolder\",\n                \"path\": \"/GrandParentFolder\"\n            },\n            {\n                \"name\": \"ParentFolder\",\n                \"path\": \"/GrandParentFolder/ParentFolder\"\n            },\n            {\n                \"name\": \"ChildFolder\",\n                \"path\": \"/GrandParentFolder/ParentFolder/ChildFolder\"\n            }\n        ]\n    }"
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Set Folders",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation setFolders($folders: [FolderInput!]!) {\n  setFolders(input: $folders) {\n    detailedStatus {\n            action\n            status\n            description\n            source {name value}\n            target {name value}\n        }\n  }\n}\n",
+												"variables": "{\n        \"folders\": [\n            {\n                \"name\": \"FolderA\",\n                \"path\": \"/FolderA\"\n            },\n            {\n                \"name\": \"FolderB\",\n                \"path\": \"/FolderB\"\n            }\n        ]\n    }"
+											}
+										},
+										"url": {
+											"raw": "{{source_gw}}",
+											"host": [
+												"{{source_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Folders",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation DeleteFolders {\n    deleteFolders(paths: [\"/FolderA\"]) {\n        detailedStatus {\n            action\n            status\n            description\n            source {name value}\n            target {name value}\n        }\n    }\n}\n",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}",
+											"host": [
+												"{{target_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Folders Having Content via forceDelete",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation DeleteFolders {\n    deleteFolders(paths: [\"//GrandParentFolder\"]) {\n        detailedStatus {\n            action\n            status\n            description\n            source {name value}\n            target {name value}\n        }\n    }\n}\n",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{target_gw}}?forceDelete=true",
+											"host": [
+												"{{target_gw}}"
+											],
+											"query": [
+												{
+													"key": "forceDelete",
+													"value": "true"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Query",
+							"item": [
+								{
+									"name": "Get All Folders",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "query Folders {\n    folders {\n        goid\n        name\n        path\n        checksum\n    }\n}\n",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{source_gw}}",
+											"host": [
+												"{{source_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Folder By Goid",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "query FolderByGoid {\n    folderByGoid(goid: \"0000000000000000ffffffffffffec76\") {\n        goid\n        name\n        path\n        checksum\n    }\n}\n",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{source_gw}}",
+											"host": [
+												"{{source_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Folder By Path",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "query FolderByPath {\n    folderByPath(path: \"/FolderA\") {\n        goid\n        name\n        path\n        checksum\n    }\n}\n",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{source_gw}}",
+											"host": [
+												"{{source_gw}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get the folders matches by path (i.e., folder itself and the folders in it)",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "query FoldersByPath {\n    foldersByPath(path: \"/\") {\n        goid\n        name\n        path\n        checksum\n    }\n}\n",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{source_gw}}",
+											"host": [
+												"{{source_gw}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
 				}
 			],
 			"description": "# CRUD Config Entities\n\nThis folder contains queries (read) and mutations (create/update/delete) for full CRUD for each Layer7 Gateway configuration entity type supported."
@@ -6375,7 +6711,7 @@
 		},
 		{
 			"key": "l7utils",
-			"value": "const L7META = {\n    \"activeConnectors\": {\n        \"prefix\": \"activeConnector\"\n    },\n    \"backgroundTaskPolicies\": {\n        \"prefix\": \"backgroundTaskPolic\"\n    },\n    \"cassandraConnections\": {\n        \"prefix\": \"cassandraConnection\"\n    },\n    \"trustedCerts\": {\n        \"prefix\": \"trustedCert\"\n    },\n    \"clusterProperties\": {\n        \"prefix\": \"clusterPropert\"\n    },\n    \"customKeyValues\": {\n        \"prefix\": \"customKeyValue\"\n    },\n    \"dtds\": {\n        \"prefix\": \"dtd\"\n    },\n    \"emailListeners\": {\n        \"prefix\": \"emailListener\"\n    },\n    \"encassConfigs\": {\n        \"prefix\": \"encassConfig\"\n    },\n    \"fips\": {\n        \"prefixes\": [\"fips\", \"fipByName\"],\n        \"prefix\": \"fips\"\n    },\n    \"fipGroups\": {\n        \"prefix\": \"fipGroup\"\n    },\n    \"fipUsers\": {\n        \"prefix\": \"fipUser\"\n    },\n    \"globalPolicies\": {\n        \"prefix\": \"globalPolic\"\n    },\n\t\"httpConfigurations\": {\n        \"prefix\": \"httpConfiguration\"\n    },\n\t\"logSinks\": {\n        \"prefix\": \"logSink\"\n    },\n    \"internalGroups\": {\n        \"prefix\": \"internalGroup\"\n    },\n    \"internalSoapServices\": {\n        \"prefix\": \"internalSoapService\"\n    },\n    \"internalUsers\": {\n        \"prefix\": \"internalUser\"\n    },\n    \"internalWebApiServices\": {\n        \"prefix\": \"internalWebApiService\"\n    },\n    \"jdbcConnections\": {\n        \"prefix\": \"jdbcConnection\"\n    },\n    \"jmsDestinations\": {\n        \"prefix\": \"jmsDestination\"\n    },\n    \"keys\": {\n        \"prefix\": \"key\"\n    },\n    \"listenPorts\": {\n        \"prefix\": \"listenPort\"\n    },\n    \"policies\": {\n    \t\"prefixes\": [\"polic\", \"policiesBy\"],\n        \"prefix\": \"polic\"\n    },\n    \"ldapIdps\": {\n        \"prefix\": \"ldapIdp\"\n    },\n    \"simpleLdapIdps\": {\n    \t\"prefix\": \"simpleLdapIdp\"\n    },\n    \"policyBackedIdps\": {\n    \t\"prefix\": \"policyBackedIdp\"\n    },\n    \"federatedIdps\": {\n    \t\"prefix\": \"federatedIdp\"\n    },\n    \"revocationCheckPolicies\": {\n        \"prefix\": \"revocationCheckPolic\"\n    },\n    \"smConfigs\": {\n        \"prefix\": \"smConfig\"\n    },\n    \"scheduledTasks\": {\n        \"prefix\": \"scheduledTask\"\n    },\n    \"schemas\": {\n        \"prefix\": \"schema\"\n    },\n    \"secrets\": {\n        \"prefix\": \"secret\"\n    },\n    \"serverModuleFiles\": {\n        \"prefix\": \"serverModuleFile\"\n    },\n    \"soapServices\": {\n        \"prefix\": \"soapService\"\n    },\n    \"webApiServices\": {\n        \"prefix\": \"webApiService\"\n    }\n};\nconst L7UTILS = (function () {\n    return {\n        metaKey: function (key) {\n            if (L7META[key] || key === \"properties\") return key;\n            for(const prop in L7META) {\n                if (L7META[prop].prefixes && L7META[prop].prefixes.includes(key)) return prop;\n                if (key.startsWith(L7META[prop].prefix)) return prop;\n            }\n            return key;\n        },\n        normalize: function(bundle) {\n            normalize(bundle, bundle.data);\n\t\t\tbundle.properties = {defaultAction: \"NEW_OR_UPDATE\"};\n            delete bundle.data;\n        }\n    };\n    function normalize(bundle, data) {\n        Object.entries(data).forEach(([key, value]) => {\n\t\t    if (key !== \"properties\") {\n                const mkey = L7UTILS.metaKey(key);\n                let target = bundle[mkey];\n                if (!target) target = bundle[mkey] = [];\n                if (Array.isArray(value)) value.forEach(item => target.push(item));\n                else target.push(value);\n                target.filter(item => item.policy).forEach(item => normalizePolicyDependencies(bundle, item.policy));\n\t\t\t}\n        });\n    }\n    function normalizePolicyDependencies(bundle, policy) {\n        if (policy.allDependencies) {\n\t\t    let deps = Object.assign({}, policy.allDependencies);\n            delete policy.allDependencies;\n            normalize(bundle, deps);\n        }\n        if (policy.directDependencies) {\n            let deps = Object.assign({}, policy.directDependencies);\n            delete policy.directDependencies;\n            normalize(bundle, deps);\n        }\n    }\n})();\nfunction l7utils() {\n    return L7UTILS;\n}\n",
+			"value": "const L7UTILS = (function () {\n    return {\n\t\tsectionName: function(name) {\n\t\t\tvar index = name.indexOf('By');\n\t\t\tif (index != -1) name = name.substring(0, index);\n\t\t\t\n\t\t\tif (name === \"key\") return \"keys\";\n\t\t\tif (name.endsWith(\"y\")) return name.substring(0, name.length - 1) + \"ies\";\n\t\t\tif (!name.endsWith(\"s\")) return name + \"s\";\n\t\t\treturn name;\n\t\t},\n        normalize: function(bundle) {\n            normalize(bundle, bundle.data);\n\t\t\tbundle.properties = {defaultAction: \"NEW_OR_UPDATE\"};\n            delete bundle.data;\n        }\n    };\n    function normalize(bundle, data) {\n        Object.entries(data).forEach(([key, value]) => {\n\t\t    if (key !== \"properties\") {\n                const mkey = L7UTILS.sectionName(key);\n                let target = bundle[mkey];\n                if (!target) target = bundle[mkey] = [];\n                if (Array.isArray(value)) value.forEach(item => target.push(item));\n                else target.push(value);\n                target.filter(item => item.policy).forEach(item => normalizePolicyDependencies(bundle, item.policy));\n\t\t\t}\n        });\n    }\n    function normalizePolicyDependencies(bundle, policy) {\n        if (policy.allDependencies) {\n\t\t    let deps = Object.assign({}, policy.allDependencies);\n            delete policy.allDependencies;\n            normalize(bundle, deps);\n        }\n        if (policy.directDependencies) {\n            let deps = Object.assign({}, policy.directDependencies);\n            delete policy.directDependencies;\n            normalize(bundle, deps);\n        }\n    }\n})();\nfunction l7utils() {\n    return L7UTILS;\n}",
 			"type": "string"
 		}
 	]
