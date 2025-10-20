@@ -26,7 +26,8 @@ const SCHEMA_FEATURE_LIST = {
 
 const SUPPORTED_REQUEST_LEVEL_OPTIONS = [
     "activate", "comment", "forceAdminPasswordReset", "forceDelete", "replaceAllMatchingCertChain",
-    "migratePolicyRevisions", "override.replaceRoleAssignees", "override.replaceUserGroupMemberships"
+    "migratePolicyRevisions", "override.replaceRoleAssignees", "override.replaceUserGroupMemberships",
+    "deleteEmptyParentFolders"
 ];
 
 const utils = require("./graphman-utils");
