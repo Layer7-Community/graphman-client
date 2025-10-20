@@ -129,7 +129,8 @@ graphman.sh version
 > 
 
 > Supported schema(s) (i.e., version of the Layer7 API Gateway)
-- v11.1.2 (default)
+- v11.1.3 (default)
+- v11.1.2
 - v11.1.1
 - v11.1.00
 - v11.0.00-CR03
@@ -141,12 +142,12 @@ graphman.sh version
 ## Compatibility Matrix <a name="compatibility-matrix"></a>
 The following table describes the compatibility of the Graphman client with the targeting Layer7 API Gateways.
 
-| Graphman Client | Layer7 API Gateway                        |
-|-----------------|-------------------------------------------|
-| v1.3.*          | v11.1.2, v11.1.1, v11.1.00, v11.0.00-CR03 |
-| v1.2.*          | v11.1.00                                  |
-| v1.1            | v10.1 CR04, v11.0 CR02                    |
-| v1.0.*          | v10.1 CR03, v11.0 CR01                    |
+| Graphman Client | Layer7 API Gateway                                 |
+|-----------------|----------------------------------------------------|
+| v1.3.*          | v11.1.3, v11.1.2, v11.1.1, v11.1.00, v11.0.00-CR03 |
+| v1.2.*          | v11.1.00                                           |
+| v1.1            | v10.1 CR04, v11.0 CR02                             |
+| v1.0.*          | v10.1 CR03, v11.0 CR01                             |
 
 
 ## Graphman configuration bundles <a name="bundles"></a>

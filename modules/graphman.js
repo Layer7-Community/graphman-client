@@ -3,8 +3,8 @@
  */
 
 const PACKAGE = require("../package.json");
-const SCHEMA_VERSION = "v11.1.2";
-const SCHEMA_VERSIONS = [SCHEMA_VERSION, "v11.1.1", "v11.1.00", "v11.0.00-CR03"];
+const SCHEMA_VERSION = "v11.1.3";
+const SCHEMA_VERSIONS = [SCHEMA_VERSION, "v11.1.2", "v11.1.1", "v11.1.00", "v11.0.00-CR03"];
 
 const SUPPORTED_OPERATIONS = [
     "version", "describe",
@@ -17,6 +17,7 @@ const SUPPORTED_OPERATIONS = [
 
 const SUPPORTED_EXTENSIONS = ["pre-request", "post-export", "pre-import", "multiline-text-diff", "policy-code-validator"];
 const SCHEMA_FEATURE_LIST = {
+    "v11.1.3": ["mappings", "mappings-source", "policy-as-code"],
     "v11.1.2": ["mappings", "mappings-source", "policy-as-code"],
     "v11.1.00": ["mappings", "mappings-source", "policy-as-code"],
     "v11.1.1": ["mappings", "mappings-source", "policy-as-code"],
