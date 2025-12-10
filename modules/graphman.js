@@ -15,7 +15,7 @@ const SUPPORTED_OPERATIONS = [
     "config"
 ];
 
-const SUPPORTED_EXTENSIONS = ["pre-request", "post-export", "pre-import", "multiline-text-diff", "policy-code-validator"];
+const SUPPORTED_EXTENSIONS = ["pre-request", "post-export", "pre-import", "multiline-text-diff", "policy-code-validator", "socks-proxy-agent", "http-proxy-agent", "https-proxy-agent"];
 const SCHEMA_FEATURE_LIST = {
     "v11.1.00": ["mappings", "mappings-source", "policy-as-code"],
     "v11.1.1": ["mappings", "mappings-source", "policy-as-code"],
@@ -213,6 +213,15 @@ module.exports = {
         }
 
         req.minVersion = req.maxVersion = gateway.tlsProtocol || "TLSv1.2";
+        
+        // Handle proxy configuration
+        if (gateway.socksProxy) {
+            req.socksProxy = gateway.socksProxy;
+        }
+        if (gateway.httpProxy) {
+            req.httpProxy = gateway.httpProxy;
+        }
+        
         return req;
     },
 
@@ -224,7 +233,48 @@ module.exports = {
      */
     invoke: function (options, callback, cli_options) {
         options = utils.extension("pre-request").apply(options, cli_options);
-        const req = ((!options.protocol||options.protocol === 'https'||options.protocol === 'https:') ? https : http).request(options, function(response) {
+        
+        // Create proxy agent if configured (HTTP/HTTPS proxy takes precedence over SOCKS)
+        let agent = null;
+        const isHttps = !options.protocol || options.protocol === 'https' || options.protocol === 'https:';
+        
+        if (options.httpProxy) {
+            // Handle HTTP/HTTPS proxy
+            let proxyUrl = options.httpProxy;
+            if (!proxyUrl.startsWith('http://') && !proxyUrl.startsWith('https://')) {
+                proxyUrl = `http://${proxyUrl}`;
+            }
+            try {
+                if (isHttps) {
+                    agent = utils.extension("https-proxy-agent").apply(proxyUrl, {});
+                    if (agent) {
+                        options.agent = agent;
+                    }
+                } else {
+                    agent = utils.extension("http-proxy-agent").apply(proxyUrl, {});
+                    if (agent) {
+                        options.agent = agent;
+                    }
+                }
+            } catch (e) {
+                utils.warn(`failed to load ${isHttps ? 'https' : 'http'}-proxy-agent extension, proxy will not be used: ${e.message}`);
+            }
+        } else if (options.socksProxy) {
+            // Handle SOCKS proxy
+            const proxyUrl = options.socksProxy.startsWith('socks://') || options.socksProxy.startsWith('socks5://') || options.socksProxy.startsWith('socks4://') 
+                ? options.socksProxy 
+                : `socks5://${options.socksProxy}`;
+            try {
+                agent = utils.extension("socks-proxy-agent").apply(proxyUrl, {});
+                if (agent) {
+                    options.agent = agent;
+                }
+            } catch (e) {
+                utils.warn(`failed to load socks-proxy-agent extension, proxy will not be used: ${e.message}`);
+            }
+        }
+        
+        const req = (isHttps ? https : http).request(options, function(response) {
             let respInfo = {initialized: false, chunks: []};
 
             response.on('data', function (chunk) {
@@ -329,7 +379,9 @@ function makeGateways(gateways) {
             "keyFilename": null,
             "certFilename": null,
             "passphrase": "7layer",
-            "allowMutations": false
+            "allowMutations": false,
+            "socksProxy": null,
+            "httpProxy": null
         };
     }
 
