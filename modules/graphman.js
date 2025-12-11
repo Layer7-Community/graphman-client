@@ -241,23 +241,18 @@ module.exports = {
         if (options.httpProxy) {
             // Handle HTTP/HTTPS proxy
             let proxyUrl = options.httpProxy;
-            if (!proxyUrl.startsWith('http://') && !proxyUrl.startsWith('https://')) {
-                proxyUrl = `http://${proxyUrl}`;
-            }
             try {
-                if (isHttps) {
+                if (proxyUrl.startsWith('https://')) {
                     agent = utils.extension("https-proxy-agent").apply(proxyUrl, {});
-                    if (agent) {
-                        options.agent = agent;
-                    }
                 } else {
                     agent = utils.extension("http-proxy-agent").apply(proxyUrl, {});
-                    if (agent) {
-                        options.agent = agent;
-                    }
+                }
+                if (agent) {
+                    options.agent = agent;
                 }
             } catch (e) {
-                utils.warn(`failed to load ${isHttps ? 'https' : 'http'}-proxy-agent extension, proxy will not be used: ${e.message}`);
+                console.error(e);
+                utils.warn(`failed to load http/https proxy-agent extension, proxy will not be used: ${e.message}`);
             }
         } else if (options.socksProxy) {
             // Handle SOCKS proxy
