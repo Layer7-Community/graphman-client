@@ -240,19 +240,27 @@ module.exports = {
         
         if (options.httpProxy) {
             // Handle HTTP/HTTPS proxy
+            // Use agent type based on target protocol, not proxy URL protocol
             let proxyUrl = options.httpProxy;
+            // Normalize proxy URL - add http:// prefix if no protocol specified
+            if (!proxyUrl.startsWith('http://') && !proxyUrl.startsWith('https://')) {
+                proxyUrl = `http://${proxyUrl}`;
+            }
             try {
-                if (proxyUrl.startsWith('https://')) {
+                // Use https-proxy-agent for HTTPS targets, http-proxy-agent for HTTP targets
+                if (isHttps) {
                     agent = utils.extension("https-proxy-agent").apply(proxyUrl, {});
                 } else {
                     agent = utils.extension("http-proxy-agent").apply(proxyUrl, {});
                 }
-                if (agent) {
+                if (agent && typeof agent !== 'string' && typeof agent === 'object') {
                     options.agent = agent;
+                } else if (agent) {
+                    utils.warn(`${isHttps ? 'https' : 'http'}-proxy-agent extension did not return a valid agent, proxy will not be used`);
                 }
             } catch (e) {
                 console.error(e);
-                utils.warn(`failed to load http/https proxy-agent extension, proxy will not be used: ${e.message}`);
+                utils.warn(`failed to load ${isHttps ? 'https' : 'http'}-proxy-agent extension, proxy will not be used: ${e.message}`);
             }
         } else if (options.socksProxy) {
             // Handle SOCKS proxy
@@ -261,8 +269,10 @@ module.exports = {
                 : `socks5://${options.socksProxy}`;
             try {
                 agent = utils.extension("socks-proxy-agent").apply(proxyUrl, {});
-                if (agent) {
+                if (agent && typeof agent !== 'string' && typeof agent === 'object') {
                     options.agent = agent;
+                } else if (agent) {
+                    utils.warn(`socks-proxy-agent extension did not return a valid agent, proxy will not be used`);
                 }
             } catch (e) {
                 utils.warn(`failed to load socks-proxy-agent extension, proxy will not be used: ${e.message}`);
