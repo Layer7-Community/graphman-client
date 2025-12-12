@@ -1,0 +1,341 @@
+{
+  "encassConfigs": [
+    {
+      "goid": "0dac9701843313cdf7d616eade708d0f",
+      "guid": "559c8348-36b0-4e70-99f4-825a4e6015b4",
+      "name": "AWS",
+      "checksum": "9fcb6e6946faf3e7775247e3362200adb9167235",
+      "policyName": "AWS",
+      "encassArgs": [
+        {
+          "name": "config",
+          "type": "STRING",
+          "ordinal": 1,
+          "guiPrompt": true,
+          "guiLabel": ""
+        }
+      ],
+      "encassResults": [
+        {
+          "name": "aws.responseCode",
+          "type": "INTEGER"
+        },
+        {
+          "name": "result",
+          "type": "STRING"
+        }
+      ],
+      "properties": [
+        {
+          "name": "allowTracing",
+          "value": "true"
+        },
+        {
+          "name": "paletteFolder",
+          "value": "internalAssertions"
+        },
+        {
+          "name": "passMetricsToParent",
+          "value": "false"
+        }
+      ]
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a154",
+      "guid": "5047edc8-9df8-4e57-9e75-74221139c520",
+      "name": "some-encass",
+      "checksum": "b7a3ad923c7794eff70ca28f6543c6ab562f0240",
+      "policyName": "some-encass-policy",
+      "encassArgs": [
+        {
+          "name": "some-binary-arg",
+          "type": "BINARY",
+          "ordinal": 8,
+          "guiPrompt": false
+        },
+        {
+          "name": "some-bool-arg",
+          "type": "BOOLEAN",
+          "ordinal": 7,
+          "guiPrompt": true,
+          "guiLabel": "boolean"
+        },
+        {
+          "name": "some-cert-arg",
+          "type": "CERTIFICATE",
+          "ordinal": 2,
+          "guiPrompt": true,
+          "guiLabel": "certificate"
+        },
+        {
+          "name": "some-datetime-arg",
+          "type": "DATE_TIME",
+          "ordinal": 9,
+          "guiPrompt": false
+        },
+        {
+          "name": "some-decimal-arg",
+          "type": "DECIMAL",
+          "ordinal": 4,
+          "guiPrompt": true,
+          "guiLabel": "decimal"
+        },
+        {
+          "name": "some-float-arg",
+          "type": "FLOAT",
+          "ordinal": 5,
+          "guiPrompt": true,
+          "guiLabel": "float"
+        },
+        {
+          "name": "some-int-arg",
+          "type": "INTEGER",
+          "ordinal": 3,
+          "guiPrompt": true,
+          "guiLabel": "integer"
+        },
+        {
+          "name": "some-msg-arg",
+          "type": "MESSAGE",
+          "ordinal": 10,
+          "guiPrompt": false
+        },
+        {
+          "name": "some-string-arg",
+          "type": "STRING",
+          "ordinal": 1,
+          "guiPrompt": true,
+          "guiLabel": "string arg"
+        },
+        {
+          "name": "some-xml-arg",
+          "type": "ELEMENT",
+          "ordinal": 6,
+          "guiPrompt": false
+        }
+      ],
+      "encassResults": [
+        {
+          "name": "some-binary-result",
+          "type": "BINARY"
+        },
+        {
+          "name": "some-blob-result",
+          "type": "BLOB"
+        },
+        {
+          "name": "some-bool-result",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "some-cert-result",
+          "type": "CERTIFICATE"
+        },
+        {
+          "name": "some-clob-result",
+          "type": "CLOB"
+        },
+        {
+          "name": "some-datetime-result",
+          "type": "DATE_TIME"
+        },
+        {
+          "name": "some-decimal-result",
+          "type": "DECIMAL"
+        },
+        {
+          "name": "some-float-result",
+          "type": "FLOAT"
+        },
+        {
+          "name": "some-int-result",
+          "type": "INTEGER"
+        },
+        {
+          "name": "some-msg-result",
+          "type": "MESSAGE"
+        },
+        {
+          "name": "some-string-result",
+          "type": "STRING"
+        },
+        {
+          "name": "some-unknown-result",
+          "type": "UNKNOWN"
+        },
+        {
+          "name": "some-xml-result",
+          "type": "ELEMENT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "allowTracing",
+          "value": "false"
+        },
+        {
+          "name": "paletteFolder",
+          "value": "accessControl"
+        },
+        {
+          "name": "passMetricsToParent",
+          "value": "false"
+        }
+      ]
+    },
+    {
+      "goid": "ff70c6a442043ef12e74f4eb13ccb8c5",
+      "guid": "3acd132d-0b6a-4508-9a14-55b858651f2f",
+      "name": "some-other-encass",
+      "checksum": "6694860f2c0371cedc4071cf79418eaf34bf1c49",
+      "description": "some othe encass",
+      "policyName": "some-other-encass",
+      "encassArgs": [
+        {
+          "name": "input1",
+          "type": "STRING",
+          "ordinal": 1,
+          "guiPrompt": true,
+          "guiLabel": "Input1"
+        },
+        {
+          "name": "input2",
+          "type": "STRING",
+          "ordinal": 2,
+          "guiPrompt": true,
+          "guiLabel": "Input2"
+        }
+      ],
+      "encassResults": [
+        {
+          "name": "output",
+          "type": "STRING"
+        }
+      ],
+      "properties": [
+        {
+          "name": "allowTracing",
+          "value": "false"
+        },
+        {
+          "name": "paletteFolder",
+          "value": "policyLogic"
+        },
+        {
+          "name": "passMetricsToParent",
+          "value": "false"
+        }
+      ]
+    }
+  ],
+  "keys": [
+    {
+      "goid": "00000000000000000000000000000002:some-key",
+      "keystoreId": "00000000000000000000000000000002",
+      "alias": "some-key",
+      "checksum": "82fa9aabab38b45e6293c2d891a378113a7ed80c",
+      "keyType": "RSA",
+      "subjectDn": "CN=some-key",
+      "p12": "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",
+      "pem": "-----BEGIN ENCRYPTED PRIVATE KEY-----\nMIIE9jAoBgoqhkiG9w0BDAEFMBoEFFSbQd0sgsEIwp+2/LOyhrhkcaaSAgIIAASC\nBMhKrHbV99pGZYjYKLzIObB35yosPpzJGyRsFV1pnmKDvNLS8AhX2p0NdRgIaHwK\nJDD6jc8z1QMcPIJoHaTHv/Fom0ZP1EaDA+v0zbb4M61/C9xqJKH+4GyYDySEZefJ\n0avnHwrD5hcIQVawQ40U0A53gg7rpkSmsfS52SwHyNer0+K0vD90PgZ3fe87Xh46\nOaifhWUA23rOuU3uA8a6zTB4nZDavvrcgVdyeCGvF/hfWfavcoCKeRgZEAC1y/hy\nDDjvv21BAMFBRobof9Upfyzj3v4DhP7Fgeta/1zuQD3h4Ex2nbNZTQZnpF+qlOxP\nAWBQnu+1KHQ+HzwA4TJ5e8+beUo5ZCLsHqtgnnKO5+Jl5j3Obz48zUaogcjyo/l8\nWXJasPbD0t1uqIcEa4WJY6rprK8N23ontkiCPehLI8KrBtn19PIkrSB0cqeb3e1j\n5s+63YCAZ6K3A4dBKge+uNU8oxoFMCFK3bfF7Xy2EEG/xst5Coo8X3nYODBk1ays\nSzrLL4v4QOowm2WewB7GF826T7fvnJobBann15r4mJHuQPp0jeh8JK0GXXc9S3Hd\nmM63KW4J30RlGXvxB5ovA1tS2X+DPZFOCvHe17R56M5tiCkqwqEO/Sm9xeqoIS18\n0l6VfmAcnNmyJ2thB+6M98w+8pJdo2pS5mGV4ViNjxtAGnVgW7nZHyX91pKVGB71\nai4OG5+hyizXVZjBn8Dl7vsEmczxvMmkSCCs1Gxztlmq5D0rmcEsooOi6H5T8/aT\nvR1w2vCwF6VAivnUxjWi4if86EknO4jbwUwEjuEU3usWeht9THGMYXe03HdJyIK/\nNu7AtDtl5CNp3fe1aQfN+PufrvlztBj3jFIUDBzXmQ1OnUy/JW/sn8lDO44K4ERC\n6B/nBWZ45rAzvgJgLAeIGqP0lLzx8LrhxhAiMSQ6pkb+44R3b87GPfNTGuJGUKd7\nMQqR0gQR8hSyDtguyzjBeYog5XKmPEl8v+bKfY1eY2x88fUD824mpxMxj+p6OemK\ndQKcbUrEUGV2VRnPWRXj53D0PkEVZLqwf21sgkml//igk2r16uHeBZfPsGBIYrbP\nAR5G7gM6DbTnzF3JKVLrFgqk0Gxjdd74XHV6e9MtVYAioms0rma5+WvIF361nv2C\nXPgmEXFpBNq69B+ereICaoCE/l19Y5T5ngy7XQ4E3tUE5pBwH6ACYQvh0ID2Ra+s\nfMzJwoBKRnX+boh66Cvb+s0htV1IRt7stWRoougii/2hj10yLUn3boQDStK1SXsl\nw+r1U+RxkpjA1vNZKcdFy+89U1Xsi805HNuTA5I79S7loXBD9A/q3Z0ckXm+cmoX\nGkpw1NxykXZoLoCKgvbnktTqCCwNyxPfKyTYbWrA9ephYPZzre6RZ4hnfp5pieiO\nieM7XJF2XVKUEeKwx4hK5pi7zRQo+0hlwMioZ4GPBBKxwTG65HZ5+PpIFLWGPY4Z\nn+ejT4IJ88GiskFZiT/GIpYDzrRDUgFHDLATeGtYd4JZqkGgCY8UQSQ59ZaS3sVM\ns/TXeGAeFPVvdJZ0mStPK88j6HUhyJIWcpnwducsrgH/keDEao2nZo/NKmEdn6HN\nhbSnrHvbJ6rsIWkGi2ZtpITvBKaqje4aa1o=\n-----END ENCRYPTED PRIVATE KEY-----\n",
+      "certChain": [
+        "-----BEGIN CERTIFICATE-----\nMIIC6zCCAdOgAwIBAgIJAPBYDK3qjfM1MA0GCSqGSIb3DQEBDAUAMBMxETAPBgNVBAMTCHNvbWUt\r\na2V5MB4XDTIzMDQwNDA1NDU1M1oXDTI4MDQwMjA1NDU1M1owEzERMA8GA1UEAxMIc29tZS1rZXkw\r\nggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCADgFxsGgmoRefiq4dMzfgy0minfIw98PP\r\nco/gJtvAXdW/0ZamjpGNhepq3LJ0rNonXrbpOJSn9nBtcAmQQdDq9rMWVXbh11OJH7BfeGs2vFSU\r\nPXV9P0K/8w/X5xFaKZ8/qhQVLLyOq8gGjCk3NS7XTMmA+9jjkoxzqNDvRVRw7mEFRFxgIJOuPBBL\r\nTpBKjiCxdfFbcV9r2ZQyf0a/UO+M7UIGuFFJxHTtdtp0PBZAhJ/wf6oIyMeeCNSkYmLYI9v8Sne5\r\n4oRiIFTJ0BrnIA/7PNyjiaDejfy6TmrqmtV85cn3wxorC8tOfUv1PsOv1FGqBbbYvQ7lh5ybVLL7\r\nefGTAgMBAAGjQjBAMB0GA1UdDgQWBBQL2fCUg0lRk4HWwBBr35SyKSQ70jAfBgNVHSMEGDAWgBQL\r\n2fCUg0lRk4HWwBBr35SyKSQ70jANBgkqhkiG9w0BAQwFAAOCAQEAELwHue6qGlrWpfJc3rq3Pby7\r\nNwjI7VEANcWHM5WVQ0TX5+Hm/P+GIyxr4WFA356nnUeGCe3owCWv3Y3yRva715Jf6JUofYCNgvk7\r\nuUoQgLmTIe2s4GguuX7ATVAEMz5EM1EmcapGgrfoEbWFTEemUr1nvu19LSDgVzKJhvVpWvWwCQGr\r\nX2lipOGuZrgGumW+AaTATLpxCasG3aP3IqdGaMs+ALi07CM9b/JD+XPRAp1B7yYrFTGYbftfvBeJ\r\nKfKiC2YoJKNJcNXMsz3yhGfvVbZrSG5LZIgCjqsDJ0EoCXMzpR3AACHbF9p4ummEbrAOmse1lx6u\r\nPh9PhFwPx2XmUg==\n-----END CERTIFICATE-----\n"
+      ]
+    },
+    {
+      "goid": "00000000000000000000000000000002:some-other-key",
+      "keystoreId": "00000000000000000000000000000002",
+      "alias": "some-other-key",
+      "checksum": "8a60f31ce6a81b31fda5463e7619fb0e9e0882e0",
+      "keyType": "EC",
+      "subjectDn": "CN=some-other-key",
+      "p12": "MIID8AIBAzCCA5oGCSqGSIb3DQEHAaCCA4sEggOHMIIDgzCCASoGCSqGSIb3DQEHAaCCARsEggEXMIIBEzCCAQ8GCyqGSIb3DQEMCgECoIGtMIGqMGYGCSqGSIb3DQEFDTBZMDgGCSqGSIb3DQEFDDArBBRx1uvdZTToO8CpDXIzA3SkMahy7AICJxACASAwDAYIKoZIhvcNAgkFADAdBglghkgBZQMEASoEEDHNeaKLx1NX+14rj0NkhLQEQGJI5Ht6kOyIWLGfWZb7+hZjZhU9BIx+XLpqWSgQtp7CwLKC0PpxIXiBLGWbyQbAL5VXUvZxYGlUcv1ZO5VlzDMxUDArBgkqhkiG9w0BCRQxHh4cAHMAbwBtAGUALQBvAHQAaABlAHIALQBrAGUAeTAhBgkqhkiG9w0BCRUxFAQSVGltZSAxNzEzOTU0MTAzMTUyMIICUQYJKoZIhvcNAQcGoIICQjCCAj4CAQAwggI3BgkqhkiG9w0BBwEwZgYJKoZIhvcNAQUNMFkwOAYJKoZIhvcNAQUMMCsEFAO6gYoNlmArRNyf/BIKq9xrL0s5AgInEAIBIDAMBggqhkiG9w0CCQUAMB0GCWCGSAFlAwQBKgQQ/kNwKl89QGLdvwjRHCFojoCCAcD9hQWCFmNtNjrG4DPs1RPhL+NdTass1CRU+YlFCoDE8njKHprgqfvWzNdURm/vxw9ZkEnN7EatlffHio+O9zE+HGXN02oaSasUZNX5xiFpCQ+oLmTGCuVNb+UzGH+u7zX5aE+HMx8HOYDQF6ficNG5USvrKbc/kneBTg8P9sgVe1bbnBeynwyHRd7Cm9JmvtZJXtnYZryQLDbABuv5YW10x2/Yx3CJCSObhHHYuSXpySeZytCP8YRwwi+qqAPUgC073ESvFjwyLgRKLI4rktFCxBN3x1jKrSJ39p7XZ14XwbUwScLKsXHixT1VAfWnVqfZo5ay83BS3hAW2hZhzZ+rCQ3FVrmczyclvrbXDyPoH0tR4VjLWpP3Gp38amD/GRKzMkXyQSXClQfmUhviTDWn4lGy58Aj8xXOxmqeT12S7Cv0vrV6RR6r40m9KkcZSk2eDezv4GC/z4gmOiWhKcJSfqwD2vdaFEJzZhg+VozKw+lJG35y2PoiMUoXnzYQOwZ95xssSv4Xda/2ckiftfMzqHZcVJzwVVSau0QLlX2WRoAckCnGSeZeiQgeHw4UvfWkTAJtJqLBFNhf2j0k7Ho9ME0wMTANBglghkgBZQMEAgEFAAQglO312ww3o1j/KJIt7pmDElAGl9IoqsM0nhLUPyIa/YMEFDFt1TbXw/HnHxh7NZAMZSskCsPNAgInEA==",
+      "pem": "-----BEGIN ENCRYPTED PRIVATE KEY-----\nMGQwKAYKKoZIhvcNAQwBBTAaBBRcyLUtPBUBju66mcR9fql/Z64ZCgICCAAEOA4P\npQhB9C5oHYAzsipoaaWzef8xhuTgTk7LvhHebQlmdmQ+AHxm20/iYzk1dgj397js\nILx2P5SF\n-----END ENCRYPTED PRIVATE KEY-----\n",
+      "certChain": [
+        "-----BEGIN CERTIFICATE-----\nMIIBNzCB9qADAgECAghlKhmgL8tv2DAJBgcqhkjOPQQBMBkxFzAVBgNVBAMTDnNvbWUtb3RoZXIt\r\na2V5MB4XDTIzMDQwNDA1NDYxNloXDTI4MDQwMjA1NDYxNlowGTEXMBUGA1UEAxMOc29tZS1vdGhl\r\nci1rZXkwQDAQBgcqhkjOPQIBBgUrgQQAAQMsAAQCKUXlPr3rWVvwhZYdkgOKagmCTp4F10+4WiFg\r\nu9kifLdH9HX4sqYS7yqjQjBAMB0GA1UdDgQWBBSfiaYzK5+p/U34aoidHIhHN4+tRzAfBgNVHSME\r\nGDAWgBSfiaYzK5+p/U34aoidHIhHN4+tRzAJBgcqhkjOPQQBAzEAMC4CFQM21XdG/IO9i2ucVL/2\r\nJ/JSpGdiHQIVAw8fUf/2dAD0eu6NfvutzsbGJqQW\n-----END CERTIFICATE-----\n"
+      ]
+    },
+    {
+      "goid": "00000000000000000000000000000002:ssl",
+      "keystoreId": "00000000000000000000000000000002",
+      "alias": "ssl",
+      "checksum": "30092e0d5d282ded8793cd3a95f6a5edeb936c99",
+      "keyType": "RSA",
+      "usageTypes": [
+        "SSL"
+      ],
+      "subjectDn": "CN=su671781gw111-ssp-0.dhcp.broadcom.net",
+      "p12": "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",
+      "pem": "-----BEGIN ENCRYPTED PRIVATE KEY-----\nMIIE9jAoBgoqhkiG9w0BDAEFMBoEFBTn2h3dDgoWRBlTd89uSfc/mZtnAgIIAASC\nBMhiDle4yT7ar82Mg8pLsf6MXqPB+ztbISpR1VFbXmXlsO02ybgzcgllGQCv1wDi\nPmLvaJMBTZehdaEu6ICUdxxCoUcARzSyCkW5UwuMgzbRSB0cqBZPo6iV3jxmmbiY\nnbynScSEIfInGVbN23xDzpWiO6EVGNYFGzIWzKjLh0Lb35jFwGLtEwUL9YmcX69j\nXnD8Kg9XALwe8npS4SH+ncRYppmszhEpDyMzU8W73frUoAL7k+HLnjYFQJFe/3pm\ny6X2Q+hXwd9KiTG7Szcb+qX/xgMcElCHPnKUfOjo909b+eFGer0/HFKnEQJyoui8\n6IEcZXlacOIi8fnVZI+NcOVExksHj+qiaHDIYohYNCXZQgk4sF1+jtHalNlQfsNA\nHQBJY38QyVdk1J/A1hcOG4FWsfa32lZZI7d5zoNN3EjWQh24SIJwt6T+NNT/Cd43\nar5NFHPeiPHGq11BO0DiW1bVuqMgXQLeGNAPcvNI45Yb00Wkfm5kjh01QtyPQERx\nNeMK6S/EcsAEJm3FbcbHiL/4R9IuGrpu8Hd3bKhWYAdYQpJpJp1GAESdsy0TKPwD\ndwgSxC2HoSlVXIURQus8367PiQl7IweQ/y2GVAc4h7nXWg6ixxcEIFL1QGdZmKTV\nFJpTu0LJ+gpMtJLAjOGXVXyDqW7A4VyBKF715jA/3wIl76gdrai3cB/qBJWGjgmi\nOlw78lYh+YaGJvqgj24g31uWZv9DBXWs+3LOYhQYjj4DAIeFbxPn9zK1uEmcqnBA\nb/ICPGJsHyAZASM/Ct/WFoTYAdzZbreKpvNs6rbZBIiJAg9J/rsFD4SiXKQYMWMu\nKY4k09lDBCQekaBXKhHOUmegD7w8xEqwtDLn2/uBNDmmHdySS1bIAExSwFef2Q9O\nm7V8HNTz4bnuBE6zfI2FSob9tOyDR4IP+wbTY3k8hYgVv+IsJ50qnKSbFJvQ1Fej\nRVoCo6Ee7iRMcqdOAwcV4E3Tw7LClHNUAid9H6N8F+Zj9GdoMp/D4QqRTn4eadwu\nNEQNgKfhOOOObzB1dnoBAtxX54Yr4EGICdimzPai84d5nWt1pQ7cXcCbPbojAICM\naUUKxzrXds1wWNnggJIvu863HU/4V7owtqdAfj/CNlM5/7egsh/lAQ2OhLh3e9Mt\ny2fsCIGLYLgeej68idLTVt4fn/vfIzXVJMQ0QQAlQii0P1/8sYyzrMyAoRpU3QwT\nV9Tt5nm6uSMFHR00no1GiuaXo00sjcBRJj4feohz0s5QXGS5QGf7CZoS14YLUxNE\niOvZ4RcAeij0x/BZqTIkjwDLBFIS3kN0Byayx6gWK8cO7k65OcbSc3yhfIywoimQ\n1ovTs2dIaIjh7yrW0VU9HuvPuEzeh7YL8zrbhmS/+wRpiFhaiKPzU0hoWFG27qms\nebNUl2SNIlDlVhqM0YBUoYqjMo+6i7xkHclUdFKpSSd1IfTuf3osuZfUx7JZNP4Q\n/0bnG4yN8QbWyvWZvEtuXS+kMHcEF2WP9hRcEB8Gz7tYeITa3wHHjFpa0STmDk+N\no0AOuKoc4WEiIJt9vFWmE5HbEsqyNE2XmM2S4UgZFaeVEmwLG4ZQ3eBucllyzhX0\nqggMJ3sG31YlCnLhypz4/+2VErnpKBdRyv8=\n-----END ENCRYPTED PRIVATE KEY-----\n",
+      "certChain": [
+        "-----BEGIN CERTIFICATE-----\nMIIDJTCCAg2gAwIBAgIJANL3hII8+L0TMA0GCSqGSIb3DQEBDAUAMDAxLjAsBgNVBAMTJXN1Njcx\r\nNzgxZ3cxMTEtc3NwLTAuZGhjcC5icm9hZGNvbS5uZXQwHhcNMjQwNDIzMDUxNjM4WhcNMzQwNDIx\r\nMDUxNjM4WjAwMS4wLAYDVQQDEyVzdTY3MTc4MWd3MTExLXNzcC0wLmRoY3AuYnJvYWRjb20ubmV0\r\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvtLo0qmW7fLemCaNEC1wNuxSikbVXhEm\r\nCOqYoyJ1JlJ49B07iPvdtL9OEskKPGIEyx58bNvpMHhgzxz6vkK7Ysh7SmzRSY9vMvKcr3SsZhuZ\r\nzgeTXliDM9wXKM7Dqik2Y/gVihAa/rrcpfu0ygI1Yp5OYncj8lnAdZngYNDAy0v2EIVEeqL4WorS\r\nBrs731V9BaFL8PqRU1TERo3O4JaMQ1ZnSxZszPZxb5e0woNsBqJ+YXjGTi29cH9zc7IcSk6S6MpD\r\nt4C1sL3cTSMqOEqzx6hcl2H7pwwptsznGmr2eljAlaA0LAxJqvTEdjPN+jkZ8OVP16sXDO15PgnH\r\nKb0JEwIDAQABo0IwQDAdBgNVHQ4EFgQUgjxWg+OnCRtXzgo0uDSoLBNyBxswHwYDVR0jBBgwFoAU\r\ngjxWg+OnCRtXzgo0uDSoLBNyBxswDQYJKoZIhvcNAQEMBQADggEBAEsrNJpYLIvxSkj20TnIcRTy\r\nGYXCM9Wis9y8zAnyCnx0H05Hvm2jX0xLBzYh1HMZq93k/gQyAFH9sPYfyd/jiqF/jMEhoBW/DPK7\r\nn/NzSJ2u2G5zrUtAjERld9TKHPw2xQKDF7dZarMq8h4ogGL31fqhhDZMfglwvpfep0ctNSPvhCoS\r\nSKZ8i1oUqiafSjthMzgN4VawkF3NuZH/umSHroB1FSRvYP6d7XM4W2CVhdvWy/kKwWTKN1kxArtL\r\nWEA2oUG+jitDcxxIjWlgqaItdV4HmeZ1Rp9VV01fni9IfZe5tXLMJnkzJlp9m0SVdusO+K54W4SP\r\noA2hDzATwUSITS0=\n-----END CERTIFICATE-----\n"
+      ]
+    }
+  ],
+  "secrets": [
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a2d9",
+      "name": "some-other-secret",
+      "checksum": "c0fb05640a888b2052555516b2765619972bf4d5",
+      "description": "openssl compatible",
+      "secret": "JEw3RXYwMyQiGIOQ9T/iI85C4bVf4+kJ//DOXBN9BVsYF9rY/NNIqQ==",
+      "secretType": "PASSWORD",
+      "variableReferencable": true
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a2db",
+      "name": "some-other-secrets-1",
+      "checksum": "bdc5bace7a887ab3cba323e76d214e6279993dca",
+      "description": "second creation of a password with value hello by setting hello again in clear",
+      "secret": "JEw3RXYwMyTN4Hc49vLP66a+5qs/5NbhefBglRE+McGczzLHlFO3Eg==",
+      "secretType": "PASSWORD",
+      "variableReferencable": true
+    }
+  ],
+  "properties": {
+    "defaultAction": "ALWAYS_CREATE_NEW",
+    "mappings": {
+      "encassConfigs": [
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "AWS"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "some-encass"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "some-other-encass"
+        }
+      ],
+      "keys": [
+        {
+          "action": "NEW_OR_EXISTING",
+          "alias": "some-key",
+          "keystoreId": "00000000000000000000000000000002"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "alias": "some-other-key",
+          "keystoreId": "00000000000000000000000000000002"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "alias": "ssl",
+          "keystoreId": "00000000000000000000000000000002"
+        }
+      ],
+      "secrets": [
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "some-other-secret"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "some-other-secrets-1"
+        }
+      ]
+    }
+  }
+}
