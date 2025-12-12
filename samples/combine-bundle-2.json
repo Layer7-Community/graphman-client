@@ -1,0 +1,466 @@
+{
+  "services": [
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a0fe",
+      "guid": "e03d6ce1-14a8-4504-82cc-a6c68d2587af",
+      "name": "some-backend",
+      "resolutionPath": "/some-backend",
+      "serviceType": "WEB_API",
+      "checksum": "e0fa76d881f0b1c0b701f0650a859997655c2486",
+      "enabled": true,
+      "folderPath": "/",
+      "methodsAllowed": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "tracingEnabled": false,
+      "wssProcessingEnabled": false,
+      "laxResolution": false,
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\"><wsp:All wsp:Usage=\"Required\"><L7p:HardcodedResponse>\t<L7p:Base64ResponseBody stringValue=\"WyJoZWxsbyBmcm9tICR7c2VydmljZS5uYW1lfSJd\"/>\t<L7p:ResponseContentType stringValue=\"application/json; charset=UTF-8\"/></L7p:HardcodedResponse></wsp:All></wsp:Policy>"
+      }
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a358",
+      "guid": "1b18fd61-802a-4d5d-a4ed-1c150da7864e",
+      "name": "some-internal-soap-service",
+      "resolutionPath": "/some-internal-soap",
+      "resolvers": {
+        "soapActions": [
+          "http://warehouse.acme.com/ws/currentOrders",
+          "http://warehouse.acme.com/ws/getProductDetails",
+          "http://warehouse.acme.com/ws/listProducts",
+          "http://warehouse.acme.com/ws/placeOrder"
+        ],
+        "baseUri": "http://warehouse.acme.com/ws",
+        "resolutionPath": "/some-internal-soap"
+      },
+      "serviceType": "INTERNAL_SOAP",
+      "checksum": "730bb4f7b3fdd9f61c328c73cec44c0458d95af0",
+      "enabled": true,
+      "folderPath": "/graphman-tests/internalSoapServices",
+      "soapVersion": "UNKNOWN",
+      "methodsAllowed": [
+        "POST"
+      ],
+      "tracingEnabled": false,
+      "wssProcessingEnabled": true,
+      "laxResolution": false,
+      "wsdl": "<definitions targetNamespace=\"http://warehouse.acme.com/ws\" xmlns=\"http://schemas.xmlsoap.org/wsdl/\" xmlns:http=\"http://schemas.xmlsoap.org/wsdl/http/\" xmlns:mime=\"http://schemas.xmlsoap.org/wsdl/mime/\" xmlns:s=\"http://www.w3.org/2001/XMLSchema\" xmlns:s0=\"http://warehouse.acme.com/ws\" xmlns:soap=\"http://schemas.xmlsoap.org/wsdl/soap/\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:tm=\"http://microsoft.com/wsdl/mime/textMatching/\">\n  <types>\n    <s:schema elementFormDefault=\"qualified\" targetNamespace=\"http://warehouse.acme.com/ws\">\n      <s:element name=\"listProducts\">\n        <s:complexType/>\n      </s:element>\n      <s:element name=\"listProductsResponse\">\n        <s:complexType>\n          <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"0\" name=\"listProductsResult\" type=\"s0:ArrayOfProductListHeader\"/>\n          </s:sequence>\n        </s:complexType>\n      </s:element>\n      <s:complexType name=\"ArrayOfProductListHeader\">\n        <s:sequence>\n          <s:element maxOccurs=\"unbounded\" minOccurs=\"0\" name=\"ProductListHeader\" nillable=\"true\" type=\"s0:ProductListHeader\"/>\n        </s:sequence>\n      </s:complexType>\n      <s:complexType name=\"ProductListHeader\">\n        <s:sequence>\n          <s:element maxOccurs=\"1\" minOccurs=\"0\" name=\"productName\" type=\"s:string\"/>\n          <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productId\" type=\"s:long\"/>\n        </s:sequence>\n      </s:complexType>\n      <s:element name=\"getProductDetails\">\n        <s:complexType>\n          <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productid\" type=\"s:long\"/>\n          </s:sequence>\n        </s:complexType>\n      </s:element>\n      <s:element name=\"getProductDetailsResponse\">\n        <s:complexType>\n          <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"0\" name=\"getProductDetailsResult\" type=\"s0:ProductDetails\"/>\n          </s:sequence>\n        </s:complexType>\n      </s:element>\n      <s:complexType name=\"ProductDetails\">\n        <s:complexContent mixed=\"false\">\n          <s:extension base=\"s0:ProductListHeader\">\n            <s:sequence>\n              <s:element maxOccurs=\"1\" minOccurs=\"0\" name=\"description\" type=\"s:string\"/>\n              <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n              <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"inStock\" type=\"s:boolean\"/>\n            </s:sequence>\n          </s:extension>\n        </s:complexContent>\n      </s:complexType>\n      <s:element name=\"placeOrder\">\n        <s:complexType>\n          <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productid\" type=\"s:long\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"amount\" type=\"s:long\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountid\" type=\"s:long\"/>\n          </s:sequence>\n        </s:complexType>\n      </s:element>\n      <s:element name=\"placeOrderResponse\">\n        <s:complexType>\n          <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"placeOrderResult\" type=\"s:long\"/>\n          </s:sequence>\n        </s:complexType>\n      </s:element>\n      <s:element name=\"currentOrders\">\n        <s:complexType>\n          <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountid\" type=\"s:long\"/>\n          </s:sequence>\n        </s:complexType>\n      </s:element>\n      <s:element name=\"currentOrdersResponse\">\n        <s:complexType>\n          <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"0\" name=\"currentOrdersResult\" type=\"s0:ArrayOfOrder\"/>\n          </s:sequence>\n        </s:complexType>\n      </s:element>\n      <s:complexType name=\"ArrayOfOrder\">\n        <s:sequence>\n          <s:element maxOccurs=\"unbounded\" minOccurs=\"0\" name=\"Order\" nillable=\"true\" type=\"s0:Order\"/>\n        </s:sequence>\n      </s:complexType>\n      <s:complexType name=\"Order\">\n        <s:sequence>\n          <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"date\" type=\"s:dateTime\"/>\n          <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountId\" type=\"s:long\"/>\n          <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productId\" type=\"s:long\"/>\n          <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"amount\" type=\"s:long\"/>\n          <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n          <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"confirmationId\" type=\"s:long\"/>\n        </s:sequence>\n      </s:complexType>\n    </s:schema>\n  </types>\n  <message name=\"listProductsSoapIn\">\n    <part element=\"s0:listProducts\" name=\"parameters\"/>\n  </message>\n  <message name=\"listProductsSoapOut\">\n    <part element=\"s0:listProductsResponse\" name=\"parameters\"/>\n  </message>\n  <message name=\"getProductDetailsSoapIn\">\n    <part element=\"s0:getProductDetails\" name=\"parameters\"/>\n  </message>\n  <message name=\"getProductDetailsSoapOut\">\n    <part element=\"s0:getProductDetailsResponse\" name=\"parameters\"/>\n  </message>\n  <message name=\"placeOrderSoapIn\">\n    <part element=\"s0:placeOrder\" name=\"parameters\"/>\n  </message>\n  <message name=\"placeOrderSoapOut\">\n    <part element=\"s0:placeOrderResponse\" name=\"parameters\"/>\n  </message>\n  <message name=\"currentOrdersSoapIn\">\n    <part element=\"s0:currentOrders\" name=\"parameters\"/>\n  </message>\n  <message name=\"currentOrdersSoapOut\">\n    <part element=\"s0:currentOrdersResponse\" name=\"parameters\"/>\n  </message>\n  <portType name=\"WarehouseSoap\">\n    <operation name=\"listProducts\">\n      <input message=\"s0:listProductsSoapIn\"/>\n      <output message=\"s0:listProductsSoapOut\"/>\n    </operation>\n    <operation name=\"getProductDetails\">\n      <input message=\"s0:getProductDetailsSoapIn\"/>\n      <output message=\"s0:getProductDetailsSoapOut\"/>\n    </operation>\n    <operation name=\"placeOrder\">\n      <input message=\"s0:placeOrderSoapIn\"/>\n      <output message=\"s0:placeOrderSoapOut\"/>\n    </operation>\n    <operation name=\"currentOrders\">\n      <input message=\"s0:currentOrdersSoapIn\"/>\n      <output message=\"s0:currentOrdersSoapOut\"/>\n    </operation>\n  </portType>\n  <binding name=\"WarehouseSoap\" type=\"s0:WarehouseSoap\">\n    <soap:binding style=\"document\" transport=\"http://schemas.xmlsoap.org/soap/http\"/>\n    <operation name=\"listProducts\">\n      <soap:operation soapAction=\"http://warehouse.acme.com/ws/listProducts\" style=\"document\"/>\n      <input>\n        <soap:body use=\"literal\"/>\n      </input>\n      <output>\n        <soap:body use=\"literal\"/>\n      </output>\n    </operation>\n    <operation name=\"getProductDetails\">\n      <soap:operation soapAction=\"http://warehouse.acme.com/ws/getProductDetails\" style=\"document\"/>\n      <input>\n        <soap:body use=\"literal\"/>\n      </input>\n      <output>\n        <soap:body use=\"literal\"/>\n      </output>\n    </operation>\n    <operation name=\"placeOrder\">\n      <soap:operation soapAction=\"http://warehouse.acme.com/ws/placeOrder\" style=\"document\"/>\n      <input>\n        <soap:body use=\"literal\"/>\n      </input>\n      <output>\n        <soap:body use=\"literal\"/>\n      </output>\n    </operation>\n    <operation name=\"currentOrders\">\n      <soap:operation soapAction=\"http://warehouse.acme.com/ws/currentOrders\" style=\"document\"/>\n      <input>\n        <soap:body use=\"literal\"/>\n      </input>\n      <output>\n        <soap:body use=\"literal\"/>\n      </output>\n    </operation>\n  </binding>\n  <service name=\"Warehouse\">\n    <port binding=\"s0:WarehouseSoap\" name=\"WarehouseSoap\">\n      <soap:address location=\"http://hugh/ACMEWarehouseWS/Service1.asmx\"/>\n    </port>\n  </service>\n</definitions>",
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:SchemaValidation>\n            <L7p:ResourceInfo staticResourceInfo=\"included\">\n                <L7p:Document stringValueReference=\"inline\"><![CDATA[<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<s:schema elementFormDefault=\"qualified\"\n    targetNamespace=\"http://warehouse.acme.com/ws\"\n    xmlns:http=\"http://schemas.xmlsoap.org/wsdl/http/\"\n    xmlns:mime=\"http://schemas.xmlsoap.org/wsdl/mime/\"\n    xmlns:s=\"http://www.w3.org/2001/XMLSchema\"\n    xmlns:s0=\"http://warehouse.acme.com/ws\"\n    xmlns:soap=\"http://schemas.xmlsoap.org/wsdl/soap/\"\n    xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:tm=\"http://microsoft.com/wsdl/mime/textMatching/\">\n    <s:element name=\"listProducts\">\n        <s:complexType/>\n    </s:element>\n    <s:element name=\"listProductsResponse\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"0\"\n                    name=\"listProductsResult\" type=\"s0:ArrayOfProductListHeader\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:complexType name=\"ArrayOfProductListHeader\">\n        <s:sequence>\n            <s:element maxOccurs=\"unbounded\" minOccurs=\"0\"\n                name=\"ProductListHeader\" nillable=\"true\" type=\"s0:ProductListHeader\"/>\n        </s:sequence>\n    </s:complexType>\n    <s:complexType name=\"ProductListHeader\">\n        <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"0\" name=\"productName\" type=\"s:string\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productId\" type=\"s:long\"/>\n        </s:sequence>\n    </s:complexType>\n    <s:element name=\"getProductDetails\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productid\" type=\"s:long\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:element name=\"getProductDetailsResponse\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"0\"\n                    name=\"getProductDetailsResult\" type=\"s0:ProductDetails\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:complexType name=\"ProductDetails\">\n        <s:complexContent mixed=\"false\">\n            <s:extension base=\"s0:ProductListHeader\">\n                <s:sequence>\n                    <s:element maxOccurs=\"1\" minOccurs=\"0\"\n                        name=\"description\" type=\"s:string\"/>\n                    <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n                    <s:element maxOccurs=\"1\" minOccurs=\"1\"\n                        name=\"inStock\" type=\"s:boolean\"/>\n                </s:sequence>\n            </s:extension>\n        </s:complexContent>\n    </s:complexType>\n    <s:element name=\"placeOrder\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productid\" type=\"s:long\"/>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"amount\" type=\"s:long\"/>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountid\" type=\"s:long\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:element name=\"placeOrderResponse\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\"\n                    name=\"placeOrderResult\" type=\"s:long\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:element name=\"currentOrders\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountid\" type=\"s:long\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:element name=\"currentOrdersResponse\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"0\"\n                    name=\"currentOrdersResult\" type=\"s0:ArrayOfOrder\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:complexType name=\"ArrayOfOrder\">\n        <s:sequence>\n            <s:element maxOccurs=\"unbounded\" minOccurs=\"0\" name=\"Order\"\n                nillable=\"true\" type=\"s0:Order\"/>\n        </s:sequence>\n    </s:complexType>\n    <s:complexType name=\"Order\">\n        <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"date\" type=\"s:dateTime\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountId\" type=\"s:long\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productId\" type=\"s:long\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"amount\" type=\"s:long\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"confirmationId\" type=\"s:long\"/>\n        </s:sequence>\n    </s:complexType>\n</s:schema>\n]]></L7p:Document>\n                <L7p:OriginalUrl stringValue=\"file:/Users/flascelles/Documents/soap/Warehouse_WSDL.wsdl#.xsd1\"/>\n            </L7p:ResourceInfo>\n            <L7p:Target target=\"REQUEST\"/>\n        </L7p:SchemaValidation>\n        <L7p:SchemaValidation>\n            <L7p:ResourceInfo globalResourceInfo=\"included\">\n                <L7p:Id stringValue=\"http://warehouse.io/mywarehouse\"/>\n            </L7p:ResourceInfo>\n            <L7p:Target target=\"REQUEST\"/>\n        </L7p:SchemaValidation>\n        <L7p:HttpRoutingAssertion>\n            <L7p:ProtectedServiceUrl stringValue=\"http://hugh/ACMEWarehouseWS/Service1.asmx\"/>\n            <L7p:RequestHeaderRules httpPassthroughRuleSet=\"included\">\n                <L7p:Rules httpPassthroughRules=\"included\">\n                    <L7p:item httpPassthroughRule=\"included\">\n                        <L7p:Name stringValue=\"Cookie\"/>\n                    </L7p:item>\n                    <L7p:item httpPassthroughRule=\"included\">\n                        <L7p:Name stringValue=\"SOAPAction\"/>\n                    </L7p:item>\n                </L7p:Rules>\n            </L7p:RequestHeaderRules>\n            <L7p:RequestParamRules httpPassthroughRuleSet=\"included\">\n                <L7p:ForwardAll booleanValue=\"true\"/>\n                <L7p:Rules httpPassthroughRules=\"included\"/>\n            </L7p:RequestParamRules>\n            <L7p:ResponseHeaderRules httpPassthroughRuleSet=\"included\">\n                <L7p:Rules httpPassthroughRules=\"included\">\n                    <L7p:item httpPassthroughRule=\"included\">\n                        <L7p:Name stringValue=\"Set-Cookie\"/>\n                    </L7p:item>\n                </L7p:Rules>\n            </L7p:ResponseHeaderRules>\n        </L7p:HttpRoutingAssertion>\n    </wsp:All>\n</wsp:Policy>\n"
+      }
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a34e",
+      "guid": "7ec189f4-d965-424f-9d0d-e13a62d77904",
+      "name": "some-internal-webapi-service",
+      "resolutionPath": "/some-internal-webapi",
+      "serviceType": "INTERNAL_WEB_API",
+      "checksum": "a2fb35eb396d29cfe26b0afde704fa51448f6b61",
+      "enabled": true,
+      "folderPath": "/graphman-tests/internalWebApiServices",
+      "methodsAllowed": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "tracingEnabled": false,
+      "wssProcessingEnabled": false,
+      "laxResolution": false,
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:Include>\n            <L7p:Enabled booleanValue=\"false\"/>\n            <L7p:PolicyGuid stringValue=\"1871928d-c4a3-4456-ab50-b86d3230c908\"/>\n        </L7p:Include>\n        <L7p:Include>\n            <L7p:PolicyGuid stringValue=\"553fcf5f-d0a8-4cde-8b6a-a24644d241d0\"/>\n        </L7p:Include>\n        <L7p:HardcodedResponse>\n            <L7p:Base64ResponseBody stringValue=\"ewogInJvbGVzIiA6ICIke3JvbGVzfSIKfQ==\"/>\n            <L7p:ResponseContentType stringValue=\"application/json; charset=UTF-8\"/>\n        </L7p:HardcodedResponse>\n    </wsp:All>\n</wsp:Policy>\n"
+      }
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a2c1",
+      "guid": "2bf04432-52f0-47c9-9d22-fc4436553019",
+      "name": "some soap service",
+      "resolutionPath": "/some-soap",
+      "resolvers": {
+        "soapActions": [
+          "http://warehouse.acme.com/ws/currentOrders",
+          "http://warehouse.acme.com/ws/getProductDetails",
+          "http://warehouse.acme.com/ws/listProducts",
+          "http://warehouse.acme.com/ws/placeOrder"
+        ],
+        "baseUri": "http://warehouse.acme.com/ws",
+        "resolutionPath": "/some-soap"
+      },
+      "serviceType": "SOAP",
+      "checksum": "50a5a5710202f45c6a78829f169880d7cafe4ca1",
+      "enabled": true,
+      "folderPath": "/graphman-tests/soapServices",
+      "soapVersion": "UNKNOWN",
+      "methodsAllowed": [
+        "POST"
+      ],
+      "tracingEnabled": false,
+      "wssProcessingEnabled": true,
+      "laxResolution": false,
+      "wsdl": "<definitions targetNamespace=\"http://warehouse.acme.com/ws\" xmlns=\"http://schemas.xmlsoap.org/wsdl/\" xmlns:http=\"http://schemas.xmlsoap.org/wsdl/http/\" xmlns:mime=\"http://schemas.xmlsoap.org/wsdl/mime/\" xmlns:s=\"http://www.w3.org/2001/XMLSchema\" xmlns:s0=\"http://warehouse.acme.com/ws\" xmlns:soap=\"http://schemas.xmlsoap.org/wsdl/soap/\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:tm=\"http://microsoft.com/wsdl/mime/textMatching/\">\n  <types>\n    <s:schema elementFormDefault=\"qualified\" targetNamespace=\"http://warehouse.acme.com/ws\">\n      <s:element name=\"listProducts\">\n        <s:complexType/>\n      </s:element>\n      <s:element name=\"listProductsResponse\">\n        <s:complexType>\n          <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"0\" name=\"listProductsResult\" type=\"s0:ArrayOfProductListHeader\"/>\n          </s:sequence>\n        </s:complexType>\n      </s:element>\n      <s:complexType name=\"ArrayOfProductListHeader\">\n        <s:sequence>\n          <s:element maxOccurs=\"unbounded\" minOccurs=\"0\" name=\"ProductListHeader\" nillable=\"true\" type=\"s0:ProductListHeader\"/>\n        </s:sequence>\n      </s:complexType>\n      <s:complexType name=\"ProductListHeader\">\n        <s:sequence>\n          <s:element maxOccurs=\"1\" minOccurs=\"0\" name=\"productName\" type=\"s:string\"/>\n          <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productId\" type=\"s:long\"/>\n        </s:sequence>\n      </s:complexType>\n      <s:element name=\"getProductDetails\">\n        <s:complexType>\n          <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productid\" type=\"s:long\"/>\n          </s:sequence>\n        </s:complexType>\n      </s:element>\n      <s:element name=\"getProductDetailsResponse\">\n        <s:complexType>\n          <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"0\" name=\"getProductDetailsResult\" type=\"s0:ProductDetails\"/>\n          </s:sequence>\n        </s:complexType>\n      </s:element>\n      <s:complexType name=\"ProductDetails\">\n        <s:complexContent mixed=\"false\">\n          <s:extension base=\"s0:ProductListHeader\">\n            <s:sequence>\n              <s:element maxOccurs=\"1\" minOccurs=\"0\" name=\"description\" type=\"s:string\"/>\n              <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n              <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"inStock\" type=\"s:boolean\"/>\n            </s:sequence>\n          </s:extension>\n        </s:complexContent>\n      </s:complexType>\n      <s:element name=\"placeOrder\">\n        <s:complexType>\n          <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productid\" type=\"s:long\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"amount\" type=\"s:long\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountid\" type=\"s:long\"/>\n          </s:sequence>\n        </s:complexType>\n      </s:element>\n      <s:element name=\"placeOrderResponse\">\n        <s:complexType>\n          <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"placeOrderResult\" type=\"s:long\"/>\n          </s:sequence>\n        </s:complexType>\n      </s:element>\n      <s:element name=\"currentOrders\">\n        <s:complexType>\n          <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountid\" type=\"s:long\"/>\n          </s:sequence>\n        </s:complexType>\n      </s:element>\n      <s:element name=\"currentOrdersResponse\">\n        <s:complexType>\n          <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"0\" name=\"currentOrdersResult\" type=\"s0:ArrayOfOrder\"/>\n          </s:sequence>\n        </s:complexType>\n      </s:element>\n      <s:complexType name=\"ArrayOfOrder\">\n        <s:sequence>\n          <s:element maxOccurs=\"unbounded\" minOccurs=\"0\" name=\"Order\" nillable=\"true\" type=\"s0:Order\"/>\n        </s:sequence>\n      </s:complexType>\n      <s:complexType name=\"Order\">\n        <s:sequence>\n          <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"date\" type=\"s:dateTime\"/>\n          <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountId\" type=\"s:long\"/>\n          <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productId\" type=\"s:long\"/>\n          <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"amount\" type=\"s:long\"/>\n          <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n          <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"confirmationId\" type=\"s:long\"/>\n        </s:sequence>\n      </s:complexType>\n    </s:schema>\n  </types>\n  <message name=\"listProductsSoapIn\">\n    <part element=\"s0:listProducts\" name=\"parameters\"/>\n  </message>\n  <message name=\"listProductsSoapOut\">\n    <part element=\"s0:listProductsResponse\" name=\"parameters\"/>\n  </message>\n  <message name=\"getProductDetailsSoapIn\">\n    <part element=\"s0:getProductDetails\" name=\"parameters\"/>\n  </message>\n  <message name=\"getProductDetailsSoapOut\">\n    <part element=\"s0:getProductDetailsResponse\" name=\"parameters\"/>\n  </message>\n  <message name=\"placeOrderSoapIn\">\n    <part element=\"s0:placeOrder\" name=\"parameters\"/>\n  </message>\n  <message name=\"placeOrderSoapOut\">\n    <part element=\"s0:placeOrderResponse\" name=\"parameters\"/>\n  </message>\n  <message name=\"currentOrdersSoapIn\">\n    <part element=\"s0:currentOrders\" name=\"parameters\"/>\n  </message>\n  <message name=\"currentOrdersSoapOut\">\n    <part element=\"s0:currentOrdersResponse\" name=\"parameters\"/>\n  </message>\n  <portType name=\"WarehouseSoap\">\n    <operation name=\"listProducts\">\n      <input message=\"s0:listProductsSoapIn\"/>\n      <output message=\"s0:listProductsSoapOut\"/>\n    </operation>\n    <operation name=\"getProductDetails\">\n      <input message=\"s0:getProductDetailsSoapIn\"/>\n      <output message=\"s0:getProductDetailsSoapOut\"/>\n    </operation>\n    <operation name=\"placeOrder\">\n      <input message=\"s0:placeOrderSoapIn\"/>\n      <output message=\"s0:placeOrderSoapOut\"/>\n    </operation>\n    <operation name=\"currentOrders\">\n      <input message=\"s0:currentOrdersSoapIn\"/>\n      <output message=\"s0:currentOrdersSoapOut\"/>\n    </operation>\n  </portType>\n  <binding name=\"WarehouseSoap\" type=\"s0:WarehouseSoap\">\n    <soap:binding style=\"document\" transport=\"http://schemas.xmlsoap.org/soap/http\"/>\n    <operation name=\"listProducts\">\n      <soap:operation soapAction=\"http://warehouse.acme.com/ws/listProducts\" style=\"document\"/>\n      <input>\n        <soap:body use=\"literal\"/>\n      </input>\n      <output>\n        <soap:body use=\"literal\"/>\n      </output>\n    </operation>\n    <operation name=\"getProductDetails\">\n      <soap:operation soapAction=\"http://warehouse.acme.com/ws/getProductDetails\" style=\"document\"/>\n      <input>\n        <soap:body use=\"literal\"/>\n      </input>\n      <output>\n        <soap:body use=\"literal\"/>\n      </output>\n    </operation>\n    <operation name=\"placeOrder\">\n      <soap:operation soapAction=\"http://warehouse.acme.com/ws/placeOrder\" style=\"document\"/>\n      <input>\n        <soap:body use=\"literal\"/>\n      </input>\n      <output>\n        <soap:body use=\"literal\"/>\n      </output>\n    </operation>\n    <operation name=\"currentOrders\">\n      <soap:operation soapAction=\"http://warehouse.acme.com/ws/currentOrders\" style=\"document\"/>\n      <input>\n        <soap:body use=\"literal\"/>\n      </input>\n      <output>\n        <soap:body use=\"literal\"/>\n      </output>\n    </operation>\n  </binding>\n  <service name=\"Warehouse\">\n    <port binding=\"s0:WarehouseSoap\" name=\"WarehouseSoap\">\n      <soap:address location=\"http://hugh/ACMEWarehouseWS/Service1.asmx\"/>\n    </port>\n  </service>\n</definitions>",
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:SchemaValidation>\n            <L7p:ResourceInfo staticResourceInfo=\"included\">\n                <L7p:Document stringValueReference=\"inline\"><![CDATA[<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<s:schema elementFormDefault=\"qualified\"\n    targetNamespace=\"http://warehouse.acme.com/ws\"\n    xmlns:http=\"http://schemas.xmlsoap.org/wsdl/http/\"\n    xmlns:mime=\"http://schemas.xmlsoap.org/wsdl/mime/\"\n    xmlns:s=\"http://www.w3.org/2001/XMLSchema\"\n    xmlns:s0=\"http://warehouse.acme.com/ws\"\n    xmlns:soap=\"http://schemas.xmlsoap.org/wsdl/soap/\"\n    xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:tm=\"http://microsoft.com/wsdl/mime/textMatching/\">\n    <s:element name=\"listProducts\">\n        <s:complexType/>\n    </s:element>\n    <s:element name=\"listProductsResponse\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"0\"\n                    name=\"listProductsResult\" type=\"s0:ArrayOfProductListHeader\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:complexType name=\"ArrayOfProductListHeader\">\n        <s:sequence>\n            <s:element maxOccurs=\"unbounded\" minOccurs=\"0\"\n                name=\"ProductListHeader\" nillable=\"true\" type=\"s0:ProductListHeader\"/>\n        </s:sequence>\n    </s:complexType>\n    <s:complexType name=\"ProductListHeader\">\n        <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"0\" name=\"productName\" type=\"s:string\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productId\" type=\"s:long\"/>\n        </s:sequence>\n    </s:complexType>\n    <s:element name=\"getProductDetails\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productid\" type=\"s:long\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:element name=\"getProductDetailsResponse\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"0\"\n                    name=\"getProductDetailsResult\" type=\"s0:ProductDetails\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:complexType name=\"ProductDetails\">\n        <s:complexContent mixed=\"false\">\n            <s:extension base=\"s0:ProductListHeader\">\n                <s:sequence>\n                    <s:element maxOccurs=\"1\" minOccurs=\"0\"\n                        name=\"description\" type=\"s:string\"/>\n                    <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n                    <s:element maxOccurs=\"1\" minOccurs=\"1\"\n                        name=\"inStock\" type=\"s:boolean\"/>\n                </s:sequence>\n            </s:extension>\n        </s:complexContent>\n    </s:complexType>\n    <s:element name=\"placeOrder\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productid\" type=\"s:long\"/>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"amount\" type=\"s:long\"/>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountid\" type=\"s:long\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:element name=\"placeOrderResponse\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\"\n                    name=\"placeOrderResult\" type=\"s:long\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:element name=\"currentOrders\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountid\" type=\"s:long\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:element name=\"currentOrdersResponse\">\n        <s:complexType>\n            <s:sequence>\n                <s:element maxOccurs=\"1\" minOccurs=\"0\"\n                    name=\"currentOrdersResult\" type=\"s0:ArrayOfOrder\"/>\n            </s:sequence>\n        </s:complexType>\n    </s:element>\n    <s:complexType name=\"ArrayOfOrder\">\n        <s:sequence>\n            <s:element maxOccurs=\"unbounded\" minOccurs=\"0\" name=\"Order\"\n                nillable=\"true\" type=\"s0:Order\"/>\n        </s:sequence>\n    </s:complexType>\n    <s:complexType name=\"Order\">\n        <s:sequence>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"date\" type=\"s:dateTime\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"accountId\" type=\"s:long\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"productId\" type=\"s:long\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"amount\" type=\"s:long\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"price\" type=\"s:float\"/>\n            <s:element maxOccurs=\"1\" minOccurs=\"1\" name=\"confirmationId\" type=\"s:long\"/>\n        </s:sequence>\n    </s:complexType>\n</s:schema>\n]]></L7p:Document>\n                <L7p:OriginalUrl stringValue=\"file:/Users/flascelles/Documents/soap/Warehouse_WSDL.wsdl#.xsd1\"/>\n            </L7p:ResourceInfo>\n            <L7p:Target target=\"REQUEST\"/>\n        </L7p:SchemaValidation>\n        <L7p:SchemaValidation>\n            <L7p:ResourceInfo globalResourceInfo=\"included\">\n                <L7p:Id stringValue=\"http://warehouse.io/mywarehouse\"/>\n            </L7p:ResourceInfo>\n            <L7p:Target target=\"REQUEST\"/>\n        </L7p:SchemaValidation>\n        <L7p:HttpRoutingAssertion>\n            <L7p:ProtectedServiceUrl stringValue=\"http://hugh/ACMEWarehouseWS/Service1.asmx\"/>\n            <L7p:RequestHeaderRules httpPassthroughRuleSet=\"included\">\n                <L7p:Rules httpPassthroughRules=\"included\">\n                    <L7p:item httpPassthroughRule=\"included\">\n                        <L7p:Name stringValue=\"Cookie\"/>\n                    </L7p:item>\n                    <L7p:item httpPassthroughRule=\"included\">\n                        <L7p:Name stringValue=\"SOAPAction\"/>\n                    </L7p:item>\n                </L7p:Rules>\n            </L7p:RequestHeaderRules>\n            <L7p:RequestParamRules httpPassthroughRuleSet=\"included\">\n                <L7p:ForwardAll booleanValue=\"true\"/>\n                <L7p:Rules httpPassthroughRules=\"included\"/>\n            </L7p:RequestParamRules>\n            <L7p:ResponseHeaderRules httpPassthroughRuleSet=\"included\">\n                <L7p:Rules httpPassthroughRules=\"included\">\n                    <L7p:item httpPassthroughRule=\"included\">\n                        <L7p:Name stringValue=\"Set-Cookie\"/>\n                    </L7p:item>\n                </L7p:Rules>\n            </L7p:ResponseHeaderRules>\n        </L7p:HttpRoutingAssertion>\n    </wsp:All>\n</wsp:Policy>\n"
+      }
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a296",
+      "guid": "5204e59e-0004-42ba-b02c-8dfb22d085b7",
+      "name": "some-webapi",
+      "resolutionPath": "/some-webapi",
+      "serviceType": "WEB_API",
+      "checksum": "61365bea8a73ef4808de2dc0a916dcfcf58d8ca6",
+      "enabled": true,
+      "folderPath": "/graphman-tests/webApiServices",
+      "methodsAllowed": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "tracingEnabled": false,
+      "wssProcessingEnabled": false,
+      "laxResolution": false,
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n           <L7p:HardcodedResponse>\n            <L7p:Base64ResponseBody stringValue=\"JHtncmVldGluZ3N9\"/>\n            <L7p:ResponseContentType stringValue=\"text/plain; charset=UTF-8\"/>\n        </L7p:HardcodedResponse>\n    </wsp:All>\n</wsp:Policy>\n"
+      }
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b58065d47",
+      "guid": "379269e2-fa17-474b-9ab7-4b67e1a67617",
+      "name": "Gateway Management Service",
+      "resolutionPath": "/wsman",
+      "resolvers": {
+        "soapActions": [
+          "http://schemas.xmlsoap.org/ws/2004/09/enumeration/Enumerate",
+          "http://schemas.xmlsoap.org/ws/2004/09/enumeration/GetStatus",
+          "http://schemas.xmlsoap.org/ws/2004/09/enumeration/Pull",
+          "http://schemas.xmlsoap.org/ws/2004/09/enumeration/Release",
+          "http://schemas.xmlsoap.org/ws/2004/09/enumeration/Renew",
+          "http://schemas.xmlsoap.org/ws/2004/09/transfer/Create",
+          "http://schemas.xmlsoap.org/ws/2004/09/transfer/Delete",
+          "http://schemas.xmlsoap.org/ws/2004/09/transfer/Get",
+          "http://schemas.xmlsoap.org/ws/2004/09/transfer/Put"
+        ],
+        "baseUri": "http://schemas.xmlsoap.org/ws/2004/09/enumeration",
+        "resolutionPath": "/wsman"
+      },
+      "serviceType": "INTERNAL_SOAP",
+      "checksum": "e351b8f21c67f4c875de3c838a4d59695da6a8f4",
+      "enabled": true,
+      "folderPath": "/",
+      "soapVersion": "SOAP_1_2",
+      "methodsAllowed": [
+        "POST"
+      ],
+      "tracingEnabled": false,
+      "wssProcessingEnabled": true,
+      "laxResolution": false,
+      "wsdl": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><definitions targetNamespace=\"http://ns.l7tech.com/2010/04/gateway-management\" tns:targetNamespace=\"http://ns.l7tech.com/2010/04/gateway-management\" xmlns:wsen=\"http://schemas.xmlsoap.org/ws/2004/09/enumeration\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:wse=\"http://schemas.xmlsoap.org/ws/2004/08/eventing\" xmlns:wsa=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\" xmlns:wxf=\"http://schemas.xmlsoap.org/ws/2004/09/transfer\" xmlns:wsman=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\" xmlns:tns=\"http://ns.l7tech.com/2010/04/gateway-management\" xmlns:wsoap12=\"http://schemas.xmlsoap.org/wsdl/soap12/\" xmlns=\"http://schemas.xmlsoap.org/wsdl/\">\n  <!-- Imports -->\n  <import namespace=\"http://schemas.xmlsoap.org/ws/2004/09/transfer\" location=\"http://schemas.xmlsoap.org/ws/2004/09/transfer/transfer.wsdl\"/>\n  <import namespace=\"http://schemas.xmlsoap.org/ws/2004/09/enumeration\" location=\"http://schemas.xmlsoap.org/ws/2004/09/enumeration/enumeration.wsdl\"/>\n  <import namespace=\"http://schemas.xmlsoap.org/ws/2004/08/eventing\" location=\"http://schemas.xmlsoap.org/ws/2004/08/eventing/eventing.wsdl\"/>\n  <types>\n    <xs:schema elementFormDefault=\"qualified\" blockDefault=\"#all\">\n      <xs:import namespace=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\" schemaLocation=\"http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd\"/>\n    </xs:schema>\n    <xs:schema elementFormDefault=\"qualified\" blockDefault=\"#all\">\n      <xs:import namespace=\"http://ns.l7tech.com/2010/04/gateway-management\" schemaLocation=\"gateway-management.xsd\"/>\n    </xs:schema>\n  </types>\n  <!-- WS-Management Messages -->\n  <message name=\"ResourceURIMessage\">\n    <part name=\"ResourceURIPart\" element=\"wsman:ResourceURI\"/>\n  </message>\n  <message name=\"SelectorSetMessage\">\n    <part name=\"SelectorSetPart\" element=\"wsman:SelectorSet\"/>\n  </message>\n  <message name=\"OptionSetMessage\">\n    <part name=\"OptionSetPart\" element=\"wsman:OptionSet\"/>\n  </message>\n  <message name=\"OperationTimeoutMessage\">\n    <part name=\"OperationTimeoutPart\" element=\"wsman:OperationTimeout\"/>\n  </message>\n  <message name=\"RequestTotalItemsCountEstimateMessage\">\n    <part name=\"RequestTotalItemsCountEstimatePart\" element=\"wsman:RequestTotalItemsCountEstimate\"/>\n  </message>\n  <message name=\"TotalItemsCountEstimateMessage\">\n    <part name=\"TotalItemsCountEstimatePart\" element=\"wsman:TotalItemsCountEstimate\"/>\n  </message>\n  <message name=\"FragmentTransferMessage\">\n    <part name=\"FragmentTransferPart\" element=\"wsman:FragmentTransfer\"/>\n  </message>\n  <!-- Resource Messages -->\n  <!-- PortTypes -->\n  <portType name=\"GatewayManagementPortType\">\n    <!--  WS-Transfer Operations -->\n    <operation name=\"Create\">\n      <input message=\"wxf:AnyXmlMessage\" wsa:Action=\"http://schemas.xmlsoap.org/ws/2004/09/transfer/Create\"/>\n      <output message=\"wxf:CreateResponseMessage\" wsa:Action=\"http://schemas.xmlsoap.org/ws/2004/09/transfer/CreateResponse\"/>\n    </operation>\n    <operation name=\"Get\">\n      <input message=\"wxf:EmptyMessage\" wsa:Action=\"http://schemas.xmlsoap.org/ws/2004/09/transfer/Get\"/>\n      <output message=\"wxf:AnyXmlMessage\" wsa:Action=\"http://schemas.xmlsoap.org/ws/2004/09/transfer/GetResponse\"/>\n    </operation>\n    <operation name=\"Put\">\n      <input message=\"wxf:AnyXmlMessage\" wsa:Action=\"http://schemas.xmlsoap.org/ws/2004/09/transfer/Put\"/>\n      <output message=\"wxf:OptionalXmlMessage\" wsa:Action=\"http://schemas.xmlsoap.org/ws/2004/09/transfer/PutResponse\"/>\n    </operation>\n    <operation name=\"Delete\">\n      <input message=\"wxf:EmptyMessage\" wsa:Action=\"http://schemas.xmlsoap.org/ws/2004/09/transfer/Delete\"/>\n      <output message=\"wxf:EmptyMessage\" wsa:Action=\"http://schemas.xmlsoap.org/ws/2004/09/transfer/DeleteResponse\"/>\n    </operation>\n    <!--  WS-Enumeration Operations -->\n    <operation name=\"EnumerateOp\">\n      <input message=\"wsen:EnumerateMessage\" wsa:Action=\"http://schemas.xmlsoap.org/ws/2004/09/enumeration/Enumerate\"/>\n      <output message=\"wsen:EnumerateResponseMessage\" wsa:Action=\"http://schemas.xmlsoap.org/ws/2004/09/enumeration/EnumerateResponse\"/>\n    </operation>\n    <operation name=\"PullOp\">\n      <input message=\"wsen:PullMessage\" wsa:Action=\"http://schemas.xmlsoap.org/ws/2004/09/enumeration/Pull\"/>\n      <output message=\"wsen:PullResponseMessage\" wsa:Action=\"http://schemas.xmlsoap.org/ws/2004/09/enumeration/PullResponse\"/>\n    </operation>\n    <operation name=\"RenewOp\">\n      <input message=\"wsen:RenewMessage\" wsa:Action=\"http://schemas.xmlsoap.org/ws/2004/09/enumeration/Renew\"/>\n      <output message=\"wsen:RenewResponseMessage\" wsa:Action=\"http://schemas.xmlsoap.org/ws/2004/09/enumeration/RenewResponse\"/>\n    </operation>\n    <operation name=\"GetStatusOp\">\n      <input message=\"wsen:GetStatusMessage\" wsa:Action=\"http://schemas.xmlsoap.org/ws/2004/09/enumeration/GetStatus\"/>\n      <output message=\"wsen:GetStatusResponseMessage\" wsa:Action=\"http://schemas.xmlsoap.org/ws/2004/09/enumeration/GetStatusResponse\"/>\n    </operation>\n    <operation name=\"ReleaseOp\">\n      <input message=\"wsen:ReleaseMessage\" wsa:Action=\"http://schemas.xmlsoap.org/ws/2004/09/enumeration/Release\"/>\n      <output message=\"wsen:ReleaseResponseMessage\" wsa:Action=\"http://schemas.xmlsoap.org/ws/2004/09/enumeration/ReleaseResponse\"/>\n    </operation>\n  </portType>\n  <!-- Bindings -->\n  <binding name=\"GatewayManagementBinding\" type=\"tns:GatewayManagementPortType\">\n    <wsoap12:binding transport=\"http://schemas.xmlsoap.org/soap/http\" style=\"document\"/>\n    <!--  WS-Transfer Operations -->\n    <operation name=\"Get\">\n      <wsoap12:operation soapAction=\"http://schemas.xmlsoap.org/ws/2004/09/transfer/Get\"/>\n      <input>\n        <wsoap12:header message=\"tns:ResourceURIMessage\" part=\"ResourceURIPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:SelectorSetMessage\" part=\"SelectorSetPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:OptionSetMessage\" part=\"OptionSetPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:OperationTimeoutMessage\" part=\"OperationTimeoutPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:FragmentTransferMessage\" part=\"FragmentTransferPart\" use=\"literal\"/>\n        <wsoap12:body use=\"literal\"/>\n      </input>\n      <output>\n        <wsoap12:body use=\"literal\"/>\n      </output>\n    </operation>\n    <operation name=\"Put\">\n      <wsoap12:operation soapAction=\"http://schemas.xmlsoap.org/ws/2004/09/transfer/Put\"/>\n      <input>\n        <wsoap12:header message=\"tns:ResourceURIMessage\" part=\"ResourceURIPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:SelectorSetMessage\" part=\"SelectorSetPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:OptionSetMessage\" part=\"OptionSetPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:OperationTimeoutMessage\" part=\"OperationTimeoutPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:FragmentTransferMessage\" part=\"FragmentTransferPart\" use=\"literal\"/>\n        <wsoap12:body use=\"literal\"/>\n      </input>\n      <output>\n        <wsoap12:body use=\"literal\"/>\n      </output>\n    </operation>\n    <operation name=\"Delete\">\n      <wsoap12:operation soapAction=\"http://schemas.xmlsoap.org/ws/2004/09/transfer/Delete\"/>\n      <input>\n        <wsoap12:header message=\"tns:ResourceURIMessage\" part=\"ResourceURIPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:SelectorSetMessage\" part=\"SelectorSetPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:OptionSetMessage\" part=\"OptionSetPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:OperationTimeoutMessage\" part=\"OperationTimeoutPart\" use=\"literal\"/>\n        <wsoap12:body use=\"literal\"/>\n      </input>\n      <output>\n        <wsoap12:body use=\"literal\"/>\n      </output>\n    </operation>\n    <operation name=\"Create\">\n      <wsoap12:operation soapAction=\"http://schemas.xmlsoap.org/ws/2004/09/transfer/Create\"/>\n      <input>\n        <wsoap12:header message=\"tns:ResourceURIMessage\" part=\"ResourceURIPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:SelectorSetMessage\" part=\"SelectorSetPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:OptionSetMessage\" part=\"OptionSetPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:OperationTimeoutMessage\" part=\"OperationTimeoutPart\" use=\"literal\"/>\n        <wsoap12:body use=\"literal\"/>\n      </input>\n      <output>\n        <wsoap12:body use=\"literal\"/>\n      </output>\n    </operation>\n    <!-- WS-Enumeration Operations -->\n    <operation name=\"EnumerateOp\">\n      <wsoap12:operation soapAction=\"http://schemas.xmlsoap.org/ws/2004/09/enumeration/Enumerate\"/>\n      <input>\n        <wsoap12:header message=\"tns:ResourceURIMessage\" part=\"ResourceURIPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:SelectorSetMessage\" part=\"SelectorSetPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:OptionSetMessage\" part=\"OptionSetPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:OperationTimeoutMessage\" part=\"OperationTimeoutPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:RequestTotalItemsCountEstimateMessage\" part=\"RequestTotalItemsCountEstimatePart\" use=\"literal\"/>\n        <wsoap12:body use=\"literal\"/>\n      </input>\n      <output>\n        <wsoap12:header message=\"tns:TotalItemsCountEstimateMessage\" part=\"TotalItemsCountEstimatePart\" use=\"literal\"/>\n        <wsoap12:body use=\"literal\"/>\n      </output>\n    </operation>\n    <operation name=\"PullOp\">\n      <wsoap12:operation soapAction=\"http://schemas.xmlsoap.org/ws/2004/09/enumeration/Pull\"/>\n      <input>\n        <wsoap12:header message=\"tns:ResourceURIMessage\" part=\"ResourceURIPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:SelectorSetMessage\" part=\"SelectorSetPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:OptionSetMessage\" part=\"OptionSetPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:OperationTimeoutMessage\" part=\"OperationTimeoutPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:RequestTotalItemsCountEstimateMessage\" part=\"RequestTotalItemsCountEstimatePart\" use=\"literal\"/>\n        <wsoap12:body use=\"literal\"/>\n      </input>\n      <output>\n        <wsoap12:header message=\"tns:TotalItemsCountEstimateMessage\" part=\"TotalItemsCountEstimatePart\" use=\"literal\"/>\n        <wsoap12:body use=\"literal\"/>\n      </output>\n    </operation>\n    <operation name=\"RenewOp\">\n      <wsoap12:operation soapAction=\"http://schemas.xmlsoap.org/ws/2004/09/enumeration/Renew\"/>\n      <input>\n        <wsoap12:header message=\"tns:ResourceURIMessage\" part=\"ResourceURIPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:SelectorSetMessage\" part=\"SelectorSetPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:OptionSetMessage\" part=\"OptionSetPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:OperationTimeoutMessage\" part=\"OperationTimeoutPart\" use=\"literal\"/>\n        <wsoap12:body use=\"literal\"/>\n      </input>\n      <output>\n        <wsoap12:body use=\"literal\"/>\n      </output>\n    </operation>\n    <operation name=\"GetStatusOp\">\n      <wsoap12:operation soapAction=\"http://schemas.xmlsoap.org/ws/2004/09/enumeration/GetStatus\"/>\n      <input>\n        <wsoap12:header message=\"tns:ResourceURIMessage\" part=\"ResourceURIPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:SelectorSetMessage\" part=\"SelectorSetPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:OptionSetMessage\" part=\"OptionSetPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:OperationTimeoutMessage\" part=\"OperationTimeoutPart\" use=\"literal\"/>\n        <wsoap12:body use=\"literal\"/>\n      </input>\n      <output>\n        <wsoap12:body use=\"literal\"/>\n      </output>\n    </operation>\n    <operation name=\"ReleaseOp\">\n      <wsoap12:operation soapAction=\"http://schemas.xmlsoap.org/ws/2004/09/enumeration/Release\"/>\n      <input>\n        <wsoap12:header message=\"tns:ResourceURIMessage\" part=\"ResourceURIPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:SelectorSetMessage\" part=\"SelectorSetPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:OptionSetMessage\" part=\"OptionSetPart\" use=\"literal\"/>\n        <wsoap12:header message=\"tns:OperationTimeoutMessage\" part=\"OperationTimeoutPart\" use=\"literal\"/>\n        <wsoap12:body use=\"literal\"/>\n      </input>\n      <output>\n        <wsoap12:body use=\"literal\"/>\n      </output>\n    </operation>\n  </binding>\n  <!-- Services -->\n  <service name=\"GatewayManagementService\">\n    <!--\n                   Service for management of the following resources:\n                   \n    -->\n    <port name=\"GatewayManagementPort\" binding=\"tns:GatewayManagementBinding\">\n      <wsoap12:address location=\"http://127.0.0.1:8080/wsman\"/>\n    </port>\n  </service>\n</definitions>\n",
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:SslAssertion/>\n        <L7p:HttpBasic/>\n        <L7p:Authentication>\n            <L7p:IdentityProviderOid goidValue=\"0000000000000000fffffffffffffffe\"/>\n        </L7p:Authentication>\n        <L7p:GatewayManagement/>\n    </wsp:All>\n</wsp:Policy>\n"
+      }
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a2a6",
+      "guid": "7df2f2c6-41bd-4907-ad0d-facf3f1556a8",
+      "name": "yamlpolicy-webapi",
+      "resolutionPath": "/yamlpolicy-webapi",
+      "serviceType": "WEB_API",
+      "checksum": "86e1cadb002533e2a7e2a6ca2be584c5334e9c89",
+      "enabled": true,
+      "folderPath": "/graphman-tests/webApiServices",
+      "methodsAllowed": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "tracingEnabled": false,
+      "wssProcessingEnabled": false,
+      "laxResolution": false,
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:CommentAssertion>\n            <L7p:Comment stringValue=\"Policy Fragment: some-policy-fragment\"/>\n        </L7p:CommentAssertion>\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"JHtzb21lLW91dHB1dH0sICJoZWxsbyBmcm9tICR7cG9saWN5Lm5hbWV9Ig==\"/>\n            <L7p:ContentType stringValue=\"text/plain; charset=utf-8\"/>\n            <L7p:DataType variableDataType=\"message\"/>\n            <L7p:VariableToSet stringValue=\"some-output\"/>\n        </L7p:SetVariable>\n        <L7p:Include>\n            <L7p:PolicyGuid stringValue=\"ffe348a7-8255-4c3b-ba18-021ec626dd0d\"/>\n            <L7p:PolicyName stringValue=\"some-inner-policy-fragment\"/>\n        </L7p:Include>\n        <L7p:Encapsulated>\n            <L7p:EncapsulatedAssertionConfigGuid stringValue=\"5047edc8-9df8-4e57-9e75-74221139c520\"/>\n            <L7p:EncapsulatedAssertionConfigName stringValue=\"some-encass\"/>\n        </L7p:Encapsulated>\n        <wsp:OneOrMore wsp:Usage=\"Required\">\n            <L7p:TrueAssertion/>\n        </wsp:OneOrMore>\n    </wsp:All>\n</wsp:Policy>\n"
+      }
+    }
+  ],
+  "policies": [
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a14c",
+      "guid": "605f1143-005c-4e19-8aa9-9238f665f1ec",
+      "name": "some-encass-policy",
+      "policyType": "FRAGMENT",
+      "checksum": "0910047116b1cd52a104489b7acba9f88147253b",
+      "folderPath": "/graphman-tests/encassConfigs",
+      "soap": false,
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:CommentAssertion>\n            <L7p:Comment stringValue=\"Policy Fragment: some-policy\"/>\n        </L7p:CommentAssertion>\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"JHtzb21lLXN0cmluZy1hcmd9\"/>\n            <L7p:VariableToSet stringValue=\"some-string-result\"/>\n        </L7p:SetVariable>\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"JHtzb21lLWludC1hcmd9\"/>\n            <L7p:VariableToSet stringValue=\"some-int-result\"/>\n        </L7p:SetVariable>\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"JHtzb21lLWRlY2ltYWwtYXJnfQ==\"/>\n            <L7p:VariableToSet stringValue=\"some-decimal-result\"/>\n        </L7p:SetVariable>\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"JHtzb21lLWZsb2F0LWFyZ30=\"/>\n            <L7p:VariableToSet stringValue=\"some-float-result\"/>\n        </L7p:SetVariable>\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"JHtzb21lLWJvb2wtYXJnfQ==\"/>\n            <L7p:VariableToSet stringValue=\"some-bool-result\"/>\n        </L7p:SetVariable>\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"JHtzb21lLWJpbmFyeS1hcmd9\"/>\n            <L7p:VariableToSet stringValue=\"some-binary-result\"/>\n        </L7p:SetVariable>\n    </wsp:All>\n</wsp:Policy>\n"
+      }
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a3d5",
+      "guid": "e9840888-5e32-4c44-94a0-20036c7a5d79",
+      "name": "some-identity-provider-policy",
+      "policyType": "FRAGMENT",
+      "checksum": "a095f91e91bae31edbd15e76796827f051ec7890",
+      "folderPath": "/graphman-tests/policyFragments",
+      "soap": false,
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:CommentAssertion>\n            <L7p:Comment stringValue=\"Policy Fragment: some-identity-provider-policy\"/>\n        </L7p:CommentAssertion>\n    </wsp:All>\n</wsp:Policy>\n"
+      }
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a279",
+      "guid": "ffe348a7-8255-4c3b-ba18-021ec626dd0d",
+      "name": "some-inner-policy-fragment",
+      "policyType": "FRAGMENT",
+      "checksum": "f1b70f54c4eb81a0a32b48976145210fc96b1714",
+      "folderPath": "/graphman-tests/policyFragments",
+      "soap": false,
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"JHtzb21lLW91dHB1dH0sICJoZWxsbyBmcm9tICR7cG9saWN5Lm5hbWV9Ig==\"/>\n            <L7p:VariableToSet stringValue=\"some-output\"/>\n        </L7p:SetVariable>\n    </wsp:All>\n</wsp:Policy>\n"
+      }
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a2ea",
+      "guid": "2120e6e1-8908-6c63-b8ab-6aeb5fbd97f2",
+      "name": "some-other-backgroundtask-policy",
+      "policyType": "POLICY_BACKED_BACKGROUND_TASK",
+      "checksum": "fb478cc821dc9a23148e3575dfbc0c94d13a85c8",
+      "folderPath": "/graphman-tests/backgroundTaskPolicies",
+      "soap": false,
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:AuditAssertion/>\n        <L7p:AuditDetailAssertion>\n            <L7p:Detail stringValue=\"Hello from schedule task-2!\"/>\n        </L7p:AuditDetailAssertion>\n    </wsp:All>\n</wsp:Policy>\n"
+      }
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a150",
+      "guid": "264423e9-0695-4dde-9eb6-4d94f51d6536",
+      "name": "some-other-encass",
+      "policyType": "FRAGMENT",
+      "checksum": "dfe3416e6317eb1fcc0a663568c91d0d9d4b254a",
+      "folderPath": "/graphman-tests/encassConfigs",
+      "soap": false,
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:CommentAssertion>\n            <L7p:Comment stringValue=\"Policy Fragment: some-other-encass\"/>\n        </L7p:CommentAssertion>\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"JHtpbnB1dDF9JHtpbnB1dDJ9\"/>\n            <L7p:VariableToSet stringValue=\"output\"/>\n        </L7p:SetVariable>\n    </wsp:All>\n</wsp:Policy>\n"
+      }
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a2fb",
+      "guid": "86ba61e9-fc93-4be9-94de-3975bb03f641",
+      "name": "some-policy",
+      "policyType": "FRAGMENT",
+      "checksum": "e81b0fdd78541fac0aa452bd6690137401a4b4dd",
+      "folderPath": "/",
+      "soap": false,
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:CommentAssertion>\n            <L7p:Comment stringValue=\"Policy Fragment: some-policy\"/>\n        </L7p:CommentAssertion>\n        <L7p:HardcodedResponse>\n            <L7p:Base64ResponseBody stringValue=\"SGVsbG8gV29ybGQ=\"/>\n        </L7p:HardcodedResponse>\n    </wsp:All>\n</wsp:Policy>\n"
+      }
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a285",
+      "guid": "57e20954-e6c7-479e-ba68-09c987fef146",
+      "name": "yaml-policy-fragment",
+      "policyType": "FRAGMENT",
+      "checksum": "fb795ece8efe8b98120c9c3456a2a0bb7663f363",
+      "folderPath": "/graphman-tests/policyFragments",
+      "soap": false,
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:CommentAssertion>\n            <L7p:Comment stringValue=\"Policy Fragment: some-policy-fragment\"/>\n        </L7p:CommentAssertion>\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"JHtzb21lLW91dHB1dH0sICJoZWxsbyBmcm9tICR7cG9saWN5Lm5hbWV9Ig==\"/>\n            <L7p:ContentType stringValue=\"text/plain; charset=utf-8\"/>\n            <L7p:DataType variableDataType=\"message\"/>\n            <L7p:VariableToSet stringValue=\"some-output\"/>\n        </L7p:SetVariable>\n        <L7p:Include>\n            <L7p:PolicyGuid stringValue=\"ffe348a7-8255-4c3b-ba18-021ec626dd0d\"/>\n            <L7p:PolicyName stringValue=\"some-inner-policy-fragment\"/>\n        </L7p:Include>\n        <L7p:Encapsulated>\n            <L7p:EncapsulatedAssertionConfigGuid stringValue=\"5047edc8-9df8-4e57-9e75-74221139c520\"/>\n            <L7p:EncapsulatedAssertionConfigName stringValue=\"some-encass\"/>\n        </L7p:Encapsulated>\n        <wsp:OneOrMore wsp:Usage=\"Required\">\n            <L7p:TrueAssertion/>\n        </wsp:OneOrMore>\n    </wsp:All>\n</wsp:Policy>\n"
+      }
+    }
+  ],
+  "clusterProperties": [
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a11b",
+      "name": "logon.maxAllowableAttempts",
+      "checksum": "daae0084a2ef9e7c68c36af9f9395bef7a9dbccb",
+      "description": "Maximum number of failed login attempts before the account is locked.   Default is set to 5 attempts max.",
+      "hiddenProperty": false,
+      "value": "17"
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a121",
+      "name": "logon.sessionExpiry",
+      "checksum": "4976b89c10254d962b4557af49aa9e221977b8c4",
+      "description": "The time interval a session can be inactive for.  Default is 30 minutes.  Value should be entered in minutes.",
+      "hiddenProperty": false,
+      "value": "25"
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b58065fb7",
+      "name": "oauth2.introspection.defaultTokenIssuer",
+      "checksum": "f2acfbdd573459810961b392eecdad12ee345e6d",
+      "description": "Default OAuth Token Issuer. Choose one among the known OAuth Token Issuers as the default.",
+      "hiddenProperty": false,
+      "value": "SSP"
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b58065fb4",
+      "name": "oauth2.introspection.knownTokenIssuers",
+      "checksum": "fd3bb5d2ba75101bedb14ee0c225a2fe193ff82a",
+      "description": "Known OAuth Token Issuers details as JSON Array.",
+      "hiddenProperty": false,
+      "value": "[\n{\n\n\"introspection_endpoint\": \"https://myssp.layer7.broadcom.com/default/oauth2/v1/introspect\",\n\n\"issuer\": \"SSP\",\n\n\"jwks_uri\": \"https://myssp.layer7.broadcom.com/default/oauth2/v1/jwks\",\n\n\"token_type\": \"JWT\",\n\n\"properties\":{\n\n\"client_id\": \"e81ad1d7-cb05-4a0c-823c-be7ed28630df\",\n\n\"client_secret\": \"fd68e599-9db4-4415-aa17-cac15001b810\"}\n}]"
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a130",
+      "name": "some-cwp",
+      "checksum": "15efa8c44f1cca94bc4514d6ef90b7b5b01e5569",
+      "description": "some cluster property",
+      "hiddenProperty": false,
+      "value": "some-value"
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a132",
+      "name": "some-other-cwp",
+      "checksum": "cdc66fb93b8c97af467f0419526559b0f5dead30",
+      "description": "",
+      "hiddenProperty": false,
+      "value": "1234"
+    }
+  ],
+  "properties": {
+    "defaultAction": "NEW_OR_UPDATE",
+    "mappings": {
+      "services": [
+        {
+          "action": "NEW_OR_EXISTING",
+          "resolutionPath": "/some-backend",
+          "serviceType": "WEB_API"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "resolutionPath": "/some-internal-soap",
+          "resolvers": {
+            "soapActions": [
+              "http://warehouse.acme.com/ws/currentOrders",
+              "http://warehouse.acme.com/ws/getProductDetails",
+              "http://warehouse.acme.com/ws/listProducts",
+              "http://warehouse.acme.com/ws/placeOrder"
+            ],
+            "baseUri": "http://warehouse.acme.com/ws",
+            "resolutionPath": "/some-internal-soap"
+          },
+          "serviceType": "INTERNAL_SOAP"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "resolutionPath": "/some-internal-webapi",
+          "serviceType": "INTERNAL_WEB_API"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "resolutionPath": "/some-soap",
+          "resolvers": {
+            "soapActions": [
+              "http://warehouse.acme.com/ws/currentOrders",
+              "http://warehouse.acme.com/ws/getProductDetails",
+              "http://warehouse.acme.com/ws/listProducts",
+              "http://warehouse.acme.com/ws/placeOrder"
+            ],
+            "baseUri": "http://warehouse.acme.com/ws",
+            "resolutionPath": "/some-soap"
+          },
+          "serviceType": "SOAP"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "resolutionPath": "/some-webapi",
+          "serviceType": "WEB_API"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "resolutionPath": "/wsman",
+          "resolvers": {
+            "soapActions": [
+              "http://schemas.xmlsoap.org/ws/2004/09/enumeration/Enumerate",
+              "http://schemas.xmlsoap.org/ws/2004/09/enumeration/GetStatus",
+              "http://schemas.xmlsoap.org/ws/2004/09/enumeration/Pull",
+              "http://schemas.xmlsoap.org/ws/2004/09/enumeration/Release",
+              "http://schemas.xmlsoap.org/ws/2004/09/enumeration/Renew",
+              "http://schemas.xmlsoap.org/ws/2004/09/transfer/Create",
+              "http://schemas.xmlsoap.org/ws/2004/09/transfer/Delete",
+              "http://schemas.xmlsoap.org/ws/2004/09/transfer/Get",
+              "http://schemas.xmlsoap.org/ws/2004/09/transfer/Put"
+            ],
+            "baseUri": "http://schemas.xmlsoap.org/ws/2004/09/enumeration",
+            "resolutionPath": "/wsman"
+          },
+          "serviceType": "INTERNAL_SOAP"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "resolutionPath": "/yamlpolicy-webapi",
+          "serviceType": "WEB_API"
+        }
+      ],
+      "policies": [
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "some-encass-policy",
+          "policyType": "FRAGMENT"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "some-identity-provider-policy",
+          "policyType": "FRAGMENT"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "some-inner-policy-fragment",
+          "policyType": "FRAGMENT"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "some-other-backgroundtask-policy",
+          "policyType": "POLICY_BACKED_BACKGROUND_TASK"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "some-other-encass",
+          "policyType": "FRAGMENT"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "some-policy",
+          "policyType": "FRAGMENT"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "yaml-policy-fragment",
+          "policyType": "FRAGMENT"
+        }
+      ],
+      "clusterProperties": [
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "logon.maxAllowableAttempts"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "logon.sessionExpiry"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "oauth2.introspection.defaultTokenIssuer"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "oauth2.introspection.knownTokenIssuers"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "some-cwp"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "some-other-cwp"
+        }
+      ]
+    }
+  }
+}

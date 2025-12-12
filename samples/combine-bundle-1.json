@@ -1,0 +1,345 @@
+{
+  "services": [
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a2ae",
+      "guid": "3a01448e-f549-46aa-ab3f-fd5fdb9373fb",
+      "name": "codepolicy-webapi",
+      "resolutionPath": "/codepolicy-webapi",
+      "serviceType": "WEB_API",
+      "checksum": "834ce75d909aa0bc1d009323628c36376b94cb9d",
+      "enabled": true,
+      "folderPath": "/graphman-tests/webApiServices",
+      "methodsAllowed": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "tracingEnabled": false,
+      "wssProcessingEnabled": false,
+      "laxResolution": false,
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:CommentAssertion>\n            <L7p:Comment stringValue=\"Policy Fragment: some-policy-fragment\"/>\n        </L7p:CommentAssertion>\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"JHtzb21lLW91dHB1dH0sICJoZWxsbyBmcm9tICR7cG9saWN5Lm5hbWV9Ig==\"/>\n            <L7p:ContentType stringValue=\"text/plain; charset=utf-8\"/>\n            <L7p:DataType variableDataType=\"message\"/>\n            <L7p:VariableToSet stringValue=\"some-output\"/>\n        </L7p:SetVariable>\n        <L7p:Include>\n            <L7p:PolicyGuid stringValue=\"ffe348a7-8255-4c3b-ba18-021ec626dd0d\"/>\n            <L7p:PolicyName stringValue=\"some-inner-policy-fragment\"/>\n        </L7p:Include>\n        <L7p:Encapsulated>\n            <L7p:EncapsulatedAssertionConfigGuid stringValue=\"5047edc8-9df8-4e57-9e75-74221139c520\"/>\n            <L7p:EncapsulatedAssertionConfigName stringValue=\"some-encass\"/>\n        </L7p:Encapsulated>\n        <wsp:OneOrMore wsp:Usage=\"Required\">\n            <L7p:TrueAssertion/>\n        </wsp:OneOrMore>\n    </wsp:All>\n</wsp:Policy>\n"
+      }
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b58065d9c",
+      "guid": "52dfe88f-62c6-4c53-b853-7099f119487b",
+      "name": "Gateway GraphQL Management Service",
+      "resolutionPath": "/graphman",
+      "serviceType": "INTERNAL_WEB_API",
+      "checksum": "7cfc52d1a2c9105326ca5f757c701ce08c841b39",
+      "enabled": true,
+      "folderPath": "/",
+      "methodsAllowed": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "tracingEnabled": false,
+      "wssProcessingEnabled": true,
+      "laxResolution": false,
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <wsp:OneOrMore wsp:Usage=\"Required\">\n            <L7p:SslAssertion>\n                <L7p:RequireClientAuthentication booleanValue=\"true\"/>\n            </L7p:SslAssertion>\n            <wsp:All wsp:Usage=\"Required\">\n                <L7p:SslAssertion/>\n                <L7p:HttpBasic/>\n            </wsp:All>\n            <L7p:assertionComment>\n                <L7p:Properties mapValue=\"included\">\n                    <L7p:entry>\n                        <L7p:key stringValue=\"RIGHT.COMMENT\"/>\n                        <L7p:value stringValue=\"~ enforce security checks\"/>\n                    </L7p:entry>\n                </L7p:Properties>\n            </L7p:assertionComment>\n        </wsp:OneOrMore>\n        <L7p:CustomizeErrorResponse>\n            <L7p:Content stringValue=\"${error_description}\"/>\n            <L7p:ExtraHeaders nameValuePairArray=\"included\"/>\n        </L7p:CustomizeErrorResponse>\n        <wsp:OneOrMore wsp:Usage=\"Required\">\n            <L7p:Authentication>\n                <L7p:IdentityProviderOid goidValue=\"0000000000000000fffffffffffffffe\"/>\n            </L7p:Authentication>\n            <wsp:All wsp:Usage=\"Required\">\n                <L7p:SetVariable>\n                    <L7p:Base64Expression stringValue=\"QXV0aGVudGljYXRpb24gZmFpbGVkLg==\"/>\n                    <L7p:VariableToSet stringValue=\"error_description\"/>\n                </L7p:SetVariable>\n                <L7p:FalseAssertion/>\n            </wsp:All>\n            <L7p:assertionComment>\n                <L7p:Properties mapValue=\"included\">\n                    <L7p:entry>\n                        <L7p:key stringValue=\"RIGHT.COMMENT\"/>\n                        <L7p:value stringValue=\"~ enforce authz\"/>\n                    </L7p:entry>\n                </L7p:Properties>\n            </L7p:assertionComment>\n        </wsp:OneOrMore>\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"RXJyb3IgZW5jb3VudGVyZWQgaW4gcHJvY2Vzc2luZyB0aGUgcmVxdWVzdC4gUGxlYXNlIGNoZWNrIHRoZSBTU0cgYXVkaXRzL2xvZ3MvYWRtaW5pc3RyYXRvciBmb3IgbW9yZSBpbmZvcm1hdGlvbiBhYm91dCB0aGUgcHJvYmxlbS4=\"/>\n            <L7p:VariableToSet stringValue=\"error_description\"/>\n        </L7p:SetVariable>\n        <L7p:CustomizeErrorResponse>\n            <L7p:Content stringValueReference=\"inline\"><![CDATA[{\n\"errors\": [\n    {\n        \"message\": \"${error_description}\"\n    }\n]\n}]]></L7p:Content>\n            <L7p:ContentType stringValue=\"application/json; charset=UTF-8\"/>\n            <L7p:ExtraHeaders nameValuePairArray=\"included\"/>\n            <L7p:HttpStatus stringValue=\"200\"/>\n        </L7p:CustomizeErrorResponse>\n        <L7p:GatewayGraphQL/>\n    </wsp:All>\n</wsp:Policy>\n"
+      }
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a29e",
+      "guid": "d51eb64f-7f88-40aa-8c78-fdddd1c15fde",
+      "name": "jsonpolicy-webapi",
+      "resolutionPath": "/jsonpolicy-webapi",
+      "serviceType": "WEB_API",
+      "checksum": "c9052f0d06167fc0838615cc2efd9b468bd60b47",
+      "enabled": true,
+      "folderPath": "/graphman-tests/webApiServices",
+      "methodsAllowed": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "tracingEnabled": false,
+      "wssProcessingEnabled": false,
+      "laxResolution": false,
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"JHtzb21lLW91dHB1dH0sICJoZWxsbyBmcm9tICR7cG9saWN5Lm5hbWV9Ig==\"/>\n            <L7p:VariableToSet stringValue=\"some-output\"/>\n        </L7p:SetVariable>\n    </wsp:All>\n</wsp:Policy>\n"
+      }
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b58065f63",
+      "guid": "6b3662d1-e47d-4ce1-91be-b0bffcbca9af",
+      "name": "protect api",
+      "resolutionPath": "/protected_api",
+      "serviceType": "WEB_API",
+      "checksum": "3beacef9c7d360a92bd053d8d08c1d87dfcac750",
+      "enabled": true,
+      "folderPath": "/",
+      "methodsAllowed": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "tracingEnabled": false,
+      "wssProcessingEnabled": false,
+      "laxResolution": false,
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:OAuth2Introspection/>\n        <L7p:HardcodedResponse>\n            <L7p:Base64ResponseBody stringValue=\"ewogICJjbGllbnRfaWQiOiAiJHtvYXV0aDJpLmNsaWVudF9pZH0iLAogICJ1c2VybmFtZSI6ICIke29hdXRoMmkudXNlcm5hbWV9IiwKICAic2NvcGUiOiAiJHtvYXV0aDJpLnNjb3BlfSIsCiAgImF1ZCI6ICIke29hdXRoMmkuYXVkfSIsCiAgImV4cCI6ICR7b2F1dGgyaS5leHB9Cn0=\"/>\n        </L7p:HardcodedResponse>\n    </wsp:All>\n</wsp:Policy>\n"
+      }
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b58065d06",
+      "guid": "3cad8af9-83f0-4c6f-8734-4ea3ee791b52",
+      "name": "Gateway REST Management Service",
+      "resolutionPath": "/restman/*",
+      "serviceType": "INTERNAL_WEB_API",
+      "checksum": "52b5717fb1ea5135cf4d7467e1a10f076c16c4d3",
+      "enabled": true,
+      "folderPath": "/",
+      "methodsAllowed": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "tracingEnabled": false,
+      "wssProcessingEnabled": true,
+      "laxResolution": false,
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <wsp:OneOrMore wsp:Usage=\"Required\">\n            <L7p:SslAssertion>\n                <L7p:RequireClientAuthentication booleanValue=\"true\"/>\n            </L7p:SslAssertion>\n            <wsp:All wsp:Usage=\"Required\">\n                <L7p:SslAssertion/>\n                <L7p:HttpBasic/>\n            </wsp:All>\n        </wsp:OneOrMore>\n        <L7p:Authentication>\n            <L7p:IdentityProviderOid goidValue=\"0000000000000000fffffffffffffffe\"/>\n        </L7p:Authentication>\n        <wsp:OneOrMore wsp:Usage=\"Required\">\n            <L7p:CommentAssertion>\n                <L7p:Comment stringValue=\"Check the request message size. If the maximum message size needs to be increased change the 'restman.request.message.maxSize' cluster property\"/>\n            </L7p:CommentAssertion>\n            <L7p:RequestSizeLimit>\n                <L7p:Limit stringValue=\"${gateway.restman.request.message.maxSize}\"/>\n            </L7p:RequestSizeLimit>\n            <wsp:All wsp:Usage=\"Required\">\n                <L7p:CustomizeErrorResponse>\n                    <L7p:Content stringValueReference=\"inline\"><![CDATA[<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<l7:Error xmlns:l7=\"http://ns.l7tech.com/2010/04/gateway-management\">\n    <l7:Type>InvalidRequest</l7:Type>\n    <l7:Detail>the specified maximum data size limit would be exceeded</l7:Detail>\n</l7:Error>]]></L7p:Content>\n                    <L7p:ContentType stringValue=\"application/xml; charset=UTF-8\"/>\n                    <L7p:HttpStatus stringValue=\"400\"/>\n                </L7p:CustomizeErrorResponse>\n                <L7p:FalseAssertion/>\n            </wsp:All>\n        </wsp:OneOrMore>\n        <L7p:RESTGatewayManagement/>\n    </wsp:All>\n</wsp:Policy>\n"
+      }
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a0fe",
+      "guid": "e03d6ce1-14a8-4504-82cc-a6c68d2587af",
+      "name": "some-backend",
+      "resolutionPath": "/some-backend",
+      "serviceType": "WEB_API",
+      "checksum": "e0fa76d881f0b1c0b701f0650a859997655c2486",
+      "enabled": true,
+      "folderPath": "/",
+      "methodsAllowed": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "tracingEnabled": false,
+      "wssProcessingEnabled": false,
+      "laxResolution": false,
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\"><wsp:All wsp:Usage=\"Required\"><L7p:HardcodedResponse>\t<L7p:Base64ResponseBody stringValue=\"WyJoZWxsbyBmcm9tICR7c2VydmljZS5uYW1lfSJd\"/>\t<L7p:ResponseContentType stringValue=\"application/json; charset=UTF-8\"/></L7p:HardcodedResponse></wsp:All></wsp:Policy>"
+      }
+    }
+  ],
+  "policies": [
+    {
+      "goid": "0dac9701843313cdf7d616eade708cf3",
+      "guid": "10828f75-aebd-4cee-98c4-1d7e34e68526",
+      "name": "AWS",
+      "policyType": "FRAGMENT",
+      "checksum": "7a6b7d0440a69dcbd08be8b1b203e3de1d71f937",
+      "folderPath": "/Quick Start Templates/Encapsulated Assertion Fragments",
+      "soap": false,
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:SetVariable>\n            <L7p:AssertionComment assertionComment=\"included\">\n                <L7p:Properties mapValue=\"included\">\n                    <L7p:entry>\n                        <L7p:key stringValue=\"RIGHT.COMMENT\"/>\n                        <L7p:value stringValue=\"------------------------------------- Policy template input\"/>\n                    </L7p:entry>\n                </L7p:Properties>\n            </L7p:AssertionComment>\n            <L7p:Base64Expression stringValue=\"JHtjb25maWd9\"/>\n            <L7p:ContentType stringValue=\"application/json; charset=utf-8\"/>\n            <L7p:DataType variableDataType=\"message\"/>\n            <L7p:VariableToSet stringValue=\"awsConfig\"/>\n        </L7p:SetVariable>\n        <wsp:OneOrMore wsp:Usage=\"Required\">\n            <wsp:All wsp:Usage=\"Required\">\n                <L7p:EvaluateJsonPathExpression>\n                    <L7p:Expression stringValue=\"$.service.name\"/>\n                    <L7p:OtherTargetMessageVariable stringValue=\"awsConfig\"/>\n                    <L7p:Target target=\"OTHER\"/>\n                    <L7p:VariablePrefix stringValue=\"awsServiceName\"/>\n                </L7p:EvaluateJsonPathExpression>\n                <L7p:EvaluateJsonPathExpression>\n                    <L7p:Expression stringValue=\"$.service.method\"/>\n                    <L7p:OtherTargetMessageVariable stringValue=\"awsConfig\"/>\n                    <L7p:Target target=\"OTHER\"/>\n                    <L7p:VariablePrefix stringValue=\"awsMethodName\"/>\n                </L7p:EvaluateJsonPathExpression>\n                <L7p:EvaluateJsonPathExpression>\n                    <L7p:Expression stringValue=\"$.account.key\"/>\n                    <L7p:OtherTargetMessageVariable stringValue=\"awsConfig\"/>\n                    <L7p:Target target=\"OTHER\"/>\n                    <L7p:VariablePrefix stringValue=\"awsKey\"/>\n                </L7p:EvaluateJsonPathExpression>\n                <L7p:EvaluateJsonPathExpression>\n                    <L7p:Expression stringValue=\"$.account.secret\"/>\n                    <L7p:OtherTargetMessageVariable stringValue=\"awsConfig\"/>\n                    <L7p:Target target=\"OTHER\"/>\n                    <L7p:VariablePrefix stringValue=\"awsSecretKey\"/>\n                </L7p:EvaluateJsonPathExpression>\n                <L7p:EvaluateJsonPathExpression>\n                    <L7p:Expression stringValue=\"$.account.region\"/>\n                    <L7p:OtherTargetMessageVariable stringValue=\"awsConfig\"/>\n                    <L7p:Target target=\"OTHER\"/>\n                    <L7p:VariablePrefix stringValue=\"awsRegion\"/>\n                </L7p:EvaluateJsonPathExpression>\n            </wsp:All>\n            <wsp:All wsp:Usage=\"Required\">\n                <L7p:AuditDetailAssertion>\n                    <L7p:Detail stringValue=\"Missing one or more required variable(s)\"/>\n                </L7p:AuditDetailAssertion>\n                <L7p:SetVariable>\n                    <L7p:AssertionComment assertionComment=\"included\">\n                        <L7p:Properties mapValue=\"included\">\n                            <L7p:entry>\n                                <L7p:key stringValue=\"RIGHT.COMMENT\"/>\n                                <L7p:value stringValue=\"// initialize\"/>\n                            </L7p:entry>\n                        </L7p:Properties>\n                    </L7p:AssertionComment>\n                    <L7p:Base64Expression stringValue=\"ew0KICAibWVzc2FnZSI6ICJNaXNzaW5nIG9uZSBvciBtb3JlIHJlcXVpcmVkIHZhcmlhYmxlcyIsDQogICJleHBlY3RfZm9ybWF0Ijogew0KICAgICJzZXJ2aWNlIjogew0KICAgICAgIm5hbWUiOiAiUkVRVUlSRUQgc2VydmljZSBuYW1lIiwNCiAgICAgICJtZXRob2QiOiAiUkVRVUlSRUQgbWV0aG9kIiwNCiAgICAgICJwYXJhbWV0ZXJzIjogIk9QVElPTkFMIGRlcGVuZGluZyBvbiB0aGUgY2hvc2VuIHNlcnZpY2UgYW5kIG1ldGhvZCBhYm92ZS4gT3RoZXJ3aXNlLCBwcm92aWRlIGpzb24gZm9ybWF0dGVkIHBhcmFtZXRlcnMiDQogICAgfSwNCiAgICAiYWNjb3VudCI6IHsNCiAgICAgICJrZXkiOiAiUkVRVUlSRUQuIEFXUyBhY2Nlc3Mga2V5IiwNCiAgICAgICJzZWNyZXQiOiAiUkVRVUlSRUQuIEFXUyBzZWNyZXQga2V5IiwNCiAgICAgICJyZWdpb24iOiAiUkVRVUlSRUQuIEFXUyByZWdpb24iDQogICAgfQ0KICB9DQp9\"/>\n                    <L7p:VariableToSet stringValue=\"result\"/>\n                </L7p:SetVariable>\n                <L7p:FalseAssertion/>\n                <L7p:assertionComment>\n                    <L7p:Properties mapValue=\"included\">\n                        <L7p:entry>\n                            <L7p:key stringValue=\"RIGHT.COMMENT\"/>\n                            <L7p:value stringValue=\"// error\"/>\n                        </L7p:entry>\n                    </L7p:Properties>\n                </L7p:assertionComment>\n            </wsp:All>\n            <L7p:assertionComment>\n                <L7p:Properties mapValue=\"included\">\n                    <L7p:entry>\n                        <L7p:key stringValue=\"RIGHT.COMMENT\"/>\n                        <L7p:value stringValue=\"------------------------------------- Parse service and account configuration\"/>\n                    </L7p:entry>\n                </L7p:Properties>\n            </L7p:assertionComment>\n        </wsp:OneOrMore>\n        <wsp:OneOrMore wsp:Usage=\"Required\">\n            <wsp:All wsp:Usage=\"Required\">\n                <L7p:SetVariable>\n                    <L7p:Base64Expression stringValue=\"JHtyZXF1ZXN0Lm1haW5wYXJ0fQ==\"/>\n                    <L7p:ContentType stringValue=\"application/json; charset=utf-8\"/>\n                    <L7p:DataType variableDataType=\"message\"/>\n                    <L7p:VariableToSet stringValue=\"requestBody\"/>\n                </L7p:SetVariable>\n                <L7p:EvaluateJsonPathExpression>\n                    <L7p:Expression stringValue=\"$.\"/>\n                    <L7p:OtherTargetMessageVariable stringValue=\"requestBody\"/>\n                    <L7p:Target target=\"OTHER\"/>\n                    <L7p:VariablePrefix stringValue=\"parametersMsg\"/>\n                </L7p:EvaluateJsonPathExpression>\n                <L7p:SetVariable>\n                    <L7p:Base64Expression stringValue=\"MQ==\"/>\n                    <L7p:DataType variableDataType=\"int\"/>\n                    <L7p:VariableToSet stringValue=\"containParameters\"/>\n                </L7p:SetVariable>\n            </wsp:All>\n            <wsp:All wsp:Usage=\"Required\">\n                <L7p:SetVariable>\n                    <L7p:Base64Expression stringValue=\"MA==\"/>\n                    <L7p:DataType variableDataType=\"int\"/>\n                    <L7p:VariableToSet stringValue=\"containParameters\"/>\n                </L7p:SetVariable>\n                <L7p:TrueAssertion/>\n            </wsp:All>\n            <L7p:assertionComment>\n                <L7p:Properties mapValue=\"included\">\n                    <L7p:entry>\n                        <L7p:key stringValue=\"RIGHT.COMMENT\"/>\n                        <L7p:value stringValue=\"------------------------------------- Get request body, if any\"/>\n                    </L7p:entry>\n                </L7p:Properties>\n            </L7p:assertionComment>\n        </wsp:OneOrMore>\n        <wsp:OneOrMore wsp:Usage=\"Required\">\n            <wsp:All wsp:Usage=\"Required\">\n                <wsp:All wsp:Usage=\"Required\">\n                    <L7p:SetVariable>\n                        <L7p:Base64Expression stringValue=\"JHthd3NLZXkucmVzdWx0fQ==\"/>\n                        <L7p:VariableToSet stringValue=\"awsKey\"/>\n                    </L7p:SetVariable>\n                </wsp:All>\n                <wsp:All wsp:Usage=\"Required\">\n                    <L7p:SetVariable>\n                        <L7p:Base64Expression stringValue=\"JHthd3NTZWNyZXRLZXkucmVzdWx0fQ==\"/>\n                        <L7p:VariableToSet stringValue=\"awsSecretKey\"/>\n                    </L7p:SetVariable>\n                </wsp:All>\n                <wsp:All wsp:Usage=\"Required\">\n                    <L7p:SetVariable>\n                        <L7p:Base64Expression stringValue=\"JHthd3NSZWdpb24ucmVzdWx0fQ==\"/>\n                        <L7p:VariableToSet stringValue=\"awsRegion\"/>\n                    </L7p:SetVariable>\n                </wsp:All>\n                <wsp:All wsp:Usage=\"Required\">\n                    <L7p:SetVariable>\n                        <L7p:Base64Expression stringValue=\"JHthd3NTZXJ2aWNlTmFtZS5yZXN1bHR9\"/>\n                        <L7p:VariableToSet stringValue=\"awsServiceName\"/>\n                    </L7p:SetVariable>\n                </wsp:All>\n                <wsp:All wsp:Usage=\"Required\">\n                    <L7p:SetVariable>\n                        <L7p:Base64Expression stringValue=\"JHthd3NNZXRob2ROYW1lLnJlc3VsdH0=\"/>\n                        <L7p:VariableToSet stringValue=\"awsMethodName\"/>\n                    </L7p:SetVariable>\n                </wsp:All>\n            </wsp:All>\n            <wsp:All wsp:Usage=\"Required\">\n                <L7p:AuditDetailAssertion>\n                    <L7p:Detail stringValue=\"Invalid values for required variables\"/>\n                </L7p:AuditDetailAssertion>\n                <L7p:SetVariable>\n                    <L7p:AssertionComment assertionComment=\"included\">\n                        <L7p:Properties mapValue=\"included\">\n                            <L7p:entry>\n                                <L7p:key stringValue=\"RIGHT.COMMENT\"/>\n                                <L7p:value stringValue=\"// initialize\"/>\n                            </L7p:entry>\n                        </L7p:Properties>\n                    </L7p:AssertionComment>\n                    <L7p:Base64Expression stringValue=\"ew0KICAibWVzc2FnZSI6ICJJbnZhbGlkIHZhbHVlKHMpIGZvciByZXF1aXJlZCB2YXJpYWJsZShzKSIsDQogICJleHBlY3RfZm9ybWF0Ijogew0KICAgICJzZXJ2aWNlIjogew0KICAgICAgIm5hbWUiOiAiUkVRVUlSRUQ6IG5vdCBlbXB0eSBhbmQgbm8gc3BhY2UiLA0KICAgICAgIm1ldGhvZCI6ICJSRVFVSVJFRDogbm90IGVtcHR5IGFuZCBubyBzcGFjZSIsDQogICAgICAicGFyYW1ldGVycyI6ICJPUFRJT05BTCBkZXBlbmRpbmcgb24gdGhlIGNob3NlbiBzZXJ2aWNlIGFuZCBtZXRob2QgYWJvdmUuIE90aGVyd2lzZSwgcHJvdmlkZSBqc29uIGZvcm1hdHRlZCBwYXJhbWV0ZXJzIg0KICAgIH0sDQogICAgImFjY291bnQiOiB7DQogICAgICAia2V5IjogIlJFUVVJUkVEOiBub3QgZW1wdHkgYW5kIG5vIHNwYWNlIiwNCiAgICAgICJzZWNyZXQiOiAiUkVRVUlSRUQ6IG5vdCBlbXB0eSBhbmQgbm8gc3BhY2UiLA0KICAgICAgInJlZ2lvbiI6ICJSRVFVSVJFRDogbm90IGVtcHR5IGFuZCBubyBzcGFjZSINCiAgICB9DQogIH0NCn0=\"/>\n                    <L7p:VariableToSet stringValue=\"result\"/>\n                </L7p:SetVariable>\n                <L7p:FalseAssertion/>\n                <L7p:assertionComment>\n                    <L7p:Properties mapValue=\"included\">\n                        <L7p:entry>\n                            <L7p:key stringValue=\"RIGHT.COMMENT\"/>\n                            <L7p:value stringValue=\"// error\"/>\n                        </L7p:entry>\n                    </L7p:Properties>\n                </L7p:assertionComment>\n            </wsp:All>\n            <L7p:assertionComment>\n                <L7p:Properties mapValue=\"included\">\n                    <L7p:entry>\n                        <L7p:key stringValue=\"RIGHT.COMMENT\"/>\n                        <L7p:value stringValue=\"------------------------------------- Get all the provided variables\"/>\n                    </L7p:entry>\n                </L7p:Properties>\n            </L7p:assertionComment>\n        </wsp:OneOrMore>\n        <wsp:OneOrMore wsp:Usage=\"Required\">\n            <wsp:All wsp:Usage=\"Required\">\n                <L7p:ComparisonAssertion>\n                    <L7p:CaseSensitive booleanValue=\"false\"/>\n                    <L7p:Expression1 stringValue=\"${containParameters}\"/>\n                    <L7p:Operator operatorNull=\"null\"/>\n                    <L7p:Predicates predicates=\"included\">\n                        <L7p:item dataType=\"included\">\n                            <L7p:Type variableDataType=\"int\"/>\n                        </L7p:item>\n                        <L7p:item binary=\"included\">\n                            <L7p:RightValue stringValue=\"1\"/>\n                        </L7p:item>\n                    </L7p:Predicates>\n                </L7p:ComparisonAssertion>\n                <L7p:SetVariable>\n                    <L7p:Base64Expression stringValue=\"JHtwYXJhbWV0ZXJzTXNnLnJlc3VsdH0=\"/>\n                    <L7p:VariableToSet stringValue=\"parameters\"/>\n                </L7p:SetVariable>\n                <L7p:assertionComment>\n                    <L7p:Properties mapValue=\"included\">\n                        <L7p:entry>\n                            <L7p:key stringValue=\"RIGHT.COMMENT\"/>\n                            <L7p:value stringValue=\"------------------------------------- Assign parameters\"/>\n                        </L7p:entry>\n                    </L7p:Properties>\n                </L7p:assertionComment>\n            </wsp:All>\n            <L7p:TrueAssertion/>\n        </wsp:OneOrMore>\n        <L7p:CustomAssertion>\n            <L7p:base64SerializedValue>rO0ABXNyADFjb20ubDd0ZWNoLnBvbGljeS5hc3NlcnRpb24uQ3VzdG9tQXNzZXJ0aW9uSG9sZGVyZtcreFwddTICAAlaAAxpc1VpQXV0b09wZW5MAApjYXRlZ29yaWVzdAAPTGphdmEvdXRpbC9TZXQ7TAAIY2F0ZWdvcnl0ACpMY29tL2w3dGVjaC9wb2xpY3kvYXNzZXJ0aW9uL2V4dC9DYXRlZ29yeTtMAA9jdXN0b21Bc3NlcnRpb250ADFMY29tL2w3dGVjaC9wb2xpY3kvYXNzZXJ0aW9uL2V4dC9DdXN0b21Bc3NlcnRpb247TAAUY3VzdG9tTW9kdWxlRmlsZU5hbWV0ABJMamF2YS9sYW5nL1N0cmluZztMAA9kZXNjcmlwdGlvblRleHRxAH4ABEwAD3BhbGV0dGVOb2RlTmFtZXEAfgAETAAOcG9saWN5Tm9kZU5hbWVxAH4ABEwAHnJlZ2lzdGVyZWRDdXN0b21GZWF0dXJlU2V0TmFtZXEAfgAEeHIAJWNvbS5sN3RlY2gucG9saWN5LmFzc2VydGlvbi5Bc3NlcnRpb27bX2OZPL2isQIAAloAB2VuYWJsZWRMABBhc3NlcnRpb25Db21tZW50dAAvTGNvbS9sN3RlY2gvcG9saWN5L2Fzc2VydGlvbi9Bc3NlcnRpb24kQ29tbWVudDt4cAFwAXNyABFqYXZhLnV0aWwuSGFzaFNldLpEhZWWuLc0AwAAeHB3DAAAAAI/QAAAAAAAAXNyAChjb20ubDd0ZWNoLnBvbGljeS5hc3NlcnRpb24uZXh0LkNhdGVnb3J5WrCcZaFE/jUCAAJJAAVteUtleUwABm15TmFtZXEAfgAEeHAAAAALdAAQQ3VzdG9tQXNzZXJ0aW9uc3hwc3IAF2NvbS5sN3RlY2guQVdTQXNzZXJ0aW9uzOcqR1y95oUCAAdMABdhd3NBY2NvdW50Q29uZmlndXJhdGlvbnQAKExjb20vbDd0ZWNoL2F3cy9BV1NBY2NvdW50Q29uZmlndXJhdGlvbjtMAB1hd3NSZXF1ZXN0VGltZW91dE1pbGxpU2Vjb25kc3QAE0xqYXZhL2xhbmcvSW50ZWdlcjtMABdhd3NTZXJ2aWNlQ29uZmlndXJhdGlvbnQAKExjb20vbDd0ZWNoL2F3cy9BV1NTZXJ2aWNlQ29uZmlndXJhdGlvbjtMABxhd3NTb2NrZXRUaW1lb3V0TWlsbGlTZWNvbmRzcQB+AA9MABFkZXN0aW5hdGlvblRhcmdldHQAS0xjb20vbDd0ZWNoL3BvbGljeS9hc3NlcnRpb24vZXh0L3RhcmdldGFibGUvQ3VzdG9tTWVzc2FnZVRhcmdldGFibGVTdXBwb3J0O0wAFmVudGl0eVJlZmVyZW5jZVN1cHBvcnR0AEdMY29tL2w3dGVjaC9wb2xpY3kvYXNzZXJ0aW9uL2V4dC9lbnRpdHkvQ3VzdG9tUmVmZXJlbmNlRW50aXRpZXNTdXBwb3J0O0wACWlucHV0VGV4dHEAfgAEeHBzcgAmY29tLmw3dGVjaC5hd3MuQVdTQWNjb3VudENvbmZpZ3VyYXRpb27M5ypHXL3mXQIACEwABmF3c0tleXEAfgAETAALYXdzS2V5VmFsdWVxAH4ABEwACmF3c1Byb2ZpbGVxAH4ABEwACWF3c1JlZ2lvbnEAfgAETAAOYXdzUmVnaW9uVmFsdWVxAH4ABEwACWF3c1NlY3JldHEAfgAETAAOYXdzU2VjcmV0VmFsdWVxAH4ABEwAD2VudGl0aWVzU3VwcG9ydHEAfgASeHB0AAkke2F3c0tleX1wcHQADCR7YXdzUmVnaW9ufXB0AA8ke2F3c1NlY3JldEtleX1wc3IARWNvbS5sN3RlY2gucG9saWN5LmFzc2VydGlvbi5leHQuZW50aXR5LkN1c3RvbVJlZmVyZW5jZUVudGl0aWVzU3VwcG9ydNiUed5yRZjJAgABTAAKcmVmZXJlbmNlc3QAD0xqYXZhL3V0aWwvTWFwO3hwc3IAEWphdmEudXRpbC5UcmVlTWFwDMH2Pi0lauYDAAFMAApjb21wYXJhdG9ydAAWTGphdmEvdXRpbC9Db21wYXJhdG9yO3hwcHcEAAAAAHhwc3IAJmNvbS5sN3RlY2guYXdzLkFXU1NlcnZpY2VDb25maWd1cmF0aW9uzOcqR1y+0OUCAAtMAAphd3NTZXJ2aWNlcQB+AARMAA9hd3NTZXJ2aWNlVmFsdWVxAH4ABEwAD2VudGl0aWVzU3VwcG9ydHEAfgASTAAPZnVuY3Rpb25QYXlsb2FkcQB+AARMABRmdW5jdGlvblBheWxvYWRWYWx1ZXEAfgAETAAQZnVuY3Rpb25SZXNwb25zZXEAfgAETAAVZnVuY3Rpb25SZXNwb25zZVZhbHVlcQB+AARMAA9zZXJ2aWNlRnVuY3Rpb25xAH4ABEwAFHNlcnZpY2VGdW5jdGlvblZhbHVlcQB+AARMAA5zZXJ2aWNlSGFuZGxlcnEAfgAETAATc2VydmljZUhhbmRsZXJWYWx1ZXEAfgAEeHB0ABEke2F3c1NlcnZpY2VOYW1lfXBzcQB+ABlzcQB+ABxwdwQAAAAAeHQADSR7cGFyYW1ldGVyc31wdAAGcmVzdWx0cHQAECR7YXdzTWV0aG9kTmFtZX1wcHBwc3IASWNvbS5sN3RlY2gucG9saWN5LmFzc2VydGlvbi5leHQudGFyZ2V0YWJsZS5DdXN0b21NZXNzYWdlVGFyZ2V0YWJsZVN1cHBvcnScd/FzZA3lagIAA1oAE3NvdXJjZVVzZWRCeUdhdGV3YXlaABd0YXJnZXRNb2RpZmllZEJ5R2F0ZXdheUwAFXRhcmdldE1lc3NhZ2VWYXJpYWJsZXEAfgAEeHABAHQACHJlc3BvbnNlc3EAfgAZc3EAfgAccHcEAAAAAHh0AAB0ADQwZGFjOTcwMTg0MzMxM2NkZjdkNjE2ZWFkZTcwOGNlYWE5ODZjZmZkOWEyNjU1YWQuamFycHQAA0FXU3QAEUFXUyAocG9saWN5IG5hbWUpcA==</L7p:base64SerializedValue>\n        </L7p:CustomAssertion>\n        <L7p:HardcodedResponse>\n            <L7p:AssertionComment assertionComment=\"included\">\n                <L7p:Properties mapValue=\"included\">\n                    <L7p:entry>\n                        <L7p:key stringValue=\"RIGHT.COMMENT\"/>\n                        <L7p:value stringValue=\"------------------------------------- Tell me about it ....\"/>\n                    </L7p:entry>\n                </L7p:Properties>\n            </L7p:AssertionComment>\n            <L7p:Base64ResponseBody stringValue=\"JHtyZXN1bHR9\"/>\n            <L7p:ResponseContentType stringValue=\"application/json; charset=UTF-8\"/>\n            <L7p:ResponseStatus stringValue=\"${aws.responseCode}\"/>\n        </L7p:HardcodedResponse>\n    </wsp:All>\n</wsp:Policy>\n"
+      }
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a281",
+      "guid": "57e20954-e6c7-479e-ba68-09c987fef748",
+      "name": "code-policy-fragment",
+      "policyType": "FRAGMENT",
+      "checksum": "427255e633dfba1a20fe207b5034c4f2c4efad39",
+      "folderPath": "/graphman-tests/policyFragments",
+      "soap": false,
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:CommentAssertion>\n            <L7p:Comment stringValue=\"Policy Fragment: some-policy-fragment\"/>\n        </L7p:CommentAssertion>\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"JHtzb21lLW91dHB1dH0sICJoZWxsbyBmcm9tICR7cG9saWN5Lm5hbWV9Ig==\"/>\n            <L7p:ContentType stringValue=\"text/plain; charset=utf-8\"/>\n            <L7p:DataType variableDataType=\"message\"/>\n            <L7p:VariableToSet stringValue=\"some-output\"/>\n        </L7p:SetVariable>\n        <L7p:Include>\n            <L7p:PolicyGuid stringValue=\"ffe348a7-8255-4c3b-ba18-021ec626dd0d\"/>\n            <L7p:PolicyName stringValue=\"some-inner-policy-fragment\"/>\n        </L7p:Include>\n        <L7p:Encapsulated>\n            <L7p:EncapsulatedAssertionConfigGuid stringValue=\"5047edc8-9df8-4e57-9e75-74221139c520\"/>\n            <L7p:EncapsulatedAssertionConfigName stringValue=\"some-encass\"/>\n        </L7p:Encapsulated>\n        <wsp:OneOrMore wsp:Usage=\"Required\">\n            <L7p:TrueAssertion/>\n        </wsp:OneOrMore>\n    </wsp:All>\n</wsp:Policy>\n"
+      }
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a27d",
+      "guid": "57e20954-e6c7-479e-ba68-09c987fef745",
+      "name": "json-policy-fragment",
+      "policyType": "FRAGMENT",
+      "checksum": "28d64af76e2fba39b0b56b4173a6e7ab24856e30",
+      "folderPath": "/graphman-tests/policyFragments",
+      "soap": false,
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"JHtzb21lLW91dHB1dH0sICJoZWxsbyBmcm9tICR7cG9saWN5Lm5hbWV9Ig==\"/>\n            <L7p:VariableToSet stringValue=\"some-output\"/>\n        </L7p:SetVariable>\n    </wsp:All>\n</wsp:Policy>\n"
+      }
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a190",
+      "guid": "3a2ec320-fbb6-43ad-bef3-4cc303cb35b5",
+      "name": "msg-completed",
+      "policyType": "GLOBAL",
+      "tag": "message-completed",
+      "checksum": "f371b8d5852421d01de76bfdb60fbe51669ec3d6",
+      "folderPath": "/graphman-tests/globalPolicies",
+      "soap": false,
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:CommentAssertion>\n            <L7p:Comment stringValue=\"Policy Fragment: msg-completed\"/>\n        </L7p:CommentAssertion>\n        <L7p:AuditDetailAssertion>\n            <L7p:Detail stringValue=\"hello from ${policy.name}\"/>\n            <L7p:LoggingOnly booleanValue=\"true\"/>\n        </L7p:AuditDetailAssertion>\n        <L7p:Include>\n            <L7p:PolicyGuid stringValue=\"c662b16f-5b23-49d1-b34c-5924697cf038\"/>\n            <L7p:PolicyName stringValue=\"some-global-fragment\"/>\n        </L7p:Include>\n        <L7p:AuditDetailAssertion>\n            <L7p:Detail stringValue=\"processing ${request.url} is completed\"/>\n            <L7p:Level stringValue=\"WARNING\"/>\n        </L7p:AuditDetailAssertion>\n    </wsp:All>\n</wsp:Policy>\n"
+      }
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a194",
+      "guid": "b8740af1-4e6f-4238-b091-d5392f41b789",
+      "name": "msg-received",
+      "policyType": "GLOBAL",
+      "tag": "message-received",
+      "checksum": "2bf7a3fbc237aa88829a9d571f38f04b965cc7c4",
+      "folderPath": "/graphman-tests/globalPolicies",
+      "soap": false,
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:CommentAssertion>\n            <L7p:Comment stringValue=\"Policy Fragment: msg-received\"/>\n        </L7p:CommentAssertion>\n        <L7p:AuditDetailAssertion>\n            <L7p:Detail stringValue=\"processing ${request.url}\"/>\n            <L7p:Level stringValue=\"WARNING\"/>\n        </L7p:AuditDetailAssertion>\n        <L7p:AuditDetailAssertion>\n            <L7p:Detail stringValue=\"hello from ${policy.name}\"/>\n            <L7p:LoggingOnly booleanValue=\"true\"/>\n        </L7p:AuditDetailAssertion>\n        <L7p:Include>\n            <L7p:PolicyGuid stringValue=\"c662b16f-5b23-49d1-b34c-5924697cf038\"/>\n            <L7p:PolicyName stringValue=\"some-global-fragment\"/>\n        </L7p:Include>\n    </wsp:All>\n</wsp:Policy>\n"
+      }
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a2e6",
+      "guid": "2120e6e1-8908-5c63-b8ab-6aeb5fbd97f2",
+      "name": "some-backgroundtask-policy",
+      "policyType": "POLICY_BACKED_BACKGROUND_TASK",
+      "checksum": "fba9ab9469d92049c7b8e8af845bc170cf5696c8",
+      "folderPath": "/graphman-tests/backgroundTaskPolicies",
+      "soap": false,
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:AuditAssertion/>\n        <L7p:AuditDetailAssertion>\n            <L7p:Detail stringValue=\"Hello from schedule task-1!\"/>\n        </L7p:AuditDetailAssertion>\n    </wsp:All>\n</wsp:Policy>\n"
+      }
+    }
+  ],
+  "clusterProperties": [
+    {
+      "goid": "0000000000000000fffffffffff5519f",
+      "name": "cluster.hostname",
+      "checksum": "472cf41daa0697d7c20844eb56fd6645eb36c369",
+      "description": "External hostname for the cluster",
+      "hiddenProperty": false,
+      "value": "su671781gw111-ssp-0.dhcp.broadcom.net"
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a292",
+      "name": "greetings",
+      "checksum": "52c966172677c386a1ab81a84e3cb0486c7db1f4",
+      "description": "",
+      "hiddenProperty": false,
+      "value": "Hello, World!"
+    },
+    {
+      "goid": "e701a39809e984bf53ab6d2301cc2a20",
+      "name": "keyStore.defaultSsl.alias",
+      "checksum": "ea7e440267e9c93b25578950c783ddca2f0fd50b",
+      "description": "Keystore ID and alias of default SSL key, colon delimited.  A keystore ID of -1 means \"unspecified\".",
+      "hiddenProperty": true,
+      "value": "00000000000000000000000000000002:SSL"
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a11f",
+      "name": "logon.inactivityPeriod",
+      "checksum": "cc8a513abab2a60ffbe47fc06744e34e6ac57b23",
+      "description": "The time interval an administrative user account could be inactive for.  Default is 35 days  Value should be entered in days.",
+      "hiddenProperty": false,
+      "value": "20"
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a11d",
+      "name": "logon.lockoutTime",
+      "checksum": "2bb890fac68cb355cc674a1d75580e0f18088c4b",
+      "description": "The time interval that the locked account will have to wait before next possible login retry after lock out.  The default time is set to 1200 seconds (20 min).  Value should be entered in seconds.",
+      "hiddenProperty": false,
+      "value": "1300"
+    }
+  ],
+  "properties": {
+    "defaultAction": "NEW_OR_EXISTING",
+    "mappings": {
+      "services": [
+        {
+          "action": "NEW_OR_EXISTING",
+          "resolutionPath": "/codepolicy-webapi",
+          "serviceType": "WEB_API"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "resolutionPath": "/graphman",
+          "serviceType": "INTERNAL_WEB_API"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "resolutionPath": "/jsonpolicy-webapi",
+          "serviceType": "WEB_API"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "resolutionPath": "/protected_api",
+          "serviceType": "WEB_API"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "resolutionPath": "/restman/*",
+          "serviceType": "INTERNAL_WEB_API"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "resolutionPath": "/some-backend",
+          "serviceType": "WEB_API"
+        }
+      ],
+      "policies": [
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "AWS",
+          "policyType": "FRAGMENT"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "code-policy-fragment",
+          "policyType": "FRAGMENT"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "json-policy-fragment",
+          "policyType": "FRAGMENT"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "msg-completed",
+          "policyType": "GLOBAL"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "msg-received",
+          "policyType": "GLOBAL"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "some-backgroundtask-policy",
+          "policyType": "POLICY_BACKED_BACKGROUND_TASK"
+        }
+      ],
+      "clusterProperties": [
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "cluster.hostname"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "greetings"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "keyStore.defaultSsl.alias"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "logon.inactivityPeriod"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "logon.lockoutTime"
+        }
+      ]
+    }
+  }
+}
