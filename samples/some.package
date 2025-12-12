@@ -1,1 +1,7 @@
-
+{
+  "activeConnectors": ["custom-kafka-producer.json", "some-kafka-producer.json"],
+  "clusterProperties": [
+    {"name": "greetings"},
+    {"goid": "2bf23f7e0c0bfc3d53358e1b5806a130"}
+  ]
+}
