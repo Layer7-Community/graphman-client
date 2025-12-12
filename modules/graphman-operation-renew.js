@@ -33,8 +33,9 @@ module.exports = {
         }
 
         const bundle = utils.readFile(params.input);
+        const processedBundle = utils.extension("pre-renew").apply(bundle, {options: params.options});
 
-        Promise.all(this.renew(gateway, bundle, params.sections, params.options)).then(results => {
+        Promise.all(this.renew(gateway, processedBundle, params.sections, params.options)).then(results => {
             const renewedBundle = {};
 
             results.forEach(item => {

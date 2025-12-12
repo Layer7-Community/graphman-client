@@ -15,7 +15,7 @@ const SUPPORTED_OPERATIONS = [
     "config"
 ];
 
-const SUPPORTED_EXTENSIONS = ["pre-request", "post-export", "pre-import", "multiline-text-diff", "policy-code-validator"];
+const SUPPORTED_EXTENSIONS = ["pre-request", "post-export", "pre-import", "pre-renew", "multiline-text-diff", "policy-code-validator"];
 const SCHEMA_FEATURE_LIST = {
     "v11.1.00": ["mappings", "mappings-source", "policy-as-code"],
     "v11.1.1": ["mappings", "mappings-source", "policy-as-code"],
@@ -314,7 +314,7 @@ function makeOptions(options) {
         "schema": SCHEMA_VERSION,
         "policyCodeFormat": "xml",
         "keyFormat": "p12",
-        "extensions": ["pre-request", "post-export", "pre-import"]
+        "extensions": ["pre-request", "post-export", "pre-import", "pre-renew"]
     }, options);
 }
 
