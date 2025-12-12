@@ -326,11 +326,14 @@ function diffEntities(leftEntities, rightEntities, report, typeInfo, options, mu
 
             // compare objects
             const equals = butils.isObjectEquals(leftEntity, rightEntity, "$", item => {
+                const context = utils.buildOperationContext("diff", options, null, {
+                    typeInfo: {pluralName: typeInfo.pluralName}
+                });
                 details.push(multiLineTextDiffExtension.apply({
                     path: item.path,
                     source: item.left,
                     target: item.right
-                }, {typeInfo: {pluralName: typeInfo.pluralName}, options: options}));
+                }, context));
             });
 
             // restore policy code

@@ -363,6 +363,33 @@ module.exports = {
         }
 
         throw "invalid mapping action " + action + (type ? " specified for " + type : "");
+    },
+
+    /**
+     * Builds a generic operation context for extensions
+     * @param operation operation name (e.g., "import", "export", "renew", "diff")
+     * @param options operation options
+     * @param gateway gateway configuration (optional)
+     * @param additionalContext additional context properties (optional)
+     * @returns {Object} operation context
+     */
+    buildOperationContext: function (operation, options, gateway, additionalContext) {
+        const graphman = require("./graphman");
+        const context = {
+            operation: operation,
+            options: options || {},
+            config: graphman.configuration() || null
+        };
+
+        if (gateway) {
+            context.gateway = gateway;
+        }
+
+        if (additionalContext) {
+            Object.assign(context, additionalContext);
+        }
+
+        return context;
     }
 }
 

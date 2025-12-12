@@ -42,7 +42,8 @@ module.exports = {
         butils.overrideMappings(inputBundle, params.options);
         butils.reviseIDReferences(inputBundle, inputIDMappings);
 
-        inputBundle = utils.extension("pre-import").apply(inputBundle, {options: params.options});
+        const context = utils.buildOperationContext("import", params.options, gateway);
+        inputBundle = utils.extension("pre-import").apply(inputBundle, context);
 
         const query = gql.generate(params.using, Object.assign(inputBundle, params.variables), params.options);
         if (!query.query.startsWith("mutation")) {

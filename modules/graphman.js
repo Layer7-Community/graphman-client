@@ -223,7 +223,30 @@ module.exports = {
      * @param cli_options
      */
     invoke: function (options, callback, cli_options) {
-        options = utils.extension("pre-request").apply(options, cli_options);
+        // Determine operation from request body
+        let operation = "request";
+        if (options.body && options.body.query) {
+            if (options.body.query.startsWith("mutation")) {
+                operation = "import";
+            } else if (options.body.query.startsWith("query")) {
+                operation = "export";
+            }
+        }
+        
+        // Extract gateway from options if available
+        let gateway = null;
+        if (options.host) {
+            const protocol = options.protocol || 'https:';
+            const port = options.port ? ':' + options.port : '';
+            const path = options.path || '';
+            gateway = {
+                address: protocol + '//' + options.host + port + path,
+                name: options.host
+            };
+        }
+        
+        const context = utils.buildOperationContext(operation, cli_options || {}, gateway);
+        options = utils.extension("pre-request").apply(options, context);
         const req = ((!options.protocol||options.protocol === 'https'||options.protocol === 'https:') ? https : http).request(options, function(response) {
             let respInfo = {initialized: false, chunks: []};
 
