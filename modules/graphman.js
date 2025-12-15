@@ -220,10 +220,11 @@ module.exports = {
     /**
      * Makes the http request to the gateway's graphman service
      * @param options
+     * @param opContext operation context
      * @param callback
      */
-    invoke: function (options, callback) {
-        options = utils.extension("pre-request").apply(options, {});
+    invoke: function (options, opContext, callback) {
+        options = utils.extension("pre-request").apply(options, opContext);
         const req = ((!options.protocol||options.protocol === 'https'||options.protocol === 'https:') ? https : http).request(options, function(response) {
             let respInfo = {initialized: false, chunks: []};
 
@@ -245,15 +246,15 @@ module.exports = {
                 if (respInfo.contentType.startsWith('application/json')) {
                     const jsonData = JSON.parse(data.toString('utf-8'));
                     utils.debug("graphman http response", jsonData);
-                    callback(jsonData);
+                    callback(jsonData, null, opContext);
                 } else if (respInfo.contentType.startsWith('multipart/')) {
                     utils.debug("graphman http multipart response");
                     let parts = hutils.readParts(data, respInfo.boundary);
-                    callback(JSON.parse(parts[0].data), parts);
+                    callback(JSON.parse(parts[0].data), parts, opContext);
                 } else {
                     utils.info("unexpected graphman http response");
                     utils.info(data.toString('utf-8'));
-                    callback({errors: "no valid response from graphman"});
+                    callback({errors: "no valid response from graphman"}, null, opContext);
                 }
             });
         });

@@ -29,12 +29,12 @@ module.exports = {
         const startDate = Date.now();
 
         utils.fine("start time: " + startDate);
-        this.export(gateway, query, (data, parts) => {
+        this.export(gateway, query, (data, parts, opContext) => {
             const endDate = Date.now();
             if (params.onExportDataCallback) {
-                params.onExportDataCallback(data, parts, params);
+                params.onExportDataCallback(data, parts, params, opContext);
             } else {
-                onExportDataCallback(data, parts, params);
+                onExportDataCallback(data, parts, params, opContext);
             }
             utils.fine("end time: " + endDate);
             utils.fine("operation completed in " + (endDate - startDate) + " milliseconds");
@@ -48,10 +48,11 @@ module.exports = {
         }
 
         utils.info(`exporting from ${gateway.name||gateway.address} gateway`);
+        const opContext = utils.buildOperationContext("export", gateway, query.options);
         const request = graphman.request(gateway, query.options);
         delete query.options;
         request.body = query;
-        graphman.invoke(request, callback);
+        graphman.invoke(request, opContext, callback);
     },
 
     initParams: function (params, config) {
@@ -79,7 +80,7 @@ module.exports = {
             params.variables.policyName = params.variables.policyName || params.variables.name;
 
             const operation = this;
-            params.onExportDataCallback = function (data, parts, params) {
+            params.onExportDataCallback = function (data, parts, params, opContext) {
                 const encassConfigByName = data.data ? data.data.encassConfigByName : null;
                 const policyByName = data.data ? data.data.policyByName : null;
                 // retry export operation if encass policy is not retrieved in the first attempt
@@ -89,7 +90,7 @@ module.exports = {
                     params.variables.policyName = encassConfigByName.policyName;
                     operation.run(params);
                 } else {
-                    onExportDataCallback(data, parts, params);
+                    onExportDataCallback(data, parts, params, opContext);
                 }
             };
         }
@@ -145,14 +146,14 @@ module.exports = {
     }
 }
 
-function onExportDataCallback(data, parts, params) {
+function onExportDataCallback(data, parts, params, opContext) {
     if (data.data) {
         if (data.errors) utils.warn("errors detected", data.errors);
 
         data = butils.sanitize(data.data, butils.EXPORT_USE, params.options);
         data = butils.removeDuplicates(data);
         butils.filter(data, params.filter);
-        data = utils.extension("post-export").apply(data, {options: params.options});
+        data = utils.extension("post-export").apply(data, opContext);
         utils.writeResult(params.output, butils.sort(data));
 
         if (parts) utils.writePartsResult(utils.parentPath(params.output), parts);
