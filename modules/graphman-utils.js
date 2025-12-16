@@ -174,7 +174,7 @@ module.exports = {
 
     readFile: function (file) {
         if (!fs.existsSync(file)) {
-            throw "did not find the file, " + file;
+            throw "file doesn't exist, " + file;
         }
 
         var data = fs.readFileSync(file, 'utf-8');
@@ -183,7 +183,7 @@ module.exports = {
 
     readFileBinary: function (file) {
         if (!fs.existsSync(file)) {
-            throw "did not find the file, " + file;
+            throw "file doesn't exist, " + file;
         }
 
         return fs.readFileSync(file);

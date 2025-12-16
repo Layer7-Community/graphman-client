@@ -52,7 +52,6 @@ module.exports = {
         }
 
         const request = graphman.request(gateway, query.options);
-        cli_options=query.options
         delete query.options;
         request.body = query;
 
@@ -65,7 +64,7 @@ module.exports = {
 
         graphman.invoke(request, opContext, function (data) {
             utils.writeResult(params.output, sanitizeMutationResult(data));
-        }, cli_options);
+        });
     },
 
     initParams: function (params, config) {

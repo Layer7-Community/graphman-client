@@ -170,16 +170,6 @@ module.exports = {
     },
 
     filter: function (bundle, filter) {
-        // TODO: filter.latest is temporary flag
-        if (filter && filter.latest) {
-            const predicates = filterer.buildPredicates(filter);
-            Object.keys(bundle)
-                .map(item => graphman.typeInfoByPluralName(item))
-                .filter(item => item)
-                .forEach(typeInfo => filterer.filterEntities(bundle, typeInfo, predicates));
-            return;
-        }
-
         if (!filter || !filter.by) return;
         if (!filter.equals && !filter.startsWith && !filter.endsWith && !filter.contains) return;
 
