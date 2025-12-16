@@ -36,13 +36,14 @@ module.exports = {
             return;
         }
 
+        const opContext = utils.buildOperationContext("import", gateway, params.options);
         const inputIDMappings = params["input-id-mappings"] ? utils.readFile(params["input-id-mappings"]) : {};
         let inputBundle = butils.sanitize(utils.readFile(params.input), butils.IMPORT_USE, params.options);
         inputBundle = butils.removeDuplicates(inputBundle);
         butils.overrideMappings(inputBundle, params.options);
         butils.reviseIDReferences(inputBundle, inputIDMappings);
 
-        inputBundle = utils.extension("pre-import").apply(inputBundle, {options: params.options});
+        inputBundle = utils.extension("pre-import").apply(inputBundle, opContext);
 
         const query = gql.generate(params.using, Object.assign(inputBundle, params.variables), params.options);
         if (!query.query.startsWith("mutation")) {
@@ -62,7 +63,7 @@ module.exports = {
             request.headers["Content-Type"] = 'multipart/form-data; boundary='+boundary;
         }
 
-        graphman.invoke(request, function (data) {
+        graphman.invoke(request, opContext, function (data) {
             utils.writeResult(params.output, sanitizeMutationResult(data));
         }, cli_options);
     },
