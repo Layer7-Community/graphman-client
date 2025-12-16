@@ -435,6 +435,15 @@ function reviseIDReferencesInPolicies(entity, typeInfo, mappings, butils) {
             utils.info(`  revising ${name}, replacing ${mapping.left} with ${mapping.right}`);
             return mapping.right;
         });
+
+        if (entity.policy.code) {
+            let codeString = JSON.stringify(entity.policy.code);
+            codeString = codeString.replaceAll(mapping.left, function (match) {
+                utils.info(`  revising ${name}, replacing ${mapping.left} with ${mapping.right}`);
+                return mapping.right;
+            });
+            entity.policy.code = JSON.parse(codeString);
+        }
     });
 }
 
