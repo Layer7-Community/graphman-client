@@ -13,7 +13,8 @@ module.exports = {
      * @param input.path json path to the field that has difference
      * @param input.source source entity field's value
      * @param input.target target entity field's value
-     * @param context partial execution context
+     * @param context CLI operation execution context
+     * @param context.operation operation
      * @param context.options CLI options
      * @param context.typeInfo.pluralName input type information
      */

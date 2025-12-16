@@ -330,7 +330,7 @@ function diffEntities(leftEntities, rightEntities, report, typeInfo, options, mu
                     path: item.path,
                     source: item.left,
                     target: item.right
-                }, {typeInfo: {pluralName: typeInfo.pluralName}, options: options}));
+                }, {operation: "diff", typeInfo: {pluralName: typeInfo.pluralName}, options: options}));
             });
 
             // restore policy code
