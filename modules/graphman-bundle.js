@@ -92,10 +92,10 @@ module.exports = {
             const list = this.withArray(result, typeInfo);
             entities.forEach(item => {
                 const found = list.find(x => this.isEntityMatches(x, item, typeInfo));
-                if (!found) {
-                    list.push(item);
-                } else {
+                if (found && this.isEntityReallyDuplicate(found, item)) {
                     utils.info("found duplicate entity, " + key + "." + this.entityName(item, typeInfo));
+                } else {
+                    list.push(item);
                 }
             });
         }, (key, value) => {
@@ -219,6 +219,21 @@ module.exports = {
         const obj = {};
         typeInfo.identityFields.forEach(field => obj[field] = entity[field]);
         return obj;
+    },
+
+    isEntityReallyDuplicate: function (left, right, typeInfo) {
+        if (left.checksum && right.checksum) {
+            return left.checksum === right.checksum;
+        }
+
+        for (const field of typeInfo.summaryFields) {
+            const value = left[field];
+            if (value && value !== right[field]) {
+                return false;
+            }
+        }
+
+        return true;
     },
 
     isEntityMatches: function (left, right, typeInfo) {
