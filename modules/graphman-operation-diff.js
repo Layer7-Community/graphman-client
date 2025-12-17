@@ -14,7 +14,8 @@ module.exports = {
      * Identifies the differences between bundles/gateways.
      * @param params
      * @param params.input-source source bundle or source gateway profile name
-     * @param params.input-target target bundle or tagert gateway profile name
+     * @param params.input-target target bundle or target gateway profile name
+     * @param params.input-mappings input (external) mappings file name
      * @param params.input-report input report file name
      * @param params.output output file name
      * @param params.output-report output report file name
@@ -34,14 +35,16 @@ module.exports = {
             bundles.push(readBundleFrom(params["input-source"]));
             bundles.push(readBundleFrom(params["input-target"]));
 
+            const inputMappings = utils.readFile(params["input-mappings"]);
+
             Promise.all(bundles).then(results => {
                 const leftBundle = results[0];
                 const rightBundle = results[1];
                 const report = {inserts: {}, updates: {}, deletes: {}, diffs: {}, mappings: {goids: [], guids: []}};
 
-                diffReport(leftBundle, rightBundle, report, params.options);
+                diffReport(leftBundle, rightBundle, inputMappings.mappings, report, params.options);
                 if (params.options.renewEntities) {
-                    diffRenewReport(leftBundle, rightBundle, report, params.options, renewedReport => {
+                    diffRenewReport(leftBundle, rightBundle, inputMappings.mappings, report, params.options, renewedReport => {
                         const bundle = {};
                         diffBundle(renewedReport, bundle, params.options, false);
 
@@ -104,6 +107,7 @@ module.exports = {
 
     usage: function () {
         console.log("diff --input-source <input-file-or-gateway> --input-target <input-file-or-gateway>");
+        console.log("  [--input-id-mappings <input-id-mappings-file>]");
         console.log("  [--output <output-file>]");
         console.log("  [--output-report <output-report-file>]");
         console.log("  [--output-id-mappings <output-id-mappings-file>]");
@@ -127,6 +131,9 @@ module.exports = {
         console.log("  --input-target <input-file-or-gateway-profile>");
         console.log("    specify target input bundle file for comparison");
         console.log("    Use '@' special marker to treat the input as gateway profile name");
+        console.log();
+        console.log("  --input-mappings <input-id-mappings-file>");
+        console.log("    specify complex id-mappings between source and target environments");
         console.log();
         console.log("  --input-report <input-report-file>");
         console.log("    specify the input diff report file to generate the diff bundle");
@@ -200,12 +207,12 @@ function readBundleFromGateway(gateway) {
     });
 }
 
-function diffReport(leftBundle, rightBundle, report, options) {
+function diffReport(leftBundle, rightBundle, mappings, report, options) {
     const multiLineTextDiffExtension = utils.extension("multiline-text-diff");
 
     butils.forEach(leftBundle, (key, leftEntities, typeInfo) => {
         utils.info("inspecting " + key);
-        diffEntities(leftEntities, rightBundle[key], report, typeInfo, options, multiLineTextDiffExtension);
+        diffEntities(leftEntities, rightBundle[key], mappings[key], report, typeInfo, options, multiLineTextDiffExtension);
     });
 
     butils.forEach(rightBundle, (key, rightEntities, typeInfo) => {
@@ -230,7 +237,7 @@ function sortReport(report) {
     return report;
 }
 
-function diffRenewReport(leftBundle, rightBundle, report, options, callback) {
+function diffRenewReport(leftBundle, rightBundle, mappings, report, options, callback) {
     let promises = [];
 
     if (leftBundle.properties.meta.summary) {
@@ -277,7 +284,7 @@ function diffRenewReport(leftBundle, rightBundle, report, options, callback) {
 
             butils.forEach(leftUpdateBundle, (key, leftEntities, typeInfo) => {
                 utils.info("re-inspecting " + key);
-                diffEntities(leftEntities, rightUpdateBundle[key], renewedReport, typeInfo, options, multiLineTextDiffExtension);
+                diffEntities(leftEntities, rightUpdateBundle[key], mappings[key], renewedReport, typeInfo, options, multiLineTextDiffExtension);
             });
 
             callback(renewedReport);
@@ -304,16 +311,20 @@ function renewBundle(gateway, bundle, sections, options, resolve, reject) {
  * To identify the differences among class-of entities
  * @param leftEntities entities from left bundle
  * @param rightEntities entities from right bundle
+ * @param sectionMappings section level mappings
  * @param report diff report
  * @param typeInfo type-info about class
  * @param options
- * @param multiLineTextDiffExtension multiline text deff extension
+ * @param multiLineTextDiffExtension multiline text diff extension
  */
-function diffEntities(leftEntities, rightEntities, report, typeInfo, options, multiLineTextDiffExtension) {
+function diffEntities(leftEntities, rightEntities, sectionMappings, report, typeInfo, options, multiLineTextDiffExtension) {
     // iterate through the left entities,
     // bucket it into diff-report, depending on the match in the right entities
     leftEntities.forEach(leftEntity => {
-        const rightEntity = rightEntities ? rightEntities.find(x => butils.isEntityMatches(leftEntity, x, typeInfo)) : null;
+        const rightEntity = rightEntities ?
+            rightEntities.find(x =>
+                butils.isEntityMatches(leftEntity, x, typeInfo) ||
+                butils.isEntityMatchesByMappings(leftEntity, x, sectionMappings, typeInfo)) : null;
         if (rightEntity == null) {
             utils.info("  selecting " + butils.entityName(leftEntity, typeInfo) + ", category=inserts");
             const inserts = butils.withArray(report.inserts, typeInfo);
@@ -357,12 +368,12 @@ function diffEntities(leftEntities, rightEntities, report, typeInfo, options, mu
         if (rightEntity != null) {
             if (leftEntity.goid && rightEntity.goid !== leftEntity.goid) {
                 utils.info(`  selecting ` + butils.entityName(leftEntity, typeInfo) + `, category=goid-mappings`);
-                report.mappings.goids.push({left: leftEntity.goid, right: rightEntity.goid});
+                report.mappings.goids.push({source: leftEntity.goid, target: rightEntity.goid});
             }
 
             if (leftEntity.guid && rightEntity.guid !== leftEntity.guid) {
                 utils.info(`  selecting ` + butils.entityName(leftEntity, typeInfo) + `, category=guid-mappings`);
-                report.mappings.guids.push({left: leftEntity.guid, right: rightEntity.guid});
+                report.mappings.guids.push({source: leftEntity.guid, target: rightEntity.guid});
             }
         }
     });
@@ -468,7 +479,7 @@ function diffBundle(report, bundle, options, verbose) {
         if (array2.length === 0) delete bundle.properties.mappings[typeInfo.pluralName];
     });
 
-    butils.reviseIDReferences(bundle, report);
+    butils.reviseIDReferences(bundle, report.mappings);
 }
 
 function initializeBundleProperties(bundle) {
