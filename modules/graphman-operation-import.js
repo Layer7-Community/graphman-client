@@ -41,7 +41,7 @@ module.exports = {
         let inputBundle = butils.sanitize(utils.readFile(params.input), butils.IMPORT_USE, params.options);
         inputBundle = butils.removeDuplicates(inputBundle);
         butils.overrideMappings(inputBundle, params.options);
-        butils.reviseIDReferences(inputBundle, inputIDMappings.mappings);
+        butils.reviseIDReferences(inputBundle, inputIDMappings.mappings || {});
 
         inputBundle = utils.extension("pre-import").apply(inputBundle, opContext);
 

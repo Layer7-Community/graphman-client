@@ -257,16 +257,6 @@ module.exports = {
         }
     },
 
-    isEntityMatchesByMappings: function (left, right, mappings, typeInfo) {
-        if (!mappings || !mappings.length) {
-            return false;
-        }
-
-
-
-        return false;
-    },
-
     isArrayEquals: function (left, right, fieldPath, callback) {
         if (!Array.isArray(left) || !Array.isArray(right) || left.length !== right.length) {
             if (callback) {

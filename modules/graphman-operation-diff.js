@@ -35,16 +35,17 @@ module.exports = {
             bundles.push(readBundleFrom(params["input-source"]));
             bundles.push(readBundleFrom(params["input-target"]));
 
-            const inputMappings = utils.readFile(params["input-mappings"]);
+            const mappingsFile = params["input-mappings"];
+            const inputMappings = mappingsFile ? utils.readFile(params["input-mappings"]) : {};
 
             Promise.all(bundles).then(results => {
                 const leftBundle = results[0];
                 const rightBundle = results[1];
                 const report = {inserts: {}, updates: {}, deletes: {}, diffs: {}, mappings: {goids: [], guids: []}};
 
-                diffReport(leftBundle, rightBundle, inputMappings.mappings, report, params.options);
+                diffReport(leftBundle, rightBundle, inputMappings.mappings || {}, report, params.options);
                 if (params.options.renewEntities) {
-                    diffRenewReport(leftBundle, rightBundle, inputMappings.mappings, report, params.options, renewedReport => {
+                    diffRenewReport(leftBundle, rightBundle, inputMappings.mappings || {}, report, params.options, renewedReport => {
                         const bundle = {};
                         diffBundle(renewedReport, bundle, params.options, false);
 
@@ -321,10 +322,8 @@ function diffEntities(leftEntities, rightEntities, sectionMappings, report, type
     // iterate through the left entities,
     // bucket it into diff-report, depending on the match in the right entities
     leftEntities.forEach(leftEntity => {
-        const rightEntity = rightEntities ?
-            rightEntities.find(x =>
-                butils.isEntityMatches(leftEntity, x, typeInfo) ||
-                butils.isEntityMatchesByMappings(leftEntity, x, sectionMappings, typeInfo)) : null;
+        const rightEntity = findMatchingEntity(rightEntities, leftEntity, sectionMappings, typeInfo);
+
         if (rightEntity == null) {
             utils.info("  selecting " + butils.entityName(leftEntity, typeInfo) + ", category=inserts");
             const inserts = butils.withArray(report.inserts, typeInfo);
@@ -485,4 +484,50 @@ function diffBundle(report, bundle, options, verbose) {
 function initializeBundleProperties(bundle) {
     if (!bundle.properties) bundle.properties = {};
     if (!bundle.properties.mappings) bundle.properties.mappings = {};
+}
+
+function findMatchingEntity(rightEntities, leftEntity, mappings, typeInfo) {
+    if (!rightEntities) {
+        return null;
+    }
+
+    const mapping = findMapping(mappings, leftEntity);
+    if (mapping) {
+        return rightEntities.find(x => isMappingMatches(mapping, x, true));
+    }
+
+    return rightEntities.find(x => butils.isEntityMatches(leftEntity, x, typeInfo));
+}
+
+function findMapping(mappings, entity, fromTarget) {
+    if (!mappings || !mappings.length) {
+        return null;
+    }
+
+    return mappings.find(item => isMappingMatches(item, entity, fromTarget));
+}
+
+function isMappingMatches(mapping, entity, fromTarget) {
+    const ref = fromTarget ? mapping.target : mapping.source;
+    const fields = Object.keys(ref);
+
+    for (const field of fields) {
+        const expected = ref[field];
+        const actual = entity[field];
+
+        if (typeof expected === "string" && typeof actual === "string") {
+            const pattern = expected.substring("regex:".length);
+            if (!actual.match(pattern)) {
+                return false;
+            }
+        } else if (typeof expected === "object" && typeof actual === "object") {
+            if (!butils.isObjectEquals(expected, actual)) {
+                return false;
+            }
+        } else if (expected !== actual) {
+            return false;
+        }
+    }
+
+    return fields.length > 0;
 }
