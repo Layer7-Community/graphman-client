@@ -9,7 +9,9 @@ module.exports = {
     /**
      * Extension to construct the json schema validator
      * @param input json schema
-     * @param context partial execution context
+     * @param context CLI operation execution context
+     * @param context.operation operation
+     * @param context.options CLI options
      * @return schema validator
      */
     apply: function (input, context) {

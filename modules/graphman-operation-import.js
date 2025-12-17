@@ -36,13 +36,14 @@ module.exports = {
             return;
         }
 
+        const opContext = utils.buildOperationContext("import", gateway, params.options);
         const inputIDMappings = params["input-id-mappings"] ? utils.readFile(params["input-id-mappings"]) : {};
         let inputBundle = butils.sanitize(utils.readFile(params.input), butils.IMPORT_USE, params.options);
         inputBundle = butils.removeDuplicates(inputBundle);
         butils.overrideMappings(inputBundle, params.options);
         butils.reviseIDReferences(inputBundle, inputIDMappings);
 
-        inputBundle = utils.extension("pre-import").apply(inputBundle, {options: params.options});
+        inputBundle = utils.extension("pre-import").apply(inputBundle, opContext);
 
         const query = gql.generate(params.using, Object.assign(inputBundle, params.variables), params.options);
         if (!query.query.startsWith("mutation")) {
@@ -51,7 +52,6 @@ module.exports = {
         }
 
         const request = graphman.request(gateway, query.options);
-        cli_options=query.options
         delete query.options;
         request.body = query;
 
@@ -62,9 +62,9 @@ module.exports = {
             request.headers["Content-Type"] = 'multipart/form-data; boundary='+boundary;
         }
 
-        graphman.invoke(request, function (data) {
+        graphman.invoke(request, opContext, function (data) {
             utils.writeResult(params.output, sanitizeMutationResult(data));
-        }, cli_options);
+        });
     },
 
     initParams: function (params, config) {
@@ -133,6 +133,8 @@ module.exports = {
         console.log("        overrides the mapping action for the specified class of entities. This option can be repeatable.");
         console.log("      .excludeGoids false|true");
         console.log("        use this option to exclude GOIDs from the importing bundled entities.");
+        console.log("      .activate true|false");
+        console.log("        use this option to activate newly created policy revisions immediately. When this flag is set to false, revisions will be created without activation.");
         console.log("      .comment <some-text>");
         console.log("        to leave the comment over the new policy revisions due to mutation");
         console.log("      .forceDelete false|true");
@@ -147,6 +149,8 @@ module.exports = {
         console.log("        when specified, to override replaceMemberships flag over the user/group entities.");
         console.log("      .migratePolicyRevisions false|true");
         console.log("        to migrate the policies and services along with their revisions.");
+        console.log("      .deleteEmptyParentFolders false|true");
+        console.log("        to delete empty parent folders automatically.");
         console.log();
         console.log("    NOTE:");
         console.log("      Use 'delete-bundle' standard mutation-based query for deleting the entities.");

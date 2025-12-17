@@ -230,8 +230,13 @@ let type1Exploder = (function () {
     return {
         explode: function (bundle, outputDir, options) {
             butils.forEach(bundle, (key, entities, typeInfo) => {
+                const list = [];
                 utils.info(`exploding ${key}`);
-                entities.forEach(item => writeEntity(outputDir, key, item, typeInfo, options));
+                entities.forEach(item => {
+                    options.duplicate = list.find(x => butils.isEntityMatches(x, item, typeInfo));
+                    writeEntity(outputDir, key, item, typeInfo, options);
+                    list.push(item);
+                });
             });
 
             if (bundle.properties) {
@@ -241,16 +246,28 @@ let type1Exploder = (function () {
         }
     };
 
+    function timeAwareRandom() {
+        return Date.now() + "-" + Math.round(Math.random() * 1000)
+    }
+
     function writeEntity(dir, key, entity, typeInfo, options) {
         let displayName = butils.entityName(entity, typeInfo);
         if (!displayName) {
-            displayName = entity.checksum || Date.now().toString(36) + Math.random().toString(36).substring(2);
-            utils.warn("forced to use alternative entity display name for ", entity);
+            displayName = entity.checksum || timeAwareRandom();
+            utils.warn("  forced to use alternative entity display name for ", entity);
+        }
+
+        if (options.duplicate) {
+            const originalName = displayName;
+            displayName += "-" + timeAwareRandom();
+            utils.info(`  ${displayName} (duplicate to ${originalName})`);
+        } else {
+            utils.info(`  ${displayName}`);
         }
 
         const fileSuffix = butils.entityFileSuffixByPluralName(key);
         const filename = utils.safeName(displayName) + (fileSuffix ? fileSuffix : "");
-        utils.info(`  ${displayName}`);
+
         const targetDir = entity.folderPath ? utils.safePath(dir, "tree", entity.folderPath) : utils.path(dir, key);
 
         subExploders.forEach(item => item.explode(targetDir, filename, entity, typeInfo, options));
