@@ -92,10 +92,10 @@ module.exports = {
             const list = this.withArray(result, typeInfo);
             entities.forEach(item => {
                 const found = list.find(x => this.isEntityMatches(x, item, typeInfo));
-                if (!found) {
-                    list.push(item);
-                } else {
+                if (found && this.isEntityReallyDuplicate(found, item)) {
                     utils.info("found duplicate entity, " + key + "." + this.entityName(item, typeInfo));
+                } else {
+                    list.push(item);
                 }
             });
         }, (key, value) => {
@@ -170,16 +170,6 @@ module.exports = {
     },
 
     filter: function (bundle, filter) {
-        // TODO: filter.latest is temporary flag
-        if (filter && filter.latest) {
-            const predicates = filterer.buildPredicates(filter);
-            Object.keys(bundle)
-                .map(item => graphman.typeInfoByPluralName(item))
-                .filter(item => item)
-                .forEach(typeInfo => filterer.filterEntities(bundle, typeInfo, predicates));
-            return;
-        }
-
         if (!filter || !filter.by) return;
         if (!filter.equals && !filter.startsWith && !filter.endsWith && !filter.contains) return;
 
@@ -219,6 +209,21 @@ module.exports = {
         const obj = {};
         typeInfo.identityFields.forEach(field => obj[field] = entity[field]);
         return obj;
+    },
+
+    isEntityReallyDuplicate: function (left, right, typeInfo) {
+        if (left.checksum && right.checksum) {
+            return left.checksum === right.checksum;
+        }
+
+        for (const field of typeInfo.summaryFields) {
+            const value = left[field];
+            if (value && value !== right[field]) {
+                return false;
+            }
+        }
+
+        return true;
     },
 
     isEntityMatches: function (left, right, typeInfo) {
@@ -435,6 +440,15 @@ function reviseIDReferencesInPolicies(entity, typeInfo, mappings, butils) {
             utils.info(`  revising ${name}, replacing ${mapping.left} with ${mapping.right}`);
             return mapping.right;
         });
+
+        if (entity.policy.code) {
+            let codeString = JSON.stringify(entity.policy.code);
+            codeString = codeString.replaceAll(mapping.left, function (match) {
+                utils.info(`  revising ${name}, replacing ${mapping.left} with ${mapping.right}`);
+                return mapping.right;
+            });
+            entity.policy.code = JSON.parse(codeString);
+        }
     });
 }
 

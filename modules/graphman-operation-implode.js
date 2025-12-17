@@ -93,7 +93,8 @@ let type1Imploder = (function () {
                         utils.info("imploding " + item);
                         readEntities(subDir, item, typeInfo, bundle);
                     } else if (item === "tree") {
-                        readFolderableEntities(subDir, bundle);
+                        utils.info("imploding policies/services");
+                        readFolderableEntities(subDir, bundle, subDir);
                     } else {
                         utils.info("unknown entities, " + item);
                     }
@@ -121,21 +122,23 @@ let type1Imploder = (function () {
         });
     }
 
-    function readFolderableEntities(dir, bundle) {
+    function readFolderableEntities(dir, bundle, rootDir) {
         utils.listDir(dir).forEach(item => {
             if (utils.isDirectory(dir + "/" + item)) {
-                readFolderableEntities(`${dir}/${item}`, bundle);
+                readFolderableEntities(`${dir}/${item}`, bundle, rootDir);
             } else {
-                readFolderableEntity(dir, item, bundle);
+                readFolderableEntity(dir, item, bundle, rootDir);
             }
         });
     }
 
-    function readFolderableEntity(path, filename, bundle) {
+    function readFolderableEntity(path, filename, bundle, rootDir) {
         const pluralName = butils.entityPluralNameByFile(filename);
         let typeInfo = pluralName ? graphman.typeInfoByPluralName(pluralName) : null;
 
         if (typeInfo) {
+            const fullPath = `${path}/${filename}`;
+            utils.info(`  ${fullPath.substring(rootDir.length + 1)}`);
             const entity = utils.readFile(`${path}/${filename}`);
 
             // for backward compatibility, check whether the entity is of type policy fragment

@@ -6,7 +6,9 @@ module.exports = {
     /**
      * Extension to process gateway exported configuration.
      * @param input exported bundle
-     * @param context partial execution context
+     * @param context CLI operation execution context
+     * @param context.operation operation
+     * @param context.gateway gateway object
      * @param context.options CLI options
      */
     apply: function (input, context) {

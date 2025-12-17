@@ -174,7 +174,7 @@ module.exports = {
 
     readFile: function (file) {
         if (!fs.existsSync(file)) {
-            throw "did not find the file, " + file;
+            throw "file doesn't exist, " + file;
         }
 
         var data = fs.readFileSync(file, 'utf-8');
@@ -183,7 +183,7 @@ module.exports = {
 
     readFileBinary: function (file) {
         if (!fs.existsSync(file)) {
-            throw "did not find the file, " + file;
+            throw "file doesn't exist, " + file;
         }
 
         return fs.readFileSync(file);
@@ -363,6 +363,28 @@ module.exports = {
         }
 
         throw "invalid mapping action " + action + (type ? " specified for " + type : "");
+    },
+
+    /**
+     * Builds a generic operation context for extensions
+     * @param operation operation name (e.g., "import", "export", "renew", "diff")
+     * @param gateway gateway configuration (optional)
+     * @param options operation options
+     * @param additionalContext additional context properties (optional)
+     * @returns {Object} operation context
+     */
+    buildOperationContext: function (operation, gateway, options, additionalContext) {
+        const context = {
+            operation: operation,
+            gateway: gateway,
+            options: options || {},
+        };
+
+        if (additionalContext) {
+            Object.assign(context, additionalContext);
+        }
+
+        return context;
     }
 }
 

@@ -3,8 +3,8 @@
  */
 
 const PACKAGE = require("../package.json");
-const SCHEMA_VERSION = "v11.1.1";
-const SCHEMA_VERSIONS = [SCHEMA_VERSION, "v11.1.00", "v11.0.00-CR03"];
+const SCHEMA_VERSION = "v11.2.0";
+const SCHEMA_VERSIONS = [SCHEMA_VERSION, "v11.1.3", "v11.1.2", "v11.1.1", "v11.1.00", "v11.0.00-CR03"];
 
 const SUPPORTED_OPERATIONS = [
     "version", "describe",
@@ -17,6 +17,9 @@ const SUPPORTED_OPERATIONS = [
 
 const SUPPORTED_EXTENSIONS = ["pre-request", "post-export", "pre-import", "multiline-text-diff", "policy-code-validator"];
 const SCHEMA_FEATURE_LIST = {
+    "v11.2.0": ["mappings", "mappings-source", "policy-as-code"],
+    "v11.1.3": ["mappings", "mappings-source", "policy-as-code"],
+    "v11.1.2": ["mappings", "mappings-source", "policy-as-code"],
     "v11.1.00": ["mappings", "mappings-source", "policy-as-code"],
     "v11.1.1": ["mappings", "mappings-source", "policy-as-code"],
     "v11.0.00-CR03": ["mappings", "mappings-source"]
@@ -24,7 +27,8 @@ const SCHEMA_FEATURE_LIST = {
 
 const SUPPORTED_REQUEST_LEVEL_OPTIONS = [
     "activate", "comment", "forceAdminPasswordReset", "forceDelete", "replaceAllMatchingCertChain",
-    "migratePolicyRevisions", "override.replaceRoleAssignees", "override.replaceUserGroupMemberships"
+    "migratePolicyRevisions", "override.replaceRoleAssignees", "override.replaceUserGroupMemberships",
+    "deleteEmptyParentFolders"
 ];
 
 const utils = require("./graphman-utils");
@@ -219,11 +223,11 @@ module.exports = {
     /**
      * Makes the http request to the gateway's graphman service
      * @param options
+     * @param opContext operation context
      * @param callback
-     * @param cli_options
      */
-    invoke: function (options, callback, cli_options) {
-        options = utils.extension("pre-request").apply(options, cli_options);
+    invoke: function (options, opContext, callback) {
+        options = utils.extension("pre-request").apply(options, opContext);
         const req = ((!options.protocol||options.protocol === 'https'||options.protocol === 'https:') ? https : http).request(options, function(response) {
             let respInfo = {initialized: false, chunks: []};
 
@@ -245,15 +249,15 @@ module.exports = {
                 if (respInfo.contentType.startsWith('application/json')) {
                     const jsonData = JSON.parse(data.toString('utf-8'));
                     utils.debug("graphman http response", jsonData);
-                    callback(jsonData);
+                    callback(jsonData, null, opContext);
                 } else if (respInfo.contentType.startsWith('multipart/')) {
                     utils.debug("graphman http multipart response");
                     let parts = hutils.readParts(data, respInfo.boundary);
-                    callback(JSON.parse(parts[0].data), parts);
+                    callback(JSON.parse(parts[0].data), parts, opContext);
                 } else {
                     utils.info("unexpected graphman http response");
                     utils.info(data.toString('utf-8'));
-                    callback({errors: "no valid response from graphman"});
+                    callback({errors: "no valid response from graphman"}, null, opContext);
                 }
             });
         });
