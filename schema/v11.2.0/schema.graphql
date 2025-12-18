@@ -448,7 +448,9 @@ type AuthenticatedUser {
     providerType: IdpType!
     "The roles assigned for this user"
     roles: [Role]
-}#
+}
+
+#
 # Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
 
@@ -1630,6 +1632,7 @@ Generic entity details.
 > @l7-entity
 > @l7-identity-fields name
 > @l7-summary-fields goid,name,checksum
+> @l7-excluded-fields valueJson
 > @l7-name-fields name
 > @l7-display-summary-fields name,entityClassName,enabled
 """
@@ -3478,6 +3481,13 @@ extend type Mutation {
     deleteKerberosConfigs(names: [String]): KerberosConfigPayload
 }
 
+"""
+A Kerberos configuration.
+> @l7-entity
+> @l7-identity-fields conf
+> @l7-summary-fields conf
+> @l7-excluded-fields
+"""
 type KerberosConfig {
     """
     The encrypted Kerberos keytab.
@@ -4176,7 +4186,7 @@ extend type Mutation {
 > @l7-entity policy|policies
 > @l7-identity-fields name,policyType
 > @l7-summary-fields goid,guid,name,policyType,tag,subTag,checksum
-> @l7-excluded-fields policy.directDependencies,policy.allDependencies,policyRevision,policyRevisions
+> @l7-excluded-fields policy.directDependencies,policy.allDependencies,version,policyRevision,policyRevisions
 > @l7-name-fields name
 > @l7-display-summary-fields name,policyType,enabled
 > @l7-alternative-fields policy.xml|policy.json|policy.yaml|policy.code,policyRevision.xml|policyRevision.json|policyRevision.yaml|policyRevision.code,policyRevisions.xml|policyRevisions.json|policyRevisions.yaml|policyRevisions.code
@@ -4595,7 +4605,7 @@ extend type Mutation {
 """
 A Global policy.
 > @l7-entity
-> @l7-identity-fields name
+> @l7-identity-fields tag
 > @l7-summary-fields goid,guid,name,tag,checksum
 > @l7-excluded-fields
 > @l7-deprecated Use 'L7Policy' instead.
@@ -5651,6 +5661,7 @@ A secret (password or private key) which is used by gateway policies and other c
 > @l7-entity
 > @l7-identity-fields name
 > @l7-summary-fields goid,name,checksum
+> @l7-excluded-fields publicKey
 > @l7-name-fields name
 > @l7-display-summary-fields name,secretType,description,lastModifiedDate
 > @l7-encrypted-fields secret
@@ -6063,7 +6074,7 @@ A Layer7 service.
 > @l7-entity service|services
 > @l7-identity-fields resolutionPath,resolvers,serviceType
 > @l7-summary-fields goid,guid,name,resolutionPath,resolvers,serviceType,checksum
-> @l7-excluded-fields policy.directDependencies,policy.allDependencies,policyRevision,policyRevisions
+> @l7-excluded-fields policy.directDependencies,policy.allDependencies,version,policyRevision,policyRevisions
 > @l7-name-fields name
 > @l7-display-summary-fields name,resolutionPath,serviceType,enabled
 > @l7-alternative-fields policy.xml|policy.json|policy.yaml|policy.code,policyRevision.xml|policyRevision.json|policyRevision.yaml|policyRevision.code,policyRevisions.xml|policyRevisions.json|policyRevisions.yaml|policyRevisions.code

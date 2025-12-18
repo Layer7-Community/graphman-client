@@ -1,0 +1,4 @@
+{
+  "query": "{{delete-bundle.gql}}",
+  "variables": {}
+}
