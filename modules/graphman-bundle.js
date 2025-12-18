@@ -560,7 +560,7 @@ let exportSanitizer = function () {
 
     function addEntity(entity, result, typeInfo, options, dependencies, sanitizedKey) {
         if (dependencies && options.excludeDependencies) {
-            utils.info(`excluding the dependency ${sanitizedKey} - ${this.entityName(entity, typeInfo)}`);
+            utils.info(`excluding the dependency ${sanitizedKey}`); // ${this.entityName(entity, typeInfo)}
             if (entity.mappingInstruction) result.dependencyMappings[sanitizedKey].push(entity.mappingInstruction);
         } else {
             result[sanitizedKey].push(entity);
