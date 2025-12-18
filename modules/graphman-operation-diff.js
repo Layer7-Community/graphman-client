@@ -322,7 +322,8 @@ function diffEntities(leftEntities, rightEntities, sectionMappings, report, type
     // iterate through the left entities,
     // bucket it into diff-report, depending on the match in the right entities
     leftEntities.forEach(leftEntity => {
-        const rightEntity = findMatchingEntity(rightEntities, leftEntity, sectionMappings, typeInfo);
+        const rightEntity = rightEntities ?
+            rightEntities.find(x => butils.isEntityMatches(leftEntity, x, typeInfo)) : null;
 
         if (rightEntity == null) {
             utils.info("  selecting " + butils.entityName(leftEntity, typeInfo) + ", category=inserts");
@@ -364,15 +365,19 @@ function diffEntities(leftEntities, rightEntities, sectionMappings, report, type
             }
         }
 
-        if (rightEntity != null) {
-            if (leftEntity.goid && rightEntity.goid !== leftEntity.goid) {
-                utils.info(`  selecting ` + butils.entityName(leftEntity, typeInfo) + `, category=goid-mappings`);
-                report.mappings.goids.push({source: leftEntity.goid, target: rightEntity.goid});
+        const sourceEntity = leftEntity;
+        const targetEntity = rightEntity || findMatchingEntityByMappings(rightEntities, leftEntity, sectionMappings);
+        if (targetEntity != null) {
+            const targetInfo = rightEntity == null ? ", target=" + butils.entityName(targetEntity, typeInfo) : "";
+
+            if (sourceEntity.goid && targetEntity.goid !== sourceEntity.goid) {
+                utils.info(`  selecting ` + butils.entityName(sourceEntity, typeInfo) + `${targetInfo}, category=goid-mappings`);
+                report.mappings.goids.push({source: sourceEntity.goid, target: targetEntity.goid});
             }
 
-            if (leftEntity.guid && rightEntity.guid !== leftEntity.guid) {
-                utils.info(`  selecting ` + butils.entityName(leftEntity, typeInfo) + `, category=guid-mappings`);
-                report.mappings.guids.push({source: leftEntity.guid, target: rightEntity.guid});
+            if (sourceEntity.guid && targetEntity.guid !== sourceEntity.guid) {
+                utils.info(`  selecting ` + butils.entityName(sourceEntity, typeInfo) + `${targetInfo}, category=guid-mappings`);
+                report.mappings.guids.push({source: sourceEntity.guid, target: targetEntity.guid});
             }
         }
     });
@@ -486,25 +491,11 @@ function initializeBundleProperties(bundle) {
     if (!bundle.properties.mappings) bundle.properties.mappings = {};
 }
 
-function findMatchingEntity(rightEntities, leftEntity, mappings, typeInfo) {
-    if (!rightEntities) {
-        return null;
-    }
-
-    const mapping = findMapping(mappings, leftEntity);
-    if (mapping) {
-        return rightEntities.find(x => isMappingMatches(mapping, x, true));
-    }
-
-    return rightEntities.find(x => butils.isEntityMatches(leftEntity, x, typeInfo));
-}
-
-function findMapping(mappings, entity, fromTarget) {
-    if (!mappings || !mappings.length) {
-        return null;
-    }
-
-    return mappings.find(item => isMappingMatches(item, entity, fromTarget));
+function findMatchingEntityByMappings(rightEntities, leftEntity, mappings) {
+    const mapping = rightEntities && mappings ?
+        mappings.find(item => isMappingMatches(item, leftEntity)) : null;
+    return mapping ?
+        rightEntities.find(x => isMappingMatches(mapping, x, true)) : null;
 }
 
 function isMappingMatches(mapping, entity, fromTarget) {
@@ -516,9 +507,15 @@ function isMappingMatches(mapping, entity, fromTarget) {
         const actual = entity[field];
 
         if (typeof expected === "string" && typeof actual === "string") {
-            const pattern = expected.substring("regex:".length);
-            if (!actual.match(pattern)) {
-                return false;
+            if (expected.startsWith("regex:")) {
+                const pattern = expected.substring("regex:".length);
+                if (!actual.match(pattern)) {
+                    return false;
+                }
+            } else {
+                if (expected !== actual) {
+                    return false;
+                }
             }
         } else if (typeof expected === "object" && typeof actual === "object") {
             if (!butils.isObjectEquals(expected, actual)) {
