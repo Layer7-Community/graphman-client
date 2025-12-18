@@ -113,6 +113,9 @@ query all($includePolicyRevisions: Boolean = false, $includeRoles: Boolean = fal
     trustedCerts {
         {{Certificate}}
     }
+    policyBackedServices {
+        {{PolicyBackedService}}
+    }
     kerberosConfigs {
         {{KerberosConfig}}
     }
