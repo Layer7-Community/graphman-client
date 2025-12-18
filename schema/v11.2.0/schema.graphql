@@ -1,3 +1,4 @@
+
 # Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 extend type Query {
@@ -82,7 +83,6 @@ type ActiveConnectorsPayload implements EntityMutationsPayload {
     "The mutated active connectors"
     activeConnectors: [ActiveConnector]!
 }
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 extend type Query {
     "Get all administrative user account properties : logonMaxAllowableAttempts, logonLockoutTime, logonSessionExpiry, logonInactivityPeriod"
@@ -143,9 +143,6 @@ type AdministrativeUserAccountPropertiesPayload implements EntityMutationsPayloa
     detailedStatus: [EntityMutationDetailedStatus!]!
     administrativeUserAccountProperties: [AdministrativeUserAccountProperty]!
 }
-#
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
-#
 
 extend type Query {
     "Get policy aliases"
@@ -298,7 +295,6 @@ extend type Mutation {
   "The name of the aliased entity."
   name: String!
  }
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 extend type Query {
     "Get All AuditConfigurations"
@@ -413,9 +409,6 @@ type AuditConfigurationsPayload implements EntityMutationsPayload {
     detailedStatus: [EntityMutationDetailedStatus!]!
     auditConfigurations: [AuditConfiguration]!
 }
-#
-# Copyright (c) 2025. Broadcom Inc. and its subsidiaries. All Rights Reserved.
-#
 
 extend type Query {
     "Get authenticated user details"
@@ -443,8 +436,6 @@ type AuthenticatedUser {
     "The roles assigned for this user"
     roles: [Role]
 }
-
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 input BundlePropertiesInput {
     "Bundle Meta information should be any key value pair form ex: id, name, author, hostname, timestamp"
@@ -556,7 +547,6 @@ input NamedEntityRefInput {
     """
     name: String!
 }
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 extend type Query {
     "Get all Cassandra Connections"
@@ -665,9 +655,6 @@ type CassandraConnectionsPayload implements EntityMutationsPayload {
     "The mutated Cassandra connections."
     cassandraConnections: [CassandraConnection]!
 }
-#
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
-#
 
 extend type Query {
     "Get all cluster nodes information"
@@ -824,7 +811,7 @@ type LicenseProductVersion {
     minor : String
     "License Trusted Issuer"
     issuer : String
-}# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
+}
 
 extend type Query {
   "Get all cluster properties"
@@ -895,7 +882,6 @@ type ClusterPropertiesPayload implements EntityMutationsPayload {
     detailedStatus: [EntityMutationDetailedStatus!]!
     clusterProperties: [ClusterProperty]!
 }
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 extend type Query {
   "Get all Custom Key values"
@@ -971,7 +957,6 @@ input CustomKeyValueRefInput{
     "The custom key"
     key: String!
 }
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 extend type Query {
   "Get all email listeners"
@@ -1091,7 +1076,6 @@ type EmailListenersPayload implements EntityMutationsPayload {
     "The mutated email listener connections."
     emailListeners: [EmailListener]!
 }
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 extend type Query {
     "Get all Encapsulated Assertion Configurations"
@@ -1234,9 +1218,6 @@ type EncassConfigsPayload implements EntityMutationsPayload {
     detailedStatus: [EntityMutationDetailedStatus!]!
     encassConfigs: [EncassConfig]!
 }
-#
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
-#
 
 extend type Query {
   "Get all Folders"
@@ -1583,7 +1564,6 @@ type EntitySubFieldMetadata {
     graphQLType: String!
     entitySubType: String!
 }
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 extend type Query {
     "Get all generic entities"
@@ -1657,7 +1637,6 @@ type GenericEntitiesPayload implements EntityMutationsPayload {
     "The mutated generic entities"
     genericEntities: [GenericEntity]!
 }
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 extend type Query {
     "Get xml schemas configured on this gateway"
@@ -1813,7 +1792,6 @@ input SchemaRefInput {
     "A reference to the schema. This id is what is referred to in policy and is often mirror of the target namespace"
     systemId: String!
 }
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 extend type Query {
     "Get all http configuration"
@@ -2000,7 +1978,6 @@ input HttpProxyConfigurationInput {
      "The path of the http configuration"
      path: String
  }
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 extend type Query {
     "Get all fips configurations"
@@ -2404,9 +2381,6 @@ input FipUserRefInput {
     " The name of the FiP this user is defined as part of "
     providerName: String!
 }
-#
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
-#
 
 extend type Query {
     "Get internal IDPs."
@@ -3083,9 +3057,6 @@ input InternalUserMappingInstructionInput{
 input InternalUserRefInput {
     login: String!
 }
-#
-# Copyright (c) 2025. Broadcom Inc. and its subsidiaries. All Rights Reserved.
-#
 
 extend type Query {
     "Get all JDBC Connections"
@@ -3237,7 +3208,6 @@ type JdbcConnectionsPayload implements EntityMutationsPayload {
     "The created/updated JDBC connections."
     jdbcConnections: [JdbcConnection]!
 }
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 extend type Query {
     "Get all JMS Destinations"
@@ -3491,8 +3461,6 @@ input KerberosConfigInput {
 }
 
 
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
-
 extend type Mutation {
    "Generate Certificate Signing Request"
     generateCSR(alias: String!, params: CSRGenerateParamsInput!) : KeyCSRPayload
@@ -3612,9 +3580,6 @@ input KeyRefInput {
     "The KeyStoreId"
     keystoreId: String!
 }
-#
-# Copyright (c) 2025. Broadcom Inc. and its subsidiaries. All Rights Reserved.
-#
 
 extend type Query {
     "Get all listen ports"
@@ -3853,7 +3818,6 @@ type ListenPortsPayload implements EntityMutationsPayload {
     detailedStatus: [EntityMutationDetailedStatus!]!
     listenPorts: [ListenPort]!
 }
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 extend type Query {
     "Get All LogSinks"
@@ -3982,7 +3946,6 @@ type LogSinksPayload implements EntityMutationsPayload {
     detailedStatus: [EntityMutationDetailedStatus!]!
     logSinks: [LogSink]!
 }
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 extend type Query {
     "Get Password Policy"
@@ -4091,9 +4054,6 @@ input PasswordPolicyRefInput {
     "The internal entity unique identifier"
     goid: ID!
 }
-#
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
-#
 
 extend type Query {
     "Get all policies"
@@ -4447,9 +4407,6 @@ input PolicyRefInput {
     tag: String
     subTag: String
 }
-#
-# Copyright (c) 2025. Broadcom Inc. and its subsidiaries. All Rights Reserved.
-#
 
 extend type Query {
   "Get all policy-backed services"
@@ -4534,7 +4491,6 @@ type PolicyBackedServicesPayload implements EntityMutationsPayload {
     "The mutated policy-backed services"
     policyBackedServices: [PolicyBackedService]!
 }
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 extend type Query {
     "Get all policy fragments"
@@ -4702,7 +4658,6 @@ input GlobalPolicyRefInput {
     """
     tag: String!
 }
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 extend type Query {
     "Get Service Resolution Config"
@@ -4783,7 +4738,6 @@ input ServiceResolutionConfigRefInput {
     "The internal entity unique identifier"
     goid: ID!
 }
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 extend type Query {
     "Get all RevocationCheckPolicies"
@@ -4905,9 +4859,6 @@ input RevocationCheckPolicyInput {
     "Certificate revocation check properties"
     revocationCheckPolicyItems: [RevocationCheckPolicyItemInput!]!
 }
-#
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
-#
 
 extend type Query {
     "Get all roles"
@@ -5144,9 +5095,6 @@ input GroupRefInput {
     "The type of identity provider that the group belongs to"
     providerType: IdpType!
 }
-#
-# Copyright (c) 2025. Broadcom Inc. and its subsidiaries. All Rights Reserved.
-#
 
 type Query {
 }
@@ -5324,9 +5272,6 @@ input EntityFilterConditionInput {
     xin: [JSON!]
 }
 
-#
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
-#
 
 extend type Query {
     "Get all sample messages"
@@ -5396,7 +5341,7 @@ type SampleMessagesPayload implements EntityMutationsPayload {
     status: [EntityMutationStatus!]!
     detailedStatus: [EntityMutationDetailedStatus!]!
     sampleMessages: [SampleMessage]!
-}# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
+}
 
 "An RFC-3339 compliant date time scalar that accepts string values like `1996-12-19T16:39:57-08:00`"
 scalar DateTime
@@ -5417,7 +5362,6 @@ scalar JSON
 #"A File part information from the multi-part message"
 #"This scalar implementation is partial, hence commenting for now"
 #scalar FilePart
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 extend type Query {
     "Retrieves all scheduled tasks"
@@ -5574,9 +5518,6 @@ type BackgroundTaskPoliciesPayload implements EntityMutationsPayload {
     detailedStatus: [EntityMutationDetailedStatus!]!
     backgroundTaskPolicies: [BackgroundTaskPolicy]!
 }
-#
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
-#
 
 extend type Query {
     "Retrieves all secrets"
@@ -5824,7 +5765,6 @@ type KeysPayload implements EntityMutationsPayload {
     detailedStatus: [EntityMutationDetailedStatus!]!
     keys : [Key]!
 }
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 extend type Query {
     "Get all Server module files"
@@ -5947,9 +5887,6 @@ type ServerModuleFilesPayload implements EntityMutationsPayload {
     "The created Server module files."
     serverModuleFiles: [ServerModuleFile]!
 }
-#
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
-#
 
 extend type Query {
     "Get all services"
@@ -6247,7 +6184,6 @@ input ServiceRefInput {
     "The service resolvers. They can be used to identify services."
     resolvers: ServiceResolversInput
 }
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 extend type Query {
     "Get all siteminder configurations"
@@ -6362,7 +6298,6 @@ type SMConfigsPayload implements EntityMutationsPayload {
     detailedStatus: [EntityMutationDetailedStatus!]!
     smConfigs: [SMConfig]!
 }
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 extend type Query {
     "Get all soap services"
@@ -6581,7 +6516,6 @@ input SoapServiceRefInput {
     "Soap service resolvers"
     resolvers: SoapServiceResolverInput
 }
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 extend type Query {
     "Retrieves all trusted certificates"
@@ -6779,7 +6713,6 @@ input TrustedCertRefInput {
     "The sha1 thumbprint of the certificate. (Note that, this field has no effect on the mutation)"
     thumbprintSha1: String!
 }
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 extend type Query {
   "Get all webApi services"
