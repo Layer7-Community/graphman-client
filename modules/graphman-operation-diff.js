@@ -108,7 +108,7 @@ module.exports = {
 
     usage: function () {
         console.log("diff --input-source <input-file-or-gateway> --input-target <input-file-or-gateway>");
-        console.log("  [--input-id-mappings <input-id-mappings-file>]");
+        console.log("  [--input-mappings <input-mappings-file>]");
         console.log("  [--output <output-file>]");
         console.log("  [--output-report <output-report-file>]");
         console.log("  [--output-id-mappings <output-id-mappings-file>]");
@@ -133,8 +133,8 @@ module.exports = {
         console.log("    specify target input bundle file for comparison");
         console.log("    Use '@' special marker to treat the input as gateway profile name");
         console.log();
-        console.log("  --input-mappings <input-id-mappings-file>");
-        console.log("    specify complex id-mappings between source and target environments");
+        console.log("  --input-mappings <input-mappings-file>");
+        console.log("    specify complex mappings between source and target environments");
         console.log();
         console.log("  --input-report <input-report-file>");
         console.log("    specify the input diff report file to generate the diff bundle");
