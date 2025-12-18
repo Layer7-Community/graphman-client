@@ -1,6 +1,6 @@
 {
     "name": "@layer7/graphman",
-    "version": "1.3.0",
+    "version": "2.1.0",
     "description": "Layer7 API Gateway Graphman Client",
     "main": "modules/main.js",
     "scripts": {

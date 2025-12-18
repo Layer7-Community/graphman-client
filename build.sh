@@ -27,9 +27,9 @@ pushd $packageDir>/dev/null
 if [[ $branchName == release/v* ]]; then
     sed -i -E "s/\"version\": \"[^\"]+\"/\"version\": \"${branchName:9}.$buildNumber\"/g" package.json
 elif [[ $branchName == PR-* ]]; then
-    sed -i -E "s/\"version\": \"([^.]+)[.]([^.]+)[^\"]+\"/\"version\": \"\1.\2.${branchName:3}$buildNumber-SNAPSHOT\"/g" package.json
+    sed -i -E "s/\"version\": \"([^.]+)[.]([^.]+)[^\"]+\"/\"version\": \"\2.\1.${branchName:3}$buildNumber-SNAPSHOT\"/g" package.json
 else
-    sed -i -E "s/\"version\": \"([^.]+)[.]([^.]+)[^\"]+\"/\"version\": \"\1.\2.$buildNumber-SNAPSHOT\"/g" package.json
+    sed -i -E "s/\"version\": \"([^.]+)[.]([^.]+)[^\"]+\"/\"version\": \"\2.\1.$buildNumber-SNAPSHOT\"/g" package.json
 fi
 
 npm pack
