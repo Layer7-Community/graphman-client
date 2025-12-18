@@ -1,10 +1,8 @@
-/*
- * Copyright ©  2024. Broadcom Inc. and/or its subsidiaries. All Rights Reserved.
- */
+// Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 const PACKAGE = require("../package.json");
 const SCHEMA_VERSION = "v11.2.0";
-const SCHEMA_VERSIONS = [SCHEMA_VERSION, "v11.1.3", "v11.1.2", "v11.1.1", "v11.1.00", "v11.0.00-CR03"];
+const SCHEMA_VERSIONS = [SCHEMA_VERSION, "v11.1.3", "v11.1.2", "v11.1.1"];
 
 const SUPPORTED_OPERATIONS = [
     "version", "describe",
