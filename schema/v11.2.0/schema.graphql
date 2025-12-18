@@ -3484,8 +3484,9 @@ extend type Mutation {
 """
 A Kerberos configuration.
 > @l7-entity
-> @l7-identity-fields keytab
-> @l7-summary-fields keytab,conf
+> @l7-identity-fields conf
+> @l7-summary-fields conf
+> @l7-excluded-fields
 """
 type KerberosConfig {
     """
@@ -4604,7 +4605,7 @@ extend type Mutation {
 """
 A Global policy.
 > @l7-entity
-> @l7-identity-fields name
+> @l7-identity-fields tag
 > @l7-summary-fields goid,guid,name,tag,checksum
 > @l7-excluded-fields
 > @l7-deprecated Use 'L7Policy' instead.

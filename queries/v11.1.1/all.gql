@@ -5,9 +5,6 @@ query all($includePolicyRevisions: Boolean = false, $includeRoles: Boolean = fal
             {{PolicyRevision}}
         }
     }
-    serviceAliases {
-        {{L7ServiceAlias}}
-    }
     encassConfigs {
         {{EncassConfig}}
     }
@@ -16,9 +13,6 @@ query all($includePolicyRevisions: Boolean = false, $includeRoles: Boolean = fal
         policyRevisions @include (if: $includePolicyRevisions) {
             {{PolicyRevision}}
         }
-    }
-    policyAliases {
-        {{L7PolicyAlias}}
     }
     activeConnectors {
         {{ActiveConnector}}
@@ -112,8 +106,5 @@ query all($includePolicyRevisions: Boolean = false, $includeRoles: Boolean = fal
     }
     trustedCerts {
         {{Certificate}}
-    }
-    kerberosConfigs {
-        {{KerberosConfig}}
     }
 }

@@ -1,9 +1,6 @@
-query all($includePolicyRevision: Boolean = false, $includePolicyRevisions: Boolean = false) {
+query all($includePolicyRevisions: Boolean = false, $includeRoles: Boolean = false) {
     services {
         {{L7Service}}
-        policyRevision @include (if: $includePolicyRevision) {
-            {{PolicyRevision}}
-        }
         policyRevisions @include (if: $includePolicyRevisions) {
             {{PolicyRevision}}
         }
@@ -13,15 +10,15 @@ query all($includePolicyRevision: Boolean = false, $includePolicyRevisions: Bool
     }
     policies {
         {{L7Policy}}
-        policyRevision @include (if: $includePolicyRevision) {
-            {{PolicyRevision}}
-        }
         policyRevisions @include (if: $includePolicyRevisions) {
             {{PolicyRevision}}
         }
     }
     activeConnectors {
         {{ActiveConnector}}
+    }
+    auditConfigurations {
+        {{AuditConfiguration}}
     }
     cassandraConnections {
         {{CassandraConnection}}
@@ -46,6 +43,9 @@ query all($includePolicyRevision: Boolean = false, $includePolicyRevisions: Bool
     }
     federatedUsers {
         {{FederatedUser}}
+    }
+    genericEntities {
+        {{GenericEntity}}
     }
     httpConfigurations {
         {{HttpConfiguration}}
@@ -83,6 +83,9 @@ query all($includePolicyRevision: Boolean = false, $includePolicyRevisions: Bool
     revocationCheckPolicies {
         {{RevocationCheckPolicy}}
     }
+    roles @include (if: $includeRoles){
+        {{Role}}
+    }
     scheduledTasks {
         {{ScheduledTask}}
     }
@@ -103,5 +106,8 @@ query all($includePolicyRevision: Boolean = false, $includePolicyRevisions: Bool
     }
     trustedCerts {
         {{Certificate}}
+    }
+    kerberosConfigs {
+        {{KerberosConfig}}
     }
 }

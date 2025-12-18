@@ -1,4 +1,4 @@
-query serviceByResolutionPath ($resolutionPath: String!, $includeAllDependencies: Boolean = false, $includePolicyRevision: Boolean = false, $includePolicyRevisions: Boolean = false) {
+query serviceByResolutionPath ($resolutionPath: String!, $includeAllDependencies: Boolean = false, $includePolicyRevisions: Boolean = false) {
     servicesByResolutionPath (resolutionPath: $resolutionPath) {
         {{L7Service:-policy}}
          policy {
@@ -6,9 +6,6 @@ query serviceByResolutionPath ($resolutionPath: String!, $includeAllDependencies
             allDependencies @include (if: $includeAllDependencies) {
                 {{PolicyDependency:-policyFragments,-ldaps,-fips,-fipUsers,-fipGroups}}
             }
-        }
-        policyRevision @include (if: $includePolicyRevision) {
-            {{PolicyRevision}}
         }
         policyRevisions @include (if: $includePolicyRevisions) {
             {{PolicyRevision}}

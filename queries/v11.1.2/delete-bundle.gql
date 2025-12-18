@@ -47,12 +47,8 @@ mutation deleteBundle (
     $soapServices:[SoapServiceInput!]!=[],
     $trustedCerts:[TrustedCertInput!]!=[],
     $webApiServices: [WebApiServiceInput!]!=[],
-    $genericEntities: [GenericEntityInput!]!=[],
-    $auditConfigurations: [AuditConfigurationInput!]!=[],
-    $policyBackedServices: [PolicyBackedServiceInput!]!=[],
-    $policyAliases: [L7PolicyAliasInput!]!=[],
-    $serviceAliases: [L7ServiceAliasInput!]!=[],
-    $sampleMessages: [SampleMessageInput!]!=[]
+    $genericEntities: [GenericEntityInput!]!=[]
+    $auditConfigurations: [AuditConfigurationInput!]!=[]
     ) {
     setAuditConfigurations(input: $auditConfigurations){detailedStatus {action status description source {name value} target {name value}}}
     setRoles (input: $roles) {detailedStatus {action status description source {name value} target {name value}}}
@@ -65,17 +61,13 @@ mutation deleteBundle (
     setJmsDestinations (input: $jmsDestinations){detailedStatus {action status description source {name value} target {name value}}}
     setPolicyBackedIdps (input: $policyBackedIdps){detailedStatus {action status description source {name value} target {name value}}}
     setGenericEntities (input: $genericEntities){detailedStatus {action status description source {name value} target {name value}}}
-    setPolicyBackedServices(input: $policyBackedServices){detailedStatus {action status description source {name value} target {name value}}}
 
-    setSampleMessages (input: $sampleMessages){detailedStatus {action status description source {name value} target {name value}}}
-    setServiceAliases (input: $serviceAliases){detailedStatus {action status description source {name value} target {name value}}}
     setServices(input: $services){detailedStatus {action status description source {name value} target {name value}}}
     setInternalSoapServices (input: $internalSoapServices){detailedStatus {action status description source {name value} target {name value}}}
     setInternalWebApiServices (input: $internalWebApiServices){detailedStatus {action status description source {name value} target {name value}}}
     setSoapServices (input: $soapServices){detailedStatus {action status description source {name value} target {name value}}}
     setWebApiServices (input: $webApiServices){detailedStatus {action status description source {name value} target {name value}}}
     setEncassConfigs (input: $encassConfigs){detailedStatus {action status description source {name value} target {name value}}}
-    setPolicyAliases (input: $policyAliases){detailedStatus {action status description source {name value} target {name value}}}
     setPolicies (input: $policies){detailedStatus {action status description source {name value} target {name value}}}
     setBackgroundTaskPolicies (input: $backgroundTaskPolicies){detailedStatus {action status description source {name value} target {name value}}}
     setGlobalPolicies (input: $globalPolicies){detailedStatus {action status description source {name value} target {name value}}}

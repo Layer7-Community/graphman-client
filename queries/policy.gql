@@ -1,4 +1,4 @@
-query policyByName ($name: String!, $includeAllDependencies: Boolean = false, $includePolicyRevision: Boolean = false, $includePolicyRevisions: Boolean = false) {
+query policyByName ($name: String!, $includeAllDependencies: Boolean = false, $includePolicyRevisions: Boolean = false) {
     policyByName (name: $name) {
         {{L7Policy:-policy}}
          policy {
@@ -6,9 +6,6 @@ query policyByName ($name: String!, $includeAllDependencies: Boolean = false, $i
             allDependencies @include (if: $includeAllDependencies) {
                 {{PolicyDependency:-policyFragments,-ldaps,-fips,-fipUsers,-fipGroups}}
             }
-        }
-        policyRevision @include (if: $includePolicyRevision) {
-            {{PolicyRevision}}
         }
         policyRevisions @include (if: $includePolicyRevisions) {
             {{PolicyRevision}}

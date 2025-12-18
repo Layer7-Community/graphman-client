@@ -1,0 +1,3 @@
+mutation installBundle {
+    installBundleEntities {summary}
+}
