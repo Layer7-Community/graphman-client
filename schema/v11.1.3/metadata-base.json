@@ -2,6 +2,7 @@
     "primitiveTypes": [
         "String",
         "NonEmptyString",
+        "AnyObject",
         "Boolean",
         "ID",
         "PositiveInt",
