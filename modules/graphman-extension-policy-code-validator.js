@@ -1,6 +1,4 @@
-/*
- * Copyright ©  2024. Broadcom Inc. and/or its subsidiaries. All Rights Reserved.
- */
+// Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 const Ajv2020 = require("ajv/dist/2020");
 const ajv = new Ajv2020();

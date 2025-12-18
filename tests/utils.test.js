@@ -1,3 +1,5 @@
+// Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
+
 const tUtils = require("./utils");
 const utils = tUtils.load("graphman-utils");
 
