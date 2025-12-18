@@ -105,10 +105,17 @@ module.exports = {
         return result;
     },
 
-    reviseIDReferences: function (bundle, idMappings) {
-        if (idMappings.mappings) this.forEach(bundle, (key, entities, typeInfo) => {
-            if (idMappings.mappings.goids.length) reviseIDReferences(entities, typeInfo, idMappings.mappings.goids, this);
-            if (idMappings.mappings.guids.length) reviseIDReferences(entities, typeInfo, idMappings.mappings.guids, this);
+    reviseIDReferences: function (bundle, mappings) {
+        if (!mappings) {
+            return;
+        }
+
+        transformIDReferences(mappings.goids); // backward compatibility
+        transformIDReferences(mappings.guids); // backward compatibility
+
+        this.forEach(bundle, (key, entities, typeInfo) => {
+            if (mappings.goids && mappings.goids.length) reviseIDReferences(entities, typeInfo, mappings.goids, this);
+            if (mappings.guids && mappings.guids.length) reviseIDReferences(entities, typeInfo, mappings.guids, this);
         });
     },
 
@@ -415,6 +422,15 @@ module.exports = {
     }
 }
 
+function transformIDReferences(ids) {
+    if (Array.isArray(ids)) {
+        ids.forEach(item => {
+            if (item.left) item.source = item.left;
+            if (item.right) item.target = item.right;
+        });
+    }
+}
+
 function reviseIDReferences(entities, typeInfo, mappings, butils) {
     entities.forEach(entity => {
         if (entity.policy) {
@@ -426,26 +442,26 @@ function reviseIDReferences(entities, typeInfo, mappings, butils) {
 function reviseIDReferencesInPolicies(entity, typeInfo, mappings, butils) {
     const name = butils.entityName(entity, typeInfo);
     mappings.forEach(mapping => {
-        if (entity.policy.xml) entity.policy.xml = entity.policy.xml.replaceAll(mapping.left, function (match) {
-            utils.info(`  revising ${name}, replacing ${mapping.left} with ${mapping.right}`);
-            return mapping.right;
+        if (entity.policy.xml) entity.policy.xml = entity.policy.xml.replaceAll(mapping.source, function (match) {
+            utils.info(`  revising ${name}, replacing ${mapping.source} with ${mapping.target}`);
+            return mapping.target;
         });
 
-        if (entity.policy.json) entity.policy.json = entity.policy.json.replaceAll(mapping.left, function (match) {
-            utils.info(`  revising ${name}, replacing ${mapping.left} with ${mapping.right}`);
-            return mapping.right;
+        if (entity.policy.json) entity.policy.json = entity.policy.json.replaceAll(mapping.source, function (match) {
+            utils.info(`  revising ${name}, replacing ${mapping.source} with ${mapping.target}`);
+            return mapping.target;
         });
 
-        if (entity.policy.yaml) entity.policy.yaml = entity.policy.yaml.replaceAll(mapping.left, function (match) {
-            utils.info(`  revising ${name}, replacing ${mapping.left} with ${mapping.right}`);
-            return mapping.right;
+        if (entity.policy.yaml) entity.policy.yaml = entity.policy.yaml.replaceAll(mapping.source, function (match) {
+            utils.info(`  revising ${name}, replacing ${mapping.source} with ${mapping.target}`);
+            return mapping.target;
         });
 
         if (entity.policy.code) {
             let codeString = JSON.stringify(entity.policy.code);
-            codeString = codeString.replaceAll(mapping.left, function (match) {
-                utils.info(`  revising ${name}, replacing ${mapping.left} with ${mapping.right}`);
-                return mapping.right;
+            codeString = codeString.replaceAll(mapping.source, function (match) {
+                utils.info(`  revising ${name}, replacing ${mapping.source} with ${mapping.target}`);
+                return mapping.target;
             });
             entity.policy.code = JSON.parse(codeString);
         }
