@@ -5314,13 +5314,6 @@ type SampleMessage {
     serviceName: String
 }
 
-"""
-A SampleMessage Configuration.
-> @l7-entity
-> @l7-identity-fields name
-> @l7-summary-fields goid,name,checksum
-> @l7-excluded-fields
-"""
 input SampleMessageInput {
     "The goid for the SampleMessage"
     goid : ID
