@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 
-/*
- * Copyright ©  2024. Broadcom Inc. and/or its subsidiaries. All Rights Reserved.
- */
+// Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 const home = process.env.GRAPHMAN_HOME || __dirname;
 const args = process.argv.slice(2);
