@@ -25,7 +25,7 @@ This document describes how to run and write tests for the Graphman Client.
 1. Clone the repository:
 ```bash
 git clone https://github.com/Layer7-Community/graphman-client.git
-cd graphman-client/v2.0
+cd graphman-client
 ```
 
 2. Install dependencies:
@@ -45,17 +45,17 @@ This will install:
 
    **Linux/Mac:**
    ```bash
-   export GRAPHMAN_HOME=/path/to/graphman-client/v2.0
+   export GRAPHMAN_HOME=/path/to/graphman-client
    ```
 
    **Windows (PowerShell):**
    ```powershell
-   $env:GRAPHMAN_HOME = "C:\path\to\graphman-client\v2.0"
+   $env:GRAPHMAN_HOME = "C:\path\to\graphman-client"
    ```
 
    **Windows (Command Prompt):**
    ```cmd
-   set GRAPHMAN_HOME=C:\path\to\graphman-client\v2.0
+   set GRAPHMAN_HOME=C:\path\to\graphman-client
    ```
 
 2. **Configure Gateway Connection** (for integration tests):
@@ -361,7 +361,7 @@ Cannot find module './modules/graphman-utils'
 
 **Solution:**
 ```bash
-export GRAPHMAN_HOME=/path/to/graphman-client/v2.0
+export GRAPHMAN_HOME=/path/to/graphman-client
 ```
 
 #### 2. Gateway not accessible
@@ -397,98 +397,6 @@ Cannot find module 'jest'
 **Solution:**
 ```bash
 npm install
-```
-
-### Running Specific Test Suites
-
-#### Run only unit tests (no Gateway required)
-
-```bash
-npx jest tests/utils.test.js tests/args-parser.test.js tests/combine.test.js
-```
-
-#### Run only integration tests (Gateway required)
-
-```bash
-npx jest tests/standard-bundle.mutations.test.js tests/export.test.js
-```
-
-#### Skip specific tests
-
-```bash
-npx jest --testPathIgnorePatterns=standard-bundle
-```
-
-### Debug Mode
-
-Run tests with Node.js debugger:
-
-```bash
-node --inspect-brk node_modules/.bin/jest --runInBand
-```
-
-Then attach your debugger (VS Code, Chrome DevTools, etc.)
-
-## Continuous Integration
-
-### GitHub Actions Example
-
-```yaml
-name: Tests
-
-on: [push, pull_request]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v2
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '16'
-    
-    - name: Install dependencies
-      run: npm install
-      working-directory: ./v2.0
-    
-    - name: Run tests
-      run: npm test
-      working-directory: ./v2.0
-      env:
-        GRAPHMAN_HOME: ${{ github.workspace }}/v2.0
-```
-
-### Jenkins Example
-
-```groovy
-pipeline {
-    agent any
-    
-    stages {
-        stage('Install') {
-            steps {
-                dir('v2.0') {
-                    sh 'npm install'
-                }
-            }
-        }
-        
-        stage('Test') {
-            steps {
-                dir('v2.0') {
-                    sh 'npm test'
-                }
-            }
-        }
-    }
-    
-    environment {
-        GRAPHMAN_HOME = "${WORKSPACE}/v2.0"
-    }
-}
 ```
 
 ## Test Coverage
