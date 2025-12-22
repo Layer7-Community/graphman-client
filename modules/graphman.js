@@ -214,7 +214,7 @@ module.exports = {
 
         req.minVersion = req.maxVersion = gateway.tlsProtocol || "TLSv1.2";
         
-        // Handle proxy configuration
+        // Handle proxy configuration (object with url and options)
         if (gateway.socksProxy) {
             req.socksProxy = gateway.socksProxy;
         }
@@ -239,43 +239,64 @@ module.exports = {
         const isHttps = !options.protocol || options.protocol === 'https' || options.protocol === 'https:';
         
         if (options.httpProxy) {
-            // Handle HTTP/HTTPS proxy
-            // Use agent type based on target protocol, not proxy URL protocol
-            let proxyUrl = options.httpProxy;
-            // Normalize proxy URL - add http:// prefix if no protocol specified
-            if (!proxyUrl.startsWith('http://') && !proxyUrl.startsWith('https://')) {
-                proxyUrl = `http://${proxyUrl}`;
-            }
-            try {
-                // Use https-proxy-agent for HTTPS targets, http-proxy-agent for HTTP targets
-                if (isHttps) {
-                    agent = utils.extension("https-proxy-agent").apply(proxyUrl, {});
-                } else {
-                    agent = utils.extension("http-proxy-agent").apply(proxyUrl, {});
+            // Handle HTTP/HTTPS proxy - object with url and connection options
+            const proxyConfig = options.httpProxy;
+            
+            if (typeof proxyConfig !== 'object' || !proxyConfig.url) {
+                utils.warn("httpProxy must be an object with a 'url' property");
+            } else {
+                const proxyUrl = proxyConfig.url;
+                // Extract connection options (exclude url property)
+                const proxyOptions = {};
+                Object.keys(proxyConfig).forEach(key => {
+                    if (key !== 'url') {
+                        proxyOptions[key] = proxyConfig[key];
+                    }
+                });
+                
+                try {
+                    // Use https-proxy-agent for HTTPS targets, http-proxy-agent for HTTP targets
+                    if (isHttps) {
+                        agent = utils.extension("https-proxy-agent").apply(proxyUrl, proxyOptions);
+                    } else {
+                        agent = utils.extension("http-proxy-agent").apply(proxyUrl, proxyOptions);
+                    }
+                    if (agent && typeof agent !== 'string' && typeof agent === 'object') {
+                        options.agent = agent;
+                    } else if (agent) {
+                        utils.warn(`${isHttps ? 'https' : 'http'}-proxy-agent extension did not return a valid agent, proxy will not be used`);
+                    }
+                } catch (e) {
+                    console.error(e);
+                    utils.warn(`failed to load ${isHttps ? 'https' : 'http'}-proxy-agent extension, proxy will not be used: ${e.message}`);
                 }
-                if (agent && typeof agent !== 'string' && typeof agent === 'object') {
-                    options.agent = agent;
-                } else if (agent) {
-                    utils.warn(`${isHttps ? 'https' : 'http'}-proxy-agent extension did not return a valid agent, proxy will not be used`);
-                }
-            } catch (e) {
-                console.error(e);
-                utils.warn(`failed to load ${isHttps ? 'https' : 'http'}-proxy-agent extension, proxy will not be used: ${e.message}`);
             }
         } else if (options.socksProxy) {
-            // Handle SOCKS proxy
-            const proxyUrl = options.socksProxy.startsWith('socks://') || options.socksProxy.startsWith('socks5://') || options.socksProxy.startsWith('socks4://') 
-                ? options.socksProxy 
-                : `socks5://${options.socksProxy}`;
-            try {
-                agent = utils.extension("socks-proxy-agent").apply(proxyUrl, {});
-                if (agent && typeof agent !== 'string' && typeof agent === 'object') {
-                    options.agent = agent;
-                } else if (agent) {
-                    utils.warn(`socks-proxy-agent extension did not return a valid agent, proxy will not be used`);
+            // Handle SOCKS proxy - object with url and connection options
+            const proxyConfig = options.socksProxy;
+            
+            if (typeof proxyConfig !== 'object' || !proxyConfig.url) {
+                utils.warn("socksProxy must be an object with a 'url' property");
+            } else {
+                const proxyUrl = proxyConfig.url;
+                // Extract connection options (exclude url property)
+                const proxyOptions = {};
+                Object.keys(proxyConfig).forEach(key => {
+                    if (key !== 'url') {
+                        proxyOptions[key] = proxyConfig[key];
+                    }
+                });
+                
+                try {
+                    agent = utils.extension("socks-proxy-agent").apply(proxyUrl, proxyOptions);
+                    if (agent && typeof agent !== 'string' && typeof agent === 'object') {
+                        options.agent = agent;
+                    } else if (agent) {
+                        utils.warn(`socks-proxy-agent extension did not return a valid agent, proxy will not be used`);
+                    }
+                } catch (e) {
+                    utils.warn(`failed to load socks-proxy-agent extension, proxy will not be used: ${e.message}`);
                 }
-            } catch (e) {
-                utils.warn(`failed to load socks-proxy-agent extension, proxy will not be used: ${e.message}`);
             }
         }
         
