@@ -254,8 +254,23 @@ module.exports = {
                     }
                 });
                 
+                // Validate proxy URL protocol
+                const proxyUrlLower = proxyUrl.toLowerCase();
+                const isProxyHttps = proxyUrlLower.startsWith('https://');
+                if (isProxyHttps) {
+                    // If proxy URL uses https://, ensure TLS options are configured if needed
+                    if (!proxyOptions.tls) {
+                        proxyOptions.tls = {};
+                    }
+                    // If rejectUnauthorized is not explicitly set for proxy TLS, default to false for compatibility
+                    if (proxyOptions.tls.rejectUnauthorized === undefined) {
+                        proxyOptions.tls.rejectUnauthorized = false;
+                    }
+                }
+                
                 try {
                     // Use https-proxy-agent for HTTPS targets, http-proxy-agent for HTTP targets
+                    // Note: The agent type is based on TARGET protocol, not proxy URL protocol
                     if (isHttps) {
                         agent = utils.extension("https-proxy-agent").apply(proxyUrl, proxyOptions);
                     } else {
