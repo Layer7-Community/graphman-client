@@ -404,6 +404,11 @@ npm install
 Generate coverage report:
 
 ```bash
+npm run test:coverage
+```
+
+Or using Jest directly:
+```bash
 npx jest --coverage
 ```
 
@@ -415,6 +420,29 @@ open coverage/lcov-report/index.html  # Mac
 xdg-open coverage/lcov-report/index.html  # Linux
 start coverage/lcov-report/index.html  # Windows
 ```
+
+### Generate All Reports
+
+Use the provided scripts to generate comprehensive test reports:
+
+**Linux/Mac:**
+```bash
+./generate-test-reports.sh
+```
+
+**Windows:**
+```bash
+generate-test-reports.bat
+```
+
+**Or using npm:**
+```bash
+npm run test:report
+```
+
+For detailed information about test reporting, see:
+- [TEST-REPORTING.md](./TEST-REPORTING.md) - Complete test reporting guide
+- [TEST-REPORTS-QUICK-REFERENCE.md](./TEST-REPORTS-QUICK-REFERENCE.md) - Quick reference
 
 ## Best Practices
 
