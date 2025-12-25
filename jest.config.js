@@ -40,7 +40,7 @@ module.exports = {
   reporters: [
     'default',        // Standard Jest reporter
     [
-      'jest-junit',   // JUnit XML reporter (needs to be installed)
+      'jest-junit',   // JUnit XML reporter
       {
         outputDirectory: './test-reports',
         outputName: 'junit.xml',
@@ -48,6 +48,22 @@ module.exports = {
         titleTemplate: '{title}',
         ancestorSeparator: ' › ',
         usePathForSuiteName: true
+      }
+    ],
+    [
+      'jest-html-reporters',  // Standard HTML test reporter
+      {
+        publicPath: './test-reports',
+        filename: 'test-report.html',
+        pageTitle: 'Graphman Client - Test Report',
+        expand: false,
+        openReport: false,
+        hideIcon: false,
+        includeConsoleLog: true,
+        includeFailureMsg: true,
+        enableMergeData: false,
+        dateFmt: 'yyyy-mm-dd HH:MM:ss',
+        inlineSource: true
       }
     ]
   ],
