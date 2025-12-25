@@ -30,6 +30,7 @@ generate-test-reports.bat
 
 | Report Type | Location | Command |
 |------------|----------|---------|
+| **HTML Test Report** | `test-reports/test-report.html` | `npm run test:report` |
 | **HTML Coverage** | `coverage/lcov-report/index.html` | `npm run test:coverage` |
 | **LCOV** | `coverage/lcov.info` | `npm run test:coverage` |
 | **JUnit XML** | `test-reports/junit.xml` | `npm run test:ci` |
@@ -38,7 +39,19 @@ generate-test-reports.bat
 
 ## 🔍 View Reports
 
-### HTML Coverage Report
+### HTML Test Report (Simple & Clean)
+```bash
+# Windows
+start test-reports\test-report.html
+
+# Mac
+open test-reports/test-report.html
+
+# Linux
+xdg-open test-reports/test-report.html
+```
+
+### HTML Coverage Report (Detailed)
 ```bash
 # Windows
 start coverage\lcov-report\index.html
@@ -77,24 +90,30 @@ All files                 |   85.23 |    78.45 |   82.67 |   85.89 |
 npm test
 ```
 
-### 2. Full Coverage Report
+### 2. Generate HTML Test Report
+```bash
+npm run test:report
+open test-reports/test-report.html
+```
+
+### 3. Generate Coverage Report (separate)
 ```bash
 npm run test:coverage
 open coverage/lcov-report/index.html
 ```
 
-### 3. CI/CD Pipeline
+### 4. CI/CD Pipeline
 ```bash
 npm run test:ci
 # Generates: test-reports/junit.xml
 ```
 
-### 4. Specific File Coverage
+### 5. Specific File Coverage
 ```bash
 npm test -- tests/combine.test.js --coverage
 ```
 
-### 5. Watch Mode Development
+### 6. Watch Mode Development
 ```bash
 npm run test:watch
 ```
@@ -193,10 +212,11 @@ publishHTML reportDir: 'coverage/lcov-report'
 
 ## 🔗 Resources
 
-- [Full Documentation](./TEST-REPORTING.md)
-- [Testing Guide](./TESTING.md)
+- [HTML Test Report Guide](./HTML-TEST-REPORT-GUIDE.md) - **Simple HTML reports**
+- [Full Documentation](./TEST-REPORTING.md) - Complete reporting guide
+- [Testing Guide](./TESTING.md) - How to write tests
 - [Jest Docs](https://jestjs.io/)
-- [jest-junit](https://github.com/jest-community/jest-junit)
+- [jest-html-reporters](https://github.com/Hazyzh/jest-html-reporters)
 
 ---
 
