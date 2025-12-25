@@ -16,17 +16,17 @@ if not exist coverage mkdir coverage
 REM Run tests with coverage
 echo.
 echo Running tests with coverage...
-call npm test -- --coverage --coverageReporters=html --coverageReporters=text --coverageReporters=lcov --coverageReporters=json --coverageReporters=cobertura --coverageReporters=text-summary
+call npm test -- --runInBand --coverage --coverageReporters=html --coverageReporters=text --coverageReporters=lcov --coverageReporters=json --coverageReporters=cobertura --coverageReporters=text-summary
 
 REM Generate JUnit XML report
 echo.
 echo Generating JUnit XML report...
-call npm test -- --ci --reporters=jest-junit
+call npm test -- --runInBand --ci --reporters=jest-junit
 
 REM Generate test summary
 echo.
 echo Generating test summary...
-call npm test -- --verbose --json --outputFile=test-reports/test-results.json
+call npm test -- --runInBand --verbose --json --outputFile=test-reports/test-results.json
 
 REM Display results
 echo.

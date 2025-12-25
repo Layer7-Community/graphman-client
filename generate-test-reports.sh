@@ -24,7 +24,7 @@ mkdir -p coverage
 # Run tests with coverage
 echo ""
 echo -e "${BLUE}Running tests with coverage...${NC}"
-npm test -- --coverage \
+npm test -- --runInBand --coverage \
   --coverageReporters=html \
   --coverageReporters=text \
   --coverageReporters=lcov \
@@ -35,12 +35,12 @@ npm test -- --coverage \
 # Generate JUnit XML report
 echo ""
 echo -e "${BLUE}Generating JUnit XML report...${NC}"
-npm test -- --ci --reporters=jest-junit || true
+npm test -- --runInBand --ci --reporters=jest-junit || true
 
 # Generate test summary
 echo ""
 echo -e "${BLUE}Generating test summary...${NC}"
-npm test -- --verbose --json --outputFile=test-reports/test-results.json || true
+npm test -- --runInBand--verbose --json --outputFile=test-reports/test-results.json || true
 
 # Display results
 echo ""
