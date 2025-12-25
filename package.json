@@ -4,7 +4,12 @@
     "description": "Layer7 API Gateway Graphman Client",
     "main": "modules/main.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "jest --runInBand",
+        "test:watch": "jest --runInBand --watch",
+        "test:coverage": "jest --runInBand --coverage",
+        "test:verbose": "jest -runInBand --verbose",
+        "test:report": "jest -runInBand --reporters=default --reporters=jest-html-reporters",
+        "test:ci": "jest --runInBand --ci --coverage --maxWorkers=2 --reporters=default --reporters=jest-junit"
     },
     "repository": "https://github.com/Layer7-Community/graphman-client",
     "homepage": "https://github.com/Layer7-Community/graphman-client#readme",
@@ -18,7 +23,9 @@
     "author": "Layer7",
     "license": "SEE LICENSE IN LICENSE.md",
     "devDependencies": {
-        "jest": "^29.7.0"
+        "jest": "^29.7.0",
+        "jest-html-reporters": "^3.1.7",
+        "jest-junit": "^16.0.0"
     },
     "optionalDependencies": {
         "diff": "^5.2.0"

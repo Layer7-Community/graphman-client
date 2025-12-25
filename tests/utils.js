@@ -30,7 +30,7 @@ module.exports = {
         }
 
         if (fs.existsSync(outputFile)) fs.unlinkSync(outputFile);
-        const stdOutput = String(cp.execFileSync(tConfig.execFile, args));
+        const stdOutput = String(cp.execFileSync(tConfig.execFile, args, { stdio: ['inherit', 'pipe', 'pipe'], shell: true }));
         console.log(stdOutput);
         const output = fs.existsSync(outputFile)? String(fs.readFileSync(outputFile)) : "{}";
         console.log(output);
