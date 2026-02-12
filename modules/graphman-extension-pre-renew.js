@@ -1,5 +1,5 @@
 /*
- * Copyright ©  2024. Broadcom Inc. and/or its subsidiaries. All Rights Reserved.
+ * Copyright (c)  2026. Broadcom Inc. and its subsidiaries. All Rights Reserved.
  */
 
 module.exports = {
