@@ -7,6 +7,8 @@ module.exports = {
      * Extension to process the bundle to be renewed
      * @param input bundle to be renewed
      * @param context partial execution context
+     * @param context.operation operation
+     * @param context.gateway gateway object
      * @param context.options CLI options
      */
     apply: function (input, context) {
