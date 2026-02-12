@@ -117,9 +117,6 @@ function combineProperties(result, left, right) {
  * For duplicate entity mappings (same identity), right bundle mappings take precedence.
  * Reuses the structure and logic pattern from overrideMappings in graphman-bundle.js
  * 
- * This implementation addresses the requirement from PR #91 to keep mappings
- * from each single source bundle when combining bundles.
- * 
  * @param resultBundle result bundle (will be modified)
  * @param leftMappings left bundle mappings
  * @param rightMappings right bundle mappings

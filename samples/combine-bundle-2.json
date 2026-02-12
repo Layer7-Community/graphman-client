@@ -185,6 +185,28 @@
       "policy": {
         "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:CommentAssertion>\n            <L7p:Comment stringValue=\"Policy Fragment: some-policy-fragment\"/>\n        </L7p:CommentAssertion>\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"JHtzb21lLW91dHB1dH0sICJoZWxsbyBmcm9tICR7cG9saWN5Lm5hbWV9Ig==\"/>\n            <L7p:ContentType stringValue=\"text/plain; charset=utf-8\"/>\n            <L7p:DataType variableDataType=\"message\"/>\n            <L7p:VariableToSet stringValue=\"some-output\"/>\n        </L7p:SetVariable>\n        <L7p:Include>\n            <L7p:PolicyGuid stringValue=\"ffe348a7-8255-4c3b-ba18-021ec626dd0d\"/>\n            <L7p:PolicyName stringValue=\"some-inner-policy-fragment\"/>\n        </L7p:Include>\n        <L7p:Encapsulated>\n            <L7p:EncapsulatedAssertionConfigGuid stringValue=\"5047edc8-9df8-4e57-9e75-74221139c520\"/>\n            <L7p:EncapsulatedAssertionConfigName stringValue=\"some-encass\"/>\n        </L7p:Encapsulated>\n        <wsp:OneOrMore wsp:Usage=\"Required\">\n            <L7p:TrueAssertion/>\n        </wsp:OneOrMore>\n    </wsp:All>\n</wsp:Policy>\n"
       }
+    },
+    {
+      "goid": "2bf23f7e0c0bfc3d53358e1b5806a29f",
+      "guid": "d51eb64f-7f88-40aa-8c78-fdddd1c15fde",
+      "name": "jsonpolicy-webapi",
+      "resolutionPath": "/jsonpolicy-webapi",
+      "serviceType": "WEB_API",
+      "checksum": "c9052f0d06167fc0838615cc2efd9b468bd60b47",
+      "enabled": true,
+      "folderPath": "/graphman-tests/webApiServices",
+      "methodsAllowed": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "tracingEnabled": false,
+      "wssProcessingEnabled": false,
+      "laxResolution": false,
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:SetVariable>\n            <L7p:Base64Expression stringValue=\"JHtzb21lLW91dHB1dH0sICJoZWxsbyBmcm9tICR7cG9saWN5Lm5hbWV9Ig==\"/>\n            <L7p:VariableToSet stringValue=\"some-output\"/>\n        </L7p:SetVariable>\n    </wsp:All>\n</wsp:Policy>\n"
+      }
     }
   ],
   "policies": [
@@ -395,6 +417,11 @@
         {
           "action": "NEW_OR_EXISTING",
           "resolutionPath": "/yamlpolicy-webapi",
+          "serviceType": "WEB_API"
+        },
+        {
+          "action": "NEW_OR_UPDATE",
+          "resolutionPath": "/jsonpolicy-webapi",
           "serviceType": "WEB_API"
         }
       ],

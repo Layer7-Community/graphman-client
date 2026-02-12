@@ -29,17 +29,29 @@ test("combine two bundles with unique entities", () => {
     
     const output = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
 
-    // Should contain all services from bundle1
+    // Bundle1 has 6 services, bundle3 has 0 services - result should have 6
     expect(output.services).toBeDefined();
-    expect(output.services.length).toBeGreaterThan(0);
+    expect(output.services.length).toBe(6);
     
-    // Should contain encassConfigs from bundle3
+    // Bundle1 has 6 policies, bundle3 has 0 policies - result should have 6
+    expect(output.policies).toBeDefined();
+    expect(output.policies.length).toBe(6);
+    
+    // Bundle1 has 5 clusterProperties, bundle3 has 0 - result should have 5
+    expect(output.clusterProperties).toBeDefined();
+    expect(output.clusterProperties.length).toBe(5);
+    
+    // Bundle1 has 0 encassConfigs, bundle3 has 3 - result should have 3
     expect(output.encassConfigs).toBeDefined();
-    expect(output.encassConfigs.length).toBeGreaterThan(0);
+    expect(output.encassConfigs.length).toBe(3);
     
-    // Should contain keys from bundle3
+    // Bundle1 has 0 keys, bundle3 has 3 - result should have 3
     expect(output.keys).toBeDefined();
-    expect(output.keys.length).toBeGreaterThan(0);
+    expect(output.keys.length).toBe(3);
+    
+    // Bundle1 has 0 secrets, bundle3 has 2 - result should have 2
+    expect(output.secrets).toBeDefined();
+    expect(output.secrets.length).toBe(2);
     
     // Properties should be merged
     expect(output.properties).toBeDefined();
@@ -68,6 +80,9 @@ test("combine bundles with overlapping entities - right takes precedence", () =>
         s.resolutionPath === "/jsonpolicy-webapi" || s.name === "jsonpolicy-webapi"
     );
     expect(overlappingService).toBeDefined();
+    // Verify that the goid matches the right bundle (bundle2) goid
+    // Bundle1 has goid "2bf23f7e0c0bfc3d53358e1b5806a29e", Bundle2 has goid "2bf23f7e0c0bfc3d53358e1b5806a29f"
+    expect(overlappingService.goid).toBe("2bf23f7e0c0bfc3d53358e1b5806a29f");
     
     // Should contain all policies from both bundles
     expect(output.policies).toBeDefined();
@@ -121,6 +136,9 @@ test("combine bundles - mappings are merged with right taking precedence", () =>
         m.resolutionPath === "/jsonpolicy-webapi"
     );
     expect(overlappingMapping).toBeDefined();
+    // Verify that the action matches the right bundle (bundle2) action
+    // Bundle1 has action "NEW_OR_EXISTING", Bundle2 has action "NEW_OR_UPDATE"
+    expect(overlappingMapping.action).toBe("NEW_OR_UPDATE");
 });
 
 test("combine three bundles", () => {
