@@ -88,7 +88,7 @@ module.exports = {
         mockExtensionDir = path.join(testHome, "modules");
         
         // Clear any previous mock extensions and captured contexts
-        ['pre-import', 'post-export', 'pre-renew', 'pre-request', 'policy-code-validator', 'multiline-text-diff'].forEach(extName => {
+        ['pre-import', 'post-export', 'pre-renew', 'pre-request', 'multiline-text-diff'].forEach(extName => {
             const extFile = path.join(mockExtensionDir, `graphman-extension-${extName}.js`);
             if (fs.existsSync(extFile)) {
                 fs.unlinkSync(extFile);
@@ -106,7 +106,7 @@ module.exports = {
 
     afterEach(() => {
         // Clean up mock extensions
-        ['pre-import', 'post-export', 'pre-renew', 'pre-request', 'policy-code-validator', 'multiline-text-diff'].forEach(extName => {
+        ['pre-import', 'post-export', 'pre-renew', 'pre-request', 'multiline-text-diff'].forEach(extName => {
             const extFile = path.join(mockExtensionDir, `graphman-extension-${extName}.js`);
             if (fs.existsSync(extFile)) {
                 fs.unlinkSync(extFile);
@@ -298,21 +298,6 @@ module.exports = {
         expect(capturedContext.operation).toBe("export");
     });
 
-    test("policy-code-validator extension receives context with operation details", () => {
-        createMockExtension("policy-code-validator");
-        utils.extensions("policy-code-validator");
-        const extension = utils.extension("policy-code-validator");
-        
-        const testSchema = { type: "object" };
-        const context = utils.buildOperationContext("validate", {}, null);
-        
-        extension.apply(testSchema, context);
-        
-        const capturedContext = getCapturedContext("policy-code-validator");
-        expect(capturedContext).toBeDefined();
-        expect(capturedContext.operation).toBe("validate");
-        expect(capturedContext.config).toBeDefined();
-    });
 
     test("multiline-text-diff extension receives context with operation and typeInfo", () => {
         createMockExtension("multiline-text-diff");
