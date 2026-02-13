@@ -1,13 +1,33 @@
-.idea
+# Dependencies
+node_modules/
+
+# Test reports
+test-reports/
+coverage/
+
+# Build output
+build/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
 .DS_Store
-.tmp
-exploded
-target.properties
-./*.json
-./*.xml
-./*.zip
-schema/metadata.json
-schema/**/metadata.json
-output/*
-build/*
-node_modules/*
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment
+.env
+.env.local
+
+# Temporary files
+*.tmp
+tmp/
+temp/
