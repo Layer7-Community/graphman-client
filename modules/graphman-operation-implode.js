@@ -216,8 +216,6 @@ let type1Imploder = (function () {
             });
         });
 
-        // Resolve dependencies for selected entities
-        resolveDependencies(selectedEntities, entityFileMap, inputDir);
     }
 
     function findEntityBySummary(section, summary, entityFileMap, typeInfo) {
@@ -244,100 +242,6 @@ let type1Imploder = (function () {
             return false;
         }
         return true;
-    }
-
-    function resolveDependencies(selectedEntities, entityFileMap, inputDir) {
-        const processed = new Set();
-        const toProcess = Array.from(selectedEntities);
-
-        while (toProcess.length > 0) {
-            const key = toProcess.shift();
-            if (processed.has(key)) continue;
-            processed.add(key);
-
-            const entry = entityFileMap.get(key);
-            if (!entry) continue;
-
-            const { entity, typeInfo } = entry;
-
-            // Find dependencies in the entity
-            const dependencies = findDependencies(entity, typeInfo, entityFileMap, inputDir);
-            dependencies.forEach(depKey => {
-                if (!selectedEntities.has(depKey)) {
-                    selectedEntities.add(depKey);
-                    toProcess.push(depKey);
-                    const depEntry = entityFileMap.get(depKey);
-                    if (depEntry) {
-                        utils.info(`  including dependency: ${depKey} - ${butils.entityName(depEntry.entity, depEntry.typeInfo)}`);
-                    }
-                }
-            });
-        }
-    }
-
-    function findDependencies(entity, typeInfo, entityFileMap, inputDir) {
-        const dependencies = [];
-
-        // Check for policy dependencies (these might exist if the directory was created from an export with dependencies)
-        if (entity.policy) {
-            if (entity.policy.allDependencies) {
-                addDependenciesFromBundle(entity.policy.allDependencies, entityFileMap, dependencies);
-            }
-            if (entity.policy.directDependencies) {
-                addDependenciesFromBundle(entity.policy.directDependencies, entityFileMap, dependencies);
-            }
-        }
-
-        // For services, check for referenced policies
-        if (typeInfo.pluralName === "services" && entity.policy) {
-            // Service references a policy - try to find it
-            if (entity.policy.goid) {
-                findEntityByGoid("policies", entity.policy.goid, entityFileMap, dependencies);
-            }
-        }
-
-        // Check for key references
-        if (entity.keyRef) {
-            findEntityByGoid("keys", entity.keyRef.goid || entity.keyRef, entityFileMap, dependencies);
-        }
-
-        // Check for trusted cert references
-        if (entity.trustedCertRefs && Array.isArray(entity.trustedCertRefs)) {
-            entity.trustedCertRefs.forEach(ref => {
-                findEntityByGoid("trustedCerts", ref.goid || ref, entityFileMap, dependencies);
-            });
-        }
-
-        return dependencies;
-    }
-
-    function findEntityByGoid(section, goid, entityFileMap, dependencies) {
-        if (!goid) return;
-
-        for (const [key, value] of entityFileMap.entries()) {
-            if (key.startsWith(section + ":")) {
-                const entity = value.entity;
-                if (entity.goid === goid) {
-                    dependencies.push(key);
-                    return;
-                }
-            }
-        }
-    }
-
-    function addDependenciesFromBundle(dependencyBundle, entityFileMap, dependencies) {
-        Object.keys(dependencyBundle).forEach(section => {
-            const typeInfo = graphman.typeInfoByPluralName(section);
-            if (!typeInfo) return;
-
-            const depEntities = Array.isArray(dependencyBundle[section]) ? dependencyBundle[section] : [dependencyBundle[section]];
-            depEntities.forEach(depEntity => {
-                const key = findEntityBySummary(section, depEntity, entityFileMap, typeInfo);
-                if (key) {
-                    dependencies.push(key);
-                }
-            });
-        });
     }
 
     function readEntities(inputDir, pluralName, typeInfo, bundle, selectedEntities, packageSpec) {
