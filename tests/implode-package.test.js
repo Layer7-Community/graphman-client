@@ -194,7 +194,7 @@ describe("Implode operation - with package file (entity summary references)", ()
 describe("Implode operation - folderable entities (services/policies)", () => {
     test("implode should handle tree structure (services and policies)", () => {
         const output = graphman("implode",
-            "--input", "samples/entities",
+            "--input", explodedDir,
             "--output", implodedFile);
 
         const bundle = tUtils.readFileAsJson(implodedFile);
@@ -237,12 +237,11 @@ describe("Implode operation - folderable entities (services/policies)", () => {
 
 describe("Implode operation - package file validation", () => {
     test("implode with non-existent package file should fail", () => {
-        expect(() => {
-            graphman("implode",
-                "--input", explodedDir,
-                "--output", implodedFile,
-                "--package", "non-existent-package.json");
-        }).toThrow();
+        const output = graphman("implode",
+            "--input", explodedDir,
+            "--output", implodedFile,
+            "--package", "non-existent-package.json");
+        expect(output.stdout).toContain("package file does not exist");
     });
 
     test("implode with unknown entity type in package file should warn", () => {
@@ -312,7 +311,7 @@ describe("Implode operation - mapping filtering", () => {
             "--output", implodedFile);
 
         const bundle = tUtils.readFileAsJson(implodedFile);
-        const originalProps = tUtils.readFileAsJson("samples/entities/bundle-properties.json");
+        const originalProps = tUtils.readFileAsJson(explodedDir + "/bundle-properties.json");
         
         // All original mappings should be preserved
         if (originalProps.mappings && bundle.properties && bundle.properties.mappings) {
