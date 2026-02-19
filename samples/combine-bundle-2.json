@@ -350,7 +350,7 @@
     "mappings": {
       "services": [
         {
-          "action": "NEW_OR_EXISTING",
+          "action": "NEW_OR_UPDATE",
           "resolutionPath": "/some-backend",
           "serviceType": "WEB_API"
         },

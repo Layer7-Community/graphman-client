@@ -295,6 +295,13 @@
   "properties": {
     "defaultAction": "ALWAYS_CREATE_NEW",
     "mappings": {
+      "services": [
+        {
+          "action": "ALWAYS_CREATE_NEW",
+          "resolutionPath": "/some-backend",
+          "serviceType": "WEB_API"
+        }
+      ],
       "encassConfigs": [
         {
           "action": "NEW_OR_EXISTING",

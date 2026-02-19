@@ -480,68 +480,6 @@ describe("combine command", () => {
         expect(output.clusterProperties.length).toBeGreaterThanOrEqual(5);
     });
 
-    test("combine bundles - right defaultAction takes precedence", () => {
-        const bundle1Path = path.join("samples", "combine-bundle-1.json");
-        const bundle2Path = path.join("samples", "combine-bundle-2.json");
-        const outputPath = path.join(workspace, "combine-output-3.json");
-
-        graphman("combine", "--inputs", bundle1Path, bundle2Path, "--output", outputPath);
-
-        const output = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
-
-        // Right bundle's defaultAction should take precedence
-        expect(output.properties.defaultAction).toBe("NEW_OR_UPDATE");
-    });
-
-    test("combine bundles - mappings are merged with right taking precedence", () => {
-        const bundle1Path = path.join("samples", "combine-bundle-1.json");
-        const bundle2Path = path.join("samples", "combine-bundle-2.json");
-        const outputPath = path.join(workspace, "combine-output-4.json");
-
-        graphman("combine", "--inputs", bundle1Path, bundle2Path, "--output", outputPath);
-
-        const output = tUtils.readFileAsJson(outputPath);
-
-        expect(output.properties.mappings).toBeDefined();
-        expect(output.properties.mappings.services).toBeDefined();
-
-        // Should contain mappings from both bundles
-        expect(output.properties.mappings.services.length).toBeGreaterThanOrEqual(6);
-
-        // Verify overlapping mapping from bundle2 is present (right takes precedence)
-        const overlappingMapping = output.properties.mappings.services.find(m =>
-            m.resolutionPath === "/jsonpolicy-webapi"
-        );
-        expect(overlappingMapping).toBeDefined();
-        // Verify that the action matches the right bundle (bundle2) action
-        // Bundle1 has action "NEW_OR_EXISTING", Bundle2 has action "NEW_OR_UPDATE"
-        expect(overlappingMapping.action).toBe("NEW_OR_UPDATE");
-    });
-
-    test("combine three bundles", () => {
-        const bundle1Path = path.join("samples", "combine-bundle-1.json");
-        const bundle2Path = path.join("samples", "combine-bundle-2.json");
-        const bundle3Path = path.join("samples", "combine-bundle-3.json");
-        const outputPath = path.join(workspace, "combine-output-5.json");
-
-        graphman("combine", "--inputs", bundle1Path, bundle2Path, bundle3Path, "--output", outputPath);
-
-        const output = tUtils.readFileAsJson(outputPath);
-
-        // Should contain entities from all three bundles
-        expect(output.services).toBeDefined();
-        expect(output.services.length).toBeGreaterThan(0);
-
-        expect(output.encassConfigs).toBeDefined();
-        expect(output.encassConfigs.length).toBeGreaterThan(0);
-
-        expect(output.keys).toBeDefined();
-        expect(output.keys.length).toBeGreaterThan(0);
-
-        // Rightmost bundle's defaultAction should take precedence
-        expect(output.properties.defaultAction).toBe("ALWAYS_CREATE_NEW");
-    });
-
     test("combine bundles with empty bundle", () => {
         const bundle1Path = path.join("samples", "combine-bundle-1.json");
         const bundle4Path = path.join("samples", "combine-bundle-4.json");
@@ -576,27 +514,6 @@ describe("combine command", () => {
         expect(output.encassConfigs).toBeDefined();
         expect(output.keys).toBeDefined();
         expect(output.secrets).toBeDefined();
-    });
-
-    test("combine bundles - mappings for all entity types are preserved", () => {
-        const bundle1Path = path.join("samples", "combine-bundle-1.json");
-        const bundle2Path = path.join("samples", "combine-bundle-2.json");
-        const bundle3Path = path.join("samples", "combine-bundle-3.json");
-        const outputPath = path.join(workspace, "combine-output-8.json");
-
-        graphman("combine", "--inputs", bundle1Path, bundle2Path, bundle3Path, "--output", outputPath);
-
-        const output = tUtils.readFileAsJson(outputPath);
-
-        expect(output.properties.mappings).toBeDefined();
-
-        // Verify mappings for different entity types
-        expect(output.properties.mappings.services).toBeDefined();
-        expect(output.properties.mappings.policies).toBeDefined();
-        expect(output.properties.mappings.clusterProperties).toBeDefined();
-        expect(output.properties.mappings.encassConfigs).toBeDefined();
-        expect(output.properties.mappings.keys).toBeDefined();
-        expect(output.properties.mappings.secrets).toBeDefined();
     });
 
     test("combine bundles - no duplicate entities in result", () => {
@@ -650,43 +567,6 @@ describe("combine command", () => {
         expect(output.properties.mappings).toBeDefined();
     });
 
-    test("combine bundles - rightmost bundle mappings take precedence for duplicates", () => {
-        const bundle1Path = path.join("samples", "combine-bundle-1.json");
-        const bundle2Path = path.join("samples", "combine-bundle-2.json");
-        const outputPath = path.join(workspace, "combine-output-12.json");
-
-        graphman("combine", "--inputs", bundle1Path, bundle2Path, "--output", outputPath);
-
-        const output = tUtils.readFileAsJson(outputPath);
-
-        // Find the overlapping service mapping
-        const overlappingServiceMapping = output.properties.mappings.services.find(m =>
-            m.resolutionPath === "/jsonpolicy-webapi"
-        );
-
-        // The mapping from bundle2 should be present (right takes precedence)
-        expect(overlappingServiceMapping).toBeDefined();
-        expect(overlappingServiceMapping.action).toBe("NEW_OR_UPDATE");
-    });
-
-    test("combine bundles - all mappings from left bundle are preserved when no overlap", () => {
-        const bundle1Path = path.join("samples", "combine-bundle-1.json");
-        const bundle3Path = path.join("samples", "combine-bundle-3.json");
-        const outputPath = path.join(workspace, "combine-output-13.json");
-
-        graphman("combine", "--inputs", bundle1Path, bundle3Path, "--output", outputPath);
-
-        const output = tUtils.readFileAsJson(outputPath);
-
-        // Bundle1 and bundle3 have no overlapping entity types in mappings
-        // All mappings from both should be present
-        expect(output.properties.mappings.services).toBeDefined();
-        expect(output.properties.mappings.services.length).toBeGreaterThanOrEqual(6);
-
-        expect(output.properties.mappings.encassConfigs).toBeDefined();
-        expect(output.properties.mappings.encassConfigs.length).toBeGreaterThan(0);
-    });
-
     test("combine bundles - result is sorted", () => {
         const bundle1Path = path.join("samples", "combine-bundle-1.json");
         const bundle2Path = path.join("samples", "combine-bundle-2.json");
@@ -703,6 +583,148 @@ describe("combine command", () => {
             const sortedNames = [...serviceNames].sort();
             expect(serviceNames).toEqual(sortedNames);
         }
+    });
+
+    test("combine bundles - right defaultAction takes precedence", () => {
+        const bundle1Path = path.join("samples", "combine-bundle-1.json");
+        const bundle2Path = path.join("samples", "combine-bundle-2.json");
+        const outputPath = path.join(workspace, "combine-output-3.json");
+
+        graphman("combine", "--inputs", bundle1Path, bundle2Path, "--output", outputPath);
+
+        const output = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
+
+        // Right bundle's defaultAction should take precedence
+        expect(output.properties.defaultAction).toBe("NEW_OR_UPDATE");
+    });
+
+    test("combine three bundles", () => {
+        const bundle1Path = path.join("samples", "combine-bundle-1.json");
+        const bundle2Path = path.join("samples", "combine-bundle-2.json");
+        const bundle3Path = path.join("samples", "combine-bundle-3.json");
+        const outputPath = path.join(workspace, "combine-output-5.json");
+
+        graphman("combine", "--inputs", bundle1Path, bundle2Path, bundle3Path, "--output", outputPath);
+
+        const output = tUtils.readFileAsJson(outputPath);
+
+        // Should contain entities from all three bundles
+        expect(output.services).toBeDefined();
+        expect(output.services.length).toBeGreaterThan(0);
+
+        expect(output.encassConfigs).toBeDefined();
+        expect(output.encassConfigs.length).toBeGreaterThan(0);
+
+        expect(output.keys).toBeDefined();
+        expect(output.keys.length).toBeGreaterThan(0);
+
+        // Rightmost bundle's defaultAction should take precedence
+        expect(output.properties.defaultAction).toBe("ALWAYS_CREATE_NEW");
+    });
+
+    test("combine three bundles - rightmost properties action takes precedence", () => {
+        const bundle1Path = path.join("samples", "combine-bundle-1.json");
+        const bundle2Path = path.join("samples", "combine-bundle-2.json");
+        const bundle3Path = path.join("samples", "combine-bundle-3.json");
+        const outputPath = path.join(workspace, "combine-output-5-props.json");
+
+        graphman("combine", "--inputs", bundle1Path, bundle2Path, bundle3Path, "--output", outputPath);
+
+        const output = tUtils.readFileAsJson(outputPath);
+
+        // Verify properties and mappings exist
+        expect(output.properties).toBeDefined();
+        expect(output.properties.mappings).toBeDefined();
+        expect(output.properties.mappings.services).toBeDefined();
+
+        // Find the /some-backend service mapping
+        const someBackendMapping = output.properties.mappings.services.find(m =>
+            m.resolutionPath === "/some-backend"
+        );
+        expect(someBackendMapping).toBeDefined();
+
+        // Bundle1 has action "NEW_OR_EXISTING" for /some-backend
+        // Bundle2 has action "NEW_OR_UPDATE" for /some-backend
+        // Bundle3 has action "ALWAYS_CREATE_NEW" for /some-backend
+        // Rightmost (bundle3) should win
+        expect(someBackendMapping.action).toBe("ALWAYS_CREATE_NEW");
+
+        // Verify that when combining in different order, the rightmost still wins
+        const outputPath2 = path.join(workspace, "combine-output-5-props-reverse.json");
+        graphman("combine", "--inputs", bundle3Path, bundle1Path, bundle2Path, "--output", outputPath2);
+        const output2 = tUtils.readFileAsJson(outputPath2);
+
+        const someBackendMapping2 = output2.properties.mappings.services.find(m =>
+            m.resolutionPath === "/some-backend"
+        );
+        expect(someBackendMapping2).toBeDefined();
+
+        // Now bundle2 is rightmost, so its action should win
+        expect(someBackendMapping2.action).toBe("NEW_OR_UPDATE");
+    });
+
+    test("combine bundles - mappings are merged with right taking precedence", () => {
+        const bundle1Path = path.join("samples", "combine-bundle-1.json");
+        const bundle2Path = path.join("samples", "combine-bundle-2.json");
+        const outputPath = path.join(workspace, "combine-output-4.json");
+
+        graphman("combine", "--inputs", bundle1Path, bundle2Path, "--output", outputPath);
+
+        const output = tUtils.readFileAsJson(outputPath);
+
+        expect(output.properties.mappings).toBeDefined();
+        expect(output.properties.mappings.services).toBeDefined();
+
+        // Should contain mappings from both bundles
+        expect(output.properties.mappings.services.length).toBeGreaterThanOrEqual(6);
+
+        // Verify overlapping mapping from bundle2 is present (right takes precedence)
+        const overlappingMapping = output.properties.mappings.services.find(m =>
+            m.resolutionPath === "/jsonpolicy-webapi"
+        );
+        expect(overlappingMapping).toBeDefined();
+        // Verify that the action matches the right bundle (bundle2) action
+        // Bundle1 has action "NEW_OR_EXISTING", Bundle2 has action "NEW_OR_UPDATE"
+        expect(overlappingMapping.action).toBe("NEW_OR_UPDATE");
+    });
+
+    test("combine bundles - all mappings from left bundle are preserved when no overlap", () => {
+        const bundle1Path = path.join("samples", "combine-bundle-1.json");
+        const bundle3Path = path.join("samples", "combine-bundle-3.json");
+        const outputPath = path.join(workspace, "combine-output-13.json");
+
+        graphman("combine", "--inputs", bundle1Path, bundle3Path, "--output", outputPath);
+
+        const output = tUtils.readFileAsJson(outputPath);
+
+        // Bundle1 and bundle3 have no overlapping entity types in mappings
+        // All mappings from both should be present
+        expect(output.properties.mappings.services).toBeDefined();
+        expect(output.properties.mappings.services.length).toEqual(6);
+
+        expect(output.properties.mappings.encassConfigs).toBeDefined();
+        expect(output.properties.mappings.encassConfigs.length).toEqual(3);
+    });
+
+    test("combine bundles - mappings for all entity types are preserved", () => {
+        const bundle1Path = path.join("samples", "combine-bundle-1.json");
+        const bundle2Path = path.join("samples", "combine-bundle-2.json");
+        const bundle3Path = path.join("samples", "combine-bundle-3.json");
+        const outputPath = path.join(workspace, "combine-output-8.json");
+
+        graphman("combine", "--inputs", bundle1Path, bundle2Path, bundle3Path, "--output", outputPath);
+
+        const output = tUtils.readFileAsJson(outputPath);
+
+        expect(output.properties.mappings).toBeDefined();
+
+        // Verify mappings for different entity types
+        expect(output.properties.mappings.services.length).toEqual(12);
+        expect(output.properties.mappings.policies.length).toEqual(13);
+        expect(output.properties.mappings.clusterProperties.length).toEqual(11);
+        expect(output.properties.mappings.encassConfigs.length).toEqual(3);
+        expect(output.properties.mappings.keys.length).toEqual(3);
+        expect(output.properties.mappings.secrets.length).toEqual(2);
     });
 });
 
