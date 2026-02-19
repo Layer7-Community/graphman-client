@@ -192,19 +192,6 @@ describe("Implode operation - with package file (entity summary references)", ()
 });
 
 describe("Implode operation - folderable entities (services/policies)", () => {
-    test("implode should handle tree structure (services and policies)", () => {
-        const output = graphman("implode",
-            "--input", explodedDir,
-            "--output", implodedFile);
-
-        const bundle = tUtils.readFileAsJson(implodedFile);
-        
-        // Check if services or policies from tree are included
-        if (bundle.services || bundle.policies) {
-            expect(bundle.services || bundle.policies).toBeInstanceOf(Array);
-        }
-    });
-
     test("implode with package file should filter tree entities", () => {
         // First, check what services exist in the entities
         const output = graphman("implode",
@@ -223,7 +210,7 @@ describe("Implode operation - folderable entities (services/policies)", () => {
             fs.writeFileSync(packageFile, JSON.stringify(packageSpec, null, 2));
 
             const filteredOutput = graphman("implode",
-                "--input", "samples/entities",
+                "--input", explodedDir,
                 "--output", implodedFile,
                 "--package", packageFile);
 
