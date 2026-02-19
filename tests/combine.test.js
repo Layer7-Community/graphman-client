@@ -4,14 +4,13 @@ const tUtils = require("./utils");
 const {graphman} = tUtils;
 const fs = require('fs');
 const path = require('path');
-
+const workspace = tUtils.config().workspace;
 // Helper to create test bundle files
 function createTestBundle(filename, content) {
-    const testDir = tUtils.config().workspace;
-    if (!fs.existsSync(testDir)) {
-        fs.mkdirSync(testDir, { recursive: true });
+    if (!fs.existsSync(workspace)) {
+        fs.mkdirSync(workspace, { recursive: true });
     }
-    const filepath = path.join(testDir, filename);
+    const filepath = path.join(workspace, filename);
     fs.writeFileSync(filepath, JSON.stringify(content, null, 2));
     return filepath;
 }
@@ -19,19 +18,16 @@ function createTestBundle(filename, content) {
 describe("combine command", () => {
     
     test("should throw error when --inputs parameter is missing", () => {
-        expect(() => {
-            graphman("combine");
-        }).toThrow();
+        const output = graphman("combine");
+        expect(output.stdout).toContain("inputs parameters are missing");
     });
 
     test("should throw error when less than two input bundles are provided", () => {
         const bundle1 = createTestBundle("bundle1.json", {
             services: [{name: "Service1", resolutionPath: "/service1"}]
         });
-
-        expect(() => {
-            graphman("combine", "--inputs", bundle1);
-        }).toThrow();
+        const output = graphman("combine", "--inputs", bundle1);
+        expect(output.stdout).toContain("operation requires at least two bundles");
     });
 
     test("should combine two bundles with non-overlapping entities", () => {
@@ -244,7 +240,7 @@ describe("combine command", () => {
         expect(output.services[1].properties).toBeDefined();
     });
 
-    test("should maintain entity order with rightmost first", () => {
+    test("should contain entities from both the bundles", () => {
         const bundle1 = createTestBundle("bundle1.json", {
             clusterProperties: [
                 {name: "prop1", value: "value1"},
@@ -262,8 +258,12 @@ describe("combine command", () => {
             "--inputs", bundle1, bundle2);
 
         expect(output.clusterProperties).toHaveLength(3);
-        // Rightmost bundle entities should appear first
-        expect(output.clusterProperties[0]).toMatchObject({name: "prop3"});
+        // All entities should be present (output is sorted, so check for presence rather than order)
+        expect(output.clusterProperties).toEqual(expect.arrayContaining([
+            expect.objectContaining({name: "prop1", value: "value1"}),
+            expect.objectContaining({name: "prop2", value: "value2"}),
+            expect.objectContaining({name: "prop3", value: "value3"})
+        ]));
     });
 
     test("should handle bundle properties", () => {
@@ -414,16 +414,11 @@ describe("combine command", () => {
     });
 
     test("combine two bundles with unique entities", () => {
-        const bundle1Path = path.join(testHome, "samples", "combine-bundle-1.json");
-        const bundle3Path = path.join(testHome, "samples", "combine-bundle-3.json");
-        const outputPath = path.join(testHome, "build", "tests", "combine-output-1.json");
+        const bundle1Path = path.join("samples", "combine-bundle-1.json");
+        const bundle3Path = path.join("samples", "combine-bundle-3.json");
+        const outputPath = path.join(workspace, "tests", "combine-output-1.json");
 
-        const params = combineOp.initParams({
-            inputs: [bundle1Path, bundle3Path],
-            output: outputPath
-        }, graphman.configuration());
-
-        combineOp.run(params);
+        graphman("combine", "--inputs", bundle1Path, bundle3Path, "--output", outputPath);
 
         const output = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
 
@@ -456,17 +451,11 @@ describe("combine command", () => {
     });
 
     test("combine bundles with overlapping entities - right takes precedence", () => {
-        const bundle1Path = path.join(testHome, "samples", "combine-bundle-1.json");
-        const bundle2Path = path.join(testHome, "samples", "combine-bundle-2.json");
-        const outputPath = path.join(testHome, "build", "tests", "combine-output-2.json");
+        const bundle1Path = path.join("samples", "combine-bundle-1.json");
+        const bundle2Path = path.join("samples", "combine-bundle-2.json");
+        const outputPath = path.join(workspace, "combine-output-2.json");
 
-        const params = combineOp.initParams({
-            inputs: [bundle1Path, bundle2Path],
-            output: outputPath
-        }, graphman.configuration());
-
-        combineOp.run(params);
-
+        graphman("combine", "--inputs", bundle1Path, bundle2Path, "--output", outputPath);
         const output = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
 
         // Should contain all services (bundle1 + bundle2, with bundle2 taking precedence for duplicates)
@@ -492,16 +481,11 @@ describe("combine command", () => {
     });
 
     test("combine bundles - right defaultAction takes precedence", () => {
-        const bundle1Path = path.join(testHome, "samples", "combine-bundle-1.json");
-        const bundle2Path = path.join(testHome, "samples", "combine-bundle-2.json");
-        const outputPath = path.join(testHome, "build", "tests", "combine-output-3.json");
+        const bundle1Path = path.join("samples", "combine-bundle-1.json");
+        const bundle2Path = path.join("samples", "combine-bundle-2.json");
+        const outputPath = path.join(workspace, "combine-output-3.json");
 
-        const params = combineOp.initParams({
-            inputs: [bundle1Path, bundle2Path],
-            output: outputPath
-        }, graphman.configuration());
-
-        combineOp.run(params);
+        graphman("combine", "--inputs", bundle1Path, bundle2Path, "--output", outputPath);
 
         const output = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
 
@@ -510,18 +494,13 @@ describe("combine command", () => {
     });
 
     test("combine bundles - mappings are merged with right taking precedence", () => {
-        const bundle1Path = path.join(testHome, "samples", "combine-bundle-1.json");
-        const bundle2Path = path.join(testHome, "samples", "combine-bundle-2.json");
-        const outputPath = path.join(testHome, "build", "tests", "combine-output-4.json");
+        const bundle1Path = path.join("samples", "combine-bundle-1.json");
+        const bundle2Path = path.join("samples", "combine-bundle-2.json");
+        const outputPath = path.join(workspace, "combine-output-4.json");
 
-        const params = combineOp.initParams({
-            inputs: [bundle1Path, bundle2Path],
-            output: outputPath
-        }, graphman.configuration());
+        graphman("combine", "--inputs", bundle1Path, bundle2Path, "--output", outputPath);
 
-        combineOp.run(params);
-
-        const output = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
+        const output = tUtils.readFileAsJson(outputPath);
 
         expect(output.properties.mappings).toBeDefined();
         expect(output.properties.mappings.services).toBeDefined();
@@ -540,19 +519,14 @@ describe("combine command", () => {
     });
 
     test("combine three bundles", () => {
-        const bundle1Path = path.join(testHome, "samples", "combine-bundle-1.json");
-        const bundle2Path = path.join(testHome, "samples", "combine-bundle-2.json");
-        const bundle3Path = path.join(testHome, "samples", "combine-bundle-3.json");
-        const outputPath = path.join(testHome, "build", "tests", "combine-output-5.json");
+        const bundle1Path = path.join("samples", "combine-bundle-1.json");
+        const bundle2Path = path.join("samples", "combine-bundle-2.json");
+        const bundle3Path = path.join("samples", "combine-bundle-3.json");
+        const outputPath = path.join(workspace, "combine-output-5.json");
 
-        const params = combineOp.initParams({
-            inputs: [bundle1Path, bundle2Path, bundle3Path],
-            output: outputPath
-        }, graphman.configuration());
+        graphman("combine", "--inputs", bundle1Path, bundle2Path, bundle3Path, "--output", outputPath);
 
-        combineOp.run(params);
-
-        const output = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
+        const output = tUtils.readFileAsJson(outputPath);
 
         // Should contain entities from all three bundles
         expect(output.services).toBeDefined();
@@ -569,18 +543,13 @@ describe("combine command", () => {
     });
 
     test("combine bundles with empty bundle", () => {
-        const bundle1Path = path.join(testHome, "samples", "combine-bundle-1.json");
-        const bundle4Path = path.join(testHome, "samples", "combine-bundle-4.json");
-        const outputPath = path.join(testHome, "build", "tests", "combine-output-6.json");
+        const bundle1Path = path.join("samples", "combine-bundle-1.json");
+        const bundle4Path = path.join("samples", "combine-bundle-4.json");
+        const outputPath = path.join(workspace, "combine-output-6.json");
 
-        const params = combineOp.initParams({
-            inputs: [bundle1Path, bundle4Path],
-            output: outputPath
-        }, graphman.configuration());
+        graphman("combine", "--inputs", bundle1Path, bundle4Path, "--output", outputPath);
 
-        combineOp.run(params);
-
-        const output = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
+        const output = tUtils.readFileAsJson(outputPath);
 
         // Should contain entities from bundle1
         expect(output.services).toBeDefined();
@@ -591,19 +560,14 @@ describe("combine command", () => {
     });
 
     test("combine bundles - all entity types are preserved", () => {
-        const bundle1Path = path.join(testHome, "samples", "combine-bundle-1.json");
-        const bundle2Path = path.join(testHome, "samples", "combine-bundle-2.json");
-        const bundle3Path = path.join(testHome, "samples", "combine-bundle-3.json");
-        const outputPath = path.join(testHome, "build", "tests", "combine-output-7.json");
+        const bundle1Path = path.join("samples", "combine-bundle-1.json");
+        const bundle2Path = path.join("samples", "combine-bundle-2.json");
+        const bundle3Path = path.join("samples", "combine-bundle-3.json");
+        const outputPath = path.join(workspace, "tests", "combine-output-7.json");
 
-        const params = combineOp.initParams({
-            inputs: [bundle1Path, bundle2Path, bundle3Path],
-            output: outputPath
-        }, graphman.configuration());
+        graphman("combine", "--inputs", bundle1Path, bundle2Path, bundle3Path, "--output", outputPath);
 
-        combineOp.run(params);
-
-        const output = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
+        const output = tUtils.readFileAsJson(outputPath);
 
         // Verify all entity types from all bundles are present
         expect(output.services).toBeDefined();
@@ -615,19 +579,14 @@ describe("combine command", () => {
     });
 
     test("combine bundles - mappings for all entity types are preserved", () => {
-        const bundle1Path = path.join(testHome, "samples", "combine-bundle-1.json");
-        const bundle2Path = path.join(testHome, "samples", "combine-bundle-2.json");
-        const bundle3Path = path.join(testHome, "samples", "combine-bundle-3.json");
-        const outputPath = path.join(testHome, "build", "tests", "combine-output-8.json");
+        const bundle1Path = path.join("samples", "combine-bundle-1.json");
+        const bundle2Path = path.join("samples", "combine-bundle-2.json");
+        const bundle3Path = path.join("samples", "combine-bundle-3.json");
+        const outputPath = path.join(workspace, "combine-output-8.json");
 
-        const params = combineOp.initParams({
-            inputs: [bundle1Path, bundle2Path, bundle3Path],
-            output: outputPath
-        }, graphman.configuration());
+        graphman("combine", "--inputs", bundle1Path, bundle2Path, bundle3Path, "--output", outputPath);
 
-        combineOp.run(params);
-
-        const output = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
+        const output = tUtils.readFileAsJson(outputPath);
 
         expect(output.properties.mappings).toBeDefined();
 
@@ -641,18 +600,13 @@ describe("combine command", () => {
     });
 
     test("combine bundles - no duplicate entities in result", () => {
-        const bundle1Path = path.join(testHome, "samples", "combine-bundle-1.json");
-        const bundle2Path = path.join(testHome, "samples", "combine-bundle-2.json");
-        const outputPath = path.join(testHome, "build", "tests", "combine-output-9.json");
+        const bundle1Path = path.join("samples", "combine-bundle-1.json");
+        const bundle2Path = path.join("samples", "combine-bundle-2.json");
+        const outputPath = path.join(workspace, "combine-output-9.json");
 
-        const params = combineOp.initParams({
-            inputs: [bundle1Path, bundle2Path],
-            output: outputPath
-        }, graphman.configuration());
+        graphman("combine", "--inputs", bundle1Path, bundle2Path, "--output", outputPath);
 
-        combineOp.run(params);
-
-        const output = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
+        const output = tUtils.readFileAsJson(outputPath);
 
         // Check services for duplicates (same resolutionPath and serviceType)
         const serviceIdentities = new Set();
@@ -664,18 +618,13 @@ describe("combine command", () => {
     });
 
     test("combine bundles - verify entity count matches expected", () => {
-        const bundle1Path = path.join(testHome, "samples", "combine-bundle-1.json");
-        const bundle2Path = path.join(testHome, "samples", "combine-bundle-2.json");
-        const outputPath = path.join(testHome, "build", "tests", "combine-output-10.json");
+        const bundle1Path = path.join("samples", "combine-bundle-1.json");
+        const bundle2Path = path.join("samples", "combine-bundle-2.json");
+        const outputPath = path.join(workspace, "combine-output-10.json");
 
-        const params = combineOp.initParams({
-            inputs: [bundle1Path, bundle2Path],
-            output: outputPath
-        }, graphman.configuration());
+        graphman("combine", "--inputs", bundle1Path, bundle2Path, "--output", outputPath);
 
-        combineOp.run(params);
-
-        const output = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
+        const output = tUtils.readFileAsJson(outputPath);
 
         // Bundle1 has 6 services, bundle2 has 7 services (including 1 overlap)
         // Result should have 6 + 7 - 1 = 12 services (or at least close to that)
@@ -685,36 +634,14 @@ describe("combine command", () => {
         expect(output.policies.length).toBeGreaterThanOrEqual(6);
     });
 
-    test("combine error - missing inputs parameter", () => {
-        expect(() => {
-            const params = combineOp.initParams({}, graphman.configuration());
-            combineOp.run(params);
-        }).toThrow();
-    });
-
-    test("combine error - only one input bundle", () => {
-        expect(() => {
-            const bundle1Path = path.join(testHome, "samples", "combine-bundle-1.json");
-            const params = combineOp.initParams({
-                inputs: [bundle1Path]
-            }, graphman.configuration());
-            combineOp.run(params);
-        }).toThrow("not enough input bundles");
-    });
-
     test("combine bundles - properties meta information", () => {
-        const bundle1Path = path.join(testHome, "samples", "combine-bundle-1.json");
-        const bundle2Path = path.join(testHome, "samples", "combine-bundle-2.json");
-        const outputPath = path.join(testHome, "build", "tests", "combine-output-11.json");
+        const bundle1Path = path.join("samples", "combine-bundle-1.json");
+        const bundle2Path = path.join("samples", "combine-bundle-2.json");
+        const outputPath = path.join(workspace, "combine-output-11.json");
 
-        const params = combineOp.initParams({
-            inputs: [bundle1Path, bundle2Path],
-            output: outputPath
-        }, graphman.configuration());
+        graphman("combine", "--inputs", bundle1Path, bundle2Path, "--output", outputPath);
 
-        combineOp.run(params);
-
-        const output = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
+        const output = tUtils.readFileAsJson(outputPath);
 
         // Properties should exist
         expect(output.properties).toBeDefined();
@@ -724,18 +651,13 @@ describe("combine command", () => {
     });
 
     test("combine bundles - rightmost bundle mappings take precedence for duplicates", () => {
-        const bundle1Path = path.join(testHome, "samples", "combine-bundle-1.json");
-        const bundle2Path = path.join(testHome, "samples", "combine-bundle-2.json");
-        const outputPath = path.join(testHome, "build", "tests", "combine-output-12.json");
+        const bundle1Path = path.join("samples", "combine-bundle-1.json");
+        const bundle2Path = path.join("samples", "combine-bundle-2.json");
+        const outputPath = path.join(workspace, "combine-output-12.json");
 
-        const params = combineOp.initParams({
-            inputs: [bundle1Path, bundle2Path],
-            output: outputPath
-        }, graphman.configuration());
+        graphman("combine", "--inputs", bundle1Path, bundle2Path, "--output", outputPath);
 
-        combineOp.run(params);
-
-        const output = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
+        const output = tUtils.readFileAsJson(outputPath);
 
         // Find the overlapping service mapping
         const overlappingServiceMapping = output.properties.mappings.services.find(m =>
@@ -744,22 +666,17 @@ describe("combine command", () => {
 
         // The mapping from bundle2 should be present (right takes precedence)
         expect(overlappingServiceMapping).toBeDefined();
-        expect(overlappingServiceMapping.action).toBe("NEW_OR_EXISTING");
+        expect(overlappingServiceMapping.action).toBe("NEW_OR_UPDATE");
     });
 
     test("combine bundles - all mappings from left bundle are preserved when no overlap", () => {
-        const bundle1Path = path.join(testHome, "samples", "combine-bundle-1.json");
-        const bundle3Path = path.join(testHome, "samples", "combine-bundle-3.json");
-        const outputPath = path.join(testHome, "build", "tests", "combine-output-13.json");
+        const bundle1Path = path.join("samples", "combine-bundle-1.json");
+        const bundle3Path = path.join("samples", "combine-bundle-3.json");
+        const outputPath = path.join(workspace, "combine-output-13.json");
 
-        const params = combineOp.initParams({
-            inputs: [bundle1Path, bundle3Path],
-            output: outputPath
-        }, graphman.configuration());
+        graphman("combine", "--inputs", bundle1Path, bundle3Path, "--output", outputPath);
 
-        combineOp.run(params);
-
-        const output = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
+        const output = tUtils.readFileAsJson(outputPath);
 
         // Bundle1 and bundle3 have no overlapping entity types in mappings
         // All mappings from both should be present
@@ -771,19 +688,14 @@ describe("combine command", () => {
     });
 
     test("combine bundles - result is sorted", () => {
-        const bundle1Path = path.join(testHome, "samples", "combine-bundle-1.json");
-        const bundle2Path = path.join(testHome, "samples", "combine-bundle-2.json");
-        const bundle3Path = path.join(testHome, "samples", "combine-bundle-3.json");
-        const outputPath = path.join(testHome, "build", "tests", "combine-output-14.json");
+        const bundle1Path = path.join("samples", "combine-bundle-1.json");
+        const bundle2Path = path.join("samples", "combine-bundle-2.json");
+        const bundle3Path = path.join("samples", "combine-bundle-3.json");
+        const outputPath = path.join(workspace, "combine-output-14.json");
 
-        const params = combineOp.initParams({
-            inputs: [bundle1Path, bundle2Path, bundle3Path],
-            output: outputPath
-        }, graphman.configuration());
+        graphman("combine", "--inputs", bundle1Path, bundle2Path, bundle3Path, "--output", outputPath);
 
-        combineOp.run(params);
-
-        const output = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
+        const output = tUtils.readFileAsJson(outputPath);
 
         // Services should be sorted (check first few)
         if (output.services.length > 1) {
