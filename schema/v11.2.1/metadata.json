@@ -116,6 +116,14 @@
         {
           "name": "checksum",
           "dataType": "String"
+        },
+        {
+          "name": "aliasedPolicyName",
+          "dataType": "String"
+        },
+        {
+          "name": "aliasedPolicy",
+          "dataType": "AliasedPolicy"
         }
       ],
       "isL7Entity": true,
@@ -127,7 +135,9 @@
         "folderPath",
         "checksum"
       ],
-      "excludedFields": [],
+      "excludedFields": [
+        "aliasedPolicy"
+      ],
       "includedFields": [],
       "identityFields": [
         "name",
@@ -153,6 +163,14 @@
         {
           "name": "checksum",
           "dataType": "String"
+        },
+        {
+          "name": "aliasedServiceName",
+          "dataType": "String"
+        },
+        {
+          "name": "aliasedService",
+          "dataType": "AliasedService"
         }
       ],
       "isL7Entity": true,
@@ -164,7 +182,9 @@
         "folderPath",
         "checksum"
       ],
-      "excludedFields": [],
+      "excludedFields": [
+        "aliasedService"
+      ],
       "includedFields": [],
       "identityFields": [
         "name",
@@ -2161,6 +2181,7 @@
         "checksum"
       ],
       "excludedFields": [
+        "version",
         "policyRevision",
         "policyRevisions"
       ],
@@ -2257,7 +2278,7 @@
       "excludedFields": [],
       "includedFields": [],
       "identityFields": [
-        "name"
+        "tag"
       ]
     },
     "PolicyFragment": {
@@ -2968,6 +2989,7 @@
         "checksum"
       ],
       "excludedFields": [
+        "version",
         "policyRevision",
         "policyRevisions"
       ],

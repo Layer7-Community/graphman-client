@@ -219,11 +219,11 @@ extend type Query {
     "Get policy aliases inside a folder"
     policyAliasesByFolderPath(folderPath: String!) : [L7PolicyAlias!]!
 
-    "Get aliases for a given policy"
+    "Get aliases by name"
     policyAliasesByName(name: String!) : [L7PolicyAlias!]!
 
-    "Get policy alias by folder and name"
-    policyAliasByFolderPathAndName(folderPath: String!, name: String!) : L7PolicyAlias
+    "(Deprecated) Get policy alias by folder and name"
+    policyAliasByFolderPathAndName(folderPath: String!, name: String!) : L7PolicyAlias @deprecated(reason: "Use 'policyAliasesByFolderPath' instead.")
 
     "Get policy alias by goid"
     policyAliasByGoid(goid: ID!) : L7PolicyAlias
@@ -237,11 +237,11 @@ extend type Query {
     "Get service aliases inside a folder"
     serviceAliasesByFolderPath(folderPath: String!) : [L7ServiceAlias!]!
 
-    "Get aliases for a given service"
+    "Get aliases by name"
     serviceAliasesByName(name: String!) : [L7ServiceAlias!]!
 
-    "Get service alias by folder and name"
-    serviceAliasByFolderPathAndName(folderPath: String!, name: String!) : L7ServiceAlias
+    "(Deprecated) Get service alias by folder and name"
+    serviceAliasByFolderPathAndName(folderPath: String!, name: String!) : L7ServiceAlias @deprecated(reason: "Use 'serviceAliasesByFolderPath' instead.")
 
     "Get service alias by goid"
     serviceAliasByGoid(goid: ID!) : L7ServiceAlias
@@ -258,6 +258,12 @@ extend type Mutation {
     setServiceAliases(input: [L7ServiceAliasInput!]!) : L7ServiceAliasesPayload!
 
     """
+    Update a single policy alias by name and folder path.
+    Using which, selected alias can be moved from one folder to another.
+    """
+    updatePolicyAlias(refInput: L7PolicyAliasRefInput!, input: L7PolicyAliasPartialInput!) : L7PolicyAliasPayload!
+
+    """
     (Deprecated) Delete a single policy alias by name and folder path.
     Returns DELETED status if the alias was found and deleted, NONE if the alias was not found.
     """
@@ -271,6 +277,12 @@ extend type Mutation {
     This operation is transactional - use the 'test' query parameter to preview changes without committing.
     """
     deletePolicyAliases(refInputs: [L7PolicyAliasRefInput!]!) : L7PolicyAliasesPayload!
+
+    """
+    Update a single service alias by name and folder path.
+    Using which, selected alias can be moved from one folder to another.
+    """
+    updateServiceAlias(refInput: L7ServiceAliasRefInput!, input: L7ServiceAliasPartialInput!) : L7ServiceAliasPayload!
 
     """
     (Deprecated) Delete a single service alias by name and folder path.
@@ -295,17 +307,22 @@ extend type Mutation {
 > @l7-summary-fields goid,name,folderPath,checksum
 > @l7-name-fields name
 > @l7-display-summary-fields name,folderPath
-> @l7-foreign-fields name|name|L7Policy
+> @l7-excluded-fields aliasedPolicy
+> @l7-foreign-fields aliasedPolicyName|name|L7Policy
  """
  type L7PolicyAlias {
     "The goid for this alias"
     goid : ID!
-    "Aliased entity name"
+    "The alias name"
     name: String!
     "The folder path to the alias"
     folderPath: String!
     "The configuration checksum"
     checksum: String!
+    "Aliased policy name"
+    aliasedPolicyName: String!
+    "Aliased policy"
+    aliasedPolicy: AliasedPolicy
  }
 
  """
@@ -315,17 +332,22 @@ extend type Mutation {
 > @l7-summary-fields goid,name,folderPath,checksum
 > @l7-name-fields name
 > @l7-display-summary-fields name,folderPath
-> @l7-foreign-fields name|name|L7Service
+> @l7-excluded-fields aliasedService
+> @l7-foreign-fields aliasedServiceName|name|L7Service
  """
  type L7ServiceAlias {
     "The goid for this alias"
     goid : ID!
-    "Aliased entity name"
+    "The alias name"
     name: String!
     "The folder path to the alias"
     folderPath: String!
     "The configuration checksum"
     checksum: String!
+    "Aliased service name"
+    aliasedServiceName: String!
+    "Aliased service"
+    aliasedService: AliasedService
  }
 
  type L7PolicyAliasPayload implements EntityMutationPayload {
@@ -345,11 +367,18 @@ extend type Mutation {
    goid: ID
    "The folder path where to create this alias.  If the path does not exist, it will be created"
    folderPath: String!
-   "The name of the aliased entity."
+   "The alias name"
    name: String!
+   "Aliased policy name"
+   aliasedPolicyName: String
    "Ignored at creation time but can be used to compare bundle with gw state"
    checksum : String
  }
+
+  input L7PolicyAliasPartialInput {
+    "The folder path where to create this alias.  If the path does not exist, it will be created"
+    folderPath: String
+  }
 
  """
  Reference input to identify a policy alias entity.
@@ -357,9 +386,11 @@ extend type Mutation {
  """
  input L7PolicyAliasRefInput {
    "The folder path where the alias is located (e.g., '/my-folder' or '/parent/child')"
-  folderPath: String!
-  "The name of the policy that is aliased (not the alias display name)"
-  name: String!
+   folderPath: String!
+   "The name of the alias"
+   name: String!
+   "The name of the aliased policy"
+   aliasedPolicyName: String
  }
 
  input L7PolicyAliasMappingInstructionInput {
@@ -389,11 +420,18 @@ extend type Mutation {
    goid: ID
    "The folder path where to create this alias.  If the path does not exist, it will be created"
    folderPath: String!
-   "The name of the aliased entity."
+   "The alias name"
    name: String!
+   "The name of the aliased entity."
+   aliasedServiceName: String
    "Ignored at creation time but can be used to compare bundle with gw state"
    checksum : String
  }
+
+  input L7ServiceAliasPartialInput {
+    "The folder path where to create this alias.  If the path does not exist, it will be created"
+    folderPath: String
+  }
 
  """
  Reference input to identify a service alias entity.
@@ -401,9 +439,13 @@ extend type Mutation {
  """
  input L7ServiceAliasRefInput {
    "The folder path where the alias is located (e.g., '/my-folder' or '/parent/child')"
-  folderPath: String!
-  "The name of the service that is aliased (not the alias display name)"
-  name: String!
+   folderPath: String!
+   "The alias name"
+   name: String!
+   "The name of the service that is aliased"
+   aliasedServiceName: String
+   "The internal entity unique identifier"
+   goid: ID
  }
 
  input L7ServiceAliasMappingInstructionInput {
@@ -477,7 +519,7 @@ input AuditConfigurationInput {
     "The configuration checksum"
     checksum: String
     "Whether to save the audit records always to the internal database"
-    alwaysSaveInternal: Boolean = true
+    alwaysSaveInternal: Boolean
     "Sink Policy Name"
     sinkPolicyName: String
     "FTP Client Configuration"
@@ -1052,7 +1094,9 @@ enum FormFactor {
     CONTAINER
     "Unknown"
     UNKNOWN
-}# AI assistance has been used to generate some or all contents of this file. That includes, but is not limited to, new code, modifying existing code, stylistic edits.
+}
+
+# AI assistance has been used to generate some or all contents of this file. That includes, but is not limited to, new code, modifying existing code, stylistic edits.
 #
 #  Copyright (c) 2025-2026 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
@@ -4369,23 +4413,6 @@ type ReplaceCertChainPayload {
     "List of updated key aliases"
     affectedKeyAliases : [String!]
 }
-
-input KeyMappingInstructionInput{
-    action: EntityMutationAction!
-    default: Boolean
-    failOnNew: Boolean
-    failOnExisting: Boolean
-    nodef: Boolean
-    "one or more name-value pairs to identify a Key entity uniquely"
-    source: KeyRefInput
-}
-
-input KeyRefInput {
-    "The alias of Keystore"
-    alias: String!
-    "The KeyStoreId"
-    keystoreId: String!
-}
 # AI assistance has been used to generate some or all contents of this file. That includes, but is not limited to, new code, modifying existing code, stylistic edits.
 #
 # Copyright (c) 2025. Broadcom Inc. and its subsidiaries. All Rights Reserved.
@@ -4964,7 +4991,7 @@ extend type Mutation {
 > @l7-entity policy|policies
 > @l7-identity-fields name,policyType
 > @l7-summary-fields goid,guid,name,policyType,tag,subTag,checksum
-> @l7-excluded-fields policy.directDependencies,policy.allDependencies,policyRevision,policyRevisions
+> @l7-excluded-fields policy.directDependencies,policy.allDependencies,version,policyRevision,policyRevisions
 > @l7-name-fields name
 > @l7-display-summary-fields name,policyType,enabled
 > @l7-alternative-fields policy.xml|policy.json|policy.yaml|policy.code,policyRevision.xml|policyRevision.json|policyRevision.yaml|policyRevision.code,policyRevisions.xml|policyRevisions.json|policyRevisions.yaml|policyRevisions.code
@@ -5387,7 +5414,7 @@ extend type Mutation {
 """
 A Global policy.
 > @l7-entity
-> @l7-identity-fields name
+> @l7-identity-fields tag
 > @l7-summary-fields goid,guid,name,tag,checksum
 > @l7-excluded-fields
 > @l7-deprecated Use 'L7Policy' instead.
@@ -6097,6 +6124,8 @@ interface PublishedService {
 }
 
 union HardwiredService = L7Service
+union AliasedService = L7Service
+union AliasedPolicy = L7Policy
 
 "Service resource (document) details"
 type ServiceResource {
@@ -6743,12 +6772,20 @@ type KeysPayload implements EntityMutationsPayload {
 }
 
 input KeyRefInput {
-    "The internal entity unique identifier"
-    goid: ID
     "The gateway keystore identifier"
-    keystoreId: ID
+    keystoreId: ID  = "00000000000000000000000000000002"
     "The name assigned to the key"
-    alias: String
+    alias: String!
+}
+
+input KeyMappingInstructionInput{
+    action: EntityMutationAction!
+    default: Boolean
+    failOnNew: Boolean
+    failOnExisting: Boolean
+    nodef: Boolean
+    "one or more name-value pairs to identify a Key entity uniquely"
+    source: KeyRefInput
 }
 #
 # Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
@@ -6965,7 +7002,7 @@ A Layer7 service.
 > @l7-entity service|services
 > @l7-identity-fields resolutionPath,resolvers,serviceType
 > @l7-summary-fields goid,guid,name,resolutionPath,resolvers,serviceType,checksum
-> @l7-excluded-fields policy.directDependencies,policy.allDependencies,policyRevision,policyRevisions
+> @l7-excluded-fields policy.directDependencies,policy.allDependencies,version,policyRevision,policyRevisions
 > @l7-name-fields name
 > @l7-display-summary-fields name,resolutionPath,serviceType,enabled
 > @l7-alternative-fields policy.xml|policy.json|policy.yaml|policy.code,policyRevision.xml|policyRevision.json|policyRevision.yaml|policyRevision.code,policyRevisions.xml|policyRevisions.json|policyRevisions.yaml|policyRevisions.code
@@ -7174,6 +7211,18 @@ input ServiceMappingInstructionInput{
     source: ServiceRefInput
 }
 
+"""
+Reference input for identifying a published service.
+Primary identifier is resolutionPath.
+Provide one of the supported extra identifiers to filter the identified targets.
+
+Supported identifier fields (in order of precedence):
+- name: The service name
+- resolvers: The service resolvers details
+- goid: The internal entity unique identifier
+
+NOTE: Only one of the extra identifiers will be used in combination with the primary identifier.
+"""
 input ServiceRefInput {
     "The goid for this service"
     goid : ID
@@ -7772,12 +7821,12 @@ input TrustedCertsMappingInstructionInput{
 """
 Reference input for identifying a trusted certificate.
 Provide at least one identifier field to uniquely reference a certificate.
-If multiple fields are provided, they will be used together to match the certificate.
+If multiple fields are provided, one of them will be used in pair with the name to match the certificate.
 
 Supported identifier fields (in order of precedence):
+- name: The certificate name
 - thumbprint: SHA1 thumbprint in format 'SHA1:<hex-encoded-sha1-digest>'
 - thumbprintSha1: Base64-encoded SHA1 digest (deprecated, use thumbprint instead)
-- name: The certificate name
 - goid: The internal entity unique identifier
 
 NOTE: The goid field is not used for identification by itself. It is used in combination 
