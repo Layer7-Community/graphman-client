@@ -94,6 +94,10 @@ function initHome(home, options) {
             if (gateway.passphrase) {
                 gateway.passphrase = utils.encodeSecret(utils.decodeSecret(gateway.passphrase));
             }
+
+            if (gateway.keyPassphrase) {
+                gateway.keyPassphrase = utils.encodeSecret(utils.decodeSecret(gateway.keyPassphrase));
+            }
         });
 
         utils.writeFile(configFile, utils.pretty(config));

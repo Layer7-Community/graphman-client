@@ -207,9 +207,12 @@ module.exports = {
         }
 
         if (gateway.keyFilename && gateway.certFilename) {
-            // This expects the certificate.pem and certificate.key file(s) to be in the graphman-client directory. 
+            // This expects the certificate.pem and certificate.key file(s) to be in the graphman-client directory.
             req.key = utils.readFileBinary(utils.path(utils.wrapperHome(), gateway.keyFilename));
             req.cert = utils.readFileBinary(utils.path(utils.wrapperHome(), gateway.certFilename));
+            if (gateway.keyPassphrase) {
+                req.passphrase = utils.decodeSecret(gateway.keyPassphrase);
+            }
         } else if (gateway.username && gateway.password) {
             req.auth = gateway.username + ":" + utils.decodeSecret(gateway.password);
         } else {
@@ -280,6 +283,7 @@ module.exports = {
 
 function maskedHttpRequest(options) {
     if (options.auth) options.auth = "***";
+    if (options.passphrase) options.passphrase = "***";
     if (options.headers['x-l7-passphrase']) options.headers['x-l7-passphrase'] = "***";
     if (options.headers['l7-passphrase']) options.headers['l7-passphrase'] = "***";
     if (options.headers.encpass) options.headers.encpass = "***";
@@ -332,6 +336,7 @@ function makeGateways(gateways) {
             "rejectUnauthorized": false,
             "keyFilename": null,
             "certFilename": null,
+            "keyPassphrase": null,
             "passphrase": "7layer",
             "allowMutations": false
         };
