@@ -520,6 +520,105 @@
       "hostname": "test.qa.broadcom.net",
       "timestamp": "2026-02-12T23:39:05.187-08:00"
     },
-    "defaultAction": "NEW_OR_UPDATE"
+    "defaultAction": "NEW_OR_UPDATE",
+    "mappings": {
+      "services": [
+        {
+          "action": "NEW_OR_EXISTING",
+          "resolutionPath": "/some-service",
+          "serviceType": "WEB_API"
+        }
+      ],
+      "encassConfigs": [
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "some-encass"
+        }
+      ],
+      "policies": [
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "some-policy",
+          "policyType": "FRAGMENT"
+        }
+      ],
+      "clusterProperties": [
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "cluster.hostname"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "keyStore.defaultSsl.alias"
+        }
+      ],
+      "dtds": [
+        {
+          "action": "NEW_OR_EXISTING",
+          "systemId": "http://www.w3.org/2001/XMLSchema.dtd"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "systemId": "http://www.w3.org/2001/datatypes.dtd"
+        }
+      ],
+      "schemas": [
+        {
+          "action": "NEW_OR_EXISTING",
+          "systemId": "http://www.w3.org/2001/xml.xsd"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "systemId": "http://schemas.xmlsoap.org/soap/envelope/"
+        }
+      ],
+      "internalUsers": [
+        {
+          "action": "NEW_OR_EXISTING",
+          "login": "admin"
+        }
+      ],
+      "keys": [
+        {
+          "action": "NEW_OR_EXISTING",
+          "alias": "ssl",
+          "keystoreId": "00000000000000000000000000000002"
+        }
+      ],
+      "listenPorts": [
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "Default HTTP (8080)"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "Default HTTPS (8443)"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "Default HTTPS (9443)"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "Node HTTPS (2124)"
+        }
+      ],
+      "logSinks": [
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "ssg"
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "name": "sspc"
+        }
+      ],
+      "trustedCerts": [
+        {
+          "action": "NEW_OR_EXISTING",
+          "thumbprintSha1": "XoGGKW3e6IlGpbMl5eGOmhM4sdM="
+        }
+      ]
+    }
   }
 }

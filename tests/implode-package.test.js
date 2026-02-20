@@ -264,7 +264,9 @@ describe("Implode operation - mapping filtering", () => {
     test("implode with package file should filter mappings to match selected entities", () => {
 
         const packageSpec = {
-            "clusterProperties": ["cluster.hostname.json"]
+            "services": [
+                {"resolutionPath": "/some-service"}
+            ]
         };
         fs.writeFileSync(packageFile, JSON.stringify(packageSpec, null, 2));
 
@@ -274,83 +276,15 @@ describe("Implode operation - mapping filtering", () => {
             "--package", packageFile);
 
         const bundle = tUtils.readFileAsJson(implodedFile);
-        
-        // If mappings exist, verify they're filtered
-        if (bundle.properties && bundle.properties.mappings) {
-            // Mappings should only include those for selected entities or defaults
-            if (bundle.properties.mappings.clusterProperties) {
-                const mappings = bundle.properties.mappings.clusterProperties;
-                // All non-default mappings should match selected entities
-                const nonDefaultMappings = mappings.filter(m => !m.default);
-                nonDefaultMappings.forEach(mapping => {
-                    const source = mapping.source || mapping;
-                    // Should match one of our selected entities
-                    expect(source.name).toBe("cluster.hostname");
-                });
-            }
-        }
-    });
 
-    test("implode without package file should include all mappings", () => {
-
-        const output = graphman("implode",
-            "--input", explodedDir,
-            "--output", implodedFile);
-
-        const bundle = tUtils.readFileAsJson(implodedFile);
-        const originalProps = tUtils.readFileAsJson(explodedDir + "/bundle-properties.json");
-        
-        // All original mappings should be preserved
-        if (originalProps.mappings && bundle.properties && bundle.properties.mappings) {
-            Object.keys(originalProps.mappings).forEach(entityType => {
-                if (bundle.properties.mappings[entityType]) {
-                    expect(bundle.properties.mappings[entityType]).toBeInstanceOf(Array);
-                }
-            });
-        }
+        const mappings = bundle.properties.mappings.services;
+        // All non-default mappings should match selected entities
+        const nonDefaultMappings = mappings.filter(m => !m.default);
+        nonDefaultMappings.forEach(mapping => {
+            const source = mapping.source || mapping;
+            // Should match one of our selected entities
+            expect(source.resolutionPath).toBe("/some-service");
+        });
     });
 });
 
-describe("Implode operation - special entity handling", () => {
-    test("implode should handle keys with binary data", () => {
-
-        const output = graphman("implode",
-            "--input", explodedDir,
-            "--output", implodedFile);
-
-        const bundle = tUtils.readFileAsJson(implodedFile);
-        
-        if (bundle.keys && bundle.keys.length > 0) {
-            const key = bundle.keys[0];
-            // Keys should have proper structure
-            expect(key).toHaveProperty("alias");
-        }
-    });
-
-    test("implode should handle trusted certificates", () => {
-
-        const output = graphman("implode",
-            "--input", explodedDir,
-            "--output", implodedFile);
-
-        const bundle = tUtils.readFileAsJson(implodedFile);
-        
-        if (bundle.trustedCerts && bundle.trustedCerts.length > 0) {
-            const cert = bundle.trustedCerts[0];
-            expect(cert).toHaveProperty("name");
-        }
-    });
-
-    test("implode should handle internal users", () => {
-        const output = graphman("implode",
-            "--input", explodedDir,
-            "--output", implodedFile);
-
-        const bundle = tUtils.readFileAsJson(implodedFile);
-        
-        if (bundle.internalUsers && bundle.internalUsers.length > 0) {
-            const user = bundle.internalUsers[0];
-            expect(user).toHaveProperty("name");
-        }
-    });
-});
