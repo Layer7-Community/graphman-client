@@ -11,12 +11,16 @@
             "allowMutations": false
         }
     },
-
     "options": {
         "log": "info",
         "schema": null,
+        "excludeDeprecatedFields": true,
         "policyCodeFormat": "xml",
         "keyFormat": "p12",
-        "extensions": ["pre-request", "post-export", "pre-import"]
+        "extensions": [
+            "pre-request",
+            "post-export",
+            "pre-import"
+        ]
     }
 }

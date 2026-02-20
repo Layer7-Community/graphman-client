@@ -4,6 +4,14 @@
       "category": "union",
       "fields": []
     },
+    "AliasedService": {
+      "category": "union",
+      "fields": []
+    },
+    "AliasedPolicy": {
+      "category": "union",
+      "fields": []
+    },
     "ActiveConnector": {
       "category": "type",
       "typeName": "ActiveConnector",
@@ -60,7 +68,8 @@
       "includedFields": [],
       "identityFields": [
         "name"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "AdministrativeUserAccountProperty": {
       "category": "type",
@@ -95,7 +104,8 @@
       "includedFields": [],
       "identityFields": [
         "name"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "L7PolicyAlias": {
       "category": "type",
@@ -142,7 +152,8 @@
       "identityFields": [
         "name",
         "folderPath"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "L7ServiceAlias": {
       "category": "type",
@@ -189,7 +200,8 @@
       "identityFields": [
         "name",
         "folderPath"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "AuditConfiguration": {
       "category": "type",
@@ -237,6 +249,7 @@
       "identityFields": [
         "name"
       ],
+      "deprecatedFields": [],
       "goidRefEnabled": true,
       "singleQueryMethod": "auditConfigurations"
     },
@@ -309,7 +322,8 @@
       "includedFields": [],
       "identityFields": [
         "name"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "ClusterProperty": {
       "category": "type",
@@ -352,7 +366,8 @@
       "includedFields": [],
       "identityFields": [
         "name"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "CustomKeyValue": {
       "category": "type",
@@ -387,7 +402,8 @@
       "includedFields": [],
       "identityFields": [
         "key"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "EmailListener": {
       "category": "type",
@@ -476,7 +492,8 @@
       "includedFields": [],
       "identityFields": [
         "name"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "EncassConfig": {
       "category": "type",
@@ -532,7 +549,8 @@
       "includedFields": [],
       "identityFields": [
         "name"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "FirewallRule": {
       "category": "type",
@@ -593,7 +611,8 @@
       "includedFields": [],
       "identityFields": [
         "name"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "Folder": {
       "category": "type",
@@ -629,7 +648,8 @@
       "includedFields": [],
       "identityFields": [
         "path"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "GenericEntity": {
       "category": "type",
@@ -680,7 +700,8 @@
       "includedFields": [],
       "identityFields": [
         "name"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "Schema": {
       "category": "type",
@@ -723,7 +744,8 @@
       "includedFields": [],
       "identityFields": [
         "systemId"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "Dtd": {
       "category": "type",
@@ -766,7 +788,8 @@
       "includedFields": [],
       "identityFields": [
         "systemId"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "HttpConfiguration": {
       "category": "type",
@@ -872,6 +895,7 @@
         "protocol",
         "path"
       ],
+      "deprecatedFields": [],
       "singleQueryMethod": "httpConfigurationsByHost"
     },
     "FipGroup": {
@@ -920,6 +944,7 @@
       "identityFields": [
         "name"
       ],
+      "deprecatedFields": [],
       "goidRefEnabled": true
     },
     "FipUser": {
@@ -990,6 +1015,7 @@
         "name",
         "providerName"
       ],
+      "deprecatedFields": [],
       "goidRefEnabled": true,
       "singleQueryMethod": "fipUserByName"
     },
@@ -1041,6 +1067,7 @@
       "identityFields": [
         "name"
       ],
+      "deprecatedFields": [],
       "goidRefEnabled": true
     },
     "Ldap": {
@@ -1114,6 +1141,7 @@
       "identityFields": [
         "name"
       ],
+      "deprecatedFields": [],
       "goidRefEnabled": true
     },
     "InternalIdp": {
@@ -1150,6 +1178,7 @@
       "identityFields": [
         "name"
       ],
+      "deprecatedFields": [],
       "singleQueryMethod": "internalIdps"
     },
     "InternalGroup": {
@@ -1192,6 +1221,7 @@
       "identityFields": [
         "name"
       ],
+      "deprecatedFields": [],
       "goidRefEnabled": true
     },
     "InternalUser": {
@@ -1274,6 +1304,9 @@
       "identityFields": [
         "login"
       ],
+      "deprecatedFields": [
+        "memberOf"
+      ],
       "goidRefEnabled": true
     },
     "FederatedIdp": {
@@ -1326,6 +1359,9 @@
       "identityFields": [
         "name"
       ],
+      "deprecatedFields": [
+        "trustedCerts"
+      ],
       "goidRefEnabled": true
     },
     "FederatedGroup": {
@@ -1373,6 +1409,7 @@
       "identityFields": [
         "name"
       ],
+      "deprecatedFields": [],
       "goidRefEnabled": true
     },
     "FederatedUser": {
@@ -1454,6 +1491,9 @@
         "name",
         "providerName"
       ],
+      "deprecatedFields": [
+        "memberOf"
+      ],
       "goidRefEnabled": true,
       "singleQueryMethod": "federatedUserByName"
     },
@@ -1510,7 +1550,8 @@
       "includedFields": [],
       "identityFields": [
         "name"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "PolicyBackedIdp": {
       "category": "type",
@@ -1553,7 +1594,8 @@
       "includedFields": [],
       "identityFields": [
         "name"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "LdapIdp": {
       "category": "type",
@@ -1642,6 +1684,7 @@
       "identityFields": [
         "name"
       ],
+      "deprecatedFields": [],
       "goidRefEnabled": true
     },
     "InterfaceTag": {
@@ -1676,7 +1719,8 @@
       "includedFields": [],
       "identityFields": [
         "name"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "JdbcConnection": {
       "category": "type",
@@ -1739,7 +1783,8 @@
       "includedFields": [],
       "identityFields": [
         "name"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "JmsDestination": {
       "category": "type",
@@ -1842,7 +1887,8 @@
         "name",
         "direction",
         "providerType"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "KerberosConfig": {
       "category": "type",
@@ -1889,6 +1935,9 @@
       "includedFields": [],
       "identityFields": [
         "name"
+      ],
+      "deprecatedFields": [
+        "conf"
       ]
     },
     "ListenPort": {
@@ -1956,7 +2005,8 @@
       "includedFields": [],
       "identityFields": [
         "name"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "LogSink": {
       "category": "type",
@@ -2019,7 +2069,8 @@
       "includedFields": [],
       "identityFields": [
         "name"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "PasswordPolicy": {
       "category": "type",
@@ -2098,6 +2149,7 @@
       "identityFields": [
         "goid"
       ],
+      "deprecatedFields": [],
       "goidRefEnabled": true
     },
     "L7Policy": {
@@ -2189,7 +2241,8 @@
       "identityFields": [
         "name",
         "policyType"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "PolicyBackedService": {
       "category": "type",
@@ -2229,7 +2282,8 @@
       "includedFields": [],
       "identityFields": [
         "name"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "GlobalPolicy": {
       "category": "type",
@@ -2279,7 +2333,8 @@
       "includedFields": [],
       "identityFields": [
         "tag"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "PolicyFragment": {
       "category": "type",
@@ -2328,7 +2383,8 @@
       "includedFields": [],
       "identityFields": [
         "name"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "ServiceResolutionConfig": {
       "category": "type",
@@ -2379,6 +2435,7 @@
       "identityFields": [
         "goid"
       ],
+      "deprecatedFields": [],
       "goidRefEnabled": true
     },
     "RevocationCheckPolicy": {
@@ -2426,7 +2483,8 @@
       "includedFields": [],
       "identityFields": [
         "name"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "Role": {
       "category": "type",
@@ -2481,7 +2539,8 @@
       "includedFields": [],
       "identityFields": [
         "name"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "IdpRef": {
       "category": "type",
@@ -2521,7 +2580,8 @@
       "includedFields": [],
       "identityFields": [
         "name"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "SampleMessage": {
       "category": "type",
@@ -2564,7 +2624,8 @@
       "includedFields": [],
       "identityFields": [
         "name"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "ScheduledTask": {
       "category": "type",
@@ -2631,7 +2692,8 @@
       "includedFields": [],
       "identityFields": [
         "name"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "BackgroundTaskPolicy": {
       "category": "type",
@@ -2680,7 +2742,8 @@
       "includedFields": [],
       "identityFields": [
         "name"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "Secret": {
       "category": "type",
@@ -2735,7 +2798,8 @@
       "includedFields": [],
       "identityFields": [
         "name"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "Key": {
       "category": "type",
@@ -2807,7 +2871,8 @@
       "identityFields": [
         "alias",
         "keystoreId"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "ServerModuleFile": {
       "category": "type",
@@ -2874,7 +2939,8 @@
       "includedFields": [],
       "identityFields": [
         "name"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "L7Service": {
       "category": "type",
@@ -2999,6 +3065,7 @@
         "resolvers",
         "serviceType"
       ],
+      "deprecatedFields": [],
       "singleQueryMethod": "serviceByResolvers"
     },
     "SMConfig": {
@@ -3082,7 +3149,8 @@
       "includedFields": [],
       "identityFields": [
         "name"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "SoapService": {
       "category": "type",
@@ -3179,6 +3247,7 @@
         "resolutionPath",
         "resolvers"
       ],
+      "deprecatedFields": [],
       "singleQueryMethod": "soapServiceByResolver"
     },
     "InternalSoapService": {
@@ -3276,6 +3345,7 @@
         "resolutionPath",
         "resolvers"
       ],
+      "deprecatedFields": [],
       "singleQueryMethod": "internalSoapServiceByResolver"
     },
     "Certificate": {
@@ -3360,6 +3430,9 @@
       "identityFields": [
         "thumbprint"
       ],
+      "deprecatedFields": [
+        "thumbprintSha1"
+      ],
       "goidRefEnabled": true,
       "singleQueryMethod": "trustedCertByThumbprint"
     },
@@ -3431,7 +3504,8 @@
       "includedFields": [],
       "identityFields": [
         "resolutionPath"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "InternalWebApiService": {
       "category": "type",
@@ -3501,7 +3575,8 @@
       "includedFields": [],
       "identityFields": [
         "resolutionPath"
-      ]
+      ],
+      "deprecatedFields": []
     },
     "Query": {
       "category": "type",
@@ -5837,7 +5912,8 @@
       "summaryFields": [],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": []
+      "identityFields": [],
+      "deprecatedFields": []
     },
     "AuditFtpConfiguration": {
       "category": "type",
@@ -5885,7 +5961,8 @@
       "summaryFields": [],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": []
+      "identityFields": [],
+      "deprecatedFields": []
     },
     "EncassArg": {
       "category": "type",
@@ -5917,7 +5994,8 @@
       "summaryFields": [],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": []
+      "identityFields": [],
+      "deprecatedFields": []
     },
     "EncassResult": {
       "category": "type",
@@ -5937,7 +6015,8 @@
       "summaryFields": [],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": []
+      "identityFields": [],
+      "deprecatedFields": []
     },
     "HttpProxyConfiguration": {
       "category": "type",
@@ -5965,7 +6044,8 @@
       "summaryFields": [],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": []
+      "identityFields": [],
+      "deprecatedFields": []
     },
     "GroupMapping": {
       "category": "type",
@@ -5993,7 +6073,8 @@
       "summaryFields": [],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": []
+      "identityFields": [],
+      "deprecatedFields": []
     },
     "MemberStrategy": {
       "category": "type",
@@ -6009,7 +6090,8 @@
       "summaryFields": [],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": []
+      "identityFields": [],
+      "deprecatedFields": []
     },
     "UserMapping": {
       "category": "type",
@@ -6065,7 +6147,8 @@
       "summaryFields": [],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": []
+      "identityFields": [],
+      "deprecatedFields": []
     },
     "PasswdStrategy": {
       "category": "type",
@@ -6081,7 +6164,8 @@
       "summaryFields": [],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": []
+      "identityFields": [],
+      "deprecatedFields": []
     },
     "JmsSslDetails": {
       "category": "type",
@@ -6113,7 +6197,8 @@
       "summaryFields": [],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": []
+      "identityFields": [],
+      "deprecatedFields": []
     },
     "ListenPortTlsSettings": {
       "category": "type",
@@ -6149,7 +6234,8 @@
       "summaryFields": [],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": []
+      "identityFields": [],
+      "deprecatedFields": []
     },
     "LogSinkFilter": {
       "category": "type",
@@ -6169,7 +6255,8 @@
       "summaryFields": [],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": []
+      "identityFields": [],
+      "deprecatedFields": []
     },
     "Policy": {
       "category": "type",
@@ -6211,7 +6298,8 @@
         "allDependencies"
       ],
       "includedFields": [],
-      "identityFields": []
+      "identityFields": [],
+      "deprecatedFields": []
     },
     "PolicyRevision": {
       "category": "type",
@@ -6267,7 +6355,8 @@
         "code"
       ],
       "includedFields": [],
-      "identityFields": []
+      "identityFields": [],
+      "deprecatedFields": []
     },
     "PolicyDependency": {
       "category": "type",
@@ -6425,7 +6514,8 @@
         "policyFragments"
       ],
       "includedFields": [],
-      "identityFields": []
+      "identityFields": [],
+      "deprecatedFields": []
     },
     "PolicyBackedServiceOperation": {
       "category": "type",
@@ -6445,7 +6535,8 @@
       "summaryFields": [],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": []
+      "identityFields": [],
+      "deprecatedFields": []
     },
     "RevocationCheckPolicyItem": {
       "category": "type",
@@ -6481,7 +6572,10 @@
       "summaryFields": [],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": []
+      "identityFields": [],
+      "deprecatedFields": [
+        "signerThumbprintSha1s"
+      ]
     },
     "UserRef": {
       "category": "type",
@@ -6521,7 +6615,8 @@
       "summaryFields": [],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": []
+      "identityFields": [],
+      "deprecatedFields": []
     },
     "GroupRef": {
       "category": "type",
@@ -6557,7 +6652,8 @@
       "summaryFields": [],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": []
+      "identityFields": [],
+      "deprecatedFields": []
     },
     "EntityProperty": {
       "category": "type",
@@ -6577,7 +6673,8 @@
       "summaryFields": [],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": []
+      "identityFields": [],
+      "deprecatedFields": []
     },
     "ServiceResource": {
       "category": "type",
@@ -6597,7 +6694,8 @@
       "summaryFields": [],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": []
+      "identityFields": [],
+      "deprecatedFields": []
     },
     "ServerModuleFileStateSummary": {
       "category": "type",
@@ -6617,7 +6715,8 @@
       "summaryFields": [],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": []
+      "identityFields": [],
+      "deprecatedFields": []
     },
     "ServerModuleFileState": {
       "category": "type",
@@ -6645,7 +6744,8 @@
       "summaryFields": [],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": []
+      "identityFields": [],
+      "deprecatedFields": []
     },
     "ServiceResolvers": {
       "category": "type",
@@ -6669,7 +6769,8 @@
       "summaryFields": [],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": []
+      "identityFields": [],
+      "deprecatedFields": []
     },
     "SoapResolvers": {
       "category": "type",
@@ -6693,7 +6794,8 @@
       "summaryFields": [],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": []
+      "identityFields": [],
+      "deprecatedFields": []
     },
     "TrustedCertRef": {
       "category": "interface",
@@ -6721,7 +6823,8 @@
       "summaryFields": [],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": []
+      "identityFields": [],
+      "deprecatedFields": []
     }
   },
   "primitiveTypes": [
