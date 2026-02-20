@@ -219,6 +219,12 @@ module.exports = {
             throw new Error("gateway credentials are missing, provide either basic authentication (username / password) or mTLS based authentication (keyFilename / certFilename)");
         }
 
+        const globalOptions = this.loadedConfig && this.loadedConfig.options ? this.loadedConfig.options : {};
+        if (globalOptions.caFilename) {
+            // Trusted CA certificate(s) for server verification (PEM; file may contain multiple certs).
+            req.ca = utils.readFileBinary(utils.path(utils.wrapperHome(), globalOptions.caFilename));
+        }
+
         req.minVersion = req.maxVersion = gateway.tlsProtocol || "TLSv1.2";
         return req;
     },
@@ -322,6 +328,7 @@ function makeOptions(options) {
         "schema": SCHEMA_VERSION,
         "policyCodeFormat": "xml",
         "keyFormat": "p12",
+        "caFilename": null,
         "extensions": ["pre-request", "post-export", "pre-import"]
     }, options);
 }
