@@ -59,6 +59,7 @@ module.exports = {
         // set the client log level
         utils.logAt(config.options.log);
 
+        config.credentials = makeCredentials(config.credentials || {});
         config.gateways = makeGateways(config.gateways || {});
 
         // override configured gateway details using params if specified
@@ -81,6 +82,7 @@ module.exports = {
 
     defaultConfiguration: function () {
         return {
+            credentials: makeCredentials({}),
             gateways: makeGateways({}),
             options: makeOptions({})
         }
@@ -91,7 +93,12 @@ module.exports = {
     },
 
     gatewayConfiguration: function (name) {
-        return name ? Object.assign({name: name}, this.configuration().gateways[name]) : null;
+        const obj = name ? Object.assign({name: name}, this.configuration().gateways[name]) : null;
+        if (obj && obj.credential) {
+            obj["credentialRef"] = this.configuration().credentials[obj.credential];
+        }
+
+        return obj;
     },
 
     schemaMetadata: function () {
@@ -206,17 +213,10 @@ module.exports = {
             req.path = req.path + "?" + queryString.substring(1);
         }
 
-        if (gateway.keyFilename && gateway.certFilename) {
-            // This expects the certificate.pem and certificate.key file(s) to be in the graphman-client directory.
-            req.key = utils.readFileBinary(utils.path(utils.wrapperHome(), gateway.keyFilename));
-            req.cert = utils.readFileBinary(utils.path(utils.wrapperHome(), gateway.certFilename));
-            if (gateway.keyPassphrase) {
-                req.passphrase = utils.decodeSecret(gateway.keyPassphrase);
-            }
-        } else if (gateway.username && gateway.password) {
-            req.auth = gateway.username + ":" + utils.decodeSecret(gateway.password);
+        if (gateway.credential) {
+            attachCredential(req, gateway.credentialRef, gateway.credential);
         } else {
-            throw new Error("gateway credentials are missing, provide either basic authentication (username / password) or mTLS based authentication (keyFilename / certFilename)");
+            attachCredential(req, gateway, "<local>");
         }
 
         const globalOptions = this.loadedConfig && this.loadedConfig.options ? this.loadedConfig.options : {};
@@ -273,6 +273,12 @@ module.exports = {
 
         req.on('error', (err) => {
             utils.warn(`error encountered while processing the graphman request: ${err.message}`);
+            const internalErrors = err["errors"];
+            if (internalErrors) {
+                internalErrors.filter(item => item.message).forEach((item, index) => {
+                    utils.warn(`  internal error [${index}]: `, item.message);
+                });
+            }
         });
 
         utils.debug("graphman http request", maskedHttpRequest(options));
@@ -287,12 +293,35 @@ module.exports = {
     }
 }
 
+function attachCredential(req, credRef, credName) {
+    if (!credRef) {
+        throw utils.newError(`gateway credentials (${credName}) are missing`);
+    }
+
+    if (credRef.keyFilename && credRef.certFilename) {
+        // This expects the certificate.pem and certificate.key file(s) to be in the graphman-client directory.
+        req.key = utils.readFileBinary(utils.path(utils.wrapperHome(), credRef.keyFilename));
+        req.cert = utils.readFileBinary(utils.path(utils.wrapperHome(), credRef.certFilename));
+        if (credRef.keyPassphrase) {
+            req.passphrase = utils.decodeSecret(credRef.keyPassphrase);
+        }
+    } else if (credRef.username && credRef.password) {
+        req.auth = credRef.username + ":" + utils.decodeSecret(credRef.password);
+    } else {
+        throw utils.newError("gateway credentials are missing, provide either username/password based credentials or client-cert based credentials");
+    }
+}
+
 function maskedHttpRequest(options) {
     if (options.auth) options.auth = "***";
     if (options.passphrase) options.passphrase = "***";
     if (options.headers['x-l7-passphrase']) options.headers['x-l7-passphrase'] = "***";
     if (options.headers['l7-passphrase']) options.headers['l7-passphrase'] = "***";
     if (options.headers.encpass) options.headers.encpass = "***";
+    if (options.key) options.key = "***";
+    if (options.cert) options.cert = "***";
+    if (options.ca) options.ca = "***";
+
     return options;
 }
 
@@ -333,17 +362,27 @@ function makeOptions(options) {
     }, options);
 }
 
+function makeCredentials(credentials) {
+    if (!Object.keys(credentials).length) {
+        credentials["default"] = {
+            "username": "admin",
+            "password": "7layer",
+            "keyFilename": null,
+            "certFilename": null,
+            "keyPassphrase": null
+        }
+    }
+
+    return credentials;
+}
+
 function makeGateways(gateways) {
     // populate default gateway if no gateway profiles are defined
     if (!Object.keys(gateways).length) {
         gateways['default'] = {
             "address": "https://localhost:8443/graphman",
-            "username": "admin",
-            "password": "7layer",
+            "credential": "default",
             "rejectUnauthorized": false,
-            "keyFilename": null,
-            "certFilename": null,
-            "keyPassphrase": null,
             "passphrase": "7layer",
             "allowMutations": false
         };
