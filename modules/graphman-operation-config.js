@@ -84,8 +84,19 @@ function initHome(home, options) {
     }
 
     const config = JSON.parse(utils.readFile(configFile));
-    if (options.encodeSecrets && config.gateways) {
-        Object.entries(config.gateways).forEach(([key, gateway]) => {
+    if (options.encodeSecrets) {
+        if (config.credentials) Object.entries(config.credentials).forEach(([key, credential]) => {
+            utils.info("  encoding credentials", key);
+            if (credential.password) {
+                credential.password = utils.encodeSecret(utils.decodeSecret(credential.password));
+            }
+
+            if (credential.keyPassphrase) {
+                credential.keyPassphrase = utils.encodeSecret(utils.decodeSecret(credential.keyPassphrase));
+            }
+        });
+
+        if (config.gateways) Object.entries(config.gateways).forEach(([key, gateway]) => {
             utils.info("  encoding secrets of gateway profile", key);
             if (gateway.password) {
                 gateway.password = utils.encodeSecret(utils.decodeSecret(gateway.password));
