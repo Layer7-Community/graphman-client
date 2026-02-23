@@ -202,6 +202,17 @@ module.exports = {
         else console.log();
     },
 
+    logAdditionalErrorDetails: function (e) {
+        const errors = e["errors"];
+        if (Array.isArray(errors)) {
+            errors.filter(item => item.message).forEach((item, index) => {
+                this.warn(`  internal error [${index}]: `, item.message);
+            });
+        } else if (!e.message) {
+            console.log(e);
+        }
+    },
+
     log: function (prefix, ...args) {
         let text = prefix;
 
