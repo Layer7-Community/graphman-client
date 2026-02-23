@@ -13,7 +13,7 @@
         "default": {
             "address": "https://localhost:8443/graphman",
             "credential": "default",
-            "rejectUnauthorized": false,
+            "rejectUnauthorized": true,
             "passphrase": "7layer",
             "allowMutations": false
         }
