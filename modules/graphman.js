@@ -273,12 +273,7 @@ module.exports = {
 
         req.on('error', (err) => {
             utils.warn(`error encountered while processing the graphman request: ${err.message}`);
-            const internalErrors = err["errors"];
-            if (internalErrors) {
-                internalErrors.filter(item => item.message).forEach((item, index) => {
-                    utils.warn(`  internal error [${index}]: `, item.message);
-                });
-            }
+            utils.logAdditionalErrorDetails(err);
         });
 
         utils.debug("graphman http request", maskedHttpRequest(options));
