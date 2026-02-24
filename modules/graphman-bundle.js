@@ -33,7 +33,7 @@ module.exports = {
                 if (entities.length) knownEntitiesCallback(key, entities, typeInfo);
             } else if (unknownEntitiesCallback) {
                 unknownEntitiesCallback(key, entities);
-            } else {
+            } else if (key !== "properties") {
                 utils.warn("unknown entities, " + key);
             }
         });
@@ -61,7 +61,7 @@ module.exports = {
                         else if (lname > rname) return 1;
                         else return 0;
                     });
-                } else {
+                } else if (key !== "properties") {
                     utils.warn("unknown entities, " + key);
                     sorted[key] = bundle[key];
                 }
