@@ -29,7 +29,8 @@
         "extensions": [
             "pre-request",
             "post-export",
-            "pre-import"
+            "pre-import",
+            "post-revise"
         ]
     }
 }
