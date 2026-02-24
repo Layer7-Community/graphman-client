@@ -43,7 +43,7 @@ module.exports = {
                 utils.error("error encountered while processing the graphman operation");
                 utils.error(`  name: ${e.name}`);
                 utils.error(`  message: ${e.message}`);
-                console.log(e);
+                utils.logAdditionalErrorDetails(e);
                 utils.print();
             }
         }
