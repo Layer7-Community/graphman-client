@@ -210,7 +210,7 @@ module.exports = {
             });
         }
 
-        if (this.loggingAt("debug") || !e.message) {
+        if (this.loggingAt("debug") || (!e.message && !errors)) {
             console.log(e);
         }
     },
