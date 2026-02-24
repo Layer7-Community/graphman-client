@@ -1,0 +1,11 @@
+{
+  "keys": [
+    { "name": "production-key", "id": "id1" },
+    { "name": "test-key", "id": "id2" },
+    { "name": "staging-key", "id": "id3" }
+  ],
+  "trustedCerts": [
+    { "name": "prod-cert", "id": "cert1" },
+    { "name": "test-cert", "id": "cert2" }
+  ]
+}

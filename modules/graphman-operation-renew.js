@@ -34,9 +34,8 @@ module.exports = {
 
         const bundle = utils.readFile(params.input);
         const context = utils.buildOperationContext("renew", gateway, params.options);
-        const processedBundle = utils.extension("pre-renew").apply(bundle, context);
 
-        Promise.all(this.renew(gateway, processedBundle, params.sections, params.options)).then(results => {
+        Promise.all(this.renew(gateway, bundle, params.sections, params.options)).then(results => {
             const renewedBundle = {};
 
             results.forEach(item => {
@@ -50,7 +49,9 @@ module.exports = {
                 Object.assign(renewedBundle, item);
             });
 
-            utils.writeResult(params.output, butils.sort(renewedBundle));
+            const finalBundle = utils.extension("post-renew").apply(renewedBundle, context);
+
+            utils.writeResult(params.output, finalBundle);
         }).catch(error => {
             utils.error("errors encountered while renewing the entities", error);
             utils.print();
