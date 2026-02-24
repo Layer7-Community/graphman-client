@@ -355,7 +355,7 @@ function makeOptions(options) {
         "policyCodeFormat": "xml",
         "keyFormat": "p12",
         "caFilename": null,
-        "extensions": ["pre-request", "post-export", "pre-import"]
+        "extensions": ["pre-request", "post-export", "pre-import", "post-revise"]
     }, options);
 }
 

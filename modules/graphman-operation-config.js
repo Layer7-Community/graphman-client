@@ -10,6 +10,7 @@ module.exports = {
      * @param params
      * @param params.init-home initializes home directory
      * @param params.options.encodeSecrets encodes secrets in the configuration
+     * @param params.options.revise revise configuration
      */
     run: function (params) {
         if (params["init-home"]) {
@@ -48,6 +49,8 @@ module.exports = {
         console.log();
         console.log("  --options.<name> <value>");
         console.log("    specify options as name-value pair(s) to customize the operation");
+        console.log("      .revise false|true");
+        console.log("        use this option to revise the configuration file");
         console.log("      .encodeSecrets false|true");
         console.log("        use this option to encode the secrets in configuration file");
         console.log();
@@ -84,37 +87,78 @@ function initHome(home, options) {
     }
 
     const config = JSON.parse(utils.readFile(configFile));
+
+    if (options.revise) {
+        reviseConfig(config);
+    }
+
     if (options.encodeSecrets) {
-        if (config.credentials) Object.entries(config.credentials).forEach(([key, credential]) => {
-            utils.info("  encoding credentials", key);
-            if (credential.password) {
-                credential.password = utils.encodeSecret(utils.decodeSecret(credential.password));
-            }
+        encodeSecrets(config);
+    }
 
-            if (credential.keyPassphrase) {
-                credential.keyPassphrase = utils.encodeSecret(utils.decodeSecret(credential.keyPassphrase));
-            }
-        });
-
-        if (config.gateways) Object.entries(config.gateways).forEach(([key, gateway]) => {
-            utils.info("  encoding secrets of gateway profile", key);
-            if (gateway.password) {
-                gateway.password = utils.encodeSecret(utils.decodeSecret(gateway.password));
-            }
-
-            if (gateway.passphrase) {
-                gateway.passphrase = utils.encodeSecret(utils.decodeSecret(gateway.passphrase));
-            }
-
-            if (gateway.keyPassphrase) {
-                gateway.keyPassphrase = utils.encodeSecret(utils.decodeSecret(gateway.keyPassphrase));
-            }
-        });
-
+    if (options.revise || options.encodeSecrets) {
+        utils.writeFile(configFile + ".bak", JSON.parse(utils.readFile(configFile)));
         utils.writeFile(configFile, utils.pretty(config));
     }
 
     utils.info("make sure defining the environment variable, GRAPHMAN_HOME=" + home);
     utils.print();
     return home;
+}
+
+function reviseConfig(config) {
+    if (!config.credentials) {
+        config.credentials = {};
+    }
+
+    if (config.gateways) Object.entries(config.gateways).forEach(([key, gateway]) => {
+        const credential = {};
+
+        utils.info("  revising gateway profile", key);
+        ["username", "password", "keyFilename", "certFilename", "keyPassphrase"].forEach(key => {
+            reviseGatewayProperty(gateway, credential, key);
+        });
+
+        if (Object.keys(credential).length) {
+            let ckey = key + "_credential";
+
+            if (config.credentials[ckey]) {
+                ckey = ckey + "_" + Object.keys(config.credentials).length + 1;
+            }
+
+            utils.info("  new credential", ckey);
+            config.credentials[ckey] = credential;
+            if (!gateway.credential) {
+                gateway.credential = ckey;
+            }
+        }
+    });
+}
+
+function reviseGatewayProperty(gateway, credential, propertyName) {
+    const value = gateway[propertyName];
+    if (value) credential[propertyName] = value;
+    delete gateway[propertyName];
+}
+
+function encodeSecrets(config) {
+    if (config.credentials) Object.entries(config.credentials).forEach(([key, credential]) => {
+        utils.info("  encoding credentials", key);
+        encryptSecret(credential, "password");
+        encryptSecret(credential, "keyPassphrase");
+    });
+
+    if (config.gateways) Object.entries(config.gateways).forEach(([key, gateway]) => {
+        utils.info("  encoding secrets of gateway profile", key);
+        encryptSecret(gateway, "password");
+        encryptSecret(gateway, "passphrase");
+        encryptSecret(gateway, "keyPassphrase");
+    });
+}
+
+function encryptSecret(obj, propertyName) {
+    const value = obj[propertyName];
+    if (value) {
+        obj[propertyName] = utils.encodeSecret(utils.decodeSecret(value));
+    }
 }
