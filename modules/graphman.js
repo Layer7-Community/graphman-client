@@ -1,8 +1,8 @@
 // Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 const PACKAGE = require("../package.json");
-const SCHEMA_VERSION = "v11.2.0";
-const SCHEMA_VERSIONS = [SCHEMA_VERSION, "v11.1.3", "v11.1.2", "v11.1.1"];
+const SCHEMA_VERSION = "v11.2.1";
+const SCHEMA_VERSIONS = [SCHEMA_VERSION, "v11.2.0", "v11.1.3", "v11.1.2", "v11.1.1"];
 
 const SUPPORTED_OPERATIONS = [
     "version", "describe",
@@ -15,6 +15,7 @@ const SUPPORTED_OPERATIONS = [
 
 const SUPPORTED_EXTENSIONS = ["pre-request", "post-export", "pre-import", "multiline-text-diff", "policy-code-validator"];
 const SCHEMA_FEATURE_LIST = {
+    "v11.2.1": ["mappings", "mappings-source", "policy-as-code"],
     "v11.2.0": ["mappings", "mappings-source", "policy-as-code"],
     "v11.1.3": ["mappings", "mappings-source", "policy-as-code"],
     "v11.1.2": ["mappings", "mappings-source", "policy-as-code"],
@@ -24,7 +25,8 @@ const SCHEMA_FEATURE_LIST = {
 }
 
 const SUPPORTED_REQUEST_LEVEL_OPTIONS = [
-    "activate", "comment", "forceAdminPasswordReset", "forceDelete", "replaceAllMatchingCertChain",
+    "test", "activate", "comment",
+    "forceAdminPasswordReset", "forceDelete", "replaceAllMatchingCertChain",
     "migratePolicyRevisions", "override.replaceRoleAssignees", "override.replaceUserGroupMemberships",
     "deleteEmptyParentFolders"
 ];
