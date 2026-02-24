@@ -48,8 +48,8 @@ module.exports = {
                 // merge the intermediate bundles
                 Object.assign(renewedBundle, item);
             });
-
-            const finalBundle = utils.extension("post-renew").apply(renewedBundle, context);
+            const sortedBundle = butils.sort(renewedBundle);
+            const finalBundle = utils.extension("post-renew").apply(sortedBundle, context);
 
             utils.writeResult(params.output, finalBundle);
         }).catch(error => {
