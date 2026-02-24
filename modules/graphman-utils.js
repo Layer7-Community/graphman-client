@@ -208,7 +208,9 @@ module.exports = {
             errors.filter(item => item.message).forEach((item, index) => {
                 this.warn(`  internal error [${index}]: `, item.message);
             });
-        } else if (!e.message) {
+        }
+
+        if (this.loggingAt("debug") || (!e.message && !errors)) {
             console.log(e);
         }
     },
