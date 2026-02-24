@@ -28,12 +28,4 @@ query folderContents ($folderPath: String!, $includeAllDependencies: Boolean = f
             {{PolicyRevision}}
         }
     }
-
-    policyAliasesByFolderPath (folderPath: $folderPath) {
-        {{L7PolicyAlias}}
-    }
-
-    serviceAliasesByFolderPath (folderPath: $folderPath) {
-        {{L7ServiceAlias}}
-    }
 }

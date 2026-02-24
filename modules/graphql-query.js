@@ -236,7 +236,10 @@ function expandGraphQLSubQueryUsingTypeInfo(gql, typeInfo, suffix) {
         }
 
         typeInfo.fields.forEach(fieldInfo => { // include fields
-            if ((!typeInfo.excludedFields.includes(fieldInfo.name) && !excludedFields.includes(fieldInfo.name) && !excludedFields.includes("*")) ||
+            if ((!typeInfo.excludedFields.includes(fieldInfo.name) &&
+                    !excludedFields.includes(fieldInfo.name) &&
+                    !excludedFields.includes("*") &&
+                    (!typeInfo.deprecatedFields.includes(fieldInfo.name) || !gql.options.excludeDeprecatedFields)) ||
                     includedFields.includes(fieldInfo.name)) {
                 query += "\n" + fieldInfo.name;
                 if (!graphman.isPrimitiveField(fieldInfo)) {

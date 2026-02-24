@@ -3,6 +3,7 @@
 const utils = require("./graphman-utils");
 const butils = require("./graphman-bundle");
 const reviser = require("./graphql-entity-reviser");
+const graphman = require("./graphman");
 
 module.exports = {
     /**
@@ -25,6 +26,12 @@ module.exports = {
         }
 
         this.revise(bundle, params.options);
+
+        const schemaVersion = graphman.configuration().schemaVersion;
+        const opContext = utils.buildOperationContext("revise", null, params.options);
+        opContext.schemaVersion = schemaVersion;
+        bundle = utils.extension("post-revise").apply(bundle, opContext);
+
         utils.writeResult(params.output, butils.sort(bundle));
     },
 

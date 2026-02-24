@@ -50,17 +50,11 @@ query all($includePolicyRevisions: Boolean = false, $includeRoles: Boolean = fal
     federatedUsers {
         {{FederatedUser}}
     }
-    firewallRules {
-        {{FirewallRule}}
-    }
     genericEntities {
         {{GenericEntity}}
     }
     httpConfigurations {
         {{HttpConfiguration}}
-    }
-    interfaceTags {
-        {{InterfaceTag}}
     }
     internalIdps {
         {{InternalIdp}}
@@ -77,9 +71,6 @@ query all($includePolicyRevisions: Boolean = false, $includeRoles: Boolean = fal
     jmsDestinations {
         {{JmsDestination}}
     }
-    kerberosConfigs {
-        {{KerberosConfig}}
-    }
     keys {
         {{Key}}
     }
@@ -95,17 +86,11 @@ query all($includePolicyRevisions: Boolean = false, $includeRoles: Boolean = fal
     policyBackedIdps {
         {{PolicyBackedIdp}}
     }
-    policyBackedServices {
-        {{PolicyBackedService}}
-    }
     revocationCheckPolicies {
         {{RevocationCheckPolicy}}
     }
     roles @include (if: $includeRoles){
         {{Role}}
-    }
-    sampleMessages {
-        {{SampleMessage}}
     }
     scheduledTasks {
         {{ScheduledTask}}
@@ -127,5 +112,11 @@ query all($includePolicyRevisions: Boolean = false, $includeRoles: Boolean = fal
     }
     trustedCerts {
         {{Certificate}}
+    }
+    policyBackedServices {
+        {{PolicyBackedService}}
+    }
+    kerberosConfigs {
+        {{KerberosConfig}}
     }
 }
