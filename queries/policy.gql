@@ -4,7 +4,7 @@ query policyByName ($name: String!, $includeAllDependencies: Boolean = false, $i
          policy {
             xml
             allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency:-policyFragments,-ldaps,-fips,-fipUsers,-fipGroups}}
+                {{PolicyDependency:-policyFragments,-ldaps,-fips,-fipUsers,-fipGroups,-policyBackedServices}}
             }
         }
         policyRevisions @include (if: $includePolicyRevisions) {
