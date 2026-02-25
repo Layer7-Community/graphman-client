@@ -192,7 +192,7 @@ describe("Implode operation - with package file (entity summary references)", ()
 });
 
 describe("Implode operation - folderable entities (services/policies)", () => {
-    test("implode with package file should filter tree entities", () => {
+    test("implode with package file should filter tree entities by summary", () => {
         // First, check what services exist in the entities
         const output = graphman("implode",
             "--input", explodedDir,
@@ -218,6 +218,56 @@ describe("Implode operation - folderable entities (services/policies)", () => {
             
             expect(filteredBundle.services).toBeInstanceOf(Array);
             expect(filteredBundle.services.length).toBeLessThanOrEqual(fullBundle.services.length);
+        }
+    });
+
+    test("implode with package file should filter tree entities by filename", () => {
+        const output = graphman("implode",
+            "--input", explodedDir,
+            "--output", implodedFile);
+
+        const fullBundle = tUtils.readFileAsJson(implodedFile);
+
+        // Use the exact filename of a folderable entity from the tree
+        const packageSpec = {
+            "services": [{"source": "some-service-[+some-service-WEB_API].service.json"}]
+        };
+        fs.writeFileSync(packageFile, JSON.stringify(packageSpec, null, 2));
+
+        const filteredOutput = graphman("implode",
+            "--input", explodedDir,
+            "--output", implodedFile,
+            "--package", packageFile);
+
+        const filteredBundle = tUtils.readFileAsJson(implodedFile);
+
+        expect(filteredBundle.services).toBeInstanceOf(Array);
+        expect(filteredBundle.services.length).toBe(1);
+    });
+
+    test("implode with package file should filter tree entities by wildcard filename", () => {
+        const output = graphman("implode",
+            "--input", explodedDir,
+            "--output", implodedFile);
+
+        const fullBundle = tUtils.readFileAsJson(implodedFile);
+
+        // Use wildcard to match multiple policy fragment files
+        const packageSpec = {
+            "policies": [{"source": "some-*-policy-fragment-*.policy.json"}]
+        };
+        fs.writeFileSync(packageFile, JSON.stringify(packageSpec, null, 2));
+
+        const filteredOutput = graphman("implode",
+            "--input", explodedDir,
+            "--output", implodedFile,
+            "--package", packageFile);
+
+        const filteredBundle = tUtils.readFileAsJson(implodedFile);
+
+        if (filteredBundle.policyFragments) {
+            expect(filteredBundle.policies).toBeInstanceOf(Array);
+            expect(filteredBundle.policies.length).toBeLessThanOrEqual(fullBundle.policies.length);
         }
     });
 });
