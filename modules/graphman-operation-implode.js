@@ -46,8 +46,9 @@ module.exports = {
         console.log();
         console.log("  --package <package-file>");
         console.log("    specify the package file that defines which entities to include");
-        console.log("    format: { \"<section>\": [<summary> | <file-name>] }");
-        console.log("    where section is entity type and value is array of entity summary or file name");
+        console.log("    format: { \"<section>\": [{\"source\": <entity-summary>|<file-name>}] }");
+        console.log("    where section is entity type and source is entity summary object or file name string");
+        console.log("    file name supports wildcards (* and ?) for pattern matching");
         console.log();
     }
 }
@@ -194,28 +195,54 @@ let type1Imploder = (function () {
             }
 
             packageItems.forEach(item => {
-                if (typeof item === 'string') {
-                    // Item is a file name
-                    const key = `${section}:${item}`;
-                    if (entityFileMap.has(key)) {
-                        selectedEntities.add(key);
-                        utils.info(`selected entity from package: ${section}/${item}`);
-                    } else {
-                        utils.warn(`entity file not found: ${section}/${item}`);
-                    }
-                } else if (typeof item === 'object') {
-                    // Item is an entity summary object
-                    const matched = findEntityBySummary(section, item, entityFileMap, typeInfo);
+                if (typeof item !== 'object' || item.source === undefined) {
+                    utils.warn(`invalid package item in ${section}, expected object with 'source' property`);
+                    return;
+                }
+
+                const source = item.source;
+                if (typeof source === 'string') {
+                    selectEntitiesByFileName(section, source, entityFileMap, selectedEntities);
+                } else if (typeof source === 'object') {
+                    const matched = findEntityBySummary(section, source, entityFileMap, typeInfo);
                     if (matched) {
                         selectedEntities.add(matched);
                         utils.info(`selected entity from package: ${section} - ${butils.entityName(entityFileMap.get(matched).entity, typeInfo)}`);
                     } else {
-                        utils.warn(`entity not found matching summary in ${section}: ${JSON.stringify(item)}`);
+                        utils.warn(`entity not found matching summary in ${section}: ${JSON.stringify(source)}`);
                     }
                 }
             });
         });
 
+    }
+
+    function selectEntitiesByFileName(section, fileName, entityFileMap, selectedEntities) {
+        if (fileName.includes('*') || fileName.includes('?')) {
+            const pattern = new RegExp('^' + fileName.replace(/[.+^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*').replace(/\?/g, '.') + '$');
+            let found = false;
+            for (const [key] of entityFileMap.entries()) {
+                if (key.startsWith(section + ":")) {
+                    const entryFileName = key.substring(section.length + 1);
+                    if (pattern.test(entryFileName)) {
+                        selectedEntities.add(key);
+                        utils.info(`selected entity from package (wildcard): ${section}/${entryFileName}`);
+                        found = true;
+                    }
+                }
+            }
+            if (!found) {
+                utils.warn(`no entity files matched wildcard: ${section}/${fileName}`);
+            }
+        } else {
+            const key = `${section}:${fileName}`;
+            if (entityFileMap.has(key)) {
+                selectedEntities.add(key);
+                utils.info(`selected entity from package: ${section}/${fileName}`);
+            } else {
+                utils.warn(`entity file not found: ${section}/${fileName}`);
+            }
+        }
     }
 
     function findEntityBySummary(section, summary, entityFileMap, typeInfo) {

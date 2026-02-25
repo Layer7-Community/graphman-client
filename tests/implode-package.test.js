@@ -47,8 +47,8 @@ describe("Implode operation - with package file (filename references)", () => {
         // Create package file with specific entity filenames
         const packageSpec = {
             "clusterProperties": [
-                "cluster.hostname.json",
-                "keyStore.defaultSsl.alias.json"
+                {"source": "cluster.hostname.json"},
+                {"source": "keyStore.defaultSsl.alias.json"}
             ]
         };
         fs.writeFileSync(packageFile, JSON.stringify(packageSpec, null, 2));
@@ -74,8 +74,8 @@ describe("Implode operation - with package file (filename references)", () => {
     test("implode with package file should warn about missing entity files", () => {
         const packageSpec = {
             "clusterProperties": [
-                "cluster.hostname.json",
-                "non-existent-entity.json"
+                {"source": "cluster.hostname.json"},
+                {"source": "non-existent-entity.json"}
             ]
         };
         fs.writeFileSync(packageFile, JSON.stringify(packageSpec, null, 2));
@@ -91,8 +91,8 @@ describe("Implode operation - with package file (filename references)", () => {
 
     test("implode with multiple entity types in package file", () => {
         const packageSpec = {
-            "clusterProperties": ["cluster.hostname.json"],
-            "keys": ["ssl-00000000000000000000000000000002.json"]
+            "clusterProperties": [{"source": "cluster.hostname.json"}],
+            "keys": [{"source": "ssl-00000000000000000000000000000002.json"}]
         };
         fs.writeFileSync(packageFile, JSON.stringify(packageSpec, null, 2));
 
@@ -115,7 +115,7 @@ describe("Implode operation - with package file (entity summary references)", ()
     test("implode with package file using entity summary objects", () => {
         const packageSpec = {
             "clusterProperties": [
-                {"name": "cluster.hostname"}
+                {"source": {"name": "cluster.hostname"}}
             ]
         };
         fs.writeFileSync(packageFile, JSON.stringify(packageSpec, null, 2));
@@ -136,7 +136,7 @@ describe("Implode operation - with package file (entity summary references)", ()
     test("implode with package file using goid in summary", () => {
         const packageSpec = {
             "clusterProperties": [
-                {"goid": "2bf23f7e0c0bfc3d53358e1b5806a130"}
+                {"source": {"goid": "2bf23f7e0c0bfc3d53358e1b5806a130"}}
             ]
         };
         fs.writeFileSync(packageFile, JSON.stringify(packageSpec, null, 2));
@@ -157,7 +157,7 @@ describe("Implode operation - with package file (entity summary references)", ()
     test("implode with package file should warn about non-matching summary", () => {
         const packageSpec = {
             "clusterProperties": [
-                {"name": "non-existent-property"}
+                {"source": {"name": "non-existent-property"}}
             ]
         };
         fs.writeFileSync(packageFile, JSON.stringify(packageSpec, null, 2));
@@ -173,8 +173,8 @@ describe("Implode operation - with package file (entity summary references)", ()
     test("implode with mixed filename and summary references", () => {
         const packageSpec = {
             "clusterProperties": [
-                "cluster.hostname.json",
-                {"name": "keyStore.defaultSsl.alias"}
+                {"source": "cluster.hostname.json"},
+                {"source": {"name": "keyStore.defaultSsl.alias"}}
             ]
         };
         fs.writeFileSync(packageFile, JSON.stringify(packageSpec, null, 2));
@@ -205,7 +205,7 @@ describe("Implode operation - folderable entities (services/policies)", () => {
             
             // Create package file with specific service
             const packageSpec = {
-                "services": [{"resolutionPath": firstService.resolutionPath}]
+                "services": [{"source": {"resolutionPath": firstService.resolutionPath}}]
             };
             fs.writeFileSync(packageFile, JSON.stringify(packageSpec, null, 2));
 
@@ -233,7 +233,7 @@ describe("Implode operation - package file validation", () => {
 
     test("implode with unknown entity type in package file should warn", () => {
         const packageSpec = {
-            "unknownEntityType": ["some-file.json"]
+            "unknownEntityType": [{"source": "some-file.json"}]
         };
         fs.writeFileSync(packageFile, JSON.stringify(packageSpec, null, 2));
 
@@ -260,12 +260,112 @@ describe("Implode operation - package file validation", () => {
     });
 });
 
+describe("Implode operation - wildcard filename support", () => {
+    test("implode with wildcard * should match multiple entity files", () => {
+        const packageSpec = {
+            "clusterProperties": [
+                {"source": "cluster.*.json"}
+            ]
+        };
+        fs.writeFileSync(packageFile, JSON.stringify(packageSpec, null, 2));
+
+        const output = graphman("implode",
+            "--input", explodedDir,
+            "--output", implodedFile,
+            "--package", packageFile);
+
+        const bundle = tUtils.readFileAsJson(implodedFile);
+
+        expect(bundle).toHaveProperty("clusterProperties");
+        expect(bundle.clusterProperties).toBeInstanceOf(Array);
+        expect(bundle.clusterProperties.length).toBeGreaterThanOrEqual(1);
+        bundle.clusterProperties.forEach(cp => {
+            expect(cp.name).toMatch(/^cluster\./);
+        });
+    });
+
+    test("implode with wildcard ? should match single character", () => {
+        const packageSpec = {
+            "clusterProperties": [
+                {"source": "cluster.hostnam?.json"}
+            ]
+        };
+        fs.writeFileSync(packageFile, JSON.stringify(packageSpec, null, 2));
+
+        const output = graphman("implode",
+            "--input", explodedDir,
+            "--output", implodedFile,
+            "--package", packageFile);
+
+        const bundle = tUtils.readFileAsJson(implodedFile);
+
+        if (bundle.clusterProperties) {
+            expect(bundle.clusterProperties).toBeInstanceOf(Array);
+            expect(bundle.clusterProperties.length).toBeGreaterThanOrEqual(1);
+        }
+    });
+
+    test("implode with wildcard matching no files should warn", () => {
+        const packageSpec = {
+            "clusterProperties": [
+                {"source": "zzz-no-match-*.json"}
+            ]
+        };
+        fs.writeFileSync(packageFile, JSON.stringify(packageSpec, null, 2));
+
+        const output = graphman("implode",
+            "--input", explodedDir,
+            "--output", implodedFile,
+            "--package", packageFile);
+
+        expect(output.stdout).toContain("no entity files matched wildcard");
+    });
+
+    test("implode with wildcard selecting all files in a section", () => {
+        const packageSpec = {
+            "clusterProperties": [
+                {"source": "*.json"}
+            ]
+        };
+        fs.writeFileSync(packageFile, JSON.stringify(packageSpec, null, 2));
+
+        const output = graphman("implode",
+            "--input", explodedDir,
+            "--output", implodedFile,
+            "--package", packageFile);
+
+        const bundle = tUtils.readFileAsJson(implodedFile);
+
+        expect(bundle).toHaveProperty("clusterProperties");
+        expect(bundle.clusterProperties).toBeInstanceOf(Array);
+        expect(bundle.clusterProperties.length).toBeGreaterThanOrEqual(1);
+    });
+});
+
+describe("Implode operation - invalid package item format", () => {
+    test("implode with old format (bare string) should warn about invalid format", () => {
+        const packageSpec = {
+            "clusterProperties": [
+                "cluster.hostname.json"
+            ]
+        };
+        fs.writeFileSync(packageFile, JSON.stringify(packageSpec, null, 2));
+
+        const output = graphman("implode",
+            "--input", explodedDir,
+            "--output", implodedFile,
+            "--package", packageFile);
+
+        expect(output.stdout).toContain("invalid package item");
+    });
+});
+
 describe("Implode operation - mapping filtering", () => {
     test("implode with package file should filter mappings to match selected entities", () => {
 
         const packageSpec = {
             "services": [
-                {"resolutionPath": "/some-service"}
+                {"source": {"resolutionPath": "/some-service"}}
             ]
         };
         fs.writeFileSync(packageFile, JSON.stringify(packageSpec, null, 2));
