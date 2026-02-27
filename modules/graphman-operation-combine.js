@@ -242,12 +242,10 @@ function isDuplicateMatchingInstruction(list, ele, typeInfo) {
     if (!typeInfo || !typeInfo.identityFields) {
         return false;
     }
-
     for (const item of list) {
         if (identityFieldsMatch(item, ele, typeInfo)) {
             return true;
         }
     }
-
     return false;
 }
