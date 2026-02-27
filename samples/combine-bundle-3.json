@@ -298,49 +298,67 @@
       "services": [
         {
           "action": "ALWAYS_CREATE_NEW",
-          "resolutionPath": "/some-backend",
-          "serviceType": "WEB_API"
+          "source" : {
+            "resolutionPath": "/some-backend",
+            "serviceType": "WEB_API"
+          }
         }
       ],
       "encassConfigs": [
         {
           "action": "NEW_OR_EXISTING",
-          "name": "AWS"
+          "source" : {
+            "name": "AWS"
+          }
         },
         {
           "action": "NEW_OR_EXISTING",
-          "name": "some-encass"
+          "source" : {
+            "name": "some-encass"
+          }
         },
         {
           "action": "NEW_OR_EXISTING",
-          "name": "some-other-encass"
+          "source" : {
+            "name": "some-other-encass"
+          }
         }
       ],
       "keys": [
         {
           "action": "NEW_OR_EXISTING",
-          "alias": "some-key",
-          "keystoreId": "00000000000000000000000000000002"
+          "source" : {
+            "alias": "some-key",
+            "keystoreId": "00000000000000000000000000000002"
+          }
         },
         {
           "action": "NEW_OR_EXISTING",
-          "alias": "some-other-key",
-          "keystoreId": "00000000000000000000000000000002"
+          "source" : {
+            "alias": "some-other-key",
+            "keystoreId": "00000000000000000000000000000002"
+          }
         },
         {
           "action": "NEW_OR_EXISTING",
-          "alias": "ssl",
-          "keystoreId": "00000000000000000000000000000002"
+          "source" : {
+            "alias": "ssl",
+            "keystoreId": "00000000000000000000000000000002"
+          }
         }
       ],
       "secrets": [
         {
           "action": "NEW_OR_EXISTING",
-          "name": "some-other-secret"
+          "source" : {
+            "name": "some-other-secret"
+          }
         },
         {
           "action": "NEW_OR_EXISTING",
-          "name": "some-other-secrets-1"
+          "source" : {
+            "name": "some-other-secrets-1"
+          }
         }
       ]
     }

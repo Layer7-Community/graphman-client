@@ -424,7 +424,7 @@ describe("combine command", () => {
 
         // Bundle1 has 6 services, bundle3 has 0 services - result should have 6
         expect(output.services).toBeDefined();
-        expect(output.services.length).toBe(6);
+        expect(output.services.length).toBe(7);
 
         // Bundle1 has 6 policies, bundle3 has 0 policies - result should have 6
         expect(output.policies).toBeDefined();
@@ -639,7 +639,7 @@ describe("combine command", () => {
 
         // Find the /some-backend service mapping
         const someBackendMapping = output.properties.mappings.services.find(m =>
-            m.resolutionPath === "/some-backend"
+            m.source.resolutionPath === "/some-backend"
         );
         expect(someBackendMapping).toBeDefined();
 
@@ -655,7 +655,7 @@ describe("combine command", () => {
         const output2 = tUtils.readFileAsJson(outputPath2);
 
         const someBackendMapping2 = output2.properties.mappings.services.find(m =>
-            m.resolutionPath === "/some-backend"
+            m.source.resolutionPath === "/some-backend"
         );
         expect(someBackendMapping2).toBeDefined();
 
@@ -680,12 +680,31 @@ describe("combine command", () => {
 
         // Verify overlapping mapping from bundle2 is present (right takes precedence)
         const overlappingMapping = output.properties.mappings.services.find(m =>
-            m.resolutionPath === "/jsonpolicy-webapi"
+            m.source.resolutionPath === "/jsonpolicy-webapi"
         );
         expect(overlappingMapping).toBeDefined();
         // Verify that the action matches the right bundle (bundle2) action
         // Bundle1 has action "NEW_OR_EXISTING", Bundle2 has action "NEW_OR_UPDATE"
         expect(overlappingMapping.action).toBe("NEW_OR_UPDATE");
+
+
+        // Verify overlapping mapping from bundle2 is present (right takes precedence)
+        const overlappingMapping1 = output.properties.mappings.services.find(m =>
+            m.source.resolutionPath === "/some-internal-soap"
+        );
+        expect(overlappingMapping1).toBeDefined();
+        // Verify that the action matches the right bundle (bundle2) action
+        // Bundle1 has action "NEW_OR_EXISTING", Bundle2 has action "NEW_OR_UPDATE"
+        expect(overlappingMapping1.action).toBe("NEW_OR_UPDATE");
+
+        // Verify overlapping mapping from bundle2 is present (right takes precedence)
+        const overlappingMapping2 = output.properties.mappings.policies.find(m =>
+            m.failOnNew === true
+        );
+        expect(overlappingMapping2).toBeDefined();
+        // Verify that the action matches the right bundle (bundle2) action
+        // Bundle1 has action "NEW_OR_EXISTING", Bundle2 has action "NEW_OR_UPDATE"
+        expect(overlappingMapping2.action).toBe("NEW_OR_UPDATE");
     });
 
     test("combine bundles - all mappings from left bundle are preserved when no overlap", () => {
@@ -700,7 +719,7 @@ describe("combine command", () => {
         // Bundle1 and bundle3 have no overlapping entity types in mappings
         // All mappings from both should be present
         expect(output.properties.mappings.services).toBeDefined();
-        expect(output.properties.mappings.services.length).toEqual(6);
+        expect(output.properties.mappings.services.length).toEqual(7);
 
         expect(output.properties.mappings.encassConfigs).toBeDefined();
         expect(output.properties.mappings.encassConfigs.length).toEqual(3);
@@ -720,7 +739,7 @@ describe("combine command", () => {
 
         // Verify mappings for different entity types
         expect(output.properties.mappings.services.length).toEqual(12);
-        expect(output.properties.mappings.policies.length).toEqual(13);
+        expect(output.properties.mappings.policies.length).toEqual(14);
         expect(output.properties.mappings.clusterProperties.length).toEqual(11);
         expect(output.properties.mappings.encassConfigs.length).toEqual(3);
         expect(output.properties.mappings.keys.length).toEqual(3);

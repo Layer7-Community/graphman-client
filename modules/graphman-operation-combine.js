@@ -164,13 +164,9 @@ function combineMappings(resultBundle, leftMappings, rightMappings) {
                 mappings[key].push(Object.assign({}, rightItem));
             } else {
                 // Right takes precedence: replace existing mapping with right bundle mapping
-                const index = mappings[key].findIndex(item => {
-                    const itemSource = item.source ? item.source : item;
-                    const rightSource = rightItem.source ? rightItem.source : rightItem;
-                    return typeInfo.identityFields.every(field => 
-                        itemSource[field] === rightSource[field]
-                    );
-                });
+                const index = mappings[key].findIndex(item =>
+                    identityFieldsMatch(item, rightItem, typeInfo)
+                );
                 if (index !== -1) {
                     mappings[key][index] = Object.assign({}, rightItem);
                 }
@@ -204,6 +200,37 @@ function combineMappings(resultBundle, leftMappings, rightMappings) {
 }
 
 /**
+ * Returns true if two mapping instructions match on all identity fields.
+ * Uses deep equality for object fields (e.g. resolvers) so that same-shaped
+ * objects from different bundles are considered equal.
+ * @param item first mapping instruction
+ * @param other second mapping instruction
+ * @param typeInfo type information for the entity
+ * @returns true if identity fields match
+ */
+function identityFieldsMatch(item, other, typeInfo) {
+    if (!typeInfo || !typeInfo.identityFields) {
+        return false;
+    }
+    const itemSource = item.source ? item.source : item;
+    const otherSource = other.source ? other.source : other;
+
+    for (const field of typeInfo.identityFields) {
+        if (typeof itemSource[field] !== typeof otherSource[field]) {
+            return false;
+        }
+        if (typeof itemSource[field] !== 'object') {
+            if (itemSource[field] !== otherSource[field]) {
+                return false;
+            }
+        } else if (!butils.isObjectEquals(itemSource[field], otherSource[field])) {
+            return false;
+        }
+    }
+    return true;
+}
+
+/**
  * Checks if a mapping instruction is a duplicate of an existing one.
  * Reuses logic from graphman-bundle.js isDuplicateMatchingInstruction
  * @param list existing list of mapping instructions
@@ -217,18 +244,9 @@ function isDuplicateMatchingInstruction(list, ele, typeInfo) {
     }
 
     for (const item of list) {
-        let match = true;
-        const eleSource = ele.source ? ele.source : ele;
-        const itemSource = item.source ? item.source : item;
-
-        for (const field of typeInfo.identityFields) {
-            if (eleSource[field] !== itemSource[field]) {
-                match = false;
-                break;
-            }
+        if (identityFieldsMatch(item, ele, typeInfo)) {
+            return true;
         }
-
-        if (match) return true;
     }
 
     return false;

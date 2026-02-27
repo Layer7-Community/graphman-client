@@ -351,141 +351,189 @@
       "services": [
         {
           "action": "NEW_OR_UPDATE",
-          "resolutionPath": "/some-backend",
-          "serviceType": "WEB_API"
-        },
-        {
-          "action": "NEW_OR_EXISTING",
-          "resolutionPath": "/some-internal-soap",
-          "resolvers": {
-            "soapActions": [
-              "http://warehouse.acme.com/ws/currentOrders",
-              "http://warehouse.acme.com/ws/getProductDetails",
-              "http://warehouse.acme.com/ws/listProducts",
-              "http://warehouse.acme.com/ws/placeOrder"
-            ],
-            "baseUri": "http://warehouse.acme.com/ws",
-            "resolutionPath": "/some-internal-soap"
-          },
-          "serviceType": "INTERNAL_SOAP"
-        },
-        {
-          "action": "NEW_OR_EXISTING",
-          "resolutionPath": "/some-internal-webapi",
-          "serviceType": "INTERNAL_WEB_API"
-        },
-        {
-          "action": "NEW_OR_EXISTING",
-          "resolutionPath": "/some-soap",
-          "resolvers": {
-            "soapActions": [
-              "http://warehouse.acme.com/ws/currentOrders",
-              "http://warehouse.acme.com/ws/getProductDetails",
-              "http://warehouse.acme.com/ws/listProducts",
-              "http://warehouse.acme.com/ws/placeOrder"
-            ],
-            "baseUri": "http://warehouse.acme.com/ws",
-            "resolutionPath": "/some-soap"
-          },
-          "serviceType": "SOAP"
-        },
-        {
-          "action": "NEW_OR_EXISTING",
-          "resolutionPath": "/some-webapi",
-          "serviceType": "WEB_API"
-        },
-        {
-          "action": "NEW_OR_EXISTING",
-          "resolutionPath": "/wsman",
-          "resolvers": {
-            "soapActions": [
-              "http://schemas.xmlsoap.org/ws/2004/09/enumeration/Enumerate",
-              "http://schemas.xmlsoap.org/ws/2004/09/enumeration/GetStatus",
-              "http://schemas.xmlsoap.org/ws/2004/09/enumeration/Pull",
-              "http://schemas.xmlsoap.org/ws/2004/09/enumeration/Release",
-              "http://schemas.xmlsoap.org/ws/2004/09/enumeration/Renew",
-              "http://schemas.xmlsoap.org/ws/2004/09/transfer/Create",
-              "http://schemas.xmlsoap.org/ws/2004/09/transfer/Delete",
-              "http://schemas.xmlsoap.org/ws/2004/09/transfer/Get",
-              "http://schemas.xmlsoap.org/ws/2004/09/transfer/Put"
-            ],
-            "baseUri": "http://schemas.xmlsoap.org/ws/2004/09/enumeration",
-            "resolutionPath": "/wsman"
-          },
-          "serviceType": "INTERNAL_SOAP"
-        },
-        {
-          "action": "NEW_OR_EXISTING",
-          "resolutionPath": "/yamlpolicy-webapi",
-          "serviceType": "WEB_API"
+          "source" : {
+            "resolutionPath": "/some-backend",
+            "serviceType": "WEB_API"
+          }
         },
         {
           "action": "NEW_OR_UPDATE",
-          "resolutionPath": "/jsonpolicy-webapi",
-          "serviceType": "WEB_API"
+          "source" : {
+            "resolutionPath": "/some-internal-soap",
+            "resolvers": {
+              "soapActions": [
+                "http://warehouse.acme.com/ws/currentOrders",
+                "http://warehouse.acme.com/ws/getProductDetails",
+                "http://warehouse.acme.com/ws/listProducts",
+                "http://warehouse.acme.com/ws/placeOrder"
+              ],
+              "baseUri": "http://warehouse.acme.com/ws",
+              "resolutionPath": "/some-internal-soap"
+            },
+            "serviceType": "INTERNAL_SOAP"
+          }
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "source" : {
+            "resolutionPath": "/some-internal-webapi",
+            "serviceType": "INTERNAL_WEB_API"
+          }
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "source" : {
+            "resolutionPath": "/some-soap",
+            "resolvers": {
+              "soapActions": [
+                "http://warehouse.acme.com/ws/currentOrders",
+                "http://warehouse.acme.com/ws/getProductDetails",
+                "http://warehouse.acme.com/ws/listProducts",
+                "http://warehouse.acme.com/ws/placeOrder"
+              ],
+              "baseUri": "http://warehouse.acme.com/ws",
+              "resolutionPath": "/some-soap"
+            },
+            "serviceType": "SOAP"
+          }
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "source" : {
+            "resolutionPath": "/some-webapi",
+            "serviceType": "WEB_API"
+          }
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "source" : {
+            "resolutionPath": "/wsman",
+            "resolvers": {
+              "soapActions": [
+                "http://schemas.xmlsoap.org/ws/2004/09/enumeration/Enumerate",
+                "http://schemas.xmlsoap.org/ws/2004/09/enumeration/GetStatus",
+                "http://schemas.xmlsoap.org/ws/2004/09/enumeration/Pull",
+                "http://schemas.xmlsoap.org/ws/2004/09/enumeration/Release",
+                "http://schemas.xmlsoap.org/ws/2004/09/enumeration/Renew",
+                "http://schemas.xmlsoap.org/ws/2004/09/transfer/Create",
+                "http://schemas.xmlsoap.org/ws/2004/09/transfer/Delete",
+                "http://schemas.xmlsoap.org/ws/2004/09/transfer/Get",
+                "http://schemas.xmlsoap.org/ws/2004/09/transfer/Put"
+              ],
+              "baseUri": "http://schemas.xmlsoap.org/ws/2004/09/enumeration",
+              "resolutionPath": "/wsman"
+            },
+            "serviceType": "INTERNAL_SOAP"
+          }
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "source" : {
+            "resolutionPath": "/yamlpolicy-webapi",
+            "serviceType": "WEB_API"
+          }
+        },
+        {
+          "action": "NEW_OR_UPDATE",
+          "source" : {
+            "resolutionPath": "/jsonpolicy-webapi",
+            "serviceType": "WEB_API"
+          }
         }
       ],
       "policies": [
         {
-          "action": "NEW_OR_EXISTING",
-          "name": "some-encass-policy",
-          "policyType": "FRAGMENT"
+          "action": "NEW_OR_UPDATE",
+          "failOnNew": true,
+          "failOnExisting": true,
+          "default": true
         },
         {
           "action": "NEW_OR_EXISTING",
-          "name": "some-identity-provider-policy",
-          "policyType": "FRAGMENT"
+          "source" : {
+            "name": "some-encass-policy",
+            "policyType": "FRAGMENT"
+          }
         },
         {
           "action": "NEW_OR_EXISTING",
-          "name": "some-inner-policy-fragment",
-          "policyType": "FRAGMENT"
+          "source" : {
+            "name": "some-identity-provider-policy",
+            "policyType": "FRAGMENT"
+          }
         },
         {
           "action": "NEW_OR_EXISTING",
-          "name": "some-other-backgroundtask-policy",
-          "policyType": "POLICY_BACKED_BACKGROUND_TASK"
+          "source" : {
+            "name": "some-inner-policy-fragment",
+            "policyType": "FRAGMENT"
+          }
         },
         {
           "action": "NEW_OR_EXISTING",
-          "name": "some-other-encass",
-          "policyType": "FRAGMENT"
+          "source" : {
+            "name": "some-other-backgroundtask-policy",
+            "policyType": "POLICY_BACKED_BACKGROUND_TASK"
+          }
         },
         {
           "action": "NEW_OR_EXISTING",
-          "name": "some-policy",
-          "policyType": "FRAGMENT"
+          "source" : {
+            "name": "some-other-encass",
+            "policyType": "FRAGMENT"
+          }
         },
         {
           "action": "NEW_OR_EXISTING",
-          "name": "yaml-policy-fragment",
-          "policyType": "FRAGMENT"
+          "source" : {
+            "name": "some-policy",
+            "policyType": "FRAGMENT"
+          }
+        },
+        {
+          "action": "NEW_OR_EXISTING",
+          "source" : {
+            "name": "yaml-policy-fragment",
+            "policyType": "FRAGMENT"
+          }
         }
       ],
       "clusterProperties": [
         {
           "action": "NEW_OR_EXISTING",
-          "name": "logon.maxAllowableAttempts"
+          "source" : {
+            "name": "logon.maxAllowableAttempts"
+          }
         },
         {
           "action": "NEW_OR_EXISTING",
-          "name": "logon.sessionExpiry"
+          "source" : {
+            "name": "logon.sessionExpiry"
+          }
         },
         {
           "action": "NEW_OR_EXISTING",
-          "name": "oauth2.introspection.defaultTokenIssuer"
+          "source" : {
+            "name": "oauth2.introspection.defaultTokenIssuer"
+          }
         },
         {
           "action": "NEW_OR_EXISTING",
-          "name": "oauth2.introspection.knownTokenIssuers"
+          "source" : {
+            "name": "oauth2.introspection.knownTokenIssuers"
+          }
         },
         {
           "action": "NEW_OR_EXISTING",
-          "name": "some-cwp"
+          "source" : {
+            "name": "some-cwp"
+          }
         },
         {
           "action": "NEW_OR_EXISTING",
-          "name": "some-other-cwp"
+          "source" : {
+            "name": "some-other-cwp"
+          }
         }
       ]
     }
