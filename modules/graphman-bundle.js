@@ -689,7 +689,9 @@ let importSanitizer = function () {
         "activeConnectors", "emailListeners", "listenPorts",
         "internalGroups", "fipGroups", "federatedGroups",
         "serverModuleFiles",
-        "trustedCerts"
+        "trustedCerts",
+        "genericEntities",
+        "secrets"
     ];
 
     return {

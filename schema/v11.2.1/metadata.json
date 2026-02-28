@@ -696,7 +696,9 @@
         "name",
         "checksum"
       ],
-      "excludedFields": [],
+      "excludedFields": [
+        "valueJson"
+      ],
       "includedFields": [],
       "identityFields": [
         "name"
@@ -2794,7 +2796,9 @@
         "name",
         "checksum"
       ],
-      "excludedFields": [],
+      "excludedFields": [
+        "publicKey"
+      ],
       "includedFields": [],
       "identityFields": [
         "name"
