@@ -105,8 +105,6 @@ let type1Imploder = (function () {
         implode: function (inputDir, packageFile, sections) {
             const bundle = {};
             let packageSpec = null;
-            let selectedEntities = new Set();
-            let entityFileMap = new Map();
 
             if (!utils.existsFile(inputDir) || !utils.isDirectory(inputDir)) {
                 throw utils.newError(`directory does not exist or not a directory, ${inputDir}`);
@@ -114,32 +112,10 @@ let type1Imploder = (function () {
 
             // Load package file if specified (sections is ignored when package is specified)
             if (packageFile) {
-                if (!utils.existsFile(packageFile)) {
-                    throw utils.newError(`package file does not exist: ${packageFile}`);
-                }
                 packageSpec = JSON.parse(utils.readFile(packageFile));
                 utils.info(`using package file: ${packageFile}`);
             }
 
-            // First pass: collect all entities and build file mapping
-            utils.listDir(inputDir).forEach(item => {
-                const subDir = inputDir + "/" + item;
-                if (utils.isDirectory(subDir)) {
-                    const typeInfo = graphman.typeInfoByPluralName(item);
-                    if (typeInfo) {
-                        collectEntities(subDir, item, typeInfo, entityFileMap);
-                    } else if (item === "tree") {
-                        collectFolderableEntities(subDir, entityFileMap);
-                    }
-                }
-            });
-
-            // Second pass: select entities based on package file
-            if (packageSpec) {
-                selectEntitiesFromPackage(packageSpec, entityFileMap, selectedEntities, inputDir);
-            }
-
-            // Third pass: read selected entities and their dependencies
             utils.listDir(inputDir).forEach(item => {
                 const subDir = inputDir + "/" + item;
                 if (utils.isDirectory(subDir)) {
@@ -149,10 +125,21 @@ let type1Imploder = (function () {
                             utils.info("ignoring " + item);
                             return;
                         }
+                        if (packageSpec) {
+                            const packageItems = packageSpec[item];
+                            if (!packageItems) {
+                                utils.debug(item + ` section is missing in the package`);
+                                return;
+                            }
+                            if (!Array.isArray(packageItems)) {
+                                utils.warn(item + `should be an array`);
+                                return;
+                            }
+                        }
                         utils.info("imploding " + item);
-                        readEntities(subDir, item, typeInfo, bundle, selectedEntities, packageSpec);
+                        readEntities(subDir, item, typeInfo, bundle, packageSpec);
                     } else if (item === "tree") {
-                        readFolderableEntities(subDir, bundle, selectedEntities, packageSpec, sections);
+                        readFolderableEntities(subDir, bundle, packageSpec, sections);
                     } else {
                         utils.info("unknown entities, " + item);
                     }
@@ -165,7 +152,7 @@ let type1Imploder = (function () {
                 
                 // Filter mappings to only include selected entities and their dependencies
                 if (packageSpec && bundle['properties'].mappings) {
-                    filterMappings(bundle['properties'].mappings, selectedEntities, entityFileMap);
+                    filterMappings(bundle['properties'].mappings, bundle);
                 }
             }
 
@@ -173,109 +160,47 @@ let type1Imploder = (function () {
         }
     };
 
-    function collectEntities(inputDir, pluralName, typeInfo, entityFileMap) {
-        utils.listDir(inputDir).forEach(item => {
-            if (item.endsWith(".json")) {
-                const filePath = `${inputDir}/${item}`;
-                const entity = utils.readFile(filePath);
-                const key = `${pluralName}:${item}`;
-                entityFileMap.set(key, { entity, typeInfo, filePath, pluralName });
+    function findEntityFromPackage(packageSpec, entity, typeInfo, section, filename) {
+        const packageItems = packageSpec[section];
+        if (!Array.isArray(packageItems)) {
+            utils.warn(`package file section ${section} should be an array`);
+            return false;
+        }
+
+        return packageItems.some(item => {
+            if (typeof item !== 'object' || item.source === undefined) {
+                utils.warn(`invalid package item in ${section}, expected object with 'source' property`);
+                return false;
             }
+
+            const source = item.source;
+            if (typeof source === 'string') {
+                return findEntityByFileName(section, source, filename);
+            }
+            if (typeof source === 'object') {
+                return matchesSummary(entity, source, typeInfo);
+            }
+            return false;
         });
     }
 
-    function collectFolderableEntities(dir, entityFileMap) {
-        utils.listDir(dir).forEach(item => {
-            if (utils.isDirectory(dir + "/" + item)) {
-                collectFolderableEntities(`${dir}/${item}`, entityFileMap);
-            } else {
-                const pluralName = butils.entityPluralNameByFile(item);
-                let typeInfo = pluralName ? graphman.typeInfoByPluralName(pluralName) : null;
-                if (typeInfo) {
-                    const filePath = `${dir}/${item}`;
-                    const entity = utils.readFile(filePath);
-                    const key = `${pluralName}:${item}`;
-                    entityFileMap.set(key, { entity, typeInfo, filePath, pluralName });
-                }
-            }
-        });
-    }
-
-    function selectEntitiesFromPackage(packageSpec, entityFileMap, selectedEntities, inputDir) {
-        Object.keys(packageSpec).forEach(section => {
-            const typeInfo = graphman.typeInfoByPluralName(section);
-            if (!typeInfo) {
-                utils.warn(`unknown entity type in package file: ${section}`);
-                return;
-            }
-
-            const packageItems = packageSpec[section];
-            if (!Array.isArray(packageItems)) {
-                utils.warn(`package file section ${section} should be an array`);
-                return;
-            }
-
-            packageItems.forEach(item => {
-                if (typeof item !== 'object' || item.source === undefined) {
-                    utils.warn(`invalid package item in ${section}, expected object with 'source' property`);
-                    return;
-                }
-
-                const source = item.source;
-                if (typeof source === 'string') {
-                    selectEntitiesByFileName(section, source, entityFileMap, selectedEntities);
-                } else if (typeof source === 'object') {
-                    const matched = findEntityBySummary(section, source, entityFileMap, typeInfo);
-                    if (matched) {
-                        selectedEntities.add(matched);
-                        utils.info(`selected entity from package: ${section} - ${butils.entityName(entityFileMap.get(matched).entity, typeInfo)}`);
-                    } else {
-                        utils.warn(`entity not found matching summary in ${section}: ${JSON.stringify(source)}`);
-                    }
-                }
-            });
-        });
-
-    }
-
-    function selectEntitiesByFileName(section, fileName, entityFileMap, selectedEntities) {
+    function findEntityByFileName(section, fileName, entityFileName) {
         if (fileName.includes('*') || fileName.includes('?')) {
             const pattern = new RegExp('^' + fileName.replace(/[.+^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*').replace(/\?/g, '.') + '$');
-            let found = false;
-            for (const [key] of entityFileMap.entries()) {
-                if (key.startsWith(section + ":")) {
-                    const entryFileName = key.substring(section.length + 1);
-                    if (pattern.test(entryFileName)) {
-                        selectedEntities.add(key);
-                        utils.info(`selected entity from package (wildcard): ${section}/${entryFileName}`);
-                        found = true;
-                    }
-                }
+            if (pattern.test(entityFileName)) {
+                utils.info(`selected entity from package (wildcard): ${section}/${entityFileName}`);
+                return true;
             }
-            if (!found) {
-                utils.warn(`no entity files matched wildcard: ${section}/${fileName}`);
-            }
+            utils.warn(`no entity files matched wildcard: ${section}/${fileName}`);
+            return false;
         } else {
-            const key = `${section}:${fileName}`;
-            if (entityFileMap.has(key)) {
-                selectedEntities.add(key);
+            if (fileName === entityFileName) {
                 utils.info(`selected entity from package: ${section}/${fileName}`);
+                return true;
             } else {
-                utils.warn(`entity file not found: ${section}/${fileName}`);
+                return false;
             }
         }
-    }
-
-    function findEntityBySummary(section, summary, entityFileMap, typeInfo) {
-        for (const [key, value] of entityFileMap.entries()) {
-            if (key.startsWith(section + ":")) {
-                const entity = value.entity;
-                if (matchesSummary(entity, summary, typeInfo)) {
-                    return key;
-                }
-            }
-        }
-        return null;
     }
 
     function matchesSummary(entity, summary, typeInfo) {
@@ -292,32 +217,32 @@ let type1Imploder = (function () {
         return true;
     }
 
-    function readEntities(inputDir, pluralName, typeInfo, bundle, selectedEntities, packageSpec) {
+    function readEntities(inputDir, pluralName, typeInfo, bundle, packageSpec) {
         const entities = butils.withArray(bundle, typeInfo);
         utils.listDir(inputDir).forEach(item => {
             if (item.endsWith(".json")) {
-                const key = `${pluralName}:${item}`;
-                if (!packageSpec || selectedEntities.has(key)) {
-                    utils.info(`  ${item}`);
-                    const entity = utils.readFile(`${inputDir}/${item}`);
-                    const subImploder = subImploders[typeInfo.pluralName];
-                    entities.push(subImploder ? subImploder.apply(entity, inputDir) : entity);
+                utils.info(`  ${item}`);
+                const entity = utils.readFile(`${inputDir}/${item}`);
+                const subImploder = subImploders[typeInfo.pluralName];
+                const finalEntity = subImploder ? subImploder.apply(entity, inputDir) : entity
+                if (!packageSpec || findEntityFromPackage(packageSpec, finalEntity, typeInfo, pluralName, item)) {
+                    entities.push(finalEntity);
                 }
             }
         });
     }
 
-    function readFolderableEntities(dir, bundle, selectedEntities, packageSpec, sections) {
+    function readFolderableEntities(dir, bundle, packageSpec, sections) {
         utils.listDir(dir).forEach(item => {
             if (utils.isDirectory(dir + "/" + item)) {
-                readFolderableEntities(`${dir}/${item}`, bundle, selectedEntities, packageSpec, sections);
+                readFolderableEntities(`${dir}/${item}`, bundle, packageSpec, sections);
             } else {
-                readFolderableEntity(dir, item, bundle, selectedEntities, packageSpec, sections);
+                readFolderableEntity(dir, item, bundle, packageSpec, sections);
             }
         });
     }
 
-    function readFolderableEntity(path, filename, bundle, selectedEntities, packageSpec, sections) {
+    function readFolderableEntity(path, filename, bundle, packageSpec, sections) {
         const pluralName = butils.entityPluralNameByFile(filename);
         let typeInfo = pluralName ? graphman.typeInfoByPluralName(pluralName) : null;
 
@@ -325,15 +250,20 @@ let type1Imploder = (function () {
             if (!isSectionIncluded(sections, pluralName)) {
                 return;
             }
-            const key = `${pluralName}:${filename}`;
-            if (!packageSpec || selectedEntities.has(key)) {
-                const entity = utils.readFile(`${path}/${filename}`);
-
-                // for backward compatibility, check whether the entity is of type policy fragment
-                if (filename.endsWith(".policy.json") && !entity.policyType) {
-                    typeInfo = graphman.typeInfoByPluralName("policyFragments");
+            if (packageSpec) {
+                const packageItems = packageSpec[pluralName];
+                if (!packageItems || !Array.isArray(packageItems)) {
+                    utils.debug(pluralName + ` section is missing in the package`);
+                    return;
                 }
+            }
+            const entity = utils.readFile(`${path}/${filename}`);
 
+            // for backward compatibility, check whether the entity is of type policy fragment
+            if (filename.endsWith(".policy.json") && !entity.policyType) {
+                typeInfo = graphman.typeInfoByPluralName("policyFragments");
+            }
+            if (!packageSpec || findEntityFromPackage(packageSpec, entity, typeInfo, pluralName, filename)) {
                 const entities = butils.withArray(bundle, typeInfo);
                 entities.push(implodeServiceOrPolicy(entity, path));
             }
@@ -444,7 +374,7 @@ let type1Imploder = (function () {
         return certs;
     }
 
-    function filterMappings(mappings, selectedEntities, entityFileMap) {
+    function filterMappings(mappings, bundle) {
         Object.keys(mappings).forEach(section => {
             const typeInfo = graphman.typeInfoByPluralName(section);
             if (!typeInfo) {
@@ -456,6 +386,7 @@ let type1Imploder = (function () {
             if (!Array.isArray(entityMappings)) {
                 return;
             }
+            const entities = butils.withArray(bundle, typeInfo);
 
             // Filter mappings to only include those matching selected entities
             const filteredMappings = entityMappings.filter(mapping => {
@@ -466,7 +397,7 @@ let type1Imploder = (function () {
 
                 // Check if this mapping matches any selected entity
                 const source = mapping.source || mapping;
-                return isMappingMatchingSelectedEntity(section, source, selectedEntities, entityFileMap, typeInfo);
+                return isMappingMatchingSelectedEntity(section, source, entities, typeInfo);
             });
 
             if (filteredMappings.length === 0) {
@@ -477,20 +408,9 @@ let type1Imploder = (function () {
         });
     }
 
-    function isMappingMatchingSelectedEntity(section, source, selectedEntities, entityFileMap, typeInfo) {
+    function isMappingMatchingSelectedEntity(section, source, selectedEntities, typeInfo) {
         // Check each selected entity to see if it matches this mapping
-        for (const key of selectedEntities) {
-            if (!key.startsWith(section + ":")) {
-                continue;
-            }
-
-            const entry = entityFileMap.get(key);
-            if (!entry) {
-                continue;
-            }
-
-            const entity = entry.entity;
-            
+        for (const entity of selectedEntities) {
             // Match based on identity fields
             // A mapping matches if all identity fields in the source match the entity
             let hasMatchingFields = false;

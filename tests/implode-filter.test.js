@@ -154,22 +154,6 @@ describe("Implode operation - with package file (entity summary references)", ()
         }
     });
 
-    test("implode with package file should warn about non-matching summary", () => {
-        const packageSpec = {
-            "clusterProperties": [
-                {"source": {"name": "non-existent-property"}}
-            ]
-        };
-        fs.writeFileSync(packageFile, JSON.stringify(packageSpec, null, 2));
-
-        const output = graphman("implode",
-            "--input", explodedDir,
-            "--output", implodedFile,
-            "--package", packageFile);
-
-        expect(output.stdout).toContain("entity not found matching summary");
-    });
-
     test("implode with mixed filename and summary references", () => {
         const packageSpec = {
             "clusterProperties": [
@@ -278,21 +262,7 @@ describe("Implode operation - package file validation", () => {
             "--input", explodedDir,
             "--output", implodedFile,
             "--package", "non-existent-package.json");
-        expect(output.stdout).toContain("package file does not exist");
-    });
-
-    test("implode with unknown entity type in package file should warn", () => {
-        const packageSpec = {
-            "unknownEntityType": [{"source": "some-file.json"}]
-        };
-        fs.writeFileSync(packageFile, JSON.stringify(packageSpec, null, 2));
-
-        const output = graphman("implode",
-            "--input", explodedDir,
-            "--output", implodedFile,
-            "--package", packageFile);
-
-        expect(output.stdout).toContain("unknown entity type");
+        expect(output.stdout).toContain("file doesn't exist");
     });
 
     test("implode with invalid package file section (not an array) should warn", () => {
