@@ -48,10 +48,9 @@ module.exports = {
                 // merge the intermediate bundles
                 Object.assign(renewedBundle, item);
             });
-            const sortedBundle = butils.sort(renewedBundle);
-            const finalBundle = utils.extension("post-renew").apply(sortedBundle, context);
-
-            utils.writeResult(params.output, finalBundle);
+            const finalBundle = utils.extension("post-renew").apply(renewedBundle, context);
+            const sortedBundle = butils.sort(finalBundle);
+            utils.writeResult(params.output, sortedBundle);
         }).catch(error => {
             utils.error("errors encountered while renewing the entities", error);
             utils.print();
