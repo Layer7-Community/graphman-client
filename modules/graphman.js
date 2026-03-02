@@ -1,4 +1,4 @@
-// Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
+// Copyright (c) 2026 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 const PACKAGE = require("../package.json");
 const SCHEMA_VERSION = "v11.2.1";
@@ -14,7 +14,7 @@ const SUPPORTED_OPERATIONS = [
     "config"
 ];
 
-const SUPPORTED_EXTENSIONS = ["pre-request", "post-export", "pre-import", "post-revise", "multiline-text-diff", "policy-code-validator"];
+const SUPPORTED_EXTENSIONS = ["pre-request", "post-export", "pre-import", "post-revise", "multiline-text-diff", "policy-code-validator", "socks-proxy-agent", "http-proxy-agent", "https-proxy-agent"];
 const SCHEMA_FEATURE_LIST = {
     "v11.2.1": ["mappings", "mappings-source", "policy-as-code"],
     "v11.2.0": ["mappings", "mappings-source", "policy-as-code"],
@@ -228,6 +228,15 @@ module.exports = {
         }
 
         req.minVersion = req.maxVersion = gateway.tlsProtocol || "TLSv1.2";
+
+        // Handle proxy configuration (object with url and options)
+        if (gateway.socksProxy) {
+            req.socksProxy = gateway.socksProxy;
+        }
+        if (gateway.httpProxy) {
+            req.httpProxy = gateway.httpProxy;
+        }
+
         return req;
     },
 
@@ -239,7 +248,90 @@ module.exports = {
      */
     invoke: function (options, opContext, callback) {
         options = utils.extension("pre-request").apply(options, opContext);
-        const req = ((!options.protocol||options.protocol === 'https'||options.protocol === 'https:') ? https : http).request(options, function(response) {
+        // Create proxy agent if configured (HTTP/HTTPS proxy takes precedence over SOCKS)
+        let agent = null;
+        const isHttps = !options.protocol || options.protocol === 'https' || options.protocol === 'https:';
+
+        if (options.httpProxy) {
+            // Handle HTTP/HTTPS proxy - object with url and connection options
+            const proxyConfig = options.httpProxy;
+
+            utils.info("currently using http proxy of squid");
+
+            if (typeof proxyConfig !== 'object' || !proxyConfig.url) {
+                utils.warn("httpProxy must be an object with a 'url' property");
+            } else {
+                const proxyUrl = proxyConfig.url;
+                // Extract connection options (exclude url property)
+                const proxyOptions = {};
+                Object.keys(proxyConfig).forEach(key => {
+                    if (key !== 'url') {
+                        proxyOptions[key] = proxyConfig[key];
+                    }
+                });
+
+                // Validate proxy URL protocol
+                const proxyUrlLower = proxyUrl.toLowerCase();
+                const isProxyHttps = proxyUrlLower.startsWith('https://');
+                if (isProxyHttps) {
+                    // If proxy URL uses https://, ensure TLS options are configured if needed
+                    if (!proxyOptions.tls) {
+                        proxyOptions.tls = {};
+                    }
+                    // If rejectUnauthorized is not explicitly set for proxy TLS, default to false for compatibility
+                    if (proxyOptions.tls.rejectUnauthorized === undefined) {
+                        proxyOptions.tls.rejectUnauthorized = false;
+                    }
+                }
+
+                try {
+                    // Use https-proxy-agent for HTTPS targets, http-proxy-agent for HTTP targets
+                    // Note: The agent type is based on TARGET protocol, not proxy URL protocol
+                    if (isHttps) {
+                        agent = utils.extension("https-proxy-agent").apply(proxyUrl, proxyOptions);
+                    } else {
+                        agent = utils.extension("http-proxy-agent").apply(proxyUrl, proxyOptions);
+                    }
+                    if (agent && typeof agent !== 'string' && typeof agent === 'object') {
+                        options.agent = agent;
+                    } else if (agent) {
+                        utils.warn(`${isHttps ? 'https' : 'http'}-proxy-agent extension did not return a valid agent, proxy will not be used`);
+                    }
+                } catch (e) {
+                    console.error(e);
+                    utils.warn(`failed to load ${isHttps ? 'https' : 'http'}-proxy-agent extension, proxy will not be used: ${e.message}`);
+                }
+            }
+        } else if (options.socksProxy) {
+            // Handle SOCKS proxy - object with url and connection options
+            const proxyConfig = options.socksProxy;
+
+            if (typeof proxyConfig !== 'object' || !proxyConfig.url) {
+                utils.warn("socksProxy must be an object with a 'url' property");
+            } else {
+                const proxyUrl = proxyConfig.url;
+                // Extract connection options (exclude url property)
+                const proxyOptions = {};
+                Object.keys(proxyConfig).forEach(key => {
+                    if (key !== 'url') {
+                        proxyOptions[key] = proxyConfig[key];
+                    }
+                });
+
+                try {
+                    agent = utils.extension("socks-proxy-agent").apply(proxyUrl, proxyOptions);
+                    if (agent && typeof agent !== 'string' && typeof agent === 'object') {
+                        options.agent = agent;
+                    } else if (agent) {
+                        utils.warn(`socks-proxy-agent extension did not return a valid agent, proxy will not be used`);
+                    }
+                } catch (e) {
+                    utils.warn(`failed to load socks-proxy-agent extension, proxy will not be used: ${e.message}`);
+                }
+            }
+        }
+
+        const req = (isHttps ? https : http).request(options, function (response) {
             let respInfo = {initialized: false, chunks: []};
 
             response.on('data', function (chunk) {
@@ -381,7 +473,9 @@ function makeGateways(gateways) {
             "credential": "default",
             "rejectUnauthorized": true,
             "passphrase": "7layer",
-            "allowMutations": false
+            "allowMutations": false,
+            "socksProxy": null,
+            "httpProxy": null
         };
     }
 
