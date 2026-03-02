@@ -12,6 +12,7 @@ module.exports = {
      * @param params.input name of the input file containing the gateway configuration as bundle
      * @param params.output name of the output directory into which the gateway configuration will be exploded
      * @param params.package name of the package file that specifies which entities to include
+     * @param params.sections one or more sections of the bundle for inclusion (used only when package is not specified)
      * @param params.options name-value pairs used to customize explode operation
      */
     run: function (params) {
@@ -21,13 +22,17 @@ module.exports = {
 
         const inputDir = params.input;
         const packageFile = params.package;
-        const bundle = type1Imploder.implode(inputDir, packageFile);
+        const sections = params.package ? undefined : params.sections;
+        const bundle = type1Imploder.implode(inputDir, packageFile, sections);
 
         utils.writeResult(params.output, butils.sort(bundle));
     },
 
     initParams: function (params, config) {
-        //do nothing
+        params.sections = params.sections || ["*"];
+        if (!Array.isArray(params.sections)) {
+            params.sections = [params.sections];
+        }
         return params;
     },
 
@@ -35,6 +40,7 @@ module.exports = {
         console.log("implode --input <input-dir>");
         console.log("  [--output <output-file>]");
         console.log("  [--package <package-file>]");
+        console.log("  [--sections <section>...]");
         console.log();
         console.log("Implodes the gateway configuration from directory into a bundle.");
         console.log();
@@ -49,6 +55,13 @@ module.exports = {
         console.log("    format: { \"<section>\": [{\"source\": <entity-summary>|<file-name>}] }");
         console.log("    where section is entity type and source is entity summary object or file name string");
         console.log("    file name supports wildcards (* and ?) for pattern matching");
+        console.log();
+        console.log("  --sections <section> <section> ...");
+        console.log("    specify one or more sections of the bundle for inclusion");
+        console.log("    section refers to the plural name of the entity type (e.g. services, policies)");
+        console.log("    * is a special section name, used to refer all the sections of a bundle");
+        console.log("    by default, all the sections of the bundle will be considered.");
+        console.log("    this parameter is honored only when --package is not specified.");
         console.log();
     }
 }
@@ -84,8 +97,12 @@ let type1Imploder = (function () {
         }
     };
 
+    function isSectionIncluded(sections, sectionName) {
+        return !sections || sections.length === 0 || sections.includes("*") || sections.includes(sectionName);
+    }
+
     return {
-        implode: function (inputDir, packageFile) {
+        implode: function (inputDir, packageFile, sections) {
             const bundle = {};
             let packageSpec = null;
             let selectedEntities = new Set();
@@ -95,7 +112,7 @@ let type1Imploder = (function () {
                 throw utils.newError(`directory does not exist or not a directory, ${inputDir}`);
             }
 
-            // Load package file if specified
+            // Load package file if specified (sections is ignored when package is specified)
             if (packageFile) {
                 if (!utils.existsFile(packageFile)) {
                     throw utils.newError(`package file does not exist: ${packageFile}`);
@@ -128,10 +145,14 @@ let type1Imploder = (function () {
                 if (utils.isDirectory(subDir)) {
                     const typeInfo = graphman.typeInfoByPluralName(item);
                     if (typeInfo) {
+                        if (!isSectionIncluded(sections, item)) {
+                            utils.info("ignoring " + item);
+                            return;
+                        }
                         utils.info("imploding " + item);
                         readEntities(subDir, item, typeInfo, bundle, selectedEntities, packageSpec);
                     } else if (item === "tree") {
-                        readFolderableEntities(subDir, bundle, selectedEntities, packageSpec);
+                        readFolderableEntities(subDir, bundle, selectedEntities, packageSpec, sections);
                     } else {
                         utils.info("unknown entities, " + item);
                     }
@@ -286,21 +307,24 @@ let type1Imploder = (function () {
         });
     }
 
-    function readFolderableEntities(dir, bundle, selectedEntities, packageSpec) {
+    function readFolderableEntities(dir, bundle, selectedEntities, packageSpec, sections) {
         utils.listDir(dir).forEach(item => {
             if (utils.isDirectory(dir + "/" + item)) {
-                readFolderableEntities(`${dir}/${item}`, bundle, selectedEntities, packageSpec);
+                readFolderableEntities(`${dir}/${item}`, bundle, selectedEntities, packageSpec, sections);
             } else {
-                readFolderableEntity(dir, item, bundle, selectedEntities, packageSpec);
+                readFolderableEntity(dir, item, bundle, selectedEntities, packageSpec, sections);
             }
         });
     }
 
-    function readFolderableEntity(path, filename, bundle, selectedEntities, packageSpec) {
+    function readFolderableEntity(path, filename, bundle, selectedEntities, packageSpec, sections) {
         const pluralName = butils.entityPluralNameByFile(filename);
         let typeInfo = pluralName ? graphman.typeInfoByPluralName(pluralName) : null;
 
         if (typeInfo) {
+            if (!isSectionIncluded(sections, pluralName)) {
+                return;
+            }
             const key = `${pluralName}:${filename}`;
             if (!packageSpec || selectedEntities.has(key)) {
                 const entity = utils.readFile(`${path}/${filename}`);

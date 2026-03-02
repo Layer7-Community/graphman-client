@@ -59,12 +59,12 @@ describe("Implode operation - with package file (filename references)", () => {
             "--package", packageFile);
 
         const bundle = tUtils.readFileAsJson(implodedFile);
-        
+
         // Verify only specified entities are included
         expect(bundle).toHaveProperty("clusterProperties");
         expect(bundle.clusterProperties).toBeInstanceOf(Array);
         expect(bundle.clusterProperties.length).toBe(2);
-        
+
         // Verify specific entities are present
         const names = bundle.clusterProperties.map(cp => cp.name);
         expect(names).toContain("cluster.hostname");
@@ -102,10 +102,10 @@ describe("Implode operation - with package file (filename references)", () => {
             "--package", packageFile);
 
         const bundle = tUtils.readFileAsJson(implodedFile);
-        
+
         expect(bundle).toHaveProperty("clusterProperties");
         expect(bundle.clusterProperties.length).toBe(1);
-        
+
         expect(bundle).toHaveProperty("keys");
         expect(bundle.keys.length).toBe(1);
     });
@@ -127,7 +127,7 @@ describe("Implode operation - with package file (entity summary references)", ()
 
 
         const bundle = tUtils.readFileAsJson(implodedFile);
-        
+
         expect(bundle).toHaveProperty("clusterProperties");
         expect(bundle.clusterProperties.length).toBe(1);
         expect(bundle.clusterProperties[0].name).toBe("cluster.hostname");
@@ -147,7 +147,7 @@ describe("Implode operation - with package file (entity summary references)", ()
             "--package", packageFile);
 
         const bundle = tUtils.readFileAsJson(implodedFile);
-        
+
         if (bundle.clusterProperties && bundle.clusterProperties.length > 0) {
             expect(bundle.clusterProperties).toBeInstanceOf(Array);
             expect(bundle.clusterProperties[0]).toHaveProperty("goid");
@@ -185,7 +185,7 @@ describe("Implode operation - with package file (entity summary references)", ()
             "--package", packageFile);
 
         const bundle = tUtils.readFileAsJson(implodedFile);
-        
+
         expect(bundle).toHaveProperty("clusterProperties");
         expect(bundle.clusterProperties.length).toBe(2);
     });
@@ -197,12 +197,12 @@ describe("Implode operation - folderable entities (services/policies)", () => {
         const output = graphman("implode",
             "--input", explodedDir,
             "--output", implodedFile);
-        
+
         const fullBundle = tUtils.readFileAsJson(implodedFile);
-        
+
         if (fullBundle.services && fullBundle.services.length > 0) {
             const firstService = fullBundle.services[0];
-            
+
             // Create package file with specific service
             const packageSpec = {
                 "services": [{"source": {"resolutionPath": firstService.resolutionPath}}]
@@ -215,7 +215,7 @@ describe("Implode operation - folderable entities (services/policies)", () => {
                 "--package", packageFile);
 
             const filteredBundle = tUtils.readFileAsJson(implodedFile);
-            
+
             expect(filteredBundle.services).toBeInstanceOf(Array);
             expect(filteredBundle.services.length).toBeLessThanOrEqual(fullBundle.services.length);
         }
@@ -438,3 +438,70 @@ describe("Implode operation - mapping filtering", () => {
     });
 });
 
+describe("Implode operation - sections parameter when package is specified", () => {
+    test("implode with both --package and --sections should ignore sections and use package", () => {
+        // Package selects only clusterProperties; --sections services would otherwise exclude them
+        const packageSpec = {
+            "clusterProperties": [
+                {"source": "cluster.hostname.json"}
+            ]
+        };
+        fs.writeFileSync(packageFile, JSON.stringify(packageSpec, null, 2));
+
+        const output = graphman("implode",
+            "--input", explodedDir,
+            "--output", implodedFile,
+            "--package", packageFile,
+            "--sections", "services");
+
+        const bundle = tUtils.readFileAsJson(implodedFile);
+
+        // Package wins: clusterProperties from package are included despite --sections services
+        expect(bundle).toHaveProperty("clusterProperties");
+        expect(bundle.clusterProperties).toBeInstanceOf(Array);
+        expect(bundle.clusterProperties.length).toBe(1);
+        expect(bundle.clusterProperties[0].name).toBe("cluster.hostname");
+    });
+});
+
+describe("implode command with --sections (when package is not specified)", () => {
+
+    test("should include only specified section when --sections is one section", () => {
+        const output = graphman("implode", "--input", explodedDir, "--sections", "clusterProperties");
+
+        expect(output.services).toBeUndefined();
+        expect(output.clusterProperties).toHaveLength(2);
+        expect(output.folders).toBeUndefined();
+    });
+
+    test("should include only specified sections when --sections has multiple values", () => {
+        const output = graphman("implode", "--input", explodedDir, "--sections", "services", "clusterProperties");
+
+        expect(output.services).toHaveLength(5);
+        expect(output.clusterProperties).toHaveLength(2);
+        expect(output.policies).toBeUndefined();
+    });
+
+    test("should include all sections when --sections is *", () => {
+        const output = graphman("implode", "--input", explodedDir, "--sections", "*");
+
+        expect(output.services).toHaveLength(5);
+        expect(output.clusterProperties).toHaveLength(2);
+        expect(output.listenPorts).toHaveLength(4);
+    });
+
+    test("should filter tree entities by section when --sections is specified", () => {
+        const output = graphman("implode", "--input", explodedDir, "--sections", "services");
+        expect(output.services).toHaveLength(5);
+        expect(output.policies).toBeUndefined();
+    });
+
+    test("should include bundle-properties when using --sections", () => {
+
+        const output = graphman("implode", "--input", explodedDir, "--sections", "services");
+
+        expect(output.services).toHaveLength(5);
+        expect(output.properties.meta.source).toBeDefined;
+        expect(output.clusterProperties).toBeUndefined();
+    });
+});
