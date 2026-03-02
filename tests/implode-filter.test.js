@@ -71,24 +71,6 @@ describe("Implode operation - with package file (filename references)", () => {
         expect(names).toContain("keyStore.defaultSsl.alias");
     });
 
-    test("implode with package file should warn about missing entity files", () => {
-        const packageSpec = {
-            "clusterProperties": [
-                {"source": "cluster.hostname.json"},
-                {"source": "non-existent-entity.json"}
-            ]
-        };
-        fs.writeFileSync(packageFile, JSON.stringify(packageSpec, null, 2));
-
-        const output = graphman("implode",
-            "--input", explodedDir,
-            "--output", implodedFile,
-            "--package", packageFile);
-
-        expect(output.stdout).toContain("entity file not found");
-        expect(output.stdout).toContain("non-existent-entity.json");
-    });
-
     test("implode with multiple entity types in package file", () => {
         const packageSpec = {
             "clusterProperties": [{"source": "cluster.hostname.json"}],

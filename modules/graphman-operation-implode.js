@@ -177,7 +177,7 @@ let type1Imploder = (function () {
             if (typeof source === 'string') {
                 return findEntityByFileName(section, source, filename);
             }
-            if (typeof source === 'object') {
+            else if (typeof source === 'object') {
                 return matchesSummary(entity, source, typeInfo);
             }
             return false;
