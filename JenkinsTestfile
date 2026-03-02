@@ -1,0 +1,151 @@
+// Jenkins pipeline for running graphman-client Jest tests.
+// References: TESTING.md, PR_128_QUICK_TEST_GUIDE.md, PR_128_TEST_SUMMARY.md, package.json test scripts.
+
+@Library('apim-jenkins-lib@master') _
+
+pipeline {
+    agent { label 'default' }
+    environment {
+        GRAPHMAN_HOME = "${env.WORKSPACE}"
+    }
+    options {
+        timeout(time: 30, unit: 'MINUTES')
+        buildDiscarder(logRotator(numToKeepStr: '20'))
+    }
+    parameters {
+        string(name: 'VAR_node_version', defaultValue: '16', description: 'Node.js major version (e.g. 16, 18, 20)')
+        booleanParam(name: 'RUN_COVERAGE', defaultValue: true, description: 'Run tests with coverage and publish report')
+        // Gateway configuration (updates graphman.configuration when VAR_gateway_address is set)
+        string(name: 'VAR_gateway_address', defaultValue: 'https://localhost:8443/graphman', description: 'Gateway address (e.g. https://gateway:8443/graphman). Leave empty to skip config update.')
+        string(name: 'VAR_gateway_username', defaultValue: 'admin', description: 'Gateway username (used when VAR_gateway_credentials_id is empty)')
+        password(name: 'VAR_gateway_password', defaultValue: '7layer', description: 'Gateway password (used when VAR_gateway_credentials_id is empty)')
+        string(name: 'VAR_gateway_credentials_id', defaultValue: '', description: 'Optional: Jenkins credentials ID (Username and password). Overrides username/password params if set.')
+        booleanParam(name: 'VAR_gateway_reject_unauthorized', defaultValue: false, description: 'Gateway TLS rejectUnauthorized')
+        booleanParam(name: 'VAR_gateway_allow_mutations', defaultValue: true, description: 'Gateway allowMutations')
+        password(name: 'VAR_gateway_passphrase', defaultValue: '7layer', description: 'Optional: Gateway passphrase (e.g. for admin key)')
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                // Assumes job is configured with Pipeline from SCM → https://github.com/Layer7-Community/graphman-client
+                checkout scm
+                echo "Checked out graphman-client at ${env.WORKSPACE}"
+            }
+        }
+
+        stage('Prepare Node') {
+            steps {
+                script {
+                    def nodeHome = tool name: "nodejs-${VAR_node_version}", type: 'nodejs'
+                    env.PATH = "${nodeHome}/bin:${env.PATH}"
+                    sh 'node -v && npm -v'
+                }
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                echo 'Installing dependencies (jest, jest-junit, jest-html-reporters, etc.) ...'
+                sh 'npm ci --no-audit --no-fund || npm install --no-audit --no-fund'
+            }
+        }
+
+        stage('Update graphman.configuration') {
+            when { expression { params.VAR_gateway_address?.trim() != '' } }
+            steps {
+                script {
+                    def credId = params.VAR_gateway_credentials_id?.trim() ?: ''
+                    def address = params.VAR_gateway_address.trim()
+                    def rejectUnauthorized = params.VAR_gateway_reject_unauthorized
+                    def allowMutations = params.VAR_gateway_allow_mutations
+                    def passphrase = params.VAR_gateway_passphrase ?: ''
+                    sh 'mkdir -p build'
+                    writeFile file: 'build/update-gateway-config.js', text: '''const fs=require("fs");
+const cfgFile=(process.env.GRAPHMAN_HOME||".")+"/graphman.configuration";
+let cfg={};
+if(fs.existsSync(cfgFile))cfg=JSON.parse(fs.readFileSync(cfgFile,"utf8"));
+if(!cfg.credentials)cfg.credentials={};
+if(!cfg.credentials.default)cfg.credentials.default={};
+cfg.credentials.default.username=process.env.GW_USER||"";
+cfg.credentials.default.password=process.env.GW_PASS||"";
+if(!cfg.gateways)cfg.gateways={};
+if(!cfg.gateways.default)cfg.gateways.default={};
+cfg.gateways.default.address=process.env.GW_ADDRESS||"";
+cfg.gateways.default.credential="default";
+cfg.gateways.default.rejectUnauthorized=process.env.GW_REJECT_UNAUTHORIZED==="true";
+cfg.gateways.default.allowMutations=process.env.GW_ALLOW_MUTATIONS==="true";
+if(process.env.GW_PASSPHRASE)cfg.gateways.default.passphrase=process.env.GW_PASSPHRASE;
+fs.writeFileSync(cfgFile,JSON.stringify(cfg,null,4));
+'''
+                    if (credId != '') {
+                        withCredentials([usernamePassword(credentialsId: credId, usernameVariable: 'GW_USER', passwordVariable: 'GW_PASS')]) {
+                            sh "GW_ADDRESS='${address.replaceAll("'", "'\\\\''")}' GW_REJECT_UNAUTHORIZED='${rejectUnauthorized}' GW_ALLOW_MUTATIONS='${allowMutations}' GW_PASSPHRASE='${passphrase.replaceAll("'", "'\\\\''")}' node build/update-gateway-config.js"
+                        }
+                    } else {
+                        def user = params.VAR_gateway_username ?: 'admin'
+                        def pass = params.VAR_gateway_password ?: ''
+                        def phrase = params.VAR_gateway_passphrase ?: ''
+                        sh "GW_ADDRESS='${address.replaceAll("'", "'\\\\''")}' GW_USER='${user.replaceAll("'", "'\\\\''")}' GW_PASS='${pass.replaceAll("'", "'\\\\''")}' GW_PASSPHRASE='${phrase.replaceAll("'", "'\\\\''")}' GW_REJECT_UNAUTHORIZED='${rejectUnauthorized}' GW_ALLOW_MUTATIONS='${allowMutations}' node build/update-gateway-config.js"
+                    }
+                    echo "Updated graphman.configuration with gateway address and credentials (default profile)."
+                }
+            }
+        }
+
+        stage('Test Init') {
+            steps {
+                echo 'Running tests/init.js for test configuration ...'
+                sh 'node tests/init.js'
+            }
+        }
+
+        stage('Run Jest Tests') {
+            steps {
+                echo 'Running graphman-client Jest tests (see TESTING.md, PR_128_QUICK_TEST_GUIDE.md) ...'
+                script {
+                    if (params.RUN_COVERAGE) {
+                        // CI-style: runInBand, coverage, JUnit reporter for Jenkins (see package.json test:ci)
+                        sh 'npm run test:ci'
+                    } else {
+                        sh 'npm test -- --runInBand --ci --maxWorkers=2'
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                // Archive JUnit XML for Jenkins test trend and dashboards
+                junit allowEmptyResults: true, testResults: 'test-reports/junit.xml'
+                if (params.RUN_COVERAGE) {
+                    publishHTML([
+                        allowMissing: true,
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true,
+                        reportDir: 'test-reports',
+                        reportFiles: 'test-report.html',
+                        reportName: 'Jest HTML Report',
+                        reportTitles: ''
+                    ])
+                    publishHTML([
+                        allowMissing: true,
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true,
+                        reportDir: 'coverage/lcov-report',
+                        reportFiles: 'index.html',
+                        reportName: 'Coverage Report',
+                        reportTitles: ''
+                    ])
+                }
+            }
+        }
+        success {
+            echo 'All Jest tests passed.'
+        }
+        failure {
+            echo 'Jest test run failed or reported failures.'
+        }
+    }
+}
