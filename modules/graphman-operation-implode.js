@@ -139,7 +139,7 @@ let type1Imploder = (function () {
                         utils.info("imploding " + item);
                         readEntities(subDir, item, typeInfo, bundle, packageSpec);
                     } else if (item === "tree") {
-                        readFolderableEntities(subDir, bundle, packageSpec, sections);
+                        readFolderableEntities(subDir, bundle, subDir, packageSpec, sections);
                     } else {
                         utils.info("unknown entities, " + item);
                     }
@@ -232,21 +232,23 @@ let type1Imploder = (function () {
         });
     }
 
-    function readFolderableEntities(dir, bundle, packageSpec, sections) {
+    function readFolderableEntities(dir, bundle, rootDir, packageSpec, sections) {
         utils.listDir(dir).forEach(item => {
             if (utils.isDirectory(dir + "/" + item)) {
-                readFolderableEntities(`${dir}/${item}`, bundle, packageSpec, sections);
+                readFolderableEntities(`${dir}/${item}`, bundle, rootDir, packageSpec, sections);
             } else {
-                readFolderableEntity(dir, item, bundle, packageSpec, sections);
+                readFolderableEntity(dir, item, bundle, rootDir, packageSpec, sections);
             }
         });
     }
 
-    function readFolderableEntity(path, filename, bundle, packageSpec, sections) {
+    function readFolderableEntity(path, filename, bundle, rootDir, packageSpec, sections) {
         const pluralName = butils.entityPluralNameByFile(filename);
         let typeInfo = pluralName ? graphman.typeInfoByPluralName(pluralName) : null;
 
         if (typeInfo) {
+            const fullPath = `${path}/${filename}`;
+            utils.info(`  ${fullPath.substring(rootDir.length + 1)}`);
             if (!isSectionIncluded(sections, pluralName)) {
                 return;
             }
