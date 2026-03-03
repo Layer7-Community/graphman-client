@@ -34,23 +34,12 @@ pipeline {
             }
         }
 
-        stage('Prepare Node') {
-            steps {
-                withCredentials([
-                    usernamePassword(credentialsId: 'ARTIFACTORY_USERNAME_TOKEN', passwordVariable: 'APIKEY', usernameVariable: 'USERNAME'),
-                ]) {
-                    script {
-                        // Inject API token directly into .npmrc (no base64 needed)
-                        sh 'sed -i "s/:_authToken=/:_authToken=${APIKEY}/" .npmrc'
-                    }
-                }
-            }
-        }
-
         stage('Install Dependencies') {
             steps {
                 echo 'Installing dependencies (jest, jest-junit, jest-html-reporters, etc.) ...'
+                withNPM(npmrcConfig:'graphmanclient-npmconfig') {
                 sh 'npm ci --no-audit --no-fund || npm install --no-audit --no-fund'
+                }
             }
         }
 
