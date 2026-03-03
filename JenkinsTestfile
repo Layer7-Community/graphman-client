@@ -39,7 +39,7 @@ pipeline {
                 echo 'Installing dependencies (jest, jest-junit, jest-html-reporters, etc.) ...'
                 configFileProvider([
                     configFile(
-                        fileId: 'graphmanclient-npmconfig',   // ID of the npm config in Managed Files
+                        fileId: '34b3cd52-4672-46f3-bb60-6e9227e98820',   // ID of the npm config in Managed Files
                         targetLocation: '.npmrc'              // optional: copy to workspace as .npmrc
                     )
                 ]) {
