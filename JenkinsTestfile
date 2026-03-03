@@ -42,7 +42,7 @@ pipeline {
                             echo 'Installing dependencies (jest, jest-junit, jest-html-reporters, etc.) ...'
                             configFileProvider([
                                 configFile(
-                                    fileId: '34b3cd52-4672-46f3-bb60-6e9227e98820',   // ID of the npm config in Managed Files
+                                    fileId: '5e52060e-11e4-4c02-b2b1-4b4463e681d6',   // ID of the npm config in Managed Files
                                     targetLocation: '.npmrc'              // optional: copy to workspace as .npmrc
                                 )
                             ]) {
