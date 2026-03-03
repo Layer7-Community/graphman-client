@@ -4,7 +4,6 @@
 
 const utils = require("./graphman-utils");
 const butils = require("./graphman-bundle");
-const metadata = require("./graphman").schemaMetadata();
 
 module.exports = {
     /**
@@ -132,13 +131,13 @@ function combineProperties(result, left, right) {
 function combineMappings(left, right) {
     const result = {};
 
-    // copy entities from right
+    // copy mappying from right
     butils.forEach(right, (key, entityMappings, typeInfo) => {
         const list = butils.withArray(result, typeInfo);
         entityMappings.forEach(item => list.push(item));
     });
 
-    // copy non-duplicate entityMappings from left
+    // copy non-duplicate entity mappings from left
     butils.forEach(left, (key, entityMappings, typeInfo) => {
         const list = butils.withArray(result, typeInfo);
         entityMappings.forEach(item => {
