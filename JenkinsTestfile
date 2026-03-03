@@ -36,17 +36,23 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                echo 'Installing dependencies (jest, jest-junit, jest-html-reporters, etc.) ...'
-                configFileProvider([
-                    configFile(
-                        fileId: '34b3cd52-4672-46f3-bb60-6e9227e98820',   // ID of the npm config in Managed Files
-                        targetLocation: '.npmrc'              // optional: copy to workspace as .npmrc
-                    )
-                ]) {
-                sh 'cat .npmrc'
-                sh 'npm ci --no-audit --no-fund || npm install --no-audit --no-fund'
-                }
-            }
+             withCredentials([
+                                usernamePassword(credentialsId: 'ARTIFACTORY_USERNAME_TOKEN', passwordVariable: 'APIKEY', usernameVariable: 'USERNAME'),
+                            ]) {
+                            echo 'Installing dependencies (jest, jest-junit, jest-html-reporters, etc.) ...'
+                            configFileProvider([
+                                configFile(
+                                    fileId: '34b3cd52-4672-46f3-bb60-6e9227e98820',   // ID of the npm config in Managed Files
+                                    targetLocation: '.npmrc'              // optional: copy to workspace as .npmrc
+                                )
+                            ]) {
+                            sh 'sed -i "s/:_authToken=/:_authToken=${APIKEY}/" .npmrc'
+                            sh 'cat .npmrc'
+                            sh 'npm ci --no-audit --no-fund || npm install --no-audit --no-fund'
+                        }
+                  }
+             }
+
         }
 
         stage('Update graphman.configuration') {
