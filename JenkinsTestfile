@@ -4,9 +4,10 @@
 @Library('apim-jenkins-lib@master') _
 
 pipeline {
-    agent { label 'default' }
+    agent { label 'centos9 && dockerhost-03' }
     environment {
         GRAPHMAN_HOME = "${env.WORKSPACE}"
+        ARTIFACTORY_CREDS = credentials('ARTIFACTORY_USERNAME_TOKEN')
     }
     options {
         timeout(time: 30, unit: 'MINUTES')
@@ -35,10 +36,13 @@ pipeline {
 
         stage('Prepare Node') {
             steps {
-                script {
-                    def nodeHome = tool name: "nodejs-${VAR_node_version}", type: 'nodejs'
-                    env.PATH = "${nodeHome}/bin:${env.PATH}"
-                    sh 'node -v && npm -v'
+                withCredentials([
+                    usernamePassword(credentialsId: 'ARTIFACTORY_USERNAME_TOKEN', passwordVariable: 'APIKEY', usernameVariable: 'USERNAME'),
+                ]) {
+                    script {
+                        // Inject API token directly into .npmrc (no base64 needed)
+                        sh 'sed -i "s/:_authToken=/:_authToken=${APIKEY}/" .npmrc'
+                    }
                 }
             }
         }
