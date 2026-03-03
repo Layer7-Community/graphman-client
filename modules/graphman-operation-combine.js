@@ -61,6 +61,19 @@ module.exports = {
  * @returns result bundle
  */
 function combine(left, right) {
+    const result = combineEntities(left, right);
+    combineProperties(result, left, right);
+    return result;
+}
+
+/**
+ * Merges entities from left and right bundles into a new bundle.
+ * Right bundle entities are copied first; non-duplicate entities from left are added.
+ * @param left left bundle
+ * @param right right bundle
+ * @returns new bundle containing merged entities only (no properties)
+ */
+function combineEntities(left, right) {
     const result = {};
 
     // copy entities from right
@@ -80,37 +93,72 @@ function combine(left, right) {
         });
     });
 
-    // combine properties and mappings
-    combineProperties(result, left, right);
-
     return result;
 }
 
 /**
- * Combines properties and mappings from left and right bundles.
+ * Merges properties and mappings from left and right bundles into result.
  * Right bundle properties and mappings take precedence.
- * @param result result bundle
+ * @param result bundle to receive merged properties
  * @param left left bundle
  * @param right right bundle
  */
 function combineProperties(result, left, right) {
-    const leftProperties = left.properties || {};
-    const rightProperties = right.properties || {};
+    const leftProperties = (left && left.properties) ? left.properties : {};
+    const rightProperties = (right && right.properties) ? right.properties : {};
 
-    // Initialize result properties with left bundle properties
     result.properties = Object.assign({}, leftProperties);
 
-    // Right bundle defaultAction takes precedence
     if (rightProperties.defaultAction) {
         result.properties.defaultAction = rightProperties.defaultAction;
     }
 
-    // Combine mappings using overrideMappings pattern
-    // Start with left bundle mappings, then merge right bundle mappings
-    combineMappings(result, leftProperties.mappings, rightProperties.mappings);
+    const leftMappings = leftProperties.mappings || {};
+    const rightMappings = rightProperties.mappings || {};
+    const mappings = combineMappings(leftMappings, rightMappings);
+    if (mappings && Object.keys(mappings).length > 0) {
+        result.properties.mappings = mappings;
+    }
 }
 
+
 /**
+ * Combines left and right bundle mappings into result bundle.
+ * Right bundled mappings take precedence.
+ * @param left left bundle
+ * @param right right bundle
+ * @returns result bundle
+ */
+function combineMappings(left, right) {
+    const result = {};
+
+    // copy entities from right
+    butils.forEach(right, (key, entityMappings, typeInfo) => {
+        const list = butils.withArray(result, typeInfo);
+        entityMappings.forEach(item => list.push(item));
+    });
+
+    // copy non-duplicate entityMappings from left
+    butils.forEach(left, (key, entityMappings, typeInfo) => {
+        const list = butils.withArray(result, typeInfo);
+        entityMappings.forEach(item => {
+            const found = list.find(x => {
+                if (x.source && item.source) {
+                    return butils.isEntityMatches(x.source, item.source, typeInfo)
+                } else if (item.default && x.default) {
+                    return true;
+                }
+                return false;
+            });
+            if (!found) {
+                list.push(item);
+            }
+        });
+    });
+    return result;
+}
+
+/*/!**
  * Combines entity mappings from left and right bundles.
  * Preserves mapping information from each source bundle, allowing entity-level
  * control through different entity type mappings (level 2) in source bundles.
@@ -120,7 +168,7 @@ function combineProperties(result, left, right) {
  * @param resultBundle result bundle (will be modified)
  * @param leftMappings left bundle mappings
  * @param rightMappings right bundle mappings
- */
+ *!/
 function combineMappings(resultBundle, leftMappings, rightMappings) {
     leftMappings = leftMappings || {};
     rightMappings = rightMappings || {};
@@ -199,7 +247,7 @@ function combineMappings(resultBundle, leftMappings, rightMappings) {
     }
 }
 
-/**
+/!**
  * Returns true if two mapping instructions match on all identity fields.
  * Uses deep equality for object fields (e.g. resolvers) so that same-shaped
  * objects from different bundles are considered equal.
@@ -207,7 +255,7 @@ function combineMappings(resultBundle, leftMappings, rightMappings) {
  * @param other second mapping instruction
  * @param typeInfo type information for the entity
  * @returns true if identity fields match
- */
+ *!/
 function identityFieldsMatch(item, other, typeInfo) {
     if (!typeInfo || !typeInfo.identityFields) {
         return false;
@@ -230,14 +278,14 @@ function identityFieldsMatch(item, other, typeInfo) {
     return true;
 }
 
-/**
+/!**
  * Checks if a mapping instruction is a duplicate of an existing one.
  * Reuses logic from graphman-bundle.js isDuplicateMatchingInstruction
  * @param list existing list of mapping instructions
  * @param ele element to check
  * @param typeInfo type information for the entity
  * @returns true if duplicate, false otherwise
- */
+ *!/
 function isDuplicateMatchingInstruction(list, ele, typeInfo) {
     if (!typeInfo || !typeInfo.identityFields) {
         return false;
@@ -248,4 +296,4 @@ function isDuplicateMatchingInstruction(list, ele, typeInfo) {
         }
     }
     return false;
-}
+}*/
