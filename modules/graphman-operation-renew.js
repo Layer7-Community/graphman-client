@@ -1,4 +1,6 @@
-// Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
+/*
+ * Copyright (c)  2026. Broadcom Inc. and its subsidiaries. All Rights Reserved.
+ */
 
 const utils = require("./graphman-utils");
 const butils = require("./graphman-bundle");
@@ -31,6 +33,7 @@ module.exports = {
         }
 
         const bundle = utils.readFile(params.input);
+        const context = utils.buildOperationContext("renew", gateway, params.options);
 
         Promise.all(this.renew(gateway, bundle, params.sections, params.options)).then(results => {
             const renewedBundle = {};
@@ -45,8 +48,9 @@ module.exports = {
                 // merge the intermediate bundles
                 Object.assign(renewedBundle, item);
             });
-
-            utils.writeResult(params.output, butils.sort(renewedBundle));
+            const finalBundle = utils.extension("post-renew").apply(renewedBundle, context);
+            const sortedBundle = butils.sort(finalBundle);
+            utils.writeResult(params.output, sortedBundle);
         }).catch(error => {
             utils.error("errors encountered while renewing the entities", error);
             utils.print();
