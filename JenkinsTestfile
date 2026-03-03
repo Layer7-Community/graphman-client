@@ -63,7 +63,6 @@ pipeline {
                     def address = params.VAR_gateway_address.trim()
                     def rejectUnauthorized = params.VAR_gateway_reject_unauthorized
                     def allowMutations = params.VAR_gateway_allow_mutations
-                    def passphrase = (params.VAR_gateway_passphrase instanceof hudson.util.Secret) ? params.VAR_gateway_passphrase.getPlainText() : (params.VAR_gateway_passphrase ?: '')
                     sh 'mkdir -p build'
                     writeFile file: 'build/update-gateway-config.js', text: '''const fs=require("fs");
 const cfgFile=(process.env.GRAPHMAN_HOME||".")+"/graphman.configuration";
@@ -82,15 +81,19 @@ cfg.gateways.default.allowMutations=process.env.GW_ALLOW_MUTATIONS==="true";
 if(process.env.GW_PASSPHRASE)cfg.gateways.default.passphrase=process.env.GW_PASSPHRASE;
 fs.writeFileSync(cfgFile,JSON.stringify(cfg,null,4));
 '''
+                    // Pass values via env to avoid calling getPlainText() on Secret (sandbox restriction)
+                    env.GW_ADDRESS = address
+                    env.GW_REJECT_UNAUTHORIZED = String.valueOf(rejectUnauthorized)
+                    env.GW_ALLOW_MUTATIONS = String.valueOf(allowMutations)
+                    env.GW_PASSPHRASE = params.VAR_gateway_passphrase ?: ''
                     if (credId != '') {
                         withCredentials([usernamePassword(credentialsId: credId, usernameVariable: 'GW_USER', passwordVariable: 'GW_PASS')]) {
-                            sh "GW_ADDRESS='${address.replaceAll("'", "'\\\\''")}' GW_REJECT_UNAUTHORIZED='${rejectUnauthorized}' GW_ALLOW_MUTATIONS='${allowMutations}' GW_PASSPHRASE='${passphrase.replaceAll("'", "'\\\\''")}' node build/update-gateway-config.js"
+                            sh 'node build/update-gateway-config.js'
                         }
                     } else {
-                        def user = params.VAR_gateway_username ?: 'admin'
-                        def pass = (params.VAR_gateway_password instanceof hudson.util.Secret) ? params.VAR_gateway_password.getPlainText() : (params.VAR_gateway_password ?: '')
-                        def phrase = (params.VAR_gateway_passphrase instanceof hudson.util.Secret) ? params.VAR_gateway_passphrase.getPlainText() : (params.VAR_gateway_passphrase ?: '')
-                        sh "GW_ADDRESS='${address.replaceAll("'", "'\\\\''")}' GW_USER='${user.replaceAll("'", "'\\\\''")}' GW_PASS='${pass.replaceAll("'", "'\\\\''")}' GW_PASSPHRASE='${phrase.replaceAll("'", "'\\\\''")}' GW_REJECT_UNAUTHORIZED='${rejectUnauthorized}' GW_ALLOW_MUTATIONS='${allowMutations}' node build/update-gateway-config.js"
+                        env.GW_USER = params.VAR_gateway_username ?: 'admin'
+                        env.GW_PASS = params.VAR_gateway_password ?: ''
+                        sh 'node build/update-gateway-config.js'
                     }
                     echo "Updated graphman.configuration with gateway address and credentials (default profile)."
                 }
