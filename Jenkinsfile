@@ -81,6 +81,7 @@ pipeline {
             when { expression { params.RUN_JEST_TESTS == true } }
             steps {
                 script {
+                    def branchName = URLEncoder.encode("${env.BRANCH_NAME}",java.nio.charset.StandardCharsets.UTF_8.toString())
                     build job: "gateway/tests/graphman-client/${branchName}",
                         wait: false,
                         parameters: [
