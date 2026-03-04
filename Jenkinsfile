@@ -17,6 +17,14 @@ pipeline {
             description: 'true to publish the build artifacts to the artifactory.',
             name: 'PUBLISH_TO_ARTIFACTORY'
         )
+        booleanParam(
+            defaultValue: false,
+            description: 'When true, triggers the Jest test pipeline (JenkinsTestfile).',
+            name: 'RUN_JEST_TESTS'
+        )
+        string(name: 'VAR_gateway_address', defaultValue: 'https://localhost:8443/graphman', description: 'Gateway address for Jest tests (used when RUN_JEST_TESTS is true).')
+        string(name: 'VAR_gateway_username', defaultValue: 'admin', description: 'Gateway username for Jest tests.')
+        password(name: 'VAR_gateway_password', defaultValue: '7layer', description: 'Gateway password for Jest tests.')
     }
     stages {
         stage('Update Java') {
@@ -63,6 +71,20 @@ pipeline {
                 echo "published Graphman-client artifacts to artifactory"
            }
        }
+        stage('Trigger Jest Tests') {
+            when { expression { params.RUN_JEST_TESTS == true } }
+            steps {
+                script {
+                    build job: "gateway/tests/graphman-client/${branchName}",
+                        wait: false,
+                        parameters: [
+                            string(name: 'VAR_gateway_address', value: params.VAR_gateway_address),
+                            string(name: 'VAR_gateway_username', value: params.VAR_gateway_username),
+                            password(name: 'VAR_gateway_password', value: params.VAR_gateway_password)
+                        ]
+                }
+            }
+        }
     }
 
     post {
