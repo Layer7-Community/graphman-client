@@ -113,8 +113,7 @@ pipeline {
                     env.TARGET_GW_USER = params.VAR_target_gateway_username ?: 'admin'
                     env.TARGET_GW_PASS = params.VAR_target_gateway_password ?: ''
                     sh 'node build/update-gateway-config.js'
-                    echo "configuration details from env.GRAPHMAN_HOME/graphman.configuration"
-                    sh 'cat env.GRAPHMAN_HOME/graphman.configuration'
+                    sh 'cat graphman.configuration'
                     echo "Updated graphman.configuration with source and target gateway details."
                 }
             }
