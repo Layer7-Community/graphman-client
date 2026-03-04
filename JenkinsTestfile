@@ -113,7 +113,7 @@ fs.writeFileSync(cfgFile,JSON.stringify(cfg,null,4));
                 echo 'Running graphman-client Jest tests (see TESTING.md) ...'
                 script {
                     if (params.RUN_COVERAGE) {
-                        sh 'npm test:coverage'
+                        sh 'npx jest --coverage'
                     } else {
                         sh 'npm test'
                     }
