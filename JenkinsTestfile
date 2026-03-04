@@ -7,6 +7,7 @@ pipeline {
     agent { label 'centos9 && dockerhost-03' }
     environment {
         GRAPHMAN_HOME = "${env.WORKSPACE}"
+        GRAPHMAN_ENTRYPOINT = "${env.WORKSPACE}/graphman.sh"
         ARTIFACTORY_CREDS = credentials('ARTIFACTORY_USERNAME_TOKEN')
     }
     options {
@@ -109,10 +110,10 @@ fs.writeFileSync(cfgFile,JSON.stringify(cfg,null,4));
 
         stage('Run Jest Tests') {
             steps {
-                echo 'Running graphman-client Jest tests (see TESTING.md, PR_128_QUICK_TEST_GUIDE.md) ...'
+                echo 'Running graphman-client Jest tests (see TESTING.md) ...'
                 script {
                     if (params.RUN_COVERAGE) {
-                        sh 'npx jest --coverage'
+                        sh 'npm test:coverage'
                     } else {
                         sh 'npm test'
                     }
