@@ -65,22 +65,22 @@ pipeline {
                     def allowMutations = params.VAR_gateway_allow_mutations
                     sh 'mkdir -p build'
                     writeFile file: 'build/update-gateway-config.js', text: '''const fs=require("fs");
-const cfgFile=(process.env.GRAPHMAN_HOME||".")+"/graphman.configuration";
-let cfg={};
-if(fs.existsSync(cfgFile))cfg=JSON.parse(fs.readFileSync(cfgFile,"utf8"));
-if(!cfg.credentials)cfg.credentials={};
-if(!cfg.credentials.default)cfg.credentials.default={};
-cfg.credentials.default.username=process.env.GW_USER||"";
-cfg.credentials.default.password=process.env.GW_PASS||"";
-if(!cfg.gateways)cfg.gateways={};
-if(!cfg.gateways.default)cfg.gateways.default={};
-cfg.gateways.default.address=process.env.GW_ADDRESS||"";
-cfg.gateways.default.credential="default";
-cfg.gateways.default.rejectUnauthorized=process.env.GW_REJECT_UNAUTHORIZED==="true";
-cfg.gateways.default.allowMutations=process.env.GW_ALLOW_MUTATIONS==="true";
-if(process.env.GW_PASSPHRASE)cfg.gateways.default.passphrase=process.env.GW_PASSPHRASE;
-fs.writeFileSync(cfgFile,JSON.stringify(cfg,null,4));
-'''
+                    const cfgFile=(process.env.GRAPHMAN_HOME||".")+"/graphman.configuration";
+                    let cfg={};
+                    if(fs.existsSync(cfgFile))cfg=JSON.parse(fs.readFileSync(cfgFile,"utf8"));
+                    if(!cfg.credentials)cfg.credentials={};
+                    if(!cfg.credentials.default)cfg.credentials.default={};
+                    cfg.credentials.default.username=process.env.GW_USER||"";
+                    cfg.credentials.default.password=process.env.GW_PASS||"";
+                    if(!cfg.gateways)cfg.gateways={};
+                    if(!cfg.gateways.default)cfg.gateways.default={};
+                    cfg.gateways.default.address=process.env.GW_ADDRESS||"";
+                    cfg.gateways.default.credential="default";
+                    cfg.gateways.default.rejectUnauthorized=process.env.GW_REJECT_UNAUTHORIZED==="true";
+                    cfg.gateways.default.allowMutations=process.env.GW_ALLOW_MUTATIONS==="true";
+                    if(process.env.GW_PASSPHRASE)cfg.gateways.default.passphrase=process.env.GW_PASSPHRASE;
+                    fs.writeFileSync(cfgFile,JSON.stringify(cfg,null,4));
+                    '''
                     // Pass values via env to avoid calling getPlainText() on Secret (sandbox restriction)
                     env.GW_ADDRESS = address
                     env.GW_REJECT_UNAUTHORIZED = String.valueOf(rejectUnauthorized)
