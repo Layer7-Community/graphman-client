@@ -16,14 +16,22 @@ pipeline {
     parameters {
         string(name: 'VAR_node_version', defaultValue: '16', description: 'Node.js major version (e.g. 16, 18, 20)')
         booleanParam(name: 'RUN_COVERAGE', defaultValue: true, description: 'Run tests with coverage and publish report')
-        // Gateway configuration (updates graphman.configuration when VAR_gateway_address is set)
-        string(name: 'VAR_gateway_address', defaultValue: 'https://localhost:8443/graphman', description: 'Gateway address (e.g. https://gateway:8443/graphman). Leave empty to skip config update.')
-        string(name: 'VAR_gateway_username', defaultValue: 'admin', description: 'Gateway username (used when VAR_gateway_credentials_id is empty)')
-        password(name: 'VAR_gateway_password', defaultValue: '7layer', description: 'Gateway password (used when VAR_gateway_credentials_id is empty)')
-        string(name: 'VAR_gateway_credentials_id', defaultValue: '', description: 'Optional: Jenkins credentials ID (Username and password). Overrides username/password params if set.')
-        booleanParam(name: 'VAR_gateway_reject_unauthorized', defaultValue: false, description: 'Gateway TLS rejectUnauthorized')
-        booleanParam(name: 'VAR_gateway_allow_mutations', defaultValue: true, description: 'Gateway allowMutations')
-        password(name: 'VAR_gateway_passphrase', defaultValue: '7layer', description: 'Optional: Gateway passphrase (e.g. for admin key)')
+        // Source gateway (updates graphman.configuration gateways.source-gateway when address is set)
+        string(name: 'VAR_source_gateway_address', defaultValue: 'https://localhost:8443/graphman', description: 'Source gateway address. Leave empty to skip source config update.')
+        string(name: 'VAR_source_gateway_username', defaultValue: 'admin', description: 'Source gateway username (used when VAR_source_gateway_credentials_id is empty)')
+        password(name: 'VAR_source_gateway_password', defaultValue: '7layer', description: 'Source gateway password (used when VAR_source_gateway_credentials_id is empty)')
+        string(name: 'VAR_source_gateway_credentials_id', defaultValue: '', description: 'Optional: Jenkins credentials ID for source gateway. Overrides username/password if set.')
+        booleanParam(name: 'VAR_source_gateway_reject_unauthorized', defaultValue: false, description: 'Source gateway TLS rejectUnauthorized')
+        booleanParam(name: 'VAR_source_gateway_allow_mutations', defaultValue: false, description: 'Source gateway allowMutations')
+        password(name: 'VAR_source_gateway_passphrase', defaultValue: '7layer', description: 'Optional: Source gateway passphrase (e.g. for admin key)')
+        // Target gateway (updates graphman.configuration gateways.target-gateway when address is set)
+        string(name: 'VAR_target_gateway_address', defaultValue: 'https://localhost:8443/graphman', description: 'Target gateway address. Leave empty to skip target config update.')
+        string(name: 'VAR_target_gateway_username', defaultValue: 'admin', description: 'Target gateway username (used when VAR_target_gateway_credentials_id is empty)')
+        password(name: 'VAR_target_gateway_password', defaultValue: '7layer', description: 'Target gateway password (used when VAR_target_gateway_credentials_id is empty)')
+        string(name: 'VAR_target_gateway_credentials_id', defaultValue: '', description: 'Optional: Jenkins credentials ID for target gateway. Overrides username/password if set.')
+        booleanParam(name: 'VAR_target_gateway_reject_unauthorized', defaultValue: false, description: 'Target gateway TLS rejectUnauthorized')
+        booleanParam(name: 'VAR_target_gateway_allow_mutations', defaultValue: true, description: 'Target gateway allowMutations')
+        password(name: 'VAR_target_gateway_passphrase', defaultValue: '7layer', description: 'Optional: Target gateway passphrase (e.g. for admin key)')
     }
     stages {
         stage('Checkout') {
@@ -56,46 +64,93 @@ pipeline {
         }
 
         stage('Update graphman.configuration') {
-            when { expression { params.VAR_gateway_address?.trim() != '' } }
+            when { expression {
+                (params.VAR_source_gateway_address?.trim() != '') || (params.VAR_target_gateway_address?.trim() != '')
+            } }
             steps {
                 script {
-                    def credId = params.VAR_gateway_credentials_id?.trim() ?: ''
-                    def address = params.VAR_gateway_address.trim()
-                    def rejectUnauthorized = params.VAR_gateway_reject_unauthorized
-                    def allowMutations = params.VAR_gateway_allow_mutations
                     sh 'mkdir -p build'
                     writeFile file: 'build/update-gateway-config.js', text: '''const fs=require("fs");
                     const cfgFile=(process.env.GRAPHMAN_HOME||".")+"/graphman.configuration";
                     let cfg={};
                     if(fs.existsSync(cfgFile))cfg=JSON.parse(fs.readFileSync(cfgFile,"utf8"));
                     if(!cfg.credentials)cfg.credentials={};
-                    if(!cfg.credentials.default)cfg.credentials.default={};
-                    cfg.credentials.default.username=process.env.GW_USER||"";
-                    cfg.credentials.default.password=process.env.GW_PASS||"";
                     if(!cfg.gateways)cfg.gateways={};
-                    if(!cfg.gateways.default)cfg.gateways.default={};
-                    cfg.gateways.default.address=process.env.GW_ADDRESS||"";
-                    cfg.gateways.default.credential="default";
-                    cfg.gateways.default.rejectUnauthorized=process.env.GW_REJECT_UNAUTHORIZED==="true";
-                    cfg.gateways.default.allowMutations=process.env.GW_ALLOW_MUTATIONS==="true";
-                    if(process.env.GW_PASSPHRASE)cfg.gateways.default.passphrase=process.env.GW_PASSPHRASE;
+                    // Source gateway
+                    if(process.env.SOURCE_GW_ADDRESS&&process.env.SOURCE_GW_ADDRESS.trim()!==""){
+                      if(!cfg.credentials.source)cfg.credentials.source={};
+                      cfg.credentials.source.username=process.env.SOURCE_GW_USER||"";
+                      cfg.credentials.source.password=process.env.SOURCE_GW_PASS||"";
+                      if(!cfg.gateways["source-gateway"])cfg.gateways["source-gateway"]={};
+                      cfg.gateways["source-gateway"].address=process.env.SOURCE_GW_ADDRESS.trim();
+                      cfg.gateways["source-gateway"].credential="source";
+                      cfg.gateways["source-gateway"].rejectUnauthorized=process.env.SOURCE_GW_REJECT_UNAUTHORIZED==="true";
+                      cfg.gateways["source-gateway"].allowMutations=process.env.SOURCE_GW_ALLOW_MUTATIONS==="true";
+                      if(process.env.SOURCE_GW_PASSPHRASE)cfg.gateways["source-gateway"].passphrase=process.env.SOURCE_GW_PASSPHRASE;
+                    }
+                    // Target gateway
+                    if(process.env.TARGET_GW_ADDRESS&&process.env.TARGET_GW_ADDRESS.trim()!==""){
+                      if(!cfg.credentials.target)cfg.credentials.target={};
+                      cfg.credentials.target.username=process.env.TARGET_GW_USER||"";
+                      cfg.credentials.target.password=process.env.TARGET_GW_PASS||"";
+                      if(!cfg.gateways["target-gateway"])cfg.gateways["target-gateway"]={};
+                      cfg.gateways["target-gateway"].address=process.env.TARGET_GW_ADDRESS.trim();
+                      cfg.gateways["target-gateway"].credential="target";
+                      cfg.gateways["target-gateway"].rejectUnauthorized=process.env.TARGET_GW_REJECT_UNAUTHORIZED==="true";
+                      cfg.gateways["target-gateway"].allowMutations=process.env.TARGET_GW_ALLOW_MUTATIONS==="true";
+                      if(process.env.TARGET_GW_PASSPHRASE)cfg.gateways["target-gateway"].passphrase=process.env.TARGET_GW_PASSPHRASE;
+                    }
                     fs.writeFileSync(cfgFile,JSON.stringify(cfg,null,4));
                     '''
-                    // Pass values via env to avoid calling getPlainText() on Secret (sandbox restriction)
-                    env.GW_ADDRESS = address
-                    env.GW_REJECT_UNAUTHORIZED = String.valueOf(rejectUnauthorized)
-                    env.GW_ALLOW_MUTATIONS = String.valueOf(allowMutations)
-                    env.GW_PASSPHRASE = params.VAR_gateway_passphrase ?: ''
-                    if (credId != '') {
-                        withCredentials([usernamePassword(credentialsId: credId, usernameVariable: 'GW_USER', passwordVariable: 'GW_PASS')]) {
-                            sh 'node build/update-gateway-config.js'
+                    env.SOURCE_GW_ADDRESS = (params.VAR_source_gateway_address ?: '').trim()
+                    env.SOURCE_GW_REJECT_UNAUTHORIZED = String.valueOf(params.VAR_source_gateway_reject_unauthorized)
+                    env.SOURCE_GW_ALLOW_MUTATIONS = String.valueOf(params.VAR_source_gateway_allow_mutations)
+                    env.SOURCE_GW_PASSPHRASE = params.VAR_source_gateway_passphrase ?: ''
+                    env.TARGET_GW_ADDRESS = (params.VAR_target_gateway_address ?: '').trim()
+                    env.TARGET_GW_REJECT_UNAUTHORIZED = String.valueOf(params.VAR_target_gateway_reject_unauthorized)
+                    env.TARGET_GW_ALLOW_MUTATIONS = String.valueOf(params.VAR_target_gateway_allow_mutations)
+                    env.TARGET_GW_PASSPHRASE = params.VAR_target_gateway_passphrase ?: ''
+                    def sourceCredId = params.VAR_source_gateway_credentials_id?.trim() ?: ''
+                    def targetCredId = params.VAR_target_gateway_credentials_id?.trim() ?: ''
+                    def runUpdate = {
+                        if (sourceCredId != '' && targetCredId != '' && sourceCredId == targetCredId) {
+                            withCredentials([usernamePassword(credentialsId: sourceCredId, usernameVariable: 'GW_USER', passwordVariable: 'GW_PASS')]) {
+                                env.SOURCE_GW_USER = env.GW_USER
+                                env.SOURCE_GW_PASS = env.GW_PASS
+                                env.TARGET_GW_USER = env.GW_USER
+                                env.TARGET_GW_PASS = env.GW_PASS
+                                sh 'node build/update-gateway-config.js'
+                            }
+                        } else {
+                            if (sourceCredId != '') {
+                                withCredentials([usernamePassword(credentialsId: sourceCredId, usernameVariable: 'SOURCE_GW_USER', passwordVariable: 'SOURCE_GW_PASS')]) {
+                                    if (targetCredId != '') {
+                                        withCredentials([usernamePassword(credentialsId: targetCredId, usernameVariable: 'TARGET_GW_USER', passwordVariable: 'TARGET_GW_PASS')]) {
+                                            sh 'node build/update-gateway-config.js'
+                                        }
+                                    } else {
+                                        env.TARGET_GW_USER = params.VAR_target_gateway_username ?: 'admin'
+                                        env.TARGET_GW_PASS = params.VAR_target_gateway_password ?: ''
+                                        sh 'node build/update-gateway-config.js'
+                                    }
+                                }
+                            } else {
+                                env.SOURCE_GW_USER = params.VAR_source_gateway_username ?: 'admin'
+                                env.SOURCE_GW_PASS = params.VAR_source_gateway_password ?: ''
+                                if (targetCredId != '') {
+                                    withCredentials([usernamePassword(credentialsId: targetCredId, usernameVariable: 'TARGET_GW_USER', passwordVariable: 'TARGET_GW_PASS')]) {
+                                        sh 'node build/update-gateway-config.js'
+                                    }
+                                } else {
+                                    env.TARGET_GW_USER = params.VAR_target_gateway_username ?: 'admin'
+                                    env.TARGET_GW_PASS = params.VAR_target_gateway_password ?: ''
+                                    sh 'node build/update-gateway-config.js'
+                                }
+                            }
                         }
-                    } else {
-                        env.GW_USER = params.VAR_gateway_username ?: 'admin'
-                        env.GW_PASS = params.VAR_gateway_password ?: ''
-                        sh 'node build/update-gateway-config.js'
                     }
-                    echo "Updated graphman.configuration with gateway address and credentials (default profile)."
+                    runUpdate()
+                    echo "Updated graphman.configuration with source and target gateway details."
                 }
             }
         }
