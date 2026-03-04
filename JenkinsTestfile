@@ -16,6 +16,13 @@ pipeline {
     parameters {
         string(name: 'VAR_node_version', defaultValue: '16', description: 'Node.js major version (e.g. 16, 18, 20)')
         booleanParam(name: 'RUN_COVERAGE', defaultValue: true, description: 'Run tests with coverage and publish report')
+        // Default gateway (updates graphman.configuration gateways.default when address is set)
+        string(name: 'VAR_default_gateway_address', defaultValue: 'https://localhost:8443/graphman', description: 'Default gateway address. Leave empty to skip default config update.')
+        string(name: 'VAR_default_gateway_username', defaultValue: 'admin', description: 'Default gateway username')
+        password(name: 'VAR_default_gateway_password', defaultValue: '7layer', description: 'Default gateway password')
+        booleanParam(name: 'VAR_default_gateway_reject_unauthorized', defaultValue: false, description: 'Default gateway TLS rejectUnauthorized')
+        booleanParam(name: 'VAR_default_gateway_allow_mutations', defaultValue: true, description: 'Default gateway allowMutations')
+        password(name: 'VAR_default_gateway_passphrase', defaultValue: '7layer', description: 'Optional: Default gateway passphrase (e.g. for admin key)')
         // Source gateway (updates graphman.configuration gateways.source-gateway when address is set)
         string(name: 'VAR_source_gateway_address', defaultValue: 'https://localhost:8443/graphman', description: 'Source gateway address. Leave empty to skip source config update.')
         string(name: 'VAR_source_gateway_username', defaultValue: 'admin', description: 'Source gateway username')
@@ -63,7 +70,7 @@ pipeline {
 
         stage('Update graphman.configuration') {
             when { expression {
-                (params.VAR_source_gateway_address?.trim() != '') || (params.VAR_target_gateway_address?.trim() != '')
+                (params.VAR_default_gateway_address?.trim() != '') || (params.VAR_source_gateway_address?.trim() != '') || (params.VAR_target_gateway_address?.trim() != '')
             } }
             steps {
                 script {
@@ -74,6 +81,18 @@ pipeline {
                     if(fs.existsSync(cfgFile))cfg=JSON.parse(fs.readFileSync(cfgFile,"utf8"));
                     if(!cfg.credentials)cfg.credentials={};
                     if(!cfg.gateways)cfg.gateways={};
+                    // Default gateway
+                    if(process.env.DEFAULT_GW_ADDRESS&&process.env.DEFAULT_GW_ADDRESS.trim()!==""){
+                      if(!cfg.credentials.default)cfg.credentials.default={};
+                      cfg.credentials.default.username=process.env.DEFAULT_GW_USER||"";
+                      cfg.credentials.default.password=process.env.DEFAULT_GW_PASS||"";
+                      if(!cfg.gateways.default)cfg.gateways.default={};
+                      cfg.gateways.default.address=process.env.DEFAULT_GW_ADDRESS.trim();
+                      cfg.gateways.default.credential="default";
+                      cfg.gateways.default.rejectUnauthorized=process.env.DEFAULT_GW_REJECT_UNAUTHORIZED==="true";
+                      cfg.gateways.default.allowMutations=process.env.DEFAULT_GW_ALLOW_MUTATIONS==="true";
+                      if(process.env.DEFAULT_GW_PASSPHRASE)cfg.gateways.default.passphrase=process.env.DEFAULT_GW_PASSPHRASE;
+                    }
                     // Source gateway
                     if(process.env.SOURCE_GW_ADDRESS&&process.env.SOURCE_GW_ADDRESS.trim()!==""){
                       if(!cfg.credentials.source)cfg.credentials.source={};
@@ -100,6 +119,12 @@ pipeline {
                     }
                     fs.writeFileSync(cfgFile,JSON.stringify(cfg,null,4));
                     '''
+                    env.DEFAULT_GW_ADDRESS = (params.VAR_default_gateway_address ?: '').trim()
+                    env.DEFAULT_GW_REJECT_UNAUTHORIZED = String.valueOf(params.VAR_default_gateway_reject_unauthorized)
+                    env.DEFAULT_GW_ALLOW_MUTATIONS = String.valueOf(params.VAR_default_gateway_allow_mutations)
+                    env.DEFAULT_GW_PASSPHRASE = params.VAR_default_gateway_passphrase ?: ''
+                    env.DEFAULT_GW_USER = params.VAR_default_gateway_username ?: 'admin'
+                    env.DEFAULT_GW_PASS = params.VAR_default_gateway_password ?: ''
                     env.SOURCE_GW_ADDRESS = (params.VAR_source_gateway_address ?: '').trim()
                     env.SOURCE_GW_REJECT_UNAUTHORIZED = String.valueOf(params.VAR_source_gateway_reject_unauthorized)
                     env.SOURCE_GW_ALLOW_MUTATIONS = String.valueOf(params.VAR_source_gateway_allow_mutations)
@@ -113,7 +138,8 @@ pipeline {
                     env.TARGET_GW_USER = params.VAR_target_gateway_username ?: 'admin'
                     env.TARGET_GW_PASS = params.VAR_target_gateway_password ?: ''
                     sh 'node build/update-gateway-config.js'
-                    echo "Updated graphman.configuration with source and target gateway details."
+                    sh 'cat graphman.configuration'
+                    echo "Updated graphman.configuration with default, source and target gateway details."
                 }
             }
         }
