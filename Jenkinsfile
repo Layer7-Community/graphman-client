@@ -82,8 +82,8 @@ pipeline {
             steps {
                 script {
                     def branchName = URLEncoder.encode("${env.BRANCH_NAME}",java.nio.charset.StandardCharsets.UTF_8.toString())
-                    build job: "gateway/tests/graphman-client/${branchName}",
-                        wait: false,
+                    build job: "Gateway/Tests/Graphman-Client/${branchName}",
+                        propagate: false,
                         parameters: [
                             string(name: 'VAR_gateway_address', value: params.VAR_gateway_address),
                             string(name: 'VAR_gateway_username', value: params.VAR_gateway_username),
