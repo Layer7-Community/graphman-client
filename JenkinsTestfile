@@ -1,5 +1,4 @@
 // Jenkins pipeline for running graphman-client Jest tests.
-// References: TESTING.md, PR_128_QUICK_TEST_GUIDE.md, PR_128_TEST_SUMMARY.md, package.json test scripts.
 
 @Library('apim-jenkins-lib@master') _
 
