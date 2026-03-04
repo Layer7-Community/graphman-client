@@ -112,10 +112,9 @@ fs.writeFileSync(cfgFile,JSON.stringify(cfg,null,4));
                 echo 'Running graphman-client Jest tests (see TESTING.md, PR_128_QUICK_TEST_GUIDE.md) ...'
                 script {
                     if (params.RUN_COVERAGE) {
-                        // CI-style: runInBand, coverage, JUnit reporter for Jenkins (see package.json test:ci)
-                        sh 'npm run test:ci'
+                        sh 'npx jest --coverage'
                     } else {
-                        sh 'npm test -- --runInBand --ci --maxWorkers=2'
+                        sh 'npm test'
                     }
                 }
             }
