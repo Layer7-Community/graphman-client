@@ -22,6 +22,9 @@ pipeline {
             description: 'When true, triggers the Jest test pipeline (JenkinsTestfile).',
             name: 'RUN_JEST_TESTS'
         )
+        string(name: 'VAR_default_gateway_address', defaultValue: 'https://localhost:8443/graphman', description: 'Default gateway address for Jest tests.')
+        string(name: 'VAR_default_gateway_username', defaultValue: 'admin', description: 'Default gateway username for Jest tests.')
+        password(name: 'VAR_default_gateway_password', defaultValue: '7layer', description: 'Default gateway password for Jest tests.')
         string(name: 'VAR_source_gateway_address', defaultValue: 'https://localhost:8443/graphman', description: 'Source gateway address for Jest tests.')
         string(name: 'VAR_source_gateway_username', defaultValue: 'admin', description: 'Source gateway username for Jest tests.')
         password(name: 'VAR_source_gateway_password', defaultValue: '7layer', description: 'Source gateway password for Jest tests.')
@@ -82,6 +85,9 @@ pipeline {
                     build job: "gateway/tests/Graphman-Client/${branchName}",
                         propagate: false,
                         parameters: [
+                            string(name: 'VAR_default_gateway_address', value: params.VAR_default_gateway_address),
+                            string(name: 'VAR_default_gateway_username', value: params.VAR_default_gateway_username),
+                            password(name: 'VAR_default_gateway_password', value: params.VAR_default_gateway_password),
                             string(name: 'VAR_source_gateway_address', value: params.VAR_source_gateway_address),
                             string(name: 'VAR_source_gateway_username', value: params.VAR_source_gateway_username),
                             password(name: 'VAR_source_gateway_password', value: params.VAR_source_gateway_password),
