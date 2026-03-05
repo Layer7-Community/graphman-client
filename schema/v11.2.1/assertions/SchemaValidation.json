@@ -1,0 +1,73 @@
+{
+  "$comment": "Schema for SchemaValidation assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "assertionResourceInfo": {
+      "type": "object",
+      "$id": "schema:sub-types/assertionResourceInfo"
+    },
+    "schemaValidation": {
+      "type": "object",
+      "$id": "schema:SchemaValidation",
+      "$ref": "schema:assertion",
+      "properties": {
+        "SchemaValidation": {
+          "type": "object",
+          "properties": {
+            "applyToArguments": {
+              "type": "boolean",
+              "default": false
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "resourceInfo": {
+              "$ref": "schema:sub-types/assertionResourceInfo"
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ]
+            },
+            "validationTarget": {
+              "type": "string",
+              "enum": [
+                "ENVELOPE",
+                "BODY",
+                "ARGUMENTS"
+              ],
+              "default": "BODY"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:SchemaValidation"
+}

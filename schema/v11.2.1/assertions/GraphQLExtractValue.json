@@ -1,0 +1,63 @@
+{
+  "$comment": "Schema for GraphQLExtractValue assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "graphQLExtractValue": {
+      "type": "object",
+      "$id": "schema:GraphQLExtractValue",
+      "$ref": "schema:assertion",
+      "properties": {
+        "GraphQLExtractValue": {
+          "type": "object",
+          "properties": {
+            "argumentPattern": {
+              "type": "string"
+            },
+            "expression": {
+              "type": "string"
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "REQUEST"
+            },
+            "variable": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:GraphQLExtractValue"
+}

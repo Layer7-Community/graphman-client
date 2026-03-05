@@ -1,0 +1,66 @@
+{
+  "$comment": "Schema for ApiPortalIntegration assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "apiPortalIntegration": {
+      "type": "object",
+      "$id": "schema:ApiPortalIntegration",
+      "$ref": "schema:assertion",
+      "properties": {
+        "ApiPortalIntegration": {
+          "type": "object",
+          "properties": {
+            "apiGroup": {
+              "type": "string"
+            },
+            "apiId": {
+              "type": "string",
+              "default": "32afbf5f-75f4-44ca-bacc-58181851f4c3"
+            },
+            "portalManagedApiFlag": {
+              "type": "string"
+            },
+            "variablePrefix": {
+              "type": "string",
+              "default": "portal.managed.service"
+            },
+            "_enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "_leftComment": {
+              "type": "string"
+            },
+            "_rightComment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:ApiPortalIntegration"
+}

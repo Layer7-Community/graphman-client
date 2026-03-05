@@ -1,0 +1,57 @@
+{
+  "$comment": "Schema for SnmpTrap assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "snmpTrap": {
+      "type": "object",
+      "$id": "schema:SnmpTrap",
+      "$ref": "schema:assertion",
+      "properties": {
+        "SnmpTrap": {
+          "type": "object",
+          "properties": {
+            "community": {
+              "type": "string"
+            },
+            "errorMessage": {
+              "type": "string"
+            },
+            "oid": {
+              "type": "string"
+            },
+            "targetHostname": {
+              "type": "string"
+            },
+            "targetPort": {
+              "type": "integer"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:SnmpTrap"
+}

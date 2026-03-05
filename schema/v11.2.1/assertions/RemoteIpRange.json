@@ -1,0 +1,55 @@
+{
+  "$comment": "Schema for RemoteIpRange assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "remoteIpRange": {
+      "type": "object",
+      "$id": "schema:RemoteIpRange",
+      "$ref": "schema:assertion",
+      "properties": {
+        "RemoteIpRange": {
+          "type": "object",
+          "properties": {
+            "allowRange": {
+              "type": "boolean",
+              "default": true
+            },
+            "ipSourceContextVariable": {
+              "type": "string"
+            },
+            "networkMask": {
+              "type": "string"
+            },
+            "startIp": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:RemoteIpRange"
+}

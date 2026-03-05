@@ -1,0 +1,981 @@
+{
+  "$comment": "Index of all assertion schemas. Maps assertion PascalCase name to its schema file.",
+  "assertions": {
+    "AddHeader": {
+      "file": "AddHeader.json",
+      "defKey": "addHeader"
+    },
+    "AddWsAddressing": {
+      "file": "AddWsAddressing.json",
+      "defKey": "addWsAddressing"
+    },
+    "AddWssSecurityToken": {
+      "file": "AddWssSecurityToken.json",
+      "defKey": "addWssSecurityToken"
+    },
+    "AddWssTimestamp": {
+      "file": "AddWssTimestamp.json",
+      "defKey": "addWssTimestamp"
+    },
+    "All": {
+      "file": "All.json",
+      "defKey": "all"
+    },
+    "ApplyJSONPatch": {
+      "file": "ApplyJSONPatch.json",
+      "defKey": "applyJSONPatch"
+    },
+    "Audit": {
+      "file": "Audit.json",
+      "defKey": "audit"
+    },
+    "AuditDetail": {
+      "file": "AuditDetail.json",
+      "defKey": "auditDetail"
+    },
+    "AuditRecordToXml": {
+      "file": "AuditRecordToXml.json",
+      "defKey": "auditRecordToXml"
+    },
+    "Authentication": {
+      "file": "Authentication.json",
+      "defKey": "authentication"
+    },
+    "BufferData": {
+      "file": "BufferData.json",
+      "defKey": "bufferData"
+    },
+    "BuildRstrSoapResponse": {
+      "file": "BuildRstrSoapResponse.json",
+      "defKey": "buildRstrSoapResponse"
+    },
+    "BuildRstSoapRequest": {
+      "file": "BuildRstSoapRequest.json",
+      "defKey": "buildRstSoapRequest"
+    },
+    "BulkJdbcInsert": {
+      "file": "BulkJdbcInsert.json",
+      "defKey": "bulkJdbcInsert"
+    },
+    "CacheLookup": {
+      "file": "CacheLookup.json",
+      "defKey": "cacheLookup"
+    },
+    "CacheStorage": {
+      "file": "CacheStorage.json",
+      "defKey": "cacheStorage"
+    },
+    "CancelSecurityContext": {
+      "file": "CancelSecurityContext.json",
+      "defKey": "cancelSecurityContext"
+    },
+    "CassandraQuery": {
+      "file": "CassandraQuery.json",
+      "defKey": "cassandraQuery"
+    },
+    "CertificateAttributes": {
+      "file": "CertificateAttributes.json",
+      "defKey": "certificateAttributes"
+    },
+    "CircuitBreaker": {
+      "file": "CircuitBreaker.json",
+      "defKey": "circuitBreaker"
+    },
+    "CodeInjectionProtection": {
+      "file": "CodeInjectionProtection.json",
+      "defKey": "codeInjectionProtection"
+    },
+    "Comment": {
+      "file": "Comment.json",
+      "defKey": "comment"
+    },
+    "ComparisonAssertion": {
+      "file": "ComparisonAssertion.json",
+      "defKey": "comparisonAssertion"
+    },
+    "ConcurrentAll": {
+      "file": "ConcurrentAll.json",
+      "defKey": "concurrentAll"
+    },
+    "ContentType": {
+      "file": "ContentType.json",
+      "defKey": "contentType"
+    },
+    "CookieCredentialSource": {
+      "file": "CookieCredentialSource.json",
+      "defKey": "cookieCredentialSource"
+    },
+    "CORS": {
+      "file": "CORS.json",
+      "defKey": "cORS"
+    },
+    "CreateJsonWebKey": {
+      "file": "CreateJsonWebKey.json",
+      "defKey": "createJsonWebKey"
+    },
+    "CreateRoutingStrategy": {
+      "file": "CreateRoutingStrategy.json",
+      "defKey": "createRoutingStrategy"
+    },
+    "CreateSecurityContextToken": {
+      "file": "CreateSecurityContextToken.json",
+      "defKey": "createSecurityContextToken"
+    },
+    "CsrfProtection": {
+      "file": "CsrfProtection.json",
+      "defKey": "csrfProtection"
+    },
+    "CsrSigner": {
+      "file": "CsrSigner.json",
+      "defKey": "csrSigner"
+    },
+    "CustomizeErrorResponse": {
+      "file": "CustomizeErrorResponse.json",
+      "defKey": "customizeErrorResponse"
+    },
+    "DecodeJsonWebToken": {
+      "file": "DecodeJsonWebToken.json",
+      "defKey": "decodeJsonWebToken"
+    },
+    "DistributedRateLimit": {
+      "file": "DistributedRateLimit.json",
+      "defKey": "distributedRateLimit"
+    },
+    "EchoRoutingAssertion": {
+      "file": "EchoRoutingAssertion.json",
+      "defKey": "echoRoutingAssertion"
+    },
+    "Email": {
+      "file": "Email.json",
+      "defKey": "email"
+    },
+    "Encapsulated": {
+      "file": "Encapsulated.json",
+      "defKey": "encapsulated"
+    },
+    "EncodeDecode": {
+      "file": "EncodeDecode.json",
+      "defKey": "encodeDecode"
+    },
+    "EncodeJsonWebToken": {
+      "file": "EncodeJsonWebToken.json",
+      "defKey": "encodeJsonWebToken"
+    },
+    "EncryptedUsernameToken": {
+      "file": "EncryptedUsernameToken.json",
+      "defKey": "encryptedUsernameToken"
+    },
+    "EstablishOutboundSecureConversation": {
+      "file": "EstablishOutboundSecureConversation.json",
+      "defKey": "establishOutboundSecureConversation"
+    },
+    "EvaluateJsonPathExpressionV2": {
+      "file": "EvaluateJsonPathExpressionV2.json",
+      "defKey": "evaluateJsonPathExpressionV2"
+    },
+    "ExecuteRoutingStrategy": {
+      "file": "ExecuteRoutingStrategy.json",
+      "defKey": "executeRoutingStrategy"
+    },
+    "ExportVariables": {
+      "file": "ExportVariables.json",
+      "defKey": "exportVariables"
+    },
+    "False": {
+      "file": "False.json",
+      "defKey": "false"
+    },
+    "ForEachLoop": {
+      "file": "ForEachLoop.json",
+      "defKey": "forEachLoop"
+    },
+    "FtpCredential": {
+      "file": "FtpCredential.json",
+      "defKey": "ftpCredential"
+    },
+    "FtpRoutingAssertion": {
+      "file": "FtpRoutingAssertion.json",
+      "defKey": "ftpRoutingAssertion"
+    },
+    "GatewayGraphQL": {
+      "file": "GatewayGraphQL.json",
+      "defKey": "gatewayGraphQL"
+    },
+    "GatewayManagement": {
+      "file": "GatewayManagement.json",
+      "defKey": "gatewayManagement"
+    },
+    "GenerateOAuthSignatureBaseString": {
+      "file": "GenerateOAuthSignatureBaseString.json",
+      "defKey": "generateOAuthSignatureBaseString"
+    },
+    "GenerateSecurityHash": {
+      "file": "GenerateSecurityHash.json",
+      "defKey": "generateSecurityHash"
+    },
+    "GraphQLExtractValue": {
+      "file": "GraphQLExtractValue.json",
+      "defKey": "graphQLExtractValue"
+    },
+    "GraphQLSchemaValidation": {
+      "file": "GraphQLSchemaValidation.json",
+      "defKey": "graphQLSchemaValidation"
+    },
+    "HandleErrors": {
+      "file": "HandleErrors.json",
+      "defKey": "handleErrors"
+    },
+    "HardcodedResponse": {
+      "file": "HardcodedResponse.json",
+      "defKey": "hardcodedResponse"
+    },
+    "HtmlFormData": {
+      "file": "HtmlFormData.json",
+      "defKey": "htmlFormData"
+    },
+    "Http2Routing": {
+      "file": "Http2Routing.json",
+      "defKey": "http2Routing"
+    },
+    "HttpBasic": {
+      "file": "HttpBasic.json",
+      "defKey": "httpBasic"
+    },
+    "HttpFormPost": {
+      "file": "HttpFormPost.json",
+      "defKey": "httpFormPost"
+    },
+    "HttpNegotiate": {
+      "file": "HttpNegotiate.json",
+      "defKey": "httpNegotiate"
+    },
+    "HttpRouting": {
+      "file": "HttpRouting.json",
+      "defKey": "httpRouting"
+    },
+    "IcapAntivirusScanner": {
+      "file": "IcapAntivirusScanner.json",
+      "defKey": "icapAntivirusScanner"
+    },
+    "IdentityAttributes": {
+      "file": "IdentityAttributes.json",
+      "defKey": "identityAttributes"
+    },
+    "Include": {
+      "file": "Include.json",
+      "defKey": "include"
+    },
+    "IndexLookupByItem": {
+      "file": "IndexLookupByItem.json",
+      "defKey": "indexLookupByItem"
+    },
+    "InverseHttpFormPost": {
+      "file": "InverseHttpFormPost.json",
+      "defKey": "inverseHttpFormPost"
+    },
+    "ItemLookupByIndex": {
+      "file": "ItemLookupByIndex.json",
+      "defKey": "itemLookupByIndex"
+    },
+    "JavaScript": {
+      "file": "JavaScript.json",
+      "defKey": "javaScript"
+    },
+    "JdbcQuery": {
+      "file": "JdbcQuery.json",
+      "defKey": "jdbcQuery"
+    },
+    "JmsRouting": {
+      "file": "JmsRouting.json",
+      "defKey": "jmsRouting"
+    },
+    "Join": {
+      "file": "Join.json",
+      "defKey": "join"
+    },
+    "JsonDocumentStructure": {
+      "file": "JsonDocumentStructure.json",
+      "defKey": "jsonDocumentStructure"
+    },
+    "JSONSchema": {
+      "file": "JSONSchema.json",
+      "defKey": "jSONSchema"
+    },
+    "JsonTransformation": {
+      "file": "JsonTransformation.json",
+      "defKey": "jsonTransformation"
+    },
+    "JwtDecode": {
+      "file": "JwtDecode.json",
+      "defKey": "jwtDecode"
+    },
+    "JwtEncode": {
+      "file": "JwtEncode.json",
+      "defKey": "jwtEncode"
+    },
+    "KafkaRouting": {
+      "file": "KafkaRouting.json",
+      "defKey": "kafkaRouting"
+    },
+    "KerberosAuthentication": {
+      "file": "KerberosAuthentication.json",
+      "defKey": "kerberosAuthentication"
+    },
+    "KeyValueLookup": {
+      "file": "KeyValueLookup.json",
+      "defKey": "keyValueLookup"
+    },
+    "KeyValueRemove": {
+      "file": "KeyValueRemove.json",
+      "defKey": "keyValueRemove"
+    },
+    "KeyValueStorage": {
+      "file": "KeyValueStorage.json",
+      "defKey": "keyValueStorage"
+    },
+    "LDAPQuery": {
+      "file": "LDAPQuery.json",
+      "defKey": "lDAPQuery"
+    },
+    "LdapWrite": {
+      "file": "LdapWrite.json",
+      "defKey": "ldapWrite"
+    },
+    "LookupDynamicContextVariables": {
+      "file": "LookupDynamicContextVariables.json",
+      "defKey": "lookupDynamicContextVariables"
+    },
+    "LookupOutboundSecureConversationSession": {
+      "file": "LookupOutboundSecureConversationSession.json",
+      "defKey": "lookupOutboundSecureConversationSession"
+    },
+    "LookupTrustedCertificate": {
+      "file": "LookupTrustedCertificate.json",
+      "defKey": "lookupTrustedCertificate"
+    },
+    "ManageCookie": {
+      "file": "ManageCookie.json",
+      "defKey": "manageCookie"
+    },
+    "ManipulateMultiValuedVariable": {
+      "file": "ManipulateMultiValuedVariable.json",
+      "defKey": "manipulateMultiValuedVariable"
+    },
+    "MapValue": {
+      "file": "MapValue.json",
+      "defKey": "mapValue"
+    },
+    "MemberOfGroup": {
+      "file": "MemberOfGroup.json",
+      "defKey": "memberOfGroup"
+    },
+    "MessageBuffering": {
+      "file": "MessageBuffering.json",
+      "defKey": "messageBuffering"
+    },
+    "MessageContextAssertion": {
+      "file": "MessageContextAssertion.json",
+      "defKey": "messageContextAssertion"
+    },
+    "MqNativeRouting": {
+      "file": "MqNativeRouting.json",
+      "defKey": "mqNativeRouting"
+    },
+    "MTOMDecodeAssertion": {
+      "file": "MTOMDecodeAssertion.json",
+      "defKey": "mTOMDecodeAssertion"
+    },
+    "MTOMEncodeAssertion": {
+      "file": "MTOMEncodeAssertion.json",
+      "defKey": "mTOMEncodeAssertion"
+    },
+    "MTOMValidateAssertion": {
+      "file": "MTOMValidateAssertion.json",
+      "defKey": "mTOMValidateAssertion"
+    },
+    "NonSoapCheckVerifyResults": {
+      "file": "NonSoapCheckVerifyResults.json",
+      "defKey": "nonSoapCheckVerifyResults"
+    },
+    "NonSoapDecryptElement": {
+      "file": "NonSoapDecryptElement.json",
+      "defKey": "nonSoapDecryptElement"
+    },
+    "NonSoapEncryptElement": {
+      "file": "NonSoapEncryptElement.json",
+      "defKey": "nonSoapEncryptElement"
+    },
+    "NonSoapSignElement": {
+      "file": "NonSoapSignElement.json",
+      "defKey": "nonSoapSignElement"
+    },
+    "NonSoapVerifyElement": {
+      "file": "NonSoapVerifyElement.json",
+      "defKey": "nonSoapVerifyElement"
+    },
+    "NtlmAuthentication": {
+      "file": "NtlmAuthentication.json",
+      "defKey": "ntlmAuthentication"
+    },
+    "OAuth2Introspection": {
+      "file": "OAuth2Introspection.json",
+      "defKey": "oAuth2Introspection"
+    },
+    "OdataValidation": {
+      "file": "OdataValidation.json",
+      "defKey": "odataValidation"
+    },
+    "OneOrMore": {
+      "file": "OneOrMore.json",
+      "defKey": "oneOrMore"
+    },
+    "OpenApi": {
+      "file": "OpenApi.json",
+      "defKey": "openApi"
+    },
+    "OtelMeter": {
+      "file": "OtelMeter.json",
+      "defKey": "otelMeter"
+    },
+    "OversizedText": {
+      "file": "OversizedText.json",
+      "defKey": "oversizedText"
+    },
+    "ProcessRoutingStrategyResult": {
+      "file": "ProcessRoutingStrategyResult.json",
+      "defKey": "processRoutingStrategyResult"
+    },
+    "ProcessRstrSoapResponse": {
+      "file": "ProcessRstrSoapResponse.json",
+      "defKey": "processRstrSoapResponse"
+    },
+    "ProcessSamlAttributeQueryRequest": {
+      "file": "ProcessSamlAttributeQueryRequest.json",
+      "defKey": "processSamlAttributeQueryRequest"
+    },
+    "ProcessSamlAuthnRequest": {
+      "file": "ProcessSamlAuthnRequest.json",
+      "defKey": "processSamlAuthnRequest"
+    },
+    "RadiusAuthenticate": {
+      "file": "RadiusAuthenticate.json",
+      "defKey": "radiusAuthenticate"
+    },
+    "RaiseError": {
+      "file": "RaiseError.json",
+      "defKey": "raiseError"
+    },
+    "RateLimit": {
+      "file": "RateLimit.json",
+      "defKey": "rateLimit"
+    },
+    "RateLimitQuery": {
+      "file": "RateLimitQuery.json",
+      "defKey": "rateLimitQuery"
+    },
+    "Regex": {
+      "file": "Regex.json",
+      "defKey": "regex"
+    },
+    "RemoteIpRange": {
+      "file": "RemoteIpRange.json",
+      "defKey": "remoteIpRange"
+    },
+    "RemoveElement": {
+      "file": "RemoveElement.json",
+      "defKey": "removeElement"
+    },
+    "ReplaceTagContent": {
+      "file": "ReplaceTagContent.json",
+      "defKey": "replaceTagContent"
+    },
+    "RequestSizeLimit": {
+      "file": "RequestSizeLimit.json",
+      "defKey": "requestSizeLimit"
+    },
+    "RequestSwA": {
+      "file": "RequestSwA.json",
+      "defKey": "requestSwA"
+    },
+    "RequestWssKerberos": {
+      "file": "RequestWssKerberos.json",
+      "defKey": "requestWssKerberos"
+    },
+    "RequestXpath": {
+      "file": "RequestXpath.json",
+      "defKey": "requestXpath"
+    },
+    "RequireWssEncryptedElement": {
+      "file": "RequireWssEncryptedElement.json",
+      "defKey": "requireWssEncryptedElement"
+    },
+    "RequireWssSaml": {
+      "file": "RequireWssSaml.json",
+      "defKey": "requireWssSaml"
+    },
+    "RequireWssSaml2": {
+      "file": "RequireWssSaml2.json",
+      "defKey": "requireWssSaml2"
+    },
+    "RequireWssSignedElement": {
+      "file": "RequireWssSignedElement.json",
+      "defKey": "requireWssSignedElement"
+    },
+    "RequireWssTimestamp": {
+      "file": "RequireWssTimestamp.json",
+      "defKey": "requireWssTimestamp"
+    },
+    "RequireWssX509Cert": {
+      "file": "RequireWssX509Cert.json",
+      "defKey": "requireWssX509Cert"
+    },
+    "ResolveService": {
+      "file": "ResolveService.json",
+      "defKey": "resolveService"
+    },
+    "ResponseXpath": {
+      "file": "ResponseXpath.json",
+      "defKey": "responseXpath"
+    },
+    "RESTGatewayManagement": {
+      "file": "RESTGatewayManagement.json",
+      "defKey": "rESTGatewayManagement"
+    },
+    "RetrieveServiceWsdl": {
+      "file": "RetrieveServiceWsdl.json",
+      "defKey": "retrieveServiceWsdl"
+    },
+    "SamlBrowserArtifact": {
+      "file": "SamlBrowserArtifact.json",
+      "defKey": "samlBrowserArtifact"
+    },
+    "SamlIssuer": {
+      "file": "SamlIssuer.json",
+      "defKey": "samlIssuer"
+    },
+    "SamlpRequestBuilder": {
+      "file": "SamlpRequestBuilder.json",
+      "defKey": "samlpRequestBuilder"
+    },
+    "SamlpResponseBuilder": {
+      "file": "SamlpResponseBuilder.json",
+      "defKey": "samlpResponseBuilder"
+    },
+    "SamlpResponseEvaluation": {
+      "file": "SamlpResponseEvaluation.json",
+      "defKey": "samlpResponseEvaluation"
+    },
+    "SchemaValidation": {
+      "file": "SchemaValidation.json",
+      "defKey": "schemaValidation"
+    },
+    "SecureConversation": {
+      "file": "SecureConversation.json",
+      "defKey": "secureConversation"
+    },
+    "SetSamlStatus": {
+      "file": "SetSamlStatus.json",
+      "defKey": "setSamlStatus"
+    },
+    "SetVariable": {
+      "file": "SetVariable.json",
+      "defKey": "setVariable"
+    },
+    "SimpleRawTransport": {
+      "file": "SimpleRawTransport.json",
+      "defKey": "simpleRawTransport"
+    },
+    "SiteMinderAuthenticate": {
+      "file": "SiteMinderAuthenticate.json",
+      "defKey": "siteMinderAuthenticate"
+    },
+    "SiteMinderAuthorize": {
+      "file": "SiteMinderAuthorize.json",
+      "defKey": "siteMinderAuthorize"
+    },
+    "SiteMinderChangePassword": {
+      "file": "SiteMinderChangePassword.json",
+      "defKey": "siteMinderChangePassword"
+    },
+    "SiteMinderCheckProtected": {
+      "file": "SiteMinderCheckProtected.json",
+      "defKey": "siteMinderCheckProtected"
+    },
+    "SiteMinderEnableUser": {
+      "file": "SiteMinderEnableUser.json",
+      "defKey": "siteMinderEnableUser"
+    },
+    "SnmpTrap": {
+      "file": "SnmpTrap.json",
+      "defKey": "snmpTrap"
+    },
+    "SpecificUser": {
+      "file": "SpecificUser.json",
+      "defKey": "specificUser"
+    },
+    "Split": {
+      "file": "Split.json",
+      "defKey": "split"
+    },
+    "SqlAttack": {
+      "file": "SqlAttack.json",
+      "defKey": "sqlAttack"
+    },
+    "SshCredential": {
+      "file": "SshCredential.json",
+      "defKey": "sshCredential"
+    },
+    "SshRouteAssertion": {
+      "file": "SshRouteAssertion.json",
+      "defKey": "sshRouteAssertion"
+    },
+    "Ssl": {
+      "file": "Ssl.json",
+      "defKey": "ssl"
+    },
+    "Swagger": {
+      "file": "Swagger.json",
+      "defKey": "swagger"
+    },
+    "ThroughputQuota": {
+      "file": "ThroughputQuota.json",
+      "defKey": "throughputQuota"
+    },
+    "ThroughputQuotaQuery": {
+      "file": "ThroughputQuotaQuery.json",
+      "defKey": "throughputQuotaQuery"
+    },
+    "TimeRange": {
+      "file": "TimeRange.json",
+      "defKey": "timeRange"
+    },
+    "True": {
+      "file": "True.json",
+      "defKey": "true"
+    },
+    "UUIDGenerator": {
+      "file": "UUIDGenerator.json",
+      "defKey": "uUIDGenerator"
+    },
+    "ValidateCertificate": {
+      "file": "ValidateCertificate.json",
+      "defKey": "validateCertificate"
+    },
+    "ValidateNonSoapSamlToken": {
+      "file": "ValidateNonSoapSamlToken.json",
+      "defKey": "validateNonSoapSamlToken"
+    },
+    "VariableCredentialSource": {
+      "file": "VariableCredentialSource.json",
+      "defKey": "variableCredentialSource"
+    },
+    "WebSocketConnect": {
+      "file": "WebSocketConnect.json",
+      "defKey": "webSocketConnect"
+    },
+    "WsAddressing": {
+      "file": "WsAddressing.json",
+      "defKey": "wsAddressing"
+    },
+    "WsFederationPassiveTokenExchange": {
+      "file": "WsFederationPassiveTokenExchange.json",
+      "defKey": "wsFederationPassiveTokenExchange"
+    },
+    "WsFederationPassiveTokenRequest": {
+      "file": "WsFederationPassiveTokenRequest.json",
+      "defKey": "wsFederationPassiveTokenRequest"
+    },
+    "WsiBsp": {
+      "file": "WsiBsp.json",
+      "defKey": "wsiBsp"
+    },
+    "WsiSaml": {
+      "file": "WsiSaml.json",
+      "defKey": "wsiSaml"
+    },
+    "WssBasic": {
+      "file": "WssBasic.json",
+      "defKey": "wssBasic"
+    },
+    "WssConfiguration": {
+      "file": "WssConfiguration.json",
+      "defKey": "wssConfiguration"
+    },
+    "WssDigest": {
+      "file": "WssDigest.json",
+      "defKey": "wssDigest"
+    },
+    "WsSecurity": {
+      "file": "WsSecurity.json",
+      "defKey": "wsSecurity"
+    },
+    "WssEncryptElement": {
+      "file": "WssEncryptElement.json",
+      "defKey": "wssEncryptElement"
+    },
+    "Wssp": {
+      "file": "Wssp.json",
+      "defKey": "wssp"
+    },
+    "WssReplayProtection": {
+      "file": "WssReplayProtection.json",
+      "defKey": "wssReplayProtection"
+    },
+    "WssSignElement": {
+      "file": "WssSignElement.json",
+      "defKey": "wssSignElement"
+    },
+    "WssVersion": {
+      "file": "WssVersion.json",
+      "defKey": "wssVersion"
+    },
+    "WsTrustCredentialExchange": {
+      "file": "WsTrustCredentialExchange.json",
+      "defKey": "wsTrustCredentialExchange"
+    },
+    "XacmlPdpAssertion": {
+      "file": "XacmlPdpAssertion.json",
+      "defKey": "xacmlPdpAssertion"
+    },
+    "XacmlRequestBuilderAssertion": {
+      "file": "XacmlRequestBuilderAssertion.json",
+      "defKey": "xacmlRequestBuilderAssertion"
+    },
+    "XMPPAssociateSessions": {
+      "file": "XMPPAssociateSessions.json",
+      "defKey": "xMPPAssociateSessions"
+    },
+    "XMPPCloseSession": {
+      "file": "XMPPCloseSession.json",
+      "defKey": "xMPPCloseSession"
+    },
+    "XMPPGetAssociatedSessionId": {
+      "file": "XMPPGetAssociatedSessionId.json",
+      "defKey": "xMPPGetAssociatedSessionId"
+    },
+    "XMPPGetRemoteCertificate": {
+      "file": "XMPPGetRemoteCertificate.json",
+      "defKey": "xMPPGetRemoteCertificate"
+    },
+    "XMPPGetSessionAttribute": {
+      "file": "XMPPGetSessionAttribute.json",
+      "defKey": "xMPPGetSessionAttribute"
+    },
+    "XMPPOpenServerSession": {
+      "file": "XMPPOpenServerSession.json",
+      "defKey": "xMPPOpenServerSession"
+    },
+    "XMPPSendToRemoteHost": {
+      "file": "XMPPSendToRemoteHost.json",
+      "defKey": "xMPPSendToRemoteHost"
+    },
+    "XMPPSetSessionAttribute": {
+      "file": "XMPPSetSessionAttribute.json",
+      "defKey": "xMPPSetSessionAttribute"
+    },
+    "XMPPStartTLS": {
+      "file": "XMPPStartTLS.json",
+      "defKey": "xMPPStartTLS"
+    },
+    "XpathCredentialSource": {
+      "file": "XpathCredentialSource.json",
+      "defKey": "xpathCredentialSource"
+    },
+    "XslTransformation": {
+      "file": "XslTransformation.json",
+      "defKey": "xslTransformation"
+    },
+    "GatewayTelemetryDataProvider": {
+      "file": "GatewayTelemetryDataProvider.json",
+      "defKey": "gatewayTelemetryDataProvider"
+    },
+    "GeneratePassword": {
+      "file": "GeneratePassword.json",
+      "defKey": "generatePassword"
+    },
+    "MysqlCounter": {
+      "file": "MysqlCounter.json",
+      "defKey": "mysqlCounter"
+    },
+    "WebSocketMessageInjection": {
+      "file": "WebSocketMessageInjection.json",
+      "defKey": "webSocketMessageInjection"
+    },
+    "Unknown": {
+      "file": "Unknown.json",
+      "defKey": "unknown"
+    },
+    "SelectElement": {
+      "file": "SelectElement.json",
+      "defKey": "selectElement"
+    },
+    "WebSocket": {
+      "file": "WebSocket.json",
+      "defKey": "webSocket"
+    },
+    "ExternalGemfireSharedStateProvider": {
+      "file": "ExternalGemfireSharedStateProvider.json",
+      "defKey": "externalGemfireSharedStateProvider"
+    },
+    "UDDINotification": {
+      "file": "UDDINotification.json",
+      "defKey": "uDDINotification"
+    },
+    "ApiPortalAuthAndMgmtServiceInstaller": {
+      "file": "ApiPortalAuthAndMgmtServiceInstaller.json",
+      "defKey": "apiPortalAuthAndMgmtServiceInstaller"
+    },
+    "ExactlyOne": {
+      "file": "ExactlyOne.json",
+      "defKey": "exactlyOne"
+    },
+    "EntityChangeListener": {
+      "file": "EntityChangeListener.json",
+      "defKey": "entityChangeListener"
+    },
+    "FaultLevel": {
+      "file": "FaultLevel.json",
+      "defKey": "faultLevel"
+    },
+    "ManagePortalResource": {
+      "file": "ManagePortalResource.json",
+      "defKey": "managePortalResource"
+    },
+    "ApiPortalIntegration": {
+      "file": "ApiPortalIntegration.json",
+      "defKey": "apiPortalIntegration"
+    },
+    "Operation": {
+      "file": "Operation.json",
+      "defKey": "operation"
+    },
+    "HttpDigest": {
+      "file": "HttpDigest.json",
+      "defKey": "httpDigest"
+    },
+    "GetApiIncrement": {
+      "file": "GetApiIncrement.json",
+      "defKey": "getApiIncrement"
+    },
+    "SamlProtocol": {
+      "file": "SamlProtocol.json",
+      "defKey": "samlProtocol"
+    },
+    "PortalUpgrade": {
+      "file": "PortalUpgrade.json",
+      "defKey": "portalUpgrade"
+    },
+    "AddWssUsernameToken": {
+      "file": "AddWssUsernameToken.json",
+      "defKey": "addWssUsernameToken"
+    },
+    "GenericIdentityManagementService": {
+      "file": "GenericIdentityManagementService.json",
+      "defKey": "genericIdentityManagementService"
+    },
+    "KafkaTransact": {
+      "file": "KafkaTransact.json",
+      "defKey": "kafkaTransact"
+    },
+    "Transaction": {
+      "file": "Transaction.json",
+      "defKey": "transaction"
+    },
+    "EmbeddedHazelcastSharedStateProvider": {
+      "file": "EmbeddedHazelcastSharedStateProvider.json",
+      "defKey": "embeddedHazelcastSharedStateProvider"
+    },
+    "LookupApiKey": {
+      "file": "LookupApiKey.json",
+      "defKey": "lookupApiKey"
+    },
+    "ExternalHazelcastProvider": {
+      "file": "ExternalHazelcastProvider.json",
+      "defKey": "externalHazelcastProvider"
+    },
+    "GetIncrement": {
+      "file": "GetIncrement.json",
+      "defKey": "getIncrement"
+    },
+    "Radius": {
+      "file": "Radius.json",
+      "defKey": "radius"
+    },
+    "MysqlClusterInfo": {
+      "file": "MysqlClusterInfo.json",
+      "defKey": "mysqlClusterInfo"
+    },
+    "WebSocketValidation": {
+      "file": "WebSocketValidation.json",
+      "defKey": "webSocketValidation"
+    },
+    "KafkaConsumer": {
+      "file": "KafkaConsumer.json",
+      "defKey": "kafkaConsumer"
+    },
+    "WebSocketEntityManager": {
+      "file": "WebSocketEntityManager.json",
+      "defKey": "webSocketEntityManager"
+    },
+    "CustomAssertion": {
+      "file": "CustomAssertion.json",
+      "defKey": "customAssertion"
+    },
+    "ApiPortalEncassIntegration": {
+      "file": "ApiPortalEncassIntegration.json",
+      "defKey": "apiPortalEncassIntegration"
+    },
+    "ProcessIncrement": {
+      "file": "ProcessIncrement.json",
+      "defKey": "processIncrement"
+    },
+    "IncrementPostBack": {
+      "file": "IncrementPostBack.json",
+      "defKey": "incrementPostBack"
+    },
+    "Http2Transport": {
+      "file": "Http2Transport.json",
+      "defKey": "http2Transport"
+    },
+    "ManageApiKey": {
+      "file": "ManageApiKey.json",
+      "defKey": "manageApiKey"
+    },
+    "EmbeddedGemfireSharedStateProvider": {
+      "file": "EmbeddedGemfireSharedStateProvider.json",
+      "defKey": "embeddedGemfireSharedStateProvider"
+    },
+    "PortalBootstrap": {
+      "file": "PortalBootstrap.json",
+      "defKey": "portalBootstrap"
+    },
+    "KeyValueStatistics": {
+      "file": "KeyValueStatistics.json",
+      "defKey": "keyValueStatistics"
+    },
+    "SFTPResponse": {
+      "file": "SFTPResponse.json",
+      "defKey": "sFTPResponse"
+    },
+    "PolicyBundleInstaller": {
+      "file": "PolicyBundleInstaller.json",
+      "defKey": "policyBundleInstaller"
+    },
+    "RedisSharedStateProvider": {
+      "file": "RedisSharedStateProvider.json",
+      "defKey": "redisSharedStateProvider"
+    },
+    "LDAPUpdate": {
+      "file": "LDAPUpdate.json",
+      "defKey": "lDAPUpdate"
+    },
+    "MqNativeSupport": {
+      "file": "MqNativeSupport.json",
+      "defKey": "mqNativeSupport"
+    },
+    "ServiceMetricsEventListener": {
+      "file": "ServiceMetricsEventListener.json",
+      "defKey": "serviceMetricsEventListener"
+    }
+  }
+}

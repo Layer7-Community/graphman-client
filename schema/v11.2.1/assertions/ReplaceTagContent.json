@@ -1,0 +1,67 @@
+{
+  "$comment": "Schema for ReplaceTagContent assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "replaceTagContent": {
+      "type": "object",
+      "$id": "schema:ReplaceTagContent",
+      "$ref": "schema:assertion",
+      "properties": {
+        "ReplaceTagContent": {
+          "type": "object",
+          "properties": {
+            "caseSensitive": {
+              "type": "boolean",
+              "default": true
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "replaceWith": {
+              "type": "string"
+            },
+            "searchFor": {
+              "type": "string"
+            },
+            "tagsToSearch": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "REQUEST"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:ReplaceTagContent"
+}

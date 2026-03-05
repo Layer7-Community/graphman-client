@@ -1,0 +1,40 @@
+{
+  "$comment": "Schema for KafkaTransact assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "kafkaTransact": {
+      "type": "object",
+      "$id": "schema:KafkaTransact",
+      "$ref": "schema:assertion",
+      "properties": {
+        "KafkaTransact": {
+          "type": "object",
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:KafkaTransact"
+}

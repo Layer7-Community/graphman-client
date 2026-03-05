@@ -1,0 +1,70 @@
+{
+  "$comment": "Schema for MessageContextAssertion assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "MessageContextAssertion:mappingInfo": {
+      "type": "object",
+      "$id": "schema:MessageContextAssertion:mappingInfo",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "mappingType": {
+          "type": "string",
+          "enum": [
+            "IP_ADDRESS",
+            "AUTH_USER",
+            "CUSTOM_MAPPING"
+          ],
+          "default": "IP_ADDRESS"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "messageContextAssertion": {
+      "type": "object",
+      "$id": "schema:MessageContextAssertion",
+      "$ref": "schema:assertion",
+      "properties": {
+        "MessageContextAssertion": {
+          "type": "object",
+          "properties": {
+            "mappings": {
+              "type": "array",
+              "items": {
+                "$ref": "schema:MessageContextAssertion:mappingInfo"
+              }
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:MessageContextAssertion"
+}

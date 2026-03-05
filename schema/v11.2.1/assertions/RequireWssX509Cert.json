@@ -1,0 +1,80 @@
+{
+  "$comment": "Schema for RequireWssX509Cert assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "xmlSecurityRecipientContext": {
+      "type": "object",
+      "$id": "schema:sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "requireWssX509Cert": {
+      "type": "object",
+      "$id": "schema:RequireWssX509Cert",
+      "$ref": "schema:assertion",
+      "properties": {
+        "RequireWssX509Cert": {
+          "type": "object",
+          "properties": {
+            "allowMultipleSignatures": {
+              "type": "boolean",
+              "default": false
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "recipientContext": {
+              "$ref": "schema:sub-types/xmlSecurityRecipientContext"
+            },
+            "signatureElementVariable": {
+              "type": "string"
+            },
+            "signatureReferenceElementVariable": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "REQUEST"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:RequireWssX509Cert"
+}

@@ -1,0 +1,84 @@
+{
+  "$comment": "Schema for NonSoapEncryptElement assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "xpathExpression": {
+      "type": "object",
+      "$id": "schema:sub-types/xpathExpression",
+      "properties": {
+        "expression": {
+          "type": "string"
+        },
+        "namespaces": {
+          "type": "object"
+        },
+        "xpathVersion": {
+          "type": "string",
+          "enum": [
+            "UNSPECIFIED",
+            "XPATH_1_0",
+            "XPATH_2_0"
+          ],
+          "default": "UNSPECIFIED"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "nonSoapEncryptElement": {
+      "type": "object",
+      "$id": "schema:NonSoapEncryptElement",
+      "$ref": "schema:assertion",
+      "properties": {
+        "NonSoapEncryptElement": {
+          "type": "object",
+          "properties": {
+            "recipientCertContextVariableName": {
+              "type": "string"
+            },
+            "recipientCertificateBase64": {
+              "type": "string"
+            },
+            "xencAlgorithm": {
+              "type": "string",
+              "enum": [
+                "http://www.w3.org/2001/04/xmlenc#aes128-cbc",
+                "http://www.w3.org/2001/04/xmlenc#aes192-cbc",
+                "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+                "http://www.w3.org/2001/04/xmlenc#aes128-gcm",
+                "http://www.w3.org/2001/04/xmlenc#aes256-gcm",
+                "http://www.w3.org/2001/04/xmlenc#tripledes-cbc"
+              ]
+            },
+            "xpath": {
+              "$ref": "schema:sub-types/xpathExpression"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:NonSoapEncryptElement"
+}

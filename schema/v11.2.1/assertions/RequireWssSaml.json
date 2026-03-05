@@ -1,0 +1,85 @@
+{
+  "$comment": "Schema for RequireWssSaml assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "xmlSecurityRecipientContext": {
+      "type": "object",
+      "$id": "schema:sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "requireWssSaml": {
+      "type": "object",
+      "$id": "schema:RequireWssSaml",
+      "$ref": "schema:assertion",
+      "properties": {
+        "RequireWssSaml": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "integer",
+              "enum": [
+                1
+              ],
+              "default": 1
+            },
+            "checkAssertionValidity": {
+              "type": "boolean",
+              "default": true
+            },
+            "nameFormats": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "requireSenderVouchesWithMessageSignature": {
+              "type": "boolean",
+              "default": true
+            },
+            "subjectConfirmations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "recipientContext": {
+              "$ref": "schema:sub-types/xmlSecurityRecipientContext"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:RequireWssSaml"
+}

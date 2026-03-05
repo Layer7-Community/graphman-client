@@ -1,0 +1,76 @@
+{
+  "$comment": "Schema for CodeInjectionProtection assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "codeInjectionProtectionType": {
+      "type": "string",
+      "$id": "schema:sub-types/codeInjectionProtectionType"
+    },
+    "codeInjectionProtection": {
+      "type": "object",
+      "$id": "schema:CodeInjectionProtection",
+      "$ref": "schema:assertion",
+      "properties": {
+        "CodeInjectionProtection": {
+          "type": "object",
+          "properties": {
+            "includeBody": {
+              "type": "boolean",
+              "default": false
+            },
+            "includeUrlPath": {
+              "type": "boolean",
+              "default": false
+            },
+            "includeUrlQueryString": {
+              "type": "boolean",
+              "default": false
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "protections": {
+              "type": "array",
+              "items": {
+                "$ref": "schema:sub-types/codeInjectionProtectionType"
+              }
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "REQUEST"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:CodeInjectionProtection"
+}

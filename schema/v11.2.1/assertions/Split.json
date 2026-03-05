@@ -1,0 +1,59 @@
+{
+  "$comment": "Schema for Split assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "split": {
+      "type": "object",
+      "$id": "schema:Split",
+      "$ref": "schema:assertion",
+      "properties": {
+        "Split": {
+          "type": "object",
+          "properties": {
+            "ignoreEmptyValues": {
+              "type": "boolean",
+              "default": false
+            },
+            "inputVariable": {
+              "type": "string"
+            },
+            "outputVariable": {
+              "type": "string"
+            },
+            "splitPattern": {
+              "type": "string"
+            },
+            "splitPatternRegEx": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:Split"
+}

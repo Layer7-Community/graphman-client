@@ -1,0 +1,56 @@
+{
+  "$comment": "Schema for RequestSwA assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "requestSwA": {
+      "type": "object",
+      "$id": "schema:RequestSwA",
+      "$ref": "schema:assertion",
+      "properties": {
+        "RequestSwA": {
+          "type": "object",
+          "properties": {
+            "bindings": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "requireEncryption": {
+              "type": "boolean",
+              "default": false
+            },
+            "requireSignature": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:RequestSwA"
+}

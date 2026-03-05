@@ -1,0 +1,97 @@
+{
+  "$comment": "Schema for EstablishOutboundSecureConversation assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "timeUnit": {
+      "type": "string",
+      "$id": "schema:sub-types/timeUnit"
+    },
+    "establishOutboundSecureConversation": {
+      "type": "object",
+      "$id": "schema:EstablishOutboundSecureConversation",
+      "$ref": "schema:assertion",
+      "properties": {
+        "EstablishOutboundSecureConversation": {
+          "type": "object",
+          "properties": {
+            "allowInboundMsgUsingSession": {
+              "type": "boolean",
+              "default": false
+            },
+            "clientEntropy": {
+              "type": "string"
+            },
+            "creationTime": {
+              "type": "string"
+            },
+            "expirationTime": {
+              "type": "string"
+            },
+            "fullKey": {
+              "type": "string"
+            },
+            "keySize": {
+              "type": "string"
+            },
+            "maxLifetime": {
+              "type": "number"
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "securityContextTokenVarName": {
+              "type": "string"
+            },
+            "serverEntropy": {
+              "type": "string"
+            },
+            "serviceUrl": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "REQUEST"
+            },
+            "timeUnit": {
+              "$ref": "schema:sub-types/timeUnit",
+              "default": "m"
+            },
+            "useSystemDefaultSessionDuration": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:EstablishOutboundSecureConversation"
+}

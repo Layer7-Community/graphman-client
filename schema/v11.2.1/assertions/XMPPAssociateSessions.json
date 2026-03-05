@@ -1,0 +1,48 @@
+{
+  "$comment": "Schema for XMPPAssociateSessions assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "xMPPAssociateSessions": {
+      "type": "object",
+      "$id": "schema:XMPPAssociateSessions",
+      "$ref": "schema:assertion",
+      "properties": {
+        "XMPPAssociateSessions": {
+          "type": "object",
+          "properties": {
+            "inboundSessionId": {
+              "type": "string"
+            },
+            "outboundSessionId": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:XMPPAssociateSessions"
+}

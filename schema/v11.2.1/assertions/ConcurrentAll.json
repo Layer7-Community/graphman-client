@@ -1,0 +1,42 @@
+{
+  "$comment": "Schema for ConcurrentAll assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "concurrentAll": {
+      "type": "object",
+      "$id": "schema:ConcurrentAll",
+      "$ref": "schema:assertion",
+      "properties": {
+        "ConcurrentAll": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:ConcurrentAll"
+}

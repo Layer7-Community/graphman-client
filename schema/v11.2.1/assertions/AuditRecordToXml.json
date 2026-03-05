@@ -1,0 +1,54 @@
+{
+  "$comment": "Schema for AuditRecordToXml assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "auditRecordToXml": {
+      "type": "object",
+      "$id": "schema:AuditRecordToXml",
+      "$ref": "schema:assertion",
+      "properties": {
+        "AuditRecordToXml": {
+          "type": "object",
+          "properties": {
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "REQUEST"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:AuditRecordToXml"
+}

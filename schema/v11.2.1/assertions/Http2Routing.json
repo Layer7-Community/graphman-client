@@ -1,0 +1,111 @@
+{
+  "$comment": "Schema for Http2Routing assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "httpPassthroughRuleSet": {
+      "type": "object",
+      "$id": "schema:sub-types/httpPassthroughRuleSet",
+      "properties": {
+        "forwardAll": {
+          "type": "boolean",
+          "default": false
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "schema:sub-types/httpPassthroughRule"
+          }
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "httpPassthroughRule": {
+      "type": "object",
+      "$id": "schema:sub-types/httpPassthroughRule",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "customizeValue": {
+          "type": "string",
+          "title": "Value"
+        },
+        "usesCustomizedValue": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "http2Routing": {
+      "type": "object",
+      "$id": "schema:Http2Routing",
+      "$ref": "schema:assertion",
+      "properties": {
+        "Http2Routing": {
+          "type": "object",
+          "properties": {
+            "protectedServiceUrl": {
+              "type": "string"
+            },
+            "requestHeaderRules": {
+              "$ref": "schema:sub-types/httpPassthroughRuleSet"
+            },
+            "responseHeaderRules": {
+              "$ref": "schema:sub-types/httpPassthroughRuleSet"
+            },
+            "requestMsgSrc": {
+              "type": "string"
+            },
+            "responseMsgDest": {
+              "type": "string"
+            },
+            "timeout": {
+              "type": "string"
+            },
+            "connectionTimeout": {
+              "type": "string"
+            },
+            "tlsVersion": {
+              "type": "string",
+              "enum": [
+                "any",
+                "TLSv1.2",
+                "TLSv1.3"
+              ],
+              "default": "any"
+            },
+            "usesDefaultKeyStore": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:Http2Routing"
+}

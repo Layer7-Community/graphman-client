@@ -1,0 +1,59 @@
+{
+  "$comment": "Schema for LookupDynamicContextVariables assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "dataType": {
+      "type": "string",
+      "$id": "schema:sub-types/dataType"
+    },
+    "lookupDynamicContextVariables": {
+      "type": "object",
+      "$id": "schema:LookupDynamicContextVariables",
+      "$ref": "schema:assertion",
+      "properties": {
+        "LookupDynamicContextVariables": {
+          "type": "object",
+          "properties": {
+            "failOnNotFound": {
+              "type": "boolean",
+              "default": true
+            },
+            "sourceVariable": {
+              "type": "string"
+            },
+            "targetDataType": {
+              "$ref": "schema:sub-types/dataType"
+            },
+            "targetOutputVariablePrefix": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:LookupDynamicContextVariables"
+}

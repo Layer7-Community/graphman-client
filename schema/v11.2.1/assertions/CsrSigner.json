@@ -1,0 +1,72 @@
+{
+  "$comment": "Schema for CsrSigner assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "csrSigner": {
+      "type": "object",
+      "$id": "schema:CsrSigner",
+      "$ref": "schema:assertion",
+      "properties": {
+        "CsrSigner": {
+          "type": "object",
+          "properties": {
+            "certDNVariableName": {
+              "type": "string"
+            },
+            "csrVariableName": {
+              "type": "string"
+            },
+            "dynamicPrivateKeyVariable": {
+              "type": "string",
+              "default": ""
+            },
+            "expiryAgeDays": {
+              "type": "string"
+            },
+            "keyAlias": {
+              "type": "string"
+            },
+            "nonDefaultKeystoreId": {
+              "type": "string"
+            },
+            "outputPrefix": {
+              "type": "string"
+            },
+            "usesDefaultKeyStore": {
+              "type": "boolean",
+              "default": true
+            },
+            "usesDynamicPrivateKey": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:CsrSigner"
+}

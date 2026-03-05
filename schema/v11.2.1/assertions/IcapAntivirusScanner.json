@@ -1,0 +1,69 @@
+{
+  "$comment": "Schema for IcapAntivirusScanner assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "icapAntivirusScanner": {
+      "type": "object",
+      "$id": "schema:IcapAntivirusScanner",
+      "$ref": "schema:assertion",
+      "properties": {
+        "IcapAntivirusScanner": {
+          "type": "object",
+          "properties": {
+            "continueOnVirusFound": {
+              "type": "boolean",
+              "default": false
+            },
+            "failoverStrategy": {
+              "type": "string",
+              "enum": [
+                "ORDERED",
+                "STICKY",
+                "RANDOM"
+              ],
+              "default": "ORDERED"
+            },
+            "icapServers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "serviceType": {
+              "type": "string",
+              "enum": [
+                "REQMOD",
+                "RESPMOD"
+              ],
+              "default": "REQMOD"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:IcapAntivirusScanner"
+}

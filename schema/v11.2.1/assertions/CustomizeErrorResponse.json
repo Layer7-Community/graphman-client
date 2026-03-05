@@ -1,0 +1,82 @@
+{
+  "$comment": "Schema for CustomizeErrorResponse assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "nameValuePair": {
+      "type": "object",
+      "$id": "schema:sub-types/nameValuePair",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "customizeErrorResponse": {
+      "type": "object",
+      "$id": "schema:CustomizeErrorResponse",
+      "$ref": "schema:assertion",
+      "properties": {
+        "CustomizeErrorResponse": {
+          "type": "object",
+          "properties": {
+            "errorLevel": {
+              "type": "string",
+              "enum": [
+                "DROP_CONNECTION",
+                "TEMPLATE_RESPONSE"
+              ],
+              "default": "TEMPLATE_RESPONSE"
+            },
+            "content": {
+              "type": "string"
+            },
+            "contentType": {
+              "type": "string"
+            },
+            "extraHeaders": {
+              "type": "array",
+              "items": {
+                "$ref": "schema:sub-types/nameValuePair"
+              }
+            },
+            "httpStatus": {
+              "type": "string"
+            },
+            "includePolicyDownloadURL": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:CustomizeErrorResponse"
+}

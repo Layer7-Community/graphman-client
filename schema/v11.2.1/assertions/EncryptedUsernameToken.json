@@ -1,0 +1,89 @@
+{
+  "$comment": "Schema for EncryptedUsernameToken assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "xmlSecurityRecipientContext": {
+      "type": "object",
+      "$id": "schema:sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "encryptedUsernameToken": {
+      "type": "object",
+      "$id": "schema:EncryptedUsernameToken",
+      "$ref": "schema:assertion",
+      "properties": {
+        "EncryptedUsernameToken": {
+          "type": "object",
+          "properties": {
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "recipientContext": {
+              "$ref": "schema:sub-types/xmlSecurityRecipientContext"
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "REQUEST"
+            },
+            "enableEncryptionMethods": {
+              "type": "boolean",
+              "default": false
+            },
+            "xEncAlgorithmList": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "http://www.w3.org/2001/04/xmlenc#aes128-cbc",
+                  "http://www.w3.org/2001/04/xmlenc#aes192-cbc",
+                  "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+                  "http://www.w3.org/2001/04/xmlenc#tripledes-cbc",
+                  "http://www.w3.org/2009/xmlenc11#aes128-gcm",
+                  "http://www.w3.org/2009/xmlenc11#aes256-gcm"
+                ]
+              },
+              "uniqueItems": true
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:EncryptedUsernameToken"
+}

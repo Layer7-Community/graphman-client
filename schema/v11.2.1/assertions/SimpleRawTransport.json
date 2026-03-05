@@ -1,0 +1,119 @@
+{
+  "$comment": "Schema for SimpleRawTransport assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "xmlSecurityRecipientContext": {
+      "type": "object",
+      "$id": "schema:sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "messageTargetableSupport": {
+      "type": "object",
+      "$id": "schema:sub-types/messageTargetableSupport",
+      "properties": {
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "sourceUsedByGateway": {
+          "type": "boolean",
+          "default": true
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "RESPONSE"
+        },
+        "targetModifiedByGateway": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "simpleRawTransport": {
+      "type": "object",
+      "$id": "schema:SimpleRawTransport",
+      "$ref": "schema:assertion",
+      "properties": {
+        "SimpleRawTransport": {
+          "type": "object",
+          "properties": {
+            "connectionTimeoutMillis": {
+              "type": "integer"
+            },
+            "currentSecurityHeaderHandling": {
+              "type": "integer",
+              "default": 0
+            },
+            "maxResponseBytesText": {
+              "type": "string"
+            },
+            "readTimeoutMillis": {
+              "type": "integer"
+            },
+            "recipientContext": {
+              "$ref": "schema:sub-types/xmlSecurityRecipientContext"
+            },
+            "requestTarget": {
+              "$ref": "schema:sub-types/messageTargetableSupport"
+            },
+            "responseContentType": {
+              "type": "string"
+            },
+            "responseTarget": {
+              "$ref": "schema:sub-types/messageTargetableSupport"
+            },
+            "targetHost": {
+              "type": "string"
+            },
+            "targetPort": {
+              "type": "string"
+            },
+            "writeTimeoutMillis": {
+              "type": "integer"
+            },
+            "xmlSecurityActorToPromote": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:SimpleRawTransport"
+}

@@ -1,0 +1,86 @@
+{
+  "$comment": "Schema for AddHeader assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "addHeader": {
+      "type": "object",
+      "$id": "schema:AddHeader",
+      "$ref": "schema:assertion",
+      "properties": {
+        "AddHeader": {
+          "type": "object",
+          "properties": {
+            "evaluateNameAsExpression": {
+              "type": "boolean",
+              "default": false
+            },
+            "evaluateValueExpression": {
+              "type": "boolean",
+              "default": false
+            },
+            "headerName": {
+              "type": "string"
+            },
+            "headerValue": {
+              "type": "string"
+            },
+            "metadataType": {
+              "type": "string",
+              "default": "HTTP_HEADER",
+              "enum": [
+                "HTTP_HEADER",
+                "JMS_PROPERTY",
+                "JMS_HEADER"
+              ]
+            },
+            "operation": {
+              "type": "string",
+              "enum": [
+                "ADD",
+                "ADD_REPLACE",
+                "REMOVE"
+              ],
+              "default": "ADD"
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "REQUEST"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:AddHeader"
+}

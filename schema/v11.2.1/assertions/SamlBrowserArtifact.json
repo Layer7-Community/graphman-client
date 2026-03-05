@@ -1,0 +1,98 @@
+{
+  "$comment": "Schema for SamlBrowserArtifact assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "authenticationProperties": {
+      "type": "object",
+      "$id": "schema:sub-types/authenticationProperties",
+      "properties": {
+        "additionalFields": {
+          "type": "object"
+        },
+        "copyFormFields": {
+          "type": "boolean",
+          "default": false
+        },
+        "enableCookies": {
+          "type": "boolean",
+          "default": false
+        },
+        "formTarget": {
+          "type": "string"
+        },
+        "method": {
+          "$ref": "schema:sub-types/authenticationProperties$Method",
+          "enum": [
+            "basic",
+            "form"
+          ],
+          "default": "basic"
+        },
+        "passwordFieldname": {
+          "type": "string"
+        },
+        "redirectAfterSubmit": {
+          "type": "boolean",
+          "default": false
+        },
+        "requestForm": {
+          "type": "boolean",
+          "default": false
+        },
+        "usernameFieldname": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "authenticationProperties$Method": {
+      "type": "string",
+      "$id": "schema:sub-types/authenticationProperties$Method"
+    },
+    "samlBrowserArtifact": {
+      "type": "object",
+      "$id": "schema:SamlBrowserArtifact",
+      "$ref": "schema:assertion",
+      "properties": {
+        "SamlBrowserArtifact": {
+          "type": "object",
+          "properties": {
+            "artifactQueryParameter": {
+              "type": "string"
+            },
+            "authenticationProperties": {
+              "$ref": "schema:sub-types/authenticationProperties"
+            },
+            "ssoEndpointUrl": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:SamlBrowserArtifact"
+}

@@ -1,0 +1,55 @@
+{
+  "$comment": "Schema for XMPPOpenServerSession assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "xMPPOpenServerSession": {
+      "type": "object",
+      "$id": "schema:XMPPOpenServerSession",
+      "$ref": "schema:assertion",
+      "properties": {
+        "XMPPOpenServerSession": {
+          "type": "object",
+          "properties": {
+            "direction": {
+              "type": "string",
+              "enum": [
+                "INBOUND",
+                "OUTBOUND"
+              ]
+            },
+            "inboundSessionIdVariable": {
+              "type": "string"
+            },
+            "sessionId": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:XMPPOpenServerSession"
+}

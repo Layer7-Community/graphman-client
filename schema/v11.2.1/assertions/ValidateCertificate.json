@@ -1,0 +1,61 @@
+{
+  "$comment": "Schema for ValidateCertificate assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "validateCertificate": {
+      "type": "object",
+      "$id": "schema:ValidateCertificate",
+      "$ref": "schema:assertion",
+      "properties": {
+        "ValidateCertificate": {
+          "type": "object",
+          "properties": {
+            "sourceVariable": {
+              "type": "string"
+            },
+            "validationType": {
+              "type": "string",
+              "enum": [
+                "CERTIFICATE_ONLY",
+                "PATH_VALIDATION",
+                "REVOCATION"
+              ],
+              "default": "CERTIFICATE_ONLY"
+            },
+            "variablePrefix": {
+              "type": "string"
+            },
+            "logOnly": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:ValidateCertificate"
+}

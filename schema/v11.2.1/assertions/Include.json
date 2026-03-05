@@ -1,0 +1,51 @@
+{
+  "$comment": "Schema for Include assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "include": {
+      "type": "object",
+      "$id": "schema:Include",
+      "$ref": "schema:assertion",
+      "properties": {
+        "Include": {
+          "type": "object",
+          "properties": {
+            "policyGuid": {
+              "type": "string"
+            },
+            "policyName": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "policyName"
+          ],
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:Include"
+}

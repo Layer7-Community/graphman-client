@@ -1,0 +1,74 @@
+{
+  "$comment": "Schema for GenerateSecurityHash assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "lineBreak": {
+      "type": "string",
+      "$id": "schema:sub-types/lineBreak"
+    },
+    "generateSecurityHash": {
+      "type": "object",
+      "$id": "schema:GenerateSecurityHash",
+      "$ref": "schema:assertion",
+      "properties": {
+        "GenerateSecurityHash": {
+          "type": "object",
+          "properties": {
+            "algorithm": {
+              "type": "string",
+              "default": "HMAC-SHA1",
+              "enum": [
+                "HMAC-SHA1",
+                "HMAC-SHA256",
+                "HMAC-SHA384",
+                "HMAC-SHA512",
+                "HMAC-MD5",
+                "MD5",
+                "SHA-1",
+                "SHA-256",
+                "SHA-384",
+                "SHA-512"
+              ]
+            },
+            "base64Data": {
+              "type": "string"
+            },
+            "keyText": {
+              "type": "string"
+            },
+            "lineBreak": {
+              "$ref": "schema:sub-types/lineBreak"
+            },
+            "targetOutputVariable": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:GenerateSecurityHash"
+}

@@ -1,0 +1,64 @@
+{
+  "$comment": "Schema for ManageCookie assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "manageCookie": {
+      "type": "object",
+      "$id": "schema:ManageCookie",
+      "$ref": "schema:assertion",
+      "properties": {
+        "ManageCookie": {
+          "type": "object",
+          "properties": {
+            "cookieAttributes": {
+              "type": "object"
+            },
+            "cookieCriteria": {
+              "type": "object"
+            },
+            "operation": {
+              "type": "string",
+              "enum": [
+                "ADD",
+                "ADD_OR_REPLACE",
+                "REMOVE",
+                "UPDATE"
+              ],
+              "default": "ADD"
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:ManageCookie"
+}

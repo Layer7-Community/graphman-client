@@ -1,0 +1,88 @@
+{
+  "$comment": "Schema for CassandraQuery assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "cassandraQuery": {
+      "type": "object",
+      "$id": "schema:CassandraQuery",
+      "$ref": "schema:assertion",
+      "properties": {
+        "CassandraQuery": {
+          "type": "object",
+          "properties": {
+            "connectionName": {
+              "type": "string"
+            },
+            "consistencyLevel": {
+              "type": "string"
+            },
+            "failIfNoResults": {
+              "type": "boolean",
+              "default": false
+            },
+            "fetchSize": {
+              "type": "integer"
+            },
+            "generateXmlResult": {
+              "type": "boolean",
+              "default": false
+            },
+            "maxRecords": {
+              "type": "integer"
+            },
+            "namingMap": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "columnLabel": {
+                    "type": "string"
+                  },
+                  "variableName": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "overrideConsistencyLevel": {
+              "type": "boolean"
+            },
+            "prefix": {
+              "type": "string"
+            },
+            "queryDocument": {
+              "type": "string"
+            },
+            "queryTimeout": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:CassandraQuery"
+}

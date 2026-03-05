@@ -1,0 +1,88 @@
+{
+  "$comment": "Schema for Regex assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "regex": {
+      "type": "object",
+      "$id": "schema:Regex",
+      "$ref": "schema:assertion",
+      "properties": {
+        "Regex": {
+          "type": "object",
+          "properties": {
+            "autoTarget": {
+              "type": "boolean",
+              "default": true
+            },
+            "caseInsensitive": {
+              "type": "boolean",
+              "default": false
+            },
+            "captureVar": {
+              "type": "string"
+            },
+            "encode": {
+              "type": "boolean",
+              "default": false
+            },
+            "matchTarget": {
+              "type": "integer"
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "patternContainsVariables": {
+              "type": "boolean",
+              "default": false
+            },
+            "proceedIfPatternMatches": {
+              "type": "boolean",
+              "default": true
+            },
+            "regex": {
+              "type": "string"
+            },
+            "regexName": {
+              "type": "string"
+            },
+            "replacement": {
+              "type": "string"
+            },
+            "replace": {
+              "type": "boolean",
+              "default": false
+            },
+            "replaceRepeatCount": {
+              "type": "integer",
+              "default": 0
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:Regex"
+}

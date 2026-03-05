@@ -1,0 +1,77 @@
+{
+  "$comment": "Schema for LookupTrustedCertificate assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "lookupTrustedCertificate": {
+      "type": "object",
+      "$id": "schema:LookupTrustedCertificate",
+      "$ref": "schema:assertion",
+      "properties": {
+        "LookupTrustedCertificate": {
+          "type": "object",
+          "properties": {
+            "allowMultipleCertificates": {
+              "type": "boolean",
+              "default": true
+            },
+            "certIssuerDn": {
+              "type": "string"
+            },
+            "certSerialNumber": {
+              "type": "string"
+            },
+            "certSubjectDn": {
+              "type": "string"
+            },
+            "certSubjectKeyIdentifier": {
+              "type": "string"
+            },
+            "certThumbprintSha1": {
+              "type": "string"
+            },
+            "lookupType": {
+              "type": "string",
+              "enum": [
+                "TRUSTED_CERT_NAME",
+                "CERT_THUMBPRINT_SHA1",
+                "CERT_SKI",
+                "CERT_SUBJECT_DN",
+                "CERT_ISSUER_SERIAL"
+              ]
+            },
+            "trustedCertificateName": {
+              "type": "string"
+            },
+            "variableName": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:LookupTrustedCertificate"
+}

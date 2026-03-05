@@ -1,0 +1,51 @@
+{
+  "$comment": "Schema for ForEachLoop assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "forEachLoop": {
+      "type": "object",
+      "$id": "schema:ForEachLoop",
+      "$ref": "schema:assertion",
+      "properties": {
+        "ForEachLoop": {
+          "type": "object",
+          "properties": {
+            "loopVariable": {
+              "type": "string"
+            },
+            "iterationLimit": {
+              "type": "string"
+            },
+            "variablePrefix": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:ForEachLoop"
+}

@@ -1,0 +1,67 @@
+{
+  "$comment": "Schema for MapValue assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "nameValuePair": {
+      "type": "object",
+      "$id": "schema:sub-types/nameValuePair",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "mapValue": {
+      "type": "object",
+      "$id": "schema:MapValue",
+      "$ref": "schema:assertion",
+      "properties": {
+        "MapValue": {
+          "type": "object",
+          "properties": {
+            "inputExpr": {
+              "type": "string"
+            },
+            "mappings": {
+              "type": "array",
+              "items": {
+                "$ref": "schema:sub-types/nameValuePair"
+              }
+            },
+            "outputVar": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:MapValue"
+}

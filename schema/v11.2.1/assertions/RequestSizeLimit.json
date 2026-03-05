@@ -1,0 +1,55 @@
+{
+  "$comment": "Schema for RequestSizeLimit assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "requestSizeLimit": {
+      "type": "object",
+      "$id": "schema:RequestSizeLimit",
+      "$ref": "schema:assertion",
+      "properties": {
+        "RequestSizeLimit": {
+          "type": "object",
+          "properties": {
+            "entireMessage": {
+              "type": "boolean",
+              "default": true
+            },
+            "limit": {
+              "type": "string"
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:RequestSizeLimit"
+}

@@ -1,0 +1,114 @@
+{
+  "$comment": "Schema for WssSignElement assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "goid": {
+      "type": "string",
+      "$id": "schema:sub-types/goid"
+    },
+    "xpathExpression": {
+      "type": "object",
+      "$id": "schema:sub-types/xpathExpression",
+      "properties": {
+        "expression": {
+          "type": "string"
+        },
+        "namespaces": {
+          "type": "object"
+        },
+        "xpathVersion": {
+          "type": "string",
+          "enum": [
+            "UNSPECIFIED",
+            "XPATH_1_0",
+            "XPATH_2_0"
+          ],
+          "default": "UNSPECIFIED"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "xmlSecurityRecipientContext": {
+      "type": "object",
+      "$id": "schema:sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "wssSignElement": {
+      "type": "object",
+      "$id": "schema:WssSignElement",
+      "$ref": "schema:assertion",
+      "properties": {
+        "WssSignElement": {
+          "type": "object",
+          "properties": {
+            "digestAlgorithmName": {
+              "type": "string",
+              "enum": [
+                "http://www.w3.org/2000/09/xmldsig#sha1",
+                "http://www.w3.org/2001/04/xmldsig-more#sha384",
+                "http://www.w3.org/2001/04/xmlenc#sha256",
+                "http://www.w3.org/2001/04/xmlenc#sha512"
+              ]
+            },
+            "keyAlias": {
+              "type": "string"
+            },
+            "nonDefaultKeystoreId": {
+              "$ref": "schema:sub-types/goid"
+            },
+            "protectTokens": {
+              "type": "boolean",
+              "default": false
+            },
+            "signatureMessageDigest": {
+              "type": "boolean",
+              "default": false
+            },
+            "usesDefaultKeyStore": {
+              "type": "boolean",
+              "default": true
+            },
+            "xpath": {
+              "$ref": "schema:sub-types/xpathExpression"
+            },
+            "recipientContext": {
+              "$ref": "schema:sub-types/xmlSecurityRecipientContext"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:WssSignElement"
+}

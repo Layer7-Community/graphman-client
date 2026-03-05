@@ -1,0 +1,63 @@
+{
+  "$comment": "Schema for LookupApiKey assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "lookupApiKey": {
+      "type": "object",
+      "$id": "schema:LookupApiKey",
+      "$ref": "schema:assertion",
+      "properties": {
+        "LookupApiKey": {
+          "type": "object",
+          "properties": {
+            "apiKey": {
+              "type": "string"
+            },
+            "serviceId": {
+              "type": "string",
+              "default": "${service.oid}"
+            },
+            "variablePrefix": {
+              "type": "string",
+              "default": "apiKeyRecord"
+            },
+            "_enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "_leftComment": {
+              "type": "string"
+            },
+            "_rightComment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:LookupApiKey"
+}

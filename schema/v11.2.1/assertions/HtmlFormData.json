@@ -1,0 +1,96 @@
+{
+  "$comment": "Schema for HtmlFormData assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "htmlFormDataAssertion$FieldSpec": {
+      "type": "object",
+      "$id": "schema:sub-types/htmlFormDataAssertion$FieldSpec",
+      "properties": {
+        "allowEmpty": {
+          "type": "boolean"
+        },
+        "allowedLocation": {
+          "$ref": "schema:sub-types/htmlFormDataLocation",
+          "default": "anywhere"
+        },
+        "dataType": {
+          "$ref": "schema:sub-types/htmlFormDataType"
+        },
+        "maxOccurs": {
+          "type": "integer",
+          "default": 1
+        },
+        "minOccurs": {
+          "type": "integer",
+          "default": 1
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "htmlFormDataLocation": {
+      "type": "string",
+      "$id": "schema:sub-types/htmlFormDataLocation"
+    },
+    "htmlFormDataType": {
+      "type": "string",
+      "$id": "schema:sub-types/htmlFormDataType"
+    },
+    "htmlFormData": {
+      "type": "object",
+      "$id": "schema:HtmlFormData",
+      "$ref": "schema:assertion",
+      "properties": {
+        "HtmlFormData": {
+          "type": "object",
+          "properties": {
+            "allowGet": {
+              "type": "boolean",
+              "default": false
+            },
+            "allowPost": {
+              "type": "boolean",
+              "default": false
+            },
+            "disallowOtherFields": {
+              "type": "boolean",
+              "default": false
+            },
+            "fieldSpecs": {
+              "type": "array",
+              "items": {
+                "$ref": "schema:sub-types/htmlFormDataAssertion$FieldSpec"
+              }
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:HtmlFormData"
+}

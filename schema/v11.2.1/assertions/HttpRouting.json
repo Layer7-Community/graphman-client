@@ -1,0 +1,367 @@
+{
+  "$comment": "Schema for HttpRouting assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "goid": {
+      "type": "string",
+      "$id": "schema:sub-types/goid"
+    },
+    "xmlSecurityRecipientContext": {
+      "type": "object",
+      "$id": "schema:sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "httpPassthroughRuleSet": {
+      "type": "object",
+      "$id": "schema:sub-types/httpPassthroughRuleSet",
+      "properties": {
+        "forwardAll": {
+          "type": "boolean",
+          "default": false
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "schema:sub-types/httpPassthroughRule"
+          }
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "httpPassthroughRule": {
+      "type": "object",
+      "$id": "schema:sub-types/httpPassthroughRule",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "customizeValue": {
+          "type": "string",
+          "title": "Value"
+        },
+        "usesCustomizedValue": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "httpRouting": {
+      "type": "object",
+      "$id": "schema:HttpRouting",
+      "$ref": "schema:assertion",
+      "properties": {
+        "HttpRouting": {
+          "type": "object",
+          "properties": {
+            "attachSamlSenderVouches": {
+              "type": "boolean",
+              "default": false
+            },
+            "authOauthTokenVar": {
+              "type": "string"
+            },
+            "authOauthVersion": {
+              "type": "string",
+              "enum": [
+                "1.0",
+                "2.0"
+              ],
+              "default": "2.0"
+            },
+            "connectionTimeout": {
+              "type": "string"
+            },
+            "currentSecurityHeaderHandling": {
+              "type": "integer",
+              "default": 0
+            },
+            "customIpAddresses": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "title": "IP Address"
+                  }
+                }
+              }
+            },
+            "customURLs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "title": "URL"
+                  }
+                }
+              }
+            },
+            "dynamicCertificateVariable": {
+              "type": "string"
+            },
+            "dynamicPrivateKeyVariable": {
+              "type": "string"
+            },
+            "failOnErrorStatus": {
+              "type": "boolean",
+              "default": true
+            },
+            "failoverStrategyName": {
+              "type": "string",
+              "default": "ordered",
+              "enum": [
+                "ordered",
+                "sticky",
+                "robin"
+              ]
+            },
+            "followRedirects": {
+              "type": "boolean",
+              "default": false
+            },
+            "forceIncludeRequestBody": {
+              "type": "boolean",
+              "default": false
+            },
+            "gzipEncodeDownstream": {
+              "type": "boolean",
+              "default": false
+            },
+            "httpMethod": {
+              "type": "string"
+            },
+            "httpMethodAsString": {
+              "type": "string"
+            },
+            "httpVersion": {
+              "type": "string"
+            },
+            "keyAlias": {
+              "type": "string"
+            },
+            "krbConfiguredAccount": {
+              "type": "string"
+            },
+            "krbConfiguredPassword": {
+              "type": "string"
+            },
+            "krbDelegatedAuthentication": {
+              "type": "boolean",
+              "default": false
+            },
+            "krbUseGatewayKeytab": {
+              "type": "boolean",
+              "default": false
+            },
+            "login": {
+              "type": "string"
+            },
+            "maxConnections": {
+              "type": "integer",
+              "default": -1
+            },
+            "maxDurationTimeout": {
+              "type": "string"
+            },
+            "maxDurationEnabled": {
+              "type": "boolean",
+              "default": false
+            },
+            "bufferDisabled": {
+              "type": "boolean",
+              "default": false
+            },
+            "maxRetries": {
+              "type": "integer"
+            },
+            "nonDefaultKeystoreId": {
+              "$ref": "schema:sub-types/goid"
+            },
+            "ntlmHost": {
+              "type": "string"
+            },
+            "omitAuthHeaderConnectReuse": {
+              "type": "boolean",
+              "default": false
+            },
+            "omitAuthHeaderConnectReuseSystemDefault": {
+              "type": "boolean"
+            },
+            "omitHostHeader": {
+              "type": "boolean",
+              "default": false
+            },
+            "overrideContentType": {
+              "type": "boolean",
+              "default": false
+            },
+            "passThroughSoapFaults": {
+              "type": "boolean",
+              "default": true
+            },
+            "passthroughHttpAuthentication": {
+              "type": "boolean",
+              "default": false
+            },
+            "password": {
+              "type": "string"
+            },
+            "protectedServiceUrl": {
+              "type": "string"
+            },
+            "proxyHost": {
+              "type": "string"
+            },
+            "proxyPassword": {
+              "type": "string",
+              "default": ""
+            },
+            "proxyPort": {
+              "type": "string"
+            },
+            "proxyUsername": {
+              "type": "string",
+              "default": ""
+            },
+            "realm": {
+              "type": "string"
+            },
+            "recipientContext": {
+              "$ref": "schema:sub-types/xmlSecurityRecipientContext"
+            },
+            "requestHeaderRules": {
+              "$ref": "schema:sub-types/httpPassthroughRuleSet"
+            },
+            "requestMsgSrc": {
+              "type": "string"
+            },
+            "requestParamRules": {
+              "$ref": "schema:sub-types/httpPassthroughRuleSet"
+            },
+            "responseHeaderRules": {
+              "$ref": "schema:sub-types/httpPassthroughRuleSet"
+            },
+            "responseMsgDest": {
+              "type": "string"
+            },
+            "responseSize": {
+              "type": "string"
+            },
+            "samlAssertionExpiry": {
+              "type": "integer",
+              "default": 5
+            },
+            "samlAssertionVersion": {
+              "type": "integer",
+              "default": 1
+            },
+            "taiCredentialChaining": {
+              "type": "boolean",
+              "default": false
+            },
+            "timeout": {
+              "type": "string"
+            },
+            "tlsCipherSuites": {
+              "type": "string"
+            },
+            "tlsTrustedCertGoids": {
+              "type": "array",
+              "items": {
+                "$ref": "schema:sub-types/goid"
+              }
+            },
+            "tlsTrustedCertNames": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "tlsVersion": {
+              "type": "string",
+              "enum": [
+                "any",
+                "TLSv1",
+                "TLSv1.1",
+                "TLSv1.2",
+                "TLSv1.3"
+              ],
+              "default": "any"
+            },
+            "useKeepAlives": {
+              "type": "boolean",
+              "default": true
+            },
+            "useThumbprintInSamlSignature": {
+              "type": "boolean",
+              "default": false
+            },
+            "useThumbprintInSamlSubject": {
+              "type": "boolean",
+              "default": false
+            },
+            "userAgent": {
+              "type": "string"
+            },
+            "usesDefaultKeyStore": {
+              "type": "boolean",
+              "default": true
+            },
+            "usesDynamicPrivateKey": {
+              "type": "boolean",
+              "default": false
+            },
+            "usesNoKey": {
+              "type": "boolean",
+              "default": false
+            },
+            "xmlSecurityActorToPromote": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:HttpRouting"
+}

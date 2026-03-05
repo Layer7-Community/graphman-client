@@ -1,0 +1,65 @@
+{
+  "$comment": "Schema for HandleErrors assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "handleErrors": {
+      "type": "object",
+      "$id": "schema:HandleErrors",
+      "$ref": "schema:assertion",
+      "properties": {
+        "HandleErrors": {
+          "type": "object",
+          "properties": {
+            "includeIOException": {
+              "type": "boolean",
+              "default": false
+            },
+            "variablePrefix": {
+              "type": "string"
+            },
+            ".enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            },
+            ".children": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:HandleErrors"
+}

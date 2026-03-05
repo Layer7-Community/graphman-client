@@ -1,0 +1,149 @@
+{
+  "$comment": "Schema for EncodeJsonWebToken assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "goid": {
+      "type": "string",
+      "$id": "schema:sub-types/goid"
+    },
+    "encodeJsonWebToken": {
+      "type": "object",
+      "$id": "schema:EncodeJsonWebToken",
+      "$ref": "schema:assertion",
+      "properties": {
+        "EncodeJsonWebToken": {
+          "type": "object",
+          "properties": {
+            "contentEncryptionAlgorithm": {
+              "type": "string"
+            },
+            "dynamicPrivateKeyAliasVariable": {
+              "type": "string"
+            },
+            "emptyPayload": {
+              "type": "boolean",
+              "default": false
+            },
+            "encryptPayload": {
+              "type": "boolean"
+            },
+            "encryptionKey": {
+              "type": "string"
+            },
+            "encryptionKeyId": {
+              "type": "string"
+            },
+            "encryptionKeyType": {
+              "type": "string",
+              "enum": [
+                "Certificate",
+                "JSON Web Key",
+                "JSON Web Key Set"
+              ]
+            },
+            "encryptionSecret": {
+              "type": "string"
+            },
+            "encryptionSecretBase64Encoded": {
+              "type": "boolean",
+              "default": false
+            },
+            "encryptionSourceType": {
+              "type": "string",
+              "enum": [
+                "2"
+              ]
+            },
+            "headerAction": {
+              "type": "string",
+              "default": "Use Generated Header",
+              "enum": [
+                "Use Generated Header",
+                "Merge to Generated Header",
+                "Replace Generated Header"
+              ]
+            },
+            "keyAlias": {
+              "type": "string"
+            },
+            "keyGoid": {
+              "$ref": "schema:sub-types/goid"
+            },
+            "keyManagementAlgorithm": {
+              "type": "string"
+            },
+            "signPayload": {
+              "type": "boolean"
+            },
+            "signatureAlgorithm": {
+              "type": "string",
+              "default": "HS256"
+            },
+            "signatureJwksKeyId": {
+              "type": "string"
+            },
+            "signatureKeyType": {
+              "type": "string",
+              "enum": [
+                "JSON Web Key",
+                "JSON Web Key Set"
+              ]
+            },
+            "signatureSecretBase64Encoded": {
+              "type": "boolean",
+              "default": false
+            },
+            "signatureSecretKey": {
+              "type": "string"
+            },
+            "signatureSourceType": {
+              "type": "string",
+              "default": "0",
+              "enum": [
+                "0",
+                "2"
+              ]
+            },
+            "signatureSourceVariable": {
+              "type": "string"
+            },
+            "sourceHeaders": {
+              "type": "string"
+            },
+            "sourceVariable": {
+              "type": "string",
+              "default": ""
+            },
+            "targetVariable": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:EncodeJsonWebToken"
+}

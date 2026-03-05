@@ -1,0 +1,65 @@
+{
+  "$comment": "Schema for CacheLookup assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "cacheLookup": {
+      "type": "object",
+      "$id": "schema:CacheLookup",
+      "$ref": "schema:assertion",
+      "properties": {
+        "CacheLookup": {
+          "type": "object",
+          "properties": {
+            "cacheEntryKey": {
+              "type": "string"
+            },
+            "cacheId": {
+              "type": "string"
+            },
+            "contentTypeOverride": {
+              "type": "string"
+            },
+            "maxEntryAgeSeconds": {
+              "type": "string"
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ]
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:CacheLookup"
+}

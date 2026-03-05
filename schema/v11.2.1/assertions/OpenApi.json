@@ -1,0 +1,125 @@
+{
+  "$comment": "Schema for OpenApi assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "openApi": {
+      "type": "object",
+      "$id": "schema:OpenApi",
+      "$ref": "schema:assertion",
+      "properties": {
+        "OpenApi": {
+          "type": "object",
+          "properties": {
+            "openApiDoc": {
+              "type": "string"
+            },
+            "prefix": {
+              "type": "string"
+            },
+            "requireSecurityCredentials": {
+              "type": "boolean",
+              "default": true
+            },
+            "serviceBase": {
+              "type": "string",
+              "default": ""
+            },
+            "strictValidation": {
+              "type": "boolean",
+              "default": false
+            },
+            "useOpenApiDocAsUrl": {
+              "type": "boolean",
+              "default": false
+            },
+            "validateBody": {
+              "type": "boolean",
+              "default": false
+            },
+            "validateHeaders": {
+              "type": "boolean",
+              "default": false
+            },
+            "validateMethod": {
+              "type": "boolean",
+              "default": true
+            },
+            "validatePath": {
+              "type": "boolean",
+              "default": true
+            },
+            "validateQueryParameters": {
+              "type": "boolean",
+              "default": false
+            },
+            "validateResponseStatus": {
+              "type": "boolean",
+              "default": false
+            },
+            "nonHttpMessage": {
+              "type": "boolean",
+              "default": false
+            },
+            "resourceUri": {
+              "type": "string",
+              "default": ""
+            },
+            "methodName": {
+              "type": "string",
+              "default": ""
+            },
+            "statusCode": {
+              "type": "string",
+              "default": ""
+            },
+            "otherMessageType": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE"
+              ],
+              "default": "REQUEST"
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "REQUEST"
+            },
+            "otherTargetMessageVariable": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:OpenApi"
+}

@@ -1,0 +1,80 @@
+{
+  "$comment": "Schema for DistributedRateLimit assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "distributedRateLimit": {
+      "type": "object",
+      "$id": "schema:DistributedRateLimit",
+      "$ref": "schema:assertion",
+      "properties": {
+        "DistributedRateLimit": {
+          "type": "object",
+          "properties": {
+            "burstLimit": {
+              "type": "string"
+            },
+            "counterId": {
+              "type": "string"
+            },
+            "counterPrefix": {
+              "type": "string"
+            },
+            "limitEachCounterType": {
+              "type": "string",
+              "enum": [
+                "User or IP",
+                "Authenticated user",
+                "Client IP",
+                "Custom"
+              ]
+            },
+            "limitExceededOption": {
+              "type": "string",
+              "enum": [
+                "Throttle",
+                "Log Only"
+              ]
+            },
+            "limitRequests": {
+              "type": "string"
+            },
+            "rateLimitUnit": {
+              "type": "string",
+              "enum": [
+                "Minute",
+                "Second"
+              ]
+            },
+            "rateLimitProvider": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:DistributedRateLimit"
+}

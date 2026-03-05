@@ -1,0 +1,76 @@
+{
+  "$comment": "Schema for ContentType assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "contentType": {
+      "type": "object",
+      "$id": "schema:ContentType",
+      "$ref": "schema:assertion",
+      "properties": {
+        "ContentType": {
+          "type": "object",
+          "properties": {
+            "changeContentType": {
+              "type": "string",
+              "enum": [
+                "VALIDATE",
+                "CHANGE"
+              ],
+              "default": "VALIDATE"
+            },
+            "messagePart": {
+              "type": "boolean",
+              "default": false
+            },
+            "messagePartNum": {
+              "type": "string"
+            },
+            "newContentTypeValue": {
+              "type": "string"
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "reinitializeMessage": {
+              "type": "boolean",
+              "default": false
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "REQUEST"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:ContentType"
+}

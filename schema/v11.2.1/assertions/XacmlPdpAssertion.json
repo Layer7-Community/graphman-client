@@ -1,0 +1,67 @@
+{
+  "$comment": "Schema for XacmlPdpAssertion assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "xacmlPdpAssertion": {
+      "type": "object",
+      "$id": "schema:XacmlPdpAssertion",
+      "$ref": "schema:assertion",
+      "properties": {
+        "XacmlPdpAssertion": {
+          "type": "object",
+          "properties": {
+            "failIfNotPermit": {
+              "type": "boolean",
+              "default": false
+            },
+            "inputMessageSource": {
+              "type": "string"
+            },
+            "inputMessageVariable": {
+              "type": "string"
+            },
+            "outputMessageTarget": {
+              "type": "string"
+            },
+            "outputMessageVariable": {
+              "type": "string"
+            },
+            "soapEncapsulation": {
+              "type": "string",
+              "enum": [
+                "NONE",
+                "REQUEST_ONLY",
+                "RESPONSE_ONLY",
+                "REQUEST_AND_RESPONSE"
+              ]
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:XacmlPdpAssertion"
+}

@@ -1,0 +1,65 @@
+{
+  "$comment": "Schema for ValidateNonSoapSamlToken assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "validateNonSoapSamlToken": {
+      "type": "object",
+      "$id": "schema:ValidateNonSoapSamlToken",
+      "$ref": "schema:assertion",
+      "properties": {
+        "ValidateNonSoapSamlToken": {
+          "type": "object",
+          "properties": {
+            "checkAssertionValidity": {
+              "type": "boolean",
+              "default": true
+            },
+            "nameFormats": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "subjectConfirmations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "version": {
+              "type": "integer",
+              "enum": [
+                1,
+                2
+              ]
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:ValidateNonSoapSamlToken"
+}

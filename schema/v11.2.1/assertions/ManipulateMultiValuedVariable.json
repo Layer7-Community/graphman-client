@@ -1,0 +1,48 @@
+{
+  "$comment": "Schema for ManipulateMultiValuedVariable assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "manipulateMultiValuedVariable": {
+      "type": "object",
+      "$id": "schema:ManipulateMultiValuedVariable",
+      "$ref": "schema:assertion",
+      "properties": {
+        "ManipulateMultiValuedVariable": {
+          "type": "object",
+          "properties": {
+            "sourceVariableName": {
+              "type": "string"
+            },
+            "targetVariableName": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:ManipulateMultiValuedVariable"
+}

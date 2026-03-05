@@ -1,0 +1,67 @@
+{
+  "$comment": "Schema for CacheStorage assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "cacheStorage": {
+      "type": "object",
+      "$id": "schema:CacheStorage",
+      "$ref": "schema:assertion",
+      "properties": {
+        "CacheStorage": {
+          "type": "object",
+          "properties": {
+            "cacheEntryKey": {
+              "type": "string"
+            },
+            "cacheId": {
+              "type": "string"
+            },
+            "maxEntries": {
+              "type": "string"
+            },
+            "maxEntryAgeSeconds": {
+              "type": "string"
+            },
+            "maxEntrySizeBytes": {
+              "type": "string"
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "storeSoapFaults": {
+              "type": "boolean",
+              "default": true
+            },
+            "target": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:CacheStorage"
+}

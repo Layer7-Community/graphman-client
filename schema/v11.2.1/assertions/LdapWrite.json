@@ -1,0 +1,79 @@
+{
+  "$comment": "Schema for LdapWrite assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "goid": {
+      "type": "string",
+      "$id": "schema:sub-types/goid"
+    },
+    "ldapWrite": {
+      "type": "object",
+      "$id": "schema:LdapWrite",
+      "$ref": "schema:assertion",
+      "properties": {
+        "LdapWrite": {
+          "type": "object",
+          "properties": {
+            "attributeList": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "attribute": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "changetype": {
+              "type": "string",
+              "enum": [
+                "ADD",
+                "DELETE",
+                "MODIFY",
+                "MODRDN"
+              ],
+              "default": "ADD"
+            },
+            "dn": {
+              "type": "string"
+            },
+            "ldapProviderId": {
+              "$ref": "schema:sub-types/goid"
+            },
+            "variablePrefix": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:LdapWrite"
+}

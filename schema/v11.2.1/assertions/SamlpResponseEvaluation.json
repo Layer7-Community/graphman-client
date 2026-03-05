@@ -1,0 +1,270 @@
+{
+  "$comment": "Schema for SamlpResponseEvaluation assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "samlAttributeStatement": {
+      "type": "object",
+      "$id": "schema:sub-types/samlAttributeStatement",
+      "properties": {
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "schema:sub-types/samlAttributeStatement$Attribute"
+          }
+        },
+        "failIfAnyAttributeIsMissing": {
+          "type": "boolean",
+          "default": false
+        },
+        "failIfAttributeValueExcludesAttribute": {
+          "type": "boolean",
+          "default": false
+        },
+        "failIfNoAttributesAdded": {
+          "type": "boolean",
+          "default": true
+        },
+        "failIfUnknownAttributeInFilter": {
+          "type": "boolean",
+          "default": false
+        },
+        "filterExpression": {
+          "type": "string",
+          "default": ""
+        },
+        "variablePrefix": {
+          "type": "string",
+          "default": "attrStatement"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "samlAuthenticationStatement": {
+      "type": "object",
+      "$id": "schema:sub-types/samlAuthenticationStatement",
+      "properties": {
+        "authenticationMethods": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "customAuthenticationMethods": {
+          "type": "string",
+          "default": ""
+        },
+        "includeAuthenticationContextDeclaration": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "SamlpResponseEvaluation:samlpAuthorizationInfo": {
+      "type": "object",
+      "$id": "schema:SamlpResponseEvaluation:samlpAuthorizationInfo",
+      "properties": {
+        "actions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "resource": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "samlAttributeStatement$Attribute": {
+      "type": "object",
+      "$id": "schema:sub-types/samlAttributeStatement$Attribute",
+      "properties": {
+        "addBehavior": {
+          "type": "string",
+          "enum": [
+            "STRING_CONVERT",
+            "ADD_AS_XML"
+          ],
+          "default": "STRING_CONVERT"
+        },
+        "anyValue": {
+          "type": "boolean",
+          "default": false
+        },
+        "emptyBehavior": {
+          "type": "string",
+          "enum": [
+            "EMPTY_STRING",
+            "EXISTS_NO_VALUE",
+            "NULL_VALUE"
+          ],
+          "default": "EMPTY_STRING"
+        },
+        "friendlyName": {
+          "type": "string"
+        },
+        "missingWhenEmpty": {
+          "type": "boolean",
+          "default": false
+        },
+        "name": {
+          "type": "string"
+        },
+        "nameFormat": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "repeatIfMulti": {
+          "type": "boolean",
+          "default": false
+        },
+        "value": {
+          "type": "string"
+        },
+        "valueComparison": {
+          "type": "string",
+          "enum": [
+            "STRING_COMPARE",
+            "CANONICALIZE"
+          ],
+          "default": "STRING_COMPARE"
+        },
+        "variableNotFoundBehavior": {
+          "type": "string",
+          "enum": [
+            "REPLACE_EMPTY_STRING",
+            "REPLACE_EXPRESSION_EMPTY_STRING"
+          ],
+          "default": "REPLACE_EMPTY_STRING"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "samlpResponseEvaluation": {
+      "type": "object",
+      "$id": "schema:SamlpResponseEvaluation",
+      "$ref": "schema:assertion",
+      "properties": {
+        "SamlpResponseEvaluation": {
+          "type": "object",
+          "properties": {
+            "attributeStatement": {
+              "$ref": "schema:sub-types/samlAttributeStatement"
+            },
+            "audienceRestriction": {
+              "type": "string"
+            },
+            "authenticationStatement": {
+              "$ref": "schema:sub-types/samlAuthenticationStatement"
+            },
+            "authorizationStatement": {
+              "$ref": "schema:SamlpResponseEvaluation:samlpAuthorizationInfo"
+            },
+            "authzDecisionFalsifyAssertion": {
+              "type": "boolean",
+              "default": true
+            },
+            "authzDecisionOption": {
+              "type": "integer"
+            },
+            "authzDecisionVariable": {
+              "type": "string",
+              "enum": [
+                "Permit",
+                "Deny",
+                "Indeterminate"
+              ],
+              "default": "Permit"
+            },
+            "keyAlias": {
+              "type": "string"
+            },
+            "nameQualifier": {
+              "type": "string"
+            },
+            "noSubjectConfirmation": {
+              "type": "boolean",
+              "default": false
+            },
+            "nonDefaultKeystoreId": {
+              "type": "number",
+              "default": 0
+            },
+            "otherTargetMessageVariable": {
+              "type": "string",
+              "default": "samlpResponse.message"
+            },
+            "responseStatusFalsifyAssertion": {
+              "type": "boolean",
+              "default": true
+            },
+            "soapVersion": {
+              "type": "integer"
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "OTHER"
+            },
+            "usesDefaultKeyStore": {
+              "type": "boolean",
+              "default": true
+            },
+            "variablePrefixOverride": {
+              "type": "string"
+            },
+            "version": {
+              "type": "integer",
+              "default": 1,
+              "enum": [
+                1,
+                2
+              ]
+            },
+            ".enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:SamlpResponseEvaluation"
+}

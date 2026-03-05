@@ -1,0 +1,141 @@
+{
+  "$comment": "Schema for LDAPQuery assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "goid": {
+      "type": "string",
+      "$id": "schema:sub-types/goid"
+    },
+    "lDAPQuery": {
+      "type": "object",
+      "$id": "schema:LDAPQuery",
+      "$ref": "schema:assertion",
+      "properties": {
+        "LDAPQuery": {
+          "type": "object",
+          "properties": {
+            "allowMultipleResults": {
+              "type": "boolean",
+              "default": false
+            },
+            "attrNames": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "cachePeriod": {
+              "type": "number"
+            },
+            "cacheSize": {
+              "type": "integer"
+            },
+            "dnText": {
+              "type": "string"
+            },
+            "enableCache": {
+              "type": "boolean",
+              "default": true
+            },
+            "failIfNoResults": {
+              "type": "boolean",
+              "default": false
+            },
+            "failIfTooManyResults": {
+              "type": "boolean",
+              "default": false
+            },
+            "includeEmptyAttributes": {
+              "type": "boolean",
+              "default": false
+            },
+            "ldapProviderOid": {
+              "$ref": "schema:sub-types/goid"
+            },
+            "maximumResults": {
+              "type": "integer"
+            },
+            "queryMappings": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "attributeName": {
+                    "type": "string",
+                    "title": "LDAP Attribute"
+                  },
+                  "matchingContextVariableName": {
+                    "type": "string",
+                    "title": "Context Variable Name"
+                  },
+                  "failMultivalued": {
+                    "type": "boolean",
+                    "default": false
+                  },
+                  "joinMultivalued": {
+                    "type": "boolean",
+                    "default": true
+                  },
+                  "multivalued": {
+                    "type": "boolean",
+                    "default": false
+                  },
+                  "__multivalued": {
+                    "type": "string",
+                    "enum": [
+                      "USE_FIRST_VALUE",
+                      "JOIN_WITH_COMMAS",
+                      "SET_MULTIVALUED",
+                      "FAIL_ASSERTIONS"
+                    ],
+                    "default": "USE_FIRST_VALUE"
+                  }
+                }
+              }
+            },
+            "searchFilter": {
+              "type": "string"
+            },
+            "searchFilterInjectionProtected": {
+              "type": "boolean",
+              "default": false
+            },
+            "selectedScope": {
+              "type": "string",
+              "enum": [
+                "SUBTREE",
+                "ONELEVEL",
+                "OBJECT"
+              ],
+              "default": "SUBTREE"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:LDAPQuery"
+}

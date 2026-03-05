@@ -1,0 +1,73 @@
+{
+  "$comment": "Schema for OAuth2Introspection assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "oAuth2Introspection": {
+      "type": "object",
+      "$id": "schema:OAuth2Introspection",
+      "$ref": "schema:assertion",
+      "properties": {
+        "OAuth2Introspection": {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string"
+            },
+            "atLeastOneAudience": {
+              "type": "boolean",
+              "default": false
+            },
+            "atLeastOneScope": {
+              "type": "boolean",
+              "default": false
+            },
+            "audience": {
+              "type": "string"
+            },
+            "includeFullResponseDetails": {
+              "type": "boolean",
+              "default": false
+            },
+            "scope": {
+              "type": "string"
+            },
+            "tokenIssuerHint": {
+              "type": "string"
+            },
+            "trustGatewayAsIssuer": {
+              "type": "boolean",
+              "default": false
+            },
+            "varPrefix": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:OAuth2Introspection"
+}

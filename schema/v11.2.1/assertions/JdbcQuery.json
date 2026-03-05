@@ -1,0 +1,102 @@
+{
+  "$comment": "Schema for JdbcQuery assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "jdbcQuery": {
+      "type": "object",
+      "$id": "schema:JdbcQuery",
+      "$ref": "schema:assertion",
+      "properties": {
+        "JdbcQuery": {
+          "type": "object",
+          "properties": {
+            "assertionFailureEnabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "connectionName": {
+              "type": "string"
+            },
+            "convertVariablesToStrings": {
+              "type": "boolean",
+              "default": true
+            },
+            "generateXmlResult": {
+              "type": "boolean",
+              "default": false
+            },
+            "maxRecords": {
+              "type": "integer"
+            },
+            "namingMap": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "columnLabel": {
+                    "type": "string"
+                  },
+                  "variableName": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "queryName": {
+              "type": "string"
+            },
+            "queryTimeout": {
+              "type": "string"
+            },
+            "resolveAsObjectList": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "saveResultsAsContextVariables": {
+              "type": "boolean",
+              "default": true
+            },
+            "specifySchema": {
+              "type": "boolean"
+            },
+            "schema": {
+              "type": "string"
+            },
+            "sqlQuery": {
+              "type": "string"
+            },
+            "variablePrefix": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:JdbcQuery"
+}

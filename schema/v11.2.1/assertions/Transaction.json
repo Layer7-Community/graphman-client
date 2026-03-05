@@ -1,0 +1,61 @@
+{
+  "$comment": "Schema for Transaction assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "transaction": {
+      "type": "object",
+      "$id": "schema:Transaction",
+      "$ref": "schema:assertion",
+      "properties": {
+        "Transaction": {
+          "type": "object",
+          "properties": {
+            "connectionName": {
+              "type": "string"
+            },
+            "_enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "_leftComment": {
+              "type": "string"
+            },
+            "_rightComment": {
+              "type": "string"
+            },
+            "_children": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:Transaction"
+}

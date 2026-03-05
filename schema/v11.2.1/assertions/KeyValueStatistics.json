@@ -1,0 +1,59 @@
+{
+  "$comment": "Schema for KeyValueStatistics assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "keyValueStatistics": {
+      "type": "object",
+      "$id": "schema:KeyValueStatistics",
+      "$ref": "schema:assertion",
+      "properties": {
+        "KeyValueStatistics": {
+          "type": "object",
+          "properties": {
+            "storeId": {
+              "type": "string"
+            },
+            "targetVariableName": {
+              "type": "string",
+              "default": "response"
+            },
+            "_enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "_leftComment": {
+              "type": "string"
+            },
+            "_rightComment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:KeyValueStatistics"
+}

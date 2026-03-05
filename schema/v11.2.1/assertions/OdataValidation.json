@@ -1,0 +1,122 @@
+{
+  "$comment": "Schema for OdataValidation assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "odataValidation": {
+      "type": "object",
+      "$id": "schema:OdataValidation",
+      "$ref": "schema:assertion",
+      "properties": {
+        "OdataValidation": {
+          "type": "object",
+          "properties": {
+            "actions": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "ALLOW_METADATA",
+                  "ALLOW_RAW_VALUE"
+                ]
+              }
+            },
+            "allowMetadata": {
+              "type": "boolean",
+              "default": false
+            },
+            "allowRawValue": {
+              "type": "boolean",
+              "default": false
+            },
+            "createOperation": {
+              "type": "boolean",
+              "default": true
+            },
+            "deleteOperation": {
+              "type": "boolean",
+              "default": false
+            },
+            "httpMethod": {
+              "type": "string",
+              "enum": [
+                "AUTOMATIC",
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "MERGE",
+                "PATCH"
+              ],
+              "default": "AUTOMATIC"
+            },
+            "mergeOperation": {
+              "type": "boolean",
+              "default": false
+            },
+            "odataMetadataSource": {
+              "type": "string"
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "partialUpdateOperation": {
+              "type": "boolean",
+              "default": false
+            },
+            "readOperation": {
+              "type": "boolean",
+              "default": true
+            },
+            "resourceUrl": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "REQUEST"
+            },
+            "updateOperation": {
+              "type": "boolean",
+              "default": true
+            },
+            "validatePayload": {
+              "type": "boolean",
+              "default": true
+            },
+            "variablePrefix": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:OdataValidation"
+}

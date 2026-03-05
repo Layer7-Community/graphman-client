@@ -1,0 +1,69 @@
+{
+  "$comment": "Schema for EvaluateJsonPathExpressionV2 assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "evaluateJsonPathExpressionV2": {
+      "type": "object",
+      "$id": "schema:EvaluateJsonPathExpressionV2",
+      "$ref": "schema:assertion",
+      "properties": {
+        "EvaluateJsonPathExpressionV2": {
+          "type": "object",
+          "properties": {
+            "evaluator": {
+              "type": "string",
+              "enum": [
+                "SystemDefault",
+                "JsonPath",
+                "JsonPathWithCompression"
+              ],
+              "default": "SystemDefault"
+            },
+            "expression": {
+              "type": "string"
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string",
+              "default": "REQUEST",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ]
+            },
+            "variablePrefix": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:EvaluateJsonPathExpressionV2"
+}

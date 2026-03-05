@@ -1,0 +1,48 @@
+{
+  "$comment": "Schema for ProcessRoutingStrategyResult assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "processRoutingStrategyResult": {
+      "type": "object",
+      "$id": "schema:ProcessRoutingStrategyResult",
+      "$ref": "schema:assertion",
+      "properties": {
+        "ProcessRoutingStrategyResult": {
+          "type": "object",
+          "properties": {
+            "feedback": {
+              "type": "string"
+            },
+            "strategy": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:ProcessRoutingStrategyResult"
+}

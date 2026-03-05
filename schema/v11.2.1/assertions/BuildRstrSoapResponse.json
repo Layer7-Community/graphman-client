@@ -1,0 +1,146 @@
+{
+  "$comment": "Schema for BuildRstrSoapResponse assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "identityTarget": {
+      "type": "object",
+      "$id": "schema:sub-types/identityTarget",
+      "properties": {
+        "identityId": {
+          "type": "string"
+        },
+        "identityInfo": {
+          "type": "string"
+        },
+        "identityProviderOid": {
+          "$ref": "schema:sub-types/goid"
+        },
+        "targetIdentityType": {
+          "type": "string",
+          "enum": [
+            "USER",
+            "GROUP",
+            "PROVIDER",
+            "TAG"
+          ]
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "xmlSecurityRecipientContext": {
+      "type": "object",
+      "$id": "schema:sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "timeUnit": {
+      "type": "string",
+      "$id": "schema:sub-types/timeUnit"
+    },
+    "goid": {
+      "type": "string",
+      "$id": "schema:sub-types/goid"
+    },
+    "buildRstrSoapResponse": {
+      "type": "object",
+      "$id": "schema:BuildRstrSoapResponse",
+      "$ref": "schema:assertion",
+      "properties": {
+        "BuildRstrSoapResponse": {
+          "type": "object",
+          "properties": {
+            "addressOfEPR": {
+              "type": "string"
+            },
+            "identityTarget": {
+              "$ref": "schema:sub-types/identityTarget"
+            },
+            "includeAppliesTo": {
+              "type": "boolean",
+              "default": false
+            },
+            "includeAttachedRef": {
+              "type": "boolean",
+              "default": false
+            },
+            "includeKeySize": {
+              "type": "boolean",
+              "default": false
+            },
+            "includeLifetime": {
+              "type": "boolean",
+              "default": false
+            },
+            "includeUnattachedRef": {
+              "type": "boolean",
+              "default": false
+            },
+            "lifetime": {
+              "type": "number"
+            },
+            "otherTargetMessagevariablePrefix": {
+              "type": "string"
+            },
+            "recipientContext": {
+              "$ref": "schema:sub-types/xmlSecurityRecipientContext"
+            },
+            "responseForIssuance": {
+              "type": "boolean",
+              "default": true
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "REQUEST"
+            },
+            "timeUnit": {
+              "$ref": "schema:sub-types/timeUnit",
+              "default": "m"
+            },
+            "tokenIssued": {
+              "type": "string"
+            },
+            "variablePrefix": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:BuildRstrSoapResponse"
+}

@@ -1,0 +1,84 @@
+{
+  "$comment": "Schema for WssDigest assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "xmlSecurityRecipientContext": {
+      "type": "object",
+      "$id": "schema:sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "wssDigest": {
+      "type": "object",
+      "$id": "schema:WssDigest",
+      "$ref": "schema:assertion",
+      "properties": {
+        "WssDigest": {
+          "type": "object",
+          "properties": {
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "recipientContext": {
+              "$ref": "schema:sub-types/xmlSecurityRecipientContext"
+            },
+            "requireNonce": {
+              "type": "boolean",
+              "default": false
+            },
+            "requireTimestamp": {
+              "type": "boolean",
+              "default": false
+            },
+            "requiredPassword": {
+              "type": "string"
+            },
+            "requiredUsername": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "REQUEST"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:WssDigest"
+}

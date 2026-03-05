@@ -1,0 +1,85 @@
+{
+  "$comment": "Schema for CsrfProtection assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "csrfProtection": {
+      "type": "object",
+      "$id": "schema:CsrfProtection",
+      "$ref": "schema:assertion",
+      "properties": {
+        "CsrfProtection": {
+          "type": "object",
+          "properties": {
+            "allowMissingOrEmptyReferer": {
+              "type": "boolean",
+              "default": false
+            },
+            "cookieName": {
+              "type": "string"
+            },
+            "enableDoubleSubmitCookieChecking": {
+              "type": "boolean",
+              "default": true
+            },
+            "enableHttpRefererChecking": {
+              "type": "boolean",
+              "default": false
+            },
+            "onlyAllowCurrentDomain": {
+              "type": "boolean",
+              "default": true
+            },
+            "parameterName": {
+              "type": "string"
+            },
+            "parameterType": {
+              "type": "string",
+              "enum": [
+                "GET",
+                "POST",
+                "GET_AND_POST"
+              ],
+              "default": "POST"
+            },
+            "trustedDomains": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "title": "Trusted Domain"
+                  }
+                }
+              }
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:CsrfProtection"
+}

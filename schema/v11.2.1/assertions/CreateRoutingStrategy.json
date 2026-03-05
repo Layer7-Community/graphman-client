@@ -1,0 +1,94 @@
+{
+  "$comment": "Schema for CreateRoutingStrategy assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "CreateRoutingStrategy:route": {
+      "type": "object",
+      "$id": "schema:CreateRoutingStrategy:route",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "routeProperties": {
+          "type": "string",
+          "title": "Properties"
+        },
+        "properties": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "__routeName": {
+                "type": "string"
+              },
+              "__routeProperty": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "createRoutingStrategy": {
+      "type": "object",
+      "$id": "schema:CreateRoutingStrategy",
+      "$ref": "schema:assertion",
+      "properties": {
+        "CreateRoutingStrategy": {
+          "type": "object",
+          "properties": {
+            "routes": {
+              "type": "array",
+              "items": {
+                "$ref": "schema:CreateRoutingStrategy:route"
+              }
+            },
+            "strategy": {
+              "type": "string"
+            },
+            "strategyDescription": {
+              "type": "string",
+              "enum": [
+                "ORDERED_STICKY_FAILOVER",
+                "RANDOM_STICKY_FAILOVER",
+                "ROUND_ROBIN"
+              ],
+              "default": "ORDERED_STICKY_FAILOVER"
+            },
+            "strategyName": {
+              "type": "string"
+            },
+            "strategyProperties": {
+              "type": "object"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:CreateRoutingStrategy"
+}

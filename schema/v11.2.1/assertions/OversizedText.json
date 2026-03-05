@@ -1,0 +1,103 @@
+{
+  "$comment": "Schema for OversizedText assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "oversizedText": {
+      "type": "object",
+      "$id": "schema:OversizedText",
+      "$ref": "schema:assertion",
+      "properties": {
+        "OversizedText": {
+          "type": "object",
+          "properties": {
+            "limitAttrChars": {
+              "type": "boolean",
+              "default": true
+            },
+            "limitAttrNameChars": {
+              "type": "boolean",
+              "default": true
+            },
+            "limitNamespaceCount": {
+              "type": "boolean",
+              "default": false
+            },
+            "limitNamespacePrefixCount": {
+              "type": "boolean",
+              "default": false
+            },
+            "limitNestingDepth": {
+              "type": "boolean",
+              "default": true
+            },
+            "limitTextChars": {
+              "type": "boolean",
+              "default": true
+            },
+            "maxAttrChars": {
+              "type": "integer"
+            },
+            "maxAttrNameChars": {
+              "type": "integer"
+            },
+            "maxNamespaceCount": {
+              "type": "integer"
+            },
+            "maxNamespacePrefixCount": {
+              "type": "integer"
+            },
+            "maxNestingDepth": {
+              "type": "integer"
+            },
+            "maxPayloadElements": {
+              "type": "integer"
+            },
+            "maxTextChars": {
+              "type": "integer"
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "requireValidSoapEnvelope": {
+              "type": "boolean",
+              "default": false
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "REQUEST"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:OversizedText"
+}

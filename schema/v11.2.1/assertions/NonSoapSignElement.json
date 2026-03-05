@@ -1,0 +1,141 @@
+{
+  "$comment": "Schema for NonSoapSignElement assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "goid": {
+      "type": "string",
+      "$id": "schema:sub-types/goid"
+    },
+    "xpathExpression": {
+      "type": "object",
+      "$id": "schema:sub-types/xpathExpression",
+      "properties": {
+        "expression": {
+          "type": "string"
+        },
+        "namespaces": {
+          "type": "object"
+        },
+        "xpathVersion": {
+          "type": "string",
+          "enum": [
+            "UNSPECIFIED",
+            "XPATH_1_0",
+            "XPATH_2_0"
+          ],
+          "default": "UNSPECIFIED"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "nonSoapSignElement": {
+      "type": "object",
+      "$id": "schema:NonSoapSignElement",
+      "$ref": "schema:assertion",
+      "properties": {
+        "NonSoapSignElement": {
+          "type": "object",
+          "properties": {
+            "customIdAttributeQname": {
+              "type": "string"
+            },
+            "detachedSignatureVariableName": {
+              "type": "string"
+            },
+            "digestAlgName": {
+              "type": "string",
+              "enum": [
+                "Default",
+                "SHA-1",
+                "SHA-256",
+                "SHA-384",
+                "SHA-512"
+              ],
+              "default": "Default"
+            },
+            "dynamicPrivateKeyVariable": {
+              "type": "string",
+              "default": ""
+            },
+            "forceEnvelopedTransform": {
+              "type": "boolean",
+              "default": false
+            },
+            "keyAlias": {
+              "type": "string"
+            },
+            "nonDefaultKeystoreId": {
+              "$ref": "schema:sub-types/goid"
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "refDigestAlgName": {
+              "type": "string",
+              "enum": [
+                "Default",
+                "SHA-1",
+                "SHA-256",
+                "SHA-384",
+                "SHA-512"
+              ],
+              "default": "Default"
+            },
+            "signatureLocation": {
+              "type": "string",
+              "enum": [
+                "FIRST_CHILD",
+                "LAST_CHILD"
+              ],
+              "default": "LAST_CHILD"
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "RESPONSE"
+            },
+            "usesDefaultKeyStore": {
+              "type": "boolean",
+              "default": true
+            },
+            "usesDynamicPrivateKey": {
+              "type": "boolean",
+              "default": false
+            },
+            "xpathExpression": {
+              "$ref": "schema:sub-types/xpathExpression"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:NonSoapSignElement"
+}

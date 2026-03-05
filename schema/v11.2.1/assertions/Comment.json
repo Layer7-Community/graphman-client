@@ -1,0 +1,39 @@
+{
+  "$comment": "Schema for Comment assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "comment": {
+      "type": "object",
+      "$id": "schema:Comment",
+      "$ref": "schema:assertion",
+      "properties": {
+        "Comment": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:Comment"
+}

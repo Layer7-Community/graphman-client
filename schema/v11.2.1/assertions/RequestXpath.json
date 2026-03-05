@@ -1,0 +1,67 @@
+{
+  "$comment": "Schema for RequestXpath assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "xpathExpression": {
+      "type": "object",
+      "$id": "schema:sub-types/xpathExpression",
+      "properties": {
+        "expression": {
+          "type": "string"
+        },
+        "namespaces": {
+          "type": "object"
+        },
+        "xpathVersion": {
+          "type": "string",
+          "enum": [
+            "UNSPECIFIED",
+            "XPATH_1_0",
+            "XPATH_2_0"
+          ],
+          "default": "UNSPECIFIED"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "requestXpath": {
+      "type": "object",
+      "$id": "schema:RequestXpath",
+      "$ref": "schema:assertion",
+      "properties": {
+        "RequestXpath": {
+          "type": "object",
+          "properties": {
+            "xpath": {
+              "$ref": "schema:sub-types/xpathExpression"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:RequestXpath"
+}

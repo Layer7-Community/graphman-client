@@ -1,0 +1,252 @@
+{
+  "$comment": "Schema for MqNativeRouting assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "MqNativeRouting:mqDynamicProperties": {
+      "type": "object",
+      "$id": "schema:sub-types/MqNativeRouting:mqDynamicProperties",
+      "properties": {
+        "queueName": {
+          "type": "string"
+        },
+        "replyToQueue": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "xmlSecurityRecipientContext": {
+      "type": "object",
+      "$id": "schema:sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "MqNativeRouting:mappingRuleSet": {
+      "type": "object",
+      "$id": "schema:sub-types/MqNativeRouting:mappingRuleSet",
+      "properties": {
+        "passThroughHeaders": {
+          "type": "boolean",
+          "default": true
+        },
+        "passThroughMqMessageHeaders": {
+          "type": "boolean",
+          "default": true
+        },
+        "passThroughMqMessageProperties": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "messageTargetableSupport": {
+      "type": "object",
+      "$id": "schema:sub-types/messageTargetableSupport",
+      "properties": {
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "sourceUsedByGateway": {
+          "type": "boolean",
+          "default": true
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "RESPONSE"
+        },
+        "targetModifiedByGateway": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "goid": {
+      "type": "string",
+      "$id": "schema:sub-types/goid"
+    },
+    "mqNativeRouting": {
+      "type": "object",
+      "$id": "schema:MqNativeRouting",
+      "$ref": "schema:assertion",
+      "properties": {
+        "MqNativeRouting": {
+          "type": "object",
+          "properties": {
+            "currentSecurityHeaderHandling": {
+              "type": "integer",
+              "default": 0,
+              "enum": [
+                3,
+                1,
+                0
+              ]
+            },
+            "dynamicMqRoutingProperties": {
+              "$ref": "schema:sub-types/MqNativeRouting:mqDynamicProperties"
+            },
+            "messageOptions": {
+              "type": "string"
+            },
+            "messageOptionsUsed": {
+              "type": "boolean",
+              "default": false
+            },
+            "openOptions": {
+              "type": "string"
+            },
+            "openOptionsUsed": {
+              "type": "boolean",
+              "default": false
+            },
+            "putMessageTimeout": {
+              "type": "string"
+            },
+            "putToQueue": {
+              "type": "boolean",
+              "default": true,
+              "enum": [
+                true,
+                false
+              ]
+            },
+            "recipientContext": {
+              "$ref": "schema:sub-types/xmlSecurityRecipientContext"
+            },
+            "requestCopyHeaderToProperty": {
+              "type": "boolean",
+              "default": false
+            },
+            "requestCopyPropertyToHeader": {
+              "type": "boolean",
+              "default": false
+            },
+            "requestMessageAdvancedProperties": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "default": "characterSet"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "requestMqHeaderType": {
+              "type": "string",
+              "enum": [
+                "ORIGINAL",
+                "MQRFH2",
+                "MQRFH1"
+              ],
+              "default": "ORIGINAL"
+            },
+            "requestMqNativeMessagePropertyRuleSet": {
+              "$ref": "schema:sub-types/MqNativeRouting:mappingRuleSet"
+            },
+            "requestTarget": {
+              "$ref": "schema:sub-types/messageTargetableSupport"
+            },
+            "responseCopyHeaderToProperty": {
+              "type": "boolean",
+              "default": false
+            },
+            "responseCopyPropertyToHeader": {
+              "type": "boolean",
+              "default": false
+            },
+            "responseMessageAdvancedProperties": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "default": "characterSet"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "responseMqHeaderType": {
+              "type": "string",
+              "enum": [
+                "ORIGINAL",
+                "MQRFH2",
+                "MQRFH1"
+              ],
+              "default": "ORIGINAL"
+            },
+            "responseMqNativeMessagePropertyRuleSet": {
+              "$ref": "schema:sub-types/MqNativeRouting:mappingRuleSet"
+            },
+            "responseSize": {
+              "type": "string"
+            },
+            "responseTarget": {
+              "$ref": "schema:sub-types/messageTargetableSupport"
+            },
+            "responseTimeout": {
+              "type": "string"
+            },
+            "ssgActiveConnectorGoid": {
+              "$ref": "schema:sub-types/goid"
+            },
+            "ssgActiveConnectorId": {
+              "$ref": "schema:sub-types/goid"
+            },
+            "ssgActiveConnectorName": {
+              "type": "string"
+            },
+            "xmlSecurityActorToPromote": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:MqNativeRouting"
+}

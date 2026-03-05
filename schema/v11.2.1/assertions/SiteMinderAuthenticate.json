@@ -1,0 +1,93 @@
+{
+  "$comment": "Schema for SiteMinderAuthenticate assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "siteMinderAuthenticate": {
+      "type": "object",
+      "$id": "schema:SiteMinderAuthenticate",
+      "$ref": "schema:assertion",
+      "properties": {
+        "SiteMinderAuthenticate": {
+          "type": "object",
+          "properties": {
+            "cookieSourceVar": {
+              "type": "string"
+            },
+            "createSsoToken": {
+              "type": "boolean"
+            },
+            "lastCredential": {
+              "type": "boolean"
+            },
+            "namedCertificate": {
+              "type": "string"
+            },
+            "namedJsonWebToken": {
+              "type": "string"
+            },
+            "namedUser": {
+              "type": "string"
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "passwordPolicy": {
+              "type": "string"
+            },
+            "prefix": {
+              "type": "string"
+            },
+            "sendJWT": {
+              "type": "boolean"
+            },
+            "sendUsernamePasswordCredential": {
+              "type": "boolean"
+            },
+            "sendX509CertificateCredential": {
+              "type": "boolean"
+            },
+            "ssoZoneName": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "REQUEST"
+            },
+            "useSMCookie": {
+              "type": "boolean"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:SiteMinderAuthenticate"
+}

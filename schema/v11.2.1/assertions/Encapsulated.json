@@ -1,0 +1,54 @@
+{
+  "$comment": "Schema for Encapsulated assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "encapsulated": {
+      "type": "object",
+      "$id": "schema:Encapsulated",
+      "$ref": "schema:assertion",
+      "properties": {
+        "Encapsulated": {
+          "type": "object",
+          "properties": {
+            "encassGuid": {
+              "type": "string"
+            },
+            "encassName": {
+              "type": "string"
+            },
+            "parameters": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "encassName"
+          ],
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:Encapsulated"
+}

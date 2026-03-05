@@ -1,0 +1,139 @@
+{
+  "$comment": "Schema for XMPPStartTLS assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "xmlSecurityRecipientContext": {
+      "type": "object",
+      "$id": "schema:sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "messageTargetableSupport": {
+      "type": "object",
+      "$id": "schema:sub-types/messageTargetableSupport",
+      "properties": {
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "sourceUsedByGateway": {
+          "type": "boolean",
+          "default": true
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "RESPONSE"
+        },
+        "targetModifiedByGateway": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "xMPPStartTLS": {
+      "type": "object",
+      "$id": "schema:XMPPStartTLS",
+      "$ref": "schema:assertion",
+      "properties": {
+        "XMPPStartTLS": {
+          "type": "object",
+          "properties": {
+            "clientAuthType": {
+              "type": "string",
+              "enum": [
+                "NONE",
+                "OPTIONAL",
+                "REQUIRED"
+              ],
+              "default": "NONE"
+            },
+            "currentSecurityHeaderHandling": {
+              "type": "integer",
+              "default": 0
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "privateKeyId": {
+              "type": "string"
+            },
+            "provideClientCert": {
+              "type": "boolean",
+              "default": false
+            },
+            "recipientContext": {
+              "$ref": "schema:sub-types/xmlSecurityRecipientContext"
+            },
+            "requestTarget": {
+              "$ref": "schema:sub-types/messageTargetableSupport"
+            },
+            "sessionId": {
+              "type": "string"
+            },
+            "tLSSelectedVersion": {
+              "type": "string",
+              "enum": [
+                "TLSv1",
+                "TLSv1.1",
+                "TLSv1.2"
+              ],
+              "default": "TLSv1"
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "REQUEST"
+            },
+            "toServer": {
+              "type": "boolean",
+              "default": false
+            },
+            "xmlSecurityActorToPromote": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:XMPPStartTLS"
+}

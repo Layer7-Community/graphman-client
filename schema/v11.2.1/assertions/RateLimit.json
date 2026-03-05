@@ -1,0 +1,72 @@
+{
+  "$comment": "Schema for RateLimit assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "rateLimit": {
+      "type": "object",
+      "$id": "schema:RateLimit",
+      "$ref": "schema:assertion",
+      "properties": {
+        "RateLimit": {
+          "type": "object",
+          "properties": {
+            "counterName": {
+              "type": "string"
+            },
+            "blackoutPeriodInSeconds": {
+              "type": "string"
+            },
+            "hardLimit": {
+              "type": "boolean"
+            },
+            "logOnly": {
+              "type": "boolean"
+            },
+            "maxConcurrency": {
+              "type": "string"
+            },
+            "maxRequestsPerSecond": {
+              "type": "string"
+            },
+            "shapeRequests": {
+              "type": "boolean"
+            },
+            "splitConcurrencyLimitAcrossNodes": {
+              "type": "boolean"
+            },
+            "splitRateLimitAcrossNodes": {
+              "type": "boolean"
+            },
+            "windowSizeInSeconds": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:RateLimit"
+}

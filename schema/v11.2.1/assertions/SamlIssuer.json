@@ -1,0 +1,85 @@
+{
+  "$comment": "Schema for SamlIssuer assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "samlIssuer": {
+      "type": "object",
+      "$id": "schema:SamlIssuer",
+      "$ref": "schema:assertion",
+      "properties": {
+        "SamlIssuer": {
+          "type": "object",
+          "properties": {
+            "audienceRestriction": {
+              "type": "string"
+            },
+            "conditionNotBeforeSecondsInPast": {
+              "type": "integer",
+              "default": 120
+            },
+            "conditionNotOnOrAfterExpirySeconds": {
+              "type": "integer",
+              "default": 300
+            },
+            "nameQualifier": {
+              "type": "string"
+            },
+            "signAssertion": {
+              "type": "boolean",
+              "default": true
+            },
+            "subjectConfirmationDataAddress": {
+              "type": "string"
+            },
+            "subjectConfirmationDataInResponseTo": {
+              "type": "string"
+            },
+            "subjectConfirmationDataRecipient": {
+              "type": "string"
+            },
+            "subjectConfirmationMethodUri": {
+              "type": "string",
+              "enum": [
+                "urn:oasis:names:tc:SAML:2.0:cm:holder-of-key",
+                "urn:oasis:names:tc:SAML:2.0:cm:sender-vouches",
+                "urn:oasis:names:tc:SAML:2.0:cm:bearer"
+              ]
+            },
+            "version": {
+              "type": "integer",
+              "enum": [
+                1,
+                2
+              ],
+              "default": 2
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:SamlIssuer"
+}

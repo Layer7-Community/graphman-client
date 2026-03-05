@@ -1,0 +1,78 @@
+{
+  "$comment": "Schema for HardcodedResponse assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "xmlSecurityRecipientContext": {
+      "type": "object",
+      "$id": "schema:sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "hardcodedResponse": {
+      "type": "object",
+      "$id": "schema:HardcodedResponse",
+      "$ref": "schema:assertion",
+      "properties": {
+        "HardcodedResponse": {
+          "type": "object",
+          "properties": {
+            "body": {
+              "type": "string"
+            },
+            "contentType": {
+              "type": "string"
+            },
+            "currentSecurityHeaderHandling": {
+              "type": "integer",
+              "default": 0
+            },
+            "earlyResponse": {
+              "type": "boolean",
+              "default": false
+            },
+            "recipientContext": {
+              "$ref": "schema:sub-types/xmlSecurityRecipientContext"
+            },
+            "status": {
+              "type": "string"
+            },
+            "xmlSecurityActorToPromote": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:HardcodedResponse"
+}

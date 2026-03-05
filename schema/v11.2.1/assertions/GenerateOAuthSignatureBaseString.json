@@ -1,0 +1,108 @@
+{
+  "$comment": "Schema for GenerateOAuthSignatureBaseString assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "generateOAuthSignatureBaseString": {
+      "type": "object",
+      "$id": "schema:GenerateOAuthSignatureBaseString",
+      "$ref": "schema:assertion",
+      "properties": {
+        "GenerateOAuthSignatureBaseString": {
+          "type": "object",
+          "properties": {
+            "allowCustomOAuthQueryParams": {
+              "type": "boolean",
+              "default": false
+            },
+            "allowEmptyCallback": {
+              "type": "boolean",
+              "default": false
+            },
+            "authorizationHeader": {
+              "type": "string"
+            },
+            "httpMethod": {
+              "type": "string"
+            },
+            "oauthCallback": {
+              "type": "string"
+            },
+            "oauthConsumerKey": {
+              "type": "string"
+            },
+            "oauthSignatureMethod": {
+              "type": "string",
+              "enum": [
+                "HMAC-SHA1",
+                "RSA-SHA1",
+                "RSA-SHA256",
+                "RSA-SHA512",
+                "PLAINTEXT"
+              ],
+              "default": "HMAC-SHA1"
+            },
+            "oauthToken": {
+              "type": "string"
+            },
+            "oauthVerifier": {
+              "type": "string"
+            },
+            "queryString": {
+              "type": "string"
+            },
+            "requestUrl": {
+              "type": "string"
+            },
+            "usageMode": {
+              "type": "string",
+              "enum": [
+                "CLIENT",
+                "SERVER"
+              ],
+              "default": "CLIENT"
+            },
+            "useAuthorizationHeader": {
+              "type": "boolean",
+              "default": true
+            },
+            "useMessageTarget": {
+              "type": "boolean",
+              "default": true
+            },
+            "useOAuthVersion": {
+              "type": "boolean",
+              "default": true
+            },
+            "variablePrefix": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:GenerateOAuthSignatureBaseString"
+}

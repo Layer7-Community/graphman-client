@@ -1,0 +1,156 @@
+{
+  "$comment": "Schema for FaultLevel assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "sub-type-soapFaultLevel": {
+      "type": "object",
+      "$id": "schema:sub-types/soapFaultLevel",
+      "properties": {
+        "alwaysReturnSoapFault": {
+          "type": "boolean",
+          "default": false
+        },
+        "dynamicPrivateKeyVariable": {
+          "type": "string",
+          "default": ""
+        },
+        "extraHeaders": {
+          "type": "array",
+          "items": {
+            "$ref": "schema:sub-types/nameValuePair"
+          }
+        },
+        "faultTemplate": {
+          "type": "string"
+        },
+        "faultTemplateContentType": {
+          "type": "string"
+        },
+        "faultTemplateCustomContentType": {
+          "type": "string"
+        },
+        "faultTemplateHttpStatus": {
+          "type": "string"
+        },
+        "includePolicyDownloadURL": {
+          "type": "boolean",
+          "default": true
+        },
+        "keyAlias": {
+          "type": "string"
+        },
+        "level": {
+          "type": "integer",
+          "default": 2
+        },
+        "nonDefaultKeystoreId": {
+          "$ref": "schema:sub-types/goid"
+        },
+        "signSoapFault": {
+          "type": "boolean",
+          "default": false
+        },
+        "useClientFault": {
+          "type": "boolean",
+          "default": false
+        },
+        "usesDefaultKeyStore": {
+          "type": "boolean",
+          "default": true
+        },
+        "usesDynamicPrivateKey": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "goid": {
+      "type": "string",
+      "$id": "schema:sub-types/goid"
+    },
+    "nameValuePair": {
+      "type": "object",
+      "$id": "schema:sub-types/nameValuePair",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "faultLevel": {
+      "type": "object",
+      "$id": "schema:FaultLevel",
+      "$ref": "schema:assertion",
+      "properties": {
+        "FaultLevel": {
+          "type": "object",
+          "properties": {
+            "dynamicPrivateKeyVariable": {
+              "type": "string",
+              "default": ""
+            },
+            "keyAlias": {
+              "type": "string"
+            },
+            "levelInfo": {
+              "$ref": "schema:sub-types/soapFaultLevel"
+            },
+            "nonDefaultKeystoreId": {
+              "$ref": "schema:sub-types/goid"
+            },
+            "soap12": {
+              "type": "boolean",
+              "default": false
+            },
+            "usesDefaultKeyStore": {
+              "type": "boolean",
+              "default": true
+            },
+            "usesDynamicPrivateKey": {
+              "type": "boolean",
+              "default": false
+            },
+            "_enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "_leftComment": {
+              "type": "string"
+            },
+            "_rightComment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:FaultLevel"
+}

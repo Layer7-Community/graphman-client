@@ -1,0 +1,62 @@
+{
+  "$comment": "Schema for CircuitBreaker assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "circuitBreaker": {
+      "type": "object",
+      "$id": "schema:CircuitBreaker",
+      "$ref": "schema:assertion",
+      "properties": {
+        "CircuitBreaker": {
+          "type": "object",
+          "properties": {
+            "failureCountThreshold": {
+              "type": "integer",
+              "default": 5
+            },
+            "forceOpen": {
+              "type": "boolean",
+              "default": false
+            },
+            "maxActiveRequests": {
+              "type": "integer",
+              "default": 0
+            },
+            "recoveryPeriod": {
+              "type": "integer",
+              "default": 10000
+            },
+            "samplingWindow": {
+              "type": "integer",
+              "default": 60000
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:CircuitBreaker"
+}

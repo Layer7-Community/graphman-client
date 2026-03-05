@@ -1,0 +1,55 @@
+{
+  "$comment": "Schema for ItemLookupByIndex assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "itemLookupByIndex": {
+      "type": "object",
+      "$id": "schema:ItemLookupByIndex",
+      "$ref": "schema:assertion",
+      "properties": {
+        "ItemLookupByIndex": {
+          "type": "object",
+          "properties": {
+            "allowMultipleMatches": {
+              "type": "boolean",
+              "default": false
+            },
+            "indexValue": {
+              "type": "string"
+            },
+            "multivaluedVariableName": {
+              "type": "string"
+            },
+            "outputVariableName": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:ItemLookupByIndex"
+}

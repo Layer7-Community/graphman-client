@@ -1,0 +1,61 @@
+{
+  "$comment": "Schema for SamlpResponseBuilder assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "samlpResponseBuilder": {
+      "type": "object",
+      "$id": "schema:SamlpResponseBuilder",
+      "$ref": "schema:assertion",
+      "properties": {
+        "SamlpResponseBuilder": {
+          "type": "object",
+          "properties": {
+            "soapVersion": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2
+              ]
+            },
+            "targetMessageVariable": {
+              "type": "string"
+            },
+            "version": {
+              "type": "integer",
+              "enum": [
+                1,
+                2
+              ],
+              "default": 2
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:SamlpResponseBuilder"
+}

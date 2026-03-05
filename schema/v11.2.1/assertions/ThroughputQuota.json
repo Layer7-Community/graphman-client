@@ -1,0 +1,84 @@
+{
+  "$comment": "Schema for ThroughputQuota assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "throughputQuota": {
+      "type": "object",
+      "$id": "schema:ThroughputQuota",
+      "$ref": "schema:assertion",
+      "properties": {
+        "ThroughputQuota": {
+          "type": "object",
+          "properties": {
+            "byValue": {
+              "type": "string"
+            },
+            "counterName": {
+              "type": "string"
+            },
+            "counterStrategy": {
+              "type": "integer",
+              "default": 2,
+              "enum": [
+                1,
+                2,
+                3,
+                4
+              ]
+            },
+            "global": {
+              "type": "boolean",
+              "default": false
+            },
+            "logOnly": {
+              "type": "boolean",
+              "default": false
+            },
+            "quota": {
+              "type": "string"
+            },
+            "readSynchronous": {
+              "type": "boolean",
+              "default": false
+            },
+            "synchronous": {
+              "type": "boolean",
+              "default": false
+            },
+            "timeUnit": {
+              "type": "string"
+            },
+            "variablePrefix": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:ThroughputQuota"
+}

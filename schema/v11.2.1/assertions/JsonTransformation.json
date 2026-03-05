@@ -1,0 +1,115 @@
+{
+  "$comment": "Schema for JsonTransformation assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "messageTargetableSupport": {
+      "type": "object",
+      "$id": "schema:sub-types/messageTargetableSupport",
+      "properties": {
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "sourceUsedByGateway": {
+          "type": "boolean",
+          "default": true
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "RESPONSE"
+        },
+        "targetModifiedByGateway": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "jsonTransformation": {
+      "type": "object",
+      "$id": "schema:JsonTransformation",
+      "$ref": "schema:assertion",
+      "properties": {
+        "JsonTransformation": {
+          "type": "object",
+          "properties": {
+            "arrayForm": {
+              "type": "boolean",
+              "default": false
+            },
+            "convention": {
+              "type": "string",
+              "enum": [
+                "STANDARD",
+                "JSONML"
+              ],
+              "default": "STANDARD"
+            },
+            "destinationMessageTarget": {
+              "$ref": "schema:sub-types/messageTargetableSupport"
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "prettyPrint": {
+              "type": "boolean",
+              "default": false
+            },
+            "rootTagString": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "RESPONSE"
+            },
+            "transformation": {
+              "type": "string",
+              "enum": [
+                "XML_to_JSON",
+                "JSON_to_XML"
+              ],
+              "default": "XML_to_JSON"
+            },
+            "useNumbersWhenPossible": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:JsonTransformation"
+}

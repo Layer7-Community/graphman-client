@@ -1,0 +1,233 @@
+{
+  "$comment": "Schema for JmsRouting assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "goid": {
+      "type": "string",
+      "$id": "schema:sub-types/goid"
+    },
+    "jmsDynamicProperties": {
+      "type": "object",
+      "$id": "schema:sub-types/jmsDynamicProperties",
+      "properties": {
+        "destPassword": {
+          "type": "string"
+        },
+        "destQName": {
+          "type": "string"
+        },
+        "destUserName": {
+          "type": "string"
+        },
+        "icfName": {
+          "type": "string"
+        },
+        "jndiPassword": {
+          "type": "string"
+        },
+        "jndiUrl": {
+          "type": "string"
+        },
+        "jndiUserName": {
+          "type": "string"
+        },
+        "qcfName": {
+          "type": "string"
+        },
+        "replytoQName": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "xmlSecurityRecipientContext": {
+      "type": "object",
+      "$id": "schema:sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "jmsMessagePropertyRuleSet": {
+      "type": "object",
+      "$id": "schema:sub-types/jmsMessagePropertyRuleSet",
+      "properties": {
+        "passThruAll": {
+          "type": "boolean",
+          "default": true
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "schema:sub-types/jmsMessagePropertyRule"
+          }
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "messageTargetableSupport": {
+      "type": "object",
+      "$id": "schema:sub-types/messageTargetableSupport",
+      "properties": {
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "sourceUsedByGateway": {
+          "type": "boolean",
+          "default": true
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "RESPONSE"
+        },
+        "targetModifiedByGateway": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "jmsMessagePropertyRule": {
+      "type": "object",
+      "$id": "schema:sub-types/jmsMessagePropertyRule",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "customPattern": {
+          "type": "string"
+        },
+        "passThru": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "jmsRouting": {
+      "type": "object",
+      "$id": "schema:JmsRouting",
+      "$ref": "schema:assertion",
+      "properties": {
+        "JmsRouting": {
+          "type": "object",
+          "properties": {
+            "endpointName": {
+              "type": "string"
+            },
+            "endpointOid": {
+              "$ref": "schema:sub-types/goid"
+            },
+            "attachSamlSenderVouches": {
+              "type": "boolean",
+              "default": false
+            },
+            "currentSecurityHeaderHandling": {
+              "type": "integer",
+              "default": 0,
+              "enum": [
+                3,
+                1,
+                0
+              ]
+            },
+            "dynamicJmsRoutingProperties": {
+              "$ref": "schema:sub-types/jmsDynamicProperties"
+            },
+            "recipientContext": {
+              "$ref": "schema:sub-types/xmlSecurityRecipientContext"
+            },
+            "requestDeliveryMode": {
+              "type": "string",
+              "enum": [
+                "PERSISTENT",
+                "NON_PERSISTENT"
+              ],
+              "default": "PERSISTENT"
+            },
+            "requestJmsMessagePropertyRuleSet": {
+              "$ref": "schema:sub-types/jmsMessagePropertyRuleSet"
+            },
+            "requestPriority": {
+              "type": "string"
+            },
+            "requestTarget": {
+              "$ref": "schema:sub-types/messageTargetableSupport"
+            },
+            "requestTimeToLive": {
+              "type": "string"
+            },
+            "responseJmsMessagePropertyRuleSet": {
+              "$ref": "schema:sub-types/jmsMessagePropertyRuleSet"
+            },
+            "responseSize": {
+              "type": "string"
+            },
+            "responseTarget": {
+              "$ref": "schema:sub-types/messageTargetableSupport"
+            },
+            "responseTimeout": {
+              "type": "string"
+            },
+            "samlAssertionExpiry": {
+              "type": "integer"
+            },
+            "samlAssertionVersion": {
+              "type": "string",
+              "enum": [
+                "1.1",
+                "2.0"
+              ],
+              "default": "2.0"
+            },
+            "useThumbprintInSamlSignature": {
+              "type": "boolean",
+              "default": false
+            },
+            "useThumbprintInSamlSubject": {
+              "type": "boolean",
+              "default": false
+            },
+            "xmlSecurityActorToPromote": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:JmsRouting"
+}

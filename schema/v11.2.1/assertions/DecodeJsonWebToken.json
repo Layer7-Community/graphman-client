@@ -1,0 +1,101 @@
+{
+  "$comment": "Schema for DecodeJsonWebToken assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "decodeJsonWebToken": {
+      "type": "object",
+      "$id": "schema:DecodeJsonWebToken",
+      "$ref": "schema:assertion",
+      "properties": {
+        "DecodeJsonWebToken": {
+          "type": "object",
+          "properties": {
+            "base64Encoded": {
+              "type": "boolean",
+              "default": false
+            },
+            "detachedJwsContent": {
+              "type": "string"
+            },
+            "dynamicPrivateKeyVariable": {
+              "type": "string"
+            },
+            "failUnverifiedSignature": {
+              "type": "boolean",
+              "default": true
+            },
+            "keyAlias": {
+              "type": "string"
+            },
+            "keyGoid": {
+              "type": "string"
+            },
+            "keyId": {
+              "type": "string"
+            },
+            "keyType": {
+              "type": "string",
+              "enum": [
+                "CERT",
+                "JSON_WEB_KEY",
+                "JSON_WEB_KEY_SET"
+              ],
+              "default": "CERT"
+            },
+            "privateKeyFromList": {
+              "type": "boolean",
+              "default": false
+            },
+            "privateKeySource": {
+              "type": "string"
+            },
+            "signatureSecret": {
+              "type": "string"
+            },
+            "sourcePayload": {
+              "type": "string"
+            },
+            "targetVariablePrefix": {
+              "type": "string"
+            },
+            "validationType": {
+              "type": "string",
+              "enum": [
+                "NONE",
+                "SECRET",
+                "RECIPIENT_LIST",
+                "RECIPIENT_ALIAS_VARIABLE",
+                "RECIPIENT_VARIABLE"
+              ],
+              "default": "NONE"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:DecodeJsonWebToken"
+}

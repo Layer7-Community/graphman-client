@@ -1,0 +1,229 @@
+{
+  "$comment": "Schema for SamlProtocol assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "samlAttributeStatement": {
+      "type": "object",
+      "$id": "schema:sub-types/samlAttributeStatement",
+      "properties": {
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "schema:sub-types/samlAttributeStatement$Attribute"
+          }
+        },
+        "failIfAnyAttributeIsMissing": {
+          "type": "boolean",
+          "default": false
+        },
+        "failIfAttributeValueExcludesAttribute": {
+          "type": "boolean",
+          "default": false
+        },
+        "failIfNoAttributesAdded": {
+          "type": "boolean",
+          "default": true
+        },
+        "failIfUnknownAttributeInFilter": {
+          "type": "boolean",
+          "default": false
+        },
+        "filterExpression": {
+          "type": "string",
+          "default": ""
+        },
+        "variablePrefix": {
+          "type": "string",
+          "default": "attrStatement"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "samlAuthenticationStatement": {
+      "type": "object",
+      "$id": "schema:sub-types/samlAuthenticationStatement",
+      "properties": {
+        "authenticationMethods": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "customAuthenticationMethods": {
+          "type": "string",
+          "default": ""
+        },
+        "includeAuthenticationContextDeclaration": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "sub-type-SamlProtocol:samlpAuthorizationInfo": {
+      "type": "object",
+      "$id": "schema:SamlProtocol:samlpAuthorizationInfo",
+      "properties": {
+        "actions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "resource": {
+          "type": "string"
+        }
+      }
+    },
+    "samlAttributeStatement$Attribute": {
+      "type": "object",
+      "$id": "schema:sub-types/samlAttributeStatement$Attribute",
+      "properties": {
+        "addBehavior": {
+          "type": "string",
+          "enum": [
+            "STRING_CONVERT",
+            "ADD_AS_XML"
+          ],
+          "default": "STRING_CONVERT"
+        },
+        "anyValue": {
+          "type": "boolean",
+          "default": false
+        },
+        "emptyBehavior": {
+          "type": "string",
+          "enum": [
+            "EMPTY_STRING",
+            "EXISTS_NO_VALUE",
+            "NULL_VALUE"
+          ],
+          "default": "EMPTY_STRING"
+        },
+        "friendlyName": {
+          "type": "string"
+        },
+        "missingWhenEmpty": {
+          "type": "boolean",
+          "default": false
+        },
+        "name": {
+          "type": "string"
+        },
+        "nameFormat": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "repeatIfMulti": {
+          "type": "boolean",
+          "default": false
+        },
+        "value": {
+          "type": "string"
+        },
+        "valueComparison": {
+          "type": "string",
+          "enum": [
+            "STRING_COMPARE",
+            "CANONICALIZE"
+          ],
+          "default": "STRING_COMPARE"
+        },
+        "variableNotFoundBehavior": {
+          "type": "string",
+          "enum": [
+            "REPLACE_EMPTY_STRING",
+            "REPLACE_EXPRESSION_EMPTY_STRING"
+          ],
+          "default": "REPLACE_EMPTY_STRING"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "samlProtocol": {
+      "type": "object",
+      "$id": "schema:SamlProtocol",
+      "$ref": "schema:assertion",
+      "properties": {
+        "SamlProtocol": {
+          "type": "object",
+          "properties": {
+            "attributeStatement": {
+              "$ref": "schema:sub-types/samlAttributeStatement"
+            },
+            "audienceRestriction": {
+              "type": "string"
+            },
+            "authenticationStatement": {
+              "$ref": "schema:sub-types/samlAuthenticationStatement"
+            },
+            "authorizationStatement": {
+              "$ref": "schema:SamlProtocol:samlpAuthorizationInfo"
+            },
+            "nameQualifier": {
+              "type": "string"
+            },
+            "noSubjectConfirmation": {
+              "type": "boolean",
+              "default": false
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "soapVersion": {
+              "type": "integer"
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "REQUEST"
+            },
+            "version": {
+              "type": "integer"
+            },
+            "_enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "_leftComment": {
+              "type": "string"
+            },
+            "_rightComment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:SamlProtocol"
+}

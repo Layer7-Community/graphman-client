@@ -1,0 +1,166 @@
+{
+  "$comment": "Schema for WssEncryptElement assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "identityTarget": {
+      "type": "object",
+      "$id": "schema:sub-types/identityTarget",
+      "properties": {
+        "identityId": {
+          "type": "string"
+        },
+        "identityInfo": {
+          "type": "string"
+        },
+        "identityProviderOid": {
+          "$ref": "schema:sub-types/goid"
+        },
+        "targetIdentityType": {
+          "type": "string",
+          "enum": [
+            "USER",
+            "GROUP",
+            "PROVIDER",
+            "TAG"
+          ]
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "xmlSecurityRecipientContext": {
+      "type": "object",
+      "$id": "schema:sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "xpathExpression": {
+      "type": "object",
+      "$id": "schema:sub-types/xpathExpression",
+      "properties": {
+        "expression": {
+          "type": "string"
+        },
+        "namespaces": {
+          "type": "object"
+        },
+        "xpathVersion": {
+          "type": "string",
+          "enum": [
+            "UNSPECIFIED",
+            "XPATH_1_0",
+            "XPATH_2_0"
+          ],
+          "default": "UNSPECIFIED"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "goid": {
+      "type": "string",
+      "$id": "schema:sub-types/goid"
+    },
+    "wssEncryptElement": {
+      "type": "object",
+      "$id": "schema:WssEncryptElement",
+      "$ref": "schema:assertion",
+      "properties": {
+        "WssEncryptElement": {
+          "type": "object",
+          "properties": {
+            "encryptContentsOnly": {
+              "type": "boolean",
+              "default": true
+            },
+            "identityTarget": {
+              "$ref": "schema:sub-types/identityTarget"
+            },
+            "keyEncryptionAlgorithm": {
+              "type": "string"
+            },
+            "keyReference": {
+              "type": "string",
+              "enum": [
+                "BinarySecurityToken",
+                "SubjectKeyIdentifier",
+                "IssuerSerial",
+                "KeyName"
+              ],
+              "default": "SubjectKeyIdentifier"
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "recipientContext": {
+              "$ref": "schema:sub-types/xmlSecurityRecipientContext"
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "RESPONSE"
+            },
+            "xEncAlgorithm": {
+              "type": "string",
+              "enum": [
+                "http://www.w3.org/2001/04/xmlenc#aes128-cbc",
+                "http://www.w3.org/2001/04/xmlenc#aes192-cbc",
+                "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+                "http://www.w3.org/2001/04/xmlenc#tripledes-cbc",
+                "http://www.w3.org/2009/xmlenc11#aes128-gcm",
+                "http://www.w3.org/2009/xmlenc11#aes256-gcm"
+              ],
+              "default": "http://www.w3.org/2001/04/xmlenc#aes128-cbc"
+            },
+            "xpathExpression": {
+              "$ref": "schema:sub-types/xpathExpression"
+            },
+            ".enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:WssEncryptElement"
+}

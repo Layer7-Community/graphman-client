@@ -1,0 +1,135 @@
+{
+  "$comment": "Schema for BulkJdbcInsert assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "BulkJdbcInsert:columnMapper": {
+      "type": "object",
+      "$id": "schema:BulkJdbcInsert:columnMapper",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "order": {
+          "type": "integer",
+          "default": 0
+        },
+        "transformation": {
+          "type": "string",
+          "enum": [
+            "Add",
+            "ConstantInt",
+            "ConstantString",
+            "Regex2Bool",
+            "Regex2Int",
+            "String",
+            "Subtract",
+            "UUID"
+          ],
+          "default": "Add"
+        },
+        "transformParam": {
+          "type": "string",
+          "title": "Parameter"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "bulkJdbcInsert": {
+      "type": "object",
+      "$id": "schema:BulkJdbcInsert",
+      "$ref": "schema:assertion",
+      "properties": {
+        "BulkJdbcInsert": {
+          "type": "object",
+          "properties": {
+            "batchSize": {
+              "type": "integer",
+              "default": 100
+            },
+            "columnMapperList": {
+              "type": "array",
+              "items": {
+                "$ref": "schema:BulkJdbcInsert:columnMapper"
+              }
+            },
+            "compression": {
+              "type": "string",
+              "enum": [
+                "NONE",
+                "GZIP",
+                "DEFLATE"
+              ],
+              "default": "GZIP"
+            },
+            "connectionName": {
+              "type": "string"
+            },
+            "escapeQuote": {
+              "type": "string"
+            },
+            "fieldDelimiter": {
+              "type": "string"
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "quoteChar": {
+              "type": "string"
+            },
+            "quoted": {
+              "type": "boolean"
+            },
+            "recordDelimiter": {
+              "type": "string",
+              "enum": [
+                "CRLF",
+                "LF",
+                "CR"
+              ],
+              "default": "CRLF"
+            },
+            "schema": {
+              "type": "string"
+            },
+            "tableName": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "REQUEST"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:BulkJdbcInsert"
+}

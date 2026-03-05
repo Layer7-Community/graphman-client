@@ -1,0 +1,65 @@
+{
+  "$comment": "Schema for HttpFormPost assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "httpFormPost$FieldInfo": {
+      "type": "object",
+      "$id": "schema:sub-types/httpFormPost$FieldInfo",
+      "properties": {
+        "contentType": {
+          "type": "string"
+        },
+        "fieldname": {
+          "type": "string"
+        },
+        "displayField": {
+          "type": "string",
+          "title": "HTTP Form Fields"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "httpFormPost": {
+      "type": "object",
+      "$id": "schema:HttpFormPost",
+      "$ref": "schema:assertion",
+      "properties": {
+        "HttpFormPost": {
+          "type": "object",
+          "properties": {
+            "fieldInfos": {
+              "type": "array",
+              "items": {
+                "$ref": "schema:sub-types/httpFormPost$FieldInfo"
+              }
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:HttpFormPost"
+}

@@ -1,0 +1,96 @@
+{
+  "$comment": "Schema for SshRouteAssertion assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "sshRouteAssertion": {
+      "type": "object",
+      "$id": "schema:SshRouteAssertion",
+      "$ref": "schema:assertion",
+      "properties": {
+        "SshRouteAssertion": {
+          "type": "object",
+          "properties": {
+            "commandType": {
+              "type": "string",
+              "enum": [
+                "PUT",
+                "GET",
+                "LIST",
+                "STAT",
+                "DELETE",
+                "MOVE",
+                "MKDIR",
+                "RMDIR",
+                "COMMAND"
+              ]
+            },
+            "directory": {
+              "type": "string"
+            },
+            "fileName": {
+              "type": "string"
+            },
+            "host": {
+              "type": "string"
+            },
+            "newFileName": {
+              "type": "string"
+            },
+            "passwordAuthentication": {
+              "type": "boolean",
+              "default": false
+            },
+            "passwordGoid": {
+              "type": "string"
+            },
+            "port": {
+              "type": "string",
+              "default": "22"
+            },
+            "responseTarget": {
+              "type": "string"
+            },
+            "sftpSecure": {
+              "type": "boolean",
+              "default": true
+            },
+            "timeout": {
+              "type": "string"
+            },
+            "username": {
+              "type": "string"
+            },
+            "usePrivateKey": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:SshRouteAssertion"
+}

@@ -1,0 +1,88 @@
+{
+  "$comment": "Schema for SetVariable assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "setVariable": {
+      "type": "object",
+      "$id": "schema:SetVariable",
+      "$ref": "schema:assertion",
+      "properties": {
+        "SetVariable": {
+          "type": "object",
+          "properties": {
+            "contentType": {
+              "type": "string"
+            },
+            "dataType": {
+              "type": "string",
+              "enum": [
+                "string",
+                "message",
+                "dateTime",
+                "int"
+              ]
+            },
+            "dateFormat": {
+              "type": "string"
+            },
+            "dateOffsetExpression": {
+              "type": "string"
+            },
+            "dateOffsetField": {
+              "type": "integer",
+              "default": 13,
+              "enum": [
+                14,
+                13,
+                12,
+                11,
+                5,
+                3,
+                2
+              ]
+            },
+            "expression": {
+              "type": "string"
+            },
+            "lineBreak": {
+              "type": "string",
+              "enum": [
+                "CR-LF",
+                "LF",
+                "CR"
+              ],
+              "default": "CR-LF"
+            },
+            "variable": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:SetVariable"
+}

@@ -1,0 +1,57 @@
+{
+  "$comment": "Schema for InverseHttpFormPost assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "inverseHttpFormPost": {
+      "type": "object",
+      "$id": "schema:InverseHttpFormPost",
+      "$ref": "schema:assertion",
+      "properties": {
+        "InverseHttpFormPost": {
+          "type": "object",
+          "properties": {
+            "fieldNames": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "displayField": {
+                    "type": "string",
+                    "title": "HTTP Form Fields Names"
+                  },
+                  "__mime": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:InverseHttpFormPost"
+}

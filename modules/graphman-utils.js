@@ -106,6 +106,14 @@ module.exports = {
       return this.path(this.schemaDir(schemaVersion), POLICY_SCHEMA_FILE)
     },
 
+    policyAssertionsDir: function (schemaVersion) {
+        return this.path(this.schemaDir(schemaVersion), "assertions");
+    },
+
+    policyAssertionSchemaFile: function (schemaVersion, assertionName) {
+        return this.path(this.policyAssertionsDir(schemaVersion), assertionName + ".json");
+    },
+
     queriesDir: function (workspace) {
         return workspace ? this.path(workspace, "queries") : QUERIES_DIR;
     },

@@ -1,0 +1,74 @@
+{
+  "$comment": "Schema for XslTransformation assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "staticResourceInfo": {
+      "type": "object",
+      "$id": "schema:sub-types/staticResourceInfo",
+      "properties": {
+        "document": {
+          "type": "string"
+        },
+        "originalUrl": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "xslTransformation": {
+      "type": "object",
+      "$id": "schema:XslTransformation",
+      "$ref": "schema:assertion",
+      "properties": {
+        "XslTransformation": {
+          "type": "object",
+          "properties": {
+            "direction": {
+              "type": "integer",
+              "enum": [
+                1,
+                2,
+                3
+              ],
+              "default": 1
+            },
+            "msgVarPrefix": {
+              "type": "string"
+            },
+            "resourceInfo": {
+              "$ref": "schema:sub-types/staticResourceInfo"
+            },
+            "whichMimePart": {
+              "type": "integer",
+              "default": 0
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:XslTransformation"
+}

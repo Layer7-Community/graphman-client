@@ -1,0 +1,102 @@
+{
+  "$comment": "Schema for MTOMValidateAssertion assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "MTOMValidateAssertion:MTOMValidationRule": {
+      "type": "object",
+      "$id": "schema:MTOMValidateAssertion:MTOMValidationRule",
+      "properties": {
+        "count": {
+          "type": "integer"
+        },
+        "size": {
+          "type": "number"
+        },
+        "xpathExpression": {
+          "$ref": "schema:sub-types/xpathExpression"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "xpathExpression": {
+      "type": "object",
+      "$id": "schema:sub-types/xpathExpression",
+      "properties": {
+        "expression": {
+          "type": "string"
+        },
+        "namespaces": {
+          "type": "object"
+        },
+        "xpathVersion": {
+          "type": "string",
+          "enum": [
+            "UNSPECIFIED",
+            "XPATH_1_0",
+            "XPATH_2_0"
+          ],
+          "default": "UNSPECIFIED"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "mTOMValidateAssertion": {
+      "type": "object",
+      "$id": "schema:MTOMValidateAssertion",
+      "$ref": "schema:assertion",
+      "properties": {
+        "MTOMValidateAssertion": {
+          "type": "object",
+          "properties": {
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "requireEncoded": {
+              "type": "boolean",
+              "default": true
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "REQUEST"
+            },
+            "validationRules": {
+              "type": "array",
+              "items": {
+                "$ref": "schema:MTOMValidateAssertion:MTOMValidationRule"
+              }
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:MTOMValidateAssertion"
+}

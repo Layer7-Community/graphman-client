@@ -1,0 +1,66 @@
+{
+  "$comment": "Schema for WsiBsp assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "wsiBsp": {
+      "type": "object",
+      "$id": "schema:WsiBsp",
+      "$ref": "schema:assertion",
+      "properties": {
+        "WsiBsp": {
+          "type": "object",
+          "properties": {
+            "auditRequestNonCompliance": {
+              "type": "boolean",
+              "default": true
+            },
+            "auditResponseNonCompliance": {
+              "type": "boolean",
+              "default": true
+            },
+            "checkRequestMessages": {
+              "type": "boolean",
+              "default": true
+            },
+            "checkResponseMessages": {
+              "type": "boolean",
+              "default": false
+            },
+            "failOnNonCompliantRequest": {
+              "type": "boolean",
+              "default": false
+            },
+            "failOnNonCompliantResponse": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:WsiBsp"
+}

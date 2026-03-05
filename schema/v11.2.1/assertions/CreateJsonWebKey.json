@@ -1,0 +1,69 @@
+{
+  "$comment": "Schema for CreateJsonWebKey assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "createJsonWebKey": {
+      "type": "object",
+      "$id": "schema:CreateJsonWebKey",
+      "$ref": "schema:assertion",
+      "properties": {
+        "CreateJsonWebKey": {
+          "type": "object",
+          "properties": {
+            "keys": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "keyId": {
+                    "type": "string",
+                    "title": "Key ID"
+                  },
+                  "publicKeyUse": {
+                    "type": "string",
+                    "default": "Encryption",
+                    "title": "Usage",
+                    "enum": [
+                      "Encryption",
+                      "Signature"
+                    ]
+                  },
+                  "sourceKeyAlias": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "targetVariable": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:CreateJsonWebKey"
+}

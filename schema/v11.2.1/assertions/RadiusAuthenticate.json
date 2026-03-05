@@ -1,0 +1,93 @@
+{
+  "$comment": "Schema for RadiusAuthenticate assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "goid": {
+      "type": "string",
+      "$id": "schema:sub-types/goid"
+    },
+    "radiusAuthenticate": {
+      "type": "object",
+      "$id": "schema:RadiusAuthenticate",
+      "$ref": "schema:assertion",
+      "properties": {
+        "RadiusAuthenticate": {
+          "type": "object",
+          "properties": {
+            "acctPort": {
+              "type": "string"
+            },
+            "authPort": {
+              "type": "string"
+            },
+            "authenticator": {
+              "type": "string"
+            },
+            "host": {
+              "type": "string"
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "prefix": {
+              "type": "string"
+            },
+            "secretGoid": {
+              "$ref": "schema:sub-types/goid"
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "REQUEST"
+            },
+            "timeout": {
+              "type": "string"
+            },
+            "attributes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:RadiusAuthenticate"
+}

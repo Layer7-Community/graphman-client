@@ -1,0 +1,76 @@
+{
+  "$comment": "Schema for Audit assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "audit": {
+      "type": "object",
+      "$id": "schema:Audit",
+      "$ref": "schema:assertion",
+      "properties": {
+        "Audit": {
+          "type": "object",
+          "properties": {
+            "changeSaveRequest": {
+              "type": "boolean",
+              "default": true
+            },
+            "changeSaveResponse": {
+              "type": "boolean",
+              "default": true
+            },
+            "level": {
+              "type": "string",
+              "default": "WARNING",
+              "enum": [
+                "WARNING",
+                "INFO"
+              ]
+            },
+            "saveRequest": {
+              "type": "boolean",
+              "default": false,
+              "enum": [
+                true,
+                false,
+                "noChange"
+              ]
+            },
+            "saveResponse": {
+              "type": "boolean",
+              "default": false,
+              "enum": [
+                true,
+                false,
+                "noChange"
+              ]
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:Audit"
+}

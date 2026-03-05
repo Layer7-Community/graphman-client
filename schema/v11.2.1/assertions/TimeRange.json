@@ -1,0 +1,61 @@
+{
+  "$comment": "Schema for TimeRange assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "timeRange": {
+      "type": "object",
+      "$id": "schema:TimeRange",
+      "$ref": "schema:assertion",
+      "properties": {
+        "TimeRange": {
+          "type": "object",
+          "properties": {
+            "startTime": {
+              "type": "string"
+            },
+            "endTime": {
+              "type": "string"
+            },
+            "timeZone": {
+              "type": "string"
+            },
+            "daysOfWeek": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "timeOfDayRange": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:TimeRange"
+}

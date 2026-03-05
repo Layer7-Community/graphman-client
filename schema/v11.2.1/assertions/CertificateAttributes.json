@@ -1,0 +1,57 @@
+{
+  "$comment": "Schema for CertificateAttributes assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "certificateAttributes": {
+      "type": "object",
+      "$id": "schema:CertificateAttributes",
+      "$ref": "schema:assertion",
+      "properties": {
+        "CertificateAttributes": {
+          "type": "object",
+          "properties": {
+            "extensionOids": {
+              "type": "string"
+            },
+            "extensionOidsEnabled": {
+              "type": "boolean"
+            },
+            "sourceVariable": {
+              "type": "string"
+            },
+            "sourceVariableEnabled": {
+              "type": "boolean"
+            },
+            "variablePrefix": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:CertificateAttributes"
+}

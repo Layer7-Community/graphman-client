@@ -1,0 +1,42 @@
+{
+  "$comment": "Schema for OneOrMore assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "oneOrMore": {
+      "type": "object",
+      "$id": "schema:OneOrMore",
+      "$ref": "schema:assertion",
+      "properties": {
+        "OneOrMore": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:OneOrMore"
+}

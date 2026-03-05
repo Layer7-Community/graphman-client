@@ -1,0 +1,136 @@
+{
+  "$comment": "Schema for KafkaRouting assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "goid": {
+      "type": "string",
+      "$id": "schema:sub-types/goid"
+    },
+    "xmlSecurityRecipientContext": {
+      "type": "object",
+      "$id": "schema:sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "messageTargetableSupport": {
+      "type": "object",
+      "$id": "schema:sub-types/messageTargetableSupport",
+      "properties": {
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "sourceUsedByGateway": {
+          "type": "boolean",
+          "default": true
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "RESPONSE"
+        },
+        "targetModifiedByGateway": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "kafkaRouting": {
+      "type": "object",
+      "$id": "schema:KafkaRouting",
+      "$ref": "schema:assertion",
+      "properties": {
+        "KafkaRouting": {
+          "type": "object",
+          "properties": {
+            "ackTimeout": {
+              "type": "string"
+            },
+            "clientConfigGoid": {
+              "$ref": "schema:sub-types/goid",
+              "enum": [
+                ""
+              ]
+            },
+            "clientConfigName": {
+              "type": "string"
+            },
+            "currentSecurityHeaderHandling": {
+              "type": "integer",
+              "default": 0,
+              "enum": [
+                3,
+                1,
+                0
+              ]
+            },
+            "key": {
+              "type": "string"
+            },
+            "partition": {
+              "type": "string"
+            },
+            "passthroughHeaders": {
+              "type": "boolean",
+              "default": false
+            },
+            "prefix": {
+              "type": "string"
+            },
+            "recipientContext": {
+              "$ref": "schema:sub-types/xmlSecurityRecipientContext"
+            },
+            "requestTarget": {
+              "$ref": "schema:sub-types/messageTargetableSupport"
+            },
+            "topic": {
+              "type": "string"
+            },
+            "waitForAck": {
+              "type": "boolean",
+              "default": true
+            },
+            "xmlSecurityActorToPromote": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:KafkaRouting"
+}

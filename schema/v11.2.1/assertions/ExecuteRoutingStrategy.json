@@ -1,0 +1,51 @@
+{
+  "$comment": "Schema for ExecuteRoutingStrategy assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "executeRoutingStrategy": {
+      "type": "object",
+      "$id": "schema:ExecuteRoutingStrategy",
+      "$ref": "schema:assertion",
+      "properties": {
+        "ExecuteRoutingStrategy": {
+          "type": "object",
+          "properties": {
+            "feedback": {
+              "type": "string"
+            },
+            "route": {
+              "type": "string"
+            },
+            "strategy": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:ExecuteRoutingStrategy"
+}

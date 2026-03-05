@@ -1,0 +1,68 @@
+{
+  "$comment": "Schema for JSONSchema assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "assertionResourceInfo": {
+      "type": "object",
+      "$id": "schema:sub-types/assertionResourceInfo"
+    },
+    "jSONSchema": {
+      "type": "object",
+      "$id": "schema:JSONSchema",
+      "$ref": "schema:assertion",
+      "properties": {
+        "JSONSchema": {
+          "type": "object",
+          "properties": {
+            "jsonSchemaVersion": {
+              "type": "string",
+              "enum": [
+                "DRAFT_V4"
+              ],
+              "default": "DRAFT_V4"
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "resourceInfo": {
+              "$ref": "schema:sub-types/assertionResourceInfo"
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "REQUEST"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:JSONSchema"
+}

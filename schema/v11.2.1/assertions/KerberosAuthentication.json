@@ -1,0 +1,95 @@
+{
+  "$comment": "Schema for KerberosAuthentication assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "goid": {
+      "type": "string",
+      "$id": "schema:sub-types/goid"
+    },
+    "kerberosAuthentication": {
+      "type": "object",
+      "$id": "schema:KerberosAuthentication",
+      "$ref": "schema:assertion",
+      "properties": {
+        "KerberosAuthentication": {
+          "type": "object",
+          "properties": {
+            "authenticatedUser": {
+              "type": "string"
+            },
+            "krbConfiguredAccount": {
+              "type": "string"
+            },
+            "krbDelegatedAuthentication": {
+              "type": "boolean",
+              "default": true
+            },
+            "krbSecurePasswordReference": {
+              "$ref": "schema:sub-types/goid"
+            },
+            "krbUseGatewayKeytab": {
+              "type": "integer",
+              "default": 1,
+              "enum": [
+                1,
+                2
+              ]
+            },
+            "lastAuthenticatedUser": {
+              "type": "integer",
+              "default": 1,
+              "enum": [
+                1,
+                2
+              ]
+            },
+            "realm": {
+              "type": "string"
+            },
+            "s4U2Proxy": {
+              "type": "boolean",
+              "default": false
+            },
+            "s4U2Self": {
+              "default": "1",
+              "enum": [
+                "1",
+                "2"
+              ]
+            },
+            "servicePrincipalName": {
+              "type": "string"
+            },
+            "userRealm": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:KerberosAuthentication"
+}

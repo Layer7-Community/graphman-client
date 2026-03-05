@@ -1,0 +1,74 @@
+{
+  "$comment": "Schema for GatewayGraphQL assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "gatewayGraphQL": {
+      "type": "object",
+      "$id": "schema:GatewayGraphQL",
+      "$ref": "schema:assertion",
+      "properties": {
+        "GatewayGraphQL": {
+          "type": "object",
+          "properties": {
+            "authzOption": {
+              "type": "string",
+              "enum": [
+                "ADMINISTRATORS",
+                "ALL_USERS"
+              ],
+              "default": "ADMINISTRATORS"
+            },
+            "encPass": {
+              "type": "string"
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "query": {
+              "type": "string"
+            },
+            "queryOptions": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "REQUEST"
+            },
+            "variables": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:GatewayGraphQL"
+}

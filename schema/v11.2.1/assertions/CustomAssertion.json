@@ -1,0 +1,59 @@
+{
+  "$comment": "Schema for CustomAssertion assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "sub-type-customAssertion": {
+      "type": "object",
+      "$id": "schema:sub-types/customAssertion"
+    },
+    "customAssertion": {
+      "type": "object",
+      "$id": "schema:CustomAssertion",
+      "$ref": "schema:assertion",
+      "properties": {
+        "CustomAssertion": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "schema:sub-types/customAssertion"
+            },
+            "_enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "_leftComment": {
+              "type": "string"
+            },
+            "_rightComment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:CustomAssertion"
+}

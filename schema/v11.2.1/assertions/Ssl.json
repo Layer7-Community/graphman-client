@@ -1,0 +1,59 @@
+{
+  "$comment": "Schema for Ssl assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "ssl": {
+      "type": "object",
+      "$id": "schema:Ssl",
+      "$ref": "schema:assertion",
+      "properties": {
+        "Ssl": {
+          "type": "object",
+          "properties": {
+            "checkCertValidity": {
+              "type": "boolean",
+              "default": true
+            },
+            "option": {
+              "type": "string",
+              "default": "Required",
+              "enum": [
+                "Required",
+                "Optional",
+                "Forbidden"
+              ]
+            },
+            "requireClientAuthentication": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:Ssl"
+}

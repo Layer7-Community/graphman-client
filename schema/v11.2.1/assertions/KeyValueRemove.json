@@ -1,0 +1,52 @@
+{
+  "$comment": "Schema for KeyValueRemove assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "keyValueRemove": {
+      "type": "object",
+      "$id": "schema:KeyValueRemove",
+      "$ref": "schema:assertion",
+      "properties": {
+        "KeyValueRemove": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string",
+              "maxLength": 256
+            },
+            "removeAllKeys": {
+              "type": "boolean"
+            },
+            "storeId": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:KeyValueRemove"
+}

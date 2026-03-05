@@ -1,0 +1,82 @@
+{
+  "$comment": "Schema for SiteMinderCheckProtected assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "siteMinderCheckProtected": {
+      "type": "object",
+      "$id": "schema:SiteMinderCheckProtected",
+      "$ref": "schema:assertion",
+      "properties": {
+        "SiteMinderCheckProtected": {
+          "type": "object",
+          "properties": {
+            "acoName": {
+              "type": "string"
+            },
+            "action": {
+              "type": "string",
+              "default": "GET"
+            },
+            "agentGoid": {
+              "type": "string"
+            },
+            "agentId": {
+              "type": "string"
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "prefix": {
+              "type": "string"
+            },
+            "protectedResource": {
+              "type": "string"
+            },
+            "serverName": {
+              "type": "string"
+            },
+            "smAgentName": {
+              "type": "string"
+            },
+            "sourceIpAddress": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "REQUEST"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:SiteMinderCheckProtected"
+}

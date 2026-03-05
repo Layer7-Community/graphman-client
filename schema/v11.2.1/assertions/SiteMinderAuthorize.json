@@ -1,0 +1,93 @@
+{
+  "$comment": "Schema for SiteMinderAuthorize assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "siteMinderAuthorize": {
+      "type": "object",
+      "$id": "schema:SiteMinderAuthorize",
+      "$ref": "schema:assertion",
+      "properties": {
+        "SiteMinderAuthorize": {
+          "type": "object",
+          "properties": {
+            "cookieComment": {
+              "type": "string"
+            },
+            "cookieDomain": {
+              "type": "string"
+            },
+            "cookieMaxAge": {
+              "type": "string"
+            },
+            "cookieName": {
+              "type": "string"
+            },
+            "cookiePath": {
+              "type": "string"
+            },
+            "cookieSecure": {
+              "type": "string"
+            },
+            "cookieSourceVar": {
+              "type": "string"
+            },
+            "cookieVersion": {
+              "type": "string"
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "prefix": {
+              "type": "string"
+            },
+            "setSMCookie": {
+              "type": "boolean",
+              "default": false
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "REQUEST"
+            },
+            "useCustomCookieName": {
+              "type": "boolean",
+              "default": false
+            },
+            "useVarAsCookieSource": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:SiteMinderAuthorize"
+}

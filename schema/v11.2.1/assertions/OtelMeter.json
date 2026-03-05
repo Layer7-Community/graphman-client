@@ -1,0 +1,78 @@
+{
+  "$comment": "Schema for OtelMeter assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "otelMeter": {
+      "type": "object",
+      "$id": "schema:OtelMeter",
+      "$ref": "schema:assertion",
+      "properties": {
+        "OtelMeter": {
+          "type": "object",
+          "properties": {
+            "attributes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "description": {
+              "type": "string"
+            },
+            "measure": {
+              "type": "string"
+            },
+            "telemetryName": {
+              "type": "string",
+              "default": ""
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "COUNTER",
+                "UP_DOWN_COUNTER",
+                "GAUGE",
+                "HISTOGRAM"
+              ]
+            },
+            "unit": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:OtelMeter"
+}

@@ -1,0 +1,120 @@
+{
+  "$comment": "Schema for CORS assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "cORS": {
+      "type": "object",
+      "$id": "schema:CORS",
+      "$ref": "schema:assertion",
+      "properties": {
+        "CORS": {
+          "type": "object",
+          "properties": {
+            "acceptSameOriginRequests": {
+              "type": "boolean",
+              "default": false
+            },
+            "acceptedHeaders": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "title": "Header"
+                  }
+                }
+              }
+            },
+            "acceptedMethods": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "GET",
+                  "PUT",
+                  "HEAD",
+                  "DELETE",
+                  "POST",
+                  "OPTIONS",
+                  "PATCH",
+                  "OTHER"
+                ]
+              }
+            },
+            "acceptedOrigins": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "title": "Origin"
+                  }
+                }
+              }
+            },
+            "allowNonStandardMethods": {
+              "type": "boolean",
+              "default": false
+            },
+            "dynamicOrigins": {
+              "type": "string"
+            },
+            "exposedHeaders": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "title": "Header"
+                  }
+                }
+              }
+            },
+            "requireCors": {
+              "type": "boolean",
+              "default": true
+            },
+            "supportsCredentials": {
+              "type": "boolean",
+              "default": true
+            },
+            "responseCacheTime": {
+              "type": "string"
+            },
+            "variablePrefix": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:CORS"
+}

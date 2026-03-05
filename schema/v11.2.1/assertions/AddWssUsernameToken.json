@@ -1,0 +1,138 @@
+{
+  "$comment": "Schema for AddWssUsernameToken assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "identityTarget": {
+      "type": "object",
+      "$id": "schema:sub-types/identityTarget",
+      "properties": {
+        "identityId": {
+          "type": "string"
+        },
+        "identityInfo": {
+          "type": "string"
+        },
+        "identityProviderOid": {
+          "$ref": "schema:sub-types/goid"
+        },
+        "targetIdentityType": {
+          "type": "string",
+          "enum": [
+            "USER",
+            "GROUP",
+            "PROVIDER",
+            "TAG"
+          ]
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "xmlSecurityRecipientContext": {
+      "type": "object",
+      "$id": "schema:sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "goid": {
+      "type": "string",
+      "$id": "schema:sub-types/goid"
+    },
+    "addWssUsernameToken": {
+      "type": "object",
+      "$id": "schema:AddWssUsernameToken",
+      "$ref": "schema:assertion",
+      "properties": {
+        "AddWssUsernameToken": {
+          "type": "object",
+          "properties": {
+            "digest": {
+              "type": "boolean",
+              "default": false
+            },
+            "encrypt": {
+              "type": "boolean",
+              "default": false
+            },
+            "identityTarget": {
+              "$ref": "schema:sub-types/identityTarget"
+            },
+            "includeCreated": {
+              "type": "boolean",
+              "default": true
+            },
+            "includeNonce": {
+              "type": "boolean",
+              "default": true
+            },
+            "includePassword": {
+              "type": "boolean",
+              "default": true
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            },
+            "recipientContext": {
+              "$ref": "schema:sub-types/xmlSecurityRecipientContext"
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "RESPONSE"
+            },
+            "username": {
+              "type": "string"
+            },
+            "_enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "_leftComment": {
+              "type": "string"
+            },
+            "_rightComment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:AddWssUsernameToken"
+}

@@ -1,0 +1,58 @@
+{
+  "$comment": "Schema for JwtDecode assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "jwtDecode": {
+      "type": "object",
+      "$id": "schema:JwtDecode",
+      "$ref": "schema:assertion",
+      "properties": {
+        "JwtDecode": {
+          "type": "object",
+          "properties": {
+            "algorithmSecretLocation": {
+              "type": "string",
+              "default": "0",
+              "enum": [
+                "1",
+                "2",
+                "4",
+                "0"
+              ]
+            },
+            "incomingToken": {
+              "type": "string"
+            },
+            "outputVariable": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:JwtDecode"
+}

@@ -1,0 +1,45 @@
+{
+  "$comment": "Schema for NonSoapCheckVerifyResults assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "nonSoapCheckVerifyResults": {
+      "type": "object",
+      "$id": "schema:NonSoapCheckVerifyResults",
+      "$ref": "schema:assertion",
+      "properties": {
+        "NonSoapCheckVerifyResults": {
+          "type": "object",
+          "properties": {
+            "variablePrefix": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:NonSoapCheckVerifyResults"
+}

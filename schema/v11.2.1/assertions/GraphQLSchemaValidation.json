@@ -1,0 +1,71 @@
+{
+  "$comment": "Schema for GraphQLSchemaValidation assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "assertionResourceInfo": {
+      "type": "object",
+      "$id": "schema:sub-types/assertionResourceInfo"
+    },
+    "graphQLSchemaValidation": {
+      "type": "object",
+      "$id": "schema:GraphQLSchemaValidation",
+      "$ref": "schema:assertion",
+      "properties": {
+        "GraphQLSchemaValidation": {
+          "type": "object",
+          "properties": {
+            "allowMutationsEnabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "maxNestingDepth": {
+              "type": "string"
+            },
+            "maxNestingDepthEnabled": {
+              "type": "boolean"
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "resourceInfo": {
+              "$ref": "schema:sub-types/assertionResourceInfo"
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "REQUEST"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:GraphQLSchemaValidation"
+}

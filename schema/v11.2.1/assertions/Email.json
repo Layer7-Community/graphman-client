@@ -1,0 +1,89 @@
+{
+  "$comment": "Schema for Email assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "email": {
+      "type": "object",
+      "$id": "schema:Email",
+      "$ref": "schema:assertion",
+      "properties": {
+        "Email": {
+          "type": "object",
+          "properties": {
+            "smtpHost": {
+              "type": "string"
+            },
+            "smtpPort": {
+              "type": "integer",
+              "default": 25
+            },
+            "authenticate": {
+              "type": "boolean",
+              "default": false
+            },
+            "authPassword": {
+              "type": "string"
+            },
+            "authUsername": {
+              "type": "string"
+            },
+            "base64message": {
+              "type": "string"
+            },
+            "contextVarPassword": {
+              "type": "string"
+            },
+            "protocol": {
+              "type": "string",
+              "enum": [
+                "PLAIN",
+                "SSL",
+                "STARTTLS"
+              ],
+              "default": "PLAIN"
+            },
+            "sourceEmailAddress": {
+              "type": "string"
+            },
+            "targetBCCEmailAddress": {
+              "type": "string"
+            },
+            "targetCCEmailAddress": {
+              "type": "string"
+            },
+            "targetEmailAddress": {
+              "type": "string"
+            },
+            "subject": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:Email"
+}

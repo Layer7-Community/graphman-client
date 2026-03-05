@@ -1,0 +1,154 @@
+{
+  "$comment": "Schema for WssConfiguration assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "goid": {
+      "type": "string",
+      "$id": "schema:sub-types/goid"
+    },
+    "xmlSecurityRecipientContext": {
+      "type": "object",
+      "$id": "schema:sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "wssConfiguration": {
+      "type": "object",
+      "$id": "schema:WssConfiguration",
+      "$ref": "schema:assertion",
+      "properties": {
+        "WssConfiguration": {
+          "type": "object",
+          "properties": {
+            "addTimestamp": {
+              "type": "boolean",
+              "default": true
+            },
+            "digestAlgorithmName": {
+              "type": "string"
+            },
+            "dynamicPrivateKeyVariable": {
+              "type": "string",
+              "default": ""
+            },
+            "encryptSignature": {
+              "type": "boolean",
+              "default": false
+            },
+            "encryptionAlgorithmUri": {
+              "type": "string"
+            },
+            "encryptionKeyReference": {
+              "type": "string"
+            },
+            "keyAlias": {
+              "type": "string"
+            },
+            "keyReference": {
+              "type": "string"
+            },
+            "keyWrappingAlgorithmUri": {
+              "type": "string"
+            },
+            "neverSignTimestamp": {
+              "type": "boolean",
+              "default": false
+            },
+            "nonDefaultKeystoreId": {
+              "$ref": "schema:sub-types/goid"
+            },
+            "omitTimestamp": {
+              "type": "boolean",
+              "default": false
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "protectTokens": {
+              "type": "boolean",
+              "default": true
+            },
+            "recipientContext": {
+              "$ref": "schema:sub-types/xmlSecurityRecipientContext"
+            },
+            "referenceDigestAlgorithmName": {
+              "type": "string"
+            },
+            "secureConversationNamespace": {
+              "type": "string"
+            },
+            "signTimestamp": {
+              "type": "boolean",
+              "default": true
+            },
+            "signTimestampValue": {
+              "type": "string"
+            },
+            "signWsAddressingHeaders": {
+              "type": "boolean",
+              "default": false
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "REQUEST"
+            },
+            "timestampValue": {
+              "type": "string"
+            },
+            "useDerivedKeys": {
+              "type": "boolean",
+              "default": false
+            },
+            "usesDefaultKeyStore": {
+              "type": "boolean",
+              "default": true
+            },
+            "usesDynamicPrivateKey": {
+              "type": "boolean",
+              "default": false
+            },
+            "wssVersion": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:WssConfiguration"
+}

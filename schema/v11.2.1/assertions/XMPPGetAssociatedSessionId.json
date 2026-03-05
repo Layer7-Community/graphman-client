@@ -1,0 +1,52 @@
+{
+  "$comment": "Schema for XMPPGetAssociatedSessionId assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "xMPPGetAssociatedSessionId": {
+      "type": "object",
+      "$id": "schema:XMPPGetAssociatedSessionId",
+      "$ref": "schema:assertion",
+      "properties": {
+        "XMPPGetAssociatedSessionId": {
+          "type": "object",
+          "properties": {
+            "inbound": {
+              "type": "boolean",
+              "default": true
+            },
+            "sessionId": {
+              "type": "string"
+            },
+            "variableName": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:XMPPGetAssociatedSessionId"
+}

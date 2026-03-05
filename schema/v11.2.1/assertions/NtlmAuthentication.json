@@ -1,0 +1,64 @@
+{
+  "$comment": "Schema for NtlmAuthentication assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "goid": {
+      "type": "string",
+      "$id": "schema:sub-types/goid"
+    },
+    "ntlmAuthentication": {
+      "type": "object",
+      "$id": "schema:NtlmAuthentication",
+      "$ref": "schema:assertion",
+      "properties": {
+        "NtlmAuthentication": {
+          "type": "object",
+          "properties": {
+            "ldapProviderName": {
+              "type": "string"
+            },
+            "ldapProviderOid": {
+              "$ref": "schema:sub-types/goid"
+            },
+            "maxConnectionDuration": {
+              "type": "integer"
+            },
+            "maxConnectionIdleTime": {
+              "type": "integer"
+            },
+            "realm": {
+              "type": "string"
+            },
+            "variablePrefix": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:NtlmAuthentication"
+}

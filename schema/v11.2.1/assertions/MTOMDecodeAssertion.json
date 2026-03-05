@@ -1,0 +1,91 @@
+{
+  "$comment": "Schema for MTOMDecodeAssertion assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "messageTargetableSupport": {
+      "type": "object",
+      "$id": "schema:sub-types/messageTargetableSupport",
+      "properties": {
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "sourceUsedByGateway": {
+          "type": "boolean",
+          "default": true
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "RESPONSE"
+        },
+        "targetModifiedByGateway": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "mTOMDecodeAssertion": {
+      "type": "object",
+      "$id": "schema:MTOMDecodeAssertion",
+      "$ref": "schema:assertion",
+      "properties": {
+        "MTOMDecodeAssertion": {
+          "type": "object",
+          "properties": {
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "outputTarget": {
+              "$ref": "schema:sub-types/messageTargetableSupport"
+            },
+            "processSecuredOnly": {
+              "type": "boolean"
+            },
+            "removePackaging": {
+              "type": "boolean"
+            },
+            "requireEncoded": {
+              "type": "boolean"
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE"
+              ]
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:MTOMDecodeAssertion"
+}

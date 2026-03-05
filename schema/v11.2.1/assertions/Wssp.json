@@ -1,0 +1,51 @@
+{
+  "$comment": "Schema for Wssp assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "wssp": {
+      "type": "object",
+      "$id": "schema:Wssp",
+      "$ref": "schema:assertion",
+      "properties": {
+        "Wssp": {
+          "type": "object",
+          "properties": {
+            "basePolicyXml": {
+              "type": "string"
+            },
+            "inputPolicyXml": {
+              "type": "string"
+            },
+            "outputPolicyXml": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:Wssp"
+}

@@ -1,0 +1,89 @@
+{
+  "$comment": "Schema for JsonDocumentStructure assertion. Self-contained with all dependencies.",
+  "definitions": {
+    "assertion": {
+      "$id": "schema:assertion",
+      "type": "object",
+      "properties": {
+        ".properties": {
+          "type": "object",
+          "properties": {
+            ".enabled": {
+              "type": "boolean"
+            },
+            ".left.comment": {
+              "type": "string"
+            },
+            ".right.comment": {
+              "type": "string"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "jsonDocumentStructure": {
+      "type": "object",
+      "$id": "schema:JsonDocumentStructure",
+      "$ref": "schema:assertion",
+      "properties": {
+        "JsonDocumentStructure": {
+          "type": "object",
+          "properties": {
+            "checkArrayEntryCount": {
+              "type": "boolean",
+              "default": false
+            },
+            "checkContainerDepth": {
+              "type": "boolean",
+              "default": true
+            },
+            "checkEntryNameLength": {
+              "type": "boolean",
+              "default": false
+            },
+            "checkObjectEntryCount": {
+              "type": "boolean",
+              "default": false
+            },
+            "checkStringValueLength": {
+              "type": "boolean",
+              "default": false
+            },
+            "maxArrayEntryCount": {
+              "type": "integer"
+            },
+            "maxContainerDepth": {
+              "type": "integer"
+            },
+            "maxEntryNameLength": {
+              "type": "integer"
+            },
+            "maxObjectEntryCount": {
+              "type": "integer"
+            },
+            "maxStringValueLength": {
+              "type": "integer"
+            },
+            "otherTargetMessageVariable": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "REQUEST",
+                "RESPONSE",
+                "OTHER"
+              ],
+              "default": "REQUEST"
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    }
+  },
+  "type": "object",
+  "$ref": "schema:JsonDocumentStructure"
+}
