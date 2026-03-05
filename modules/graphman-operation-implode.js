@@ -132,20 +132,20 @@ let type1Imploder = (function () {
                 sections.forEach(item => packageSpec[item] = [{"source": "*"}]);
                 utils.info(`using package(sections) : ${sections}`);
             }
+            const selectionPredicate = (entity, typeInfo, pluralName, fileName) => {
+                return !packageSpec || (isSectionIncluded(packageSpec, pluralName)
+                    && findEntityFromPackage(packageSpec, entity, typeInfo, pluralName, fileName));
+            };
 
             utils.listDir(inputDir).forEach(item => {
                 const subDir = inputDir + "/" + item;
                 if (utils.isDirectory(subDir)) {
                     const typeInfo = graphman.typeInfoByPluralName(item);
                     if (typeInfo) {
-                        if (!isSectionIncluded(packageSpec, item)) {
-                            utils.info("ignoring " + item);
-                            return;
-                        }
                         utils.info("imploding " + item);
-                        readEntities(subDir, item, typeInfo, bundle, packageSpec);
+                        readEntities(subDir, item, typeInfo, bundle, selectionPredicate);
                     } else if (item === "tree") {
-                        readFolderableEntities(subDir, bundle, subDir, packageSpec);
+                        readFolderableEntities(subDir, bundle, subDir, selectionPredicate);
                     } else {
                         utils.info("unknown entities, " + item);
                     }
@@ -218,7 +218,7 @@ let type1Imploder = (function () {
         return true;
     }
 
-    function readEntities(inputDir, pluralName, typeInfo, bundle, packageSpec) {
+    function readEntities(inputDir, pluralName, typeInfo, bundle, selectionPredicate) {
         const entities = butils.withArray(bundle, typeInfo);
         utils.listDir(inputDir).forEach(item => {
             if (item.endsWith(".json")) {
@@ -226,40 +226,37 @@ let type1Imploder = (function () {
                 const entity = utils.readFile(`${inputDir}/${item}`);
                 const subImploder = subImploders[typeInfo.pluralName];
                 const finalEntity = subImploder ? subImploder.apply(entity, inputDir) : entity
-                if (!packageSpec || findEntityFromPackage(packageSpec, finalEntity, typeInfo, pluralName, item)) {
+                if (selectionPredicate(finalEntity, typeInfo, pluralName, item)) {
                     entities.push(finalEntity);
                 }
             }
         });
     }
 
-    function readFolderableEntities(dir, bundle, rootDir, packageSpec) {
+    function readFolderableEntities(dir, bundle, rootDir, selectionPredicate) {
         utils.listDir(dir).forEach(item => {
             if (utils.isDirectory(dir + "/" + item)) {
-                readFolderableEntities(`${dir}/${item}`, bundle, rootDir, packageSpec);
+                readFolderableEntities(`${dir}/${item}`, bundle, rootDir, selectionPredicate);
             } else {
-                readFolderableEntity(dir, item, bundle, rootDir, packageSpec);
+                readFolderableEntity(dir, item, bundle, rootDir, selectionPredicate);
             }
         });
     }
 
-    function readFolderableEntity(path, filename, bundle, rootDir, packageSpec) {
+    function readFolderableEntity(path, filename, bundle, rootDir, selectionPredicate) {
         const pluralName = butils.entityPluralNameByFile(filename);
         let typeInfo = pluralName ? graphman.typeInfoByPluralName(pluralName) : null;
 
         if (typeInfo) {
             const fullPath = `${path}/${filename}`;
             utils.info(`  ${fullPath.substring(rootDir.length + 1)}`);
-            if (!isSectionIncluded(packageSpec, pluralName)) {
-                return;
-            }
             const entity = utils.readFile(`${path}/${filename}`);
 
             // for backward compatibility, check whether the entity is of type policy fragment
             if (filename.endsWith(".policy.json") && !entity.policyType) {
                 typeInfo = graphman.typeInfoByPluralName("policyFragments");
             }
-            if (!packageSpec || findEntityFromPackage(packageSpec, entity, typeInfo, pluralName, filename)) {
+            if (selectionPredicate(entity, typeInfo, pluralName, filename)) {
                 const entities = butils.withArray(bundle, typeInfo);
                 entities.push(implodeServiceOrPolicy(entity, path));
             }
