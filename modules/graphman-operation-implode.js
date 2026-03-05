@@ -11,6 +11,7 @@ module.exports = {
      * @param params
      * @param params.input name of the input file containing the gateway configuration as bundle
      * @param params.output name of the output directory into which the gateway configuration will be exploded
+     * @param params.options name-value pairs used to customize explode operation
      * @param params.package name of the package file that specifies which entities to include (CLI; prefer params.options.packageFile)
      * @param params.sections one or more sections of the bundle for inclusion (CLI; prefer params.options.sections; used only when package is not specified)
      */
