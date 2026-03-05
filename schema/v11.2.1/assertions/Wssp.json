@@ -1,51 +1,42 @@
 {
-  "$comment": "Schema for Wssp assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "Wssp",
+  "name": "Enforce WS-Security Policy Compliance",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Wssp",
+      "title": "Enforce WS-Security Policy Compliance",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "basePolicyXml": {
+          "type": "string"
+        },
+        "inputPolicyXml": {
+          "type": "string"
+        },
+        "outputPolicyXml": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "wssp": {
+    {
       "type": "object",
-      "$id": "schema:Wssp",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Wssp/Main",
+      "title": "Enforce WS-Security Policy Compliance",
       "properties": {
         "Wssp": {
-          "type": "object",
-          "properties": {
-            "basePolicyXml": {
-              "type": "string"
-            },
-            "inputPolicyXml": {
-              "type": "string"
-            },
-            "outputPolicyXml": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/Wssp"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:Wssp"
+  ]
 }

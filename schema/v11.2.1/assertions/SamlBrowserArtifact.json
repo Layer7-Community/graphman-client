@@ -1,33 +1,45 @@
 {
-  "$comment": "Schema for SamlBrowserArtifact assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "SamlBrowserArtifact",
+  "name": "Retrieve SAML Browser Artifact",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SamlBrowserArtifact",
+      "title": "Retrieve SAML Browser Artifact",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "artifactQueryParameter": {
+          "type": "string",
+          "default": "SAMLart"
+        },
+        "authenticationProperties": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/authenticationProperties"
+        },
+        "ssoEndpointUrl": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "authenticationProperties": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/authenticationProperties",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/authenticationProperties",
       "properties": {
         "additionalFields": {
-          "type": "object"
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          }
         },
         "copyFormFields": {
           "type": "boolean",
@@ -41,11 +53,7 @@
           "type": "string"
         },
         "method": {
-          "$ref": "schema:sub-types/authenticationProperties$Method",
-          "enum": [
-            "basic",
-            "form"
-          ],
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/authenticationProperties$Method",
           "default": "basic"
         },
         "passwordFieldname": {
@@ -62,37 +70,25 @@
         "usernameFieldname": {
           "type": "string"
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "authenticationProperties$Method": {
+    {
       "type": "string",
-      "$id": "schema:sub-types/authenticationProperties$Method"
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/authenticationProperties$Method",
+      "enum": [
+        "basic",
+        "form"
+      ]
     },
-    "samlBrowserArtifact": {
+    {
       "type": "object",
-      "$id": "schema:SamlBrowserArtifact",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SamlBrowserArtifact/Main",
+      "title": "Retrieve SAML Browser Artifact",
       "properties": {
         "SamlBrowserArtifact": {
-          "type": "object",
-          "properties": {
-            "artifactQueryParameter": {
-              "type": "string"
-            },
-            "authenticationProperties": {
-              "$ref": "schema:sub-types/authenticationProperties"
-            },
-            "ssoEndpointUrl": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/SamlBrowserArtifact"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:SamlBrowserArtifact"
+  ]
 }

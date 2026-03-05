@@ -1,30 +1,54 @@
 {
-  "$comment": "Schema for MTOMDecodeAssertion assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "MTOMDecodeAssertion",
+  "name": "Decode MTOM Message",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/MTOMDecodeAssertion",
+      "title": "Decode MTOM Message",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "outputTarget": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport"
+        },
+        "processSecuredOnly": {
+          "type": "boolean",
+          "default": false
+        },
+        "removePackaging": {
+          "type": "boolean",
+          "default": true
+        },
+        "requireEncoded": {
+          "type": "boolean",
+          "default": false
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "messageTargetableSupport": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/messageTargetableSupport",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport",
       "properties": {
         "otherTargetMessageVariable": {
           "type": "string"
@@ -40,52 +64,23 @@
             "RESPONSE",
             "OTHER"
           ],
-          "default": "RESPONSE"
+          "default": "REQUEST"
         },
         "targetModifiedByGateway": {
           "type": "boolean",
           "default": false
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "mTOMDecodeAssertion": {
+    {
       "type": "object",
-      "$id": "schema:MTOMDecodeAssertion",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/MTOMDecodeAssertion/Main",
+      "title": "Decode MTOM Message",
       "properties": {
         "MTOMDecodeAssertion": {
-          "type": "object",
-          "properties": {
-            "otherTargetMessageVariable": {
-              "type": "string"
-            },
-            "outputTarget": {
-              "$ref": "schema:sub-types/messageTargetableSupport"
-            },
-            "processSecuredOnly": {
-              "type": "boolean"
-            },
-            "removePackaging": {
-              "type": "boolean"
-            },
-            "requireEncoded": {
-              "type": "boolean"
-            },
-            "target": {
-              "type": "string",
-              "enum": [
-                "REQUEST",
-                "RESPONSE"
-              ]
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/MTOMDecodeAssertion"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:MTOMDecodeAssertion"
+  ]
 }

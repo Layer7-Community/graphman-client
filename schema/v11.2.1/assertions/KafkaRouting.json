@@ -1,34 +1,74 @@
 {
-  "$comment": "Schema for KafkaRouting assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "KafkaRouting",
+  "name": "Route via Kafka",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/KafkaRouting",
+      "title": "Route via Kafka",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "ackTimeout": {
+          "type": "string"
+        },
+        "clientConfigGoid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "clientConfigName": {
+          "type": "string"
+        },
+        "currentSecurityHeaderHandling": {
+          "type": "integer",
+          "default": 0
+        },
+        "key": {
+          "type": "string"
+        },
+        "partition": {
+          "type": "string"
+        },
+        "passthroughHeaders": {
+          "type": "boolean",
+          "default": false
+        },
+        "prefix": {
+          "type": "string",
+          "default": "kafkaRouting"
+        },
+        "recipientContext": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext"
+        },
+        "requestTarget": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport"
+        },
+        "topic": {
+          "type": "string"
+        },
+        "waitForAck": {
+          "type": "boolean",
+          "default": true
+        },
+        "xmlSecurityActorToPromote": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "goid": {
+    {
       "type": "string",
-      "$id": "schema:sub-types/goid"
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
     },
-    "xmlSecurityRecipientContext": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/xmlSecurityRecipientContext",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext",
       "properties": {
         "actor": {
           "type": "string"
@@ -36,12 +76,11 @@
         "base64edX509Certificate": {
           "type": "string"
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "messageTargetableSupport": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/messageTargetableSupport",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport",
       "properties": {
         "otherTargetMessageVariable": {
           "type": "string"
@@ -57,80 +96,23 @@
             "RESPONSE",
             "OTHER"
           ],
-          "default": "RESPONSE"
+          "default": "REQUEST"
         },
         "targetModifiedByGateway": {
           "type": "boolean",
           "default": false
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "kafkaRouting": {
+    {
       "type": "object",
-      "$id": "schema:KafkaRouting",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/KafkaRouting/Main",
+      "title": "Route via Kafka",
       "properties": {
         "KafkaRouting": {
-          "type": "object",
-          "properties": {
-            "ackTimeout": {
-              "type": "string"
-            },
-            "clientConfigGoid": {
-              "$ref": "schema:sub-types/goid",
-              "enum": [
-                ""
-              ]
-            },
-            "clientConfigName": {
-              "type": "string"
-            },
-            "currentSecurityHeaderHandling": {
-              "type": "integer",
-              "default": 0,
-              "enum": [
-                3,
-                1,
-                0
-              ]
-            },
-            "key": {
-              "type": "string"
-            },
-            "partition": {
-              "type": "string"
-            },
-            "passthroughHeaders": {
-              "type": "boolean",
-              "default": false
-            },
-            "prefix": {
-              "type": "string"
-            },
-            "recipientContext": {
-              "$ref": "schema:sub-types/xmlSecurityRecipientContext"
-            },
-            "requestTarget": {
-              "$ref": "schema:sub-types/messageTargetableSupport"
-            },
-            "topic": {
-              "type": "string"
-            },
-            "waitForAck": {
-              "type": "boolean",
-              "default": true
-            },
-            "xmlSecurityActorToPromote": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/KafkaRouting"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:KafkaRouting"
+  ]
 }

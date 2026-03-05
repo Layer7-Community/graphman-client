@@ -1,46 +1,37 @@
 {
-  "$comment": "Schema for WebSocketConnect assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "WebSocketConnect",
+  "name": "Connect To Outbound WebSocket",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/WebSocketConnect",
+      "title": "Connect To Outbound WebSocket",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "failOnUnsuccessfulConnectionUpgrade": {
+          "type": "boolean",
+          "default": true
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "webSocketConnect": {
+    {
       "type": "object",
-      "$id": "schema:WebSocketConnect",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/WebSocketConnect/Main",
+      "title": "Connect To Outbound WebSocket",
       "properties": {
         "WebSocketConnect": {
-          "type": "object",
-          "properties": {
-            "failOnUnsuccessfulConnectionUpgrade": {
-              "type": "boolean",
-              "default": true
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/WebSocketConnect"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:WebSocketConnect"
+  ]
 }

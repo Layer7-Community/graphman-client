@@ -1,52 +1,33 @@
 {
-  "$comment": "Schema for MqNativeSupport assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "MqNativeSupport",
+  "name": "Mq Native Support",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/MqNativeSupport",
+      "title": "Mq Native Support",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "mqNativeSupport": {
+    {
       "type": "object",
-      "$id": "schema:MqNativeSupport",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/MqNativeSupport/Main",
+      "title": "Mq Native Support",
       "properties": {
         "MqNativeSupport": {
-          "type": "object",
-          "properties": {
-            "_enabled": {
-              "type": "boolean",
-              "default": true
-            },
-            "_leftComment": {
-              "type": "string"
-            },
-            "_rightComment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/MqNativeSupport"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:MqNativeSupport"
+  ]
 }

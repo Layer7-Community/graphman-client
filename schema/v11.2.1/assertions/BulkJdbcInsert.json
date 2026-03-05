@@ -1,30 +1,87 @@
 {
-  "$comment": "Schema for BulkJdbcInsert assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "BulkJdbcInsert",
+  "name": "Insert JDBC Data in Bulk",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/BulkJdbcInsert",
+      "title": "Insert JDBC Data in Bulk",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "batchSize": {
+          "type": "integer",
+          "default": 100
+        },
+        "columnMapperList": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/BulkJdbcInsert:columnMapper"
+          }
+        },
+        "compression": {
+          "type": "string",
+          "enum": [
+            "NONE",
+            "GZIP",
+            "DEFLATE"
+          ],
+          "default": "GZIP"
+        },
+        "connectionName": {
+          "type": "string"
+        },
+        "escapeQuote": {
+          "type": "string",
+          "default": ""
+        },
+        "fieldDelimiter": {
+          "type": "string",
+          "default": ","
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "quoteChar": {
+          "type": "string",
+          "default": "\""
+        },
+        "quoted": {
+          "type": "boolean",
+          "default": false
+        },
+        "recordDelimiter": {
+          "type": "string",
+          "default": "CRLF"
+        },
+        "schema": {
+          "type": "string"
+        },
+        "tableName": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "BulkJdbcInsert:columnMapper": {
+    {
       "type": "object",
-      "$id": "schema:BulkJdbcInsert:columnMapper",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/BulkJdbcInsert:columnMapper",
       "properties": {
         "name": {
           "type": "string"
@@ -33,103 +90,23 @@
           "type": "integer",
           "default": 0
         },
-        "transformation": {
-          "type": "string",
-          "enum": [
-            "Add",
-            "ConstantInt",
-            "ConstantString",
-            "Regex2Bool",
-            "Regex2Int",
-            "String",
-            "Subtract",
-            "UUID"
-          ],
-          "default": "Add"
-        },
         "transformParam": {
-          "type": "string",
-          "title": "Parameter"
+          "type": "string"
+        },
+        "transformation": {
+          "type": "string"
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "bulkJdbcInsert": {
+    {
       "type": "object",
-      "$id": "schema:BulkJdbcInsert",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/BulkJdbcInsert/Main",
+      "title": "Insert JDBC Data in Bulk",
       "properties": {
         "BulkJdbcInsert": {
-          "type": "object",
-          "properties": {
-            "batchSize": {
-              "type": "integer",
-              "default": 100
-            },
-            "columnMapperList": {
-              "type": "array",
-              "items": {
-                "$ref": "schema:BulkJdbcInsert:columnMapper"
-              }
-            },
-            "compression": {
-              "type": "string",
-              "enum": [
-                "NONE",
-                "GZIP",
-                "DEFLATE"
-              ],
-              "default": "GZIP"
-            },
-            "connectionName": {
-              "type": "string"
-            },
-            "escapeQuote": {
-              "type": "string"
-            },
-            "fieldDelimiter": {
-              "type": "string"
-            },
-            "otherTargetMessageVariable": {
-              "type": "string"
-            },
-            "quoteChar": {
-              "type": "string"
-            },
-            "quoted": {
-              "type": "boolean"
-            },
-            "recordDelimiter": {
-              "type": "string",
-              "enum": [
-                "CRLF",
-                "LF",
-                "CR"
-              ],
-              "default": "CRLF"
-            },
-            "schema": {
-              "type": "string"
-            },
-            "tableName": {
-              "type": "string"
-            },
-            "target": {
-              "type": "string",
-              "enum": [
-                "REQUEST",
-                "RESPONSE",
-                "OTHER"
-              ],
-              "default": "REQUEST"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/BulkJdbcInsert"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:BulkJdbcInsert"
+  ]
 }

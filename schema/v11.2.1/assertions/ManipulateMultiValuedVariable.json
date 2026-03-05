@@ -1,48 +1,39 @@
 {
-  "$comment": "Schema for ManipulateMultiValuedVariable assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "ManipulateMultiValuedVariable",
+  "name": "Manipulate Multivalued Variable",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ManipulateMultiValuedVariable",
+      "title": "Manipulate Multivalued Variable",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "sourceVariableName": {
+          "type": "string"
+        },
+        "targetVariableName": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "manipulateMultiValuedVariable": {
+    {
       "type": "object",
-      "$id": "schema:ManipulateMultiValuedVariable",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ManipulateMultiValuedVariable/Main",
+      "title": "Manipulate Multivalued Variable",
       "properties": {
         "ManipulateMultiValuedVariable": {
-          "type": "object",
-          "properties": {
-            "sourceVariableName": {
-              "type": "string"
-            },
-            "targetVariableName": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/ManipulateMultiValuedVariable"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:ManipulateMultiValuedVariable"
+  ]
 }

@@ -1,30 +1,79 @@
 {
-  "$comment": "Schema for XMPPStartTLS assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "XMPPStartTLS",
+  "name": "Start TLS On XMPP Session",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/XMPPStartTLS",
+      "title": "Start TLS On XMPP Session",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "clientAuthType": {
+          "type": "string",
+          "enum": [
+            "NONE",
+            "OPTIONAL",
+            "REQUIRED"
+          ],
+          "default": "NONE"
+        },
+        "currentSecurityHeaderHandling": {
+          "type": "integer",
+          "default": 0
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "privateKeyId": {
+          "type": "string"
+        },
+        "provideClientCert": {
+          "type": "boolean",
+          "default": false
+        },
+        "recipientContext": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext"
+        },
+        "requestTarget": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport"
+        },
+        "sessionId": {
+          "type": "string"
+        },
+        "tLSSelectedVersion": {
+          "type": "string",
+          "default": "TLSv1"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "toServer": {
+          "type": "boolean",
+          "default": false
+        },
+        "xmlSecurityActorToPromote": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "xmlSecurityRecipientContext": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/xmlSecurityRecipientContext",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext",
       "properties": {
         "actor": {
           "type": "string"
@@ -32,12 +81,11 @@
         "base64edX509Certificate": {
           "type": "string"
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "messageTargetableSupport": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/messageTargetableSupport",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport",
       "properties": {
         "otherTargetMessageVariable": {
           "type": "string"
@@ -53,87 +101,23 @@
             "RESPONSE",
             "OTHER"
           ],
-          "default": "RESPONSE"
+          "default": "REQUEST"
         },
         "targetModifiedByGateway": {
           "type": "boolean",
           "default": false
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "xMPPStartTLS": {
+    {
       "type": "object",
-      "$id": "schema:XMPPStartTLS",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/XMPPStartTLS/Main",
+      "title": "Start TLS On XMPP Session",
       "properties": {
         "XMPPStartTLS": {
-          "type": "object",
-          "properties": {
-            "clientAuthType": {
-              "type": "string",
-              "enum": [
-                "NONE",
-                "OPTIONAL",
-                "REQUIRED"
-              ],
-              "default": "NONE"
-            },
-            "currentSecurityHeaderHandling": {
-              "type": "integer",
-              "default": 0
-            },
-            "otherTargetMessageVariable": {
-              "type": "string"
-            },
-            "privateKeyId": {
-              "type": "string"
-            },
-            "provideClientCert": {
-              "type": "boolean",
-              "default": false
-            },
-            "recipientContext": {
-              "$ref": "schema:sub-types/xmlSecurityRecipientContext"
-            },
-            "requestTarget": {
-              "$ref": "schema:sub-types/messageTargetableSupport"
-            },
-            "sessionId": {
-              "type": "string"
-            },
-            "tLSSelectedVersion": {
-              "type": "string",
-              "enum": [
-                "TLSv1",
-                "TLSv1.1",
-                "TLSv1.2"
-              ],
-              "default": "TLSv1"
-            },
-            "target": {
-              "type": "string",
-              "enum": [
-                "REQUEST",
-                "RESPONSE",
-                "OTHER"
-              ],
-              "default": "REQUEST"
-            },
-            "toServer": {
-              "type": "boolean",
-              "default": false
-            },
-            "xmlSecurityActorToPromote": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/XMPPStartTLS"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:XMPPStartTLS"
+  ]
 }

@@ -1,53 +1,49 @@
 {
-  "$comment": "Schema for RESTGatewayManagement assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "RESTGatewayManagement",
+  "name": "REST Manage Gateway",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RESTGatewayManagement",
+      "title": "REST Manage Gateway",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "variablePrefix": {
+          "type": "string",
+          "default": "restGatewayMan"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "rESTGatewayManagement": {
+    {
       "type": "object",
-      "$id": "schema:RESTGatewayManagement",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RESTGatewayManagement/Main",
+      "title": "REST Manage Gateway",
       "properties": {
         "RESTGatewayManagement": {
-          "type": "object",
-          "properties": {
-            "otherTargetMessageVariable": {
-              "type": "string"
-            },
-            "target": {
-              "type": "string",
-              "enum": [
-                "REQUEST",
-                "RESPONSE",
-                "OTHER"
-              ]
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/RESTGatewayManagement"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:RESTGatewayManagement"
+  ]
 }

@@ -1,72 +1,93 @@
 {
-  "$comment": "Schema for ComparisonAssertion assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "ComparisonAssertion",
+  "name": "Compare Expression",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ComparisonAssertion",
+      "title": "Compare Expression",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "caseSensitive": {
+          "type": "boolean",
+          "default": true
+        },
+        "expression1": {
+          "type": "string"
+        },
+        "expression2": {
+          "type": "string"
+        },
+        "expressionIsVariable": {
+          "type": "boolean",
+          "default": true
+        },
+        "multivaluedComparison": {
+          "type": "string",
+          "enum": [
+            "ALL",
+            "ANY",
+            "FIRST",
+            "LAST",
+            "FAIL"
+          ],
+          "default": "ALL"
+        },
+        "negate": {
+          "type": "boolean",
+          "default": false
+        },
+        "operator": {
+          "type": "string",
+          "enum": [
+            "LT",
+            "LE",
+            "EQ",
+            "GT",
+            "GE",
+            "EMPTY",
+            "CONTAINS",
+            "NE",
+            "TRUE",
+            "FALSE"
+          ],
+          "default": "EQ"
+        },
+        "predicates": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/ComparisonAssertion:predicate"
+          }
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "comparisonAssertion": {
+    {
       "type": "object",
-      "$id": "schema:ComparisonAssertion",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ComparisonAssertion:predicate",
+      "properties": {
+        "negated": {
+          "type": "boolean"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ComparisonAssertion/Main",
+      "title": "Compare Expression",
       "properties": {
         "ComparisonAssertion": {
-          "type": "object",
-          "properties": {
-            "expression1": {
-              "type": "string"
-            },
-            "expressionIsVariable": {
-              "type": "boolean"
-            },
-            "multivaluedComparison": {
-              "type": "string",
-              "enum": [
-                "ANY",
-                "ALL",
-                "FIRST",
-                "LAST",
-                "FAIL"
-              ]
-            },
-            "negate": {
-              "type": "boolean"
-            },
-            "predicates": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "negated": {
-                    "type": "boolean"
-                  }
-                }
-              }
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/ComparisonAssertion"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:ComparisonAssertion"
+  ]
 }

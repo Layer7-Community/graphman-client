@@ -1,97 +1,103 @@
 {
-  "$comment": "Schema for EstablishOutboundSecureConversation assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "EstablishOutboundSecureConversation",
+  "name": "Establish Outbound Secure Conversation",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/EstablishOutboundSecureConversation",
+      "title": "Establish Outbound Secure Conversation",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "allowInboundMsgUsingSession": {
+          "type": "boolean",
+          "default": false
+        },
+        "clientEntropy": {
+          "type": "string",
+          "default": "${requestBuilder.clientEntropy}"
+        },
+        "creationTime": {
+          "type": "string",
+          "default": "${rstrResponseProcessor.createTime}"
+        },
+        "expirationTime": {
+          "type": "string",
+          "default": "${rstrResponseProcessor.expiryTime}"
+        },
+        "fullKey": {
+          "type": "string",
+          "default": "${rstrResponseProcessor.fullKey}"
+        },
+        "keySize": {
+          "type": "string",
+          "default": "${rstrResponseProcessor.keySize}"
+        },
+        "maxLifetime": {
+          "type": "number",
+          "default": 0
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "securityContextTokenVarName": {
+          "type": "string",
+          "default": "rstrResponseProcessor.token"
+        },
+        "serverEntropy": {
+          "type": "string",
+          "default": "${rstrResponseProcessor.serverEntropy}"
+        },
+        "serviceUrl": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "timeUnit": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/timeUnit",
+          "default": "m"
+        },
+        "useSystemDefaultSessionDuration": {
+          "type": "boolean",
+          "default": true
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "timeUnit": {
+    {
       "type": "string",
-      "$id": "schema:sub-types/timeUnit"
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/timeUnit",
+      "enum": [
+        "ms",
+        "s",
+        "m",
+        "h",
+        "d"
+      ]
     },
-    "establishOutboundSecureConversation": {
+    {
       "type": "object",
-      "$id": "schema:EstablishOutboundSecureConversation",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/EstablishOutboundSecureConversation/Main",
+      "title": "Establish Outbound Secure Conversation",
       "properties": {
         "EstablishOutboundSecureConversation": {
-          "type": "object",
-          "properties": {
-            "allowInboundMsgUsingSession": {
-              "type": "boolean",
-              "default": false
-            },
-            "clientEntropy": {
-              "type": "string"
-            },
-            "creationTime": {
-              "type": "string"
-            },
-            "expirationTime": {
-              "type": "string"
-            },
-            "fullKey": {
-              "type": "string"
-            },
-            "keySize": {
-              "type": "string"
-            },
-            "maxLifetime": {
-              "type": "number"
-            },
-            "otherTargetMessageVariable": {
-              "type": "string"
-            },
-            "securityContextTokenVarName": {
-              "type": "string"
-            },
-            "serverEntropy": {
-              "type": "string"
-            },
-            "serviceUrl": {
-              "type": "string"
-            },
-            "target": {
-              "type": "string",
-              "enum": [
-                "REQUEST",
-                "RESPONSE",
-                "OTHER"
-              ],
-              "default": "REQUEST"
-            },
-            "timeUnit": {
-              "$ref": "schema:sub-types/timeUnit",
-              "default": "m"
-            },
-            "useSystemDefaultSessionDuration": {
-              "type": "boolean",
-              "default": true
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/EstablishOutboundSecureConversation"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:EstablishOutboundSecureConversation"
+  ]
 }

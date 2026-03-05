@@ -1,61 +1,133 @@
 {
-  "$comment": "Schema for SamlpResponseBuilder assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "SamlpResponseBuilder",
+  "name": "Build SAML Protocol Response",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SamlpResponseBuilder",
+      "title": "Build SAML Protocol Response",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "addIssuer": {
+          "type": "boolean",
+          "default": false
+        },
+        "consent": {
+          "type": "string"
+        },
+        "customIssuerFormat": {
+          "type": "string"
+        },
+        "customIssuerNameQualifier": {
+          "type": "string"
+        },
+        "customIssuerValue": {
+          "type": "string"
+        },
+        "destination": {
+          "type": "string"
+        },
+        "dynamicPrivateKeyVariable": {
+          "type": "string",
+          "default": ""
+        },
+        "encryptedAssertions": {
+          "type": "string"
+        },
+        "inResponseTo": {
+          "type": "string"
+        },
+        "includeSignerCertChain": {
+          "type": "boolean",
+          "default": false
+        },
+        "issueInstant": {
+          "type": "string"
+        },
+        "keyAlias": {
+          "type": "string"
+        },
+        "nonDefaultKeystoreId": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "recipient": {
+          "type": "string"
+        },
+        "responseAssertions": {
+          "type": "string"
+        },
+        "responseExtensions": {
+          "type": "string"
+        },
+        "responseId": {
+          "type": "string"
+        },
+        "samlStatusCode": {
+          "type": "string",
+          "default": "urn:oasis:names:tc:SAML:2.0:status:Success"
+        },
+        "signResponse": {
+          "type": "boolean",
+          "default": false
+        },
+        "statusDetail": {
+          "type": "string"
+        },
+        "statusMessage": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "usesDefaultKeyStore": {
+          "type": "boolean",
+          "default": true
+        },
+        "usesDynamicPrivateKey": {
+          "type": "boolean",
+          "default": false
+        },
+        "validateWebSsoRules": {
+          "type": "boolean",
+          "default": true
+        },
+        "version": {
+          "type": "integer",
+          "default": 2
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "samlpResponseBuilder": {
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
       "type": "object",
-      "$id": "schema:SamlpResponseBuilder",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SamlpResponseBuilder/Main",
+      "title": "Build SAML Protocol Response",
       "properties": {
         "SamlpResponseBuilder": {
-          "type": "object",
-          "properties": {
-            "soapVersion": {
-              "type": "integer",
-              "enum": [
-                0,
-                1,
-                2
-              ]
-            },
-            "targetMessageVariable": {
-              "type": "string"
-            },
-            "version": {
-              "type": "integer",
-              "enum": [
-                1,
-                2
-              ],
-              "default": 2
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/SamlpResponseBuilder"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:SamlpResponseBuilder"
+  ]
 }

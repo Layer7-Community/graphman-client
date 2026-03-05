@@ -1,48 +1,75 @@
 {
-  "$comment": "Schema for SetSamlStatus assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "SetSamlStatus",
+  "name": "Set SAML Response Status Code",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SetSamlStatus",
+      "title": "Set SAML Response Status Code",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "samlStatus": {
+          "type": "string",
+          "enum": [
+            "SAML_SUCCESS",
+            "SAML_VERSION_MISMATCH",
+            "SAML_REQUESTER",
+            "SAML_RESPONDER",
+            "SAML_REQUEST_VERSION_TOO_HIGH",
+            "SAML_REQUEST_VERSION_TOO_LOW",
+            "SAML_REQUEST_VERSION_DEPRECATED",
+            "SAML_TOO_MANY_RESPONSES",
+            "SAML_REQUEST_DENIED",
+            "SAML_RESOURCE_NOT_RECOGNIZED",
+            "SAML2_SUCCESS",
+            "SAML2_REQUESTER",
+            "SAML2_RESPONDER",
+            "SAML2_VERSION_MISMATCH",
+            "SAML2_AUTHN_FAILED",
+            "SAML2_INVALID_ATTR_NAME_OR_VALUE",
+            "SAML2_INVALID_NAMEID_POLICY",
+            "SAML2_NO_AUTHN_CONTEXT",
+            "SAML2_NO_AVAILABLE_IDP",
+            "SAML2_NO_PASSIVE",
+            "SAML2_NO_SUPPORTED_IDP",
+            "SAML2_PARTIAL_LOGOUT",
+            "SAML2_PROXY_COUNT_EXCEEDED",
+            "SAML2_REQUEST_DENIED",
+            "SAML2_REQUEST_UNSUPPORTED",
+            "SAML2_REQUEST_VERSION_DEPRECATED",
+            "SAML2_REQUEST_VERSION_TOO_HIGH",
+            "SAML2_REQUEST_VERSION_TOO_LOW",
+            "SAML2_RESOURCE_NOT_RECOGNIZED",
+            "SAML2_TOO_MANY_RESPONSES",
+            "SAML2_UNKNOWN_ATTR_PROFILE",
+            "SAML2_UNKNOWN_PRINCIPAL",
+            "SAML2_UNSUPPORTED_BINDING"
+          ]
+        },
+        "variableName": {
+          "type": "string",
+          "default": "responseStatus"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "setSamlStatus": {
+    {
       "type": "object",
-      "$id": "schema:SetSamlStatus",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SetSamlStatus/Main",
+      "title": "Set SAML Response Status Code",
       "properties": {
         "SetSamlStatus": {
-          "type": "object",
-          "properties": {
-            "samlStatus": {
-              "type": "string"
-            },
-            "variableName": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/SetSamlStatus"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:SetSamlStatus"
+  ]
 }

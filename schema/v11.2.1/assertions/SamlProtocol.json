@@ -1,35 +1,84 @@
 {
-  "$comment": "Schema for SamlProtocol assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "SamlProtocol",
+  "name": "Saml Protocol",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SamlProtocol",
+      "title": "Saml Protocol",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "attributeStatement": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/samlAttributeStatement"
+        },
+        "audienceRestriction": {
+          "type": "string"
+        },
+        "authenticationStatement": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/samlAuthenticationStatement"
+        },
+        "authorizationStatement": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/SamlProtocol:samlpAuthorizationInfo"
+        },
+        "nameQualifier": {
+          "type": "string"
+        },
+        "noSubjectConfirmation": {
+          "type": "boolean",
+          "default": false
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "soapVersion": {
+          "type": "integer"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "version": {
+          "type": "integer"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "samlAttributeStatement": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/samlAttributeStatement",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SamlProtocol:samlpAuthorizationInfo",
+      "properties": {
+        "actions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "resource": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/samlAttributeStatement",
       "properties": {
         "attributes": {
           "type": "array",
           "items": {
-            "$ref": "schema:sub-types/samlAttributeStatement$Attribute"
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/samlAttributeStatement$Attribute"
           }
         },
         "failIfAnyAttributeIsMissing": {
@@ -56,48 +105,11 @@
           "type": "string",
           "default": "attrStatement"
         }
-      },
-      "unevaluatedProperties": false
-    },
-    "samlAuthenticationStatement": {
-      "type": "object",
-      "$id": "schema:sub-types/samlAuthenticationStatement",
-      "properties": {
-        "authenticationMethods": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "customAuthenticationMethods": {
-          "type": "string",
-          "default": ""
-        },
-        "includeAuthenticationContextDeclaration": {
-          "type": "boolean",
-          "default": true
-        }
-      },
-      "unevaluatedProperties": false
-    },
-    "sub-type-SamlProtocol:samlpAuthorizationInfo": {
-      "type": "object",
-      "$id": "schema:SamlProtocol:samlpAuthorizationInfo",
-      "properties": {
-        "actions": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "resource": {
-          "type": "string"
-        }
       }
     },
-    "samlAttributeStatement$Attribute": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/samlAttributeStatement$Attribute",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/samlAttributeStatement$Attribute",
       "properties": {
         "addBehavior": {
           "type": "string",
@@ -159,71 +171,37 @@
           ],
           "default": "REPLACE_EMPTY_STRING"
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "samlProtocol": {
+    {
       "type": "object",
-      "$id": "schema:SamlProtocol",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/samlAuthenticationStatement",
+      "properties": {
+        "authenticationMethods": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "customAuthenticationMethods": {
+          "type": "string",
+          "default": ""
+        },
+        "includeAuthenticationContextDeclaration": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SamlProtocol/Main",
+      "title": "Saml Protocol",
       "properties": {
         "SamlProtocol": {
-          "type": "object",
-          "properties": {
-            "attributeStatement": {
-              "$ref": "schema:sub-types/samlAttributeStatement"
-            },
-            "audienceRestriction": {
-              "type": "string"
-            },
-            "authenticationStatement": {
-              "$ref": "schema:sub-types/samlAuthenticationStatement"
-            },
-            "authorizationStatement": {
-              "$ref": "schema:SamlProtocol:samlpAuthorizationInfo"
-            },
-            "nameQualifier": {
-              "type": "string"
-            },
-            "noSubjectConfirmation": {
-              "type": "boolean",
-              "default": false
-            },
-            "otherTargetMessageVariable": {
-              "type": "string"
-            },
-            "soapVersion": {
-              "type": "integer"
-            },
-            "target": {
-              "type": "string",
-              "enum": [
-                "REQUEST",
-                "RESPONSE",
-                "OTHER"
-              ],
-              "default": "REQUEST"
-            },
-            "version": {
-              "type": "integer"
-            },
-            "_enabled": {
-              "type": "boolean",
-              "default": true
-            },
-            "_leftComment": {
-              "type": "string"
-            },
-            "_rightComment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/SamlProtocol"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:SamlProtocol"
+  ]
 }

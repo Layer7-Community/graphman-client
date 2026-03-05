@@ -1,59 +1,40 @@
 {
-  "$comment": "Schema for CustomAssertion assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "CustomAssertion",
+  "name": "Custom Assertion",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CustomAssertion",
+      "title": "Custom Assertion",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "value": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/customAssertion"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "sub-type-customAssertion": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/customAssertion"
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/customAssertion"
     },
-    "customAssertion": {
+    {
       "type": "object",
-      "$id": "schema:CustomAssertion",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CustomAssertion/Main",
+      "title": "Custom Assertion",
       "properties": {
         "CustomAssertion": {
-          "type": "object",
-          "properties": {
-            "value": {
-              "$ref": "schema:sub-types/customAssertion"
-            },
-            "_enabled": {
-              "type": "boolean",
-              "default": true
-            },
-            "_leftComment": {
-              "type": "string"
-            },
-            "_rightComment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/CustomAssertion"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:CustomAssertion"
+  ]
 }

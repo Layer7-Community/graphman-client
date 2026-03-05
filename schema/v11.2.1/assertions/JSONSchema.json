@@ -1,68 +1,103 @@
 {
-  "$comment": "Schema for JSONSchema assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "JSONSchema",
+  "name": "Validate JSON Schema",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/JSONSchema",
+      "title": "Validate JSON Schema",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "jsonSchemaVersion": {
+          "type": "string",
+          "enum": [
+            "DRAFT_V4"
+          ],
+          "default": "DRAFT_V4"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "resourceInfo": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/assertionResourceInfo"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "assertionResourceInfo": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/assertionResourceInfo"
-    },
-    "jSONSchema": {
-      "type": "object",
-      "$id": "schema:JSONSchema",
-      "$ref": "schema:assertion",
-      "properties": {
-        "JSONSchema": {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/assertionResourceInfo",
+      "anyOf": [
+        {
           "type": "object",
           "properties": {
-            "jsonSchemaVersion": {
-              "type": "string",
-              "enum": [
-                "DRAFT_V4"
-              ],
-              "default": "DRAFT_V4"
-            },
-            "otherTargetMessageVariable": {
+            "document": {
               "type": "string"
             },
-            "resourceInfo": {
-              "$ref": "schema:sub-types/assertionResourceInfo"
-            },
-            "target": {
-              "type": "string",
-              "enum": [
-                "REQUEST",
-                "RESPONSE",
-                "OTHER"
-              ],
-              "default": "REQUEST"
+            "originalUrl": {
+              "type": "string"
             }
-          },
-          "unevaluatedProperties": false
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "allowMessagesWithoutUrl": {
+              "type": "boolean",
+              "default": false
+            },
+            "urlRegexes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
         }
-      },
-      "unevaluatedProperties": false
+      ]
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/JSONSchema/Main",
+      "title": "Validate JSON Schema",
+      "properties": {
+        "JSONSchema": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/JSONSchema"
+        }
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:JSONSchema"
+  ]
 }

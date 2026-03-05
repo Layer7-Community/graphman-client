@@ -1,52 +1,33 @@
 {
-  "$comment": "Schema for Http2Transport assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "Http2Transport",
+  "name": "Http2Transport",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Http2Transport",
+      "title": "Http2Transport",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "http2Transport": {
+    {
       "type": "object",
-      "$id": "schema:Http2Transport",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Http2Transport/Main",
+      "title": "Http2Transport",
       "properties": {
         "Http2Transport": {
-          "type": "object",
-          "properties": {
-            "_enabled": {
-              "type": "boolean",
-              "default": true
-            },
-            "_leftComment": {
-              "type": "string"
-            },
-            "_rightComment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/Http2Transport"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:Http2Transport"
+  ]
 }

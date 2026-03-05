@@ -1,65 +1,60 @@
 {
-  "$comment": "Schema for CacheLookup assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "CacheLookup",
+  "name": "Look Up in Cache",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CacheLookup",
+      "title": "Look Up in Cache",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "cacheEntryKey": {
+          "type": "string",
+          "default": "${request.url}"
+        },
+        "cacheId": {
+          "type": "string",
+          "default": "defaultCache"
+        },
+        "contentTypeOverride": {
+          "type": "string"
+        },
+        "maxEntryAgeSeconds": {
+          "type": "string",
+          "default": "300"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "RESPONSE"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "cacheLookup": {
+    {
       "type": "object",
-      "$id": "schema:CacheLookup",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CacheLookup/Main",
+      "title": "Look Up in Cache",
       "properties": {
         "CacheLookup": {
-          "type": "object",
-          "properties": {
-            "cacheEntryKey": {
-              "type": "string"
-            },
-            "cacheId": {
-              "type": "string"
-            },
-            "contentTypeOverride": {
-              "type": "string"
-            },
-            "maxEntryAgeSeconds": {
-              "type": "string"
-            },
-            "otherTargetMessageVariable": {
-              "type": "string"
-            },
-            "target": {
-              "type": "string",
-              "enum": [
-                "REQUEST",
-                "RESPONSE",
-                "OTHER"
-              ]
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/CacheLookup"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:CacheLookup"
+  ]
 }

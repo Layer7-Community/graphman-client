@@ -1,56 +1,89 @@
 {
-  "$comment": "Schema for RequestSwA assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "RequestSwA",
+  "name": "Validate SOAP Attachments",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RequestSwA",
+      "title": "Validate SOAP Attachments",
       "type": "object",
       "properties": {
-        ".properties": {
+        "bindings": {
           "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
+          "patternProperties": {
+            ".*": {
+              "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/bindingInfo"
+            }
+          }
+        },
+        "namespaceMap": {
+          "type": "object",
+          "patternProperties": {
+            ".*": {
               "type": "string"
             }
-          },
-          "unevaluatedProperties": false
+          }
+        },
+        "unboundAttachmentPolicy": {
+          "type": "integer",
+          "default": 0
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "requestSwA": {
+    {
       "type": "object",
-      "$id": "schema:RequestSwA",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/bindingInfo",
+      "properties": {
+        "bindingName": {
+          "type": "string",
+          "default": ""
+        },
+        "bindingOperations": {
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/bindingOperationInfo"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/bindingOperationInfo",
+      "properties": {
+        "extraMultipart": {
+          "type": "object"
+        },
+        "multipart": {
+          "type": "object"
+        },
+        "name": {
+          "type": "string"
+        },
+        "xpath": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RequestSwA/Main",
+      "title": "Validate SOAP Attachments",
       "properties": {
         "RequestSwA": {
-          "type": "object",
-          "properties": {
-            "bindings": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
-            },
-            "requireEncryption": {
-              "type": "boolean",
-              "default": false
-            },
-            "requireSignature": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/RequestSwA"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:RequestSwA"
+  ]
 }

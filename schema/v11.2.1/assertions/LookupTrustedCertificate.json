@@ -1,77 +1,70 @@
 {
-  "$comment": "Schema for LookupTrustedCertificate assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "LookupTrustedCertificate",
+  "name": "Look Up Certificate",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/LookupTrustedCertificate",
+      "title": "Look Up Certificate",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "allowMultipleCertificates": {
+          "type": "boolean",
+          "default": true
+        },
+        "certIssuerDn": {
+          "type": "string"
+        },
+        "certSerialNumber": {
+          "type": "string"
+        },
+        "certSubjectDn": {
+          "type": "string"
+        },
+        "certSubjectKeyIdentifier": {
+          "type": "string"
+        },
+        "certThumbprintSha1": {
+          "type": "string"
+        },
+        "lookupType": {
+          "type": "string",
+          "enum": [
+            "TRUSTED_CERT_NAME",
+            "CERT_SKI",
+            "CERT_THUMBPRINT_SHA1",
+            "CERT_ISSUER_SERIAL",
+            "CERT_SUBJECT_DN"
+          ],
+          "default": "TRUSTED_CERT_NAME"
+        },
+        "trustedCertificateName": {
+          "type": "string"
+        },
+        "variableName": {
+          "type": "string",
+          "default": "certificates"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "lookupTrustedCertificate": {
+    {
       "type": "object",
-      "$id": "schema:LookupTrustedCertificate",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/LookupTrustedCertificate/Main",
+      "title": "Look Up Certificate",
       "properties": {
         "LookupTrustedCertificate": {
-          "type": "object",
-          "properties": {
-            "allowMultipleCertificates": {
-              "type": "boolean",
-              "default": true
-            },
-            "certIssuerDn": {
-              "type": "string"
-            },
-            "certSerialNumber": {
-              "type": "string"
-            },
-            "certSubjectDn": {
-              "type": "string"
-            },
-            "certSubjectKeyIdentifier": {
-              "type": "string"
-            },
-            "certThumbprintSha1": {
-              "type": "string"
-            },
-            "lookupType": {
-              "type": "string",
-              "enum": [
-                "TRUSTED_CERT_NAME",
-                "CERT_THUMBPRINT_SHA1",
-                "CERT_SKI",
-                "CERT_SUBJECT_DN",
-                "CERT_ISSUER_SERIAL"
-              ]
-            },
-            "trustedCertificateName": {
-              "type": "string"
-            },
-            "variableName": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/LookupTrustedCertificate"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:LookupTrustedCertificate"
+  ]
 }

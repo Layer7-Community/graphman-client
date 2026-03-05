@@ -1,64 +1,99 @@
 {
-  "$comment": "Schema for ManageCookie assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "ManageCookie",
+  "name": "Manage Cookie",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ManageCookie",
+      "title": "Manage Cookie",
       "type": "object",
       "properties": {
-        ".properties": {
+        "cookieAttributes": {
           "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
+          "patternProperties": {
+            ".*": {
+              "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/nameValuePair"
             }
-          },
-          "unevaluatedProperties": false
+          }
+        },
+        "cookieCriteria": {
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "$ref": "https://l7tech.com/2025/json-schema/assertions/ManageCookie:cookieCriteria"
+            }
+          }
+        },
+        "operation": {
+          "type": "string",
+          "enum": [
+            "ADD",
+            "REMOVE",
+            "UPDATE",
+            "ADD_OR_REPLACE"
+          ],
+          "default": "ADD"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "manageCookie": {
+    {
       "type": "object",
-      "$id": "schema:ManageCookie",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ManageCookie:cookieCriteria",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "regex": {
+          "type": "boolean",
+          "default": false
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/nameValuePair",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ManageCookie/Main",
+      "title": "Manage Cookie",
       "properties": {
         "ManageCookie": {
-          "type": "object",
-          "properties": {
-            "cookieAttributes": {
-              "type": "object"
-            },
-            "cookieCriteria": {
-              "type": "object"
-            },
-            "operation": {
-              "type": "string",
-              "enum": [
-                "ADD",
-                "ADD_OR_REPLACE",
-                "REMOVE",
-                "UPDATE"
-              ],
-              "default": "ADD"
-            },
-            "otherTargetMessageVariable": {
-              "type": "string"
-            },
-            "target": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/ManageCookie"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:ManageCookie"
+  ]
 }

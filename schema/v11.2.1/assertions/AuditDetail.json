@@ -1,71 +1,47 @@
 {
-  "$comment": "Schema for AuditDetail assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "AuditDetail",
+  "name": "Add Audit Details",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/AuditDetail",
+      "title": "Add Audit Details",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "customLoggerSuffix": {
+          "type": "string"
+        },
+        "detail": {
+          "type": "string"
+        },
+        "level": {
+          "type": "string",
+          "default": "INFO"
+        },
+        "loggingOnly": {
+          "type": "boolean",
+          "default": false
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "auditDetail": {
+    {
       "type": "object",
-      "$id": "schema:AuditDetail",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/AuditDetail/Main",
+      "title": "Add Audit Details",
       "properties": {
         "AuditDetail": {
-          "type": "object",
-          "properties": {
-            "customLoggerSuffix": {
-              "type": "string"
-            },
-            "detail": {
-              "type": "string"
-            },
-            "category": {
-              "type": "string",
-              "enum": [
-                "Audit",
-                "Log"
-              ],
-              "default": "Audit"
-            },
-            "level": {
-              "type": "string",
-              "default": "INFO",
-              "enum": [
-                "WARNING",
-                "INFO",
-                "FINE",
-                "FINER",
-                "FINEST"
-              ]
-            },
-            "loggingOnly": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/AuditDetail"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:AuditDetail"
+  ]
 }

@@ -1,55 +1,40 @@
 {
-  "$comment": "Schema for XMPPOpenServerSession assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "XMPPOpenServerSession",
+  "name": "Open XMPP Server Session",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/XMPPOpenServerSession",
+      "title": "Open XMPP Server Session",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "xMPPConnectionId": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "xMPPOpenServerSession": {
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
       "type": "object",
-      "$id": "schema:XMPPOpenServerSession",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/XMPPOpenServerSession/Main",
+      "title": "Open XMPP Server Session",
       "properties": {
         "XMPPOpenServerSession": {
-          "type": "object",
-          "properties": {
-            "direction": {
-              "type": "string",
-              "enum": [
-                "INBOUND",
-                "OUTBOUND"
-              ]
-            },
-            "inboundSessionIdVariable": {
-              "type": "string"
-            },
-            "sessionId": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/XMPPOpenServerSession"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:XMPPOpenServerSession"
+  ]
 }

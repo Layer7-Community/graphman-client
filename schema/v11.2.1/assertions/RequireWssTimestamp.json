@@ -1,30 +1,57 @@
 {
-  "$comment": "Schema for RequireWssTimestamp assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "RequireWssTimestamp",
+  "name": "Require Timestamp",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RequireWssTimestamp",
+      "title": "Require Timestamp",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "identityTarget": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/identityTarget"
+        },
+        "maxExpiryMilliseconds": {
+          "type": "number",
+          "default": 0
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "recipientContext": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext"
+        },
+        "signatureRequired": {
+          "type": "boolean",
+          "default": true
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "timeUnit": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/timeUnit",
+          "default": "m"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "identityTarget": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/identityTarget",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/identityTarget",
       "properties": {
         "identityId": {
           "type": "string"
@@ -33,7 +60,7 @@
           "type": "string"
         },
         "identityProviderOid": {
-          "$ref": "schema:sub-types/goid"
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
         },
         "targetIdentityType": {
           "type": "string",
@@ -44,12 +71,15 @@
             "TAG"
           ]
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "xmlSecurityRecipientContext": {
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
       "type": "object",
-      "$id": "schema:sub-types/xmlSecurityRecipientContext",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext",
       "properties": {
         "actor": {
           "type": "string"
@@ -57,61 +87,28 @@
         "base64edX509Certificate": {
           "type": "string"
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "timeUnit": {
+    {
       "type": "string",
-      "$id": "schema:sub-types/timeUnit"
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/timeUnit",
+      "enum": [
+        "ms",
+        "s",
+        "m",
+        "h",
+        "d"
+      ]
     },
-    "goid": {
-      "type": "string",
-      "$id": "schema:sub-types/goid"
-    },
-    "requireWssTimestamp": {
+    {
       "type": "object",
-      "$id": "schema:RequireWssTimestamp",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RequireWssTimestamp/Main",
+      "title": "Require Timestamp",
       "properties": {
         "RequireWssTimestamp": {
-          "type": "object",
-          "properties": {
-            "identityTarget": {
-              "$ref": "schema:sub-types/identityTarget"
-            },
-            "maxExpiryMilliseconds": {
-              "type": "number"
-            },
-            "otherTargetMessageVariable": {
-              "type": "string"
-            },
-            "recipientContext": {
-              "$ref": "schema:sub-types/xmlSecurityRecipientContext"
-            },
-            "signatureRequired": {
-              "type": "boolean",
-              "default": true
-            },
-            "target": {
-              "type": "string",
-              "enum": [
-                "REQUEST",
-                "RESPONSE",
-                "OTHER"
-              ],
-              "default": "REQUEST"
-            },
-            "timeUnit": {
-              "$ref": "schema:sub-types/timeUnit",
-              "default": "m"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/RequireWssTimestamp"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:RequireWssTimestamp"
+  ]
 }

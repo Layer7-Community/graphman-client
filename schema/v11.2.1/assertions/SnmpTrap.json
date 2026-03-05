@@ -1,57 +1,53 @@
 {
-  "$comment": "Schema for SnmpTrap assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "SnmpTrap",
+  "name": "Send SNMP Trap",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SnmpTrap",
+      "title": "Send SNMP Trap",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "community": {
+          "type": "string",
+          "default": ""
+        },
+        "errorMessage": {
+          "type": "string",
+          "default": "Layer7 API Gateway SNMP Trap"
+        },
+        "oid": {
+          "type": "string",
+          "default": "0"
+        },
+        "targetHostname": {
+          "type": "string",
+          "default": ""
+        },
+        "targetPort": {
+          "type": "integer",
+          "default": 162
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "snmpTrap": {
+    {
       "type": "object",
-      "$id": "schema:SnmpTrap",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SnmpTrap/Main",
+      "title": "Send SNMP Trap",
       "properties": {
         "SnmpTrap": {
-          "type": "object",
-          "properties": {
-            "community": {
-              "type": "string"
-            },
-            "errorMessage": {
-              "type": "string"
-            },
-            "oid": {
-              "type": "string"
-            },
-            "targetHostname": {
-              "type": "string"
-            },
-            "targetPort": {
-              "type": "integer"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/SnmpTrap"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:SnmpTrap"
+  ]
 }

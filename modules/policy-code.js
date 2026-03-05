@@ -59,7 +59,12 @@ function getOrCompileValidator(assertionName) {
         return schemaCache[assertionName];
     }
 
-    const schemaFile = utils.policyAssertionSchemaFile(schemaVersion, assertionName);
+    const indexEntry = assertionIndex[assertionName];
+    if (!indexEntry || !indexEntry.file) {
+        return null;
+    }
+
+    const schemaFile = utils.path(utils.policyAssertionsDir(schemaVersion), indexEntry.file);
     if (!utils.existsFile(schemaFile)) {
         return null;
     }

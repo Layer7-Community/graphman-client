@@ -1,40 +1,106 @@
 {
-  "$comment": "Schema for NonSoapSignElement assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "NonSoapSignElement",
+  "name": "(Non-SOAP) Sign XML Element",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/NonSoapSignElement",
+      "title": "(Non-SOAP) Sign XML Element",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "certificateDigestAlgName": {
+          "type": "string"
+        },
+        "customIdAttributeQname": {
+          "type": "string"
+        },
+        "detachedSignatureVariableName": {
+          "type": "string"
+        },
+        "digestAlgName": {
+          "type": "string"
+        },
+        "dynamicPrivateKeyVariable": {
+          "type": "string",
+          "default": ""
+        },
+        "forceEnvelopedTransform": {
+          "type": "boolean",
+          "default": false
+        },
+        "keyAlias": {
+          "type": "string"
+        },
+        "nonDefaultKeystoreId": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "refDigestAlgName": {
+          "type": "string"
+        },
+        "signatureLocation": {
+          "type": "string",
+          "enum": [
+            "FIRST_CHILD",
+            "LAST_CHILD"
+          ],
+          "default": "LAST_CHILD"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "RESPONSE"
+        },
+        "usesDefaultKeyStore": {
+          "type": "boolean",
+          "default": true
+        },
+        "usesDynamicPrivateKey": {
+          "type": "boolean",
+          "default": false
+        },
+        "xAdESEnabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "xpathExpression": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xpathExpression"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "goid": {
+    {
       "type": "string",
-      "$id": "schema:sub-types/goid"
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
     },
-    "xpathExpression": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/xpathExpression",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xpathExpression",
       "properties": {
         "expression": {
           "type": "string"
         },
         "namespaces": {
-          "type": "object"
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          }
         },
         "xpathVersion": {
           "type": "string",
@@ -45,97 +111,17 @@
           ],
           "default": "UNSPECIFIED"
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "nonSoapSignElement": {
+    {
       "type": "object",
-      "$id": "schema:NonSoapSignElement",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/NonSoapSignElement/Main",
+      "title": "(Non-SOAP) Sign XML Element",
       "properties": {
         "NonSoapSignElement": {
-          "type": "object",
-          "properties": {
-            "customIdAttributeQname": {
-              "type": "string"
-            },
-            "detachedSignatureVariableName": {
-              "type": "string"
-            },
-            "digestAlgName": {
-              "type": "string",
-              "enum": [
-                "Default",
-                "SHA-1",
-                "SHA-256",
-                "SHA-384",
-                "SHA-512"
-              ],
-              "default": "Default"
-            },
-            "dynamicPrivateKeyVariable": {
-              "type": "string",
-              "default": ""
-            },
-            "forceEnvelopedTransform": {
-              "type": "boolean",
-              "default": false
-            },
-            "keyAlias": {
-              "type": "string"
-            },
-            "nonDefaultKeystoreId": {
-              "$ref": "schema:sub-types/goid"
-            },
-            "otherTargetMessageVariable": {
-              "type": "string"
-            },
-            "refDigestAlgName": {
-              "type": "string",
-              "enum": [
-                "Default",
-                "SHA-1",
-                "SHA-256",
-                "SHA-384",
-                "SHA-512"
-              ],
-              "default": "Default"
-            },
-            "signatureLocation": {
-              "type": "string",
-              "enum": [
-                "FIRST_CHILD",
-                "LAST_CHILD"
-              ],
-              "default": "LAST_CHILD"
-            },
-            "target": {
-              "type": "string",
-              "enum": [
-                "REQUEST",
-                "RESPONSE",
-                "OTHER"
-              ],
-              "default": "RESPONSE"
-            },
-            "usesDefaultKeyStore": {
-              "type": "boolean",
-              "default": true
-            },
-            "usesDynamicPrivateKey": {
-              "type": "boolean",
-              "default": false
-            },
-            "xpathExpression": {
-              "$ref": "schema:sub-types/xpathExpression"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/NonSoapSignElement"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:NonSoapSignElement"
+  ]
 }

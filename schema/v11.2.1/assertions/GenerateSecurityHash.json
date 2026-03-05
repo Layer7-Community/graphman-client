@@ -1,74 +1,58 @@
 {
-  "$comment": "Schema for GenerateSecurityHash assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "GenerateSecurityHash",
+  "name": "Generate Security Hash",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/GenerateSecurityHash",
+      "title": "Generate Security Hash",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "algorithm": {
+          "type": "string",
+          "default": "HMAC-SHA1"
+        },
+        "base64Data": {
+          "type": "string"
+        },
+        "keyText": {
+          "type": "string"
+        },
+        "lineBreak": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/lineBreak"
+        },
+        "targetOutputVariable": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "lineBreak": {
+    {
       "type": "string",
-      "$id": "schema:sub-types/lineBreak"
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/lineBreak",
+      "enum": [
+        "LF",
+        "CR",
+        "CR-LF"
+      ]
     },
-    "generateSecurityHash": {
+    {
       "type": "object",
-      "$id": "schema:GenerateSecurityHash",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/GenerateSecurityHash/Main",
+      "title": "Generate Security Hash",
       "properties": {
         "GenerateSecurityHash": {
-          "type": "object",
-          "properties": {
-            "algorithm": {
-              "type": "string",
-              "default": "HMAC-SHA1",
-              "enum": [
-                "HMAC-SHA1",
-                "HMAC-SHA256",
-                "HMAC-SHA384",
-                "HMAC-SHA512",
-                "HMAC-MD5",
-                "MD5",
-                "SHA-1",
-                "SHA-256",
-                "SHA-384",
-                "SHA-512"
-              ]
-            },
-            "base64Data": {
-              "type": "string"
-            },
-            "keyText": {
-              "type": "string"
-            },
-            "lineBreak": {
-              "$ref": "schema:sub-types/lineBreak"
-            },
-            "targetOutputVariable": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/GenerateSecurityHash"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:GenerateSecurityHash"
+  ]
 }

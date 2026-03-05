@@ -1,52 +1,33 @@
 {
-  "$comment": "Schema for ExternalGemfireSharedStateProvider assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "ExternalGemfireSharedStateProvider",
+  "name": "External Gemfire Shared State Provider",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ExternalGemfireSharedStateProvider",
+      "title": "External Gemfire Shared State Provider",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "externalGemfireSharedStateProvider": {
+    {
       "type": "object",
-      "$id": "schema:ExternalGemfireSharedStateProvider",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ExternalGemfireSharedStateProvider/Main",
+      "title": "External Gemfire Shared State Provider",
       "properties": {
         "ExternalGemfireSharedStateProvider": {
-          "type": "object",
-          "properties": {
-            "_enabled": {
-              "type": "boolean",
-              "default": true
-            },
-            "_leftComment": {
-              "type": "string"
-            },
-            "_rightComment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/ExternalGemfireSharedStateProvider"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:ExternalGemfireSharedStateProvider"
+  ]
 }

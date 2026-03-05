@@ -1,62 +1,104 @@
 {
-  "$comment": "Schema for CircuitBreaker assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "CircuitBreaker",
+  "name": "Apply Circuit Breaker",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CircuitBreaker",
+      "title": "Apply Circuit Breaker",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "latencyCircuitCustomTrackerIdEnabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "latencyCircuitEnabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "latencyCircuitMaxFailures": {
+          "type": "string",
+          "default": "5"
+        },
+        "latencyCircuitMaxLatency": {
+          "type": "string",
+          "default": "500"
+        },
+        "latencyCircuitPercentageEnabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "latencyCircuitRecoveryPeriod": {
+          "type": "string",
+          "default": "10000"
+        },
+        "latencyCircuitSamplingWindow": {
+          "type": "string",
+          "default": "5000"
+        },
+        "latencyCircuitTrackerId": {
+          "type": "string"
+        },
+        "policyFailureCircuitCustomTrackerIdEnabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "policyFailureCircuitEnabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "policyFailureCircuitMaxFailures": {
+          "type": "string",
+          "default": "5"
+        },
+        "policyFailureCircuitPercentageEnabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "policyFailureCircuitRecoveryPeriod": {
+          "type": "string",
+          "default": "10000"
+        },
+        "policyFailureCircuitRoutingFailuresOnly": {
+          "type": "boolean",
+          "default": false
+        },
+        "policyFailureCircuitRoutingStatusCodes": {
+          "type": "string"
+        },
+        "policyFailureCircuitSamplingWindow": {
+          "type": "string",
+          "default": "5000"
+        },
+        "policyFailureCircuitTrackerId": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        },
+        "_children": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
         }
       }
     },
-    "circuitBreaker": {
+    {
       "type": "object",
-      "$id": "schema:CircuitBreaker",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CircuitBreaker/Main",
+      "title": "Apply Circuit Breaker",
       "properties": {
         "CircuitBreaker": {
-          "type": "object",
-          "properties": {
-            "failureCountThreshold": {
-              "type": "integer",
-              "default": 5
-            },
-            "forceOpen": {
-              "type": "boolean",
-              "default": false
-            },
-            "maxActiveRequests": {
-              "type": "integer",
-              "default": 0
-            },
-            "recoveryPeriod": {
-              "type": "integer",
-              "default": 10000
-            },
-            "samplingWindow": {
-              "type": "integer",
-              "default": 60000
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/CircuitBreaker"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:CircuitBreaker"
+  ]
 }

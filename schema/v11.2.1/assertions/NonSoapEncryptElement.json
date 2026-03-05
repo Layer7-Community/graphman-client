@@ -1,36 +1,82 @@
 {
-  "$comment": "Schema for NonSoapEncryptElement assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "NonSoapEncryptElement",
+  "name": "(Non-SOAP) Encrypt XML Element",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/NonSoapEncryptElement",
+      "title": "(Non-SOAP) Encrypt XML Element",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "encryptContentsOnly": {
+          "type": "boolean",
+          "default": false
+        },
+        "encryptedDataTypeAttribute": {
+          "type": "string",
+          "default": "http://www.w3.org/2001/04/xmlenc#Element"
+        },
+        "encryptedKeyRecipientAttribute": {
+          "type": "string"
+        },
+        "includeEncryptedDataTypeAttribute": {
+          "type": "boolean",
+          "default": false
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "recipientCertContextVariableName": {
+          "type": "string"
+        },
+        "recipientCertificateBase64": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "RESPONSE"
+        },
+        "useOaep": {
+          "type": "boolean",
+          "default": false
+        },
+        "xencAlgorithm": {
+          "type": "string",
+          "default": "http://www.w3.org/2001/04/xmlenc#aes128-cbc"
+        },
+        "xpathExpression": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xpathExpression"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "xpathExpression": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/xpathExpression",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xpathExpression",
       "properties": {
         "expression": {
           "type": "string"
         },
         "namespaces": {
-          "type": "object"
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          }
         },
         "xpathVersion": {
           "type": "string",
@@ -41,44 +87,17 @@
           ],
           "default": "UNSPECIFIED"
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "nonSoapEncryptElement": {
+    {
       "type": "object",
-      "$id": "schema:NonSoapEncryptElement",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/NonSoapEncryptElement/Main",
+      "title": "(Non-SOAP) Encrypt XML Element",
       "properties": {
         "NonSoapEncryptElement": {
-          "type": "object",
-          "properties": {
-            "recipientCertContextVariableName": {
-              "type": "string"
-            },
-            "recipientCertificateBase64": {
-              "type": "string"
-            },
-            "xencAlgorithm": {
-              "type": "string",
-              "enum": [
-                "http://www.w3.org/2001/04/xmlenc#aes128-cbc",
-                "http://www.w3.org/2001/04/xmlenc#aes192-cbc",
-                "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
-                "http://www.w3.org/2001/04/xmlenc#aes128-gcm",
-                "http://www.w3.org/2001/04/xmlenc#aes256-gcm",
-                "http://www.w3.org/2001/04/xmlenc#tripledes-cbc"
-              ]
-            },
-            "xpath": {
-              "$ref": "schema:sub-types/xpathExpression"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/NonSoapEncryptElement"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:NonSoapEncryptElement"
+  ]
 }

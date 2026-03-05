@@ -1,66 +1,57 @@
 {
-  "$comment": "Schema for WsiBsp assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "WsiBsp",
+  "name": "Enforce WS-I BSP Compliance",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/WsiBsp",
+      "title": "Enforce WS-I BSP Compliance",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "auditRequestNonCompliance": {
+          "type": "boolean",
+          "default": true
+        },
+        "auditResponseNonCompliance": {
+          "type": "boolean",
+          "default": true
+        },
+        "checkRequestMessages": {
+          "type": "boolean",
+          "default": false
+        },
+        "checkResponseMessages": {
+          "type": "boolean",
+          "default": false
+        },
+        "failOnNonCompliantRequest": {
+          "type": "boolean",
+          "default": false
+        },
+        "failOnNonCompliantResponse": {
+          "type": "boolean",
+          "default": false
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "wsiBsp": {
+    {
       "type": "object",
-      "$id": "schema:WsiBsp",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/WsiBsp/Main",
+      "title": "Enforce WS-I BSP Compliance",
       "properties": {
         "WsiBsp": {
-          "type": "object",
-          "properties": {
-            "auditRequestNonCompliance": {
-              "type": "boolean",
-              "default": true
-            },
-            "auditResponseNonCompliance": {
-              "type": "boolean",
-              "default": true
-            },
-            "checkRequestMessages": {
-              "type": "boolean",
-              "default": true
-            },
-            "checkResponseMessages": {
-              "type": "boolean",
-              "default": false
-            },
-            "failOnNonCompliantRequest": {
-              "type": "boolean",
-              "default": false
-            },
-            "failOnNonCompliantResponse": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/WsiBsp"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:WsiBsp"
+  ]
 }

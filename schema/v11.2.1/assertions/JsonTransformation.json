@@ -1,30 +1,73 @@
 {
-  "$comment": "Schema for JsonTransformation assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "JsonTransformation",
+  "name": "Apply JSON Transformation",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/JsonTransformation",
+      "title": "Apply JSON Transformation",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "arrayForm": {
+          "type": "boolean",
+          "default": false
+        },
+        "convention": {
+          "type": "string",
+          "enum": [
+            "STANDARD",
+            "JSONML"
+          ],
+          "default": "STANDARD"
+        },
+        "destinationMessageTarget": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "prettyPrint": {
+          "type": "boolean",
+          "default": false
+        },
+        "rootTagString": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "RESPONSE"
+        },
+        "transformation": {
+          "type": "string",
+          "enum": [
+            "XML_to_JSON",
+            "JSON_to_XML"
+          ],
+          "default": "XML_to_JSON"
+        },
+        "useNumbersWhenPossible": {
+          "type": "boolean",
+          "default": false
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "messageTargetableSupport": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/messageTargetableSupport",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport",
       "properties": {
         "otherTargetMessageVariable": {
           "type": "string"
@@ -40,76 +83,23 @@
             "RESPONSE",
             "OTHER"
           ],
-          "default": "RESPONSE"
+          "default": "REQUEST"
         },
         "targetModifiedByGateway": {
           "type": "boolean",
           "default": false
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "jsonTransformation": {
+    {
       "type": "object",
-      "$id": "schema:JsonTransformation",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/JsonTransformation/Main",
+      "title": "Apply JSON Transformation",
       "properties": {
         "JsonTransformation": {
-          "type": "object",
-          "properties": {
-            "arrayForm": {
-              "type": "boolean",
-              "default": false
-            },
-            "convention": {
-              "type": "string",
-              "enum": [
-                "STANDARD",
-                "JSONML"
-              ],
-              "default": "STANDARD"
-            },
-            "destinationMessageTarget": {
-              "$ref": "schema:sub-types/messageTargetableSupport"
-            },
-            "otherTargetMessageVariable": {
-              "type": "string"
-            },
-            "prettyPrint": {
-              "type": "boolean",
-              "default": false
-            },
-            "rootTagString": {
-              "type": "string"
-            },
-            "target": {
-              "type": "string",
-              "enum": [
-                "REQUEST",
-                "RESPONSE",
-                "OTHER"
-              ],
-              "default": "RESPONSE"
-            },
-            "transformation": {
-              "type": "string",
-              "enum": [
-                "XML_to_JSON",
-                "JSON_to_XML"
-              ],
-              "default": "XML_to_JSON"
-            },
-            "useNumbersWhenPossible": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/JsonTransformation"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:JsonTransformation"
+  ]
 }

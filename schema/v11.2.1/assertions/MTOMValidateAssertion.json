@@ -1,52 +1,77 @@
 {
-  "$comment": "Schema for MTOMValidateAssertion assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "MTOMValidateAssertion",
+  "name": "Validate MTOM Message",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/MTOMValidateAssertion",
+      "title": "Validate MTOM Message",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "requireEncoded": {
+          "type": "boolean",
+          "default": true
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "validationRules": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/MTOMValidateAssertion:MTOMValidationRule"
+          }
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "MTOMValidateAssertion:MTOMValidationRule": {
+    {
       "type": "object",
-      "$id": "schema:MTOMValidateAssertion:MTOMValidationRule",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/MTOMValidateAssertion:MTOMValidationRule",
       "properties": {
         "count": {
-          "type": "integer"
+          "type": "integer",
+          "default": 0
         },
         "size": {
-          "type": "number"
+          "type": "number",
+          "default": 0
         },
         "xpathExpression": {
-          "$ref": "schema:sub-types/xpathExpression"
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xpathExpression"
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "xpathExpression": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/xpathExpression",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xpathExpression",
       "properties": {
         "expression": {
           "type": "string"
         },
         "namespaces": {
-          "type": "object"
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          }
         },
         "xpathVersion": {
           "type": "string",
@@ -57,46 +82,17 @@
           ],
           "default": "UNSPECIFIED"
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "mTOMValidateAssertion": {
+    {
       "type": "object",
-      "$id": "schema:MTOMValidateAssertion",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/MTOMValidateAssertion/Main",
+      "title": "Validate MTOM Message",
       "properties": {
         "MTOMValidateAssertion": {
-          "type": "object",
-          "properties": {
-            "otherTargetMessageVariable": {
-              "type": "string"
-            },
-            "requireEncoded": {
-              "type": "boolean",
-              "default": true
-            },
-            "target": {
-              "type": "string",
-              "enum": [
-                "REQUEST",
-                "RESPONSE",
-                "OTHER"
-              ],
-              "default": "REQUEST"
-            },
-            "validationRules": {
-              "type": "array",
-              "items": {
-                "$ref": "schema:MTOMValidateAssertion:MTOMValidationRule"
-              }
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/MTOMValidateAssertion"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:MTOMValidateAssertion"
+  ]
 }

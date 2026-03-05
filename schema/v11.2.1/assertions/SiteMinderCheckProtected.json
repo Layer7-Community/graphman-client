@@ -1,82 +1,77 @@
 {
-  "$comment": "Schema for SiteMinderCheckProtected assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "SiteMinderCheckProtected",
+  "name": "Check Protected Resource Against CA Single Sign-On",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SiteMinderCheckProtected",
+      "title": "Check Protected Resource Against CA Single Sign-On",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "acoName": {
+          "type": "string"
+        },
+        "action": {
+          "type": "string"
+        },
+        "agentGoid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "agentId": {
+          "type": "string"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "prefix": {
+          "type": "string"
+        },
+        "protectedResource": {
+          "type": "string"
+        },
+        "serverName": {
+          "type": "string",
+          "default": ""
+        },
+        "smAgentName": {
+          "type": "string"
+        },
+        "sourceIpAddress": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "siteMinderCheckProtected": {
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
       "type": "object",
-      "$id": "schema:SiteMinderCheckProtected",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SiteMinderCheckProtected/Main",
+      "title": "Check Protected Resource Against CA Single Sign-On",
       "properties": {
         "SiteMinderCheckProtected": {
-          "type": "object",
-          "properties": {
-            "acoName": {
-              "type": "string"
-            },
-            "action": {
-              "type": "string",
-              "default": "GET"
-            },
-            "agentGoid": {
-              "type": "string"
-            },
-            "agentId": {
-              "type": "string"
-            },
-            "otherTargetMessageVariable": {
-              "type": "string"
-            },
-            "prefix": {
-              "type": "string"
-            },
-            "protectedResource": {
-              "type": "string"
-            },
-            "serverName": {
-              "type": "string"
-            },
-            "smAgentName": {
-              "type": "string"
-            },
-            "sourceIpAddress": {
-              "type": "string"
-            },
-            "target": {
-              "type": "string",
-              "enum": [
-                "REQUEST",
-                "RESPONSE",
-                "OTHER"
-              ],
-              "default": "REQUEST"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/SiteMinderCheckProtected"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:SiteMinderCheckProtected"
+  ]
 }

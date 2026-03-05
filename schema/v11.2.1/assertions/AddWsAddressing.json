@@ -1,82 +1,73 @@
 {
-  "$comment": "Schema for AddWsAddressing assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "AddWsAddressing",
+  "name": "Add WS-Addressing",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/AddWsAddressing",
+      "title": "Add WS-Addressing",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "action": {
+          "type": "string"
+        },
+        "destination": {
+          "type": "string"
+        },
+        "faultEndpoint": {
+          "type": "string"
+        },
+        "messageId": {
+          "type": "string"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "relatesToMessageId": {
+          "type": "string"
+        },
+        "replyEndpoint": {
+          "type": "string"
+        },
+        "sourceEndpoint": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "variablePrefix": {
+          "type": "string",
+          "default": "wsa"
+        },
+        "wsaNamespaceUri": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "addWsAddressing": {
+    {
       "type": "object",
-      "$id": "schema:AddWsAddressing",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/AddWsAddressing/Main",
+      "title": "Add WS-Addressing",
       "properties": {
         "AddWsAddressing": {
-          "type": "object",
-          "properties": {
-            "action": {
-              "type": "string"
-            },
-            "destination": {
-              "type": "string"
-            },
-            "faultEndpoint": {
-              "type": "string"
-            },
-            "messageId": {
-              "type": "string"
-            },
-            "otherTargetMessageVariable": {
-              "type": "string"
-            },
-            "relatesToMessageId": {
-              "type": "string"
-            },
-            "replyEndpoint": {
-              "type": "string"
-            },
-            "sourceEndpoint": {
-              "type": "string"
-            },
-            "target": {
-              "type": "string",
-              "enum": [
-                "REQUEST",
-                "RESPONSE",
-                "OTHER"
-              ],
-              "default": "REQUEST"
-            },
-            "variablePrefix": {
-              "type": "string"
-            },
-            "wsaNamespaceUri": {
-              "type": "string",
-              "default": "http://www.w3.org/2005/08/addressing"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/AddWsAddressing"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:AddWsAddressing"
+  ]
 }

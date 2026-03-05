@@ -1,79 +1,75 @@
 {
-  "$comment": "Schema for LdapWrite assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "LdapWrite",
+  "name": "Write LDAP",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/LdapWrite",
+      "title": "Write LDAP",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "attributeList": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/LdapWrite:attributeType"
+          }
+        },
+        "changetype": {
+          "type": "string",
+          "enum": [
+            "ADD",
+            "DELETE",
+            "MODIFY",
+            "MODRDN"
+          ]
+        },
+        "dn": {
+          "type": "string"
+        },
+        "ldapProviderId": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid",
+          "default": "0000000000000000ffffffffffffffff"
+        },
+        "variablePrefix": {
+          "type": "string",
+          "default": "ldapWrite"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "goid": {
-      "type": "string",
-      "$id": "schema:sub-types/goid"
-    },
-    "ldapWrite": {
+    {
       "type": "object",
-      "$id": "schema:LdapWrite",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/LdapWrite:attributeType",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/LdapWrite/Main",
+      "title": "Write LDAP",
       "properties": {
         "LdapWrite": {
-          "type": "object",
-          "properties": {
-            "attributeList": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "attribute": {
-                    "type": "string"
-                  },
-                  "value": {
-                    "type": "string"
-                  }
-                }
-              }
-            },
-            "changetype": {
-              "type": "string",
-              "enum": [
-                "ADD",
-                "DELETE",
-                "MODIFY",
-                "MODRDN"
-              ],
-              "default": "ADD"
-            },
-            "dn": {
-              "type": "string"
-            },
-            "ldapProviderId": {
-              "$ref": "schema:sub-types/goid"
-            },
-            "variablePrefix": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/LdapWrite"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:LdapWrite"
+  ]
 }

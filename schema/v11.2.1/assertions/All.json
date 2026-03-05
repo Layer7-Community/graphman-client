@@ -1,42 +1,49 @@
 {
-  "$comment": "Schema for All assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
-      "type": "object",
-      "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
-        }
-      }
-    },
-    "all": {
-      "type": "object",
-      "$id": "schema:All",
-      "$ref": "schema:assertion",
-      "properties": {
-        "All": {
+  "configName": "All",
+  "name": "All assertions must evaluate to true",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/All",
+      "title": "All assertions must evaluate to true",
+      "anyOf": [
+        {
           "type": "array",
           "items": {
             "type": "object"
           }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "_enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "_leftComment": {
+              "type": "string"
+            },
+            "_rightComment": {
+              "type": "string"
+            },
+            "_children": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
         }
-      },
-      "unevaluatedProperties": false
+      ]
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/All/Main",
+      "title": "All assertions must evaluate to true",
+      "properties": {
+        "All": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/All"
+        }
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:All"
+  ]
 }

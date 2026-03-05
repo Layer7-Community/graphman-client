@@ -1,88 +1,88 @@
 {
-  "$comment": "Schema for SetVariable assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "SetVariable",
+  "name": "Set Context Variable",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SetVariable",
+      "title": "Set Context Variable",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "contentType": {
+          "type": "string"
+        },
+        "dataType": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/dataType",
+          "default": "string"
+        },
+        "dateFormat": {
+          "type": "string"
+        },
+        "dateOffsetExpression": {
+          "type": "string"
+        },
+        "dateOffsetField": {
+          "type": "integer",
+          "default": 13
+        },
+        "expression": {
+          "type": "string"
+        },
+        "lineBreak": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/lineBreak",
+          "default": "CR-LF"
+        },
+        "variable": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "setVariable": {
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/dataType",
+      "enum": [
+        "string",
+        "cert",
+        "int",
+        "decimal",
+        "float",
+        "xml",
+        "boolean",
+        "binary",
+        "dateTime",
+        "message",
+        "blob",
+        "clob",
+        "other"
+      ]
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/lineBreak",
+      "enum": [
+        "LF",
+        "CR",
+        "CR-LF"
+      ]
+    },
+    {
       "type": "object",
-      "$id": "schema:SetVariable",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SetVariable/Main",
+      "title": "Set Context Variable",
       "properties": {
         "SetVariable": {
-          "type": "object",
-          "properties": {
-            "contentType": {
-              "type": "string"
-            },
-            "dataType": {
-              "type": "string",
-              "enum": [
-                "string",
-                "message",
-                "dateTime",
-                "int"
-              ]
-            },
-            "dateFormat": {
-              "type": "string"
-            },
-            "dateOffsetExpression": {
-              "type": "string"
-            },
-            "dateOffsetField": {
-              "type": "integer",
-              "default": 13,
-              "enum": [
-                14,
-                13,
-                12,
-                11,
-                5,
-                3,
-                2
-              ]
-            },
-            "expression": {
-              "type": "string"
-            },
-            "lineBreak": {
-              "type": "string",
-              "enum": [
-                "CR-LF",
-                "LF",
-                "CR"
-              ],
-              "default": "CR-LF"
-            },
-            "variable": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/SetVariable"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:SetVariable"
+  ]
 }

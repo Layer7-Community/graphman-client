@@ -1,51 +1,43 @@
 {
-  "$comment": "Schema for Join assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "Join",
+  "name": "Join Variable",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Join",
+      "title": "Join Variable",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "inputVariable": {
+          "type": "string"
+        },
+        "joinSubstring": {
+          "type": "string",
+          "default": ","
+        },
+        "outputVariable": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "join": {
+    {
       "type": "object",
-      "$id": "schema:Join",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Join/Main",
+      "title": "Join Variable",
       "properties": {
         "Join": {
-          "type": "object",
-          "properties": {
-            "inputVariable": {
-              "type": "string"
-            },
-            "joinSubstring": {
-              "type": "string"
-            },
-            "outputVariable": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/Join"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:Join"
+  ]
 }

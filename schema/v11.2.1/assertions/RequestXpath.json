@@ -1,36 +1,44 @@
 {
-  "$comment": "Schema for RequestXpath assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "RequestXpath",
+  "name": "Evaluate Request XPath",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RequestXpath",
+      "title": "Evaluate Request XPath",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "variablePrefix": {
+          "type": "string"
+        },
+        "xpathExpression": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xpathExpression"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "xpathExpression": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/xpathExpression",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xpathExpression",
       "properties": {
         "expression": {
           "type": "string"
         },
         "namespaces": {
-          "type": "object"
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          }
         },
         "xpathVersion": {
           "type": "string",
@@ -41,27 +49,17 @@
           ],
           "default": "UNSPECIFIED"
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "requestXpath": {
+    {
       "type": "object",
-      "$id": "schema:RequestXpath",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RequestXpath/Main",
+      "title": "Evaluate Request XPath",
       "properties": {
         "RequestXpath": {
-          "type": "object",
-          "properties": {
-            "xpath": {
-              "$ref": "schema:sub-types/xpathExpression"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/RequestXpath"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:RequestXpath"
+  ]
 }

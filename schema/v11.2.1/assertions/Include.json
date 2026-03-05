@@ -1,51 +1,42 @@
 {
-  "$comment": "Schema for Include assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "Include",
+  "name": "Include Policy Fragment",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Include",
+      "title": "Include Policy Fragment",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "policyGuid": {
+          "type": "string"
+        },
+        "policyName": {
+          "type": "string"
+        },
+        "policyOid": {
+          "type": "number"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "include": {
+    {
       "type": "object",
-      "$id": "schema:Include",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Include/Main",
+      "title": "Include Policy Fragment",
       "properties": {
         "Include": {
-          "type": "object",
-          "properties": {
-            "policyGuid": {
-              "type": "string"
-            },
-            "policyName": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "policyName"
-          ],
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/Include"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:Include"
+  ]
 }

@@ -1,51 +1,45 @@
 {
-  "$comment": "Schema for ExecuteRoutingStrategy assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "ExecuteRoutingStrategy",
+  "name": "Execute Routing Strategy",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ExecuteRoutingStrategy",
+      "title": "Execute Routing Strategy",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "feedback": {
+          "type": "string",
+          "default": "feedback"
+        },
+        "route": {
+          "type": "string",
+          "default": "route"
+        },
+        "strategy": {
+          "type": "string",
+          "default": "strategy"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "executeRoutingStrategy": {
+    {
       "type": "object",
-      "$id": "schema:ExecuteRoutingStrategy",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ExecuteRoutingStrategy/Main",
+      "title": "Execute Routing Strategy",
       "properties": {
         "ExecuteRoutingStrategy": {
-          "type": "object",
-          "properties": {
-            "feedback": {
-              "type": "string"
-            },
-            "route": {
-              "type": "string"
-            },
-            "strategy": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/ExecuteRoutingStrategy"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:ExecuteRoutingStrategy"
+  ]
 }

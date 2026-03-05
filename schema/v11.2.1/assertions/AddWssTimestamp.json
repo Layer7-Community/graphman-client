@@ -1,30 +1,95 @@
 {
-  "$comment": "Schema for AddWssTimestamp assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "AddWssTimestamp",
+  "name": "Add Timestamp",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/AddWssTimestamp",
+      "title": "Add Timestamp",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "digestAlgorithmName": {
+          "type": "string"
+        },
+        "dynamicPrivateKeyVariable": {
+          "type": "string",
+          "default": ""
+        },
+        "expiryMilliseconds": {
+          "type": "number",
+          "default": 0
+        },
+        "keyAlias": {
+          "type": "string"
+        },
+        "keyReference": {
+          "type": "string",
+          "default": "BinarySecurityToken"
+        },
+        "nonDefaultKeystoreId": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "protectTokens": {
+          "type": "boolean",
+          "default": false
+        },
+        "recipientContext": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext"
+        },
+        "resolution": {
+          "type": "string",
+          "enum": [
+            "NANOSECONDS",
+            "MILLISECONDS",
+            "SECONDS"
+          ]
+        },
+        "signatureRequired": {
+          "type": "boolean",
+          "default": true
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "RESPONSE"
+        },
+        "timeUnit": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/timeUnit",
+          "default": "m"
+        },
+        "usesDefaultKeyStore": {
+          "type": "boolean",
+          "default": true
+        },
+        "usesDynamicPrivateKey": {
+          "type": "boolean",
+          "default": false
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "xmlSecurityRecipientContext": {
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
       "type": "object",
-      "$id": "schema:sub-types/xmlSecurityRecipientContext",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext",
       "properties": {
         "actor": {
           "type": "string"
@@ -32,37 +97,28 @@
         "base64edX509Certificate": {
           "type": "string"
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "addWssTimestamp": {
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/timeUnit",
+      "enum": [
+        "ms",
+        "s",
+        "m",
+        "h",
+        "d"
+      ]
+    },
+    {
       "type": "object",
-      "$id": "schema:AddWssTimestamp",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/AddWssTimestamp/Main",
+      "title": "Add Timestamp",
       "properties": {
         "AddWssTimestamp": {
-          "type": "object",
-          "properties": {
-            "expiryMilliseconds": {
-              "type": "integer"
-            },
-            "signatureRequired": {
-              "type": "boolean",
-              "default": false
-            },
-            "timeUnit": {
-              "type": "integer"
-            },
-            "recipientContext": {
-              "$ref": "schema:sub-types/xmlSecurityRecipientContext"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/AddWssTimestamp"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:AddWssTimestamp"
+  ]
 }

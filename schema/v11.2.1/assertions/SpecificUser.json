@@ -1,86 +1,65 @@
 {
-  "$comment": "Schema for SpecificUser assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "SpecificUser",
+  "name": "Authenticate User",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SpecificUser",
+      "title": "Authenticate User or Group",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "identityProviderOid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid",
+          "default": "0000000000000000ffffffffffffffff"
+        },
+        "identityTag": {
+          "type": "string"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "userLogin": {
+          "type": "string"
+        },
+        "userName": {
+          "type": "string"
+        },
+        "userUid": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "identityTarget": {
-      "type": "object",
-      "$id": "schema:sub-types/identityTarget",
-      "properties": {
-        "identityId": {
-          "type": "string"
-        },
-        "identityInfo": {
-          "type": "string"
-        },
-        "identityProviderOid": {
-          "$ref": "schema:sub-types/goid"
-        },
-        "targetIdentityType": {
-          "type": "string",
-          "enum": [
-            "USER",
-            "GROUP",
-            "PROVIDER",
-            "TAG"
-          ]
-        }
-      },
-      "unevaluatedProperties": false
-    },
-    "goid": {
+    {
       "type": "string",
-      "$id": "schema:sub-types/goid"
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
     },
-    "specificUser": {
+    {
       "type": "object",
-      "$id": "schema:SpecificUser",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SpecificUser/Main",
+      "title": "Authenticate User or Group",
       "properties": {
         "SpecificUser": {
-          "type": "object",
-          "properties": {
-            "identityProviderName": {
-              "type": "string"
-            },
-            "userName": {
-              "type": "string"
-            },
-            "userLogin": {
-              "type": "string"
-            },
-            "identityTag": {
-              "type": "string"
-            },
-            "identityTarget": {
-              "$ref": "schema:sub-types/identityTarget"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/SpecificUser"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:SpecificUser"
+  ]
 }

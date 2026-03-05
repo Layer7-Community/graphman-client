@@ -1,86 +1,75 @@
 {
-  "$comment": "Schema for AddHeader assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "AddHeader",
+  "name": "Manage Transport Properties/Headers",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/AddHeader",
+      "title": "Manage Transport Properties/Headers",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "evaluateNameAsExpression": {
+          "type": "boolean",
+          "default": false
+        },
+        "evaluateValueExpression": {
+          "type": "boolean",
+          "default": false
+        },
+        "headerName": {
+          "type": "string"
+        },
+        "headerValue": {
+          "type": "string"
+        },
+        "metadataType": {
+          "type": "string",
+          "default": "HTTP Header"
+        },
+        "operation": {
+          "type": "string",
+          "enum": [
+            "ADD",
+            "REMOVE"
+          ],
+          "default": "ADD"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "removeExisting": {
+          "type": "boolean",
+          "default": false
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "addHeader": {
+    {
       "type": "object",
-      "$id": "schema:AddHeader",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/AddHeader/Main",
+      "title": "Manage Transport Properties/Headers",
       "properties": {
         "AddHeader": {
-          "type": "object",
-          "properties": {
-            "evaluateNameAsExpression": {
-              "type": "boolean",
-              "default": false
-            },
-            "evaluateValueExpression": {
-              "type": "boolean",
-              "default": false
-            },
-            "headerName": {
-              "type": "string"
-            },
-            "headerValue": {
-              "type": "string"
-            },
-            "metadataType": {
-              "type": "string",
-              "default": "HTTP_HEADER",
-              "enum": [
-                "HTTP_HEADER",
-                "JMS_PROPERTY",
-                "JMS_HEADER"
-              ]
-            },
-            "operation": {
-              "type": "string",
-              "enum": [
-                "ADD",
-                "ADD_REPLACE",
-                "REMOVE"
-              ],
-              "default": "ADD"
-            },
-            "otherTargetMessageVariable": {
-              "type": "string"
-            },
-            "target": {
-              "type": "string",
-              "enum": [
-                "REQUEST",
-                "RESPONSE",
-                "OTHER"
-              ],
-              "default": "REQUEST"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/AddHeader"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:AddHeader"
+  ]
 }

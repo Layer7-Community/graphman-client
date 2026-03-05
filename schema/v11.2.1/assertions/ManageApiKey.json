@@ -1,67 +1,48 @@
 {
-  "$comment": "Schema for ManageApiKey assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "ManageApiKey",
+  "name": "Manage API Keys",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ManageApiKey",
+      "title": "Manage API Keys",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "action": {
+          "type": "string"
+        },
+        "apiKey": {
+          "type": "string",
+          "default": ""
+        },
+        "apiKeyElement": {
+          "type": "string",
+          "default": ""
+        },
+        "variablePrefix": {
+          "type": "string",
+          "default": "apikey"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "manageApiKey": {
+    {
       "type": "object",
-      "$id": "schema:ManageApiKey",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ManageApiKey/Main",
+      "title": "Manage API Keys",
       "properties": {
         "ManageApiKey": {
-          "type": "object",
-          "properties": {
-            "action": {
-              "type": "string"
-            },
-            "apiKey": {
-              "type": "string",
-              "default": ""
-            },
-            "apiKeyElement": {
-              "type": "string",
-              "default": ""
-            },
-            "variablePrefix": {
-              "type": "string",
-              "default": "apikey"
-            },
-            "_enabled": {
-              "type": "boolean",
-              "default": true
-            },
-            "_leftComment": {
-              "type": "string"
-            },
-            "_rightComment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/ManageApiKey"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:ManageApiKey"
+  ]
 }

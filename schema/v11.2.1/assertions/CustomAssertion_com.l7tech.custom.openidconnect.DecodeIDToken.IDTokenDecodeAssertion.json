@@ -1,0 +1,133 @@
+{
+  "configName": "CustomAssertion:com.l7tech.custom.openidconnect.DecodeIDToken.IDTokenDecodeAssertion",
+  "name": "Decode ID Token",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CustomAssertion:com.l7tech.custom.openidconnect.DecodeIDToken.IDTokenDecodeAssertion",
+      "title": "Decode ID Token",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "const": "Decode ID Token"
+        },
+        "valueClass": {
+          "type": "string",
+          "const": "com.l7tech.custom.openidconnect.DecodeIDToken.IDTokenDecodeAssertion"
+        },
+        "value": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/iDTokenDecodeAssertion"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/category"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/customAssertion"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CustomAssertion:com.l7tech.custom.openidconnect.DecodeIDToken.IDTokenDecodeAssertion/Main",
+      "title": "Decode ID Token",
+      "properties": {
+        "CustomAssertion": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/CustomAssertion:com.l7tech.custom.openidconnect.DecodeIDToken.IDTokenDecodeAssertion"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/iDTokenDecodeAssertion",
+      "properties": {
+        "allowedCustomClaims": {
+          "type": "string",
+          "default": ""
+        },
+        "exportAcr": {
+          "type": "boolean",
+          "default": true
+        },
+        "exportAll": {
+          "type": "boolean",
+          "default": true
+        },
+        "exportAtHash": {
+          "type": "boolean",
+          "default": true
+        },
+        "exportAud": {
+          "type": "boolean",
+          "default": true
+        },
+        "exportAuthTime": {
+          "type": "boolean",
+          "default": true
+        },
+        "exportAzp": {
+          "type": "boolean",
+          "default": true
+        },
+        "exportCHash": {
+          "type": "boolean",
+          "default": true
+        },
+        "exportExpiration": {
+          "type": "boolean",
+          "default": true
+        },
+        "exportIat": {
+          "type": "boolean",
+          "default": true
+        },
+        "exportIss": {
+          "type": "boolean",
+          "default": true
+        },
+        "exportNonce": {
+          "type": "boolean",
+          "default": true
+        },
+        "exportOtherClaims": {
+          "type": "boolean",
+          "default": true
+        },
+        "exportSHash": {
+          "type": "boolean",
+          "default": true
+        },
+        "exportSub": {
+          "type": "boolean",
+          "default": true
+        },
+        "exportVariable": {
+          "type": "string",
+          "default": "didt"
+        },
+        "payload": {
+          "type": "string"
+        },
+        "validateClaims": {
+          "type": "boolean",
+          "default": true
+        },
+        "validateExpiration": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    }
+  ]
+}

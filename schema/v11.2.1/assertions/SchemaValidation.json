@@ -1,73 +1,108 @@
 {
-  "$comment": "Schema for SchemaValidation assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "SchemaValidation",
+  "name": "Validate XML Schema",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SchemaValidation",
+      "title": "Validate XML Schema",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "applyToArguments": {
+          "type": "boolean",
+          "default": false
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "resourceInfo": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/assertionResourceInfo"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ]
+        },
+        "validationTarget": {
+          "type": "string",
+          "enum": [
+            "ENVELOPE",
+            "BODY",
+            "ARGUMENTS"
+          ],
+          "default": "BODY"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "assertionResourceInfo": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/assertionResourceInfo"
-    },
-    "schemaValidation": {
-      "type": "object",
-      "$id": "schema:SchemaValidation",
-      "$ref": "schema:assertion",
-      "properties": {
-        "SchemaValidation": {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/assertionResourceInfo",
+      "anyOf": [
+        {
           "type": "object",
           "properties": {
-            "applyToArguments": {
+            "document": {
+              "type": "string"
+            },
+            "originalUrl": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "allowMessagesWithoutUrl": {
               "type": "boolean",
               "default": false
             },
-            "otherTargetMessageVariable": {
-              "type": "string"
-            },
-            "resourceInfo": {
-              "$ref": "schema:sub-types/assertionResourceInfo"
-            },
-            "target": {
-              "type": "string",
-              "enum": [
-                "REQUEST",
-                "RESPONSE",
-                "OTHER"
-              ]
-            },
-            "validationTarget": {
-              "type": "string",
-              "enum": [
-                "ENVELOPE",
-                "BODY",
-                "ARGUMENTS"
-              ],
-              "default": "BODY"
+            "urlRegexes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
             }
-          },
-          "unevaluatedProperties": false
+          }
         }
-      },
-      "unevaluatedProperties": false
+      ]
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SchemaValidation/Main",
+      "title": "Validate XML Schema",
+      "properties": {
+        "SchemaValidation": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/SchemaValidation"
+        }
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:SchemaValidation"
+  ]
 }

@@ -1,30 +1,48 @@
 {
-  "$comment": "Schema for EncryptedUsernameToken assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "EncryptedUsernameToken",
+  "name": "Require Encrypted UsernameToken Profile Credentials",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/EncryptedUsernameToken",
+      "title": "Require Encrypted UsernameToken Profile Credentials",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "recipientContext": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "xEncAlgorithmList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "xmlSecurityRecipientContext": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/xmlSecurityRecipientContext",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext",
       "properties": {
         "actor": {
           "type": "string"
@@ -32,58 +50,17 @@
         "base64edX509Certificate": {
           "type": "string"
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "encryptedUsernameToken": {
+    {
       "type": "object",
-      "$id": "schema:EncryptedUsernameToken",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/EncryptedUsernameToken/Main",
+      "title": "Require Encrypted UsernameToken Profile Credentials",
       "properties": {
         "EncryptedUsernameToken": {
-          "type": "object",
-          "properties": {
-            "otherTargetMessageVariable": {
-              "type": "string"
-            },
-            "recipientContext": {
-              "$ref": "schema:sub-types/xmlSecurityRecipientContext"
-            },
-            "target": {
-              "type": "string",
-              "enum": [
-                "REQUEST",
-                "RESPONSE",
-                "OTHER"
-              ],
-              "default": "REQUEST"
-            },
-            "enableEncryptionMethods": {
-              "type": "boolean",
-              "default": false
-            },
-            "xEncAlgorithmList": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "enum": [
-                  "http://www.w3.org/2001/04/xmlenc#aes128-cbc",
-                  "http://www.w3.org/2001/04/xmlenc#aes192-cbc",
-                  "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
-                  "http://www.w3.org/2001/04/xmlenc#tripledes-cbc",
-                  "http://www.w3.org/2009/xmlenc11#aes128-gcm",
-                  "http://www.w3.org/2009/xmlenc11#aes256-gcm"
-                ]
-              },
-              "uniqueItems": true
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/EncryptedUsernameToken"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:EncryptedUsernameToken"
+  ]
 }

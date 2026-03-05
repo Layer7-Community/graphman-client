@@ -1,59 +1,46 @@
 {
-  "$comment": "Schema for XMPPGetSessionAttribute assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "XMPPGetSessionAttribute",
+  "name": "XMPP Get Session Attribute",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/XMPPGetSessionAttribute",
+      "title": "XMPP Get Session Attribute",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "attributeName": {
+          "type": "string"
+        },
+        "inbound": {
+          "type": "boolean",
+          "default": true
+        },
+        "sessionId": {
+          "type": "string"
+        },
+        "variableName": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "xMPPGetSessionAttribute": {
+    {
       "type": "object",
-      "$id": "schema:XMPPGetSessionAttribute",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/XMPPGetSessionAttribute/Main",
+      "title": "XMPP Get Session Attribute",
       "properties": {
         "XMPPGetSessionAttribute": {
-          "type": "object",
-          "properties": {
-            "attributeName": {
-              "type": "string"
-            },
-            "inbound": {
-              "type": "string",
-              "default": "1",
-              "enum": [
-                "1",
-                "2"
-              ]
-            },
-            "sessionId": {
-              "type": "string"
-            },
-            "variableName": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/XMPPGetSessionAttribute"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:XMPPGetSessionAttribute"
+  ]
 }

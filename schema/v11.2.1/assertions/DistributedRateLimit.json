@@ -1,80 +1,54 @@
 {
-  "$comment": "Schema for DistributedRateLimit assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "DistributedRateLimit",
+  "name": "Apply Distributed Rate Limit",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/DistributedRateLimit",
+      "title": "Apply Distributed Rate Limit",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "burstLimit": {
+          "type": "string"
+        },
+        "counterId": {
+          "type": "string"
+        },
+        "counterPrefix": {
+          "type": "string"
+        },
+        "limitEachCounterType": {
+          "type": "string"
+        },
+        "limitExceededOption": {
+          "type": "string"
+        },
+        "limitRequests": {
+          "type": "string"
+        },
+        "rateLimitUnit": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "distributedRateLimit": {
+    {
       "type": "object",
-      "$id": "schema:DistributedRateLimit",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/DistributedRateLimit/Main",
+      "title": "Apply Distributed Rate Limit",
       "properties": {
         "DistributedRateLimit": {
-          "type": "object",
-          "properties": {
-            "burstLimit": {
-              "type": "string"
-            },
-            "counterId": {
-              "type": "string"
-            },
-            "counterPrefix": {
-              "type": "string"
-            },
-            "limitEachCounterType": {
-              "type": "string",
-              "enum": [
-                "User or IP",
-                "Authenticated user",
-                "Client IP",
-                "Custom"
-              ]
-            },
-            "limitExceededOption": {
-              "type": "string",
-              "enum": [
-                "Throttle",
-                "Log Only"
-              ]
-            },
-            "limitRequests": {
-              "type": "string"
-            },
-            "rateLimitUnit": {
-              "type": "string",
-              "enum": [
-                "Minute",
-                "Second"
-              ]
-            },
-            "rateLimitProvider": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/DistributedRateLimit"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:DistributedRateLimit"
+  ]
 }

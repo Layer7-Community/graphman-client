@@ -1,52 +1,44 @@
 {
-  "$comment": "Schema for KeyValueRemove assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "KeyValueRemove",
+  "name": "Remove from Key Value Storage",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/KeyValueRemove",
+      "title": "Remove from Key Value Storage",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "key": {
+          "type": "string",
+          "default": "${request.url}"
+        },
+        "removeAllKeys": {
+          "type": "boolean",
+          "default": false
+        },
+        "storeId": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "keyValueRemove": {
+    {
       "type": "object",
-      "$id": "schema:KeyValueRemove",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/KeyValueRemove/Main",
+      "title": "Remove from Key Value Storage",
       "properties": {
         "KeyValueRemove": {
-          "type": "object",
-          "properties": {
-            "key": {
-              "type": "string",
-              "maxLength": 256
-            },
-            "removeAllKeys": {
-              "type": "boolean"
-            },
-            "storeId": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/KeyValueRemove"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:KeyValueRemove"
+  ]
 }

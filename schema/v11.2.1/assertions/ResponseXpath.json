@@ -1,36 +1,47 @@
 {
-  "$comment": "Schema for ResponseXpath assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "ResponseXpath",
+  "name": "Evaluate Response XPath",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ResponseXpath",
+      "title": "Evaluate Response XPath",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "variablePrefix": {
+          "type": "string"
+        },
+        "xmlMsgSrc": {
+          "type": "string"
+        },
+        "xpathExpression": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xpathExpression"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "xpathExpression": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/xpathExpression",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xpathExpression",
       "properties": {
         "expression": {
           "type": "string"
         },
         "namespaces": {
-          "type": "object"
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          }
         },
         "xpathVersion": {
           "type": "string",
@@ -41,33 +52,17 @@
           ],
           "default": "UNSPECIFIED"
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "responseXpath": {
+    {
       "type": "object",
-      "$id": "schema:ResponseXpath",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ResponseXpath/Main",
+      "title": "Evaluate Response XPath",
       "properties": {
         "ResponseXpath": {
-          "type": "object",
-          "properties": {
-            "variablePrefix": {
-              "type": "string"
-            },
-            "xmlMsgSrc": {
-              "type": "string"
-            },
-            "xpathExpression": {
-              "$ref": "schema:sub-types/xpathExpression"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/ResponseXpath"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:ResponseXpath"
+  ]
 }

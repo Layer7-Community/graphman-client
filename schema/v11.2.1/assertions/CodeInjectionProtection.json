@@ -1,76 +1,75 @@
 {
-  "$comment": "Schema for CodeInjectionProtection assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "CodeInjectionProtection",
+  "name": "Protect Against Code Injection",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CodeInjectionProtection",
+      "title": "Protect Against Code Injection",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "includeBody": {
+          "type": "boolean",
+          "default": false
+        },
+        "includeUrlPath": {
+          "type": "boolean",
+          "default": false
+        },
+        "includeUrlQueryString": {
+          "type": "boolean",
+          "default": false
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "protections": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/codeInjectionProtectionType"
+          }
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ]
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "codeInjectionProtectionType": {
+    {
       "type": "string",
-      "$id": "schema:sub-types/codeInjectionProtectionType"
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/codeInjectionProtectionType",
+      "enum": [
+        "htmlJavaScriptInjection",
+        "hexEncodedInjection",
+        "phpEvalInjection",
+        "shellInjection",
+        "ldapDnInjection",
+        "ldapSearchInjection",
+        "xpathInjection"
+      ]
     },
-    "codeInjectionProtection": {
+    {
       "type": "object",
-      "$id": "schema:CodeInjectionProtection",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CodeInjectionProtection/Main",
+      "title": "Protect Against Code Injection",
       "properties": {
         "CodeInjectionProtection": {
-          "type": "object",
-          "properties": {
-            "includeBody": {
-              "type": "boolean",
-              "default": false
-            },
-            "includeUrlPath": {
-              "type": "boolean",
-              "default": false
-            },
-            "includeUrlQueryString": {
-              "type": "boolean",
-              "default": false
-            },
-            "otherTargetMessageVariable": {
-              "type": "string"
-            },
-            "protections": {
-              "type": "array",
-              "items": {
-                "$ref": "schema:sub-types/codeInjectionProtectionType"
-              }
-            },
-            "target": {
-              "type": "string",
-              "enum": [
-                "REQUEST",
-                "RESPONSE",
-                "OTHER"
-              ],
-              "default": "REQUEST"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/CodeInjectionProtection"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:CodeInjectionProtection"
+  ]
 }

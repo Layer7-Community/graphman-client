@@ -1,80 +1,178 @@
 {
-  "$comment": "Schema for IdentityAttributes assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "IdentityAttributes",
+  "name": "Extract Attributes for Authenticated User",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/IdentityAttributes",
+      "title": "Extract Attributes for Authenticated User",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "identityProviderOid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "lookupAttributes": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/IdentityAttributes:identityMapping"
+          }
+        },
+        "variablePrefix": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "identityTarget": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/identityTarget",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/IdentityAttributes:identityMapping",
       "properties": {
-        "identityId": {
+        "attributeConfig": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/IdentityAttributes:attributeConfig"
+        },
+        "customAttributeName": {
           "type": "string"
         },
-        "identityInfo": {
+        "goid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "id": {
           "type": "string"
         },
-        "identityProviderOid": {
-          "$ref": "schema:sub-types/goid"
+        "multivalued": {
+          "type": "boolean"
         },
-        "targetIdentityType": {
+        "name": {
+          "type": "string"
+        },
+        "providerOid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "searchable": {
+          "type": "boolean"
+        },
+        "unique": {
+          "type": "boolean"
+        },
+        "validForGroups": {
+          "type": "boolean"
+        },
+        "validForUsers": {
+          "type": "boolean"
+        },
+        "version": {
+          "type": "integer"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/IdentityAttributes:attributeConfig",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "goid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid",
+          "default": "0000000000000000ffffffffffffffff"
+        },
+        "header": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/attributeHeader"
+        },
+        "id": {
+          "type": "string",
+          "default": "0000000000000000ffffffffffffffff"
+        },
+        "name": {
+          "type": "string"
+        },
+        "variableName": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "default": 0
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/attributeHeader",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "goid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid",
+          "default": "0000000000000000ffffffffffffffff"
+        },
+        "id": {
+          "type": "string",
+          "default": "0000000000000000ffffffffffffffff"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/dataType"
+        },
+        "usersOrGroups": {
           "type": "string",
           "enum": [
-            "USER",
-            "GROUP",
-            "PROVIDER",
-            "TAG"
+            "USERS",
+            "GROUPS",
+            "BOTH"
           ]
+        },
+        "variableName": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "default": 0
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "goid": {
+    {
       "type": "string",
-      "$id": "schema:sub-types/goid"
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/dataType",
+      "enum": [
+        "string",
+        "cert",
+        "int",
+        "decimal",
+        "float",
+        "xml",
+        "boolean",
+        "binary",
+        "dateTime",
+        "message",
+        "blob",
+        "clob",
+        "other"
+      ]
     },
-    "identityAttributes": {
+    {
       "type": "object",
-      "$id": "schema:IdentityAttributes",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/IdentityAttributes/Main",
+      "title": "Extract Attributes for Authenticated User",
       "properties": {
         "IdentityAttributes": {
-          "type": "object",
-          "properties": {
-            "identityProviderOid": {
-              "type": "string"
-            },
-            "identityTag": {
-              "type": "string"
-            },
-            "identityTarget": {
-              "$ref": "schema:sub-types/identityTarget"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/IdentityAttributes"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:IdentityAttributes"
+  ]
 }

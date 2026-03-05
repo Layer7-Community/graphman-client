@@ -1,76 +1,64 @@
 {
-  "$comment": "Schema for ContentType assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "ContentType",
+  "name": "Validate or Change Content Type",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ContentType",
+      "title": "Validate or Change Content Type",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "changeContentType": {
+          "type": "boolean",
+          "default": false
+        },
+        "messagePart": {
+          "type": "boolean",
+          "default": false
+        },
+        "messagePartNum": {
+          "type": "string",
+          "default": "1"
+        },
+        "newContentTypeValue": {
+          "type": "string"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "reinitializeMessage": {
+          "type": "boolean",
+          "default": false
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "contentType": {
+    {
       "type": "object",
-      "$id": "schema:ContentType",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ContentType/Main",
+      "title": "Validate or Change Content Type",
       "properties": {
         "ContentType": {
-          "type": "object",
-          "properties": {
-            "changeContentType": {
-              "type": "string",
-              "enum": [
-                "VALIDATE",
-                "CHANGE"
-              ],
-              "default": "VALIDATE"
-            },
-            "messagePart": {
-              "type": "boolean",
-              "default": false
-            },
-            "messagePartNum": {
-              "type": "string"
-            },
-            "newContentTypeValue": {
-              "type": "string"
-            },
-            "otherTargetMessageVariable": {
-              "type": "string"
-            },
-            "reinitializeMessage": {
-              "type": "boolean",
-              "default": false
-            },
-            "target": {
-              "type": "string",
-              "enum": [
-                "REQUEST",
-                "RESPONSE",
-                "OTHER"
-              ],
-              "default": "REQUEST"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/ContentType"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:ContentType"
+  ]
 }

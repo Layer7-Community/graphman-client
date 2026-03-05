@@ -1,89 +1,118 @@
 {
-  "$comment": "Schema for Email assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "Email",
+  "name": "Send Email",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Email",
+      "title": "Send Email",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "attachments": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/Email:Attachment"
+          }
+        },
+        "authPassword": {
+          "type": "string"
+        },
+        "authUsername": {
+          "type": "string"
+        },
+        "authenticate": {
+          "type": "boolean",
+          "default": false
+        },
+        "base64message": {
+          "type": "string",
+          "default": ""
+        },
+        "contextVarPassword": {
+          "type": "boolean",
+          "default": false
+        },
+        "format": {
+          "type": "string",
+          "enum": [
+            "PLAIN_TEXT",
+            "HTML"
+          ],
+          "default": "PLAIN_TEXT"
+        },
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "PLAIN",
+            "SSL",
+            "STARTTLS"
+          ],
+          "default": "PLAIN"
+        },
+        "smtpHost": {
+          "type": "string",
+          "default": "mail"
+        },
+        "smtpPort": {
+          "type": "string",
+          "default": "25"
+        },
+        "sourceEmailAddress": {
+          "type": "string",
+          "default": "L7SSG@NOMAILBOX"
+        },
+        "subject": {
+          "type": "string",
+          "default": "Layer7 API Gateway Email"
+        },
+        "targetBCCEmailAddress": {
+          "type": "string",
+          "default": ""
+        },
+        "targetCCEmailAddress": {
+          "type": "string",
+          "default": ""
+        },
+        "targetEmailAddress": {
+          "type": "string",
+          "default": ""
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "email": {
+    {
       "type": "object",
-      "$id": "schema:Email",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Email:Attachment",
+      "properties": {
+        "mimePartVariable": {
+          "type": "boolean",
+          "default": false
+        },
+        "name": {
+          "type": "string"
+        },
+        "sourceVariable": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Email/Main",
+      "title": "Send Email",
       "properties": {
         "Email": {
-          "type": "object",
-          "properties": {
-            "smtpHost": {
-              "type": "string"
-            },
-            "smtpPort": {
-              "type": "integer",
-              "default": 25
-            },
-            "authenticate": {
-              "type": "boolean",
-              "default": false
-            },
-            "authPassword": {
-              "type": "string"
-            },
-            "authUsername": {
-              "type": "string"
-            },
-            "base64message": {
-              "type": "string"
-            },
-            "contextVarPassword": {
-              "type": "string"
-            },
-            "protocol": {
-              "type": "string",
-              "enum": [
-                "PLAIN",
-                "SSL",
-                "STARTTLS"
-              ],
-              "default": "PLAIN"
-            },
-            "sourceEmailAddress": {
-              "type": "string"
-            },
-            "targetBCCEmailAddress": {
-              "type": "string"
-            },
-            "targetCCEmailAddress": {
-              "type": "string"
-            },
-            "targetEmailAddress": {
-              "type": "string"
-            },
-            "subject": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/Email"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:Email"
+  ]
 }

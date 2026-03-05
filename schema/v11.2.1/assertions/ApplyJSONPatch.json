@@ -1,30 +1,45 @@
 {
-  "$comment": "Schema for ApplyJSONPatch assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "ApplyJSONPatch",
+  "name": "Apply JSON Patch",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ApplyJSONPatch",
+      "title": "Apply JSON Patch",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "destinationMessageTarget": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport"
+        },
+        "jsonPatch": {
+          "type": "string"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "RESPONSE"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "messageTargetableSupport": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/messageTargetableSupport",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport",
       "properties": {
         "otherTargetMessageVariable": {
           "type": "string"
@@ -40,49 +55,23 @@
             "RESPONSE",
             "OTHER"
           ],
-          "default": "RESPONSE"
+          "default": "REQUEST"
         },
         "targetModifiedByGateway": {
           "type": "boolean",
           "default": false
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "applyJSONPatch": {
+    {
       "type": "object",
-      "$id": "schema:ApplyJSONPatch",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ApplyJSONPatch/Main",
+      "title": "Apply JSON Patch",
       "properties": {
         "ApplyJSONPatch": {
-          "type": "object",
-          "properties": {
-            "target": {
-              "type": "string",
-              "enum": [
-                "REQUEST",
-                "RESPONSE",
-                "OTHER"
-              ],
-              "default": "REQUEST"
-            },
-            "otherTargetMessageVariable": {
-              "type": "string"
-            },
-            "destinationMessageTarget": {
-              "$ref": "schema:sub-types/messageTargetableSupport"
-            },
-            "jsonPatchDocument": {
-              "type": "string",
-              "default": ""
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/ApplyJSONPatch"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:ApplyJSONPatch"
+  ]
 }

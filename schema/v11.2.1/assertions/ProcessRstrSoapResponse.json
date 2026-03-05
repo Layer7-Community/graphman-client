@@ -1,71 +1,57 @@
 {
-  "$comment": "Schema for ProcessRstrSoapResponse assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "ProcessRstrSoapResponse",
+  "name": "Process RSTR Response",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ProcessRstrSoapResponse",
+      "title": "Process RSTR Response",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "tokenType": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/securityTokenType",
+          "default": "Unknown"
+        },
+        "variablePrefix": {
+          "type": "string",
+          "default": "rstrResponseProcessor"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "securityTokenType": {
+    {
       "type": "string",
-      "$id": "schema:sub-types/securityTokenType"
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/securityTokenType"
     },
-    "processRstrSoapResponse": {
+    {
       "type": "object",
-      "$id": "schema:ProcessRstrSoapResponse",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ProcessRstrSoapResponse/Main",
+      "title": "Process RSTR Response",
       "properties": {
         "ProcessRstrSoapResponse": {
-          "type": "object",
-          "properties": {
-            "otherTargetMessageVariable": {
-              "type": "string"
-            },
-            "target": {
-              "type": "string",
-              "enum": [
-                "REQUEST",
-                "RESPONSE",
-                "OTHER"
-              ],
-              "default": "REQUEST"
-            },
-            "tokenType": {
-              "$ref": "schema:sub-types/securityTokenType",
-              "enum": [
-                "<Any>",
-                "SAML2 Assertion",
-                "SAML Assertion",
-                "WS-SC SecurityContextToken"
-              ],
-              "default": "<Any>"
-            },
-            "variablePrefix": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/ProcessRstrSoapResponse"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:ProcessRstrSoapResponse"
+  ]
 }

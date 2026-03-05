@@ -1,30 +1,33 @@
 {
-  "$comment": "Schema for MessageContextAssertion assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "MessageContextAssertion",
+  "name": "Capture Identity of Requestor",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/MessageContextAssertion",
+      "title": "Capture Identity of Requestor",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "mappings": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/MessageContextAssertion:mappingInfo"
+          }
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "MessageContextAssertion:mappingInfo": {
+    {
       "type": "object",
-      "$id": "schema:MessageContextAssertion:mappingInfo",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/MessageContextAssertion:mappingInfo",
       "properties": {
         "key": {
           "type": "string"
@@ -35,36 +38,22 @@
             "IP_ADDRESS",
             "AUTH_USER",
             "CUSTOM_MAPPING"
-          ],
-          "default": "IP_ADDRESS"
+          ]
         },
         "value": {
           "type": "string"
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "messageContextAssertion": {
+    {
       "type": "object",
-      "$id": "schema:MessageContextAssertion",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/MessageContextAssertion/Main",
+      "title": "Capture Identity of Requestor",
       "properties": {
         "MessageContextAssertion": {
-          "type": "object",
-          "properties": {
-            "mappings": {
-              "type": "array",
-              "items": {
-                "$ref": "schema:MessageContextAssertion:mappingInfo"
-              }
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/MessageContextAssertion"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:MessageContextAssertion"
+  ]
 }

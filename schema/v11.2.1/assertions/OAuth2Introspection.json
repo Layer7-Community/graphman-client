@@ -1,73 +1,65 @@
 {
-  "$comment": "Schema for OAuth2Introspection assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "OAuth2Introspection",
+  "name": "Require and Introspect OAuth2.0 Token",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/OAuth2Introspection",
+      "title": "Require and Introspect OAuth2.0 Token",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "atLeastOneAudience": {
+          "type": "boolean",
+          "default": false
+        },
+        "atLeastOneScope": {
+          "type": "boolean",
+          "default": false
+        },
+        "audience": {
+          "type": "string"
+        },
+        "includeFullResponseDetails": {
+          "type": "boolean",
+          "default": false
+        },
+        "scope": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        },
+        "tokenIssuerHint": {
+          "type": "string"
+        },
+        "trustGatewayAsIssuer": {
+          "type": "boolean",
+          "default": false
+        },
+        "varPrefix": {
+          "type": "string",
+          "default": "oauth2i"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "oAuth2Introspection": {
+    {
       "type": "object",
-      "$id": "schema:OAuth2Introspection",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/OAuth2Introspection/Main",
+      "title": "Require and Introspect OAuth2.0 Token",
       "properties": {
         "OAuth2Introspection": {
-          "type": "object",
-          "properties": {
-            "token": {
-              "type": "string"
-            },
-            "atLeastOneAudience": {
-              "type": "boolean",
-              "default": false
-            },
-            "atLeastOneScope": {
-              "type": "boolean",
-              "default": false
-            },
-            "audience": {
-              "type": "string"
-            },
-            "includeFullResponseDetails": {
-              "type": "boolean",
-              "default": false
-            },
-            "scope": {
-              "type": "string"
-            },
-            "tokenIssuerHint": {
-              "type": "string"
-            },
-            "trustGatewayAsIssuer": {
-              "type": "boolean",
-              "default": false
-            },
-            "varPrefix": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/OAuth2Introspection"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:OAuth2Introspection"
+  ]
 }

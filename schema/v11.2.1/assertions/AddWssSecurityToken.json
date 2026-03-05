@@ -1,30 +1,118 @@
 {
-  "$comment": "Schema for AddWssSecurityToken assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "AddWssSecurityToken",
+  "name": "Add Security Token",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/AddWssSecurityToken",
+      "title": "Add Security Token",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "digest": {
+          "type": "boolean",
+          "default": false
+        },
+        "digestAlgorithmName": {
+          "type": "string"
+        },
+        "dynamicPrivateKeyVariable": {
+          "type": "string",
+          "default": ""
+        },
+        "encrypt": {
+          "type": "boolean",
+          "default": false
+        },
+        "identityTarget": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/identityTarget"
+        },
+        "includeCreated": {
+          "type": "boolean",
+          "default": true
+        },
+        "includeNonce": {
+          "type": "boolean",
+          "default": true
+        },
+        "includePassword": {
+          "type": "boolean",
+          "default": false
+        },
+        "keyAlias": {
+          "type": "string"
+        },
+        "keyReference": {
+          "type": "string",
+          "default": "BinarySecurityToken"
+        },
+        "nonDefaultKeystoreId": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "omitSecurityContextToken": {
+          "type": "boolean",
+          "default": false
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "protectTokens": {
+          "type": "boolean",
+          "default": true
+        },
+        "recipientContext": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext"
+        },
+        "samlAssertionVariable": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "RESPONSE"
+        },
+        "tokenType": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/securityTokenType",
+          "default": "WS-S UsernameToken"
+        },
+        "useLastGatheredCredentials": {
+          "type": "boolean",
+          "default": true
+        },
+        "username": {
+          "type": "string"
+        },
+        "usesDefaultKeyStore": {
+          "type": "boolean",
+          "default": true
+        },
+        "usesDynamicPrivateKey": {
+          "type": "boolean",
+          "default": false
+        },
+        "wsscSessionVariable": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "identityTarget": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/identityTarget",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/identityTarget",
       "properties": {
         "identityId": {
           "type": "string"
@@ -33,7 +121,7 @@
           "type": "string"
         },
         "identityProviderOid": {
-          "$ref": "schema:sub-types/goid"
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
         },
         "targetIdentityType": {
           "type": "string",
@@ -44,16 +132,15 @@
             "TAG"
           ]
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "goid": {
+    {
       "type": "string",
-      "$id": "schema:sub-types/goid"
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
     },
-    "xmlSecurityRecipientContext": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/xmlSecurityRecipientContext",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext",
       "properties": {
         "actor": {
           "type": "string"
@@ -61,125 +148,21 @@
         "base64edX509Certificate": {
           "type": "string"
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "securityTokenType": {
+    {
       "type": "string",
-      "$id": "schema:sub-types/securityTokenType"
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/securityTokenType"
     },
-    "addWssSecurityToken": {
+    {
       "type": "object",
-      "$id": "schema:AddWssSecurityToken",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/AddWssSecurityToken/Main",
+      "title": "Add Security Token",
       "properties": {
         "AddWssSecurityToken": {
-          "type": "object",
-          "properties": {
-            "digest": {
-              "type": "boolean",
-              "default": false
-            },
-            "digestAlgorithmName": {
-              "type": "string"
-            },
-            "dynamicPrivateKeyVariable": {
-              "type": "string",
-              "default": ""
-            },
-            "encrypt": {
-              "type": "boolean",
-              "default": false
-            },
-            "identityTarget": {
-              "$ref": "schema:sub-types/identityTarget"
-            },
-            "includeCreated": {
-              "type": "boolean",
-              "default": true
-            },
-            "includeNonce": {
-              "type": "boolean",
-              "default": true
-            },
-            "includePassword": {
-              "type": "boolean",
-              "default": false
-            },
-            "keyAlias": {
-              "type": "string"
-            },
-            "keyReference": {
-              "type": "string",
-              "default": "BinarySecurityToken",
-              "enum": [
-                "BinarySecurityToken",
-                "SubjectKeyIdentifier",
-                "IssuerSerial"
-              ]
-            },
-            "nonDefaultKeystoreId": {
-              "$ref": "schema:sub-types/goid"
-            },
-            "omitSecurityContextToken": {
-              "type": "boolean",
-              "default": false
-            },
-            "otherTargetMessageVariable": {
-              "type": "string"
-            },
-            "password": {
-              "type": "string"
-            },
-            "protectTokens": {
-              "type": "boolean",
-              "default": true
-            },
-            "recipientContext": {
-              "$ref": "schema:sub-types/xmlSecurityRecipientContext"
-            },
-            "samlAssertionVariable": {
-              "type": "string"
-            },
-            "target": {
-              "type": "string",
-              "default": "REQUEST"
-            },
-            "tokenType": {
-              "$ref": "schema:sub-types/securityTokenType",
-              "default": "WS-S UsernameToken",
-              "enum": [
-                "WS-S UsernameToken",
-                "WS-SC SecurityContextToken",
-                "SAML Assertion",
-                "WS-S EncryptedKey"
-              ]
-            },
-            "useLastGatheredCredentials": {
-              "type": "boolean",
-              "default": true
-            },
-            "username": {
-              "type": "string"
-            },
-            "usesDefaultKeyStore": {
-              "type": "boolean",
-              "default": true
-            },
-            "usesDynamicPrivateKey": {
-              "type": "boolean",
-              "default": false
-            },
-            "wsscSessionVariable": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/AddWssSecurityToken"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:AddWssSecurityToken"
+  ]
 }

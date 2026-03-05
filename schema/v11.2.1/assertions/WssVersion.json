@@ -1,58 +1,33 @@
 {
-  "$comment": "Schema for WssVersion assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "WssVersion",
+  "name": "Use WS-Security 1.1",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/WssVersion",
+      "title": "Use WS-Security 1.1",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "xmlSecurityRecipientContext": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/xmlSecurityRecipientContext",
-      "properties": {
-        "actor": {
-          "type": "string"
-        },
-        "base64edX509Certificate": {
-          "type": "string"
-        }
-      },
-      "unevaluatedProperties": false
-    },
-    "wssVersion": {
-      "type": "object",
-      "$id": "schema:WssVersion",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/WssVersion/Main",
+      "title": "Use WS-Security 1.1",
       "properties": {
         "WssVersion": {
-          "type": "object",
-          "properties": {
-            "recipientContext": {
-              "$ref": "schema:sub-types/xmlSecurityRecipientContext"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/WssVersion"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:WssVersion"
+  ]
 }

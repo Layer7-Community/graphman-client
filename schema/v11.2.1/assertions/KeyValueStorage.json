@@ -1,68 +1,59 @@
 {
-  "$comment": "Schema for KeyValueStorage assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "KeyValueStorage",
+  "name": "Store to Key Value Storage",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/KeyValueStorage",
+      "title": "Store to Key Value Storage",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "continueOnError": {
+          "type": "boolean",
+          "default": true
+        },
+        "key": {
+          "type": "string",
+          "default": "${request.url}"
+        },
+        "maxAge": {
+          "type": "string"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "storeId": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "keyValueStorage": {
+    {
       "type": "object",
-      "$id": "schema:KeyValueStorage",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/KeyValueStorage/Main",
+      "title": "Store to Key Value Storage",
       "properties": {
         "KeyValueStorage": {
-          "type": "object",
-          "properties": {
-            "continueOnError": {
-              "type": "boolean",
-              "default": true
-            },
-            "key": {
-              "type": "string"
-            },
-            "maxAge": {
-              "type": "string",
-              "maxLength": 125
-            },
-            "otherTargetMessageVariable": {
-              "type": "string"
-            },
-            "storeId": {
-              "type": "string"
-            },
-            "target": {
-              "type": "string",
-              "enum": [
-                "REQUEST",
-                "RESPONSE",
-                "OTHER"
-              ],
-              "default": "REQUEST"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/KeyValueStorage"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:KeyValueStorage"
+  ]
 }

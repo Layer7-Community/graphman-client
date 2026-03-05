@@ -1,65 +1,47 @@
 {
-  "$comment": "Schema for HandleErrors assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "HandleErrors",
+  "name": "Handle Errors",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/HandleErrors",
+      "title": "Handle Errors",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "includeIOException": {
+          "type": "boolean",
+          "default": false
+        },
+        "variablePrefix": {
+          "type": "string",
+          "default": "handleError"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        },
+        "_children": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
         }
       }
     },
-    "handleErrors": {
+    {
       "type": "object",
-      "$id": "schema:HandleErrors",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/HandleErrors/Main",
+      "title": "Handle Errors",
       "properties": {
         "HandleErrors": {
-          "type": "object",
-          "properties": {
-            "includeIOException": {
-              "type": "boolean",
-              "default": false
-            },
-            "variablePrefix": {
-              "type": "string"
-            },
-            ".enabled": {
-              "type": "boolean",
-              "default": true
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            },
-            ".children": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/HandleErrors"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:HandleErrors"
+  ]
 }

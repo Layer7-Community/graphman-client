@@ -1,64 +1,58 @@
 {
-  "$comment": "Schema for NtlmAuthentication assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "NtlmAuthentication",
+  "name": "Require NTLM Authentication Credentials",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/NtlmAuthentication",
+      "title": "Require NTLM Authentication Credentials",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "ldapProviderName": {
+          "type": "string"
+        },
+        "ldapProviderOid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "maxConnectionDuration": {
+          "type": "number",
+          "default": 0
+        },
+        "maxConnectionIdleTime": {
+          "type": "number",
+          "default": 0
+        },
+        "realm": {
+          "type": "string"
+        },
+        "variablePrefix": {
+          "type": "string",
+          "default": "ntlm"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "goid": {
+    {
       "type": "string",
-      "$id": "schema:sub-types/goid"
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
     },
-    "ntlmAuthentication": {
+    {
       "type": "object",
-      "$id": "schema:NtlmAuthentication",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/NtlmAuthentication/Main",
+      "title": "Require NTLM Authentication Credentials",
       "properties": {
         "NtlmAuthentication": {
-          "type": "object",
-          "properties": {
-            "ldapProviderName": {
-              "type": "string"
-            },
-            "ldapProviderOid": {
-              "$ref": "schema:sub-types/goid"
-            },
-            "maxConnectionDuration": {
-              "type": "integer"
-            },
-            "maxConnectionIdleTime": {
-              "type": "integer"
-            },
-            "realm": {
-              "type": "string"
-            },
-            "variablePrefix": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/NtlmAuthentication"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:NtlmAuthentication"
+  ]
 }

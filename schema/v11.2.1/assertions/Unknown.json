@@ -1,58 +1,39 @@
 {
-  "$comment": "Schema for Unknown assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "Unknown",
+  "name": "Unresolved assertion type",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Unknown",
+      "title": "Unresolved assertion type",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "detailMessage": {
+          "type": "string"
+        },
+        "originalXml": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "unknown": {
+    {
       "type": "object",
-      "$id": "schema:Unknown",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Unknown/Main",
+      "title": "Unresolved assertion type",
       "properties": {
         "Unknown": {
-          "type": "object",
-          "properties": {
-            "detailMessage": {
-              "type": "string"
-            },
-            "originalXml": {
-              "type": "string"
-            },
-            "_enabled": {
-              "type": "boolean",
-              "default": true
-            },
-            "_leftComment": {
-              "type": "string"
-            },
-            "_rightComment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/Unknown"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:Unknown"
+  ]
 }

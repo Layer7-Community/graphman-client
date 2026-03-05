@@ -1,61 +1,42 @@
 {
-  "$comment": "Schema for Transaction assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "Transaction",
+  "name": "JDBC Transaction Group: All assertions must evaluate to true in a single transaction (for CA internal use)",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Transaction",
+      "title": "JDBC Transaction Group: All assertions must evaluate to true in a single transaction (for CA internal use)",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "connectionName": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        },
+        "_children": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
         }
       }
     },
-    "transaction": {
+    {
       "type": "object",
-      "$id": "schema:Transaction",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Transaction/Main",
+      "title": "JDBC Transaction Group: All assertions must evaluate to true in a single transaction (for CA internal use)",
       "properties": {
         "Transaction": {
-          "type": "object",
-          "properties": {
-            "connectionName": {
-              "type": "string"
-            },
-            "_enabled": {
-              "type": "boolean",
-              "default": true
-            },
-            "_leftComment": {
-              "type": "string"
-            },
-            "_rightComment": {
-              "type": "string"
-            },
-            "_children": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/Transaction"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:Transaction"
+  ]
 }

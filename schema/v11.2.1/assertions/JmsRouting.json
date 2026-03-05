@@ -1,34 +1,97 @@
 {
-  "$comment": "Schema for JmsRouting assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "JmsRouting",
+  "name": "Route via JMS",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/JmsRouting",
+      "title": "Route via JMS",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "attachSamlSenderVouches": {
+          "type": "boolean",
+          "default": false
+        },
+        "currentSecurityHeaderHandling": {
+          "type": "integer",
+          "default": 0
+        },
+        "dynamicJmsRoutingProperties": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/jmsDynamicProperties"
+        },
+        "endpointName": {
+          "type": "string"
+        },
+        "endpointOid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "recipientContext": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext"
+        },
+        "requestDeliveryMode": {
+          "type": "string",
+          "enum": [
+            "PERSISTENT",
+            "NON_PERSISTENT"
+          ]
+        },
+        "requestJmsMessagePropertyRuleSet": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/jmsMessagePropertyRuleSet"
+        },
+        "requestPriority": {
+          "type": "string"
+        },
+        "requestTarget": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport"
+        },
+        "requestTimeToLive": {
+          "type": "string"
+        },
+        "responseJmsMessagePropertyRuleSet": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/jmsMessagePropertyRuleSet"
+        },
+        "responseSize": {
+          "type": "string"
+        },
+        "responseTarget": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport"
+        },
+        "responseTimeout": {
+          "type": "string"
+        },
+        "samlAssertionExpiry": {
+          "type": "integer",
+          "default": 5
+        },
+        "samlAssertionVersion": {
+          "type": "integer",
+          "default": 1
+        },
+        "useThumbprintInSamlSignature": {
+          "type": "boolean",
+          "default": false
+        },
+        "useThumbprintInSamlSubject": {
+          "type": "boolean",
+          "default": false
+        },
+        "xmlSecurityActorToPromote": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "goid": {
-      "type": "string",
-      "$id": "schema:sub-types/goid"
-    },
-    "jmsDynamicProperties": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/jmsDynamicProperties",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/jmsDynamicProperties",
       "properties": {
         "destPassword": {
           "type": "string"
@@ -57,12 +120,15 @@
         "replytoQName": {
           "type": "string"
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "xmlSecurityRecipientContext": {
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
       "type": "object",
-      "$id": "schema:sub-types/xmlSecurityRecipientContext",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext",
       "properties": {
         "actor": {
           "type": "string"
@@ -70,12 +136,11 @@
         "base64edX509Certificate": {
           "type": "string"
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "jmsMessagePropertyRuleSet": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/jmsMessagePropertyRuleSet",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/jmsMessagePropertyRuleSet",
       "properties": {
         "passThruAll": {
           "type": "boolean",
@@ -84,15 +149,30 @@
         "rules": {
           "type": "array",
           "items": {
-            "$ref": "schema:sub-types/jmsMessagePropertyRule"
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/jmsMessagePropertyRule"
           }
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "messageTargetableSupport": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/messageTargetableSupport",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/jmsMessagePropertyRule",
+      "properties": {
+        "customPattern": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "passThru": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport",
       "properties": {
         "otherTargetMessageVariable": {
           "type": "string"
@@ -108,126 +188,23 @@
             "RESPONSE",
             "OTHER"
           ],
-          "default": "RESPONSE"
+          "default": "REQUEST"
         },
         "targetModifiedByGateway": {
           "type": "boolean",
           "default": false
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "jmsMessagePropertyRule": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/jmsMessagePropertyRule",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "customPattern": {
-          "type": "string"
-        },
-        "passThru": {
-          "type": "boolean",
-          "default": false
-        }
-      },
-      "unevaluatedProperties": false
-    },
-    "jmsRouting": {
-      "type": "object",
-      "$id": "schema:JmsRouting",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/JmsRouting/Main",
+      "title": "Route via JMS",
       "properties": {
         "JmsRouting": {
-          "type": "object",
-          "properties": {
-            "endpointName": {
-              "type": "string"
-            },
-            "endpointOid": {
-              "$ref": "schema:sub-types/goid"
-            },
-            "attachSamlSenderVouches": {
-              "type": "boolean",
-              "default": false
-            },
-            "currentSecurityHeaderHandling": {
-              "type": "integer",
-              "default": 0,
-              "enum": [
-                3,
-                1,
-                0
-              ]
-            },
-            "dynamicJmsRoutingProperties": {
-              "$ref": "schema:sub-types/jmsDynamicProperties"
-            },
-            "recipientContext": {
-              "$ref": "schema:sub-types/xmlSecurityRecipientContext"
-            },
-            "requestDeliveryMode": {
-              "type": "string",
-              "enum": [
-                "PERSISTENT",
-                "NON_PERSISTENT"
-              ],
-              "default": "PERSISTENT"
-            },
-            "requestJmsMessagePropertyRuleSet": {
-              "$ref": "schema:sub-types/jmsMessagePropertyRuleSet"
-            },
-            "requestPriority": {
-              "type": "string"
-            },
-            "requestTarget": {
-              "$ref": "schema:sub-types/messageTargetableSupport"
-            },
-            "requestTimeToLive": {
-              "type": "string"
-            },
-            "responseJmsMessagePropertyRuleSet": {
-              "$ref": "schema:sub-types/jmsMessagePropertyRuleSet"
-            },
-            "responseSize": {
-              "type": "string"
-            },
-            "responseTarget": {
-              "$ref": "schema:sub-types/messageTargetableSupport"
-            },
-            "responseTimeout": {
-              "type": "string"
-            },
-            "samlAssertionExpiry": {
-              "type": "integer"
-            },
-            "samlAssertionVersion": {
-              "type": "string",
-              "enum": [
-                "1.1",
-                "2.0"
-              ],
-              "default": "2.0"
-            },
-            "useThumbprintInSamlSignature": {
-              "type": "boolean",
-              "default": false
-            },
-            "useThumbprintInSamlSubject": {
-              "type": "boolean",
-              "default": false
-            },
-            "xmlSecurityActorToPromote": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/JmsRouting"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:JmsRouting"
+  ]
 }

@@ -1,51 +1,49 @@
 {
-  "$comment": "Schema for ForEachLoop assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "ForEachLoop",
+  "name": "Run Assertions for Each Item",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ForEachLoop",
+      "title": "Run Assertions for Each Item",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "iterationLimit": {
+          "type": "integer",
+          "default": 0
+        },
+        "loopVariableName": {
+          "type": "string"
+        },
+        "variablePrefix": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        },
+        "_children": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
         }
       }
     },
-    "forEachLoop": {
+    {
       "type": "object",
-      "$id": "schema:ForEachLoop",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ForEachLoop/Main",
+      "title": "Run Assertions for Each Item",
       "properties": {
         "ForEachLoop": {
-          "type": "object",
-          "properties": {
-            "loopVariable": {
-              "type": "string"
-            },
-            "iterationLimit": {
-              "type": "string"
-            },
-            "variablePrefix": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/ForEachLoop"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:ForEachLoop"
+  ]
 }

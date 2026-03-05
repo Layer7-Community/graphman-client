@@ -1,48 +1,39 @@
 {
-  "$comment": "Schema for RateLimitQuery assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "RateLimitQuery",
+  "name": "Query Rate Limit",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RateLimitQuery",
+      "title": "Query Rate Limit",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "counterName": {
+          "type": "string"
+        },
+        "variablePrefix": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "rateLimitQuery": {
+    {
       "type": "object",
-      "$id": "schema:RateLimitQuery",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RateLimitQuery/Main",
+      "title": "Query Rate Limit",
       "properties": {
         "RateLimitQuery": {
-          "type": "object",
-          "properties": {
-            "counterName": {
-              "type": "string"
-            },
-            "variablePrefix": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/RateLimitQuery"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:RateLimitQuery"
+  ]
 }

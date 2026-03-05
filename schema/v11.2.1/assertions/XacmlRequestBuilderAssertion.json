@@ -1,55 +1,158 @@
 {
-  "$comment": "Schema for XacmlRequestBuilderAssertion assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "XacmlRequestBuilderAssertion",
+  "name": "Create XACML Request",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/XacmlRequestBuilderAssertion",
+      "title": "Create XACML Request",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "action": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/XacmlRequestBuilderAssertion:action"
+        },
+        "environment": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/XacmlRequestBuilderAssertion:environment"
+        },
+        "outputMessageDestination": {
+          "type": "string",
+          "enum": [
+            "DEFAULT_REQUEST",
+            "DEFAULT_RESPONSE",
+            "CONTEXT_VARIABLE"
+          ],
+          "default": "DEFAULT_REQUEST"
+        },
+        "outputMessageVariableName": {
+          "type": "string"
+        },
+        "resources": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/XacmlRequestBuilderAssertion:resource"
+          }
+        },
+        "soapEncapsulation": {
+          "type": "string",
+          "enum": [
+            "NONE",
+            "v1_1",
+            "v1_2"
+          ],
+          "default": "NONE"
+        },
+        "subjects": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/XacmlRequestBuilderAssertion:subject"
+          }
+        },
+        "xacmlVersion": {
+          "type": "string",
+          "enum": [
+            "V1_0",
+            "V1_1",
+            "V2_0"
+          ],
+          "default": "V2_0"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "xacmlRequestBuilderAssertion": {
+    {
       "type": "object",
-      "$id": "schema:XacmlRequestBuilderAssertion",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/XacmlRequestBuilderAssertion:action",
+      "properties": {
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xacmlRequestBuilderAssertion$AttributeTreeNodeTag"
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/XacmlRequestBuilderAssertion:environment",
+      "properties": {
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xacmlRequestBuilderAssertion$AttributeTreeNodeTag"
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/XacmlRequestBuilderAssertion:resource",
+      "properties": {
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xacmlRequestBuilderAssertion$AttributeTreeNodeTag"
+          }
+        },
+        "resourceContent": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/XacmlRequestBuilderAssertion:resourceContent"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/XacmlRequestBuilderAssertion:resourceContent",
+      "properties": {
+        "attributes": {
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          }
+        },
+        "content": {
+          "type": "string",
+          "default": ""
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/XacmlRequestBuilderAssertion:subject",
+      "properties": {
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xacmlRequestBuilderAssertion$AttributeTreeNodeTag"
+          }
+        },
+        "subjectCategory": {
+          "type": "string",
+          "default": ""
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xacmlRequestBuilderAssertion$AttributeTreeNodeTag"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/XacmlRequestBuilderAssertion/Main",
+      "title": "Create XACML Request",
       "properties": {
         "XacmlRequestBuilderAssertion": {
-          "type": "object",
-          "properties": {
-            "outputMessageTarget": {
-              "type": "string"
-            },
-            "outputMessageVariable": {
-              "type": "string"
-            },
-            "soapEncapsulation": {
-              "type": "string",
-              "enum": [
-                "NONE",
-                "REQUEST_ONLY"
-              ]
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/XacmlRequestBuilderAssertion"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:XacmlRequestBuilderAssertion"
+  ]
 }

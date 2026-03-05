@@ -1,69 +1,64 @@
 {
-  "$comment": "Schema for CreateJsonWebKey assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "CreateJsonWebKey",
+  "name": "Create Json Web Key",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CreateJsonWebKey",
+      "title": "Create Json Web Key",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "keys": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/CreateJsonWebKey:key"
+          }
+        },
+        "targetVariable": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "createJsonWebKey": {
+    {
       "type": "object",
-      "$id": "schema:CreateJsonWebKey",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CreateJsonWebKey:key",
+      "properties": {
+        "keyId": {
+          "type": "string"
+        },
+        "publicKeyUse": {
+          "type": "string"
+        },
+        "sourceKeyAlias": {
+          "type": "string"
+        },
+        "sourceKeyGoid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CreateJsonWebKey/Main",
+      "title": "Create Json Web Key",
       "properties": {
         "CreateJsonWebKey": {
-          "type": "object",
-          "properties": {
-            "keys": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "keyId": {
-                    "type": "string",
-                    "title": "Key ID"
-                  },
-                  "publicKeyUse": {
-                    "type": "string",
-                    "default": "Encryption",
-                    "title": "Usage",
-                    "enum": [
-                      "Encryption",
-                      "Signature"
-                    ]
-                  },
-                  "sourceKeyAlias": {
-                    "type": "string"
-                  }
-                }
-              }
-            },
-            "targetVariable": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/CreateJsonWebKey"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:CreateJsonWebKey"
+  ]
 }

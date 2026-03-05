@@ -1,30 +1,57 @@
 {
-  "$comment": "Schema for CustomizeErrorResponse assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "CustomizeErrorResponse",
+  "name": "Customize Error Response",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CustomizeErrorResponse",
+      "title": "Customize Error Response",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "content": {
+          "type": "string",
+          "default": "Internal Server Error"
+        },
+        "contentType": {
+          "type": "string",
+          "default": "text/plain; charset=UTF-8"
+        },
+        "errorLevel": {
+          "type": "string",
+          "enum": [
+            "DROP_CONNECTION",
+            "TEMPLATE_RESPONSE"
+          ],
+          "default": "TEMPLATE_RESPONSE"
+        },
+        "extraHeaders": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/nameValuePair"
+          }
+        },
+        "httpStatus": {
+          "type": "string",
+          "default": "500"
+        },
+        "includePolicyDownloadURL": {
+          "type": "boolean",
+          "default": false
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "nameValuePair": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/nameValuePair",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/nameValuePair",
       "properties": {
         "key": {
           "type": "string"
@@ -32,51 +59,17 @@
         "value": {
           "type": "string"
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "customizeErrorResponse": {
+    {
       "type": "object",
-      "$id": "schema:CustomizeErrorResponse",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CustomizeErrorResponse/Main",
+      "title": "Customize Error Response",
       "properties": {
         "CustomizeErrorResponse": {
-          "type": "object",
-          "properties": {
-            "errorLevel": {
-              "type": "string",
-              "enum": [
-                "DROP_CONNECTION",
-                "TEMPLATE_RESPONSE"
-              ],
-              "default": "TEMPLATE_RESPONSE"
-            },
-            "content": {
-              "type": "string"
-            },
-            "contentType": {
-              "type": "string"
-            },
-            "extraHeaders": {
-              "type": "array",
-              "items": {
-                "$ref": "schema:sub-types/nameValuePair"
-              }
-            },
-            "httpStatus": {
-              "type": "string"
-            },
-            "includePolicyDownloadURL": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/CustomizeErrorResponse"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:CustomizeErrorResponse"
+  ]
 }

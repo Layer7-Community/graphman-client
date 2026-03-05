@@ -1,39 +1,39 @@
 {
-  "$comment": "Schema for Comment assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
-      "type": "object",
+  "configName": "Comment",
+  "name": "Add Comment to Policy",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Comment",
+      "title": "Add Comment to Policy",
+      "type": [
+        "string",
+        "object"
+      ],
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "comment": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "comment": {
+    {
       "type": "object",
-      "$id": "schema:Comment",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Comment/Main",
+      "title": "Add Comment to Policy",
       "properties": {
         "Comment": {
-          "type": "string"
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/Comment"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:Comment"
+  ]
 }

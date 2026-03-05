@@ -1,67 +1,122 @@
 {
-  "$comment": "Schema for XacmlPdpAssertion assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "XacmlPdpAssertion",
+  "name": "Evaluate XACML Policy",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/XacmlPdpAssertion",
+      "title": "Evaluate XACML Policy",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "failIfNotPermit": {
+          "type": "boolean",
+          "default": false
+        },
+        "inputMessageSource": {
+          "type": "string",
+          "enum": [
+            "DEFAULT_REQUEST",
+            "DEFAULT_RESPONSE",
+            "CONTEXT_VARIABLE"
+          ],
+          "default": "DEFAULT_REQUEST"
+        },
+        "inputMessageVariableName": {
+          "type": "string"
+        },
+        "outputMessageTarget": {
+          "type": "string",
+          "enum": [
+            "DEFAULT_REQUEST",
+            "DEFAULT_RESPONSE",
+            "CONTEXT_VARIABLE"
+          ],
+          "default": "DEFAULT_RESPONSE"
+        },
+        "outputMessageVariableName": {
+          "type": "string"
+        },
+        "resourceInfo": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/assertionResourceInfo"
+        },
+        "soapEncapsulation": {
+          "type": "string",
+          "enum": [
+            "NONE",
+            "REQUEST",
+            "RESPONSE",
+            "REQUEST_AND_RESPONSE"
+          ],
+          "default": "NONE"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "xacmlPdpAssertion": {
+    {
       "type": "object",
-      "$id": "schema:XacmlPdpAssertion",
-      "$ref": "schema:assertion",
-      "properties": {
-        "XacmlPdpAssertion": {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/assertionResourceInfo",
+      "anyOf": [
+        {
           "type": "object",
           "properties": {
-            "failIfNotPermit": {
+            "document": {
+              "type": "string"
+            },
+            "originalUrl": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "allowMessagesWithoutUrl": {
               "type": "boolean",
               "default": false
             },
-            "inputMessageSource": {
-              "type": "string"
-            },
-            "inputMessageVariable": {
-              "type": "string"
-            },
-            "outputMessageTarget": {
-              "type": "string"
-            },
-            "outputMessageVariable": {
-              "type": "string"
-            },
-            "soapEncapsulation": {
-              "type": "string",
-              "enum": [
-                "NONE",
-                "REQUEST_ONLY",
-                "RESPONSE_ONLY",
-                "REQUEST_AND_RESPONSE"
-              ]
+            "urlRegexes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
             }
-          },
-          "unevaluatedProperties": false
+          }
         }
-      },
-      "unevaluatedProperties": false
+      ]
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/XacmlPdpAssertion/Main",
+      "title": "Evaluate XACML Policy",
+      "properties": {
+        "XacmlPdpAssertion": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/XacmlPdpAssertion"
+        }
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:XacmlPdpAssertion"
+  ]
 }

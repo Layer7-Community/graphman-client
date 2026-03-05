@@ -1,30 +1,52 @@
 {
-  "$comment": "Schema for FaultLevel assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "FaultLevel",
+  "name": "Customize SOAP Fault Response",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/FaultLevel",
+      "title": "Customize SOAP Fault Response",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "dynamicPrivateKeyVariable": {
+          "type": "string",
+          "default": ""
+        },
+        "keyAlias": {
+          "type": "string"
+        },
+        "levelInfo": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/soapFaultLevel"
+        },
+        "nonDefaultKeystoreId": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "soap12": {
+          "type": "boolean",
+          "default": false
+        },
+        "usesDefaultKeyStore": {
+          "type": "boolean",
+          "default": true
+        },
+        "usesDynamicPrivateKey": {
+          "type": "boolean",
+          "default": false
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "sub-type-soapFaultLevel": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/soapFaultLevel",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/soapFaultLevel",
       "properties": {
         "alwaysReturnSoapFault": {
           "type": "boolean",
@@ -37,7 +59,7 @@
         "extraHeaders": {
           "type": "array",
           "items": {
-            "$ref": "schema:sub-types/nameValuePair"
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/nameValuePair"
           }
         },
         "faultTemplate": {
@@ -64,7 +86,7 @@
           "default": 2
         },
         "nonDefaultKeystoreId": {
-          "$ref": "schema:sub-types/goid"
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
         },
         "signSoapFault": {
           "type": "boolean",
@@ -84,13 +106,9 @@
         }
       }
     },
-    "goid": {
-      "type": "string",
-      "$id": "schema:sub-types/goid"
-    },
-    "nameValuePair": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/nameValuePair",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/nameValuePair",
       "properties": {
         "key": {
           "type": "string"
@@ -98,59 +116,21 @@
         "value": {
           "type": "string"
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "faultLevel": {
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
       "type": "object",
-      "$id": "schema:FaultLevel",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/FaultLevel/Main",
+      "title": "Customize SOAP Fault Response",
       "properties": {
         "FaultLevel": {
-          "type": "object",
-          "properties": {
-            "dynamicPrivateKeyVariable": {
-              "type": "string",
-              "default": ""
-            },
-            "keyAlias": {
-              "type": "string"
-            },
-            "levelInfo": {
-              "$ref": "schema:sub-types/soapFaultLevel"
-            },
-            "nonDefaultKeystoreId": {
-              "$ref": "schema:sub-types/goid"
-            },
-            "soap12": {
-              "type": "boolean",
-              "default": false
-            },
-            "usesDefaultKeyStore": {
-              "type": "boolean",
-              "default": true
-            },
-            "usesDynamicPrivateKey": {
-              "type": "boolean",
-              "default": false
-            },
-            "_enabled": {
-              "type": "boolean",
-              "default": true
-            },
-            "_leftComment": {
-              "type": "string"
-            },
-            "_rightComment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/FaultLevel"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:FaultLevel"
+  ]
 }

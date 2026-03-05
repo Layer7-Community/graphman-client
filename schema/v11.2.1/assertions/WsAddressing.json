@@ -1,30 +1,63 @@
 {
-  "$comment": "Schema for WsAddressing assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "WsAddressing",
+  "name": "Require WS-Addressing",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/WsAddressing",
+      "title": "Require WS-Addressing",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "enableOtherNamespace": {
+          "type": "string"
+        },
+        "enableWsAddressing10": {
+          "type": "boolean",
+          "default": true
+        },
+        "enableWsAddressing200408": {
+          "type": "boolean",
+          "default": false
+        },
+        "identityTarget": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/identityTarget"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "recipientContext": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext"
+        },
+        "requireSignature": {
+          "type": "boolean",
+          "default": false
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "variablePrefix": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "identityTarget": {
+    {
       "type": "object",
-      "$id": "schema:sub-types/identityTarget",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/identityTarget",
       "properties": {
         "identityId": {
           "type": "string"
@@ -33,7 +66,7 @@
           "type": "string"
         },
         "identityProviderOid": {
-          "$ref": "schema:sub-types/goid"
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
         },
         "targetIdentityType": {
           "type": "string",
@@ -44,12 +77,15 @@
             "TAG"
           ]
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "xmlSecurityRecipientContext": {
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
       "type": "object",
-      "$id": "schema:sub-types/xmlSecurityRecipientContext",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext",
       "properties": {
         "actor": {
           "type": "string"
@@ -57,64 +93,17 @@
         "base64edX509Certificate": {
           "type": "string"
         }
-      },
-      "unevaluatedProperties": false
+      }
     },
-    "goid": {
-      "type": "string",
-      "$id": "schema:sub-types/goid"
-    },
-    "wsAddressing": {
+    {
       "type": "object",
-      "$id": "schema:WsAddressing",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/WsAddressing/Main",
+      "title": "Require WS-Addressing",
       "properties": {
         "WsAddressing": {
-          "type": "object",
-          "properties": {
-            "enableOtherNamespace": {
-              "type": "string"
-            },
-            "enableWsAddressing10": {
-              "type": "boolean",
-              "default": true
-            },
-            "enableWsAddressing200408": {
-              "type": "boolean",
-              "default": false
-            },
-            "identityTarget": {
-              "$ref": "schema:sub-types/identityTarget"
-            },
-            "otherTargetMessageVariable": {
-              "type": "string"
-            },
-            "recipientContext": {
-              "$ref": "schema:sub-types/xmlSecurityRecipientContext"
-            },
-            "requireSignature": {
-              "type": "boolean",
-              "default": false
-            },
-            "target": {
-              "type": "string",
-              "enum": [
-                "REQUEST",
-                "RESPONSE",
-                "OTHER"
-              ],
-              "default": "REQUEST"
-            },
-            "variablePrefix": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/WsAddressing"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:WsAddressing"
+  ]
 }

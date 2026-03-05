@@ -1,89 +1,80 @@
 {
-  "$comment": "Schema for ProcessSamlAuthnRequest assertion. Self-contained with all dependencies.",
-  "definitions": {
-    "assertion": {
-      "$id": "schema:assertion",
+  "configName": "ProcessSamlAuthnRequest",
+  "name": "Process SAML Authentication Request",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ProcessSamlAuthnRequest",
+      "title": "Process SAML Authentication Request",
       "type": "object",
       "properties": {
-        ".properties": {
-          "type": "object",
-          "properties": {
-            ".enabled": {
-              "type": "boolean"
-            },
-            ".left.comment": {
-              "type": "string"
-            },
-            ".right.comment": {
-              "type": "string"
-            }
-          },
-          "unevaluatedProperties": false
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "requiredAssertionConsumerServiceIndex": {
+          "type": "boolean",
+          "default": false
+        },
+        "requiredAssertionConsumerServiceURL": {
+          "type": "boolean",
+          "default": true
+        },
+        "requiredAttributeConsumingServiceIndex": {
+          "type": "boolean",
+          "default": false
+        },
+        "requiredProtocolBinding": {
+          "type": "boolean",
+          "default": false
+        },
+        "requiredProviderName": {
+          "type": "boolean",
+          "default": false
+        },
+        "samlProtocolBinding": {
+          "type": "string",
+          "enum": [
+            "HttpPost",
+            "HttpRedirect"
+          ]
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "variablePrefix": {
+          "type": "string",
+          "default": "authnRequest"
+        },
+        "verifySignature": {
+          "type": "boolean",
+          "default": true
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
         }
       }
     },
-    "processSamlAuthnRequest": {
+    {
       "type": "object",
-      "$id": "schema:ProcessSamlAuthnRequest",
-      "$ref": "schema:assertion",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ProcessSamlAuthnRequest/Main",
+      "title": "Process SAML Authentication Request",
       "properties": {
         "ProcessSamlAuthnRequest": {
-          "type": "object",
-          "properties": {
-            "otherTargetMessageVariable": {
-              "type": "string"
-            },
-            "requiredAssertionConsumerServiceIndex": {
-              "type": "boolean",
-              "default": false
-            },
-            "requiredAssertionConsumerServiceURL": {
-              "type": "boolean",
-              "default": false
-            },
-            "requiredAttributeConsumingServiceIndex": {
-              "type": "boolean",
-              "default": false
-            },
-            "requiredProtocolBinding": {
-              "type": "boolean",
-              "default": false
-            },
-            "requiredProviderName": {
-              "type": "boolean",
-              "default": false
-            },
-            "samlProtocolBinding": {
-              "type": "string",
-              "enum": [
-                "HttpPost",
-                "HttpRedirect"
-              ],
-              "default": "HttpPost"
-            },
-            "target": {
-              "type": "string",
-              "enum": [
-                "REQUEST",
-                "RESPONSE",
-                "OTHER"
-              ],
-              "default": "REQUEST"
-            },
-            "variablePrefix": {
-              "type": "string"
-            },
-            "verifySignature": {
-              "type": "boolean",
-              "default": true
-            }
-          },
-          "unevaluatedProperties": false
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/ProcessSamlAuthnRequest"
         }
-      },
-      "unevaluatedProperties": false
+      }
     }
-  },
-  "type": "object",
-  "$ref": "schema:ProcessSamlAuthnRequest"
+  ]
 }
