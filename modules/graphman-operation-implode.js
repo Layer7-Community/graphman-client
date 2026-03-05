@@ -97,8 +97,21 @@ let type1Imploder = (function () {
         }
     };
 
-    function isSectionIncluded(sections, sectionName) {
-        return !sections || sections.length === 0 || sections.includes("*") || sections.includes(sectionName);
+    function isSectionIncluded(packageSpec, sections, sectionName) {
+        if (packageSpec) {
+            const packageItems = packageSpec[sectionName];
+            if (!packageItems) {
+                utils.debug(sectionName + ` section is missing in the package`);
+                return false;
+            }
+            if (!Array.isArray(packageItems)) {
+                utils.warn(sectionName + `should be an array`);
+                return false;
+            }
+        } else {
+            return !sections || sections.length === 0 || sections.includes("*") || sections.includes(sectionName);
+        }
+        return true;
     }
 
     return {
@@ -121,20 +134,9 @@ let type1Imploder = (function () {
                 if (utils.isDirectory(subDir)) {
                     const typeInfo = graphman.typeInfoByPluralName(item);
                     if (typeInfo) {
-                        if (!isSectionIncluded(sections, item)) {
+                        if (!isSectionIncluded(packageSpec, sections, item)) {
                             utils.info("ignoring " + item);
                             return;
-                        }
-                        if (packageSpec) {
-                            const packageItems = packageSpec[item];
-                            if (!packageItems) {
-                                utils.debug(item + ` section is missing in the package`);
-                                return;
-                            }
-                            if (!Array.isArray(packageItems)) {
-                                utils.warn(item + `should be an array`);
-                                return;
-                            }
                         }
                         utils.info("imploding " + item);
                         readEntities(subDir, item, typeInfo, bundle, packageSpec);
@@ -162,11 +164,6 @@ let type1Imploder = (function () {
 
     function findEntityFromPackage(packageSpec, entity, typeInfo, section, filename) {
         const packageItems = packageSpec[section];
-        if (!Array.isArray(packageItems)) {
-            utils.warn(`package file section ${section} should be an array`);
-            return false;
-        }
-
         return packageItems.some(item => {
             if (typeof item !== 'object' || item.source === undefined) {
                 utils.warn(`invalid package item in ${section}, expected object with 'source' property`);
@@ -249,15 +246,8 @@ let type1Imploder = (function () {
         if (typeInfo) {
             const fullPath = `${path}/${filename}`;
             utils.info(`  ${fullPath.substring(rootDir.length + 1)}`);
-            if (!isSectionIncluded(sections, pluralName)) {
+            if (!isSectionIncluded(packageSpec, sections, pluralName)) {
                 return;
-            }
-            if (packageSpec) {
-                const packageItems = packageSpec[pluralName];
-                if (!packageItems || !Array.isArray(packageItems)) {
-                    utils.debug(pluralName + ` section is missing in the package`);
-                    return;
-                }
             }
             const entity = utils.readFile(`${path}/${filename}`);
 
