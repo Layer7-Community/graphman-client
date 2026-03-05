@@ -14,7 +14,7 @@ const SUPPORTED_OPERATIONS = [
     "config"
 ];
 
-const SUPPORTED_EXTENSIONS = ["pre-request", "post-export", "pre-import", "post-revise", "multiline-text-diff", "policy-code-validator", "socks-proxy-agent", "http-proxy-agent", "https-proxy-agent"];
+const SUPPORTED_EXTENSIONS = ["pre-request", "post-export", "pre-import", "post-revise", "multiline-text-diff", "policy-code-validator", "https-proxy"];
 const SCHEMA_FEATURE_LIST = {
     "v11.2.1": ["mappings", "mappings-source", "policy-as-code"],
     "v11.2.0": ["mappings", "mappings-source", "policy-as-code"],
@@ -106,6 +106,15 @@ module.exports = {
 
         if (obj.credential) {
             obj["credentialRef"] = config.credentials[obj.credential];
+        }
+        return obj;
+    },
+
+    proxyConfiguration: function (name) {
+        const config = this.configuration();
+        const obj = name ? Object.assign({name: name}, config.gateways[name]) : null;
+        if (!obj) {
+            return null;
         }
 
         if (obj.proxy) {
@@ -238,7 +247,8 @@ module.exports = {
         }
 
         if (gateway.proxy) {
-            req.proxy = gateway.proxyRef;
+            //this.proxyConfiguration(gateway.proxy).proxyConfiguration(gateway.proxy);
+            req.proxy = this.proxyConfiguration(gateway.proxy);
         }
 
         const globalOptions = this.loadedConfig && this.loadedConfig.options ? this.loadedConfig.options : {};
@@ -259,77 +269,14 @@ module.exports = {
      * @param callback
      */
     invoke: function (options, opContext, callback) {
-        options = utils.extension("pre-request").apply(options, opContext);
-        // Create proxy agent if configured (HTTP/HTTPS proxy takes precedence over SOCKS)
-        let agent = null;
-        const isHttps = !options.protocol || options.protocol === 'https' || options.protocol === 'https:';
 
-        if (options.proxy && options.proxy["proxyType"] && options.proxy["url"]) {
-            // Handle HTTP/HTTPS proxy - object with url and connection options
-            const agentType = options.proxy["proxyType"] || "";
-            const proxyConfig = {};
-
-            Object.keys(options.proxy).forEach(key => {
-                if (key !== "proxyType" && options.proxy[key] !== undefined) {
-                    proxyConfig[key] = options.proxy[key];
-                }
-            });
-
-            if (agentType === "httpProxy") {
-                // Extract connection options (exclude url property)
-                const proxyOptions = createProxyOptions(proxyConfig);
-                const proxyUrlLower = proxyConfig["url"].toLowerCase();
-                const isProxyHttps = proxyUrlLower.startsWith('https://');
-                if (isProxyHttps) {
-                    // If proxy URL uses https://, ensure TLS options are configured if needed
-                    if (!proxyOptions.tls) {
-                        proxyOptions.tls = {};
-                    }
-                    // If rejectUnauthorized is not explicitly set for proxy TLS, default to false for compatibility
-                    if (proxyOptions.tls.rejectUnauthorized === undefined) {
-                        proxyOptions.tls.rejectUnauthorized = false;
-                    }
-                }
-
-                try {
-                    // Use https-proxy-agent for HTTPS targets, http-proxy-agent for HTTP targets
-                    // Note: The agent type is based on TARGET protocol, not proxy URL protocol
-
-                    if (isHttps) {
-                        agent = utils.extension("https-proxy-agent").apply(proxyOptions, opContext);
-                    } else {
-                        agent = utils.extension("http-proxy-agent").apply(proxyOptions, opContext);
-                    }
-                    if (agent && typeof agent !== 'string' && typeof agent === 'object') {
-                        options.agent = agent;
-                    } else if (agent) {
-                        utils.warn(`${isHttps ? 'https' : 'http'}-proxy-agent extension did not return a valid agent, proxy will not be used`);
-                    }
-                } catch (e) {
-                    console.error(e);
-                    utils.warn(`failed to load ${isHttps ? 'https' : 'http'}-proxy-agent extension, proxy will not be used: ${e.message}`);
-                }
-            }
-            if (agentType === "socksProxy") {
-                // Handle SOCKS proxy - object with url and connection options
-
-                const proxyOptions = createProxyOptions(proxyConfig);
-
-                utils.info("complete proxy options" , proxyOptions);
-                try {
-                    agent = utils.extension("socks-proxy-agent").apply(proxyOptions, opContext);
-                    if (agent && typeof agent !== 'string' && typeof agent === 'object') {
-                        options.agent = agent;
-                    } else if (agent) {
-                        utils.warn(`socks-proxy-agent extension did not return a valid agent, proxy will not be used`);
-                    }
-
-                } catch (e) {
-                    utils.warn(`failed to load socks-proxy-agent extension, proxy will not be used: ${e.message}`);
-                }
-
-            }
+        if (options.proxy) {
+            options.agent = utils.extension("http-proxy").apply(options.proxy, opContext);
+            options.proxy = null;
         }
+
+        options = utils.extension("pre-request").apply(options, opContext);
+        const isHttps = !options.protocol || options.protocol === 'https' || options.protocol === 'https:';
 
         const req = (isHttps ? https : http).request(options, function(response) {
             let respInfo = {initialized: false, chunks: []};
@@ -401,27 +348,6 @@ function attachCredential(req, credRef, credName) {
     }
 }
 
-function createProxyOptions(proxyConfig) {
-    const proxyOptions = {};
-    Object.keys(proxyConfig).forEach(key => {
-        if (key !== 'url' && key !== "credentialRef" && key !== "credential" && key !== "name") {
-            proxyOptions[key] = proxyConfig[key];
-        }
-    });
-
-    const url = new URL(proxyConfig["url"]);
-    proxyOptions["hostname"] = url.hostname;
-    const proxyServerUserName = proxyConfig?.credentialRef?.username;
-    const proxyServerPassword = proxyConfig?.credentialRef?.password;
-
-    if (proxyServerPassword && proxyServerUserName) {
-        proxyOptions["headers"] = {
-            "Proxy-Authorization": `Basic ${Buffer.from(`${proxyServerUserName}:${proxyServerPassword}`).toString('base64')}`
-        };
-    }
-    return proxyOptions;
-}
-
 function maskedHttpRequest(options) {
     if (options.auth) options.auth = "***";
     if (options.passphrase) options.passphrase = "***";
@@ -468,7 +394,7 @@ function makeOptions(options) {
         "policyCodeFormat": "xml",
         "keyFormat": "p12",
         "caFilename": null,
-        "extensions": ["pre-request", "post-export", "pre-import", "post-revise", "http-proxy-agent", "https-proxy-agent", "socks-proxy-agent"]
+        "extensions": ["pre-request", "post-export", "pre-import", "post-revise", "http-proxy"]
     }, options);
 }
 
