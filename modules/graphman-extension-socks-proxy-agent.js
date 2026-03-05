@@ -1,24 +1,20 @@
 //Copyright (c) 2026 Broadcom Inc. and/or its subsidiaries. All Rights Reserved.
 
 const {SocksProxyAgent} = require("socks-proxy-agent");
+const utils = require("./graphman-utils");
 
 module.exports = {
     /**
      * Extension to provide SOCKS proxy agent
-     * @param input proxy URL (optional, can be passed when creating agent)
-     * @param context partial execution context containing connection options (e.g., timeout, type, tls)
+     * @param input partial execution context containing connection options (e.g., timeout, keepAlive, maxSockets) along with proxy url
+     * @param context has the context of current operation details
      * @return SocksProxyAgent instance or null if package is not installed
      */
     apply: function (input, context) {
-        // If context contains connection options, pass them as second parameter
-        if (context && typeof context === 'object' && Object.keys(context).length > 0) {
-            if (typeof input === 'string') {
-                // Pass URL string and options separately
-                return new SocksProxyAgent(input, context);
-            } else {
-                // Input is already an options object, merge with context
-                return new SocksProxyAgent({...input, ...context});
-            }
+
+        utils.debug("currently executing for operation:" , context.operation);
+        if (input && typeof input === 'object' && Object.keys(input).length > 0) {
+            return new SocksProxyAgent(input, input);
         }
         return new SocksProxyAgent(input);
     }

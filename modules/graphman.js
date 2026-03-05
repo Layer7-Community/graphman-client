@@ -61,7 +61,9 @@ module.exports = {
         utils.logAt(config.options.log);
 
         config.credentials = makeCredentials(config.credentials || {});
+        config.proxies = makeProxies(config.proxies || {});
         config.gateways = makeGateways(config.gateways || {});
+
 
         // override configured gateway details using params if specified
         if (params.gateways) Object.keys(params.gateways).forEach(key => {
@@ -85,6 +87,7 @@ module.exports = {
     defaultConfiguration: function () {
         return {
             credentials: makeCredentials({}),
+            proxies: makeProxies({}),
             gateways: makeGateways({}),
             options: makeOptions({})
         }
@@ -95,9 +98,22 @@ module.exports = {
     },
 
     gatewayConfiguration: function (name) {
-        const obj = name ? Object.assign({name: name}, this.configuration().gateways[name]) : null;
-        if (obj && obj.credential) {
-            obj["credentialRef"] = this.configuration().credentials[obj.credential];
+        const config = this.configuration();
+        const obj = name ? Object.assign({name: name}, config.gateways[name]) : null;
+        if (!obj) {
+            return null;
+        }
+
+        if (obj.credential) {
+            obj["credentialRef"] = config.credentials[obj.credential];
+        }
+
+        if (obj.proxy) {
+            const proxy = Object.assign({name: obj.proxy}, config.proxies[obj.proxy]);
+            if (proxy.credential) {
+                proxy["credentialRef"] = config.credentials[proxy.credential];
+            }
+            obj["proxyRef"] = proxy;
         }
 
         return obj;
@@ -221,6 +237,10 @@ module.exports = {
             attachCredential(req, gateway, "<local>");
         }
 
+        if (gateway.proxy) {
+            req.proxy = gateway.proxyRef;
+        }
+
         const globalOptions = this.loadedConfig && this.loadedConfig.options ? this.loadedConfig.options : {};
         if (globalOptions.caFilename) {
             // Trusted CA certificate(s) for server verification (PEM; file may contain multiple certs).
@@ -228,14 +248,6 @@ module.exports = {
         }
 
         req.minVersion = req.maxVersion = gateway.tlsProtocol || "TLSv1.2";
-
-        // Handle proxy configuration (object with url and options)
-        if (gateway.socksProxy) {
-            req.socksProxy = gateway.socksProxy;
-        }
-        if (gateway.httpProxy) {
-            req.httpProxy = gateway.httpProxy;
-        }
 
         return req;
     },
@@ -252,26 +264,21 @@ module.exports = {
         let agent = null;
         const isHttps = !options.protocol || options.protocol === 'https' || options.protocol === 'https:';
 
-        if (options.httpProxy) {
+        if (options.proxy && options.proxy["proxyType"] && options.proxy["url"]) {
             // Handle HTTP/HTTPS proxy - object with url and connection options
-            const proxyConfig = options.httpProxy;
+            const agentType = options.proxy["proxyType"] || "";
+            const proxyConfig = {};
 
-            utils.info("currently using http proxy of squid");
+            Object.keys(options.proxy).forEach(key => {
+                if (key !== "proxyType" && options.proxy[key] !== undefined) {
+                    proxyConfig[key] = options.proxy[key];
+                }
+            });
 
-            if (typeof proxyConfig !== 'object' || !proxyConfig.url) {
-                utils.warn("httpProxy must be an object with a 'url' property");
-            } else {
-                const proxyUrl = proxyConfig.url;
+            if (agentType === "httpProxy") {
                 // Extract connection options (exclude url property)
-                const proxyOptions = {};
-                Object.keys(proxyConfig).forEach(key => {
-                    if (key !== 'url') {
-                        proxyOptions[key] = proxyConfig[key];
-                    }
-                });
-
-                // Validate proxy URL protocol
-                const proxyUrlLower = proxyUrl.toLowerCase();
+                const proxyOptions = createProxyOptions(proxyConfig);
+                const proxyUrlLower = proxyConfig["url"].toLowerCase();
                 const isProxyHttps = proxyUrlLower.startsWith('https://');
                 if (isProxyHttps) {
                     // If proxy URL uses https://, ensure TLS options are configured if needed
@@ -287,10 +294,11 @@ module.exports = {
                 try {
                     // Use https-proxy-agent for HTTPS targets, http-proxy-agent for HTTP targets
                     // Note: The agent type is based on TARGET protocol, not proxy URL protocol
+
                     if (isHttps) {
-                        agent = utils.extension("https-proxy-agent").apply(proxyUrl, proxyOptions);
+                        agent = utils.extension("https-proxy-agent").apply(proxyOptions, opContext);
                     } else {
-                        agent = utils.extension("http-proxy-agent").apply(proxyUrl, proxyOptions);
+                        agent = utils.extension("http-proxy-agent").apply(proxyOptions, opContext);
                     }
                     if (agent && typeof agent !== 'string' && typeof agent === 'object') {
                         options.agent = agent;
@@ -302,36 +310,28 @@ module.exports = {
                     utils.warn(`failed to load ${isHttps ? 'https' : 'http'}-proxy-agent extension, proxy will not be used: ${e.message}`);
                 }
             }
-        } else if (options.socksProxy) {
-            // Handle SOCKS proxy - object with url and connection options
-            const proxyConfig = options.socksProxy;
+            if (agentType === "socksProxy") {
+                // Handle SOCKS proxy - object with url and connection options
 
-            if (typeof proxyConfig !== 'object' || !proxyConfig.url) {
-                utils.warn("socksProxy must be an object with a 'url' property");
-            } else {
-                const proxyUrl = proxyConfig.url;
-                // Extract connection options (exclude url property)
-                const proxyOptions = {};
-                Object.keys(proxyConfig).forEach(key => {
-                    if (key !== 'url') {
-                        proxyOptions[key] = proxyConfig[key];
-                    }
-                });
+                const proxyOptions = createProxyOptions(proxyConfig);
 
+                utils.info("complete proxy options" , proxyOptions);
                 try {
-                    agent = utils.extension("socks-proxy-agent").apply(proxyUrl, proxyOptions);
+                    agent = utils.extension("socks-proxy-agent").apply(proxyOptions, opContext);
                     if (agent && typeof agent !== 'string' && typeof agent === 'object') {
                         options.agent = agent;
                     } else if (agent) {
                         utils.warn(`socks-proxy-agent extension did not return a valid agent, proxy will not be used`);
                     }
+
                 } catch (e) {
                     utils.warn(`failed to load socks-proxy-agent extension, proxy will not be used: ${e.message}`);
                 }
+
             }
         }
 
-        const req = (isHttps ? https : http).request(options, function (response) {
+        const req = (isHttps ? https : http).request(options, function(response) {
             let respInfo = {initialized: false, chunks: []};
 
             response.on('data', function (chunk) {
@@ -401,6 +401,27 @@ function attachCredential(req, credRef, credName) {
     }
 }
 
+function createProxyOptions(proxyConfig) {
+    const proxyOptions = {};
+    Object.keys(proxyConfig).forEach(key => {
+        if (key !== 'url' && key !== "credentialRef" && key !== "credential" && key !== "name") {
+            proxyOptions[key] = proxyConfig[key];
+        }
+    });
+
+    const url = new URL(proxyConfig["url"]);
+    proxyOptions["hostname"] = url.hostname;
+    const proxyServerUserName = proxyConfig?.credentialRef?.username;
+    const proxyServerPassword = proxyConfig?.credentialRef?.password;
+
+    if (proxyServerPassword && proxyServerUserName) {
+        proxyOptions["headers"] = {
+            "Proxy-Authorization": `Basic ${Buffer.from(`${proxyServerUserName}:${proxyServerPassword}`).toString('base64')}`
+        };
+    }
+    return proxyOptions;
+}
+
 function maskedHttpRequest(options) {
     if (options.auth) options.auth = "***";
     if (options.passphrase) options.passphrase = "***";
@@ -447,7 +468,7 @@ function makeOptions(options) {
         "policyCodeFormat": "xml",
         "keyFormat": "p12",
         "caFilename": null,
-        "extensions": ["pre-request", "post-export", "pre-import", "post-revise"]
+        "extensions": ["pre-request", "post-export", "pre-import", "post-revise", "http-proxy-agent", "https-proxy-agent", "socks-proxy-agent"]
     }, options);
 }
 
@@ -465,6 +486,12 @@ function makeCredentials(credentials) {
     return credentials;
 }
 
+function makeProxies(proxies) {
+    // No hard default; just ensure each proxy knows its name if useful
+    Object.entries(proxies).forEach(([key, item]) => item['name'] = key);
+    return proxies;
+}
+
 function makeGateways(gateways) {
     // populate default gateway if no gateway profiles are defined
     if (!Object.keys(gateways).length) {
@@ -473,9 +500,7 @@ function makeGateways(gateways) {
             "credential": "default",
             "rejectUnauthorized": true,
             "passphrase": "7layer",
-            "allowMutations": false,
-            "socksProxy": null,
-            "httpProxy": null
+            "allowMutations": false
         };
     }
 
