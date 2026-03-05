@@ -31,9 +31,7 @@
             "post-export",
             "pre-import",
             "post-revise",
-            "http-proxy-agent",
-            "https-proxy-agent",
-            "socks-proxy-agent"
+            "http-proxy"
         ]
     }
 }
