@@ -412,28 +412,14 @@ let type1Imploder = (function () {
 
     function isMappingMatchingSelectedEntity(section, source, selectedEntities, typeInfo) {
         // Check each selected entity to see if it matches this mapping
+        let found = false;
         for (const entity of selectedEntities) {
-            // Match based on identity fields
-            // A mapping matches if all identity fields in the source match the entity
-            let hasMatchingFields = false;
-            let allFieldsMatch = true;
-            
-            for (const field of typeInfo.identityFields) {
-                if (source[field] !== undefined) {
-                    hasMatchingFields = true;
-                    if (entity[field] !== source[field]) {
-                        allFieldsMatch = false;
-                        break;
-                    }
-                }
-            }
-
-            // If we have at least one matching field and all match, this mapping belongs to this entity
-            if (hasMatchingFields && allFieldsMatch) {
-                return true;
+            if (butils.isEntityMatches(source, entity, typeInfo) ) {
+                found = true;
+                break;
             }
         }
 
-        return false;
+        return found;
     }
 })();

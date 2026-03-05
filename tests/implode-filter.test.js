@@ -380,9 +380,9 @@ describe("Implode operation - mapping filtering", () => {
         const bundle = tUtils.readFileAsJson(implodedFile);
 
         const mappings = bundle.properties.mappings.services;
-        // All non-default mappings should match selected entities
-        const nonDefaultMappings = mappings.filter(m => !m.default);
-        nonDefaultMappings.forEach(mapping => {
+        expect(mappings.length).toBe(1);
+
+        mappings.forEach(mapping => {
             const source = mapping.source || mapping;
             // Should match one of our selected entities
             expect(source.resolutionPath).toBe("/some-service");
