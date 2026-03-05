@@ -19,6 +19,8 @@ module.exports = {
         };
 
         metadata.types["HardwiredService"] = {category: "union", fields: []};
+        metadata.types["AliasedService"] = {category: "union", fields: []};
+        metadata.types["AliasedPolicy"] = {category: "union", fields: []};
         buildV1(metadata, version, schemaVersion);
         buildV1Extras(metadata, metadataBase);
         utils.writeFile(metadataFile, metadata);
@@ -52,6 +54,16 @@ function buildV2(metadata) {
     metadata.types["HardwiredService"] = Object.assign(
         {},
         metadata.types["L7Service"],
+        {category: "union", isL7Entity: false}
+    );
+    metadata.types["AliasedService"] = Object.assign(
+        {},
+        metadata.types["L7Service"],
+        {category: "union", isL7Entity: false}
+    );
+    metadata.types["AliasedPolicy"] = Object.assign(
+        {},
+        metadata.types["L7Policy"],
         {category: "union", isL7Entity: false}
     );
 
@@ -238,6 +250,11 @@ function captureTypeInfoIfMatches(line, ref) {
         ref.tInfo.excludedFields = splitTokens(ref.mlcInfo["l7-excluded-fields"]);
         ref.tInfo.includedFields = splitTokens(ref.mlcInfo["l7-included-fields"]);
         ref.tInfo.identityFields = splitTokens(ref.mlcInfo["l7-identity-fields"]);
+        ref.tInfo.deprecatedFields = splitTokens(ref.mlcInfo["l7-deprecated-fields"]);
+        if (ref.tInfo.deprecatedFields.length) {
+            utils.info(`found deprecated fields for ${ref.tInfo.typeName}: ${ref.tInfo.deprecatedFields}`);
+        }
+
         ref.mlcInfo = {};
     }
 }

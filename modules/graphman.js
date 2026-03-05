@@ -1,8 +1,9 @@
-// Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
+// Copyright (c) 2026 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 const PACKAGE = require("../package.json");
-const SCHEMA_VERSION = "v11.2.0";
-const SCHEMA_VERSIONS = [SCHEMA_VERSION, "v11.1.3", "v11.1.2", "v11.1.1"];
+const SCHEMA_VERSION = "v11.2.1";
+const SCHEMA_VERSIONS = ["v11.2.1", "v11.2.0", "v11.1.3", "v11.1.2", "v11.1.1"];
+const ORDERED_SCHEMA_VERSIONS = ["v11.1.1", "v11.1.2", "v11.1.3", "v11.2.0", "v11.2.1"];
 
 const SUPPORTED_OPERATIONS = [
     "version", "describe",
@@ -13,8 +14,10 @@ const SUPPORTED_OPERATIONS = [
     "config"
 ];
 
-const SUPPORTED_EXTENSIONS = ["pre-request", "post-export", "pre-import", "multiline-text-diff", "policy-code-validator"];
+const SUPPORTED_EXTENSIONS = ["pre-request", "post-export", "pre-import", "post-revise", "post-renew", "multiline-text-diff", "policy-code-validator"];
+
 const SCHEMA_FEATURE_LIST = {
+    "v11.2.1": ["mappings", "mappings-source", "policy-as-code"],
     "v11.2.0": ["mappings", "mappings-source", "policy-as-code"],
     "v11.1.3": ["mappings", "mappings-source", "policy-as-code"],
     "v11.1.2": ["mappings", "mappings-source", "policy-as-code"],
@@ -24,7 +27,8 @@ const SCHEMA_FEATURE_LIST = {
 }
 
 const SUPPORTED_REQUEST_LEVEL_OPTIONS = [
-    "activate", "comment", "forceAdminPasswordReset", "forceDelete", "replaceAllMatchingCertChain",
+    "test", "activate", "comment",
+    "forceAdminPasswordReset", "forceDelete", "replaceAllMatchingCertChain",
     "migratePolicyRevisions", "override.replaceRoleAssignees", "override.replaceUserGroupMemberships",
     "deleteEmptyParentFolders"
 ];
@@ -57,6 +61,7 @@ module.exports = {
         // set the client log level
         utils.logAt(config.options.log);
 
+        config.credentials = makeCredentials(config.credentials || {});
         config.gateways = makeGateways(config.gateways || {});
 
         // override configured gateway details using params if specified
@@ -69,6 +74,7 @@ module.exports = {
         config.version = "v" + PACKAGE.version;
         config.defaultSchemaVersion = SCHEMA_VERSION;
         config.supportedSchemaVersions = SCHEMA_VERSIONS;
+        config.orderedSchemaVersions = ORDERED_SCHEMA_VERSIONS;
         config.supportedExtensions = SUPPORTED_EXTENSIONS;
         config.schemaVersion = String(params.options.schema || config.options.schema || SCHEMA_VERSION);
         config.schemaVersions = gqlschema.availableSchemas();
@@ -79,6 +85,7 @@ module.exports = {
 
     defaultConfiguration: function () {
         return {
+            credentials: makeCredentials({}),
             gateways: makeGateways({}),
             options: makeOptions({})
         }
@@ -89,7 +96,12 @@ module.exports = {
     },
 
     gatewayConfiguration: function (name) {
-        return name ? Object.assign({name: name}, this.configuration().gateways[name]) : null;
+        const obj = name ? Object.assign({name: name}, this.configuration().gateways[name]) : null;
+        if (obj && obj.credential) {
+            obj["credentialRef"] = this.configuration().credentials[obj.credential];
+        }
+
+        return obj;
     },
 
     schemaMetadata: function () {
@@ -204,14 +216,16 @@ module.exports = {
             req.path = req.path + "?" + queryString.substring(1);
         }
 
-        if (gateway.keyFilename && gateway.certFilename) {
-            // This expects the certificate.pem and certificate.key file(s) to be in the graphman-client directory. 
-            req.key = utils.readFileBinary(utils.path(utils.wrapperHome(), gateway.keyFilename));
-            req.cert = utils.readFileBinary(utils.path(utils.wrapperHome(), gateway.certFilename));
-        } else if (gateway.username && gateway.password) {
-            req.auth = gateway.username + ":" + utils.decodeSecret(gateway.password);
+        if (gateway.credential) {
+            attachCredential(req, gateway.credentialRef, gateway.credential);
         } else {
-            throw new Error("gateway credentials are missing, provide either basic authentication (username / password) or mTLS based authentication (keyFilename / certFilename)");
+            attachCredential(req, gateway, "<local>");
+        }
+
+        const globalOptions = this.loadedConfig && this.loadedConfig.options ? this.loadedConfig.options : {};
+        if (globalOptions.caFilename) {
+            // Trusted CA certificate(s) for server verification (PEM; file may contain multiple certs).
+            req.ca = utils.readFileBinary(utils.path(utils.wrapperHome(), globalOptions.caFilename));
         }
 
         req.minVersion = req.maxVersion = gateway.tlsProtocol || "TLSv1.2";
@@ -262,6 +276,7 @@ module.exports = {
 
         req.on('error', (err) => {
             utils.warn(`error encountered while processing the graphman request: ${err.message}`);
+            utils.logAdditionalErrorDetails(err);
         });
 
         utils.debug("graphman http request", maskedHttpRequest(options));
@@ -276,11 +291,35 @@ module.exports = {
     }
 }
 
+function attachCredential(req, credRef, credName) {
+    if (!credRef) {
+        throw utils.newError(`gateway credentials (${credName}) are missing`);
+    }
+
+    if (credRef.keyFilename && credRef.certFilename) {
+        // This expects the certificate.pem and certificate.key file(s) to be in the graphman-client directory.
+        req.key = utils.readFileBinary(utils.path(utils.wrapperHome(), credRef.keyFilename));
+        req.cert = utils.readFileBinary(utils.path(utils.wrapperHome(), credRef.certFilename));
+        if (credRef.keyPassphrase) {
+            req.passphrase = utils.decodeSecret(credRef.keyPassphrase);
+        }
+    } else if (credRef.username && credRef.password) {
+        req.auth = credRef.username + ":" + utils.decodeSecret(credRef.password);
+    } else {
+        throw utils.newError("gateway credentials are missing, provide either username/password based credentials or client-cert based credentials");
+    }
+}
+
 function maskedHttpRequest(options) {
     if (options.auth) options.auth = "***";
+    if (options.passphrase) options.passphrase = "***";
     if (options.headers['x-l7-passphrase']) options.headers['x-l7-passphrase'] = "***";
     if (options.headers['l7-passphrase']) options.headers['l7-passphrase'] = "***";
     if (options.headers.encpass) options.headers.encpass = "***";
+    if (options.key) options.key = "***";
+    if (options.cert) options.cert = "***";
+    if (options.ca) options.ca = "***";
+
     return options;
 }
 
@@ -316,8 +355,23 @@ function makeOptions(options) {
         "schema": SCHEMA_VERSION,
         "policyCodeFormat": "xml",
         "keyFormat": "p12",
-        "extensions": ["pre-request", "post-export", "pre-import"]
+        "caFilename": null,
+        "extensions": ["pre-request", "post-export", "pre-import", "post-revise", "post-renew"]
     }, options);
+}
+
+function makeCredentials(credentials) {
+    if (!Object.keys(credentials).length) {
+        credentials["default"] = {
+            "username": "admin",
+            "password": "7layer",
+            "keyFilename": null,
+            "certFilename": null,
+            "keyPassphrase": null
+        }
+    }
+
+    return credentials;
 }
 
 function makeGateways(gateways) {
@@ -325,11 +379,8 @@ function makeGateways(gateways) {
     if (!Object.keys(gateways).length) {
         gateways['default'] = {
             "address": "https://localhost:8443/graphman",
-            "username": "admin",
-            "password": "7layer",
-            "rejectUnauthorized": false,
-            "keyFilename": null,
-            "certFilename": null,
+            "credential": "default",
+            "rejectUnauthorized": true,
             "passphrase": "7layer",
             "allowMutations": false
         };

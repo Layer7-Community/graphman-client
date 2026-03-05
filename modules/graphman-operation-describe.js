@@ -20,7 +20,9 @@ module.exports = {
     },
 
     initParams: function (params, config) {
-        // do nothing
+        params.options = Object.assign({},
+            config.options,
+            params.options);
         return params;
     },
 

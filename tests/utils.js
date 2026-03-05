@@ -30,7 +30,8 @@ module.exports = {
         }
 
         if (fs.existsSync(outputFile)) fs.unlinkSync(outputFile);
-        const stdOutput = String(cp.execFileSync(tConfig.execFile, args, { stdio: ['inherit', 'pipe', 'pipe'], shell: true }));
+        const isWin = process.platform === "win32";
+        const stdOutput = cp.execFileSync(tConfig.execFile, args, {stdio: ['inherit', 'pipe', 'pipe'],shell: isWin, encoding: 'utf8'});
         console.log(stdOutput);
         const output = fs.existsSync(outputFile)? String(fs.readFileSync(outputFile)) : "{}";
         console.log(output);
@@ -58,7 +59,7 @@ function init() {
         home: process.env.GRAPHMAN_HOME,
         execFile: process.env.GRAPHMAN_ENTRYPOINT || "graphman.sh",
         workspace: (process.env.GRAPHMAN_HOME + "/build" || "build") + "/tests",
-        schemaVersion: process.env.GRAPHMAN_SCHEMA || "v11.2.0"
+        schemaVersion: process.env.GRAPHMAN_SCHEMA || "v11.2.1"
     };
 
     const modulePath = tConfig.home + "/modules/graphman.js";
