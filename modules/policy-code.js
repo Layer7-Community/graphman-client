@@ -104,14 +104,14 @@ function isAssertionEnabled(assertion) {
 function hasChildren(assertion, assertionName) {
     const value = assertion[assertionName];
     if (Array.isArray(value)) return true;
-    if (value && typeof value === 'object' && Array.isArray(value['.children'])) return true;
+    if (value && typeof value === 'object' && Array.isArray(value['_children'])) return true;
     return false;
 }
 
 function getChildren(assertion, assertionName) {
     const value = assertion[assertionName];
     if (Array.isArray(value)) return value;
-    if (value && typeof value === 'object' && Array.isArray(value['.children'])) return value['.children'];
+    if (value && typeof value === 'object' && Array.isArray(value['_children'])) return value['_children'];
     return [];
 }
 
