@@ -156,7 +156,7 @@ pipeline {
                 echo 'Running graphman-client Jest tests (see TESTING.md) ...'
                 script {
                     if (params.RUN_COVERAGE) {
-                        sh 'npx jest --coverage'
+                        sh 'npx jest --coverage --runInBand'
                     } else {
                         sh 'npm test'
                     }
