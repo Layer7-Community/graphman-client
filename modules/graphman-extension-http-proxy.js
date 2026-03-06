@@ -1,7 +1,3 @@
-const { HttpProxyAgent } = require("http-proxy-agent");
-const { HttpsProxyAgent } = require("https-proxy-agent");
-const { SocksProxyAgent } = require("socks-proxy-agent");
-
 const utils = require("./graphman-utils");
 
 module.exports = {
@@ -15,18 +11,17 @@ module.exports = {
 
         // Create proxy agent if configured (HTTP/HTTPS proxy takes precedence over SOCKS)
         let agent = null;
-        const proxyRef = context.gateway.proxyRef;
 
         const isHttps = context.gateway["address"].startsWith('https://');
 
-        if (proxyRef && proxyRef["proxyType"] && proxyRef["url"]) {
+        if (input && input["proxyType"] && input["url"]) {
             // Handle HTTP/HTTPS proxy - object with url and connection options
-            const agentType = proxyRef["proxyType"] || "";
+            const agentType = input["proxyType"] || "";
             const proxyConfig = {};
 
-            Object.keys(proxyRef).forEach(key => {
-                if (key !== "proxyType" && proxyRef[key] !== undefined) {
-                    proxyConfig[key] = proxyRef[key];
+            Object.keys(input).forEach(key => {
+                if (key !== "proxyType" && input[key] !== undefined) {
+                    proxyConfig[key] = input[key];
                 }
             });
 
@@ -51,9 +46,11 @@ module.exports = {
                     // Note: The agent type is based on TARGET protocol, not proxy URL protocol
 
                     if (isHttps) {
+                        const { HttpsProxyAgent } = require("https-proxy-agent")
                         agent = new HttpsProxyAgent(proxyOptions, proxyOptions);
-                        utils.info("agent details", agent);
+                        utils.info("hello", agent);
                     } else {
+                        const { HttpProxyAgent } = require("http-proxy-agent")
                         agent = new HttpProxyAgent(proxyOptions, proxyOptions);
                     }
 
@@ -69,6 +66,7 @@ module.exports = {
                 // Handle SOCKS proxy - object with url and connection options
                 const proxyOptions = createProxyOptions(proxyConfig);
                 try {
+                    const { SocksProxyAgent } = require("socks-proxy-agent");
                     agent =  agent = new SocksProxyAgent(proxyOptions, proxyOptions);
                     if (!agent && typeof agent === 'string') {
                         utils.warn(`socks-proxy-agent extension did not return a valid agent, proxy will not be used`);

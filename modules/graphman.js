@@ -1,4 +1,4 @@
-// Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
+// Copyright (c) 2026 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 const PACKAGE = require("../package.json");
 const SCHEMA_VERSION = "v11.2.1";
@@ -64,6 +64,7 @@ module.exports = {
         config.proxies = makeProxies(config.proxies || {});
         config.gateways = makeGateways(config.gateways || {});
 
+
         // override configured gateway details using params if specified
         if (params.gateways) Object.keys(params.gateways).forEach(key => {
             const gateway = params.gateways[key];
@@ -107,17 +108,13 @@ module.exports = {
 
     proxyConfiguration: function (name) {
         const config = this.configuration();
-        const obj = name ? Object.assign({name: name}, config.gateways[name]) : null;
+        const obj = name ? Object.assign({name: name}, config.proxies[name]) : null;
         if (!obj) {
             return null;
         }
 
-        if (obj.proxy) {
-            const proxy = Object.assign({name: obj.proxy}, config.proxies[obj.proxy]);
-            if (proxy.credential) {
-                proxy["credentialRef"] = config.credentials[proxy.credential];
-            }
-            obj["proxyRef"] = proxy;
+        if (obj.credential) {
+            obj["credentialRef"] = config.credentials[obj.credential];
         }
 
         return obj;
@@ -239,6 +236,10 @@ module.exports = {
             attachCredential(req, gateway.credentialRef, gateway.credential);
         } else {
             attachCredential(req, gateway, "<local>");
+        }
+
+        if (gateway.proxy) {
+            req.proxy = this.proxyConfiguration(gateway.proxy);
         }
 
         const globalOptions = this.loadedConfig && this.loadedConfig.options ? this.loadedConfig.options : {};
