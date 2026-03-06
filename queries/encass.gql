@@ -7,7 +7,7 @@ query encassByName ($name: String!, $policyName: String!, $includeAllDependencie
         policy {
             xml
             allDependencies @include (if: $includeAllDependencies) {
-                {{PolicyDependency:-policyFragments,-ldaps,-fips,-fipUsers,-fipGroups}}
+                {{PolicyDependency:-policyFragments,-ldaps,-fips,-fipUsers,-fipGroups,-policyBackedServices}}
             }
         }
         policyRevision @include (if: $includePolicyRevision) {

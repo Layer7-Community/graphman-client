@@ -1,4 +1,4 @@
-// Copyright (c) 2026 Broadcom Inc. and its subsidiaries. All Rights Reserved.
+// Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 const PACKAGE = require("../package.json");
 const SCHEMA_VERSION = "v11.2.1";
@@ -14,7 +14,7 @@ const SUPPORTED_OPERATIONS = [
     "config"
 ];
 
-const SUPPORTED_EXTENSIONS = ["pre-request", "post-export", "pre-import", "post-revise", "multiline-text-diff", "policy-code-validator", "https-proxy"];
+const SUPPORTED_EXTENSIONS = ["pre-request", "post-export", "pre-import", "post-revise", "post-renew", "multiline-text-diff", "policy-code-validator", "https-proxy"];
 const SCHEMA_FEATURE_LIST = {
     "v11.2.1": ["mappings", "mappings-source", "policy-as-code"],
     "v11.2.0": ["mappings", "mappings-source", "policy-as-code"],
@@ -64,7 +64,6 @@ module.exports = {
         config.proxies = makeProxies(config.proxies || {});
         config.gateways = makeGateways(config.gateways || {});
 
-
         // override configured gateway details using params if specified
         if (params.gateways) Object.keys(params.gateways).forEach(key => {
             const gateway = params.gateways[key];
@@ -98,15 +97,11 @@ module.exports = {
     },
 
     gatewayConfiguration: function (name) {
-        const config = this.configuration();
-        const obj = name ? Object.assign({name: name}, config.gateways[name]) : null;
-        if (!obj) {
-            return null;
+        const obj = name ? Object.assign({name: name}, this.configuration().gateways[name]) : null;
+        if (obj && obj.credential) {
+            obj["credentialRef"] = this.configuration().credentials[obj.credential];
         }
 
-        if (obj.credential) {
-            obj["credentialRef"] = config.credentials[obj.credential];
-        }
         return obj;
     },
 
@@ -246,11 +241,6 @@ module.exports = {
             attachCredential(req, gateway, "<local>");
         }
 
-        if (gateway.proxy) {
-            //this.proxyConfiguration(gateway.proxy).proxyConfiguration(gateway.proxy);
-            req.proxy = this.proxyConfiguration(gateway.proxy);
-        }
-
         const globalOptions = this.loadedConfig && this.loadedConfig.options ? this.loadedConfig.options : {};
         if (globalOptions.caFilename) {
             // Trusted CA certificate(s) for server verification (PEM; file may contain multiple certs).
@@ -258,7 +248,6 @@ module.exports = {
         }
 
         req.minVersion = req.maxVersion = gateway.tlsProtocol || "TLSv1.2";
-
         return req;
     },
 
@@ -394,7 +383,7 @@ function makeOptions(options) {
         "policyCodeFormat": "xml",
         "keyFormat": "p12",
         "caFilename": null,
-        "extensions": ["pre-request", "post-export", "pre-import", "post-revise", "http-proxy"]
+        "extensions": ["pre-request", "post-export", "pre-import", "post-revise", "post-renew", "http-proxy"]
     }, options);
 }
 

@@ -31,6 +31,7 @@
             "post-export",
             "pre-import",
             "post-revise",
+            "post-renew",
             "http-proxy"
         ]
     }
