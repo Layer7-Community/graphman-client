@@ -1,4 +1,4 @@
-// Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
+// Copyright (c) 2026 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 const PACKAGE = require("../package.json");
 const SCHEMA_VERSION = "v11.2.1";
@@ -14,7 +14,8 @@ const SUPPORTED_OPERATIONS = [
     "config"
 ];
 
-const SUPPORTED_EXTENSIONS = ["pre-request", "post-export", "pre-import", "post-revise", "multiline-text-diff", "policy-code-validator"];
+const SUPPORTED_EXTENSIONS = ["pre-request", "post-export", "pre-import", "post-revise", "post-renew", "multiline-text-diff", "policy-code-validator"];
+
 const SCHEMA_FEATURE_LIST = {
     "v11.2.1": ["mappings", "mappings-source", "policy-as-code"],
     "v11.2.0": ["mappings", "mappings-source", "policy-as-code"],
@@ -355,7 +356,7 @@ function makeOptions(options) {
         "policyCodeFormat": "xml",
         "keyFormat": "p12",
         "caFilename": null,
-        "extensions": ["pre-request", "post-export", "pre-import", "post-revise"]
+        "extensions": ["pre-request", "post-export", "pre-import", "post-revise", "post-renew"]
     }, options);
 }
 

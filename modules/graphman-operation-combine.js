@@ -1,4 +1,6 @@
-// Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
+/*
+ * Copyright (c)  2026. Broadcom Inc. and its subsidiaries. All Rights Reserved.
+ */
 
 const utils = require("./graphman-utils");
 const butils = require("./graphman-bundle");
@@ -58,6 +60,19 @@ module.exports = {
  * @returns result bundle
  */
 function combine(left, right) {
+    const result = combineEntities(left, right);
+    combineProperties(result, left, right);
+    return result;
+}
+
+/**
+ * Merges entities from left and right bundles into a new bundle.
+ * Right bundle entities are copied first; non-duplicate entities from left are added.
+ * @param left left bundle
+ * @param right right bundle
+ * @returns new bundle containing merged entities only (no properties)
+ */
+function combineEntities(left, right) {
     const result = {};
 
     // copy entities from right
@@ -77,5 +92,67 @@ function combine(left, right) {
         });
     });
 
+    return result;
+}
+
+/**
+ * Merges properties and mappings from left and right bundles into result.
+ * Right bundle properties and mappings take precedence.
+ * @param result bundle to receive merged properties
+ * @param left left bundle
+ * @param right right bundle
+ */
+function combineProperties(result, left, right) {
+    const leftProperties = (left && left.properties) ? left.properties : {};
+    const rightProperties = (right && right.properties) ? right.properties : {};
+
+    result.properties = Object.assign({}, leftProperties);
+
+    if (rightProperties.defaultAction) {
+        result.properties.defaultAction = rightProperties.defaultAction;
+    }
+
+    const leftMappings = leftProperties.mappings || {};
+    const rightMappings = rightProperties.mappings || {};
+    const mappings = combineMappings(leftMappings, rightMappings);
+    if (mappings && Object.keys(mappings).length > 0) {
+        result.properties.mappings = mappings;
+    }
+}
+
+
+/**
+ * Combines left and right bundle mappings into result bundle.
+ * Right bundled mappings take precedence.
+ * @param left left bundle
+ * @param right right bundle
+ * @returns result bundle
+ */
+function combineMappings(left, right) {
+    const result = {};
+
+    // copy mappying from right
+    butils.forEach(right, (key, entityMappings, typeInfo) => {
+        const list = butils.withArray(result, typeInfo);
+        entityMappings.forEach(item => list.push(item));
+    });
+
+    // copy non-duplicate entity mappings from left
+    butils.forEach(left, (key, entityMappings, typeInfo) => {
+        const list = butils.withArray(result, typeInfo);
+        entityMappings.forEach(item => {
+            const found = list.find(x => {
+                if (x.source && item.source) {
+                    return butils.isEntityMatches(x.source, item.source, typeInfo)
+                } else if (item.default && x.default) {
+                    return true;
+                }
+                return false;
+            });
+            if (!found) {
+                list.push(item);
+            }
+        });
+    });
     return result;
 }

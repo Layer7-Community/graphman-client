@@ -30,7 +30,8 @@
             "pre-request",
             "post-export",
             "pre-import",
-            "post-revise"
+            "post-revise",
+            "post-renew"
         ]
     }
 }
