@@ -1,0 +1,49 @@
+{
+  "configName": "ExactlyOne",
+  "name": "Exactly One",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ExactlyOne",
+      "title": "Exactly One",
+      "anyOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "_enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "_leftComment": {
+              "type": "string"
+            },
+            "_rightComment": {
+              "type": "string"
+            },
+            "_children": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ExactlyOne/Main",
+      "title": "Exactly One",
+      "properties": {
+        "ExactlyOne": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/ExactlyOne"
+        }
+      }
+    }
+  ]
+}

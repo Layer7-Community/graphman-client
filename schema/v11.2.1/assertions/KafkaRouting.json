@@ -1,0 +1,118 @@
+{
+  "configName": "KafkaRouting",
+  "name": "Route via Kafka",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/KafkaRouting",
+      "title": "Route via Kafka",
+      "type": "object",
+      "properties": {
+        "ackTimeout": {
+          "type": "string"
+        },
+        "clientConfigGoid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "clientConfigName": {
+          "type": "string"
+        },
+        "currentSecurityHeaderHandling": {
+          "type": "integer",
+          "default": 0
+        },
+        "key": {
+          "type": "string"
+        },
+        "partition": {
+          "type": "string"
+        },
+        "passthroughHeaders": {
+          "type": "boolean",
+          "default": false
+        },
+        "prefix": {
+          "type": "string",
+          "default": "kafkaRouting"
+        },
+        "recipientContext": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext"
+        },
+        "requestTarget": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport"
+        },
+        "topic": {
+          "type": "string"
+        },
+        "waitForAck": {
+          "type": "boolean",
+          "default": true
+        },
+        "xmlSecurityActorToPromote": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport",
+      "properties": {
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "sourceUsedByGateway": {
+          "type": "boolean",
+          "default": true
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "targetModifiedByGateway": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/KafkaRouting/Main",
+      "title": "Route via Kafka",
+      "properties": {
+        "KafkaRouting": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/KafkaRouting"
+        }
+      }
+    }
+  ]
+}

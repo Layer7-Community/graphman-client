@@ -1,0 +1,118 @@
+{
+  "configName": "Email",
+  "name": "Send Email",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Email",
+      "title": "Send Email",
+      "type": "object",
+      "properties": {
+        "attachments": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/Email:Attachment"
+          }
+        },
+        "authPassword": {
+          "type": "string"
+        },
+        "authUsername": {
+          "type": "string"
+        },
+        "authenticate": {
+          "type": "boolean",
+          "default": false
+        },
+        "base64message": {
+          "type": "string",
+          "default": ""
+        },
+        "contextVarPassword": {
+          "type": "boolean",
+          "default": false
+        },
+        "format": {
+          "type": "string",
+          "enum": [
+            "PLAIN_TEXT",
+            "HTML"
+          ],
+          "default": "PLAIN_TEXT"
+        },
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "PLAIN",
+            "SSL",
+            "STARTTLS"
+          ],
+          "default": "PLAIN"
+        },
+        "smtpHost": {
+          "type": "string",
+          "default": "mail"
+        },
+        "smtpPort": {
+          "type": "string",
+          "default": "25"
+        },
+        "sourceEmailAddress": {
+          "type": "string",
+          "default": "L7SSG@NOMAILBOX"
+        },
+        "subject": {
+          "type": "string",
+          "default": "Layer7 API Gateway Email"
+        },
+        "targetBCCEmailAddress": {
+          "type": "string",
+          "default": ""
+        },
+        "targetCCEmailAddress": {
+          "type": "string",
+          "default": ""
+        },
+        "targetEmailAddress": {
+          "type": "string",
+          "default": ""
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Email:Attachment",
+      "properties": {
+        "mimePartVariable": {
+          "type": "boolean",
+          "default": false
+        },
+        "name": {
+          "type": "string"
+        },
+        "sourceVariable": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Email/Main",
+      "title": "Send Email",
+      "properties": {
+        "Email": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/Email"
+        }
+      }
+    }
+  ]
+}

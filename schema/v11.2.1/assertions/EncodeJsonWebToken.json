@@ -1,0 +1,122 @@
+{
+  "configName": "EncodeJsonWebToken",
+  "name": "Encode Json Web Token",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/EncodeJsonWebToken",
+      "title": "Encode Json Web Token",
+      "type": "object",
+      "properties": {
+        "contentEncryptionAlgorithm": {
+          "type": "string"
+        },
+        "dynamicPrivateKeyAliasVariable": {
+          "type": "string"
+        },
+        "emptyPayload": {
+          "type": "boolean",
+          "default": false
+        },
+        "encryptPayload": {
+          "type": "boolean",
+          "default": false
+        },
+        "encryptionKey": {
+          "type": "string"
+        },
+        "encryptionKeyId": {
+          "type": "string"
+        },
+        "encryptionKeyType": {
+          "type": "string"
+        },
+        "encryptionSecret": {
+          "type": "string"
+        },
+        "encryptionSecretBase64Encoded": {
+          "type": "boolean",
+          "default": false
+        },
+        "encryptionSourceType": {
+          "type": "integer",
+          "default": 0
+        },
+        "headerAction": {
+          "type": "string",
+          "default": "Use Generated Header"
+        },
+        "keyAlias": {
+          "type": "string"
+        },
+        "keyGoid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "keyManagementAlgorithm": {
+          "type": "string"
+        },
+        "signPayload": {
+          "type": "boolean",
+          "default": false
+        },
+        "signatureAlgorithm": {
+          "type": "string",
+          "default": "None"
+        },
+        "signatureJwksKeyId": {
+          "type": "string"
+        },
+        "signatureKeyType": {
+          "type": "string"
+        },
+        "signatureSecretBase64Encoded": {
+          "type": "boolean",
+          "default": false
+        },
+        "signatureSecretKey": {
+          "type": "string"
+        },
+        "signatureSourceType": {
+          "type": "integer",
+          "default": 0
+        },
+        "signatureSourceVariable": {
+          "type": "string"
+        },
+        "sourceHeaders": {
+          "type": "string"
+        },
+        "sourceVariable": {
+          "type": "string",
+          "default": ""
+        },
+        "targetVariable": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/EncodeJsonWebToken/Main",
+      "title": "Encode Json Web Token",
+      "properties": {
+        "EncodeJsonWebToken": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/EncodeJsonWebToken"
+        }
+      }
+    }
+  ]
+}

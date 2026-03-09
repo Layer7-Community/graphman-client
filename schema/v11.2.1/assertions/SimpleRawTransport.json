@@ -1,0 +1,114 @@
+{
+  "configName": "SimpleRawTransport",
+  "name": "Route via Raw TCP",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SimpleRawTransport",
+      "title": "Route via Raw TCP",
+      "type": "object",
+      "properties": {
+        "connectionTimeoutMillis": {
+          "type": "integer",
+          "default": 30000
+        },
+        "currentSecurityHeaderHandling": {
+          "type": "integer",
+          "default": 0
+        },
+        "maxResponseBytesText": {
+          "type": "string",
+          "default": "-1"
+        },
+        "readTimeoutMillis": {
+          "type": "integer",
+          "default": 2000
+        },
+        "recipientContext": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext"
+        },
+        "requestTarget": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport"
+        },
+        "responseContentType": {
+          "type": "string",
+          "default": "text/xml; charset=UTF-8"
+        },
+        "responseTarget": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport"
+        },
+        "targetHost": {
+          "type": "string"
+        },
+        "targetPort": {
+          "type": "string",
+          "default": "13224"
+        },
+        "writeTimeoutMillis": {
+          "type": "integer",
+          "default": 2000
+        },
+        "xmlSecurityActorToPromote": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport",
+      "properties": {
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "sourceUsedByGateway": {
+          "type": "boolean",
+          "default": true
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "targetModifiedByGateway": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SimpleRawTransport/Main",
+      "title": "Route via Raw TCP",
+      "properties": {
+        "SimpleRawTransport": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/SimpleRawTransport"
+        }
+      }
+    }
+  ]
+}

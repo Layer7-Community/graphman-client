@@ -1,0 +1,33 @@
+{
+  "configName": "GetIncrement",
+  "name": "Portal Get Incremental Update",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/GetIncrement",
+      "title": "Portal Get Incremental Update",
+      "type": "object",
+      "properties": {
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/GetIncrement/Main",
+      "title": "Portal Get Incremental Update",
+      "properties": {
+        "GetIncrement": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/GetIncrement"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "configName": "WsFederationPassiveTokenRequest",
+  "name": "Use WS-Federation Credential (Obtain)",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/WsFederationPassiveTokenRequest",
+      "title": "Use WS-Federation Credential",
+      "type": "object",
+      "properties": {
+        "authenticate": {
+          "type": "boolean",
+          "default": false
+        },
+        "context": {
+          "type": "string"
+        },
+        "ipStsUrl": {
+          "type": "string"
+        },
+        "realm": {
+          "type": "string"
+        },
+        "replyUrl": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "boolean",
+          "default": false
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/WsFederationPassiveTokenRequest/Main",
+      "title": "Use WS-Federation Credential",
+      "properties": {
+        "WsFederationPassiveTokenRequest": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/WsFederationPassiveTokenRequest"
+        }
+      }
+    }
+  ]
+}

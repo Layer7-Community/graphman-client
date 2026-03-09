@@ -1,0 +1,33 @@
+{
+  "configName": "GatewayTelemetryDataProvider",
+  "name": "Gateway Telemetry Data Provider",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/GatewayTelemetryDataProvider",
+      "title": "Gateway Telemetry Data Provider",
+      "type": "object",
+      "properties": {
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/GatewayTelemetryDataProvider/Main",
+      "title": "Gateway Telemetry Data Provider",
+      "properties": {
+        "GatewayTelemetryDataProvider": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/GatewayTelemetryDataProvider"
+        }
+      }
+    }
+  ]
+}

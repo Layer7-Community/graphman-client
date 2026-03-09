@@ -1,0 +1,66 @@
+{
+  "configName": "LookupDynamicContextVariables",
+  "name": "Look Up Context Variable",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/LookupDynamicContextVariables",
+      "title": "Look Up Context Variable",
+      "type": "object",
+      "properties": {
+        "failOnNotFound": {
+          "type": "boolean",
+          "default": true
+        },
+        "sourceVariable": {
+          "type": "string"
+        },
+        "targetDataType": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/dataType"
+        },
+        "targetOutputVariablePrefix": {
+          "type": "string",
+          "default": "lookup"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/dataType",
+      "enum": [
+        "string",
+        "cert",
+        "int",
+        "decimal",
+        "float",
+        "xml",
+        "boolean",
+        "binary",
+        "dateTime",
+        "message",
+        "blob",
+        "clob",
+        "other"
+      ]
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/LookupDynamicContextVariables/Main",
+      "title": "Look Up Context Variable",
+      "properties": {
+        "LookupDynamicContextVariables": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/LookupDynamicContextVariables"
+        }
+      }
+    }
+  ]
+}

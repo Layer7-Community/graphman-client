@@ -1,0 +1,132 @@
+{
+  "configName": "RequireWssSignedElement",
+  "name": "Require Signed Element",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RequireWssSignedElement",
+      "title": "Require Signed Element",
+      "type": "object",
+      "properties": {
+        "acceptedDigestAlgorithms": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "identityTarget": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/identityTarget"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "recipientContext": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext"
+        },
+        "signedElementsVariable": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "variablePrefix": {
+          "type": "string"
+        },
+        "xpathExpression": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xpathExpression"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/identityTarget",
+      "properties": {
+        "identityId": {
+          "type": "string"
+        },
+        "identityInfo": {
+          "type": "string"
+        },
+        "identityProviderOid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "targetIdentityType": {
+          "type": "string",
+          "enum": [
+            "USER",
+            "GROUP",
+            "PROVIDER",
+            "TAG"
+          ]
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xpathExpression",
+      "properties": {
+        "expression": {
+          "type": "string"
+        },
+        "namespaces": {
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          }
+        },
+        "xpathVersion": {
+          "type": "string",
+          "enum": [
+            "UNSPECIFIED",
+            "XPATH_1_0",
+            "XPATH_2_0"
+          ],
+          "default": "UNSPECIFIED"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RequireWssSignedElement/Main",
+      "title": "Require Signed Element",
+      "properties": {
+        "RequireWssSignedElement": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/RequireWssSignedElement"
+        }
+      }
+    }
+  ]
+}

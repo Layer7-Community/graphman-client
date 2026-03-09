@@ -1,0 +1,47 @@
+{
+  "configName": "AuditDetail",
+  "name": "Add Audit Details",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/AuditDetail",
+      "title": "Add Audit Details",
+      "type": "object",
+      "properties": {
+        "customLoggerSuffix": {
+          "type": "string"
+        },
+        "detail": {
+          "type": "string"
+        },
+        "level": {
+          "type": "string",
+          "default": "INFO"
+        },
+        "loggingOnly": {
+          "type": "boolean",
+          "default": false
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/AuditDetail/Main",
+      "title": "Add Audit Details",
+      "properties": {
+        "AuditDetail": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/AuditDetail"
+        }
+      }
+    }
+  ]
+}

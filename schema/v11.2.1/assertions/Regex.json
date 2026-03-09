@@ -1,0 +1,99 @@
+{
+  "configName": "Regex",
+  "name": "Evaluate Regular Expression",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Regex",
+      "title": "Evaluate Regular Expression",
+      "type": "object",
+      "properties": {
+        "autoTarget": {
+          "type": "boolean",
+          "default": true
+        },
+        "captureVar": {
+          "type": "string"
+        },
+        "caseInsensitive": {
+          "type": "boolean",
+          "default": false
+        },
+        "encoding": {
+          "type": "string"
+        },
+        "findAll": {
+          "type": "boolean",
+          "default": false
+        },
+        "includeEntireExpressionCapture": {
+          "type": "boolean",
+          "default": true
+        },
+        "mimePart": {
+          "type": "integer",
+          "default": 0
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "patternContainsVariables": {
+          "type": "boolean",
+          "default": false
+        },
+        "proceedIfPatternMatches": {
+          "type": "boolean",
+          "default": true
+        },
+        "regex": {
+          "type": "string"
+        },
+        "regexName": {
+          "type": "string"
+        },
+        "regexVar": {
+          "type": "string"
+        },
+        "replace": {
+          "type": "boolean",
+          "default": false
+        },
+        "replaceRepeatCount": {
+          "type": "integer",
+          "default": 0
+        },
+        "replacement": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Regex/Main",
+      "title": "Evaluate Regular Expression",
+      "properties": {
+        "Regex": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/Regex"
+        }
+      }
+    }
+  ]
+}

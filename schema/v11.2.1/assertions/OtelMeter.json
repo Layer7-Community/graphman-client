@@ -1,0 +1,65 @@
+{
+  "configName": "OtelMeter",
+  "name": "Telemetry Metric",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/OtelMeter",
+      "title": "Telemetry Metric",
+      "type": "object",
+      "properties": {
+        "attributes": {
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          }
+        },
+        "description": {
+          "type": "string"
+        },
+        "measure": {
+          "type": "string",
+          "default": "1"
+        },
+        "name": {
+          "type": "string",
+          "default": ""
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "COUNTER",
+            "UP_DOWN_COUNTER",
+            "GAUGE",
+            "HISTOGRAM"
+          ]
+        },
+        "unit": {
+          "type": "string",
+          "default": "no"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/OtelMeter/Main",
+      "title": "Telemetry Metric",
+      "properties": {
+        "OtelMeter": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/OtelMeter"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "configName": "UDDINotification",
+  "name": "Handle UDDI Subscription Notification",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/UDDINotification",
+      "title": "Handle UDDI Subscription Notification",
+      "type": "object",
+      "properties": {
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/UDDINotification/Main",
+      "title": "Handle UDDI Subscription Notification",
+      "properties": {
+        "UDDINotification": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/UDDINotification"
+        }
+      }
+    }
+  ]
+}

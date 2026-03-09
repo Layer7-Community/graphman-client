@@ -1,0 +1,39 @@
+{
+  "configName": "XMPPAssociateSessions",
+  "name": "XMPP Associate Sessions",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/XMPPAssociateSessions",
+      "title": "XMPP Associate Sessions",
+      "type": "object",
+      "properties": {
+        "inboundSessionId": {
+          "type": "string"
+        },
+        "outboundSessionId": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/XMPPAssociateSessions/Main",
+      "title": "XMPP Associate Sessions",
+      "properties": {
+        "XMPPAssociateSessions": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/XMPPAssociateSessions"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "configName": "MqNativeSupport",
+  "name": "Mq Native Support",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/MqNativeSupport",
+      "title": "Mq Native Support",
+      "type": "object",
+      "properties": {
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/MqNativeSupport/Main",
+      "title": "Mq Native Support",
+      "properties": {
+        "MqNativeSupport": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/MqNativeSupport"
+        }
+      }
+    }
+  ]
+}

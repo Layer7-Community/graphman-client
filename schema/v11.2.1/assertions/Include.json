@@ -1,0 +1,42 @@
+{
+  "configName": "Include",
+  "name": "Include Policy Fragment",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Include",
+      "title": "Include Policy Fragment",
+      "type": "object",
+      "properties": {
+        "policyGuid": {
+          "type": "string"
+        },
+        "policyName": {
+          "type": "string"
+        },
+        "policyOid": {
+          "type": "number"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Include/Main",
+      "title": "Include Policy Fragment",
+      "properties": {
+        "Include": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/Include"
+        }
+      }
+    }
+  ]
+}

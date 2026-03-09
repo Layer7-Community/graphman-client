@@ -1,0 +1,71 @@
+{
+  "configName": "HardcodedResponse",
+  "name": "Return Template Response to Requestor",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/HardcodedResponse",
+      "title": "Return Template Response to Requestor",
+      "type": "object",
+      "properties": {
+        "body": {
+          "type": "string",
+          "default": ""
+        },
+        "contentType": {
+          "type": "string",
+          "default": "text/xml; charset=UTF-8"
+        },
+        "currentSecurityHeaderHandling": {
+          "type": "integer",
+          "default": 0
+        },
+        "earlyResponse": {
+          "type": "boolean",
+          "default": false
+        },
+        "recipientContext": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext"
+        },
+        "status": {
+          "type": "string",
+          "default": "200"
+        },
+        "xmlSecurityActorToPromote": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/HardcodedResponse/Main",
+      "title": "Return Template Response to Requestor",
+      "properties": {
+        "HardcodedResponse": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/HardcodedResponse"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "configName": "EntityChangeListener",
+  "name": "Entity Change Listener",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/EntityChangeListener",
+      "title": "Entity Change Listener",
+      "type": "object",
+      "properties": {
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/EntityChangeListener/Main",
+      "title": "Entity Change Listener",
+      "properties": {
+        "EntityChangeListener": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/EntityChangeListener"
+        }
+      }
+    }
+  ]
+}

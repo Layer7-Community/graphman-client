@@ -1,0 +1,43 @@
+{
+  "configName": "Join",
+  "name": "Join Variable",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Join",
+      "title": "Join Variable",
+      "type": "object",
+      "properties": {
+        "inputVariable": {
+          "type": "string"
+        },
+        "joinSubstring": {
+          "type": "string",
+          "default": ","
+        },
+        "outputVariable": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Join/Main",
+      "title": "Join Variable",
+      "properties": {
+        "Join": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/Join"
+        }
+      }
+    }
+  ]
+}

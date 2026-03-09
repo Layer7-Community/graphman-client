@@ -1,0 +1,85 @@
+{
+  "configName": "JsonDocumentStructure",
+  "name": "Protect Against JSON Document Structure Threats",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/JsonDocumentStructure",
+      "title": "Protect Against JSON Document Structure Threats",
+      "type": "object",
+      "properties": {
+        "checkArrayEntryCount": {
+          "type": "boolean",
+          "default": false
+        },
+        "checkContainerDepth": {
+          "type": "boolean",
+          "default": true
+        },
+        "checkEntryNameLength": {
+          "type": "boolean",
+          "default": false
+        },
+        "checkObjectEntryCount": {
+          "type": "boolean",
+          "default": false
+        },
+        "checkStringValueLength": {
+          "type": "boolean",
+          "default": false
+        },
+        "maxArrayEntryCount": {
+          "type": "integer",
+          "default": 2048
+        },
+        "maxContainerDepth": {
+          "type": "integer",
+          "default": 4
+        },
+        "maxEntryNameLength": {
+          "type": "integer",
+          "default": 128
+        },
+        "maxObjectEntryCount": {
+          "type": "integer",
+          "default": 2048
+        },
+        "maxStringValueLength": {
+          "type": "integer",
+          "default": 16384
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/JsonDocumentStructure/Main",
+      "title": "Protect Against JSON Document Structure Threats",
+      "properties": {
+        "JsonDocumentStructure": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/JsonDocumentStructure"
+        }
+      }
+    }
+  ]
+}

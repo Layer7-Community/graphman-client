@@ -1,0 +1,58 @@
+{
+  "configName": "ReplaceTagContent",
+  "name": "Replace Tag Content",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ReplaceTagContent",
+      "title": "Replace Tag Content",
+      "type": "object",
+      "properties": {
+        "caseSensitive": {
+          "type": "boolean",
+          "default": true
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "replaceWith": {
+          "type": "string"
+        },
+        "searchFor": {
+          "type": "string"
+        },
+        "tagsToSearch": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ReplaceTagContent/Main",
+      "title": "Replace Tag Content",
+      "properties": {
+        "ReplaceTagContent": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/ReplaceTagContent"
+        }
+      }
+    }
+  ]
+}

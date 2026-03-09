@@ -1,0 +1,89 @@
+{
+  "configName": "WsSecurity",
+  "name": "Add or Remove WS-Security",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/WsSecurity",
+      "title": "Add or Remove WS-Security",
+      "type": "object",
+      "properties": {
+        "applyWsSecurity": {
+          "type": "boolean",
+          "default": true
+        },
+        "clearDecorationRequirements": {
+          "type": "boolean",
+          "default": false
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "recipientTrustedCertificateGoid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "recipientTrustedCertificateName": {
+          "type": "string"
+        },
+        "recipientTrustedCertificateVariable": {
+          "type": "string"
+        },
+        "removeUnmatchedSecurityHeaders": {
+          "type": "boolean",
+          "default": false
+        },
+        "replaceSecurityHeader": {
+          "type": "boolean",
+          "default": true
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "useSecureSpanActor": {
+          "type": "boolean",
+          "default": false
+        },
+        "useSecurityHeaderMustUnderstand": {
+          "type": "boolean",
+          "default": true
+        },
+        "wsSecurityVersion": {
+          "type": "string",
+          "enum": [
+            "WSS10",
+            "WSS11"
+          ]
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/WsSecurity/Main",
+      "title": "Add or Remove WS-Security",
+      "properties": {
+        "WsSecurity": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/WsSecurity"
+        }
+      }
+    }
+  ]
+}

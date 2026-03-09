@@ -1,0 +1,105 @@
+{
+  "configName": "WssReplayProtection",
+  "name": "Protect Against Message Replay",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/WssReplayProtection",
+      "title": "Protect Against Message Replay",
+      "type": "object",
+      "properties": {
+        "customExpiryTime": {
+          "type": "integer",
+          "default": 0
+        },
+        "customIdentifierVariable": {
+          "type": "string"
+        },
+        "customProtection": {
+          "type": "boolean",
+          "default": false
+        },
+        "customScope": {
+          "type": "string"
+        },
+        "identityTarget": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/identityTarget"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "recipientContext": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/identityTarget",
+      "properties": {
+        "identityId": {
+          "type": "string"
+        },
+        "identityInfo": {
+          "type": "string"
+        },
+        "identityProviderOid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "targetIdentityType": {
+          "type": "string",
+          "enum": [
+            "USER",
+            "GROUP",
+            "PROVIDER",
+            "TAG"
+          ]
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/WssReplayProtection/Main",
+      "title": "Protect Against Message Replay",
+      "properties": {
+        "WssReplayProtection": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/WssReplayProtection"
+        }
+      }
+    }
+  ]
+}

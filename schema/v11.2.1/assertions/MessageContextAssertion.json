@@ -1,0 +1,59 @@
+{
+  "configName": "MessageContextAssertion",
+  "name": "Capture Identity of Requestor",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/MessageContextAssertion",
+      "title": "Capture Identity of Requestor",
+      "type": "object",
+      "properties": {
+        "mappings": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/MessageContextAssertion:mappingInfo"
+          }
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/MessageContextAssertion:mappingInfo",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "mappingType": {
+          "type": "string",
+          "enum": [
+            "IP_ADDRESS",
+            "AUTH_USER",
+            "CUSTOM_MAPPING"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/MessageContextAssertion/Main",
+      "title": "Capture Identity of Requestor",
+      "properties": {
+        "MessageContextAssertion": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/MessageContextAssertion"
+        }
+      }
+    }
+  ]
+}

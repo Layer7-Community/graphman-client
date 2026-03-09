@@ -1,0 +1,99 @@
+{
+  "configName": "ManageCookie",
+  "name": "Manage Cookie",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ManageCookie",
+      "title": "Manage Cookie",
+      "type": "object",
+      "properties": {
+        "cookieAttributes": {
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/nameValuePair"
+            }
+          }
+        },
+        "cookieCriteria": {
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "$ref": "https://l7tech.com/2025/json-schema/assertions/ManageCookie:cookieCriteria"
+            }
+          }
+        },
+        "operation": {
+          "type": "string",
+          "enum": [
+            "ADD",
+            "REMOVE",
+            "UPDATE",
+            "ADD_OR_REPLACE"
+          ],
+          "default": "ADD"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ManageCookie:cookieCriteria",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "regex": {
+          "type": "boolean",
+          "default": false
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/nameValuePair",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ManageCookie/Main",
+      "title": "Manage Cookie",
+      "properties": {
+        "ManageCookie": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/ManageCookie"
+        }
+      }
+    }
+  ]
+}

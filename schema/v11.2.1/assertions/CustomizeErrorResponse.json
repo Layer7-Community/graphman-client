@@ -1,0 +1,75 @@
+{
+  "configName": "CustomizeErrorResponse",
+  "name": "Customize Error Response",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CustomizeErrorResponse",
+      "title": "Customize Error Response",
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string",
+          "default": "Internal Server Error"
+        },
+        "contentType": {
+          "type": "string",
+          "default": "text/plain; charset=UTF-8"
+        },
+        "errorLevel": {
+          "type": "string",
+          "enum": [
+            "DROP_CONNECTION",
+            "TEMPLATE_RESPONSE"
+          ],
+          "default": "TEMPLATE_RESPONSE"
+        },
+        "extraHeaders": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/nameValuePair"
+          }
+        },
+        "httpStatus": {
+          "type": "string",
+          "default": "500"
+        },
+        "includePolicyDownloadURL": {
+          "type": "boolean",
+          "default": false
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/nameValuePair",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CustomizeErrorResponse/Main",
+      "title": "Customize Error Response",
+      "properties": {
+        "CustomizeErrorResponse": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/CustomizeErrorResponse"
+        }
+      }
+    }
+  ]
+}

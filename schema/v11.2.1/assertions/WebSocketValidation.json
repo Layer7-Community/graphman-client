@@ -1,0 +1,48 @@
+{
+  "configName": "WebSocketValidation",
+  "name": "Validate WebSocket Message",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/WebSocketValidation",
+      "title": "Validate WebSocket Message",
+      "type": "object",
+      "properties": {
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "userVariablePrefix": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/WebSocketValidation/Main",
+      "title": "Validate WebSocket Message",
+      "properties": {
+        "WebSocketValidation": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/WebSocketValidation"
+        }
+      }
+    }
+  ]
+}

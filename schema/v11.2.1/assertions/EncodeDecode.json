@@ -1,0 +1,93 @@
+{
+  "configName": "EncodeDecode",
+  "name": "Encode/Decode Data",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/EncodeDecode",
+      "title": "Encode/Decode Data",
+      "type": "object",
+      "properties": {
+        "characterEncoding": {
+          "type": "string",
+          "default": "UTF-8"
+        },
+        "lineBreakInterval": {
+          "type": "integer",
+          "default": 0
+        },
+        "sourceVariableName": {
+          "type": "string"
+        },
+        "strict": {
+          "type": "boolean",
+          "default": false
+        },
+        "targetContentType": {
+          "type": "string"
+        },
+        "targetDataType": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/dataType"
+        },
+        "targetVariableName": {
+          "type": "string"
+        },
+        "transformType": {
+          "type": "string",
+          "enum": [
+            "BASE64_ENCODE",
+            "BASE64_DECODE",
+            "BASE32_ENCODE",
+            "BASE32_DECODE",
+            "HEX_ENCODE",
+            "HEX_DECODE",
+            "URL_ENCODE",
+            "URL_DECODE",
+            "ZIP",
+            "UNZIP",
+            "GZIP",
+            "GUNZIP"
+          ]
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/dataType",
+      "enum": [
+        "string",
+        "cert",
+        "int",
+        "decimal",
+        "float",
+        "xml",
+        "boolean",
+        "binary",
+        "dateTime",
+        "message",
+        "blob",
+        "clob",
+        "other"
+      ]
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/EncodeDecode/Main",
+      "title": "Encode/Decode Data",
+      "properties": {
+        "EncodeDecode": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/EncodeDecode"
+        }
+      }
+    }
+  ]
+}

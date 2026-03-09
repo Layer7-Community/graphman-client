@@ -1,0 +1,121 @@
+{
+  "configName": "LDAPQuery",
+  "name": "Query LDAP",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/LDAPQuery",
+      "title": "Query LDAP",
+      "type": "object",
+      "properties": {
+        "allowMultipleResults": {
+          "type": "boolean",
+          "default": false
+        },
+        "attrNames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "cachePeriod": {
+          "type": "number",
+          "default": 10
+        },
+        "cacheSize": {
+          "type": "integer",
+          "default": 0
+        },
+        "dnText": {
+          "type": "string"
+        },
+        "enableCache": {
+          "type": "boolean",
+          "default": true
+        },
+        "failIfNoResults": {
+          "type": "boolean",
+          "default": false
+        },
+        "failIfTooManyResults": {
+          "type": "boolean",
+          "default": false
+        },
+        "includeEmptyAttributes": {
+          "type": "boolean",
+          "default": false
+        },
+        "ldapProviderOid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "maximumResults": {
+          "type": "integer",
+          "default": 0
+        },
+        "queryMappings": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/LDAPQuery:mapping"
+          }
+        },
+        "searchFilter": {
+          "type": "string"
+        },
+        "searchFilterInjectionProtected": {
+          "type": "boolean",
+          "default": false
+        },
+        "selectedScope": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/LDAPQuery:mapping",
+      "properties": {
+        "attributeName": {
+          "type": "string"
+        },
+        "failMultivalued": {
+          "type": "boolean",
+          "default": false
+        },
+        "joinMultivalued": {
+          "type": "boolean",
+          "default": true
+        },
+        "matchingContextVariableName": {
+          "type": "string"
+        },
+        "multivalued": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/LDAPQuery/Main",
+      "title": "Query LDAP",
+      "properties": {
+        "LDAPQuery": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/LDAPQuery"
+        }
+      }
+    }
+  ]
+}

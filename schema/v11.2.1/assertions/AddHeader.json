@@ -1,0 +1,75 @@
+{
+  "configName": "AddHeader",
+  "name": "Manage Transport Properties/Headers",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/AddHeader",
+      "title": "Manage Transport Properties/Headers",
+      "type": "object",
+      "properties": {
+        "evaluateNameAsExpression": {
+          "type": "boolean",
+          "default": false
+        },
+        "evaluateValueExpression": {
+          "type": "boolean",
+          "default": false
+        },
+        "headerName": {
+          "type": "string"
+        },
+        "headerValue": {
+          "type": "string"
+        },
+        "metadataType": {
+          "type": "string",
+          "default": "HTTP Header"
+        },
+        "operation": {
+          "type": "string",
+          "enum": [
+            "ADD",
+            "REMOVE"
+          ],
+          "default": "ADD"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "removeExisting": {
+          "type": "boolean",
+          "default": false
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/AddHeader/Main",
+      "title": "Manage Transport Properties/Headers",
+      "properties": {
+        "AddHeader": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/AddHeader"
+        }
+      }
+    }
+  ]
+}

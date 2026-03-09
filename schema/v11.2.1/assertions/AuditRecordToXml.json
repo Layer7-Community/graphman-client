@@ -1,0 +1,45 @@
+{
+  "configName": "AuditRecordToXml",
+  "name": "Convert Audit Record to XML",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/AuditRecordToXml",
+      "title": "Convert Audit Record to XML",
+      "type": "object",
+      "properties": {
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/AuditRecordToXml/Main",
+      "title": "Convert Audit Record to XML",
+      "properties": {
+        "AuditRecordToXml": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/AuditRecordToXml"
+        }
+      }
+    }
+  ]
+}

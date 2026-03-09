@@ -1,0 +1,33 @@
+{
+  "configName": "KafkaConsumer",
+  "name": "Kafka Consumer",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/KafkaConsumer",
+      "title": "Kafka Consumer",
+      "type": "object",
+      "properties": {
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/KafkaConsumer/Main",
+      "title": "Kafka Consumer",
+      "properties": {
+        "KafkaConsumer": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/KafkaConsumer"
+        }
+      }
+    }
+  ]
+}

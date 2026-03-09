@@ -1,0 +1,69 @@
+{
+  "configName": "GatewayGraphQL",
+  "name": "GraphQL Manage Gateway",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/GatewayGraphQL",
+      "title": "GraphQL Manage Gateway",
+      "type": "object",
+      "properties": {
+        "authzOption": {
+          "type": "string",
+          "enum": [
+            "ADMINISTRATORS",
+            "ALL_USERS"
+          ],
+          "default": "ADMINISTRATORS"
+        },
+        "checkAdmin": {
+          "type": "boolean",
+          "default": true
+        },
+        "encPass": {
+          "type": "string"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "query": {
+          "type": "string"
+        },
+        "queryOptions": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "variables": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/GatewayGraphQL/Main",
+      "title": "GraphQL Manage Gateway",
+      "properties": {
+        "GatewayGraphQL": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/GatewayGraphQL"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "configName": "ThroughputQuota",
+  "name": "Apply Throughput Quota",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ThroughputQuota",
+      "title": "Apply Throughput Quota",
+      "type": "object",
+      "properties": {
+        "byValue": {
+          "type": "string"
+        },
+        "counterName": {
+          "type": "string",
+          "default": "ThroughputQuota-${request.authenticateduser.id}-${request.authenticateduser.providerid}"
+        },
+        "counterStrategy": {
+          "type": "integer",
+          "default": 2
+        },
+        "global": {
+          "type": "boolean",
+          "default": false
+        },
+        "logOnly": {
+          "type": "boolean",
+          "default": false
+        },
+        "quota": {
+          "type": "string",
+          "default": "200"
+        },
+        "readSynchronous": {
+          "type": "boolean",
+          "default": true
+        },
+        "synchronous": {
+          "type": "boolean",
+          "default": true
+        },
+        "timeUnit": {
+          "type": "string",
+          "default": "month"
+        },
+        "variablePrefix": {
+          "type": "string",
+          "default": ""
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ThroughputQuota/Main",
+      "title": "Apply Throughput Quota",
+      "properties": {
+        "ThroughputQuota": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/ThroughputQuota"
+        }
+      }
+    }
+  ]
+}

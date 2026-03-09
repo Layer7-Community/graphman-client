@@ -1,0 +1,56 @@
+{
+  "configName": "Authentication",
+  "name": "Authenticate Against Identity Provider",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Authentication",
+      "title": "Authenticate Against Identity Provider",
+      "type": "object",
+      "properties": {
+        "identityProviderOid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid",
+          "default": "0000000000000000ffffffffffffffff"
+        },
+        "identityTag": {
+          "type": "string"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Authentication/Main",
+      "title": "Authenticate Against Identity Provider",
+      "properties": {
+        "Authentication": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/Authentication"
+        }
+      }
+    }
+  ]
+}

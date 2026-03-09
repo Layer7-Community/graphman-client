@@ -1,0 +1,63 @@
+{
+  "configName": "SqlAttack",
+  "name": "Protect Against SQL Attacks",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SqlAttack",
+      "title": "Protect Against SQL Attacks",
+      "type": "object",
+      "properties": {
+        "includeBody": {
+          "type": "boolean",
+          "default": true
+        },
+        "includeUrlPath": {
+          "type": "boolean",
+          "default": false
+        },
+        "includeUrlQueryString": {
+          "type": "boolean",
+          "default": false
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "protections": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SqlAttack/Main",
+      "title": "Protect Against SQL Attacks",
+      "properties": {
+        "SqlAttack": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/SqlAttack"
+        }
+      }
+    }
+  ]
+}

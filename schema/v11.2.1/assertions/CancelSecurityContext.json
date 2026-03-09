@@ -1,0 +1,65 @@
+{
+  "configName": "CancelSecurityContext",
+  "name": "Cancel Security Context",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CancelSecurityContext",
+      "title": "Cancel Security Context",
+      "type": "object",
+      "properties": {
+        "cancelInbound": {
+          "type": "boolean",
+          "default": true
+        },
+        "failIfNotExist": {
+          "type": "boolean",
+          "default": true
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "outboundServiceUrl": {
+          "type": "string"
+        },
+        "requiredAuthorization": {
+          "type": "string",
+          "enum": [
+            "NONE",
+            "USER",
+            "TOKEN"
+          ],
+          "default": "TOKEN"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CancelSecurityContext/Main",
+      "title": "Cancel Security Context",
+      "properties": {
+        "CancelSecurityContext": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/CancelSecurityContext"
+        }
+      }
+    }
+  ]
+}

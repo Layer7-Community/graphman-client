@@ -1,0 +1,77 @@
+{
+  "configName": "SiteMinderCheckProtected",
+  "name": "Check Protected Resource Against CA Single Sign-On",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SiteMinderCheckProtected",
+      "title": "Check Protected Resource Against CA Single Sign-On",
+      "type": "object",
+      "properties": {
+        "acoName": {
+          "type": "string"
+        },
+        "action": {
+          "type": "string"
+        },
+        "agentGoid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "agentId": {
+          "type": "string"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "prefix": {
+          "type": "string"
+        },
+        "protectedResource": {
+          "type": "string"
+        },
+        "serverName": {
+          "type": "string",
+          "default": ""
+        },
+        "smAgentName": {
+          "type": "string"
+        },
+        "sourceIpAddress": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SiteMinderCheckProtected/Main",
+      "title": "Check Protected Resource Against CA Single Sign-On",
+      "properties": {
+        "SiteMinderCheckProtected": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/SiteMinderCheckProtected"
+        }
+      }
+    }
+  ]
+}

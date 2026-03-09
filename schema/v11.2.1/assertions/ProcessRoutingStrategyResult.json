@@ -1,0 +1,41 @@
+{
+  "configName": "ProcessRoutingStrategyResult",
+  "name": "Process Routing Strategy Result",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ProcessRoutingStrategyResult",
+      "title": "Process Routing Strategy Result",
+      "type": "object",
+      "properties": {
+        "feedback": {
+          "type": "string",
+          "default": "feedback"
+        },
+        "strategy": {
+          "type": "string",
+          "default": "strategy"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ProcessRoutingStrategyResult/Main",
+      "title": "Process Routing Strategy Result",
+      "properties": {
+        "ProcessRoutingStrategyResult": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/ProcessRoutingStrategyResult"
+        }
+      }
+    }
+  ]
+}

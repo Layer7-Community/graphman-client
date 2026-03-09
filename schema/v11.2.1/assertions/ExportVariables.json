@@ -1,0 +1,39 @@
+{
+  "configName": "ExportVariables",
+  "name": "Export Variables from Fragment",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ExportVariables",
+      "title": "Export Variables from Fragment",
+      "type": "object",
+      "properties": {
+        "exportedVars": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ExportVariables/Main",
+      "title": "Export Variables from Fragment",
+      "properties": {
+        "ExportVariables": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/ExportVariables"
+        }
+      }
+    }
+  ]
+}

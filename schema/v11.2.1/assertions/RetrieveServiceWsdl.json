@@ -1,0 +1,114 @@
+{
+  "configName": "RetrieveServiceWsdl",
+  "name": "Retrieve Service WSDL",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RetrieveServiceWsdl",
+      "title": "Retrieve Service WSDL",
+      "type": "object",
+      "properties": {
+        "currentSecurityHeaderHandling": {
+          "type": "integer",
+          "default": 0
+        },
+        "host": {
+          "type": "string",
+          "default": "${gateway.cluster.hostname}"
+        },
+        "messageTarget": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport"
+        },
+        "port": {
+          "type": "string",
+          "default": "${request.tcp.localPort}"
+        },
+        "protocol": {
+          "type": "string"
+        },
+        "protocolVariable": {
+          "type": "string",
+          "default": "request.url.protocol"
+        },
+        "proxyDependencies": {
+          "type": "boolean",
+          "default": false
+        },
+        "recipientContext": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext"
+        },
+        "retrieveDependency": {
+          "type": "boolean",
+          "default": false
+        },
+        "serviceDocumentId": {
+          "type": "string"
+        },
+        "serviceId": {
+          "type": "string",
+          "default": "${service.oid}"
+        },
+        "xmlSecurityActorToPromote": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport",
+      "properties": {
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "sourceUsedByGateway": {
+          "type": "boolean",
+          "default": true
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "targetModifiedByGateway": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RetrieveServiceWsdl/Main",
+      "title": "Retrieve Service WSDL",
+      "properties": {
+        "RetrieveServiceWsdl": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/RetrieveServiceWsdl"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "configName": "KeyValueRemove",
+  "name": "Remove from Key Value Storage",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/KeyValueRemove",
+      "title": "Remove from Key Value Storage",
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "default": "${request.url}"
+        },
+        "removeAllKeys": {
+          "type": "boolean",
+          "default": false
+        },
+        "storeId": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/KeyValueRemove/Main",
+      "title": "Remove from Key Value Storage",
+      "properties": {
+        "KeyValueRemove": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/KeyValueRemove"
+        }
+      }
+    }
+  ]
+}

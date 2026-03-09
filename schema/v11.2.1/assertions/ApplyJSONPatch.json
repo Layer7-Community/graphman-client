@@ -1,0 +1,77 @@
+{
+  "configName": "ApplyJSONPatch",
+  "name": "Apply JSON Patch",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ApplyJSONPatch",
+      "title": "Apply JSON Patch",
+      "type": "object",
+      "properties": {
+        "destinationMessageTarget": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport"
+        },
+        "jsonPatch": {
+          "type": "string"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "RESPONSE"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport",
+      "properties": {
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "sourceUsedByGateway": {
+          "type": "boolean",
+          "default": true
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "targetModifiedByGateway": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ApplyJSONPatch/Main",
+      "title": "Apply JSON Patch",
+      "properties": {
+        "ApplyJSONPatch": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/ApplyJSONPatch"
+        }
+      }
+    }
+  ]
+}

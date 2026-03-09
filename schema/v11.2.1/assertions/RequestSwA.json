@@ -1,0 +1,89 @@
+{
+  "configName": "RequestSwA",
+  "name": "Validate SOAP Attachments",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RequestSwA",
+      "title": "Validate SOAP Attachments",
+      "type": "object",
+      "properties": {
+        "bindings": {
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/bindingInfo"
+            }
+          }
+        },
+        "namespaceMap": {
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          }
+        },
+        "unboundAttachmentPolicy": {
+          "type": "integer",
+          "default": 0
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/bindingInfo",
+      "properties": {
+        "bindingName": {
+          "type": "string",
+          "default": ""
+        },
+        "bindingOperations": {
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/bindingOperationInfo"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/bindingOperationInfo",
+      "properties": {
+        "extraMultipart": {
+          "type": "object"
+        },
+        "multipart": {
+          "type": "object"
+        },
+        "name": {
+          "type": "string"
+        },
+        "xpath": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RequestSwA/Main",
+      "title": "Validate SOAP Attachments",
+      "properties": {
+        "RequestSwA": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/RequestSwA"
+        }
+      }
+    }
+  ]
+}

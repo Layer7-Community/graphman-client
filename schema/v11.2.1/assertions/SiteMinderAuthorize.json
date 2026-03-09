@@ -1,0 +1,84 @@
+{
+  "configName": "SiteMinderAuthorize",
+  "name": "Authorize via CA Single Sign-On",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SiteMinderAuthorize",
+      "title": "Authorize via CA Single Sign-On",
+      "type": "object",
+      "properties": {
+        "cookieComment": {
+          "type": "string"
+        },
+        "cookieDomain": {
+          "type": "string"
+        },
+        "cookieMaxAge": {
+          "type": "string"
+        },
+        "cookieName": {
+          "type": "string"
+        },
+        "cookiePath": {
+          "type": "string"
+        },
+        "cookieSecure": {
+          "type": "string"
+        },
+        "cookieSourceVar": {
+          "type": "string"
+        },
+        "cookieVersion": {
+          "type": "string"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "prefix": {
+          "type": "string"
+        },
+        "setSMCookie": {
+          "type": "boolean",
+          "default": false
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "useCustomCookieName": {
+          "type": "boolean",
+          "default": false
+        },
+        "useVarAsCookieSource": {
+          "type": "boolean",
+          "default": false
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SiteMinderAuthorize/Main",
+      "title": "Authorize via CA Single Sign-On",
+      "properties": {
+        "SiteMinderAuthorize": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/SiteMinderAuthorize"
+        }
+      }
+    }
+  ]
+}

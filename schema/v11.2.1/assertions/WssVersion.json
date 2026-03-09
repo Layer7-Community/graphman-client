@@ -1,0 +1,33 @@
+{
+  "configName": "WssVersion",
+  "name": "Use WS-Security 1.1",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/WssVersion",
+      "title": "Use WS-Security 1.1",
+      "type": "object",
+      "properties": {
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/WssVersion/Main",
+      "title": "Use WS-Security 1.1",
+      "properties": {
+        "WssVersion": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/WssVersion"
+        }
+      }
+    }
+  ]
+}

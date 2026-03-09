@@ -1,0 +1,44 @@
+{
+  "configName": "HttpDigest",
+  "name": "Require HTTP Digest Credentials",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/HttpDigest",
+      "title": "Require HTTP Digest Credentials",
+      "type": "object",
+      "properties": {
+        "maxNonceCount": {
+          "type": "integer",
+          "default": 30
+        },
+        "nonceTimeout": {
+          "type": "integer",
+          "default": 1800000
+        },
+        "realm": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/HttpDigest/Main",
+      "title": "Require HTTP Digest Credentials",
+      "properties": {
+        "HttpDigest": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/HttpDigest"
+        }
+      }
+    }
+  ]
+}

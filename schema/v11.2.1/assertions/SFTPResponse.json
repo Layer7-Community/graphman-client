@@ -1,0 +1,63 @@
+{
+  "configName": "SFTPResponse",
+  "name": "Return SFTP Response",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SFTPResponse",
+      "title": "Return SFTP Response",
+      "type": "object",
+      "properties": {
+        "currentSecurityHeaderHandling": {
+          "type": "integer",
+          "default": 0
+        },
+        "earlyResponse": {
+          "type": "boolean",
+          "default": false
+        },
+        "recipientContext": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext"
+        },
+        "responseStatus": {
+          "type": "string",
+          "default": "0"
+        },
+        "xmlSecurityActorToPromote": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SFTPResponse/Main",
+      "title": "Return SFTP Response",
+      "properties": {
+        "SFTPResponse": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/SFTPResponse"
+        }
+      }
+    }
+  ]
+}

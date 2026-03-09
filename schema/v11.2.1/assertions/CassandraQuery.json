@@ -1,0 +1,78 @@
+{
+  "configName": "CassandraQuery",
+  "name": "Perform Cassandra Query",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CassandraQuery",
+      "title": "Perform Cassandra Query",
+      "type": "object",
+      "properties": {
+        "connectionName": {
+          "type": "string"
+        },
+        "consistencyLevel": {
+          "type": "string"
+        },
+        "failIfNoResults": {
+          "type": "boolean",
+          "default": false
+        },
+        "fetchSize": {
+          "type": "integer",
+          "default": 0
+        },
+        "generateXmlResult": {
+          "type": "boolean",
+          "default": false
+        },
+        "maxRecords": {
+          "type": "integer",
+          "default": 0
+        },
+        "namingMap": {
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          }
+        },
+        "overrideConsistencyLevel": {
+          "type": "boolean",
+          "default": false
+        },
+        "prefix": {
+          "type": "string",
+          "default": "cassandraQuery"
+        },
+        "queryDocument": {
+          "type": "string"
+        },
+        "queryTimeout": {
+          "type": "string",
+          "default": "0"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CassandraQuery/Main",
+      "title": "Perform Cassandra Query",
+      "properties": {
+        "CassandraQuery": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/CassandraQuery"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "configName": "ComparisonAssertion",
+  "name": "Compare Expression",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ComparisonAssertion",
+      "title": "Compare Expression",
+      "type": "object",
+      "properties": {
+        "caseSensitive": {
+          "type": "boolean",
+          "default": true
+        },
+        "expression1": {
+          "type": "string"
+        },
+        "expression2": {
+          "type": "string"
+        },
+        "expressionIsVariable": {
+          "type": "boolean",
+          "default": true
+        },
+        "multivaluedComparison": {
+          "type": "string",
+          "enum": [
+            "ALL",
+            "ANY",
+            "FIRST",
+            "LAST",
+            "FAIL"
+          ],
+          "default": "ALL"
+        },
+        "negate": {
+          "type": "boolean",
+          "default": false
+        },
+        "operator": {
+          "type": "string",
+          "enum": [
+            "LT",
+            "LE",
+            "EQ",
+            "GT",
+            "GE",
+            "EMPTY",
+            "CONTAINS",
+            "NE",
+            "TRUE",
+            "FALSE"
+          ],
+          "default": "EQ"
+        },
+        "predicates": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/ComparisonAssertion:predicate"
+          }
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ComparisonAssertion:predicate",
+      "properties": {
+        "negated": {
+          "type": "boolean"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ComparisonAssertion/Main",
+      "title": "Compare Expression",
+      "properties": {
+        "ComparisonAssertion": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/ComparisonAssertion"
+        }
+      }
+    }
+  ]
+}

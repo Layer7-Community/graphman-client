@@ -1,0 +1,103 @@
+{
+  "configName": "BuildRstSoapRequest",
+  "name": "Build RST SOAP Request",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/BuildRstSoapRequest",
+      "title": "Build RST SOAP Request",
+      "type": "object",
+      "properties": {
+        "appliesToAddress": {
+          "type": "string"
+        },
+        "includeClientEntropy": {
+          "type": "boolean",
+          "default": false
+        },
+        "issuerAddress": {
+          "type": "string"
+        },
+        "keySize": {
+          "type": "integer"
+        },
+        "lifetime": {
+          "type": "number"
+        },
+        "lifetimeTimeUnit": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/timeUnit"
+        },
+        "requestType": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/wsTrustRequestType",
+          "default": "http://schemas.xmlsoap.org/ws/2005/02/trust/Issue"
+        },
+        "soapVersion": {
+          "type": "string",
+          "enum": [
+            "SOAP_1_1",
+            "SOAP_1_2",
+            "UNKNOWN"
+          ]
+        },
+        "targetTokenVariable": {
+          "type": "string"
+        },
+        "tokenType": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/securityTokenType",
+          "default": "Unknown"
+        },
+        "variablePrefix": {
+          "type": "string",
+          "default": "requestBuilder"
+        },
+        "wsTrustNamespace": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/timeUnit",
+      "enum": [
+        "ms",
+        "s",
+        "m",
+        "h",
+        "d"
+      ]
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/wsTrustRequestType",
+      "enum": [
+        "http://schemas.xmlsoap.org/ws/2005/02/trust/Issue",
+        "http://schemas.xmlsoap.org/ws/2005/02/trust/Validate",
+        "http://schemas.xmlsoap.org/ws/2005/02/trust/Renew",
+        "http://schemas.xmlsoap.org/ws/2005/02/trust/Cancel"
+      ]
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/securityTokenType"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/BuildRstSoapRequest/Main",
+      "title": "Build RST SOAP Request",
+      "properties": {
+        "BuildRstSoapRequest": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/BuildRstSoapRequest"
+        }
+      }
+    }
+  ]
+}

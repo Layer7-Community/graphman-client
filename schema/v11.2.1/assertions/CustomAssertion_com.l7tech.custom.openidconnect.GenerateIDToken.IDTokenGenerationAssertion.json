@@ -1,0 +1,111 @@
+{
+  "configName": "CustomAssertion:com.l7tech.custom.openidconnect.GenerateIDToken.IDTokenGenerationAssertion",
+  "name": "Generate ID Token",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CustomAssertion:com.l7tech.custom.openidconnect.GenerateIDToken.IDTokenGenerationAssertion",
+      "title": "Generate ID Token",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "const": "Generate ID Token"
+        },
+        "valueClass": {
+          "type": "string",
+          "const": "com.l7tech.custom.openidconnect.GenerateIDToken.IDTokenGenerationAssertion"
+        },
+        "value": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/iDTokenGenerationAssertion"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/category"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/customAssertion"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CustomAssertion:com.l7tech.custom.openidconnect.GenerateIDToken.IDTokenGenerationAssertion/Main",
+      "title": "Generate ID Token",
+      "properties": {
+        "CustomAssertion": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/CustomAssertion:com.l7tech.custom.openidconnect.GenerateIDToken.IDTokenGenerationAssertion"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/iDTokenGenerationAssertion",
+      "properties": {
+        "acr": {
+          "type": "string"
+        },
+        "atHash": {
+          "type": "string"
+        },
+        "aud": {
+          "type": "string"
+        },
+        "authTime": {
+          "type": "string"
+        },
+        "automatic": {
+          "type": "boolean",
+          "default": false
+        },
+        "azp": {
+          "type": "string"
+        },
+        "cHash": {
+          "type": "string"
+        },
+        "expiration": {
+          "type": "string"
+        },
+        "generateSub": {
+          "type": "boolean",
+          "default": false
+        },
+        "iss": {
+          "type": "string"
+        },
+        "nonce": {
+          "type": "string"
+        },
+        "otherClaims": {
+          "type": "string",
+          "default": ""
+        },
+        "responseType": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string",
+          "default": ""
+        },
+        "sub": {
+          "type": "string"
+        },
+        "useAuthTimeNow": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    }
+  ]
+}

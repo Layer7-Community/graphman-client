@@ -1,0 +1,97 @@
+{
+  "configName": "HtmlFormData",
+  "name": "Validate HTML Form Data",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/HtmlFormData",
+      "title": "Validate HTML Form Data",
+      "type": "object",
+      "properties": {
+        "allowGet": {
+          "type": "boolean",
+          "default": false
+        },
+        "allowPost": {
+          "type": "boolean",
+          "default": false
+        },
+        "disallowOtherFields": {
+          "type": "boolean",
+          "default": false
+        },
+        "fieldSpecs": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/htmlFormDataAssertion$FieldSpec"
+          }
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/htmlFormDataAssertion$FieldSpec",
+      "properties": {
+        "allowEmpty": {
+          "type": "boolean"
+        },
+        "allowedLocation": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/htmlFormDataLocation",
+          "default": "anywhere"
+        },
+        "dataType": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/htmlFormDataType"
+        },
+        "maxOccurs": {
+          "type": "integer",
+          "default": 0
+        },
+        "minOccurs": {
+          "type": "integer",
+          "default": 0
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/htmlFormDataLocation",
+      "enum": [
+        "anywhere",
+        "requestUrl",
+        "requestBody"
+      ]
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/htmlFormDataType",
+      "enum": [
+        "any",
+        "number",
+        "file",
+        "string"
+      ]
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/HtmlFormData/Main",
+      "title": "Validate HTML Form Data",
+      "properties": {
+        "HtmlFormData": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/HtmlFormData"
+        }
+      }
+    }
+  ]
+}

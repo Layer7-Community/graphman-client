@@ -1,0 +1,82 @@
+{
+  "configName": "NonSoapDecryptElement",
+  "name": "(Non-SOAP) Decrypt XML Element",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/NonSoapDecryptElement",
+      "title": "(Non-SOAP) Decrypt XML Element",
+      "type": "object",
+      "properties": {
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "reportContentsOnly": {
+          "type": "boolean",
+          "default": false
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "variablePrefix": {
+          "type": "string",
+          "default": ""
+        },
+        "xpathExpression": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xpathExpression"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xpathExpression",
+      "properties": {
+        "expression": {
+          "type": "string"
+        },
+        "namespaces": {
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          }
+        },
+        "xpathVersion": {
+          "type": "string",
+          "enum": [
+            "UNSPECIFIED",
+            "XPATH_1_0",
+            "XPATH_2_0"
+          ],
+          "default": "UNSPECIFIED"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/NonSoapDecryptElement/Main",
+      "title": "(Non-SOAP) Decrypt XML Element",
+      "properties": {
+        "NonSoapDecryptElement": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/NonSoapDecryptElement"
+        }
+      }
+    }
+  ]
+}

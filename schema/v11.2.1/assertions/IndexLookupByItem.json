@@ -1,0 +1,46 @@
+{
+  "configName": "IndexLookupByItem",
+  "name": "Look Up Item by Value",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/IndexLookupByItem",
+      "title": "Look Up Item by Value",
+      "type": "object",
+      "properties": {
+        "allowMultipleMatches": {
+          "type": "boolean",
+          "default": false
+        },
+        "multivaluedVariableName": {
+          "type": "string"
+        },
+        "outputVariableName": {
+          "type": "string"
+        },
+        "valueToSearchForVariableName": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/IndexLookupByItem/Main",
+      "title": "Look Up Item by Value",
+      "properties": {
+        "IndexLookupByItem": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/IndexLookupByItem"
+        }
+      }
+    }
+  ]
+}

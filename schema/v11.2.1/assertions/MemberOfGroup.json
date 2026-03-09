@@ -1,0 +1,62 @@
+{
+  "configName": "MemberOfGroup",
+  "name": "Authenticate Group",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/MemberOfGroup",
+      "title": "Authenticate User or Group",
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string"
+        },
+        "groupName": {
+          "type": "string"
+        },
+        "identityProviderOid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid",
+          "default": "0000000000000000ffffffffffffffff"
+        },
+        "identityTag": {
+          "type": "string"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/MemberOfGroup/Main",
+      "title": "Authenticate User or Group",
+      "properties": {
+        "MemberOfGroup": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/MemberOfGroup"
+        }
+      }
+    }
+  ]
+}

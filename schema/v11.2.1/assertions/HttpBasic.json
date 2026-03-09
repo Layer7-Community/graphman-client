@@ -1,0 +1,36 @@
+{
+  "configName": "HttpBasic",
+  "name": "Require HTTP Basic Credentials",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/HttpBasic",
+      "title": "Require HTTP Basic Credentials",
+      "type": "object",
+      "properties": {
+        "realm": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/HttpBasic/Main",
+      "title": "Require HTTP Basic Credentials",
+      "properties": {
+        "HttpBasic": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/HttpBasic"
+        }
+      }
+    }
+  ]
+}

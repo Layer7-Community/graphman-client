@@ -1,0 +1,97 @@
+{
+  "configName": "GenerateOAuthSignatureBaseString",
+  "name": "Generate OAuth Signature Base String",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/GenerateOAuthSignatureBaseString",
+      "title": "Generate OAuth Signature Base String",
+      "type": "object",
+      "properties": {
+        "allowCustomOAuthQueryParams": {
+          "type": "boolean",
+          "default": false
+        },
+        "allowEmptyCallback": {
+          "type": "boolean",
+          "default": false
+        },
+        "authorizationHeader": {
+          "type": "string",
+          "default": "${request.http.header.Authorization}"
+        },
+        "httpMethod": {
+          "type": "string",
+          "default": "${request.http.method}"
+        },
+        "oauthCallback": {
+          "type": "string"
+        },
+        "oauthConsumerKey": {
+          "type": "string"
+        },
+        "oauthSignatureMethod": {
+          "type": "string",
+          "default": "HMAC-SHA1"
+        },
+        "oauthToken": {
+          "type": "string"
+        },
+        "oauthVerifier": {
+          "type": "string"
+        },
+        "queryString": {
+          "type": "string",
+          "default": "${request.url.query}"
+        },
+        "requestUrl": {
+          "type": "string",
+          "default": "${request.url}"
+        },
+        "usageMode": {
+          "type": "string",
+          "enum": [
+            "CLIENT",
+            "SERVER"
+          ],
+          "default": "CLIENT"
+        },
+        "useAuthorizationHeader": {
+          "type": "boolean",
+          "default": true
+        },
+        "useMessageTarget": {
+          "type": "boolean",
+          "default": true
+        },
+        "useOAuthVersion": {
+          "type": "boolean",
+          "default": true
+        },
+        "variablePrefix": {
+          "type": "string",
+          "default": "oauth"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/GenerateOAuthSignatureBaseString/Main",
+      "title": "Generate OAuth Signature Base String",
+      "properties": {
+        "GenerateOAuthSignatureBaseString": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/GenerateOAuthSignatureBaseString"
+        }
+      }
+    }
+  ]
+}

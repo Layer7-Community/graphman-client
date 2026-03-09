@@ -1,0 +1,216 @@
+{
+  "configName": "MqNativeRouting",
+  "name": "Route via MQ Native",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/MqNativeRouting",
+      "title": "Route via MQ Native",
+      "type": "object",
+      "properties": {
+        "currentSecurityHeaderHandling": {
+          "type": "integer",
+          "default": 0
+        },
+        "dynamicMqRoutingProperties": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/MqNativeRouting:mqDynamicProperties"
+        },
+        "messageOptions": {
+          "type": "string"
+        },
+        "messageOptionsUsed": {
+          "type": "boolean",
+          "default": false
+        },
+        "openOptions": {
+          "type": "string"
+        },
+        "openOptionsUsed": {
+          "type": "boolean",
+          "default": false
+        },
+        "putMessageTimeout": {
+          "type": "string"
+        },
+        "putToQueue": {
+          "type": "boolean",
+          "default": true
+        },
+        "recipientContext": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext"
+        },
+        "requestCopyHeaderToProperty": {
+          "type": "boolean",
+          "default": false
+        },
+        "requestCopyPropertyToHeader": {
+          "type": "boolean",
+          "default": false
+        },
+        "requestMessageAdvancedProperties": {
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          }
+        },
+        "requestMqHeaderType": {
+          "type": "string",
+          "enum": [
+            "ORIGINAL",
+            "MQRFH2",
+            "MQRFH1"
+          ],
+          "default": "ORIGINAL"
+        },
+        "requestMqNativeMessagePropertyRuleSet": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/MqNativeRouting:mappingRuleSet"
+        },
+        "requestTarget": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport"
+        },
+        "responseCopyHeaderToProperty": {
+          "type": "boolean",
+          "default": false
+        },
+        "responseCopyPropertyToHeader": {
+          "type": "boolean",
+          "default": false
+        },
+        "responseMessageAdvancedProperties": {
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          }
+        },
+        "responseMqHeaderType": {
+          "type": "string",
+          "enum": [
+            "ORIGINAL",
+            "MQRFH2",
+            "MQRFH1"
+          ],
+          "default": "ORIGINAL"
+        },
+        "responseMqNativeMessagePropertyRuleSet": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/MqNativeRouting:mappingRuleSet"
+        },
+        "responseSize": {
+          "type": "string"
+        },
+        "responseTarget": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport"
+        },
+        "responseTimeout": {
+          "type": "string"
+        },
+        "ssgActiveConnectorGoid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "ssgActiveConnectorId": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "ssgActiveConnectorName": {
+          "type": "string"
+        },
+        "xmlSecurityActorToPromote": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/MqNativeRouting:mqDynamicProperties",
+      "properties": {
+        "queueName": {
+          "type": "string"
+        },
+        "replyToQueue": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/MqNativeRouting:mappingRuleSet",
+      "properties": {
+        "passThroughHeaders": {
+          "type": "boolean",
+          "default": true
+        },
+        "passThroughMqMessageHeaders": {
+          "type": "boolean",
+          "default": true
+        },
+        "passThroughMqMessageProperties": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport",
+      "properties": {
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "sourceUsedByGateway": {
+          "type": "boolean",
+          "default": true
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "targetModifiedByGateway": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/MqNativeRouting/Main",
+      "title": "Route via MQ Native",
+      "properties": {
+        "MqNativeRouting": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/MqNativeRouting"
+        }
+      }
+    }
+  ]
+}

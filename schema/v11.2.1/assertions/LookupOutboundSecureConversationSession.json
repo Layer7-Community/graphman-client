@@ -1,0 +1,52 @@
+{
+  "configName": "LookupOutboundSecureConversationSession",
+  "name": "Look Up Outbound Secure Conversation Session",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/LookupOutboundSecureConversationSession",
+      "title": "Look Up Outbound Secure Conversation Session",
+      "type": "object",
+      "properties": {
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "serviceUrl": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "variablePrefix": {
+          "type": "string",
+          "default": "scLookup"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/LookupOutboundSecureConversationSession/Main",
+      "title": "Look Up Outbound Secure Conversation Session",
+      "properties": {
+        "LookupOutboundSecureConversationSession": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/LookupOutboundSecureConversationSession"
+        }
+      }
+    }
+  ]
+}

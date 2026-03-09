@@ -1,0 +1,335 @@
+{
+  "configName": "HttpRouting",
+  "name": "Route via HTTP(S)",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/HttpRouting",
+      "title": "Route via HTTP(S)",
+      "type": "object",
+      "properties": {
+        "attachSamlSenderVouches": {
+          "type": "boolean",
+          "default": false
+        },
+        "authOauthTokenVar": {
+          "type": "string"
+        },
+        "authOauthVersion": {
+          "type": "string"
+        },
+        "bufferDisabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "connectionTimeout": {
+          "type": "string"
+        },
+        "currentSecurityHeaderHandling": {
+          "type": "integer",
+          "default": 0
+        },
+        "customIpAddresses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "customURLs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dynamicCertificateVariable": {
+          "type": "string"
+        },
+        "dynamicPrivateKeyVariable": {
+          "type": "string"
+        },
+        "failOnErrorStatus": {
+          "type": "boolean",
+          "default": true
+        },
+        "failoverStrategyName": {
+          "type": "string",
+          "default": "ordered"
+        },
+        "followRedirects": {
+          "type": "boolean",
+          "default": false
+        },
+        "forceIncludeRequestBody": {
+          "type": "boolean",
+          "default": false
+        },
+        "gzipEncodeDownstream": {
+          "type": "boolean",
+          "default": false
+        },
+        "httpMethod": {
+          "type": "string",
+          "enum": [
+            "GET",
+            "POST",
+            "PUT",
+            "PATCH",
+            "DELETE",
+            "HEAD",
+            "OPTIONS",
+            "OTHER"
+          ]
+        },
+        "httpMethodAsString": {
+          "type": "string"
+        },
+        "httpVersion": {
+          "type": "string",
+          "enum": [
+            "HTTP_VERSION_1_0",
+            "HTTP_VERSION_1_1"
+          ]
+        },
+        "keyAlias": {
+          "type": "string"
+        },
+        "krbConfiguredAccount": {
+          "type": "string"
+        },
+        "krbConfiguredPassword": {
+          "type": "string"
+        },
+        "krbDelegatedAuthentication": {
+          "type": "boolean",
+          "default": false
+        },
+        "krbUseGatewayKeytab": {
+          "type": "boolean",
+          "default": false
+        },
+        "login": {
+          "type": "string"
+        },
+        "maxConnections": {
+          "type": "integer",
+          "default": -1
+        },
+        "maxDurationEnabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "maxDurationTimeout": {
+          "type": "string"
+        },
+        "maxRetries": {
+          "type": "integer",
+          "default": -1
+        },
+        "nonDefaultKeystoreId": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "ntlmHost": {
+          "type": "string"
+        },
+        "omitAuthHeaderConnectReuse": {
+          "type": "boolean",
+          "default": false
+        },
+        "omitAuthHeaderConnectReuseSystemDefault": {
+          "type": "boolean"
+        },
+        "omitHostHeader": {
+          "type": "boolean",
+          "default": false
+        },
+        "overrideContentType": {
+          "type": "boolean",
+          "default": false
+        },
+        "passThroughSoapFaults": {
+          "type": "boolean",
+          "default": true
+        },
+        "passthroughHttpAuthentication": {
+          "type": "boolean",
+          "default": false
+        },
+        "password": {
+          "type": "string"
+        },
+        "protectedServiceUrl": {
+          "type": "string"
+        },
+        "proxyHost": {
+          "type": "string"
+        },
+        "proxyPassword": {
+          "type": "string",
+          "default": ""
+        },
+        "proxyPort": {
+          "type": "string",
+          "default": "-1"
+        },
+        "proxyUsername": {
+          "type": "string",
+          "default": ""
+        },
+        "realm": {
+          "type": "string"
+        },
+        "recipientContext": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext"
+        },
+        "requestHeaderRules": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/httpPassthroughRuleSet"
+        },
+        "requestMsgSrc": {
+          "type": "string"
+        },
+        "requestParamRules": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/httpPassthroughRuleSet"
+        },
+        "responseHeaderRules": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/httpPassthroughRuleSet"
+        },
+        "responseMsgDest": {
+          "type": "string"
+        },
+        "responseSize": {
+          "type": "string"
+        },
+        "samlAssertionExpiry": {
+          "type": "integer",
+          "default": 5
+        },
+        "samlAssertionVersion": {
+          "type": "integer",
+          "default": 1
+        },
+        "taiCredentialChaining": {
+          "type": "boolean",
+          "default": false
+        },
+        "timeout": {
+          "type": "string"
+        },
+        "tlsCipherSuites": {
+          "type": "string"
+        },
+        "tlsTrustedCertGoids": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+          }
+        },
+        "tlsTrustedCertNames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tlsVersion": {
+          "type": "string"
+        },
+        "useKeepAlives": {
+          "type": "boolean",
+          "default": true
+        },
+        "useThumbprintInSamlSignature": {
+          "type": "boolean",
+          "default": false
+        },
+        "useThumbprintInSamlSubject": {
+          "type": "boolean",
+          "default": false
+        },
+        "userAgent": {
+          "type": "string"
+        },
+        "usesDefaultKeyStore": {
+          "type": "boolean",
+          "default": true
+        },
+        "usesDynamicPrivateKey": {
+          "type": "boolean",
+          "default": false
+        },
+        "usesNoKey": {
+          "type": "boolean",
+          "default": false
+        },
+        "xmlSecurityActorToPromote": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/httpPassthroughRuleSet",
+      "properties": {
+        "forwardAll": {
+          "type": "boolean",
+          "default": false
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/httpPassthroughRule"
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/httpPassthroughRule",
+      "properties": {
+        "customizeValue": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "usesCustomizedValue": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/HttpRouting/Main",
+      "title": "Route via HTTP(S)",
+      "properties": {
+        "HttpRouting": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/HttpRouting"
+        }
+      }
+    }
+  ]
+}
