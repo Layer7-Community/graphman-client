@@ -1,5 +1,4 @@
-const utils = require("./graphman-utils");
-
+// Copyright (c) 2026 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 module.exports = {
     /**
      * * Extension to provide HTTP proxy agent
@@ -12,7 +11,7 @@ module.exports = {
      */
     apply: function (input, context) {
 
-        if(input.agentType === "socksProxy") {
+        if(input.agentType === "socks") {
            return createSocksProxyAgent(input, context);
        } else {
            return createHttpProxyAgent(input, context);
@@ -22,32 +21,32 @@ module.exports = {
 
 function createSocksProxyAgent(input, context) {
     let agent = null;
-    const proxyOptions = createProxyOptions(input);
+    const proxyConfig = createProxyConfig(input);
+
     try {
         const { SocksProxyAgent } = require("socks-proxy-agent");
-        agent = new SocksProxyAgent(proxyOptions, proxyOptions);
+        agent = new SocksProxyAgent(proxyConfig.url, proxyConfig);
     } catch (e) {
-        utils.warn("socsk proxy-agent extension did not return a valid agent, proxy will not be used");
+      throw "failed to configure socks proxy agent" + e.message;
     }
     return agent
-
 }
 
 function createHttpProxyAgent(input, context) {
     let agent = null;
     const isHttps = context.gateway["address"].startsWith('https://');
-    const proxyOptions = createProxyOptions(input);
+    const proxyConfig = createProxyConfig(input);
     const proxyUrlLower = input.address.toLowerCase();
     const isProxyHttps = proxyUrlLower.startsWith('https://');
 
     if (isProxyHttps) {
         // If proxy URL uses https://, ensure TLS options are configured if needed
-        if (!proxyOptions.tls) {
-            proxyOptions.tls = {};
+        if (!proxyConfig.tls) {
+            proxyConfig.tls = {};
         }
         // If rejectUnauthorized is not explicitly set for proxy TLS, default to false for compatibility
-        if (proxyOptions.tls.rejectUnauthorized === undefined) {
-            proxyOptions.tls.rejectUnauthorized = false;
+        if (proxyConfig.tls.rejectUnauthorized === undefined) {
+            proxyConfig.tls.rejectUnauthorized = false;
         }
     }
 
@@ -57,38 +56,47 @@ function createHttpProxyAgent(input, context) {
 
         if (isHttps) {
             const { HttpsProxyAgent } = require("https-proxy-agent")
-            agent = new HttpsProxyAgent(proxyOptions, proxyOptions);
+            agent = new HttpsProxyAgent(input.address, proxyConfig);
         } else {
             const { HttpProxyAgent } = require("http-proxy-agent")
-            agent = new HttpProxyAgent(proxyOptions, proxyOptions);
+            agent = new HttpProxyAgent(input.address, proxyConfig);
         }
 
-        if (!agent && typeof agent === 'string') {
-            utils.warn(`${isHttps ? 'https' : 'http'}-proxy-agent extension did not return a valid agent, proxy will not be used`);
-        }
     } catch (e) {
-        utils.warn(e.message);
+        throw "failed to configure http proxy agent " + e.message;
     }
 
     return agent;
 }
-function createProxyOptions(proxyConfig) {
-    const proxyOptions = {};
-    Object.keys(proxyConfig.options).forEach(key => {
-        proxyOptions[key] = proxyConfig.options[key];
+
+function createProxyConfig(obj) {
+    const proxy = {};
+    const cred = obj.credentialRef;
+    let auth;
+
+    if (cred) {
+        if (obj.agentType === "socks") {
+            const url = new URL(obj.address);
+            url.username = cred.username;
+            url.password = cred.password;
+
+            proxy.url = url;
+        } else {
+            auth = `Basic ${Buffer.from(`${cred.username}:${cred.password}`).toString('base64')}`;
+        }
+    }
+
+    Object.keys(obj.options).forEach(key => {
+        proxy[key] = obj.options[key];
     });
 
-    proxyOptions["port"] = proxyConfig.port;
-    const url = new URL(proxyConfig.address);
-    proxyOptions["hostname"] = url.hostname;
-    const proxyServerUserName = proxyConfig?.credentialRef?.username;
-    const proxyServerPassword = proxyConfig?.credentialRef?.password;
-
-    if (proxyServerPassword && proxyServerUserName) {
-        proxyOptions["headers"] = {
-            "Proxy-Authorization": `Basic ${Buffer.from(`${proxyServerUserName}:${proxyServerPassword}`).toString('base64')}`
-        };
+    if (!proxy.headers) {
+        proxy.headers = {};
     }
-    utils.info("proxy Option details", proxyOptions);
-    return proxyOptions;
+
+    if (auth) {
+        proxy.headers["Proxy-Authorization"] = auth;
+    }
+
+    return proxy;
 }
