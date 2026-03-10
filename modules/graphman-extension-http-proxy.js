@@ -25,7 +25,7 @@ function createSocksProxyAgent(input, context) {
 
     try {
         const { SocksProxyAgent } = require("socks-proxy-agent");
-        agent = new SocksProxyAgent(proxyConfig.url, proxyConfig);
+        agent = new SocksProxyAgent(proxyConfig.url || new URL(input.address), proxyConfig);
     } catch (e) {
       throw "failed to configure socks proxy agent" + e.message;
     }
