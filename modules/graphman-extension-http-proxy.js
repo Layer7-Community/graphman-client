@@ -27,7 +27,7 @@ function createSocksProxyAgent(input, context) {
         const { SocksProxyAgent } = require("socks-proxy-agent");
         agent = new SocksProxyAgent(proxyOptions, proxyOptions);
     } catch (e) {
-        utils.newError(e.message);
+        utils.warn("socsk proxy-agent extension did not return a valid agent, proxy will not be used");
     }
     return agent
 
@@ -67,7 +67,7 @@ function createHttpProxyAgent(input, context) {
             utils.warn(`${isHttps ? 'https' : 'http'}-proxy-agent extension did not return a valid agent, proxy will not be used`);
         }
     } catch (e) {
-        utils.newError(e.message);
+        utils.warn(e.message);
     }
 
     return agent;
