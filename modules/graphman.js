@@ -14,8 +14,7 @@ const SUPPORTED_OPERATIONS = [
     "config"
 ];
 
-const SUPPORTED_EXTENSIONS = ["pre-request", "post-export", "pre-import", "post-revise", "post-renew", "multiline-text-diff", "policy-code-validator"];
-
+const SUPPORTED_EXTENSIONS = ["pre-request", "post-export", "pre-import", "post-revise", "post-renew", "multiline-text-diff", "policy-code-validator", "https-proxy"];
 const SCHEMA_FEATURE_LIST = {
     "v11.2.1": ["mappings", "mappings-source", "policy-as-code"],
     "v11.2.0": ["mappings", "mappings-source", "policy-as-code"],
@@ -62,7 +61,9 @@ module.exports = {
         utils.logAt(config.options.log);
 
         config.credentials = makeCredentials(config.credentials || {});
+        config.proxies = makeProxies(config.proxies || {});
         config.gateways = makeGateways(config.gateways || {});
+
 
         // override configured gateway details using params if specified
         if (params.gateways) Object.keys(params.gateways).forEach(key => {
@@ -86,6 +87,7 @@ module.exports = {
     defaultConfiguration: function () {
         return {
             credentials: makeCredentials({}),
+            proxies: makeProxies({}),
             gateways: makeGateways({}),
             options: makeOptions({})
         }
@@ -99,6 +101,20 @@ module.exports = {
         const obj = name ? Object.assign({name: name}, this.configuration().gateways[name]) : null;
         if (obj && obj.credential) {
             obj["credentialRef"] = this.configuration().credentials[obj.credential];
+        }
+
+        return obj;
+    },
+
+    proxyConfiguration: function (name) {
+        const config = this.configuration();
+        const obj = name ? Object.assign({name: name}, config.proxies[name]) : null;
+        if (!obj) {
+            return null;
+        }
+
+        if (obj.credential) {
+            obj["credentialRef"] = config.credentials[obj.credential];
         }
 
         return obj;
@@ -222,6 +238,10 @@ module.exports = {
             attachCredential(req, gateway, "<local>");
         }
 
+        if (gateway.proxy) {
+            req.proxy = this.proxyConfiguration(gateway.proxy);
+        }
+
         const globalOptions = this.loadedConfig && this.loadedConfig.options ? this.loadedConfig.options : {};
         if (globalOptions.caFilename) {
             // Trusted CA certificate(s) for server verification (PEM; file may contain multiple certs).
@@ -239,8 +259,16 @@ module.exports = {
      * @param callback
      */
     invoke: function (options, opContext, callback) {
+
+        if (options.proxy) {
+            options.agent = utils.extension("http-proxy").apply(options.proxy, opContext);
+            options.proxy = null;
+        }
+
         options = utils.extension("pre-request").apply(options, opContext);
-        const req = ((!options.protocol||options.protocol === 'https'||options.protocol === 'https:') ? https : http).request(options, function(response) {
+        const isHttps = !options.protocol || options.protocol === 'https' || options.protocol === 'https:';
+
+        const req = (isHttps ? https : http).request(options, function(response) {
             let respInfo = {initialized: false, chunks: []};
 
             response.on('data', function (chunk) {
@@ -356,7 +384,7 @@ function makeOptions(options) {
         "policyCodeFormat": "xml",
         "keyFormat": "p12",
         "caFilename": null,
-        "extensions": ["pre-request", "post-export", "pre-import", "post-revise", "post-renew"]
+        "extensions": ["pre-request", "post-export", "pre-import", "post-revise", "post-renew", "http-proxy"]
     }, options);
 }
 
@@ -372,6 +400,12 @@ function makeCredentials(credentials) {
     }
 
     return credentials;
+}
+
+function makeProxies(proxies) {
+    // No hard default; just ensure each proxy knows its name if useful
+    Object.entries(proxies).forEach(([key, item]) => item['name'] = key);
+    return proxies;
 }
 
 function makeGateways(gateways) {
