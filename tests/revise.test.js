@@ -19,9 +19,8 @@ function createTestBundle(filename, content) {
 describe("revise command", () => {
 
     test("should throw error when --input parameter is missing", () => {
-        expect(() => {
-            graphman("revise");
-        }).toThrow();
+        const output = graphman("revise");
+        expect(output.stdout).toContain("--input parameter is missing");
     });
 
     test("should revise bundle with default options", () => {

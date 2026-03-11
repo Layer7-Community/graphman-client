@@ -45,9 +45,8 @@ describe("implode command", () => {
     });
 
     test("should throw error when --input parameter is missing", () => {
-        expect(() => {
-            graphman("implode");
-        }).toThrow();
+        const output = graphman("implode");
+        expect(output.stdout).toContain("--input parameter is missing");
     });
 
     test("should implode directory with services into bundle", () => {

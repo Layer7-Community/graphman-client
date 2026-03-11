@@ -6,19 +6,62 @@
             "keyFilename": null,
             "certFilename": null,
             "keyPassphrase": null
+        },
+        "proxyCredentials": {
+            "username": "root",
+            "password": "7layer"
         }
     },
-
+    "proxies": {
+        "httpproxy": {
+            "agentType": "http",
+            "address": "http://localhost:3128",
+            "credential": "proxyCredentials",
+            "options" : {
+                "timeout": 30000,
+                "keepAlive": true,
+                "maxSockets": 10,
+                "rejectUnauthorized": false
+            }
+        },
+        "socksproxy": {
+            "agentType":"socks",
+            "address": "socks5://localhost:1080",
+            "credential": null,
+            "options" : {
+                "timeout": 30000,
+                "keepAlive": true,
+                "maxSockets": 10,
+                "rejectUnauthorized": false
+            }
+        }
+    },
     "gateways": {
         "default": {
             "address": "https://localhost:8443/graphman",
             "credential": "default",
-            "rejectUnauthorized": true,
+            "rejectUnauthorized": false,
             "passphrase": "7layer",
-            "allowMutations": false
+            "allowMutations": false,
+            "proxy": null
+        },
+        "source-gateway": {
+            "address": "https://localhost:8443/graphman",
+            "credential": "default",
+            "rejectUnauthorized": false,
+            "passphrase": "7layer",
+            "allowMutations": false,
+            "proxy": "httpproxy"
+        },
+        "target-gateway": {
+            "address": "https://localhost:8443/graphman",
+            "credential": "default",
+            "rejectUnauthorized": false,
+            "passphrase": "7layer",
+            "allowMutations": true,
+            "proxy": null
         }
     },
-
     "options": {
         "log": "info",
         "schema": null,
