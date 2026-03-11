@@ -29,7 +29,13 @@ module.exports = {
             args.push(outputFile);
         }
 
-        if (fs.existsSync(outputFile)) fs.unlinkSync(outputFile);
+        if (fs.existsSync(outputFile)) {
+            if (fs.statSync(outputFile).isDirectory()) {
+                fs.rmSync(outputFile, {recursive: true, force: true});
+            } else {
+                fs.unlinkSync(outputFile);
+            }
+        }
         const isWin = process.platform === "win32";
         const stdOutput = cp.execFileSync(tConfig.execFile, args, {stdio: ['inherit', 'pipe', 'pipe'],shell: isWin, encoding: 'utf8'});
         console.log(stdOutput);
@@ -57,7 +63,7 @@ module.exports = {
 function init() {
     const tConfig = {
         home: process.env.GRAPHMAN_HOME,
-        execFile: process.env.GRAPHMAN_ENTRYPOINT || "graphman.sh",
+        execFile: process.env.GRAPHMAN_ENTRYPOINT || "./graphman.sh",
         workspace: (process.env.GRAPHMAN_HOME + "/build" || "build") + "/tests",
         schemaVersion: process.env.GRAPHMAN_SCHEMA || "v11.2.1"
     };

@@ -8,17 +8,29 @@
             "keyPassphrase": null
         }
     },
-
+    "proxies": {
+        "default": {
+            "agentType": "http",
+            "address": "http://localhost:3128",
+            "credential": null,
+            "options" : {
+                "timeout": 30000,
+                "keepAlive": true,
+                "maxSockets": 10,
+                "rejectUnauthorized": false
+            }
+        }
+    },
     "gateways": {
         "default": {
             "address": "https://localhost:8443/graphman",
             "credential": "default",
             "rejectUnauthorized": true,
             "passphrase": "7layer",
-            "allowMutations": false
+            "allowMutations": false,
+            "proxy": null
         }
     },
-
     "options": {
         "log": "info",
         "schema": null,

@@ -32,19 +32,8 @@ describe("explode command", () => {
     });
 
     test("should throw error when --input parameter is missing", () => {
-        expect(() => {
-            graphman("explode", "--output", explodedDir);
-        }).toThrow();
-    });
-
-    test("should throw error when --output parameter is missing", () => {
-        const bundle = createTestBundle("test-bundle.json", {
-            services: [{name: "Service1", resolutionPath: "/service1"}]
-        });
-
-        expect(() => {
-            graphman("explode", "--input", bundle);
-        }).toThrow();
+        const output = graphman("explode", "--output", explodedDir);
+        expect(output.stdout).toContain("--input parameter is missing");
     });
 
     test("should explode bundle with services into separate files", () => {

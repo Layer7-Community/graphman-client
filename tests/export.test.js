@@ -25,7 +25,7 @@ test("try importing few cluster properties using default gateway profile", () =>
 });
 
 test("export cluster properties using default gateway profile", () => {
-    const output = graphman("export",
+    const output = graphman("export", "--gateway", "source-gateway",
         "--using", "clusterProperties:summary");
 
     expect(output["clusterProperties"]).toMatchObject(expect.arrayContaining([{

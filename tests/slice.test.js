@@ -19,9 +19,8 @@ function createTestBundle(filename, content) {
 describe("slice command", () => {
 
     test("should throw error when --input parameter is missing", () => {
-        expect(() => {
-            graphman("slice", "--sections", "services");
-        }).toThrow();
+        const output = graphman("slice", "--sections", "services");
+        expect(output.stdout).toContain("--input parameters are missing");
     });
 
     test("should slice bundle to include only specified section", () => {
