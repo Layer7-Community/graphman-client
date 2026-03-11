@@ -12,17 +12,6 @@
         "default": {
             "agentType": "http",
             "address": "http://localhost:3128",
-            "credential": "proxyCredentials",
-            "options" : {
-                "timeout": 30000,
-                "keepAlive": true,
-                "maxSockets": 10,
-                "rejectUnauthorized": false
-            }
-        },
-        "socksproxy": {
-            "agentType":"socks",
-            "address": "socks5://localhost:1080",
             "credential": null,
             "options" : {
                 "timeout": 30000,
