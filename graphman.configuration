@@ -6,14 +6,10 @@
             "keyFilename": null,
             "certFilename": null,
             "keyPassphrase": null
-        },
-        "proxyCredentials": {
-            "username": "root",
-            "password": "7layer"
         }
     },
     "proxies": {
-        "httpproxy": {
+        "default": {
             "agentType": "http",
             "address": "http://localhost:3128",
             "credential": "proxyCredentials",
@@ -43,22 +39,6 @@
             "rejectUnauthorized": false,
             "passphrase": "7layer",
             "allowMutations": false,
-            "proxy": null
-        },
-        "source-gateway": {
-            "address": "https://localhost:8443/graphman",
-            "credential": "default",
-            "rejectUnauthorized": false,
-            "passphrase": "7layer",
-            "allowMutations": false,
-            "proxy": "httpproxy"
-        },
-        "target-gateway": {
-            "address": "https://localhost:8443/graphman",
-            "credential": "default",
-            "rejectUnauthorized": false,
-            "passphrase": "7layer",
-            "allowMutations": true,
             "proxy": null
         }
     },

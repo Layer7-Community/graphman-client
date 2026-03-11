@@ -102,7 +102,7 @@ pipeline {
                         cfg.credentials.proxyCredentials.username=process.env.HTTP_PROXY_USER||"";
                         cfg.credentials.proxyCredentials.password=process.env.HTTP_PROXY_PASS||"";
 
-                        cfg.proxies.httpproxy={
+                        cfg.proxies.default={
                             agentType: process.env.HTTP_AGENT_TYPE || "http",
                             address: process.env.HTTP_PROXY_ADDRESS.trim(),
                             credential: "proxyCredentials",
@@ -153,7 +153,7 @@ pipeline {
                       cfg.gateways["source-gateway"].credential="source";
                       cfg.gateways["source-gateway"].rejectUnauthorized=process.env.SOURCE_GW_REJECT_UNAUTHORIZED==="true";
                       cfg.gateways["source-gateway"].allowMutations=process.env.SOURCE_GW_ALLOW_MUTATIONS==="true";
-                      cfg.gateways["source-gateway"].proxy="httpproxy";
+                      cfg.gateways["source-gateway"].proxy="default";
                       if(process.env.SOURCE_GW_PASSPHRASE)cfg.gateways["source-gateway"].passphrase=process.env.SOURCE_GW_PASSPHRASE;
                     }
 
