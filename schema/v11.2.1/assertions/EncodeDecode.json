@@ -8,7 +8,7 @@
       "type": "object",
       "properties": {
         "characterEncoding": {
-          "type": "string",
+          "type": ["null", "string"],
           "default": "UTF-8"
         },
         "lineBreakInterval": {

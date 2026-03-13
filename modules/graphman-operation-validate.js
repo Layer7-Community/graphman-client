@@ -51,9 +51,9 @@ function validateEntities(entities, typeInfo) {
     for (const entity of entities) {
         const statusRef = {errors: []};
         pcode.validate(entity, typeInfo, statusInfo => {
-            if (statusInfo.error) statusRef.errors.push(`    ${statusInfo.path} - ${statusInfo.name} - ${statusInfo.error}`);
+            if (statusInfo.error) statusRef.errors.push(`    ${statusInfo.path} - ${statusInfo.name} - ${statusInfo.error.schemaPath} - ${statusInfo.error}`);
             if (statusInfo.errors) for (const err of statusInfo.errors) {
-                statusRef.errors.push(`    ${statusInfo.path} - ${statusInfo.name} - ${err.message}`);
+                statusRef.errors.push(`    ${statusInfo.path} - ${statusInfo.name} - ${err.schemaPath} - ${err.message}`);
             }
         });
 

@@ -37,8 +37,9 @@
           "default": false
         },
         "operator": {
-          "type": "string",
+          "type": ["null", "string"],
           "enum": [
+            null,
             "LT",
             "LE",
             "EQ",
