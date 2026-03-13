@@ -85,7 +85,7 @@ function getOrCompileValidator(assertionName) {
 
 function validatePolicyCode(code, callback) {
     const children = getChildren(code, "All");
-    if (hasChildren(code, "All") && isAssertionEnabled(code)) {
+    if (children != null && isAssertionEnabled(code)) {
         validateAssertions("1", children, callback);
     } else {
         callback({path: "1", name: "All", tag: code, error: "root assertion is mis-configured"});
