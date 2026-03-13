@@ -59,7 +59,7 @@
           "default": false
         },
         "signatureAlgorithm": {
-          "type": "string",
+          "type": ["null", "string"],
           "default": "None"
         },
         "signatureJwksKeyId": {

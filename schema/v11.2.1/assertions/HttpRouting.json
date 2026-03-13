@@ -163,7 +163,7 @@
           "type": "string"
         },
         "proxyPassword": {
-          "type": "string",
+          "type": ["null", "string"],
           "default": ""
         },
         "proxyPort": {
@@ -171,7 +171,7 @@
           "default": "-1"
         },
         "proxyUsername": {
-          "type": "string",
+          "type": ["null", "string"],
           "default": ""
         },
         "realm": {
