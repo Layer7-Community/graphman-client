@@ -5560,7 +5560,7 @@
 										"body": {
 											"mode": "graphql",
 											"graphql": {
-												"query": "query keys {\n    keys {\n        goid\n        keystoreId\n        alias\n        checksum\n\n        keyType\n        subjectDn\n        p12\n        certChain\n    }\n}",
+												"query": "query keys {\n    keys {\n        goid\n        keystoreId\n        alias\n        checksum\n\n        keyType\n        subjectDn\n        p12\n        certChain\n        validationStatus\n        validationStatusDescription\n        }\n}",
 												"variables": "{}"
 											}
 										},
@@ -5582,7 +5582,7 @@
 										"body": {
 											"mode": "graphql",
 											"graphql": {
-												"query": "query keyByAlias($alias: String!) {\n    keyByAlias(alias : $alias) {\n        goid\n        keystoreId\n        alias\n        checksum\n\n        keyType\n        subjectDn\n        p12\n        certChain\n    }\n}",
+												"query": "query keyByAlias($alias: String!) {\n    keyByAlias(alias : $alias) {\n        goid\n        keystoreId\n        alias\n        checksum\n\n        keyType\n        subjectDn\n        p12\n        certChain\n        validationStatus\n        validationStatusDescription\n        }\n}",
 												"variables": "{\n     \"alias\": \"some-key\"\n}"
 											}
 										},
@@ -6210,7 +6210,7 @@
 										"body": {
 											"mode": "graphql",
 											"graphql": {
-												"query": "query trustedCerts {\n    trustedCerts {\n        goid \n        name \n        subjectDn \n        thumbprintSha1 \n        checksum \n        \n        verifyHostname \n        trustAnchor \n        trustedFor \n        revocationCheckPolicyType \n        revocationCheckPolicy { goid name }\n        notBefore \n        notAfter \n        certBase64\n    }\n}",
+												"query": "query trustedCerts {\n    trustedCerts {\n        goid \n        name \n        subjectDn \n        thumbprintSha1 \n        checksum \n        \n        verifyHostname \n        trustAnchor \n        trustedFor \n        revocationCheckPolicyType \n        revocationCheckPolicy { goid name }\n        notBefore \n        notAfter \n        certBase64\n            validationStatus\n        validationStatusDescription\n       }\n}",
 												"variables": "{}"
 											}
 										},
@@ -6232,7 +6232,7 @@
 										"body": {
 											"mode": "graphql",
 											"graphql": {
-												"query": "query trustedCertsByDn ($subjectDn: String!) {\n    trustedCertsByDn (subjectDn: $subjectDn) {\n        goid \n        name \n        subjectDn \n        thumbprintSha1 \n        checksum \n        \n        verifyHostname \n        trustAnchor \n        trustedFor \n        revocationCheckPolicyType \n        revocationCheckPolicy { goid name } \n        notBefore \n        notAfter \n        certBase64\n    }\n}",
+												"query": "query trustedCertsByDn ($subjectDn: String!) {\n    trustedCertsByDn (subjectDn: $subjectDn) {\n        goid \n        name \n        subjectDn \n        thumbprintSha1 \n        checksum \n        \n        verifyHostname \n        trustAnchor \n        trustedFor \n        revocationCheckPolicyType \n        revocationCheckPolicy { goid name } \n        notBefore \n        notAfter \n        certBase64\n    validationStatus\n        validationStatusDescription\n     }\n}",
 												"variables": "{\n  \"subjectDn\": \"cn=www.example.org,o=internet corporation for assigned names and numbers,l=los angeles,st=california,c=us\"\n}"
 											}
 										},
@@ -6254,7 +6254,7 @@
 										"body": {
 											"mode": "graphql",
 											"graphql": {
-												"query": "query trustedCertByThumbprint ($thumbprintSha1: String!) {\n    trustedCertByThumbprint (thumbprintSha1: $thumbprintSha1) {\n        goid \n        name \n        subjectDn \n        thumbprintSha1 \n        checksum \n        \n        verifyHostname \n        trustAnchor \n        trustedFor \n        revocationCheckPolicyType \n        revocationCheckPolicy { goid name } \n        notBefore \n        notAfter \n        certBase64\n    }\n}",
+												"query": "query trustedCertByThumbprint ($thumbprintSha1: String!) {\n    trustedCertByThumbprint (thumbprintSha1: $thumbprintSha1) {\n        goid \n        name \n        subjectDn \n        thumbprintSha1 \n        checksum \n        \n        verifyHostname \n        trustAnchor \n        trustedFor \n        revocationCheckPolicyType \n        revocationCheckPolicy { goid name } \n        notBefore \n        notAfter \n        certBase64\n        validationStatus\n        validationStatusDescription\n        }\n}",
 												"variables": "{\n  \"thumbprintSha1\": \"8qrXPTJoO3FtKn1htRxtV2SrOJk=\"\n}"
 											}
 										},
@@ -6271,12 +6271,154 @@
 							]
 						}
 					]
-				},
-				{
-					"name": "Web API Services",
-					"item": [
-						{
-							"name": "Mutations",
+			},
+			{
+				"name": "Runtime Validation Status",
+				"item": [
+					{
+						"name": "Queries",
+						"item": [
+							{
+								"name": "All Runtime Validation Statuses",
+								"request": {
+									"method": "POST",
+									"header": [],
+									"body": {
+										"mode": "graphql",
+										"graphql": {
+											"query": "query runtimeValidationStatuses {\n    runtimeValidationStatuses {\n        certificateGoid\n        certificateName\n        certificateType\n        subjectDn\n        issuerDn\n        serialNumber\n        notBefore\n        notAfter\n        thumbprintSha256\n        status\n        validationSource\n        statusDescription\n    }\n}",
+											"variables": "{}"
+										}
+									},
+									"url": {
+										"raw": "{{source_gw}}",
+										"host": [
+											"{{source_gw}}"
+										]
+									},
+									"description": "# All Runtime Validation Statuses\n\nReturns runtime validation statuses for all certificates known to the Gateway. Expiry is always computed on-demand. Revocation status for trusted certificates reflects the most recent CRL/OCSP check from the Gateway's existing caches."
+								},
+								"response": []
+							},
+							{
+								"name": "Runtime Validation Statuses by Status",
+								"request": {
+									"method": "POST",
+									"header": [],
+									"body": {
+										"mode": "graphql",
+										"graphql": {
+											"query": "query runtimeValidationStatusesByStatus($status: CertValidationStatus) {\n    runtimeValidationStatuses(status: $status) {\n        certificateGoid\n        certificateName\n        certificateType\n        status\n        statusDescription\n    }\n}",
+											"variables": "{\n    \"status\": \"EXPIRED\"\n}"
+										}
+									},
+									"url": {
+										"raw": "{{source_gw}}",
+										"host": [
+											"{{source_gw}}"
+										]
+									},
+									"description": "# Runtime Validation Statuses by Status\n\nFilter certificates by validation status. Possible values: OK, EXPIRING_SOON, EXPIRED, REVOKED, VALIDATION_ERROR, REVOCATION_NOT_CHECKED."
+								},
+								"response": []
+							},
+							{
+								"name": "Runtime Validation Statuses by Certificate Type",
+								"request": {
+									"method": "POST",
+									"header": [],
+									"body": {
+										"mode": "graphql",
+										"graphql": {
+											"query": "query runtimeValidationStatusesByCertType($type: RvsCertificateType) {\n    runtimeValidationStatuses(certificateType: $type) {\n        certificateGoid\n        certificateName\n        certificateType\n        status\n    }\n}",
+											"variables": "{\n    \"type\": \"TRUSTED_CERT\"\n}"
+										}
+									},
+									"url": {
+										"raw": "{{source_gw}}",
+										"host": [
+											"{{source_gw}}"
+										]
+									},
+									"description": "# Runtime Validation Statuses by Certificate Type\n\nFilter certificates by type. Possible values: PRIVATE_KEY_CERT, TRUSTED_CERT."
+								},
+								"response": []
+							},
+							{
+								"name": "Runtime Validation Status by Certificate GOID",
+								"request": {
+									"method": "POST",
+									"header": [],
+									"body": {
+										"mode": "graphql",
+										"graphql": {
+											"query": "query runtimeValidationStatusByCertGoid($goid: ID) {\n    runtimeValidationStatuses(certificateGoid: $goid) {\n        certificateGoid\n        certificateName\n        certificateType\n        status\n        validationSource\n        statusDescription\n    }\n}",
+											"variables": "{\n    \"goid\": \"<certificate-goid>\"\n}"
+										}
+									},
+									"url": {
+										"raw": "{{source_gw}}",
+										"host": [
+											"{{source_gw}}"
+										]
+									},
+									"description": "# Runtime Validation Status by Certificate GOID\n\nFilter to a specific certificate by its Gateway object ID."
+								},
+								"response": []
+							},
+							{
+								"name": "Runtime Validation Statuses Expiring Within N Days",
+								"request": {
+									"method": "POST",
+									"header": [],
+									"body": {
+										"mode": "graphql",
+										"graphql": {
+											"query": "query runtimeValidationStatusesExpiringWithinDays($days: Int) {\n    runtimeValidationStatuses(expiresWithinDays: $days) {\n        certificateGoid\n        certificateName\n        notAfter\n        status\n    }\n}",
+											"variables": "{\n    \"days\": 30\n}"
+										}
+									},
+									"url": {
+										"raw": "{{source_gw}}",
+										"host": [
+											"{{source_gw}}"
+										]
+									},
+									"description": "# Runtime Validation Statuses Expiring Within N Days\n\nReturn only certificates expiring within N days (includes already-expired)."
+								},
+								"response": []
+							},
+							{
+								"name": "Runtime Validation Statuses by Status and Certificate Type",
+								"request": {
+									"method": "POST",
+									"header": [],
+									"body": {
+										"mode": "graphql",
+										"graphql": {
+											"query": "query runtimeValidationStatusesByStatusAndType($status: CertValidationStatus, $type: RvsCertificateType) {\n    runtimeValidationStatuses(status: $status, certificateType: $type) {\n        certificateGoid\n        certificateName\n        certificateType\n        status\n    }\n}",
+											"variables": "{\n    \"status\": \"EXPIRING_SOON\",\n    \"type\": \"TRUSTED_CERT\"\n}"
+										}
+									},
+									"url": {
+										"raw": "{{source_gw}}",
+										"host": [
+											"{{source_gw}}"
+										]
+									},
+									"description": "# Runtime Validation Statuses by Status and Certificate Type\n\nCombined filter: retrieve certificates matching both a specific validation status and certificate type."
+								},
+								"response": []
+							}
+						]
+					}
+				]
+			},
+			{
+				"name": "Web API Services",
+				"item": [
+					{
+						"name": "Mutations",
 							"item": [
 								{
 									"name": "Set Web API Services",
