@@ -7617,8 +7617,13 @@ extend type Query {
     trustedCertByThumbprint(thumbprint: String, thumbprintSha1: String) : Certificate
     "Get filtered trusted certificates"
     trustedCertsByFilters(filters: [EntityFilterInput!]!) : [Certificate!]!
-    "Returns runtime validation statuses for all certificates known to the Gateway. Optionally filter by status."
-    runtimeValidationStatuses(status: CertValidationStatus): [CertificateValidationResult!]!
+    "Returns runtime validation statuses for all certificates known to the Gateway. Optionally filter by one or more criteria."
+    runtimeValidationStatuses(
+        status: CertValidationStatus
+        certificateType: RvsCertificateType
+        certificateGoid: ID
+        expiresWithinDays: Int
+    ): [CertificateValidationResult!]!
 }
 
 extend type Mutation {
