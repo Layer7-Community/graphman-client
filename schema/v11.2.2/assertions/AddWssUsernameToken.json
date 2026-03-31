@@ -1,0 +1,117 @@
+{
+  "configName": "AddWssUsernameToken",
+  "name": "Add WS-Security UsernameToken",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/AddWssUsernameToken",
+      "title": "Add WS-Security UsernameToken",
+      "type": "object",
+      "properties": {
+        "digest": {
+          "type": "boolean",
+          "default": false
+        },
+        "encrypt": {
+          "type": "boolean",
+          "default": false
+        },
+        "identityTarget": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/identityTarget"
+        },
+        "includeCreated": {
+          "type": "boolean",
+          "default": true
+        },
+        "includeNonce": {
+          "type": "boolean",
+          "default": true
+        },
+        "includePassword": {
+          "type": "boolean",
+          "default": true
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "recipientContext": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "RESPONSE"
+        },
+        "username": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/identityTarget",
+      "properties": {
+        "identityId": {
+          "type": "string"
+        },
+        "identityInfo": {
+          "type": "string"
+        },
+        "identityProviderOid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "targetIdentityType": {
+          "type": "string",
+          "enum": [
+            "USER",
+            "GROUP",
+            "PROVIDER",
+            "TAG"
+          ]
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/AddWssUsernameToken/Main",
+      "title": "Add WS-Security UsernameToken",
+      "properties": {
+        "AddWssUsernameToken": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/AddWssUsernameToken"
+        }
+      }
+    }
+  ]
+}

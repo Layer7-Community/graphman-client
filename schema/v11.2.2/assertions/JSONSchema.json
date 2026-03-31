@@ -1,0 +1,103 @@
+{
+  "configName": "JSONSchema",
+  "name": "Validate JSON Schema",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/JSONSchema",
+      "title": "Validate JSON Schema",
+      "type": "object",
+      "properties": {
+        "jsonSchemaVersion": {
+          "type": "string",
+          "enum": [
+            "DRAFT_V4"
+          ],
+          "default": "DRAFT_V4"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "resourceInfo": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/assertionResourceInfo"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/assertionResourceInfo",
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "document": {
+              "type": "string"
+            },
+            "originalUrl": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "allowMessagesWithoutUrl": {
+              "type": "boolean",
+              "default": false
+            },
+            "urlRegexes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/JSONSchema/Main",
+      "title": "Validate JSON Schema",
+      "properties": {
+        "JSONSchema": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/JSONSchema"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "configName": "WebSocketConnect",
+  "name": "Connect To Outbound WebSocket",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/WebSocketConnect",
+      "title": "Connect To Outbound WebSocket",
+      "type": "object",
+      "properties": {
+        "failOnUnsuccessfulConnectionUpgrade": {
+          "type": "boolean",
+          "default": true
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/WebSocketConnect/Main",
+      "title": "Connect To Outbound WebSocket",
+      "properties": {
+        "WebSocketConnect": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/WebSocketConnect"
+        }
+      }
+    }
+  ]
+}

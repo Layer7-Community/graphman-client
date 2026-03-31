@@ -1,0 +1,393 @@
+{
+  "configName": "SamlpRequestBuilder",
+  "name": "Build SAML Protocol Request",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SamlpRequestBuilder",
+      "title": "Build SAML Protocol Request",
+      "type": "object",
+      "properties": {
+        "addIssuer": {
+          "type": "boolean",
+          "default": true
+        },
+        "attributeStatement": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/samlAttributeStatement"
+        },
+        "audienceRestriction": {
+          "type": "string"
+        },
+        "authenticationStatement": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/samlAuthenticationStatement"
+        },
+        "authorizationStatement": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/SamlpRequestBuilder:samlpAuthorizationInfo"
+        },
+        "conditionsNotBeforeSecondsInPast": {
+          "type": "integer",
+          "default": -1
+        },
+        "conditionsNotOnOrAfterExpirySeconds": {
+          "type": "integer",
+          "default": -1
+        },
+        "consentAttribute": {
+          "type": "string"
+        },
+        "customIssuerFormat": {
+          "type": "string"
+        },
+        "customIssuerNameQualifier": {
+          "type": "string"
+        },
+        "customIssuerValue": {
+          "type": "string"
+        },
+        "customNameIdentifierFormat": {
+          "type": "string"
+        },
+        "decorationTypes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "REQUEST",
+              "RESPONSE",
+              "ADD_ASSERTION",
+              "SIGN_ASSERTION",
+              "SIGN_BODY"
+            ]
+          }
+        },
+        "destinationAttribute": {
+          "type": "string"
+        },
+        "dynamicPrivateKeyVariable": {
+          "type": "string",
+          "default": ""
+        },
+        "encryptNameIdentifier": {
+          "type": "boolean",
+          "default": false
+        },
+        "evidence": {
+          "type": "integer"
+        },
+        "evidenceVariable": {
+          "type": "string"
+        },
+        "keyAlias": {
+          "type": "string"
+        },
+        "nameIdentifierFormat": {
+          "type": "string"
+        },
+        "nameIdentifierType": {
+          "type": "string",
+          "enum": [
+            "NONE",
+            "SPECIFIED",
+            "FROM_CREDS",
+            "FROM_USER"
+          ],
+          "default": "FROM_CREDS"
+        },
+        "nameIdentifierValue": {
+          "type": "string"
+        },
+        "nameQualifier": {
+          "type": "string"
+        },
+        "noSubjectConfirmation": {
+          "type": "boolean",
+          "default": false
+        },
+        "nonDefaultKeystoreId": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string",
+          "default": "samlpRequest.message"
+        },
+        "requestId": {
+          "type": "integer"
+        },
+        "requestIdVariable": {
+          "type": "string"
+        },
+        "signAssertion": {
+          "type": "boolean",
+          "default": true
+        },
+        "signatureKeyInfoType": {
+          "type": "string",
+          "enum": [
+            "NONE",
+            "CERT",
+            "STR_THUMBPRINT",
+            "STR_SKI",
+            "STR_KEYID_LITERAL_X509",
+            "ISSUER_SERIAL",
+            "KEY_NAME"
+          ],
+          "default": "CERT"
+        },
+        "soapVersion": {
+          "type": "integer"
+        },
+        "subjectConfirmationDataAddress": {
+          "type": "string"
+        },
+        "subjectConfirmationDataInResponseTo": {
+          "type": "string"
+        },
+        "subjectConfirmationDataNotBeforeSecondsInPast": {
+          "type": "integer",
+          "default": -1
+        },
+        "subjectConfirmationDataNotOnOrAfterExpirySeconds": {
+          "type": "integer",
+          "default": -1
+        },
+        "subjectConfirmationDataRecipient": {
+          "type": "string"
+        },
+        "subjectConfirmationKeyInfoType": {
+          "type": "string",
+          "enum": [
+            "NONE",
+            "CERT",
+            "STR_THUMBPRINT",
+            "STR_SKI",
+            "STR_KEYID_LITERAL_X509",
+            "ISSUER_SERIAL",
+            "KEY_NAME"
+          ],
+          "default": "CERT"
+        },
+        "subjectConfirmationMethodUri": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "OTHER"
+        },
+        "usesDefaultKeyStore": {
+          "type": "boolean",
+          "default": true
+        },
+        "usesDynamicPrivateKey": {
+          "type": "boolean",
+          "default": false
+        },
+        "version": {
+          "type": "integer"
+        },
+        "xmlEncryptConfig": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlElementEncryptionConfig"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SamlpRequestBuilder:samlpAuthorizationInfo",
+      "properties": {
+        "actions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "resource": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/samlAttributeStatement",
+      "properties": {
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/samlAttributeStatement$Attribute"
+          }
+        },
+        "failIfAnyAttributeIsMissing": {
+          "type": "boolean",
+          "default": false
+        },
+        "failIfAttributeValueExcludesAttribute": {
+          "type": "boolean",
+          "default": false
+        },
+        "failIfNoAttributesAdded": {
+          "type": "boolean",
+          "default": true
+        },
+        "failIfUnknownAttributeInFilter": {
+          "type": "boolean",
+          "default": false
+        },
+        "filterExpression": {
+          "type": "string",
+          "default": ""
+        },
+        "variablePrefix": {
+          "type": "string",
+          "default": "attrStatement"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/samlAttributeStatement$Attribute",
+      "properties": {
+        "addBehavior": {
+          "type": "string",
+          "enum": [
+            "STRING_CONVERT",
+            "ADD_AS_XML"
+          ],
+          "default": "STRING_CONVERT"
+        },
+        "anyValue": {
+          "type": "boolean",
+          "default": false
+        },
+        "emptyBehavior": {
+          "type": "string",
+          "enum": [
+            "EMPTY_STRING",
+            "EXISTS_NO_VALUE",
+            "NULL_VALUE"
+          ],
+          "default": "EMPTY_STRING"
+        },
+        "friendlyName": {
+          "type": "string"
+        },
+        "missingWhenEmpty": {
+          "type": "boolean",
+          "default": false
+        },
+        "name": {
+          "type": "string"
+        },
+        "nameFormat": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "repeatIfMulti": {
+          "type": "boolean",
+          "default": false
+        },
+        "value": {
+          "type": "string"
+        },
+        "valueComparison": {
+          "type": "string",
+          "enum": [
+            "STRING_COMPARE",
+            "CANONICALIZE"
+          ],
+          "default": "STRING_COMPARE"
+        },
+        "variableNotFoundBehavior": {
+          "type": "string",
+          "enum": [
+            "REPLACE_EMPTY_STRING",
+            "REPLACE_EXPRESSION_EMPTY_STRING"
+          ],
+          "default": "REPLACE_EMPTY_STRING"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/samlAuthenticationStatement",
+      "properties": {
+        "authenticationMethods": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "customAuthenticationMethods": {
+          "type": "string",
+          "default": ""
+        },
+        "includeAuthenticationContextDeclaration": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlElementEncryptionConfig",
+      "properties": {
+        "encryptContentsOnly": {
+          "type": "boolean",
+          "default": false
+        },
+        "encryptedDataTypeAttribute": {
+          "type": "string",
+          "default": "http://www.w3.org/2001/04/xmlenc#Element"
+        },
+        "encryptedKeyRecipientAttribute": {
+          "type": "string"
+        },
+        "includeEncryptedDataTypeAttribute": {
+          "type": "boolean",
+          "default": false
+        },
+        "recipientCertContextVariableName": {
+          "type": "string"
+        },
+        "recipientCertificateBase64": {
+          "type": "string"
+        },
+        "useOaep": {
+          "type": "boolean",
+          "default": false
+        },
+        "xencAlgorithm": {
+          "type": "string",
+          "default": "http://www.w3.org/2001/04/xmlenc#aes128-cbc"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SamlpRequestBuilder/Main",
+      "title": "Build SAML Protocol Request",
+      "properties": {
+        "SamlpRequestBuilder": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/SamlpRequestBuilder"
+        }
+      }
+    }
+  ]
+}

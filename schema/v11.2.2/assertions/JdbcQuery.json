@@ -1,0 +1,87 @@
+{
+  "configName": "JdbcQuery",
+  "name": "Perform JDBC Query",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/JdbcQuery",
+      "title": "Perform JDBC Query",
+      "type": "object",
+      "properties": {
+        "assertionFailureEnabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "connectionName": {
+          "type": "string"
+        },
+        "convertVariablesToStrings": {
+          "type": "boolean",
+          "default": true
+        },
+        "generateXmlResult": {
+          "type": "boolean",
+          "default": false
+        },
+        "maxRecords": {
+          "type": "integer",
+          "default": 10
+        },
+        "namingMap": {
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          }
+        },
+        "queryName": {
+          "type": "string",
+          "default": ""
+        },
+        "queryTimeout": {
+          "type": "string"
+        },
+        "resolveAsObjectList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "saveResultsAsContextVariables": {
+          "type": "boolean",
+          "default": true
+        },
+        "schema": {
+          "type": "string"
+        },
+        "sqlQuery": {
+          "type": "string"
+        },
+        "variablePrefix": {
+          "type": "string",
+          "default": "jdbcQuery"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/JdbcQuery/Main",
+      "title": "Perform JDBC Query",
+      "properties": {
+        "JdbcQuery": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/JdbcQuery"
+        }
+      }
+    }
+  ]
+}

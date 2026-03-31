@@ -1,0 +1,40 @@
+{
+  "configName": "ResolveService",
+  "name": "Resolve Service",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ResolveService",
+      "title": "Resolve Service",
+      "type": "object",
+      "properties": {
+        "prefix": {
+          "type": "string",
+          "default": "resolvedService"
+        },
+        "uri": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ResolveService/Main",
+      "title": "Resolve Service",
+      "properties": {
+        "ResolveService": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/ResolveService"
+        }
+      }
+    }
+  ]
+}

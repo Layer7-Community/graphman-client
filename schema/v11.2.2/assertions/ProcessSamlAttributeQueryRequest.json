@@ -1,0 +1,134 @@
+{
+  "configName": "ProcessSamlAttributeQueryRequest",
+  "name": "Process SAML Attribute Query Request",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ProcessSamlAttributeQueryRequest",
+      "title": "Process SAML Attribute Query Request",
+      "type": "object",
+      "properties": {
+        "allowEncryptedId": {
+          "type": "boolean",
+          "default": false
+        },
+        "allowNameId": {
+          "type": "boolean",
+          "default": true
+        },
+        "attributeNameFormats": {
+          "type": "string",
+          "default": "urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified"
+        },
+        "customAttributeNameFormats": {
+          "type": "string"
+        },
+        "customSubjectFormats": {
+          "type": "string"
+        },
+        "decryptEncryptedId": {
+          "type": "boolean",
+          "default": false
+        },
+        "destination": {
+          "type": "string"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "requireAttributeNameFormat": {
+          "type": "boolean",
+          "default": false
+        },
+        "requireAttributes": {
+          "type": "boolean",
+          "default": false
+        },
+        "requireConsent": {
+          "type": "boolean",
+          "default": false
+        },
+        "requireDestination": {
+          "type": "boolean",
+          "default": false
+        },
+        "requireId": {
+          "type": "boolean",
+          "default": true
+        },
+        "requireIssueInstant": {
+          "type": "boolean",
+          "default": true
+        },
+        "requireIssuer": {
+          "type": "boolean",
+          "default": true
+        },
+        "requireSignature": {
+          "type": "boolean",
+          "default": false
+        },
+        "requireSubjectFormat": {
+          "type": "boolean",
+          "default": false
+        },
+        "requireVersion": {
+          "type": "boolean",
+          "default": true
+        },
+        "samlVersion": {
+          "type": "string",
+          "enum": [
+            "SAML2",
+            "SAML1_1"
+          ],
+          "default": "SAML2"
+        },
+        "soapEncapsulated": {
+          "type": "boolean",
+          "default": false
+        },
+        "subjectFormats": {
+          "type": "string",
+          "default": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "variablePrefix": {
+          "type": "string",
+          "default": "attrQuery"
+        },
+        "verifyAttributesAreUnique": {
+          "type": "boolean",
+          "default": true
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ProcessSamlAttributeQueryRequest/Main",
+      "title": "Process SAML Attribute Query Request",
+      "properties": {
+        "ProcessSamlAttributeQueryRequest": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/ProcessSamlAttributeQueryRequest"
+        }
+      }
+    }
+  ]
+}

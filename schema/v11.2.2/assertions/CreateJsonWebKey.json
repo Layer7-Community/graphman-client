@@ -1,0 +1,64 @@
+{
+  "configName": "CreateJsonWebKey",
+  "name": "Create Json Web Key",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CreateJsonWebKey",
+      "title": "Create Json Web Key",
+      "type": "object",
+      "properties": {
+        "keys": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/CreateJsonWebKey:key"
+          }
+        },
+        "targetVariable": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CreateJsonWebKey:key",
+      "properties": {
+        "keyId": {
+          "type": "string"
+        },
+        "publicKeyUse": {
+          "type": "string"
+        },
+        "sourceKeyAlias": {
+          "type": "string"
+        },
+        "sourceKeyGoid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CreateJsonWebKey/Main",
+      "title": "Create Json Web Key",
+      "properties": {
+        "CreateJsonWebKey": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/CreateJsonWebKey"
+        }
+      }
+    }
+  ]
+}

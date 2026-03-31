@@ -1,0 +1,53 @@
+{
+  "configName": "Audit",
+  "name": "Audit Messages in Policy",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Audit",
+      "title": "Audit Messages in Policy",
+      "type": "object",
+      "properties": {
+        "changeSaveRequest": {
+          "type": "boolean",
+          "default": true
+        },
+        "changeSaveResponse": {
+          "type": "boolean",
+          "default": true
+        },
+        "level": {
+          "type": "string",
+          "default": "WARNING"
+        },
+        "saveRequest": {
+          "type": "boolean",
+          "default": false
+        },
+        "saveResponse": {
+          "type": "boolean",
+          "default": false
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Audit/Main",
+      "title": "Audit Messages in Policy",
+      "properties": {
+        "Audit": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/Audit"
+        }
+      }
+    }
+  ]
+}

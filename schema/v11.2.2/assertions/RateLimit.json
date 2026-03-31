@@ -1,0 +1,72 @@
+{
+  "configName": "RateLimit",
+  "name": "Apply Rate Limit",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RateLimit",
+      "title": "Apply Rate Limit",
+      "type": "object",
+      "properties": {
+        "blackoutPeriodInSeconds": {
+          "type": "string"
+        },
+        "counterName": {
+          "type": "string",
+          "default": "RateLimit-${request.clientid}"
+        },
+        "hardLimit": {
+          "type": "boolean",
+          "default": false
+        },
+        "logOnly": {
+          "type": "boolean",
+          "default": false
+        },
+        "maxConcurrency": {
+          "type": "string",
+          "default": "0"
+        },
+        "maxRequestsPerSecond": {
+          "type": "string",
+          "default": "100"
+        },
+        "shapeRequests": {
+          "type": "boolean",
+          "default": false
+        },
+        "splitConcurrencyLimitAcrossNodes": {
+          "type": "boolean",
+          "default": true
+        },
+        "splitRateLimitAcrossNodes": {
+          "type": "boolean",
+          "default": true
+        },
+        "windowSizeInSeconds": {
+          "type": "string",
+          "default": "1"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RateLimit/Main",
+      "title": "Apply Rate Limit",
+      "properties": {
+        "RateLimit": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/RateLimit"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "configName": "SecureConversation",
+  "name": "Require WS-SecureConversation",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SecureConversation",
+      "title": "Require WS-SecureConversation",
+      "type": "object",
+      "properties": {
+        "recipientContext": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SecureConversation/Main",
+      "title": "Require WS-SecureConversation",
+      "properties": {
+        "SecureConversation": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/SecureConversation"
+        }
+      }
+    }
+  ]
+}

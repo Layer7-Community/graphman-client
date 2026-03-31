@@ -1,0 +1,76 @@
+{
+  "configName": "CreateSecurityContextToken",
+  "name": "Create Security Context Token",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CreateSecurityContextToken",
+      "title": "Create Security Context Token",
+      "type": "object",
+      "properties": {
+        "keySize": {
+          "type": "integer",
+          "default": 0
+        },
+        "lifetime": {
+          "type": "number",
+          "default": 7200000
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "timeUnit": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/timeUnit",
+          "default": "m"
+        },
+        "useSystemDefaultSessionDuration": {
+          "type": "boolean",
+          "default": true
+        },
+        "variablePrefix": {
+          "type": "string",
+          "default": "sctBuilder"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/timeUnit",
+      "enum": [
+        "ms",
+        "s",
+        "m",
+        "h",
+        "d"
+      ]
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CreateSecurityContextToken/Main",
+      "title": "Create Security Context Token",
+      "properties": {
+        "CreateSecurityContextToken": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/CreateSecurityContextToken"
+        }
+      }
+    }
+  ]
+}

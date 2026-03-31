@@ -1,0 +1,60 @@
+{
+  "configName": "CacheLookup",
+  "name": "Look Up in Cache",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CacheLookup",
+      "title": "Look Up in Cache",
+      "type": "object",
+      "properties": {
+        "cacheEntryKey": {
+          "type": "string",
+          "default": "${request.url}"
+        },
+        "cacheId": {
+          "type": "string",
+          "default": "defaultCache"
+        },
+        "contentTypeOverride": {
+          "type": "string"
+        },
+        "maxEntryAgeSeconds": {
+          "type": "string",
+          "default": "300"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "RESPONSE"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CacheLookup/Main",
+      "title": "Look Up in Cache",
+      "properties": {
+        "CacheLookup": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/CacheLookup"
+        }
+      }
+    }
+  ]
+}

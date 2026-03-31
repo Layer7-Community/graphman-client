@@ -1,0 +1,103 @@
+{
+  "configName": "NonSoapEncryptElement",
+  "name": "(Non-SOAP) Encrypt XML Element",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/NonSoapEncryptElement",
+      "title": "(Non-SOAP) Encrypt XML Element",
+      "type": "object",
+      "properties": {
+        "encryptContentsOnly": {
+          "type": "boolean",
+          "default": false
+        },
+        "encryptedDataTypeAttribute": {
+          "type": "string",
+          "default": "http://www.w3.org/2001/04/xmlenc#Element"
+        },
+        "encryptedKeyRecipientAttribute": {
+          "type": "string"
+        },
+        "includeEncryptedDataTypeAttribute": {
+          "type": "boolean",
+          "default": false
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "recipientCertContextVariableName": {
+          "type": "string"
+        },
+        "recipientCertificateBase64": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "RESPONSE"
+        },
+        "useOaep": {
+          "type": "boolean",
+          "default": false
+        },
+        "xencAlgorithm": {
+          "type": "string",
+          "default": "http://www.w3.org/2001/04/xmlenc#aes128-cbc"
+        },
+        "xpathExpression": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xpathExpression"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xpathExpression",
+      "properties": {
+        "expression": {
+          "type": "string"
+        },
+        "namespaces": {
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          }
+        },
+        "xpathVersion": {
+          "type": "string",
+          "enum": [
+            "UNSPECIFIED",
+            "XPATH_1_0",
+            "XPATH_2_0"
+          ],
+          "default": "UNSPECIFIED"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/NonSoapEncryptElement/Main",
+      "title": "(Non-SOAP) Encrypt XML Element",
+      "properties": {
+        "NonSoapEncryptElement": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/NonSoapEncryptElement"
+        }
+      }
+    }
+  ]
+}

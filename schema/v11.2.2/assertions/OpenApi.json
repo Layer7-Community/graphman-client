@@ -1,0 +1,108 @@
+{
+  "configName": "OpenApi",
+  "name": "Validate Against OpenAPI Document",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/OpenApi",
+      "title": "Validate Against OpenAPI Document",
+      "type": "object",
+      "properties": {
+        "methodName": {
+          "type": "string"
+        },
+        "nonHttpMessage": {
+          "type": "boolean",
+          "default": false
+        },
+        "openApiDoc": {
+          "type": "string"
+        },
+        "otherMessageType": {
+          "type": "string"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "prefix": {
+          "type": "string",
+          "default": "openapi"
+        },
+        "requireSecurityCredentials": {
+          "type": "boolean",
+          "default": true
+        },
+        "resourceUri": {
+          "type": "string"
+        },
+        "serviceBase": {
+          "type": "string",
+          "default": ""
+        },
+        "statusCode": {
+          "type": "string"
+        },
+        "strictValidation": {
+          "type": "boolean",
+          "default": false
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "useOpenApiDocAsUrl": {
+          "type": "boolean",
+          "default": false
+        },
+        "validateBody": {
+          "type": "boolean",
+          "default": false
+        },
+        "validateHeaders": {
+          "type": "boolean",
+          "default": false
+        },
+        "validateMethod": {
+          "type": "boolean",
+          "default": true
+        },
+        "validatePath": {
+          "type": "boolean",
+          "default": true
+        },
+        "validateQueryParameters": {
+          "type": "boolean",
+          "default": false
+        },
+        "validateResponseStatus": {
+          "type": "boolean",
+          "default": true
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/OpenApi/Main",
+      "title": "Validate Against OpenAPI Document",
+      "properties": {
+        "OpenApi": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/OpenApi"
+        }
+      }
+    }
+  ]
+}

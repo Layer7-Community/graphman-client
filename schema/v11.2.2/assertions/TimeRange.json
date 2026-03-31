@@ -1,0 +1,82 @@
+{
+  "configName": "TimeRange",
+  "name": "Limit Availability to Time/Days",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/TimeRange",
+      "title": "Limit Availability to Time/Days",
+      "type": "object",
+      "properties": {
+        "controlDay": {
+          "type": "boolean",
+          "default": false
+        },
+        "controlTime": {
+          "type": "boolean",
+          "default": false
+        },
+        "endDayOfWeek": {
+          "type": "integer",
+          "default": 0
+        },
+        "startDayOfWeek": {
+          "type": "integer",
+          "default": 0
+        },
+        "timeRange": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/timeOfDayRange"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/timeOfDayRange",
+      "properties": {
+        "from": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/timeOfDay"
+        },
+        "to": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/timeOfDay"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/timeOfDay",
+      "properties": {
+        "hour": {
+          "type": "integer",
+          "default": 0
+        },
+        "minute": {
+          "type": "integer",
+          "default": 0
+        },
+        "second": {
+          "type": "integer",
+          "default": 0
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/TimeRange/Main",
+      "title": "Limit Availability to Time/Days",
+      "properties": {
+        "TimeRange": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/TimeRange"
+        }
+      }
+    }
+  ]
+}

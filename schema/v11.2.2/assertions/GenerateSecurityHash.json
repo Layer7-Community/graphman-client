@@ -1,0 +1,58 @@
+{
+  "configName": "GenerateSecurityHash",
+  "name": "Generate Security Hash",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/GenerateSecurityHash",
+      "title": "Generate Security Hash",
+      "type": "object",
+      "properties": {
+        "algorithm": {
+          "type": "string",
+          "default": "HMAC-SHA1"
+        },
+        "base64Data": {
+          "type": "string"
+        },
+        "keyText": {
+          "type": "string"
+        },
+        "lineBreak": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/lineBreak"
+        },
+        "targetOutputVariable": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/lineBreak",
+      "enum": [
+        "LF",
+        "CR",
+        "CR-LF"
+      ]
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/GenerateSecurityHash/Main",
+      "title": "Generate Security Hash",
+      "properties": {
+        "GenerateSecurityHash": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/GenerateSecurityHash"
+        }
+      }
+    }
+  ]
+}

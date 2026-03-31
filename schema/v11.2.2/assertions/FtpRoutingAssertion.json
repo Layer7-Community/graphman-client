@@ -1,0 +1,186 @@
+{
+  "configName": "FtpRoutingAssertion",
+  "name": "Route via FTP(S)",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/FtpRoutingAssertion",
+      "title": "Route via FTP(S)",
+      "type": "object",
+      "properties": {
+        "arguments": {
+          "type": "string"
+        },
+        "clientCertKeyAlias": {
+          "type": "string"
+        },
+        "clientCertKeystoreId": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "commandFromVariable": {
+          "type": "boolean",
+          "default": false
+        },
+        "credentialsSource": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/FtpRoutingAssertion:credentialsSource"
+        },
+        "currentSecurityHeaderHandling": {
+          "type": "integer",
+          "default": 1
+        },
+        "directory": {
+          "type": "string"
+        },
+        "failureMode": {
+          "type": "integer",
+          "default": 0
+        },
+        "ftpCommand": {
+          "type": "string",
+          "enum": [
+            "APPE",
+            "STOR",
+            "STOU",
+            "RETR",
+            "LIST",
+            "MLSD",
+            "NLST",
+            "CDUP",
+            "CWD",
+            "DELE",
+            "MDTM",
+            "MLST",
+            "MKD",
+            "NOOP",
+            "PWD",
+            "RMD",
+            "SIZE"
+          ],
+          "default": "STOR"
+        },
+        "ftpCommandVariable": {
+          "type": "string"
+        },
+        "hostName": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "passwordGoid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "passwordUsesContextVariables": {
+          "type": "boolean",
+          "default": false
+        },
+        "port": {
+          "type": "string",
+          "default": "21"
+        },
+        "recipientContext": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext"
+        },
+        "requestTarget": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport"
+        },
+        "responseByteLimit": {
+          "type": "string"
+        },
+        "responseTarget": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport"
+        },
+        "security": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/FtpRoutingAssertion:security"
+        },
+        "timeout": {
+          "type": "integer",
+          "default": 10000
+        },
+        "useClientCert": {
+          "type": "boolean",
+          "default": false
+        },
+        "userName": {
+          "type": "string"
+        },
+        "verifyServerCert": {
+          "type": "boolean",
+          "default": false
+        },
+        "xmlSecurityActorToPromote": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/FtpRoutingAssertion:credentialsSource"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/FtpRoutingAssertion:security"
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport",
+      "properties": {
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "sourceUsedByGateway": {
+          "type": "boolean",
+          "default": true
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "targetModifiedByGateway": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/FtpRoutingAssertion/Main",
+      "title": "Route via FTP(S)",
+      "properties": {
+        "FtpRoutingAssertion": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/FtpRoutingAssertion"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "configName": "WebSocketEntityManager",
+  "name": "WebSocket Entity Manager",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/WebSocketEntityManager",
+      "title": "WebSocket Entity Manager",
+      "type": "object",
+      "properties": {
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/WebSocketEntityManager/Main",
+      "title": "WebSocket Entity Manager",
+      "properties": {
+        "WebSocketEntityManager": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/WebSocketEntityManager"
+        }
+      }
+    }
+  ]
+}

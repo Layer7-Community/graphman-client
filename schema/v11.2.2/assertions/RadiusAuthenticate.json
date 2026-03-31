@@ -1,0 +1,78 @@
+{
+  "configName": "RadiusAuthenticate",
+  "name": "Authenticate Against Radius Server",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RadiusAuthenticate",
+      "title": "Authenticate Against Radius Server",
+      "type": "object",
+      "properties": {
+        "acctPort": {
+          "type": "string"
+        },
+        "attributes": {
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          }
+        },
+        "authPort": {
+          "type": "string"
+        },
+        "authenticator": {
+          "type": "string"
+        },
+        "host": {
+          "type": "string"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "prefix": {
+          "type": "string"
+        },
+        "secretGoid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "timeout": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RadiusAuthenticate/Main",
+      "title": "Authenticate Against Radius Server",
+      "properties": {
+        "RadiusAuthenticate": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/RadiusAuthenticate"
+        }
+      }
+    }
+  ]
+}

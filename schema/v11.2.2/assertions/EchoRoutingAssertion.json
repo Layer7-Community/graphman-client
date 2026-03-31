@@ -1,0 +1,55 @@
+{
+  "configName": "EchoRoutingAssertion",
+  "name": "Copy Request Message to Response",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/EchoRoutingAssertion",
+      "title": "Copy Request Message to Response",
+      "type": "object",
+      "properties": {
+        "currentSecurityHeaderHandling": {
+          "type": "integer",
+          "default": 1
+        },
+        "recipientContext": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext"
+        },
+        "xmlSecurityActorToPromote": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/EchoRoutingAssertion/Main",
+      "title": "Copy Request Message to Response",
+      "properties": {
+        "EchoRoutingAssertion": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/EchoRoutingAssertion"
+        }
+      }
+    }
+  ]
+}

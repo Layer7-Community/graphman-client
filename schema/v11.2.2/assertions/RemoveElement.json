@@ -1,0 +1,60 @@
+{
+  "configName": "RemoveElement",
+  "name": "Add or Remove XML Element(s)",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RemoveElement",
+      "title": "Add or Remove XML Element(s)",
+      "type": "object",
+      "properties": {
+        "elementFromVariable": {
+          "type": "string"
+        },
+        "elementToInsertVariable": {
+          "type": "string"
+        },
+        "insertedElementLocation": {
+          "type": "string",
+          "enum": [
+            "FIRST_CHILD",
+            "LAST_CHILD",
+            "PREVIOUS_SIBLING",
+            "NEXT_SIBLING"
+          ]
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RemoveElement/Main",
+      "title": "Add or Remove XML Element(s)",
+      "properties": {
+        "RemoveElement": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/RemoveElement"
+        }
+      }
+    }
+  ]
+}

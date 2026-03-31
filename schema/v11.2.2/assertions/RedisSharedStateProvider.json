@@ -1,0 +1,33 @@
+{
+  "configName": "RedisSharedStateProvider",
+  "name": "Redis Shared State Provider",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RedisSharedStateProvider",
+      "title": "Redis Shared State Provider",
+      "type": "object",
+      "properties": {
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RedisSharedStateProvider/Main",
+      "title": "Redis Shared State Provider",
+      "properties": {
+        "RedisSharedStateProvider": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/RedisSharedStateProvider"
+        }
+      }
+    }
+  ]
+}

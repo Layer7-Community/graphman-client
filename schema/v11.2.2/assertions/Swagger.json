@@ -1,0 +1,60 @@
+{
+  "configName": "Swagger",
+  "name": "Validate Against Swagger Document",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Swagger",
+      "title": "Validate Against Swagger Document",
+      "type": "object",
+      "properties": {
+        "prefix": {
+          "type": "string",
+          "default": "sw"
+        },
+        "requireSecurityCredentials": {
+          "type": "boolean",
+          "default": true
+        },
+        "serviceBase": {
+          "type": "string",
+          "default": ""
+        },
+        "swaggerDoc": {
+          "type": "string"
+        },
+        "validateMethod": {
+          "type": "boolean",
+          "default": true
+        },
+        "validatePath": {
+          "type": "boolean",
+          "default": true
+        },
+        "validateScheme": {
+          "type": "boolean",
+          "default": true
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Swagger/Main",
+      "title": "Validate Against Swagger Document",
+      "properties": {
+        "Swagger": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/Swagger"
+        }
+      }
+    }
+  ]
+}

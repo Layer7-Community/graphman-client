@@ -1,0 +1,54 @@
+{
+  "configName": "DistributedRateLimit",
+  "name": "Apply Distributed Rate Limit",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/DistributedRateLimit",
+      "title": "Apply Distributed Rate Limit",
+      "type": "object",
+      "properties": {
+        "burstLimit": {
+          "type": "string"
+        },
+        "counterId": {
+          "type": "string"
+        },
+        "counterPrefix": {
+          "type": "string"
+        },
+        "limitEachCounterType": {
+          "type": "string"
+        },
+        "limitExceededOption": {
+          "type": "string"
+        },
+        "limitRequests": {
+          "type": "string"
+        },
+        "rateLimitUnit": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/DistributedRateLimit/Main",
+      "title": "Apply Distributed Rate Limit",
+      "properties": {
+        "DistributedRateLimit": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/DistributedRateLimit"
+        }
+      }
+    }
+  ]
+}

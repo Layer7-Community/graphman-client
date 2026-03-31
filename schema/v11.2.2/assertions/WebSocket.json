@@ -1,0 +1,33 @@
+{
+  "configName": "WebSocket",
+  "name": "WebSocket",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/WebSocket",
+      "title": "WebSocket",
+      "type": "object",
+      "properties": {
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/WebSocket/Main",
+      "title": "WebSocket",
+      "properties": {
+        "WebSocket": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/WebSocket"
+        }
+      }
+    }
+  ]
+}

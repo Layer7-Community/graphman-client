@@ -1,0 +1,26 @@
+{
+    "$comment": "Base policy-code schema. Per-assertion schemas are in the assertions/ directory.",
+    "definitions": {
+        "assertion": {
+            "$id": "schema:assertion",
+            "type": "object",
+            "properties": {
+                ".properties": {
+                    "type": "object",
+                    "properties": {
+                        ".enabled": {
+                            "type": "boolean"
+                        },
+                        ".left.comment": {
+                            "type": "string"
+                        },
+                        ".right.comment": {
+                            "type": "string"
+                        }
+                    },
+                    "unevaluatedProperties": false
+                }
+            }
+        }
+    }
+}
