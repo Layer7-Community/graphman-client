@@ -1,0 +1,53 @@
+{
+  "configName": "RequestSizeLimit",
+  "name": "Limit Message Size",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RequestSizeLimit",
+      "title": "Limit Message Size",
+      "type": "object",
+      "properties": {
+        "entireMessage": {
+          "type": "boolean",
+          "default": true
+        },
+        "limit": {
+          "type": "string",
+          "default": "128"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RequestSizeLimit/Main",
+      "title": "Limit Message Size",
+      "properties": {
+        "RequestSizeLimit": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/RequestSizeLimit"
+        }
+      }
+    }
+  ]
+}

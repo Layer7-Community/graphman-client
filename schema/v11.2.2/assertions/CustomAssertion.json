@@ -1,0 +1,40 @@
+{
+  "configName": "CustomAssertion",
+  "name": "Custom Assertion",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CustomAssertion",
+      "title": "Custom Assertion",
+      "type": "object",
+      "properties": {
+        "value": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/customAssertion"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/customAssertion"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CustomAssertion/Main",
+      "title": "Custom Assertion",
+      "properties": {
+        "CustomAssertion": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/CustomAssertion"
+        }
+      }
+    }
+  ]
+}

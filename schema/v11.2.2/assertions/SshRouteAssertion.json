@@ -1,0 +1,206 @@
+{
+  "configName": "SshRouteAssertion",
+  "name": "Route via SSH2",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SshRouteAssertion",
+      "title": "Route via SSH2",
+      "type": "object",
+      "properties": {
+        "authMaxRetryCount": {
+          "type": "string",
+          "default": ""
+        },
+        "commandType": {
+          "type": "string",
+          "enum": [
+            "GET",
+            "PUT",
+            "LIST",
+            "DELETE",
+            "MKDIR",
+            "RMDIR",
+            "STAT",
+            "MOVE"
+          ],
+          "default": "PUT"
+        },
+        "commandTypeVariableName": {
+          "type": "string"
+        },
+        "connectTimeout": {
+          "type": "integer",
+          "default": 10
+        },
+        "credentialsSourceSpecified": {
+          "type": "boolean",
+          "default": false
+        },
+        "currentSecurityHeaderHandling": {
+          "type": "integer",
+          "default": 0
+        },
+        "directory": {
+          "type": "string"
+        },
+        "downloadContentType": {
+          "type": "string"
+        },
+        "failIfFileExists": {
+          "type": "boolean",
+          "default": false
+        },
+        "fileLength": {
+          "type": "string",
+          "default": "-1"
+        },
+        "fileName": {
+          "type": "string"
+        },
+        "fileOffset": {
+          "type": "string",
+          "default": "0"
+        },
+        "host": {
+          "type": "string"
+        },
+        "kexAlgorithms": {
+          "type": "string",
+          "default": ""
+        },
+        "newFileName": {
+          "type": "string"
+        },
+        "passwordGoid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "port": {
+          "type": "string",
+          "default": "22"
+        },
+        "preserveFileMetadata": {
+          "type": "boolean",
+          "default": false
+        },
+        "privateKeyGoid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "readTimeout": {
+          "type": "integer",
+          "default": 60
+        },
+        "recipientContext": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext"
+        },
+        "requestTarget": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport"
+        },
+        "responseByteLimit": {
+          "type": "string"
+        },
+        "responseTarget": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport"
+        },
+        "retrieveCommandTypeFromVariable": {
+          "type": "boolean",
+          "default": false
+        },
+        "saveFileSizeContextVariable": {
+          "type": "string",
+          "default": ""
+        },
+        "scpProtocol": {
+          "type": "boolean",
+          "default": false
+        },
+        "setFileSizeToContextVariable": {
+          "type": "boolean",
+          "default": false
+        },
+        "sshPublicKey": {
+          "type": "string"
+        },
+        "useDefaultKexAlgorithms": {
+          "type": "boolean",
+          "default": true
+        },
+        "usePrivateKey": {
+          "type": "boolean",
+          "default": false
+        },
+        "usePublicKey": {
+          "type": "boolean",
+          "default": false
+        },
+        "username": {
+          "type": "string"
+        },
+        "xmlSecurityActorToPromote": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/messageTargetableSupport",
+      "properties": {
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "sourceUsedByGateway": {
+          "type": "boolean",
+          "default": true
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "targetModifiedByGateway": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SshRouteAssertion/Main",
+      "title": "Route via SSH2",
+      "properties": {
+        "SshRouteAssertion": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/SshRouteAssertion"
+        }
+      }
+    }
+  ]
+}

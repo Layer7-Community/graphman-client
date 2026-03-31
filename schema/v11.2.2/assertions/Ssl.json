@@ -1,0 +1,49 @@
+{
+  "configName": "Ssl",
+  "name": "Require SSL or TLS Transport",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Ssl",
+      "title": "Require SSL or TLS Transport",
+      "type": "object",
+      "properties": {
+        "checkCertValidity": {
+          "type": "boolean",
+          "default": true
+        },
+        "option": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/Ssl:optionValue",
+          "default": "Required"
+        },
+        "requireClientAuthentication": {
+          "type": "boolean",
+          "default": false
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Ssl:optionValue"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Ssl/Main",
+      "title": "Require SSL or TLS Transport",
+      "properties": {
+        "Ssl": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/Ssl"
+        }
+      }
+    }
+  ]
+}

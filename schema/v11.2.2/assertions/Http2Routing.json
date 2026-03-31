@@ -1,0 +1,145 @@
+{
+  "configName": "Http2Routing",
+  "name": "Route via HTTP/2",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Http2Routing",
+      "title": "Route via HTTP/2",
+      "type": "object",
+      "properties": {
+        "authenticationType": {
+          "type": "string",
+          "default": "Passthrough"
+        },
+        "currentSecurityHeaderHandling": {
+          "type": "integer",
+          "default": 0
+        },
+        "dynamicPrivateKeyVariable": {
+          "type": "string",
+          "default": ""
+        },
+        "failOnErrorStatus": {
+          "type": "boolean",
+          "default": true
+        },
+        "forceIncludeRequestBody": {
+          "type": "boolean",
+          "default": false
+        },
+        "gzipEncodeDownstream": {
+          "type": "boolean",
+          "default": false
+        },
+        "http2ClientConfigGoid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid",
+          "default": "0000000000000000ffffffffffffffff"
+        },
+        "http2ClientConfigName": {
+          "type": "string"
+        },
+        "httpMethod": {
+          "type": "string",
+          "enum": [
+            "GET",
+            "POST",
+            "PUT",
+            "PATCH",
+            "DELETE",
+            "HEAD",
+            "OPTIONS",
+            "OTHER"
+          ]
+        },
+        "httpMethodAsString": {
+          "type": "string"
+        },
+        "keyAlias": {
+          "type": "string"
+        },
+        "login": {
+          "type": "string"
+        },
+        "nonDefaultKeystoreId": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "overrideContentType": {
+          "type": "boolean",
+          "default": false
+        },
+        "password": {
+          "type": "string"
+        },
+        "protectedServiceUrl": {
+          "type": "string"
+        },
+        "recipientContext": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext"
+        },
+        "requestMsgSrc": {
+          "type": "string"
+        },
+        "responseMsgDest": {
+          "type": "string"
+        },
+        "responseSize": {
+          "type": "string"
+        },
+        "userAgent": {
+          "type": "string"
+        },
+        "usesDefaultKeyStore": {
+          "type": "boolean",
+          "default": true
+        },
+        "usesDynamicPrivateKey": {
+          "type": "boolean",
+          "default": false
+        },
+        "usesNoKey": {
+          "type": "boolean",
+          "default": false
+        },
+        "xmlSecurityActorToPromote": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xmlSecurityRecipientContext",
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "base64edX509Certificate": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Http2Routing/Main",
+      "title": "Route via HTTP/2",
+      "properties": {
+        "Http2Routing": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/Http2Routing"
+        }
+      }
+    }
+  ]
+}

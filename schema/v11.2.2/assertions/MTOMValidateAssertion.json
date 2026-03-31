@@ -1,0 +1,98 @@
+{
+  "configName": "MTOMValidateAssertion",
+  "name": "Validate MTOM Message",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/MTOMValidateAssertion",
+      "title": "Validate MTOM Message",
+      "type": "object",
+      "properties": {
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "requireEncoded": {
+          "type": "boolean",
+          "default": true
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "validationRules": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/MTOMValidateAssertion:MTOMValidationRule"
+          }
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/MTOMValidateAssertion:MTOMValidationRule",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "default": 0
+        },
+        "size": {
+          "type": "number",
+          "default": 0
+        },
+        "xpathExpression": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xpathExpression"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xpathExpression",
+      "properties": {
+        "expression": {
+          "type": "string"
+        },
+        "namespaces": {
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          }
+        },
+        "xpathVersion": {
+          "type": "string",
+          "enum": [
+            "UNSPECIFIED",
+            "XPATH_1_0",
+            "XPATH_2_0"
+          ],
+          "default": "UNSPECIFIED"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/MTOMValidateAssertion/Main",
+      "title": "Validate MTOM Message",
+      "properties": {
+        "MTOMValidateAssertion": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/MTOMValidateAssertion"
+        }
+      }
+    }
+  ]
+}

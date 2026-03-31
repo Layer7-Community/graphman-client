@@ -1,0 +1,67 @@
+{
+  "configName": "CsrSigner",
+  "name": "Sign Certificate",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CsrSigner",
+      "title": "Sign Certificate",
+      "type": "object",
+      "properties": {
+        "certDNVariableName": {
+          "type": "string"
+        },
+        "csrVariableName": {
+          "type": "string"
+        },
+        "dynamicPrivateKeyVariable": {
+          "type": "string",
+          "default": ""
+        },
+        "expiryAgeDays": {
+          "type": "string"
+        },
+        "keyAlias": {
+          "type": "string"
+        },
+        "nonDefaultKeystoreId": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "outputPrefix": {
+          "type": "string"
+        },
+        "usesDefaultKeyStore": {
+          "type": "boolean",
+          "default": true
+        },
+        "usesDynamicPrivateKey": {
+          "type": "boolean",
+          "default": false
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CsrSigner/Main",
+      "title": "Sign Certificate",
+      "properties": {
+        "CsrSigner": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/CsrSigner"
+        }
+      }
+    }
+  ]
+}

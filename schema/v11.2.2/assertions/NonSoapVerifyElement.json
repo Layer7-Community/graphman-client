@@ -1,0 +1,109 @@
+{
+  "configName": "NonSoapVerifyElement",
+  "name": "(Non-SOAP) Verify XML Element",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/NonSoapVerifyElement",
+      "title": "(Non-SOAP) Verify XML Element",
+      "type": "object",
+      "properties": {
+        "customIdAttrs": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/fullQName"
+          }
+        },
+        "ignoreKeyInfo": {
+          "type": "boolean",
+          "default": false
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "variablePrefix": {
+          "type": "string",
+          "default": ""
+        },
+        "verifyCertificateGoid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "verifyCertificateName": {
+          "type": "string"
+        },
+        "verifyCertificateVariableName": {
+          "type": "string"
+        },
+        "xAdESEnabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "xpathExpression": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xpathExpression"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/fullQName"
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xpathExpression",
+      "properties": {
+        "expression": {
+          "type": "string"
+        },
+        "namespaces": {
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          }
+        },
+        "xpathVersion": {
+          "type": "string",
+          "enum": [
+            "UNSPECIFIED",
+            "XPATH_1_0",
+            "XPATH_2_0"
+          ],
+          "default": "UNSPECIFIED"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/NonSoapVerifyElement/Main",
+      "title": "(Non-SOAP) Verify XML Element",
+      "properties": {
+        "NonSoapVerifyElement": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/NonSoapVerifyElement"
+        }
+      }
+    }
+  ]
+}

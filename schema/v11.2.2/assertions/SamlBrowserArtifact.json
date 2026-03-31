@@ -1,0 +1,94 @@
+{
+  "configName": "SamlBrowserArtifact",
+  "name": "Retrieve SAML Browser Artifact",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SamlBrowserArtifact",
+      "title": "Retrieve SAML Browser Artifact",
+      "type": "object",
+      "properties": {
+        "artifactQueryParameter": {
+          "type": "string",
+          "default": "SAMLart"
+        },
+        "authenticationProperties": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/authenticationProperties"
+        },
+        "ssoEndpointUrl": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/authenticationProperties",
+      "properties": {
+        "additionalFields": {
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          }
+        },
+        "copyFormFields": {
+          "type": "boolean",
+          "default": false
+        },
+        "enableCookies": {
+          "type": "boolean",
+          "default": false
+        },
+        "formTarget": {
+          "type": "string"
+        },
+        "method": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/authenticationProperties$Method",
+          "default": "basic"
+        },
+        "passwordFieldname": {
+          "type": "string"
+        },
+        "redirectAfterSubmit": {
+          "type": "boolean",
+          "default": false
+        },
+        "requestForm": {
+          "type": "boolean",
+          "default": false
+        },
+        "usernameFieldname": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/authenticationProperties$Method",
+      "enum": [
+        "basic",
+        "form"
+      ]
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SamlBrowserArtifact/Main",
+      "title": "Retrieve SAML Browser Artifact",
+      "properties": {
+        "SamlBrowserArtifact": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/SamlBrowserArtifact"
+        }
+      }
+    }
+  ]
+}

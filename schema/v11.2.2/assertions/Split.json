@@ -1,0 +1,51 @@
+{
+  "configName": "Split",
+  "name": "Split Variable",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Split",
+      "title": "Split Variable",
+      "type": "object",
+      "properties": {
+        "ignoreEmptyValues": {
+          "type": "boolean",
+          "default": false
+        },
+        "inputVariable": {
+          "type": "string"
+        },
+        "outputVariable": {
+          "type": "string"
+        },
+        "splitPattern": {
+          "type": "string",
+          "default": ","
+        },
+        "splitPatternRegEx": {
+          "type": "boolean",
+          "default": true
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Split/Main",
+      "title": "Split Variable",
+      "properties": {
+        "Split": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/Split"
+        }
+      }
+    }
+  ]
+}

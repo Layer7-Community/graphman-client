@@ -1,0 +1,69 @@
+{
+  "configName": "CacheStorage",
+  "name": "Store to Cache",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CacheStorage",
+      "title": "Store to Cache",
+      "type": "object",
+      "properties": {
+        "cacheEntryKey": {
+          "type": "string",
+          "default": "${request.url}"
+        },
+        "cacheId": {
+          "type": "string",
+          "default": "defaultCache"
+        },
+        "maxEntries": {
+          "type": "string",
+          "default": "10"
+        },
+        "maxEntryAgeSeconds": {
+          "type": "string",
+          "default": "300"
+        },
+        "maxEntrySizeBytes": {
+          "type": "string",
+          "default": "10000"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "storeSoapFaults": {
+          "type": "boolean",
+          "default": false
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "RESPONSE"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/CacheStorage/Main",
+      "title": "Store to Cache",
+      "properties": {
+        "CacheStorage": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/CacheStorage"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "configName": "RESTGatewayManagement",
+  "name": "REST Manage Gateway",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RESTGatewayManagement",
+      "title": "REST Manage Gateway",
+      "type": "object",
+      "properties": {
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "variablePrefix": {
+          "type": "string",
+          "default": "restGatewayMan"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RESTGatewayManagement/Main",
+      "title": "REST Manage Gateway",
+      "properties": {
+        "RESTGatewayManagement": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/RESTGatewayManagement"
+        }
+      }
+    }
+  ]
+}

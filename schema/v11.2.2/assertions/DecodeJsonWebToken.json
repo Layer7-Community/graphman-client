@@ -1,0 +1,82 @@
+{
+  "configName": "DecodeJsonWebToken",
+  "name": "Decode Json Web Token",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/DecodeJsonWebToken",
+      "title": "Decode Json Web Token",
+      "type": "object",
+      "properties": {
+        "base64Encoded": {
+          "type": "boolean",
+          "default": false
+        },
+        "detachedJwsContent": {
+          "type": "string"
+        },
+        "dynamicPrivateKeyVariable": {
+          "type": "string"
+        },
+        "failUnverifiedSignature": {
+          "type": "boolean",
+          "default": false
+        },
+        "keyAlias": {
+          "type": "string"
+        },
+        "keyGoid": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+        },
+        "keyId": {
+          "type": "string"
+        },
+        "keyType": {
+          "type": "string"
+        },
+        "privateKeyFromList": {
+          "type": "boolean",
+          "default": false
+        },
+        "privateKeySource": {
+          "type": "string"
+        },
+        "signatureSecret": {
+          "type": "string"
+        },
+        "sourcePayload": {
+          "type": "string"
+        },
+        "targetVariablePrefix": {
+          "type": "string"
+        },
+        "validationType": {
+          "type": "string"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/goid"
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/DecodeJsonWebToken/Main",
+      "title": "Decode Json Web Token",
+      "properties": {
+        "DecodeJsonWebToken": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/DecodeJsonWebToken"
+        }
+      }
+    }
+  ]
+}

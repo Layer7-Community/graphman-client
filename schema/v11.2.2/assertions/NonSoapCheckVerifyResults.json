@@ -1,0 +1,98 @@
+{
+  "configName": "NonSoapCheckVerifyResults",
+  "name": "(Non-SOAP) Check Results from XML Verification",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/NonSoapCheckVerifyResults",
+      "title": "(Non-SOAP) Check Results from XML Verification",
+      "type": "object",
+      "properties": {
+        "allowMultipleSigners": {
+          "type": "boolean",
+          "default": false
+        },
+        "gatherCertificateCredentials": {
+          "type": "boolean",
+          "default": true
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "permittedDigestMethodUris": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "permittedSignatureMethodUris": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "variablePrefix": {
+          "type": "string",
+          "default": ""
+        },
+        "xpathExpression": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xpathExpression"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xpathExpression",
+      "properties": {
+        "expression": {
+          "type": "string"
+        },
+        "namespaces": {
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          }
+        },
+        "xpathVersion": {
+          "type": "string",
+          "enum": [
+            "UNSPECIFIED",
+            "XPATH_1_0",
+            "XPATH_2_0"
+          ],
+          "default": "UNSPECIFIED"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/NonSoapCheckVerifyResults/Main",
+      "title": "(Non-SOAP) Check Results from XML Verification",
+      "properties": {
+        "NonSoapCheckVerifyResults": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/NonSoapCheckVerifyResults"
+        }
+      }
+    }
+  ]
+}

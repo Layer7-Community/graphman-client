@@ -1,0 +1,33 @@
+{
+  "configName": "ApiPortalEncassIntegration",
+  "name": "Set as Portal Publishable Fragment",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ApiPortalEncassIntegration",
+      "title": "Set as Portal Publishable Fragment",
+      "type": "object",
+      "properties": {
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ApiPortalEncassIntegration/Main",
+      "title": "Set as Portal Publishable Fragment",
+      "properties": {
+        "ApiPortalEncassIntegration": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/ApiPortalEncassIntegration"
+        }
+      }
+    }
+  ]
+}

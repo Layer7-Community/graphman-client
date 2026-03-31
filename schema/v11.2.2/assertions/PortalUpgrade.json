@@ -1,0 +1,33 @@
+{
+  "configName": "PortalUpgrade",
+  "name": "Portal Upgrade",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/PortalUpgrade",
+      "title": "Portal Upgrade",
+      "type": "object",
+      "properties": {
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/PortalUpgrade/Main",
+      "title": "Portal Upgrade",
+      "properties": {
+        "PortalUpgrade": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/PortalUpgrade"
+        }
+      }
+    }
+  ]
+}

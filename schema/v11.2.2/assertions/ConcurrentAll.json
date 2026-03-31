@@ -1,0 +1,49 @@
+{
+  "configName": "ConcurrentAll",
+  "name": "Run All Assertions Concurrently",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ConcurrentAll",
+      "title": "Run All Assertions Concurrently",
+      "anyOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "_enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "_leftComment": {
+              "type": "string"
+            },
+            "_rightComment": {
+              "type": "string"
+            },
+            "_children": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ConcurrentAll/Main",
+      "title": "Run All Assertions Concurrently",
+      "properties": {
+        "ConcurrentAll": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/ConcurrentAll"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "configName": "SiteMinderAuthenticate",
+  "name": "Authenticate Against CA Single Sign-On",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SiteMinderAuthenticate",
+      "title": "Authenticate Against CA Single Sign-On",
+      "type": "object",
+      "properties": {
+        "cookieSourceVar": {
+          "type": "string"
+        },
+        "createSsoToken": {
+          "type": "boolean",
+          "default": true
+        },
+        "lastCredential": {
+          "type": "boolean",
+          "default": true
+        },
+        "namedCertificate": {
+          "type": "string"
+        },
+        "namedJsonWebToken": {
+          "type": "string"
+        },
+        "namedUser": {
+          "type": "string"
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "passwordPolicy": {
+          "type": "string"
+        },
+        "prefix": {
+          "type": "string"
+        },
+        "sendJWT": {
+          "type": "boolean",
+          "default": false
+        },
+        "sendUsernamePasswordCredential": {
+          "type": "boolean",
+          "default": true
+        },
+        "sendX509CertificateCredential": {
+          "type": "boolean",
+          "default": false
+        },
+        "ssoZoneName": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "useSMCookie": {
+          "type": "boolean",
+          "default": false
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/SiteMinderAuthenticate/Main",
+      "title": "Authenticate Against CA Single Sign-On",
+      "properties": {
+        "SiteMinderAuthenticate": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/SiteMinderAuthenticate"
+        }
+      }
+    }
+  ]
+}

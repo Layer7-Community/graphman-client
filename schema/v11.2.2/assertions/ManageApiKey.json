@@ -1,0 +1,48 @@
+{
+  "configName": "ManageApiKey",
+  "name": "Manage API Keys",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ManageApiKey",
+      "title": "Manage API Keys",
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string"
+        },
+        "apiKey": {
+          "type": "string",
+          "default": ""
+        },
+        "apiKeyElement": {
+          "type": "string",
+          "default": ""
+        },
+        "variablePrefix": {
+          "type": "string",
+          "default": "apikey"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ManageApiKey/Main",
+      "title": "Manage API Keys",
+      "properties": {
+        "ManageApiKey": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/ManageApiKey"
+        }
+      }
+    }
+  ]
+}

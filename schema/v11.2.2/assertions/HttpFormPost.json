@@ -1,0 +1,51 @@
+{
+  "configName": "HttpFormPost",
+  "name": "Translate HTTP Form to MIME",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/HttpFormPost",
+      "title": "Translate HTTP Form to MIME",
+      "type": "object",
+      "properties": {
+        "fieldInfos": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/httpFormPost$FieldInfo"
+          }
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/httpFormPost$FieldInfo",
+      "properties": {
+        "contentType": {
+          "type": "string"
+        },
+        "fieldname": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/HttpFormPost/Main",
+      "title": "Translate HTTP Form to MIME",
+      "properties": {
+        "HttpFormPost": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/HttpFormPost"
+        }
+      }
+    }
+  ]
+}

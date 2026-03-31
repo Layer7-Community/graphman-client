@@ -1,0 +1,33 @@
+{
+  "configName": "ApiPortalAuthAndMgmtServiceInstaller",
+  "name": "Api Portal Auth And Mgmt Service Installer",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ApiPortalAuthAndMgmtServiceInstaller",
+      "title": "Api Portal Auth And Mgmt Service Installer",
+      "type": "object",
+      "properties": {
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ApiPortalAuthAndMgmtServiceInstaller/Main",
+      "title": "Api Portal Auth And Mgmt Service Installer",
+      "properties": {
+        "ApiPortalAuthAndMgmtServiceInstaller": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/ApiPortalAuthAndMgmtServiceInstaller"
+        }
+      }
+    }
+  ]
+}

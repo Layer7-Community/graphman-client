@@ -1,0 +1,51 @@
+{
+  "configName": "Encapsulated",
+  "name": "Encapsulated",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Encapsulated",
+      "title": "Encapsulated",
+      "type": "object",
+      "properties": {
+        "encassGuid": {
+          "type": "string"
+        },
+        "encassName": {
+          "type": "string"
+        },
+        "noOpIfConfigMissing": {
+          "type": "boolean",
+          "default": false
+        },
+        "parameters": {
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          }
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/Encapsulated/Main",
+      "title": "Encapsulated",
+      "properties": {
+        "Encapsulated": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/Encapsulated"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,254 @@
+{
+  "configName": "ValidateNonSoapSamlToken",
+  "name": "(Non-SOAP) Validate SAML Token",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ValidateNonSoapSamlToken",
+      "title": "(Non-SOAP) Validate SAML Token",
+      "type": "object",
+      "properties": {
+        "attributeStatement": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/samlAttributeStatement"
+        },
+        "audienceRestriction": {
+          "type": "string"
+        },
+        "authenticationStatement": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/samlAuthenticationStatement"
+        },
+        "authorizationStatement": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/samlAuthorizationStatement"
+        },
+        "checkAssertionValidity": {
+          "type": "boolean",
+          "default": true
+        },
+        "maxExpiry": {
+          "type": "number",
+          "default": 0
+        },
+        "nameFormats": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "nameQualifier": {
+          "type": "string"
+        },
+        "noSubjectConfirmation": {
+          "type": "boolean",
+          "default": false
+        },
+        "otherTargetMessageVariable": {
+          "type": "string"
+        },
+        "requireDigitalSignature": {
+          "type": "boolean",
+          "default": true
+        },
+        "subjectConfirmationDataCheckAddress": {
+          "type": "boolean",
+          "default": false
+        },
+        "subjectConfirmationDataCheckValidity": {
+          "type": "boolean",
+          "default": true
+        },
+        "subjectConfirmationDataRecipient": {
+          "type": "string"
+        },
+        "subjectConfirmations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "REQUEST",
+            "RESPONSE",
+            "OTHER"
+          ],
+          "default": "REQUEST"
+        },
+        "timeUnit": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/timeUnit",
+          "default": "m"
+        },
+        "version": {
+          "type": "integer"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/samlAttributeStatement",
+      "properties": {
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/samlAttributeStatement$Attribute"
+          }
+        },
+        "failIfAnyAttributeIsMissing": {
+          "type": "boolean",
+          "default": false
+        },
+        "failIfAttributeValueExcludesAttribute": {
+          "type": "boolean",
+          "default": false
+        },
+        "failIfNoAttributesAdded": {
+          "type": "boolean",
+          "default": true
+        },
+        "failIfUnknownAttributeInFilter": {
+          "type": "boolean",
+          "default": false
+        },
+        "filterExpression": {
+          "type": "string",
+          "default": ""
+        },
+        "variablePrefix": {
+          "type": "string",
+          "default": "attrStatement"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/samlAttributeStatement$Attribute",
+      "properties": {
+        "addBehavior": {
+          "type": "string",
+          "enum": [
+            "STRING_CONVERT",
+            "ADD_AS_XML"
+          ],
+          "default": "STRING_CONVERT"
+        },
+        "anyValue": {
+          "type": "boolean",
+          "default": false
+        },
+        "emptyBehavior": {
+          "type": "string",
+          "enum": [
+            "EMPTY_STRING",
+            "EXISTS_NO_VALUE",
+            "NULL_VALUE"
+          ],
+          "default": "EMPTY_STRING"
+        },
+        "friendlyName": {
+          "type": "string"
+        },
+        "missingWhenEmpty": {
+          "type": "boolean",
+          "default": false
+        },
+        "name": {
+          "type": "string"
+        },
+        "nameFormat": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "repeatIfMulti": {
+          "type": "boolean",
+          "default": false
+        },
+        "value": {
+          "type": "string"
+        },
+        "valueComparison": {
+          "type": "string",
+          "enum": [
+            "STRING_COMPARE",
+            "CANONICALIZE"
+          ],
+          "default": "STRING_COMPARE"
+        },
+        "variableNotFoundBehavior": {
+          "type": "string",
+          "enum": [
+            "REPLACE_EMPTY_STRING",
+            "REPLACE_EXPRESSION_EMPTY_STRING"
+          ],
+          "default": "REPLACE_EMPTY_STRING"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/samlAuthenticationStatement",
+      "properties": {
+        "authenticationMethods": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "customAuthenticationMethods": {
+          "type": "string",
+          "default": ""
+        },
+        "includeAuthenticationContextDeclaration": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/samlAuthorizationStatement",
+      "properties": {
+        "action": {
+          "type": "string"
+        },
+        "actionNamespace": {
+          "type": "string"
+        },
+        "resource": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/timeUnit",
+      "enum": [
+        "ms",
+        "s",
+        "m",
+        "h",
+        "d"
+      ]
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/ValidateNonSoapSamlToken/Main",
+      "title": "(Non-SOAP) Validate SAML Token",
+      "properties": {
+        "ValidateNonSoapSamlToken": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/ValidateNonSoapSamlToken"
+        }
+      }
+    }
+  ]
+}

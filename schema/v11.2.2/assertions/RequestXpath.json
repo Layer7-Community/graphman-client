@@ -1,0 +1,65 @@
+{
+  "configName": "RequestXpath",
+  "name": "Evaluate Request XPath",
+  "configSchemas": [
+    {
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RequestXpath",
+      "title": "Evaluate Request XPath",
+      "type": "object",
+      "properties": {
+        "variablePrefix": {
+          "type": "string"
+        },
+        "xpathExpression": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/sub-types/xpathExpression"
+        },
+        "_enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "_leftComment": {
+          "type": "string"
+        },
+        "_rightComment": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/sub-types/xpathExpression",
+      "properties": {
+        "expression": {
+          "type": "string"
+        },
+        "namespaces": {
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          }
+        },
+        "xpathVersion": {
+          "type": "string",
+          "enum": [
+            "UNSPECIFIED",
+            "XPATH_1_0",
+            "XPATH_2_0"
+          ],
+          "default": "UNSPECIFIED"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "$id": "https://l7tech.com/2025/json-schema/assertions/RequestXpath/Main",
+      "title": "Evaluate Request XPath",
+      "properties": {
+        "RequestXpath": {
+          "$ref": "https://l7tech.com/2025/json-schema/assertions/RequestXpath"
+        }
+      }
+    }
+  ]
+}
