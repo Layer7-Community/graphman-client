@@ -310,12 +310,12 @@ describe("combine command", () => {
     test("should combine bundles with keys and trusted certificates", () => {
         const bundle1 = createTestBundle("bundle1.json", {
             keys: [{alias: "key1", keystore: "keystore1"}],
-            trustedCerts: [{name: "cert1", thumbprintSha1: "thumb1"}]
+            trustedCerts: [{name: "cert1", thumbprintSha1: "thumb1", thumbprint: "thumb1"}]
         });
 
         const bundle2 = createTestBundle("bundle2.json", {
             keys: [{alias: "key2", keystore: "keystore2"}],
-            trustedCerts: [{name: "cert2", thumbprintSha1: "thumb2"}]
+            trustedCerts: [{name: "cert2", thumbprintSha1: "thumb2", thumbprint: "thumb2"}]
         });
 
         const output = graphman("combine", 

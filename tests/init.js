@@ -5,7 +5,7 @@ const fs = require('fs');
 // package.json
 const pkgFile = "package.json";
 const pkg = JSON.parse(String(fs.readFileSync(pkgFile)));
-pkg.scripts.test = "jest";
+pkg.scripts.test = "jest --runInBand";
 fs.writeFileSync(pkgFile, JSON.stringify(pkg, null, 4));
 
 // graphman.configuration

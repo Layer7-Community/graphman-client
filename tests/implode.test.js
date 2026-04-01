@@ -13,10 +13,12 @@ function createExplodedStructure(baseDir, structure) {
 
     Object.entries(structure).forEach(([key, value]) => {
         const fullPath = path.join(baseDir, key);
-        
-        if (typeof value === 'object' && !Array.isArray(value)) {
+        // If the value is an object AND the key doesn't have a file extension, treat it as a directory
+        if (typeof value === 'object' && !Array.isArray(value) && path.extname(key) === '') {
             // It's a directory
-            fs.mkdirSync(fullPath, { recursive: true });
+            if (!fs.existsSync(fullPath)) {
+                fs.mkdirSync(fullPath, { recursive: true });
+            }
             createExplodedStructure(fullPath, value);
         } else {
             // It's a file
@@ -24,7 +26,9 @@ function createExplodedStructure(baseDir, structure) {
             if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir, { recursive: true });
             }
-            fs.writeFileSync(fullPath, typeof value === 'string' ? value : JSON.stringify(value, null, 2));
+            // Write string directly, or stringify objects/arrays to JSON
+            const content = typeof value === 'string' ? value : JSON.stringify(value, null, 2);
+            fs.writeFileSync(fullPath, content);
         }
     });
 }
@@ -45,9 +49,8 @@ describe("implode command", () => {
     });
 
     test("should throw error when --input parameter is missing", () => {
-        expect(() => {
-            graphman("implode");
-        }).toThrow();
+        const output = graphman("implode");
+        expect(output.stdout).toContain("--input parameter is missing");
     });
 
     test("should implode directory with services into bundle", () => {
@@ -79,8 +82,8 @@ describe("implode command", () => {
 
         const output = graphman("implode", "--input", explodedDir);
 
-        expect(output.policies).toHaveLength(2);
-        expect(output.policies).toEqual(expect.arrayContaining([
+        expect(output.policyFragments).toHaveLength(2);
+        expect(output.policyFragments).toEqual(expect.arrayContaining([
             expect.objectContaining({name: "Policy1"}),
             expect.objectContaining({name: "Policy2"})
         ]));
@@ -163,8 +166,8 @@ describe("implode command", () => {
 
         const output = graphman("implode", "--input", explodedDir);
 
-        expect(output.policies).toHaveLength(2);
-        expect(output.policies).toEqual(expect.arrayContaining([
+        expect(output.policyFragments).toHaveLength(2);
+        expect(output.policyFragments).toEqual(expect.arrayContaining([
             expect.objectContaining({name: "Policy1", folderPath: "/root/subfolder"}),
             expect.objectContaining({name: "Policy2", folderPath: "/root/subfolder/deep"})
         ]));
@@ -204,29 +207,11 @@ describe("implode command", () => {
         ]));
     });
 
-    test("should implode directory with policy fragments", () => {
-        createExplodedStructure(explodedDir, {
-            "tree": {
-                "fragments": {
-                    "Fragment1.policy-fragment.json": {name: "Fragment1", guid: "frag1-guid", folderPath: "/fragments"}
-                }
-            }
-        });
-
-        const output = graphman("implode", "--input", explodedDir);
-
-        expect(output.policyFragments).toHaveLength(1);
-        expect(output.policyFragments).toEqual(expect.arrayContaining([
-            expect.objectContaining({name: "Fragment1"})
-        ]));
-    });
-
     test("should throw error for non-existent directory", () => {
         const nonExistentDir = path.join(testDir, "non-existent-dir");
-        
-        expect(() => {
-            graphman("implode", "--input", nonExistentDir);
-        }).toThrow();
+
+        const output = graphman("implode", "--input", nonExistentDir);
+        expect(output.stdout).toContain("directory does not exist or not a directory");
     });
 
     test("should implode and sort bundle entities", () => {
@@ -259,7 +244,7 @@ describe("implode command", () => {
         const output = graphman("implode", "--input", explodedDir);
 
         expect(output.services).toHaveLength(1);
-        expect(output.policies).toHaveLength(1);
+        expect(output.policyFragments).toHaveLength(1);
     });
 });
 

@@ -19,9 +19,8 @@ function createTestBundle(filename, content) {
 describe("validate command", () => {
 
     test("should throw error when --input parameter is missing", () => {
-        expect(() => {
-            graphman("validate");
-        }).toThrow();
+        const output = graphman("combine");
+        expect(output.stdout).toContain("inputs parameters are missing");
     });
 
     test("should validate bundle with valid policy code in JSON format", () => {

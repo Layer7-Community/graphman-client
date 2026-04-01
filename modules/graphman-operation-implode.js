@@ -220,7 +220,6 @@ let type1Imploder = (function () {
     }
 
     function readEntities(inputDir, pluralName, typeInfo, bundle, selectionPredicate) {
-        const entities = butils.withArray(bundle, typeInfo);
         utils.listDir(inputDir).forEach(item => {
             if (item.endsWith(".json")) {
                 utils.info(`  ${item}`);
@@ -228,7 +227,7 @@ let type1Imploder = (function () {
                 const subImploder = subImploders[typeInfo.pluralName];
                 const finalEntity = subImploder ? subImploder.apply(entity, inputDir) : entity
                 if (selectionPredicate(finalEntity, typeInfo, pluralName, item)) {
-                    entities.push(finalEntity);
+                    butils.withArray(bundle, typeInfo).push(finalEntity);
                 }
             }
         });
@@ -380,7 +379,7 @@ let type1Imploder = (function () {
             if (!Array.isArray(entityMappings)) {
                 return;
             }
-            const entities = butils.withArray(bundle, typeInfo);
+            const entities = bundle[typeInfo.pluralName] || [];
 
             // Filter mappings to only include those matching selected entities
             const filteredMappings = entityMappings.filter(mapping => {

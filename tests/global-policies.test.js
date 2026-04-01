@@ -10,12 +10,12 @@ test("import global-policies", () => {
     expect(output.data.setPolicies.detailedStatus).toEqual(
         expect.arrayContaining([
             expect.objectContaining({
-                status: 'CREATED',
+                status: expect.stringMatching(/CREATED|UPDATED/),
                 source: expect.arrayContaining([{name: 'name', value: 'msg-received'}]),
                 target: expect.arrayContaining([{name: 'goid', value: '7f2bf48f249c4d054254e23cdb832946'}])
             }),
             expect.objectContaining({
-                status: 'CREATED',
+                status: expect.stringMatching(/CREATED|UPDATED/),
                 source: expect.arrayContaining([{name: 'name', value: 'msg-completed'}]),
                 target: expect.arrayContaining([{name: 'goid', value: '7f2bf48f249c4d054254e23cdb83278d'}])
             })

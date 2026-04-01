@@ -421,9 +421,9 @@ describe("implode command with --sections (when package is not specified)", () =
     test("should include only specified section when --sections is one section", () => {
         const output = graphman("implode", "--input", explodedDir, "--sections", "clusterProperties");
 
-        expect(output.services).toHaveLength(0);
+        expect(output.services).toBeUndefined();
         expect(output.clusterProperties).toHaveLength(2);
-        expect(output.policies).toHaveLength(0);
+        expect(output.policies).toBeUndefined();
     });
 
     test("should include only specified sections when --sections has multiple values", () => {
@@ -431,7 +431,7 @@ describe("implode command with --sections (when package is not specified)", () =
 
         expect(output.services).toHaveLength(5);
         expect(output.clusterProperties).toHaveLength(2);
-        expect(output.policies).toHaveLength(0);
+        expect(output.policies).toBeUndefined();
     });
 
     test("should include all sections when --sections is *", () => {
@@ -445,7 +445,7 @@ describe("implode command with --sections (when package is not specified)", () =
     test("should filter tree entities by section when --sections is specified", () => {
         const output = graphman("implode", "--input", explodedDir, "--sections", "services");
         expect(output.services).toHaveLength(5);
-        expect(output.policies).toHaveLength(0);
+        expect(output.policies).toBeUndefined();
     });
 
     test("should include bundle-properties when using --sections", () => {
@@ -454,6 +454,6 @@ describe("implode command with --sections (when package is not specified)", () =
 
         expect(output.services).toHaveLength(5);
         expect(output.properties.meta.source).toBeDefined;
-        expect(output.clusterProperties).toHaveLength(0);
+        expect(output.clusterProperties).toBeUndefined();
     });
 });

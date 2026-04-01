@@ -1,6 +1,7 @@
 // Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 const fs = require('fs');
+const path = require('path');
 const cp = require('child_process');
 const tConfig = init();
 
@@ -29,7 +30,13 @@ module.exports = {
             args.push(outputFile);
         }
 
-        if (fs.existsSync(outputFile)) fs.unlinkSync(outputFile);
+        if (fs.existsSync(outputFile)) {
+            if (fs.statSync(outputFile).isDirectory()) {
+                fs.rmSync(outputFile, {recursive: true, force: true});
+            } else {
+                fs.unlinkSync(outputFile);
+            }
+        }
         const isWin = process.platform === "win32";
         const stdOutput = cp.execFileSync(tConfig.execFile, args, {stdio: ['inherit', 'pipe', 'pipe'],shell: isWin, encoding: 'utf8'});
         console.log(stdOutput);
@@ -55,14 +62,15 @@ module.exports = {
 };
 
 function init() {
+    const home = process.env.GRAPHMAN_HOME || path.join(__dirname, '..');
     const tConfig = {
-        home: process.env.GRAPHMAN_HOME,
-        execFile: process.env.GRAPHMAN_ENTRYPOINT || "graphman.sh",
-        workspace: (process.env.GRAPHMAN_HOME + "/build" || "build") + "/tests",
+        home,
+        execFile: process.env.GRAPHMAN_ENTRYPOINT || "./graphman.sh",
+        workspace: path.join(home, "build", "tests"),
         schemaVersion: process.env.GRAPHMAN_SCHEMA || "v11.2.1"
     };
 
-    const modulePath = tConfig.home + "/modules/graphman.js";
+    const modulePath = path.join(tConfig.home, "modules", "graphman.js");
     if (fs.existsSync(modulePath)) {
         require(modulePath).init(tConfig.home, {options:{}});
     }
@@ -73,7 +81,8 @@ function init() {
 }
 
 function initMetadata(tConfig) {
-    const metadata = JSON.parse(fs.readFileSync(tConfig.home + "/schema/" + tConfig.schemaVersion + "/metadata.json", 'utf-8'));
+    const metadataPath = path.join(tConfig.home, "schema", tConfig.schemaVersion, "metadata.json");
+    const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf-8'));
     metadata.typeInfoByBundleName = {};
     metadata.typeInfoByTypeName = {};
 

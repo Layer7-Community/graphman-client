@@ -19,9 +19,8 @@ function createTestBundle(filename, content) {
 describe("renew command", () => {
 
     test("should throw error when --input parameter is missing", () => {
-        expect(() => {
-            graphman("renew", "--gateway", "default");
-        }).toThrow();
+        const output = graphman("renew", "--gateway", "default");
+        expect(output.stdout).toContain("--input parameter is missing");
     });
 
     test("should throw error when --gateway parameter is missing", () => {
@@ -29,9 +28,8 @@ describe("renew command", () => {
             services: [{name: "Service1", resolutionPath: "/service1"}]
         });
 
-        expect(() => {
-            graphman("renew", "--input", bundle);
-        }).toThrow();
+        const output = graphman("renew", "--input", bundle);
+        expect(output.stdout).toContain("--gateway parameter is missing");
     });
 
     test("should throw error when gateway details are missing", () => {
@@ -39,9 +37,8 @@ describe("renew command", () => {
             services: [{name: "Service1", resolutionPath: "/service1"}]
         });
 
-        expect(() => {
-            graphman("renew", "--input", bundle, "--gateway", "unknown-gateway");
-        }).toThrow();
+        const output = graphman("renew", "--input", bundle,  "--gateway", "unknown-gateway");
+        expect(output.stdout).toContain("unknown-gateway gateway details are missing");
     });
 
     test("should handle renew with default gateway not configured for queries", () => {

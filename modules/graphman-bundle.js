@@ -90,7 +90,7 @@ module.exports = {
             const list = this.withArray(result, typeInfo);
             entities.forEach(item => {
                 const found = list.find(x => this.isEntityMatches(x, item, typeInfo));
-                if (found && this.isEntityReallyDuplicate(found, item)) {
+                if (found && this.isEntityReallyDuplicate(found, item, typeInfo)) {
                     utils.info("found duplicate entity, " + key + "." + this.entityName(item, typeInfo));
                 } else {
                     list.push(item);
