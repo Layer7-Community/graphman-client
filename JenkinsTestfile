@@ -144,6 +144,7 @@ pipeline {
                       cfg.gateways.default.credential="default";
                       cfg.gateways.default.rejectUnauthorized=process.env.DEFAULT_GW_REJECT_UNAUTHORIZED==="true";
                       cfg.gateways.default.allowMutations=process.env.DEFAULT_GW_ALLOW_MUTATIONS==="true";
+                      cfg.options.schema="v11.1.3";
                       if(process.env.DEFAULT_GW_PASSPHRASE)cfg.gateways.default.passphrase=process.env.DEFAULT_GW_PASSPHRASE;
                     }
 
@@ -158,6 +159,7 @@ pipeline {
                       cfg.gateways["source-gateway"].rejectUnauthorized=process.env.SOURCE_GW_REJECT_UNAUTHORIZED==="true";
                       cfg.gateways["source-gateway"].allowMutations=process.env.SOURCE_GW_ALLOW_MUTATIONS==="true";
                       cfg.gateways["source-gateway"].proxy="default";
+                      cfg.options.schema="v11.1.3";
                       if(process.env.SOURCE_GW_PASSPHRASE)cfg.gateways["source-gateway"].passphrase=process.env.SOURCE_GW_PASSPHRASE;
                     }
 
@@ -171,6 +173,7 @@ pipeline {
                       cfg.gateways["target-gateway"].credential="target";
                       cfg.gateways["target-gateway"].rejectUnauthorized=process.env.TARGET_GW_REJECT_UNAUTHORIZED==="true";
                       cfg.gateways["target-gateway"].allowMutations=process.env.TARGET_GW_ALLOW_MUTATIONS==="true";
+                      cfg.options.schema="v11.1.3";
                       if(process.env.TARGET_GW_PASSPHRASE)cfg.gateways["target-gateway"].passphrase=process.env.TARGET_GW_PASSPHRASE;
                     }
                     fs.writeFileSync(cfgFile,JSON.stringify(cfg,null,4));
