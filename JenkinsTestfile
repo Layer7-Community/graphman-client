@@ -15,6 +15,7 @@ pipeline {
     }
     parameters {
         string(name: 'VAR_node_version', defaultValue: '16', description: 'Node.js major version (e.g. 16, 18, 20)')
+        string(name: 'VAR_schema_version', defaultValue: '', description: 'Schema version to use to run the tests (e.g. v11.1.3, v11.2.1)')
         booleanParam(name: 'RUN_COVERAGE', defaultValue: true, description: 'Run tests with coverage and publish report')
 
         // Default gateway
@@ -97,6 +98,11 @@ pipeline {
                     if(!cfg.credentials)cfg.credentials={};
                     if(!cfg.gateways)cfg.gateways={};
                     if(!cfg.proxies)cfg.proxies={};
+
+                    // If VAR_schema_version has value, set schema to use to run the tests
+                    if(VAR_schema_version != '' || VAR_schema_version != null) {
+                        cfg.options.schema = VAR_schema_version
+                    }
 
                     // HTTP Proxy
                     if(process.env.HTTP_PROXY_HOST && process.env.HTTP_PROXY_HOST.trim()!==""){
