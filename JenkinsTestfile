@@ -100,7 +100,7 @@ pipeline {
                     if(!cfg.proxies)cfg.proxies={};
 
                     // If VAR_schema_version has value, set schema to use to run the tests
-                    echo "nag 1 VAR_gateway_primary_ip = params.VAR_schema_version"
+                    //echo "nag 1 VAR_gateway_primary_ip = params.VAR_schema_version"
                     echo "nag 2 VAR_gateway_primary_ip = ${VAR_schema_version}"
                     if("${VAR_schema_version}"?.trim() != '' || "${VAR_schema_version}"?.trim() != null) {
                         cfg.options.schema = "${VAR_schema_version}".trim()
