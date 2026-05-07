@@ -100,8 +100,8 @@ pipeline {
                     if(!cfg.proxies)cfg.proxies={};
 
                     // If VAR_schema_version has value, set schema to use to run the tests
-                    if(VAR_schema_version != '' || VAR_schema_version != null) {
-                        cfg.options.schema = VAR_schema_version
+                    if(params.VAR_schema_version?.trim() != '' || params.VAR_schema_version?.trim() != null) {
+                        cfg.options.schema = params.VAR_schema_version.trim()
                     }
 
                     // HTTP Proxy
