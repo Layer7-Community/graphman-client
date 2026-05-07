@@ -100,10 +100,9 @@ pipeline {
                     if(!cfg.proxies)cfg.proxies={};
 
                     // If VAR_schema_version has value, set schema to use to run the tests
-                    const schemaVersion = process.env.VAR_schema_version;
-                    console.log(`Using schema version: ${schemaVersion}`);
-                    if("${VAR_schema_version}"?.trim() != '' || "${VAR_schema_version}"?.trim() != null) {
-                        cfg.options.schema = "${VAR_schema_version}".trim()
+                    const schemaVersion = process.env.VAR_schema_version?.trim();
+                    if (schemaVersion) {
+                        cfg.options.schema = schemaVersion
                     }
 
                     // HTTP Proxy
