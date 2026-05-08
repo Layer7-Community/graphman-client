@@ -2,8 +2,8 @@
 
 const PACKAGE = require("../package.json");
 const SCHEMA_VERSION = "v11.2.1";
-const SCHEMA_VERSIONS = ["v11.2.1", "v11.2.0", "v11.1.3", "v11.1.2", "v11.1.1"];
-const ORDERED_SCHEMA_VERSIONS = ["v11.1.1", "v11.1.2", "v11.1.3", "v11.2.0", "v11.2.1"];
+const SCHEMA_VERSIONS = ["v11.2.1", "v11.2.0", "v11.1.4", "v11.1.3", "v11.1.2", "v11.1.1"];
+const ORDERED_SCHEMA_VERSIONS = ["v11.1.1", "v11.1.2", "v11.1.3", "v11.1.4", "v11.2.0", "v11.2.1"];
 
 const SUPPORTED_OPERATIONS = [
     "version", "describe",
@@ -18,6 +18,7 @@ const SUPPORTED_EXTENSIONS = ["pre-request", "post-export", "pre-import", "post-
 const SCHEMA_FEATURE_LIST = {
     "v11.2.1": ["mappings", "mappings-source", "policy-as-code"],
     "v11.2.0": ["mappings", "mappings-source", "policy-as-code"],
+    "v11.1.4": ["mappings", "mappings-source", "policy-as-code"],
     "v11.1.3": ["mappings", "mappings-source", "policy-as-code"],
     "v11.1.2": ["mappings", "mappings-source", "policy-as-code"],
     "v11.1.00": ["mappings", "mappings-source", "policy-as-code"],
