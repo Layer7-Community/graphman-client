@@ -10,6 +10,7 @@ module.exports = {
      * @param params
      * @param params.input input bundle file
      * @param params.sections one or more sections of bundle
+     * @param params.filter section specific filters
      * @param params.output output bundle
      */
     run: function (params) {
@@ -50,11 +51,7 @@ module.exports = {
             }
         }
 
-        if (params.filter) {
-            delete params.filter.by;
-            butils.filter(result, params.filter);
-        }
-
+        butils.filter(result, params.filter);
         utils.writeResult(params.output, butils.sort(result));
     },
 
@@ -86,11 +83,10 @@ module.exports = {
         console.log("    * is a special section name, used to refer all the sections of a bundle");
         console.log("    use '-' prefix to exclude the section");
         console.log();
-        console.log("  --filter.<section>.<field-name> [<matching-criteria>.]<field-value>]");
+        console.log("  --filter.<section>.<field-name> [<matching-criteria>] <field-value>");
         console.log("    use this option to filter the entities by one or more fields at section level");
         console.log("    section refers to the plural name of the entity type");
         console.log("    multiple fields used for section-level filtering will be chained together by and-logic");
-        console.log("    use '*' as a section for defining the global level filter; will only be used when no specific filters are defined for a given section");
         console.log("    supported matching criteria are");
         console.log("      eq, equals");
         console.log("      neq, not equals");
