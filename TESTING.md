@@ -46,16 +46,13 @@ This will install:
    **Linux/Mac:**
    ```bash
    export GRAPHMAN_HOME=/path/to/graphman-client
-   ```
-
-   **Windows (PowerShell):**
-   ```powershell
-   $env:GRAPHMAN_HOME = "C:\path\to\graphman-client"
+   export GRAPHMAN_ENTRYPOINT=./graphman.sh
    ```
 
    **Windows (Command Prompt):**
    ```cmd
    set GRAPHMAN_HOME=C:\path\to\graphman-client
+   set GRAPHMAN_ENTRYPOINT=graphman.sh
    ```
 
 2. **Configure Gateway Connection** (for integration tests):

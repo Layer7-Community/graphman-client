@@ -110,7 +110,7 @@ module.exports = {
     usage: function () {
         console.log("export --using <query> [--variables.<name> <value>,...] [--gateway <name>]");
         console.log("  [--output <output-file>]");
-        console.log("  [--filter.by <entity-field-name> --filter.<matching-criteria> <value>,...]");
+        console.log("  [--filter.<section>.<field-name> <matching-criteria> <field-value>,...]");
         console.log("  [--options.<name> <value>,...]");
         console.log();
         console.log("Exports gateway configuration using a specified query. If the query doesn't exist, client tries to generate a query dynamically.");

@@ -181,7 +181,7 @@ describe("slice command", () => {
         const output = graphman("slice", 
             "--input", bundle, 
             "--sections", "services",
-            "--filter.services.name", "regex.Service[12]");
+            "--filter.services.name", "regex", "Service[12]");
 
         expect(output.services).toHaveLength(2);
         expect(output.services).toEqual(expect.arrayContaining([

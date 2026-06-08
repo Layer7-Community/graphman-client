@@ -70,6 +70,7 @@ module.exports = {
     usage: function () {
         console.log("slice --input <input-file> [--sections <section> <section>...]");
         console.log("  [--output <output-file>]");
+        console.log("  [--filter.<section>.<field-name> <matching-criteria> <field-value>,...]");
         console.log();
         console.log("Slices the bundle as per the choice.");
         console.log("When similar entities are encountered, entities from the rightmost bundle takes the precedence.");
