@@ -110,7 +110,7 @@ module.exports = {
     usage: function () {
         console.log("export --using <query> [--variables.<name> <value>,...] [--gateway <name>]");
         console.log("  [--output <output-file>]");
-        console.log("  [--filter.by <entity-field-name> --filter.<matching-criteria> <value>,...]");
+        console.log("  [--filter.<section>.<field-name> <matching-criteria> <field-value>,...]");
         console.log("  [--options.<name> <value>,...]");
         console.log();
         console.log("Exports gateway configuration using a specified query. If the query doesn't exist, client tries to generate a query dynamically.");
@@ -130,11 +130,10 @@ module.exports = {
         console.log("    specify the name of file to capture the exported configuration.");
         console.log("    when skipped, output will be written to the console.");
         console.log();
-        console.log("  --filter.<section>.<field-name> [<matching-criteria>.]<field-value>]");
+        console.log("  --filter.<section>.<field-name> [<matching-criteria>] <field-value>");
         console.log("    use this option to filter the exported entities by one or more fields at section level");
         console.log("    section refers to the plural name of the entity type");
         console.log("    multiple fields used for section-level filtering will be chained together by and-logic");
-        console.log("    use '*' as a section for defining the global level filter; will only be used when no specific filters are defined for a given section");
         console.log("    supported matching criteria are");
         console.log("      eq, equals");
         console.log("      neq, not equals");

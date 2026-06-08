@@ -175,20 +175,28 @@ module.exports = {
     },
 
     filter: function (bundle, filter) {
-        if (!filter || !filter.by) return;
-        if (!filter.equals && !filter.startsWith && !filter.endsWith && !filter.contains) return;
+         if (!filter) return;
+
+        if (!filter.by) {
+            const predicates = filterer.buildPredicates(filter);
+            this.forEach(bundle, (_section, _entities, typeInfo) =>
+                filterer.filterEntities(bundle, typeInfo, predicates));
+            return;
+        }
+
+        utils.warn(" deprecated filter options are in use, please use the latest filter options");
 
         Object.keys(bundle).filter(key => Array.isArray(bundle[key])).forEach(key => {
             const list = [];
             bundle[key].forEach(item => {
                 let match = item.hasOwnProperty(filter.by);
 
-                if (filter.equals) match &= (item[filter.by].toString() === filter.equals);
-
-                if (typeof item[filter.by] === 'string') {
-                    if (filter.startsWith) match &= item[filter.by].startsWith(filter.startsWith);
-                    if (filter.endsWith) match &= item[filter.by].endsWith(filter.endsWith);
-                    if (filter.contains) match &= item[filter.by].includes(filter.contains);
+                if (filter.equals) {
+                    match = match && (item[filter.by].toString() === filter.equals);
+                } else if (typeof item[filter.by] === 'string') {
+                    if (filter.startsWith) match = match && item[filter.by].startsWith(filter.startsWith);
+                    if (filter.endsWith) match = match && item[filter.by].endsWith(filter.endsWith);
+                    if (filter.contains) match = match && item[filter.by].includes(filter.contains);
                 }
 
                 if (match) list.push(item);
@@ -810,14 +818,9 @@ let filterer = function () {
         },
     };
 
-    const supported_predicates_regex = /^(eq|neq|regex|gt|gte|lt|lte)[.]/;
-
     function toPredicateFieldConfig(name, value) {
-        const valueString = String(value);
-        const match = valueString.match(supported_predicates_regex);
-        const pfConfig = match ?
-            {name: name, criteria: match[1], value: valueString.substring(match[1].length + 1)} :
-            {name: name, criteria: 'eq', value: value};
+        const values = Array.isArray(value) ? value : ["eq", value];
+        const pfConfig = {name: name, criteria: values[0], value: values[1]};
         if (pfConfig.criteria === "regex") {
             pfConfig.value = new RegExp(pfConfig.value);
         }
@@ -838,52 +841,19 @@ let filterer = function () {
                 if (predicate) {
                     return predicate.test(entity[pfConfig.name], pfConfig.value, pfConfig);
                 } else {
-                    return true;
+                    return false;
                 }
             });
         };
     }
 
-    function buildDefaultPredicate(filter) {
-        let defaultPredicate = buildPredicate(filter['*']) || function (entity, typeInfo) {
-            return true;
-        };
-
-        if (!filter.by) {
-            return defaultPredicate;
-        }
-
-        const pfConfig = {name: filter.by, criteria: 'eq', value: null};
-        if (filter.equals) {
-            pfConfig.value = filter.equals;
-        } else if (filter.startsWith) {
-            pfConfig.value = filter.startsWith;
-            pfConfig.criteria = 'eq%';
-        } else if (filter.endsWith) {
-            pfConfig.value = filter.endsWith;
-            pfConfig.criteria = '%eq';
-        } else if (filter.contains) {
-            pfConfig.value = filter.contains;
-            pfConfig.criteria = '%eq%';
-        } else {
-            utils.warn('expected value is missing for the filter, ignoring it');
-            pfConfig.criteria = '';
-        }
-
-        const predicate = supported_predicates[pfConfig.criteria];
-        if (predicate) defaultPredicate = function (entity, typeInfo) {
-            return predicate.test(entity[pfConfig.name], pfConfig.value, pfConfig);
-        };
-
-        return defaultPredicate;
-    }
-
     return {
         filterEntities: function (bundle, typeInfo, predicates) {
             const entities = bundle[typeInfo.pluralName];
+            const predicate = predicates.get(typeInfo.pluralName);
 
-            if (entities) {
-                const predicate = predicates.get([typeInfo.pluralName]);
+            if (entities && predicate) {
+                utils.info("filtering " + typeInfo.pluralName);
                 const result = entities.filter(item => predicate(item, typeInfo));
                 if (result.length === 0) {
                     delete bundle[typeInfo.pluralName];
@@ -897,14 +867,13 @@ let filterer = function () {
             const predicates = {
                 get: function (section) {
                     if (predicates[section] === undefined) {
-                        predicates[section] = buildPredicate(filter[section]) || predicates['default'];
+                        predicates[section] = buildPredicate(filter[section]);
                     }
 
                     return predicates[section];
                 }
             };
 
-            predicates['default'] = buildDefaultPredicate(filter);
             return predicates;
         }
     }
