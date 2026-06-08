@@ -52,7 +52,7 @@ This will install:
    **Windows (Command Prompt):**
    ```cmd
    set GRAPHMAN_HOME=C:\path\to\graphman-client
-   set GRAPHMAN_ENTRYPOINT=graphman.sh
+   set GRAPHMAN_ENTRYPOINT=graphman.bat
    ```
 
 2. **Configure Gateway Connection** (for integration tests):
