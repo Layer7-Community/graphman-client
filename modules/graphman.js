@@ -1,9 +1,9 @@
 // Copyright (c) 2026 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 
 const PACKAGE = require("../package.json");
-const SCHEMA_VERSION = "v11.2.1";
-const SCHEMA_VERSIONS = ["v11.2.1", "v11.2.0", "v11.1.4", "v11.1.3", "v11.1.2", "v11.1.1"];
-const ORDERED_SCHEMA_VERSIONS = ["v11.1.1", "v11.1.2", "v11.1.3", "v11.1.4", "v11.2.0", "v11.2.1"];
+const SCHEMA_VERSION = "v11.2.2";
+const SCHEMA_VERSIONS = ["v11.2.2", "v11.2.1", "v11.2.0", "v11.1.4", "v11.1.3", "v11.1.2", "v11.1.1"];
+const ORDERED_SCHEMA_VERSIONS = ["v11.1.1", "v11.1.2", "v11.1.3", "v11.1.4", "v11.2.0", "v11.2.1", "v11.2.2"];
 
 const SUPPORTED_OPERATIONS = [
     "version", "describe",
@@ -16,6 +16,7 @@ const SUPPORTED_OPERATIONS = [
 
 const SUPPORTED_EXTENSIONS = ["pre-request", "post-export", "pre-import", "post-revise", "post-renew", "multiline-text-diff", "policy-code-validator", "https-proxy"];
 const SCHEMA_FEATURE_LIST = {
+    "v11.2.2": ["mappings", "mappings-source", "policy-as-code"],
     "v11.2.1": ["mappings", "mappings-source", "policy-as-code"],
     "v11.2.0": ["mappings", "mappings-source", "policy-as-code"],
     "v11.1.4": ["mappings", "mappings-source", "policy-as-code"],
