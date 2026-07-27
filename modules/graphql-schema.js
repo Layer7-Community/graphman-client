@@ -89,15 +89,13 @@ function buildV1(metadata, version, schemaVersion) {
                     metadata.primitiveTypes.push(typeInfo.typeName);
                 } else {
                     utils.fine("  capturing sub-type: " + typeInfo.typeName);
-
-                    if (typeInfo.typeName === "Query" || typeInfo.typeName === "Mutation") {
-                        const existing = metadata.subTypes[typeInfo.typeName];
-                        if (existing) {
-                            typeInfo.fields = existing.fields.concat(typeInfo.fields);
-                        }
+                    const existing = metadata.subTypes[typeInfo.typeName];
+                    if (existing) {
+                        utils.fine("  extending sub-type: " + typeInfo.typeName);
+                        existing.fields = existing.fields.concat(typeInfo.fields);
+                    } else {
+                        metadata.subTypes[typeInfo.typeName] = typeInfo;
                     }
-
-                    metadata.subTypes[typeInfo.typeName] = typeInfo;
                 }
             });
         }
@@ -129,7 +127,13 @@ function buildV1(metadata, version, schemaVersion) {
             utils.fine("  ignoring sub-type: " + typeInfo.typeName);
         } else {
             utils.fine("  promoting sub-type: " + typeInfo.typeName);
-            metadata.types[key] = typeInfo;
+            const existing = metadata.types[key];
+            if (existing) {
+                utils.fine("  extending type: " + typeInfo.typeName);
+                existing.fields = existing.fields.concat(typeInfo.fields);
+            } else {
+                metadata.types[key] = typeInfo;
+            }
         }
     });
 

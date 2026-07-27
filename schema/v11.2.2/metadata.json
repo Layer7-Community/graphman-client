@@ -17,16 +17,62 @@
       "typeName": "ActiveConnector",
       "fields": [
         {
+          "name": "goid",
+          "dataType": "ID"
+        },
+        {
+          "name": "name",
+          "dataType": "String"
+        },
+        {
+          "name": "connectorType",
+          "dataType": "String"
+        },
+        {
+          "name": "checksum",
+          "dataType": "String"
+        },
+        {
+          "name": "enabled",
+          "dataType": "Boolean"
+        },
+        {
+          "name": "hardwiredServiceName",
+          "dataType": "String"
+        },
+        {
+          "name": "properties",
+          "dataType": "EntityProperty"
+        },
+        {
+          "name": "advancedProperties",
+          "dataType": "EntityProperty"
+        },
+        {
+          "name": "hardwiredService",
+          "dataType": "HardwiredService"
+        },
+        {
           "name": "securityZoneName",
           "dataType": "String"
         }
       ],
+      "isL7Entity": true,
       "singularName": "activeConnector",
       "pluralName": "activeConnectors",
-      "summaryFields": [],
-      "excludedFields": [],
+      "summaryFields": [
+        "goid",
+        "name",
+        "connectorType",
+        "checksum"
+      ],
+      "excludedFields": [
+        "hardwiredService"
+      ],
       "includedFields": [],
-      "identityFields": [],
+      "identityFields": [
+        "name"
+      ],
       "deprecatedFields": []
     },
     "AdministrativeUserAccountProperty": {
@@ -216,16 +262,75 @@
       "typeName": "CassandraConnection",
       "fields": [
         {
+          "name": "goid",
+          "dataType": "ID"
+        },
+        {
+          "name": "name",
+          "dataType": "String"
+        },
+        {
+          "name": "checksum",
+          "dataType": "String"
+        },
+        {
+          "name": "enabled",
+          "dataType": "Boolean"
+        },
+        {
+          "name": "keyspace",
+          "dataType": "String"
+        },
+        {
+          "name": "contactPoints",
+          "dataType": "String"
+        },
+        {
+          "name": "port",
+          "dataType": "PositiveInt"
+        },
+        {
+          "name": "compression",
+          "dataType": "CassandraCompression"
+        },
+        {
+          "name": "username",
+          "dataType": "String"
+        },
+        {
+          "name": "securePasswordName",
+          "dataType": "String"
+        },
+        {
+          "name": "sslEnabled",
+          "dataType": "Boolean"
+        },
+        {
+          "name": "cipherSuites",
+          "dataType": "String"
+        },
+        {
+          "name": "properties",
+          "dataType": "EntityProperty"
+        },
+        {
           "name": "securityZoneName",
           "dataType": "String"
         }
       ],
+      "isL7Entity": true,
       "singularName": "cassandraConnection",
       "pluralName": "cassandraConnections",
-      "summaryFields": [],
+      "summaryFields": [
+        "goid",
+        "name",
+        "checksum"
+      ],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": [],
+      "identityFields": [
+        "name"
+      ],
       "deprecatedFields": []
     },
     "ClientCert": {
@@ -373,16 +478,93 @@
       "typeName": "EmailListener",
       "fields": [
         {
+          "name": "goid",
+          "dataType": "ID"
+        },
+        {
+          "name": "name",
+          "dataType": "String"
+        },
+        {
+          "name": "checksum",
+          "dataType": "String"
+        },
+        {
+          "name": "enabled",
+          "dataType": "Boolean"
+        },
+        {
+          "name": "serverType",
+          "dataType": "EmailServerType"
+        },
+        {
+          "name": "hostname",
+          "dataType": "String"
+        },
+        {
+          "name": "port",
+          "dataType": "PositiveInt"
+        },
+        {
+          "name": "folder",
+          "dataType": "String"
+        },
+        {
+          "name": "deleteOnReceive",
+          "dataType": "Boolean"
+        },
+        {
+          "name": "username",
+          "dataType": "String"
+        },
+        {
+          "name": "password",
+          "dataType": "String"
+        },
+        {
+          "name": "hardwiredServiceName",
+          "dataType": "String"
+        },
+        {
+          "name": "sslEnabled",
+          "dataType": "Boolean"
+        },
+        {
+          "name": "pollInterval",
+          "dataType": "PositiveInt"
+        },
+        {
+          "name": "sizeLimit",
+          "dataType": "NonNegativeInt"
+        },
+        {
+          "name": "properties",
+          "dataType": "EntityProperty"
+        },
+        {
+          "name": "hardwiredService",
+          "dataType": "HardwiredService"
+        },
+        {
           "name": "securityZoneName",
           "dataType": "String"
         }
       ],
+      "isL7Entity": true,
       "singularName": "emailListener",
       "pluralName": "emailListeners",
-      "summaryFields": [],
-      "excludedFields": [],
+      "summaryFields": [
+        "goid",
+        "name",
+        "checksum"
+      ],
+      "excludedFields": [
+        "hardwiredService"
+      ],
       "includedFields": [],
-      "identityFields": [],
+      "identityFields": [
+        "name"
+      ],
       "deprecatedFields": []
     },
     "EncassConfig": {
@@ -390,16 +572,60 @@
       "typeName": "EncassConfig",
       "fields": [
         {
+          "name": "goid",
+          "dataType": "ID"
+        },
+        {
+          "name": "guid",
+          "dataType": "ID"
+        },
+        {
+          "name": "name",
+          "dataType": "String"
+        },
+        {
+          "name": "checksum",
+          "dataType": "String"
+        },
+        {
+          "name": "description",
+          "dataType": "String"
+        },
+        {
+          "name": "policyName",
+          "dataType": "String"
+        },
+        {
+          "name": "encassArgs",
+          "dataType": "EncassArg"
+        },
+        {
+          "name": "encassResults",
+          "dataType": "EncassResult"
+        },
+        {
+          "name": "properties",
+          "dataType": "EntityProperty"
+        },
+        {
           "name": "securityZoneName",
           "dataType": "String"
         }
       ],
+      "isL7Entity": true,
       "singularName": "encassConfig",
       "pluralName": "encassConfigs",
-      "summaryFields": [],
+      "summaryFields": [
+        "goid",
+        "guid",
+        "name",
+        "checksum"
+      ],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": [],
+      "identityFields": [
+        "name"
+      ],
       "deprecatedFields": []
     },
     "FirewallRule": {
@@ -686,16 +912,61 @@
       "typeName": "GlobalResource",
       "fields": [
         {
+          "name": "goid",
+          "dataType": "ID"
+        },
+        {
+          "name": "systemId",
+          "dataType": "String"
+        },
+        {
+          "name": "publicId",
+          "dataType": "String"
+        },
+        {
+          "name": "resourceType",
+          "dataType": "ResourceType"
+        },
+        {
+          "name": "checksum",
+          "dataType": "String"
+        },
+        {
+          "name": "contentType",
+          "dataType": "String"
+        },
+        {
+          "name": "description",
+          "dataType": "String"
+        },
+        {
+          "name": "content",
+          "dataType": "String"
+        },
+        {
+          "name": "properties",
+          "dataType": "EntityProperty"
+        },
+        {
           "name": "securityZoneName",
           "dataType": "String"
         }
       ],
+      "isL7Entity": true,
       "singularName": "globalResource",
       "pluralName": "globalResources",
-      "summaryFields": [],
+      "summaryFields": [
+        "goid",
+        "systemId",
+        "publicId",
+        "resourceType",
+        "checksum"
+      ],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": [],
+      "identityFields": [
+        "systemId"
+      ],
       "deprecatedFields": []
     },
     "HttpConfiguration": {
@@ -1863,16 +2134,67 @@
       "typeName": "JdbcConnection",
       "fields": [
         {
+          "name": "goid",
+          "dataType": "ID"
+        },
+        {
+          "name": "name",
+          "dataType": "String"
+        },
+        {
+          "name": "checksum",
+          "dataType": "String"
+        },
+        {
+          "name": "enabled",
+          "dataType": "Boolean"
+        },
+        {
+          "name": "driverClass",
+          "dataType": "String"
+        },
+        {
+          "name": "jdbcUrl",
+          "dataType": "String"
+        },
+        {
+          "name": "username",
+          "dataType": "String"
+        },
+        {
+          "name": "password",
+          "dataType": "String"
+        },
+        {
+          "name": "minPoolSize",
+          "dataType": "NonNegativeInt"
+        },
+        {
+          "name": "maxPoolSize",
+          "dataType": "PositiveInt"
+        },
+        {
+          "name": "properties",
+          "dataType": "EntityProperty"
+        },
+        {
           "name": "securityZoneName",
           "dataType": "String"
         }
       ],
+      "isL7Entity": true,
       "singularName": "jdbcConnection",
       "pluralName": "jdbcConnections",
-      "summaryFields": [],
+      "summaryFields": [
+        "goid",
+        "name",
+        "checksum"
+      ],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": [],
+      "identityFields": [
+        "name"
+      ],
       "deprecatedFields": []
     },
     "JmsDestination": {
@@ -1880,16 +2202,107 @@
       "typeName": "JmsDestination",
       "fields": [
         {
+          "name": "goid",
+          "dataType": "ID"
+        },
+        {
+          "name": "connectionGoid",
+          "dataType": "ID"
+        },
+        {
+          "name": "name",
+          "dataType": "String"
+        },
+        {
+          "name": "direction",
+          "dataType": "String"
+        },
+        {
+          "name": "providerType",
+          "dataType": "String"
+        },
+        {
+          "name": "checksum",
+          "dataType": "String"
+        },
+        {
+          "name": "enabled",
+          "dataType": "Boolean"
+        },
+        {
+          "name": "template",
+          "dataType": "Boolean"
+        },
+        {
+          "name": "initialContextFactoryClassname",
+          "dataType": "String"
+        },
+        {
+          "name": "connectionFactoryName",
+          "dataType": "String"
+        },
+        {
+          "name": "jndiUrl",
+          "dataType": "String"
+        },
+        {
+          "name": "jndiUsername",
+          "dataType": "String"
+        },
+        {
+          "name": "jndiPassword",
+          "dataType": "String"
+        },
+        {
+          "name": "jndiSslDetails",
+          "dataType": "JmsSslDetails"
+        },
+        {
+          "name": "destinationType",
+          "dataType": "String"
+        },
+        {
+          "name": "destinationName",
+          "dataType": "String"
+        },
+        {
+          "name": "destinationUsername",
+          "dataType": "String"
+        },
+        {
+          "name": "destinationPassword",
+          "dataType": "String"
+        },
+        {
+          "name": "destinationSslDetails",
+          "dataType": "JmsSslDetails"
+        },
+        {
+          "name": "properties",
+          "dataType": "EntityProperty"
+        },
+        {
           "name": "securityZoneName",
           "dataType": "String"
         }
       ],
+      "isL7Entity": true,
       "singularName": "jmsDestination",
       "pluralName": "jmsDestinations",
-      "summaryFields": [],
+      "summaryFields": [
+        "goid",
+        "name",
+        "direction",
+        "providerType",
+        "checksum"
+      ],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": [],
+      "identityFields": [
+        "name",
+        "direction",
+        "providerType"
+      ],
       "deprecatedFields": []
     },
     "KerberosConfig": {
@@ -2000,16 +2413,75 @@
       "typeName": "ListenPort",
       "fields": [
         {
+          "name": "goid",
+          "dataType": "ID"
+        },
+        {
+          "name": "name",
+          "dataType": "String"
+        },
+        {
+          "name": "protocol",
+          "dataType": "String"
+        },
+        {
+          "name": "port",
+          "dataType": "PositiveInt"
+        },
+        {
+          "name": "checksum",
+          "dataType": "String"
+        },
+        {
+          "name": "enabled",
+          "dataType": "Boolean"
+        },
+        {
+          "name": "hardwiredServiceName",
+          "dataType": "String"
+        },
+        {
+          "name": "enabledFeatures",
+          "dataType": "ListenPortFeature"
+        },
+        {
+          "name": "tlsSettings",
+          "dataType": "ListenPortTlsSettings"
+        },
+        {
+          "name": "sniConfigurationName",
+          "dataType": "String"
+        },
+        {
+          "name": "properties",
+          "dataType": "EntityProperty"
+        },
+        {
+          "name": "hardwiredService",
+          "dataType": "HardwiredService"
+        },
+        {
           "name": "securityZoneName",
           "dataType": "String"
         }
       ],
+      "isL7Entity": true,
       "singularName": "listenPort",
       "pluralName": "listenPorts",
-      "summaryFields": [],
-      "excludedFields": [],
+      "summaryFields": [
+        "goid",
+        "name",
+        "protocol",
+        "port",
+        "checksum"
+      ],
+      "excludedFields": [
+        "hardwiredService"
+      ],
       "includedFields": [],
-      "identityFields": [],
+      "identityFields": [
+        "name"
+      ],
       "deprecatedFields": []
     },
     "LogSink": {
@@ -2263,16 +2735,44 @@
       "typeName": "PolicyBackedService",
       "fields": [
         {
+          "name": "goid",
+          "dataType": "ID"
+        },
+        {
+          "name": "name",
+          "dataType": "String"
+        },
+        {
+          "name": "interfaceName",
+          "dataType": "String"
+        },
+        {
+          "name": "checksum",
+          "dataType": "String"
+        },
+        {
+          "name": "operations",
+          "dataType": "PolicyBackedServiceOperation"
+        },
+        {
           "name": "securityZoneName",
           "dataType": "String"
         }
       ],
+      "isL7Entity": true,
       "singularName": "policyBackedService",
       "pluralName": "policyBackedServices",
-      "summaryFields": [],
+      "summaryFields": [
+        "goid",
+        "name",
+        "interfaceName",
+        "checksum"
+      ],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": [],
+      "identityFields": [
+        "name"
+      ],
       "deprecatedFields": []
     },
     "GlobalPolicy": {
@@ -2433,16 +2933,51 @@
       "typeName": "RevocationCheckPolicy",
       "fields": [
         {
+          "name": "goid",
+          "dataType": "ID"
+        },
+        {
+          "name": "name",
+          "dataType": "String"
+        },
+        {
+          "name": "checksum",
+          "dataType": "String"
+        },
+        {
+          "name": "defaultPolicy",
+          "dataType": "Boolean"
+        },
+        {
+          "name": "defaultSuccess",
+          "dataType": "Boolean"
+        },
+        {
+          "name": "continueOnServerUnavailable",
+          "dataType": "Boolean"
+        },
+        {
+          "name": "revocationCheckPolicyItems",
+          "dataType": "RevocationCheckPolicyItem"
+        },
+        {
           "name": "securityZoneName",
           "dataType": "String"
         }
       ],
+      "isL7Entity": true,
       "singularName": "revocationCheckPolicy",
       "pluralName": "revocationCheckPolicies",
-      "summaryFields": [],
+      "summaryFields": [
+        "goid",
+        "name",
+        "checksum"
+      ],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": [],
+      "identityFields": [
+        "name"
+      ],
       "deprecatedFields": []
     },
     "Role": {
@@ -2709,16 +3244,59 @@
       "typeName": "Secret",
       "fields": [
         {
+          "name": "goid",
+          "dataType": "ID"
+        },
+        {
+          "name": "name",
+          "dataType": "String"
+        },
+        {
+          "name": "checksum",
+          "dataType": "String"
+        },
+        {
+          "name": "description",
+          "dataType": "String"
+        },
+        {
+          "name": "secret",
+          "dataType": "String"
+        },
+        {
+          "name": "secretType",
+          "dataType": "SecretType"
+        },
+        {
+          "name": "variableReferencable",
+          "dataType": "Boolean"
+        },
+        {
+          "name": "publicKey",
+          "dataType": "String"
+        },
+        {
+          "name": "lastModifiedDate",
+          "dataType": "DateTime"
+        },
+        {
           "name": "securityZoneName",
           "dataType": "String"
         }
       ],
+      "isL7Entity": true,
       "singularName": "secret",
       "pluralName": "secrets",
-      "summaryFields": [],
+      "summaryFields": [
+        "goid",
+        "name",
+        "checksum"
+      ],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": [],
+      "identityFields": [
+        "name"
+      ],
       "deprecatedFields": []
     },
     "Key": {
@@ -3051,16 +3629,87 @@
       "typeName": "SMConfig",
       "fields": [
         {
+          "name": "goid",
+          "dataType": "ID"
+        },
+        {
+          "name": "name",
+          "dataType": "String"
+        },
+        {
+          "name": "checksum",
+          "dataType": "String"
+        },
+        {
+          "name": "enabled",
+          "dataType": "Boolean"
+        },
+        {
+          "name": "agentHost",
+          "dataType": "String"
+        },
+        {
+          "name": "agentIP",
+          "dataType": "String"
+        },
+        {
+          "name": "agentHostConfig",
+          "dataType": "String"
+        },
+        {
+          "name": "agentSecret",
+          "dataType": "String"
+        },
+        {
+          "name": "cryptoMode",
+          "dataType": "SMCryptoMode"
+        },
+        {
+          "name": "ipCheckEnabled",
+          "dataType": "Boolean"
+        },
+        {
+          "name": "updateSSOToken",
+          "dataType": "Boolean"
+        },
+        {
+          "name": "clusterFailoverThreshold",
+          "dataType": "PositiveInt"
+        },
+        {
+          "name": "nonClusterFailover",
+          "dataType": "Boolean"
+        },
+        {
+          "name": "username",
+          "dataType": "String"
+        },
+        {
+          "name": "securePasswordName",
+          "dataType": "String"
+        },
+        {
+          "name": "properties",
+          "dataType": "EntityProperty"
+        },
+        {
           "name": "securityZoneName",
           "dataType": "String"
         }
       ],
-      "singularName": "sMConfig",
-      "pluralName": "sMConfigs",
-      "summaryFields": [],
+      "isL7Entity": true,
+      "singularName": "smConfig",
+      "pluralName": "smConfigs",
+      "summaryFields": [
+        "goid",
+        "name",
+        "checksum"
+      ],
       "excludedFields": [],
       "includedFields": [],
-      "identityFields": [],
+      "identityFields": [
+        "name"
+      ],
       "deprecatedFields": []
     },
     "SniConfiguration": {
@@ -7986,6 +8635,6 @@
     "CertificateValidationType",
     "CertValidationType"
   ],
-  "version": "2.0.0",
+  "version": "v2.0.0",
   "schemaVersion": "v11.2.2"
 }
