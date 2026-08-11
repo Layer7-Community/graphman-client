@@ -1,9 +1,11 @@
 mutation deleteBundle (
     $activeConnectors: [ActiveConnectorInput!]!=[],
     $administrativeUserAccountProperties: [AdministrativeUserAccountPropertyInput!]!=[],
+    $globalConfigs: [GlobalConfigInput!]!=[],
     $backgroundTaskPolicies:[BackgroundTaskPolicyInput!]!=[],
     $cassandraConnections:[CassandraConnectionInput!]!=[],
     $clusterProperties: [ClusterPropertyInput!]!=[],
+    $globalResources: [GlobalResourceInput!]!=[],
     $dtds:[DtdInput!]!=[],
     $emailListeners: [EmailListenerInput!]!=[],
     $encassConfigs:[EncassConfigInput!]!=[],
@@ -17,6 +19,9 @@ mutation deleteBundle (
     $ldapIdps:[LdapIdpInput!]=[],
     $simpleLdapIdps:[SimpleLdapIdpInput!]=[],
     $policyBackedIdps:[PolicyBackedIdpInput!]=[],
+    $identityProviders:[IdentityProviderInput!]=[],
+    $identityUsers:[IdentityUserInput!]=[],
+    $identityGroups:[IdentityGroupInput!]=[],
     $globalPolicies:[GlobalPolicyInput!]!=[],
     $internalGroups:[InternalGroupInput!]!=[],
     $internalSoapServices:[SoapServiceInput!]!=[],
@@ -53,8 +58,11 @@ mutation deleteBundle (
     $policyAliases: [L7PolicyAliasInput!]!=[],
     $serviceAliases: [L7ServiceAliasInput!]!=[],
     $sampleMessages: [SampleMessageInput!]!=[],
+    $clientCerts: [ClientCertInput!]!=[],
     $interfaceTags: [InterfaceTagInput!]!=[],
-    $firewallRules: [FirewallRuleInput!]!=[]
+    $firewallRules: [FirewallRuleInput!]!=[],
+    $sniConfigurations: [SniConfigurationInput!]!=[],
+    $securityZones:[SecurityZoneInput!]!=[]
     ) {
     setAuditConfigurations(input: $auditConfigurations){detailedStatus {action status description source {name value} target {name value}}}
     setRoles (input: $roles) {detailedStatus {action status description source {name value} target {name value}}}
@@ -65,6 +73,7 @@ mutation deleteBundle (
     setEmailListeners (input: $emailListeners){detailedStatus {action status description source {name value} target {name value}}}
     setJmsDestinations (input: $jmsDestinations){detailedStatus {action status description source {name value} target {name value}}}
     setPolicyBackedIdps (input: $policyBackedIdps){detailedStatus {action status description source {name value} target {name value}}}
+    setSniConfigurations(input: $sniConfigurations){detailedStatus {action status description source {name value} target {name value}}}
     setGenericEntities (input: $genericEntities){detailedStatus {action status description source {name value} target {name value}}}
     setPolicyBackedServices(input: $policyBackedServices){detailedStatus {action status description source {name value} target {name value}}}
 
@@ -84,6 +93,10 @@ mutation deleteBundle (
     setSMConfigs (input: $smConfigs){detailedStatus {action status description source {name value} target {name value}}}
 
     setCassandraConnections (input: $cassandraConnections){detailedStatus {action status description source {name value} target {name value}}}
+    setClientCerts (input: $clientCerts){detailedStatus {action status description source {name value} target {name value}}}
+    setIdentityUsers (input: $identityUsers){detailedStatus {action status description source {name value} target {name value}}}
+    setIdentityGroups (input: $identityGroups){detailedStatus {action status description source {name value} target {name value}}}
+    setIdentityProviders (input: $identityProviders){detailedStatus {action status description source {name value} target {name value}}}
     setInternalUsers (input: $internalUsers){detailedStatus {action status description source {name value} target {name value}}}
     setFederatedUsers (input: $federatedUsers){detailedStatus {action status description source {name value} target {name value}}}
     setFipUsers (input: $fipUsers){detailedStatus {action status description source {name value} target {name value}}}
@@ -98,6 +111,7 @@ mutation deleteBundle (
     setLdaps (input: $ldaps){detailedStatus {action status description source {name value} target {name value}}}
     setFips (input: $fips){detailedStatus {action status description source {name value} target {name value}}}
     setJdbcConnections (input: $jdbcConnections){detailedStatus {action status description source {name value} target {name value}}}
+    setGlobalResources (input: $globalResources){detailedStatus {action status description source {name value} target {name value}}}
     setDtds (input: $dtds){detailedStatus {action status description source {name value} target {name value}}}
     setSchemas (input: $schemas){detailedStatus {action status description source {name value} target {name value}}}
     setCustomKeyValues(input: $customKeyValues){detailedStatus {action status description source {name value} target {name value}}}
@@ -109,10 +123,12 @@ mutation deleteBundle (
 
     setFirewallRules (input: $firewallRules){detailedStatus {action status description source {name value} target {name value}}}
     setInterfaceTags (input: $interfaceTags){detailedStatus {action status description source {name value} target {name value}}}
+    setGlobalConfigs(input: $globalConfigs) {detailedStatus {action status description source {name value} target { name value}}}
     setAdministrativeUserAccountProperties (input: $administrativeUserAccountProperties){detailedStatus {action status description source {name value} target {name value}}}
     setPasswordPolicies (input: $passwordPolicies){detailedStatus {action status description source {name value} target {name value}}}
     setServiceResolutionConfigs (input: $serviceResolutionConfigs){detailedStatus {action status description source {name value} target {name value}}}
     setClusterProperties (input: $clusterProperties){detailedStatus {action status description source {name value} target {name value}}}
+    setSecurityZones(input: $securityZones){detailedStatus {action status description source {name value} target {name value}}}
     setServerModuleFiles(input: $serverModuleFiles){detailedStatus {action status description source {name value} target {name value}}}
 
     # Keys and KerberosConfig must be mutated at the end

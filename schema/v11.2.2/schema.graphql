@@ -25,7 +25,15 @@ extend type Mutation {
   """
   Update an existing active connector. Match is carried by refInput
   """
-  updateActiveConnector(refInput: ActiveConnectorRefInput!, input: ActiveConnectorPartialInput!): ActiveConnectorPayload!
+  updateActiveConnector(refInput: ActiveConnectorRefInput!, input: ActiveConnectorPartialInput!): ActiveConnectorPayload! @deprecated(reason: "Use 'updateActiveConnectors' instead")
+
+  """
+  Updates one or more existing active connectors.
+
+  Each input element's `ref` field (an `ActiveConnectorRefInput`) is the recommended way to identify the entity to update — see `ActiveConnectorRefInput` for how `goid` and other fields are resolved.
+  Top-level identifying field(s) on this input (e.g. `name`) are supported for backward compatibility when `ref` is omitted, but `ref` should be preferred.
+  """
+  updateActiveConnectors(input: [ActiveConnectorPartialInput!]!): ActiveConnectorsPayload!
 
   """
   Update an existing active connector with new properties. Match is carried by refInput.
@@ -45,15 +53,11 @@ extend type Mutation {
 
   """
   Delete one or more existing active connectors.
-  
-  Matching can be done using either:
-  - refInputs: Array of ActiveConnectorRefInput objects (name + connectorType) - recommended
-  - names: Array of active connector names - deprecated
-  
-  At least one of the parameters must be provided. If both are provided, refInputs takes precedence.
-  The operation returns the status of each deletion attempt.
+
+  Each input element's `ref` field (an `ActiveConnectorRefInput`) is the recommended way to identify the entity to update — see `ActiveConnectorRefInput` for how `goid` and other fields are resolved.
+  Top-level identifying field(s) on this input (e.g. `name`) are supported for backward compatibility when `ref` is omitted, but `ref` should be preferred.
   """
-  deleteActiveConnectors(refInputs: [ActiveConnectorRefInput!], names: [String!]): ActiveConnectorsPayload!
+  deleteActiveConnectors(input: [ActiveConnectorPartialInput!], refInputs: [ActiveConnectorRefInput!] @deprecated(reason: "Use 'input' instead"), names: [String!] @deprecated(reason: "Use 'input' instead")): ActiveConnectorsPayload!
 }
 
 """
@@ -108,16 +112,23 @@ input ActiveConnectorInput {
     checksum : String
 }
 
-"Reference input to identify the active connector entity"
+"""
+Reference input to identify the active connector entity. At least one of goid or name must be supplied.
+If `goid` is supplied, it is used exclusively to locate the entity; any other identifying fields on this input are ignored, and the lookup does not fall back to them if the supplied `goid` does not match an existing entity.
+"""
 input ActiveConnectorRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "The name of the active connector"
-    name: String!
+    name: String
     "The active connector type Examples:- KAFKA, SFTP_POLLING_LISTENER, MQ_NATIVE"
     connectorType: String
 }
 
 "The inputs for partial update of active connector"
 input ActiveConnectorPartialInput {
+    "The reference input"
+    ref: ActiveConnectorRefInput
     "The internal entity unique identifier"
     goid: ID
     "The active connector name"
@@ -182,6 +193,7 @@ Supported properties are logonMaxAllowableAttempts, logonLockoutTime, logonSessi
 > @l7-summary-fields goid,name,checksum
 > @l7-name-fields name
 > @l7-display-summary-fields name,value
+> @l7-deprecated Use 'GlobalConfig' instead.
 """
 type AdministrativeUserAccountProperty {
     "The administrative user account property unique identifier"
@@ -213,6 +225,7 @@ type AdministrativeUserAccountPropertiesPayload implements EntityMutationsPayloa
 }
 #
 # Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
+# AI assistance has been used to generate some or all contents of this file. That includes, but is not limited to, new code, modifying existing code, stylistic edits.
 #
 
 extend type Query {
@@ -264,7 +277,10 @@ extend type Mutation {
     Update a single policy alias by name and folder path.
     Using which, selected alias can be moved from one folder to another.
     """
-    updatePolicyAlias(refInput: L7PolicyAliasRefInput!, input: L7PolicyAliasPartialInput!) : L7PolicyAliasPayload!
+    updatePolicyAlias(refInput: L7PolicyAliasRefInput!, input: L7PolicyAliasPartialInput!) : L7PolicyAliasPayload! @deprecated(reason: "Use 'updatePolicyAliases' instead")
+
+    "Update policy aliases."
+    updatePolicyAliases(input: [L7PolicyAliasPartialInput!]!) : L7PolicyAliasesPayload!
 
     """
     (Deprecated) Delete a single policy alias by name and folder path.
@@ -279,13 +295,16 @@ extend type Mutation {
     Aliases that do not exist will return NONE status with a description indicating the entity was not found.
     This operation is transactional - use the 'test' query parameter to preview changes without committing.
     """
-    deletePolicyAliases(refInputs: [L7PolicyAliasRefInput!]!) : L7PolicyAliasesPayload!
+    deletePolicyAliases(input: [L7PolicyAliasPartialInput!], refInputs: [L7PolicyAliasRefInput!] @deprecated(reason: "Use 'input' instead")) : L7PolicyAliasesPayload!
 
     """
     Update a single service alias by name and folder path.
     Using which, selected alias can be moved from one folder to another.
     """
-    updateServiceAlias(refInput: L7ServiceAliasRefInput!, input: L7ServiceAliasPartialInput!) : L7ServiceAliasPayload!
+    updateServiceAlias(refInput: L7ServiceAliasRefInput!, input: L7ServiceAliasPartialInput!) : L7ServiceAliasPayload! @deprecated(reason: "Use 'updateServiceAliases' instead")
+
+    "Update service aliases."
+    updateServiceAliases(input: [L7ServiceAliasPartialInput!]!) : L7ServiceAliasesPayload!
 
     """
     (Deprecated) Delete a single service alias by name and folder path.
@@ -300,7 +319,7 @@ extend type Mutation {
     Aliases that do not exist will return NONE status with a description indicating the entity was not found.
     This operation is transactional - use the 'test' query parameter to preview changes without committing.
     """
-    deleteServiceAliases(refInputs: [L7ServiceAliasRefInput!]!) : L7ServiceAliasesPayload!
+    deleteServiceAliases(input: [L7ServiceAliasPartialInput!], refInputs: [L7ServiceAliasRefInput!] @deprecated(reason: "Use 'input' instead")) : L7ServiceAliasesPayload!
 }
 
  """
@@ -379,6 +398,9 @@ extend type Mutation {
  }
 
   input L7PolicyAliasPartialInput {
+    ref: L7PolicyAliasRefInput
+    goid: ID
+    name: String
     "The folder path where to create this alias.  If the path does not exist, it will be created"
     folderPath: String
   }
@@ -386,12 +408,14 @@ extend type Mutation {
  """
  Reference input to identify a policy alias entity.
  Used for delete operations to uniquely identify an alias by its policy name and folder location.
+ At least one of goid, or both folderPath and name, must be supplied.
  """
  input L7PolicyAliasRefInput {
+   goid: ID
    "The folder path where the alias is located (e.g., '/my-folder' or '/parent/child')"
-   folderPath: String!
+   folderPath: String
    "The name of the alias"
-   name: String!
+   name: String
    "The name of the aliased policy"
    aliasedPolicyName: String
  }
@@ -432,6 +456,9 @@ extend type Mutation {
  }
 
   input L7ServiceAliasPartialInput {
+    ref: L7ServiceAliasRefInput
+    goid: ID
+    name: String
     "The folder path where to create this alias.  If the path does not exist, it will be created"
     folderPath: String
   }
@@ -439,12 +466,13 @@ extend type Mutation {
  """
  Reference input to identify a service alias entity.
  Used for delete operations to uniquely identify an alias by its service name and folder location.
+ At least one of goid, or both folderPath and name, must be supplied.
  """
  input L7ServiceAliasRefInput {
    "The folder path where the alias is located (e.g., '/my-folder' or '/parent/child')"
-   folderPath: String!
+   folderPath: String
    "The alias name"
-   name: String!
+   name: String
    "The name of the service that is aliased"
    aliasedServiceName: String
    "The internal entity unique identifier"
@@ -467,22 +495,26 @@ extend type Mutation {
 extend type Query {
     "Get All AuditConfigurations"
     auditConfigurations: [AuditConfiguration!]!
+        @deprecated(reason: "Use auditSinkOptions inside GlobalConfig instead.")
     "Get filtered AuditConfigurations"
     auditConfigurationsByFilters(filters: [EntityFilterInput!]!): [AuditConfiguration!]!
+        @deprecated(reason: "Use auditSinkOptions inside GlobalConfig instead.")
 }
 
 extend type Mutation {
     setAuditConfigurations(input : [AuditConfigurationInput!]!): AuditConfigurationsPayload!
+        @deprecated(reason: "Use setGlobalConfigs or updateGlobalConfigs with auditSinkOptions instead.")
 
     """
     Delete one or more existing audit configurations.
-    
+
     Matching can be done using:
     - refInputs: Array of AuditConfigurationRefInput objects (name)
 
     The operation returns the status of each deletion attempt.
     """
-    deleteAuditConfigurations(refInputs: [AuditConfigurationRefInput!]!): AuditConfigurationsPayload!
+    deleteAuditConfigurations(input: [AuditConfigurationPartialInput!], refInputs: [AuditConfigurationRefInput!] @deprecated(reason: "Use 'input' instead")): AuditConfigurationsPayload!
+        @deprecated(reason: "Use GlobalConfig instead; the audit configuration sub-config is a protected singleton and cannot be deleted independently.")
 }
 """
 An Audit Configuration.
@@ -493,6 +525,7 @@ An Audit Configuration.
 > @l7-display-summary-fields name,
 > @l7-encrypted-fields ftpConfig.password
 > @l7-foreign-fields lookupPolicyName|name|L7Policy,sinkPolicyName|name|L7Policy
+> @l7-deprecated Use 'GlobalConfig' instead.
 """
 type AuditConfiguration {
     "The internal entity unique identifier"
@@ -529,10 +562,30 @@ input AuditConfigurationInput {
     ftpConfig: AuditFtpConfigurationInput
 }
 
-"Reference input to identify the audit configuration entity"
+"Reference input to identify the audit configuration entity. At least one of goid or name must be supplied."
 input AuditConfigurationRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "The name of the audit configuration"
-    name: String!
+    name: String
+}
+
+"The inputs for partial update of audit configuration"
+input AuditConfigurationPartialInput {
+    "The reference input"
+    ref: AuditConfigurationRefInput
+    "The internal entity unique identifier"
+    goid: ID
+    "log sink unique name"
+    name: String
+    "Whether to save the audit records always to the internal database"
+    alwaysSaveInternal: Boolean
+    "Lookup Policy Name"
+    lookupPolicyName: String
+    "Sink Policy Name"
+    sinkPolicyName: String
+    "FTP Client Configuration"
+    ftpConfig: AuditFtpConfigurationInput
 }
 
 """
@@ -773,7 +826,10 @@ extend type Mutation {
     """
     Update an existing Cassandra connection. Match is carried by refInput
     """
-    updateCassandraConnection(refInput: CassandraConnectionRefInput!, input: CassandraConnectionPartialInput!): CassandraConnectionPayload!
+    updateCassandraConnection(refInput: CassandraConnectionRefInput!, input: CassandraConnectionPartialInput!): CassandraConnectionPayload! @deprecated(reason: "Use 'updateCassandraConnections' instead")
+
+    "Update Cassandra connections."
+    updateCassandraConnections(input: [CassandraConnectionPartialInput!]!): CassandraConnectionsPayload!
 
     """
     Update an existing Cassandra connection with new properties. Match is carried by refInput.
@@ -793,7 +849,7 @@ extend type Mutation {
     At least one of the parameters must be provided. If both are provided, refInputs takes precedence.
     The operation returns the status of each deletion attempt.
     """
-    deleteCassandraConnections(refInputs: [CassandraConnectionRefInput!], names: [String!]): CassandraConnectionsPayload!
+    deleteCassandraConnections(input: [CassandraConnectionPartialInput!], refInputs: [CassandraConnectionRefInput!] @deprecated(reason: "Use 'input' instead"), names: [String!] @deprecated(reason: "Use 'input' instead")): CassandraConnectionsPayload!
 }
 
 enum CassandraCompression {
@@ -871,6 +927,8 @@ input CassandraConnectionInput {
 }
 
 input CassandraConnectionPartialInput {
+    "The reference input"
+    ref: CassandraConnectionRefInput
     "The internal entity unique identifier"
     goid: ID
     "The Cassandra Connection name"
@@ -897,10 +955,12 @@ input CassandraConnectionPartialInput {
     properties: [EntityPropertyInput!]
 }
 
-"Reference input to identify the entity"
+"Reference input to identify the entity. At least one of goid or name must be supplied."
 input CassandraConnectionRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "The Cassandra Connection name"
-    name: String!
+    name: String
 }
 
 type CassandraConnectionPayload implements EntityMutationPayload {
@@ -940,9 +1000,11 @@ extend type Mutation {
     """
     Update the certBase64 of an existing client certificate. Match is carried by refInput.
     """
-    updateClientCert(refInput: ClientCertRefInput!, input: ClientCertPartialInput!): ClientCertPayload!
+    updateClientCert(refInput: ClientCertRefInput!, input: ClientCertPartialInput!): ClientCertPayload! @deprecated(reason: "Use 'updateClientCerts' instead")
+    "Update client certificates"
+    updateClientCerts(input: [ClientCertPartialInput!]!): ClientCertsPayload!
     "Revokes client certificates for one or more users from any IDP type"
-    deleteClientCerts(refInputs: [ClientCertRefInput!]!): ClientCertsPayload!
+    deleteClientCerts(input: [ClientCertPartialInput!], refInputs: [ClientCertRefInput!] @deprecated(reason: "Use 'input' instead")): ClientCertsPayload!
 }
 
 "Input for setting a client certificate on a user"
@@ -1012,11 +1074,14 @@ input ClientCertMappingInstructionInput {
     source: ClientCertRefInput
 }
 
+"At least one of goid or providerName must be supplied."
 input ClientCertRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "The thumbprint of the certificate"
     thumbprint: String
     "The name of identity provider that the user belongs to"
-    providerName: String!
+    providerName: String
     "The username as resolved from the identity provider"
     username: String
 }
@@ -1026,6 +1091,14 @@ Partial input for updating a client certificate.
 Only certBase64 can be updated.
 """
 input ClientCertPartialInput {
+    "The reference input"
+    ref: ClientCertRefInput
+    "The internal entity unique identifier"
+    goid: ID
+    "The name of identity provider that the user belongs to"
+    providerName: String
+    "The username as resolved from the identity provider"
+    username: String
     "A client-side certificate in base64 encoding"
     certBase64: String
 }
@@ -1246,7 +1319,12 @@ extend type Mutation {
   """
   Update an existing cluster property. Match is carried by refInput
   """
-  updateClusterProperty(refInput: ClusterPropertyRefInput!, input: ClusterPropertyPartialInput!): ClusterPropertyPayload!
+  updateClusterProperty(refInput: ClusterPropertyRefInput!, input: ClusterPropertyPartialInput!): ClusterPropertyPayload! @deprecated(reason: "Use 'updateClusterProperties' instead")
+
+  """
+  Update cluster properties.
+  """
+  updateClusterProperties(input: [ClusterPropertyPartialInput!]!): ClusterPropertiesPayload!
 
   """
   Delete one or more existing cluster properties.
@@ -1258,7 +1336,7 @@ extend type Mutation {
   At least one of the parameters must be provided. If both are provided, refInputs takes precedence.
   The operation returns the status of each deletion attempt.
   """
-  deleteClusterProperties(refInputs: [ClusterPropertyRefInput!], names: [String!]): ClusterPropertiesPayload!
+  deleteClusterProperties(input: [ClusterPropertyPartialInput!], refInputs: [ClusterPropertyRefInput!] @deprecated(reason: "Use 'input' instead"), names: [String!] @deprecated(reason: "Use 'input' instead")): ClusterPropertiesPayload!
 }
 
 """
@@ -1302,14 +1380,18 @@ input ClusterPropertyInput {
   checksum : String
 }
 
-"Reference input to identify the entity"
+"Reference input to identify the entity. At least one of goid or name must be supplied."
 input ClusterPropertyRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "The name of the cluster property"
-    name: String!
+    name: String
 }
 
 "The inputs for partial update of cluster property"
 input ClusterPropertyPartialInput {
+    "The reference input"
+    ref: ClusterPropertyRefInput
     "The internal entity unique identifier"
     goid: ID
     "The name of the cluster property"
@@ -1356,7 +1438,7 @@ extend type Mutation {
   setCustomKeyValues(input: [CustomKeyValueInput!]!): CustomKeyValuePayload!
 
   "Delete existing cluster properties"
-  deleteCustomKeyValues(keys: [String!]!): CustomKeyValuePayload!
+  deleteCustomKeyValues(input: [CustomKeyValuePartialInput!], keys: [String!] @deprecated(reason: "Use 'input' instead")): CustomKeyValuePayload!
 }
 
 """
@@ -1406,9 +1488,24 @@ input CustomKeyValueMappingInstructionInput{
     "one or more name-value pairs to identify a CustomKeyValue entity uniquely"
     source: CustomKeyValueRefInput
 }
-input CustomKeyValueRefInput{
+"The inputs for partial update of custom key value"
+input CustomKeyValuePartialInput {
+    "The reference input"
+    ref: CustomKeyValueRefInput
+    "The internal entity unique identifier"
+    goid: ID
     "The custom key"
-    key: String!
+    key: String
+    "The custom value in Base64 encoded format"
+    value: String
+}
+
+"At least one of goid or key must be supplied."
+input CustomKeyValueRefInput{
+    "The internal entity unique identifier"
+    goid: ID
+    "The custom key"
+    key: String
 }
 # AI assistance has been used to generate some or all contents of this file. That includes, but is not limited to, new code, modifying existing code, stylistic edits.
 #
@@ -1436,7 +1533,12 @@ extend type Mutation {
   """
   Update an existing email listener. Match is carried by refInput
   """
-  updateEmailListener(refInput: EmailListenerRefInput!, input: EmailListenerPartialInput!): EmailListenerPayload!
+  updateEmailListener(refInput: EmailListenerRefInput!, input: EmailListenerPartialInput!): EmailListenerPayload! @deprecated(reason: "Use 'updateEmailListeners' instead")
+
+  """
+  Update email listeners.
+  """
+  updateEmailListeners(input: [EmailListenerPartialInput!]!): EmailListenersPayload!
 
   """
   Update an existing email listener with new properties. Match is carried by refInput.
@@ -1456,7 +1558,7 @@ extend type Mutation {
   At least one of the parameters must be provided. If both are provided, refInputs takes precedence.
   The operation returns the status of each deletion attempt.
   """
-  deleteEmailListeners(refInputs: [EmailListenerRefInput!], names: [String!]): EmailListenersPayload!
+  deleteEmailListeners(input: [EmailListenerPartialInput!], refInputs: [EmailListenerRefInput!] @deprecated(reason: "Use 'input' instead"), names: [String!] @deprecated(reason: "Use 'input' instead")): EmailListenersPayload!
 }
 
 enum EmailServerType {
@@ -1550,6 +1652,8 @@ input EmailListenerInput {
 }
 
 input EmailListenerPartialInput {
+    "The reference input"
+    ref: EmailListenerRefInput
     "The internal entity unique identifier"
     goid: ID
     "The name of the email listener. If you are creating several listeners, make sure the name is descriptive"
@@ -1582,10 +1686,12 @@ input EmailListenerPartialInput {
     properties: [EntityPropertyInput!]
 }
 
-"Reference input to identify the entity"
+"Reference input to identify the entity. At least one of goid or name must be supplied."
 input EmailListenerRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "The email listener name"
-    name: String!
+    name: String
 }
 
 type EmailListenerPayload implements EntityMutationPayload {
@@ -1628,7 +1734,11 @@ extend type Mutation {
     Update an existing Encapsulated Assertion Configuration. Match is carried by refInput.
     Only the fields provided in the input will be updated; omitted fields retain their current values.
     """
-    updateEncassConfig(refInput: EncassConfigRefInput!, input: EncassConfigPartialInput!) : EncassConfigPayload!
+    updateEncassConfig(refInput: EncassConfigRefInput!, input: EncassConfigPartialInput!) : EncassConfigPayload! @deprecated(reason: "Use 'updateEncassConfigs' instead")
+    """
+    Update Encapsulated Assertion Configurations.
+    """
+    updateEncassConfigs(input: [EncassConfigPartialInput!]!) : EncassConfigsPayload!
     """
     Delete existing Encapsulated Assertion Configurations.
 
@@ -1638,7 +1748,7 @@ extend type Mutation {
 
     At least one of the parameters must be provided. If both are provided, refInputs takes precedence.
     """
-    deleteEncassConfigs(refInputs: [EncassConfigRefInput!], names: [String!]) : EncassConfigsPayload
+    deleteEncassConfigs(input: [EncassConfigPartialInput!], refInputs: [EncassConfigRefInput!] @deprecated(reason: "Use 'input' instead"), names: [String!] @deprecated(reason: "Use 'input' instead")) : EncassConfigsPayload
 }
 
 """
@@ -1733,6 +1843,8 @@ input EncassConfigInput {
 
 "The description of a partial update for an encapsulated assertion configuration. All fields are optional; omitted fields retain their current values."
 input EncassConfigPartialInput {
+    "The reference input"
+    ref: EncassConfigRefInput
     "The internal entity unique identifier"
     goid: ID
     "The guid for this encass config"
@@ -1775,10 +1887,12 @@ input EncassResultInput {
     type : DataType!
 }
 
-"Reference input to identify an Encapsulated Assertion Configuration entity"
+"Reference input to identify an Encapsulated Assertion Configuration entity. At least one of goid or name must be supplied."
 input EncassConfigRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "The name of the encass config"
-    name: String!
+    name: String
 }
 
 type EncassConfigPayload implements EntityMutationPayload {
@@ -1819,7 +1933,12 @@ extend type Mutation {
   """
   Update an existing firewall rule. Match is carried by refInput
   """
-  updateFirewallRule(refInput: FirewallRuleRefInput!, input: FirewallRulePartialInput!): FirewallRulePayload!
+  updateFirewallRule(refInput: FirewallRuleRefInput!, input: FirewallRulePartialInput!): FirewallRulePayload! @deprecated(reason: "Use 'updateFirewallRules' instead")
+
+  """
+  Update firewall rules.
+  """
+  updateFirewallRules(input: [FirewallRulePartialInput!]!): FirewallRulesPayload!
 
   """
   Update an existing firewall rule with new properties. Match is carried by refInput.
@@ -1830,7 +1949,7 @@ extend type Mutation {
   updateFirewallRuleProperties(refInput: FirewallRuleRefInput!, properties: [EntityPropertyPartialInput!]!): FirewallRulePayload!
 
   "Delete existing firewall rules"
-  deleteFirewallRules(refInputs: [FirewallRuleRefInput!]!): FirewallRulesPayload!
+  deleteFirewallRules(input: [FirewallRulePartialInput!], refInputs: [FirewallRuleRefInput!] @deprecated(reason: "Use 'input' instead")): FirewallRulesPayload!
 }
 
 """
@@ -1949,6 +2068,8 @@ The partial inputs sent with the updateFirewallRule Mutation
 All fields are optional for partial updates
 """
 input FirewallRulePartialInput {
+   "The reference input"
+    ref: FirewallRuleRefInput
    "The goid for the firewall rule (optional)"
     goid : ID
     "The name of the firewall rule (optional)"
@@ -2016,9 +2137,12 @@ input FirewallRuleMappingInstructionInput{
     "one or more name-value pairs to identify a FirewallRule entity uniquely"
     source: FirewallRuleRefInput
 }
+"At least one of goid or name must be supplied."
 input FirewallRuleRefInput{
+    "The internal entity unique identifier"
+    goid: ID
     "The firewall rule name"
-    name: String!
+    name: String
 }
 # AI assistance has been used to generate some or all contents of this file. That includes, but is not limited to, new code, modifying existing code, stylistic edits.
 #
@@ -2042,7 +2166,9 @@ extend type Mutation {
     "Set the Folders"
     setFolders(input : [FolderInput!]!) : FoldersPayload!
     "Update the folder"
-    updateFolder(refInput: FolderRefInput!, input: FolderPartialInput!): FolderPayload!
+    updateFolder(refInput: FolderRefInput!, input: FolderPartialInput!): FolderPayload! @deprecated(reason: "Use 'updateFolders' instead")
+    "Update folders"
+    updateFolders(input: [FolderPartialInput!]!): FoldersPayload!
     """
     Delete one or more existing folders.
     
@@ -2053,7 +2179,7 @@ extend type Mutation {
     At least one of the parameters must be provided. If both are provided, refInputs takes precedence.
     The operation returns the status of each deletion attempt.
     """
-    deleteFolders(refInputs: [FolderRefInput!], paths: [String!]) : FoldersPayload!
+    deleteFolders(input: [FolderPartialInput!], refInputs: [FolderRefInput!] @deprecated(reason: "Use 'input' instead"), paths: [String!] @deprecated(reason: "Use 'input' instead")) : FoldersPayload!
 }
 
 input FolderInput {
@@ -2068,6 +2194,8 @@ input FolderInput {
 }
 
 input FolderPartialInput {
+    "The reference input"
+    ref: FolderRefInput
     "The goid for the folder"
     goid : ID
     "The folder name"
@@ -2120,9 +2248,12 @@ input FolderMappingInstructionInput {
     source: FolderRefInput
 }
 
+"At least one of goid or path must be supplied."
 input FolderRefInput {
+    "The goid for the folder"
+    goid: ID
     "The folder Path"
-    path: String!
+    path: String
 }
 
 # AI assistance has been used to generate some or all contents of this file. That includes, but is not limited to, new code, modifying existing code, stylistic edits.
@@ -2457,7 +2588,12 @@ extend type Mutation {
   """
   Update an existing generic entity. Match is carried by refInput
   """
-  updateGenericEntity(refInput: GenericEntityRefInput!, input: GenericEntityPartialInput!): GenericEntityPayload!
+  updateGenericEntity(refInput: GenericEntityRefInput!, input: GenericEntityPartialInput!): GenericEntityPayload! @deprecated(reason: "Use 'updateGenericEntities' instead")
+
+  """
+  Update generic entities.
+  """
+  updateGenericEntities(input: [GenericEntityPartialInput!]!): GenericEntitiesPayload!
 
   """
   Delete one or more existing generic entities.
@@ -2469,7 +2605,7 @@ extend type Mutation {
   At least one of the parameters must be provided. If both are provided, refInputs takes precedence.
   The operation returns the status of each deletion attempt.
   """
-  deleteGenericEntities(refInputs: [GenericEntityRefInput!], names: [String!]): GenericEntitiesPayload!
+  deleteGenericEntities(input: [GenericEntityPartialInput!], refInputs: [GenericEntityRefInput!] @deprecated(reason: "Use 'input' instead"), names: [String!] @deprecated(reason: "Use 'input' instead")): GenericEntitiesPayload!
 }
 
 """
@@ -2518,6 +2654,8 @@ input GenericEntityInput {
 }
 
 input GenericEntityPartialInput {
+    "The reference input"
+    ref: GenericEntityRefInput
     "The internal entity unique identifier"
     goid: ID
     " unique name"
@@ -2536,10 +2674,12 @@ input GenericEntityPartialInput {
     entityClassName: String
 }
 
-"Reference input to identify the entity"
+"Reference input to identify the entity. At least one of goid or name must be supplied."
 input GenericEntityRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "The generic entity name"
-    name: String!
+    name: String
 }
 
 type GenericEntityPayload implements EntityMutationPayload {
@@ -2571,12 +2711,6 @@ enum CertValidationOption {
 Certificate Validation Options — embedded sub-config of GlobalConfig.
 """
 type CertValidationOptions {
-    "The internal entity unique identifier"
-    goid: ID!
-    "Configuration name (always 'SystemCertValidateConfig')"
-    name: String!
-    "The configuration checksum"
-    checksum: String!
     "Certificate validation option for Identity Providers"
     identityProviders: CertValidationOption!
     "Certificate validation option for Routing"
@@ -2592,13 +2726,86 @@ logonSessionExpiry (1-86400 s), logonInactivityPeriod (1-365 days).
 """
 type AdministrativeUserAccountOptions {
     "Maximum number of consecutive failed logon attempts before account lockout"
-    logonMaxAllowableAttempts: String!
+    logonMaxAllowableAttempts: Int!
     "Duration in seconds an account remains locked after exceeding the attempt limit"
-    logonLockoutTime: String!
+    logonLockoutTime: Long!
     "Idle session expiry time in seconds"
-    logonSessionExpiry: String!
+    logonSessionExpiry: Int!
     "Number of days of inactivity before an account is disabled"
-    logonInactivityPeriod: String!
+    logonInactivityPeriod: Int!
+}
+
+"""
+Default (cluster-wide) HTTP proxy options — embedded sub-config of GlobalConfig.
+> @l7-foreign-fields securePasswordName|name|Secret
+"""
+type DefaultHttpProxyOptions {
+    "The proxy host"
+    host: String
+    "The proxy port"
+    port: Int
+    "The proxy username"
+    username: String
+    "The name of the Secret (stored password) used for proxy authentication"
+    securePasswordName: String
+}
+
+"""
+Service resolution options — embedded sub-config of GlobalConfig.
+"""
+type ServiceResolutionOptions {
+    "Whether a resolution path is required"
+    resolutionPathRequired: Boolean!
+    "Whether the resolution path is case sensitive"
+    resolutionPathCaseSensitive: Boolean!
+    "Whether to use the original URL for resolution"
+    useL7OriginalUrl: Boolean!
+    "Whether to use the service GOID for resolution"
+    useServiceGoid: Boolean!
+    "Whether to use the SOAPAction header for resolution"
+    useSoapAction: Boolean!
+    "Whether to use the SOAP body child namespace for resolution"
+    useSoapBodyChildNamespace: Boolean!
+}
+
+"""
+Audit sink configuration options — embedded sub-config of GlobalConfig.
+> @l7-foreign-fields lookupPolicyName|name|L7Policy,sinkPolicyName|name|L7Policy
+"""
+type AuditSinkOptions {
+    "Whether to save the audit records always to the internal database"
+    alwaysSaveInternal: Boolean!
+    "Lookup Policy Name"
+    lookupPolicyName: String
+    "Sink Policy Name"
+    sinkPolicyName: String
+    "FTP Client Configuration for the audit archiver"
+    ftpConfig: AuditFtpConfig
+}
+
+"""
+Audit archiver FTP configuration
+> @l7-encrypted-fields password
+"""
+type AuditFtpConfig {
+    "Host of FTP Server"
+    host: String!
+    "Port of FTP Server"
+    port: Int!
+    "FTP connection timeout"
+    timeout: Int!
+    "FTP user"
+    user: String!
+    "FTP password"
+    password: String
+    "Directory in FTP Server"
+    directory: String
+    "To verify server certification"
+    verifyServerCert: Boolean!
+    "Security Type"
+    security: AuditFtpSecurityType!
+    "Whether this Audit Configuration is enabled"
+    enabled: Boolean!
 }
 
 """
@@ -2606,6 +2813,7 @@ Global Gateway Configuration — singleton entity aggregating gateway-wide setti
 > @l7-entity
 > @l7-identity-fields name
 > @l7-summary-fields goid,name,checksum
+> @l7-name-fields name
 """
 type GlobalConfig {
     "The internal entity unique identifier"
@@ -2614,10 +2822,16 @@ type GlobalConfig {
     name: String!
     "The configuration checksum"
     checksum: String
-    "Certificate validation options sub-configuration"
-    certValidationOptions: CertValidationOptions!
     "Administrative user account options sub-configuration"
-    administrativeUserAccountOptions: AdministrativeUserAccountOptions!
+    administrativeUserAccountOptions: AdministrativeUserAccountOptions
+    "Certificate validation options sub-configuration"
+    certValidationOptions: CertValidationOptions
+    "Default cluster-wide HTTP proxy options sub-configuration"
+    defaultHttpProxyOptions: DefaultHttpProxyOptions
+    "Service resolution options sub-configuration"
+    serviceResolutionOptions: ServiceResolutionOptions
+    "Audit sink configuration options sub-configuration"
+    auditSinkOptions: AuditSinkOptions
 }
 
 extend type Query {
@@ -2625,37 +2839,39 @@ extend type Query {
     globalConfigs: [GlobalConfig!]!
     "Get the global gateway configuration by GOID; returns the singleton when the default GOID is supplied"
     globalConfigByGoid(goid: ID!): GlobalConfig
+    "Get filtered global config configured on this gateway"
+    globalConfigsByFilters(filters: [EntityFilterInput!]!) : [GlobalConfig!]!
 }
 
 extend type Mutation {
     """
     Create or update the global configuration.
     Accepts an array of inputs; only the first element is applied (singleton).
-    Supply certValidationOptions, administrativeUserAccountOptions, or both.
+    Supply any combination of certValidationOptions, administrativeUserAccountOptions,
+    defaultHttpProxyOptions, serviceResolutionOptions, and auditSinkOptions.
     """
-    setGlobalConfigs(input: [GlobalConfigInput!]!): GlobalConfigPayload!
+    setGlobalConfigs(input: [GlobalConfigInput!]!): GlobalConfigsPayload!
 
     """
     Partially update the global configuration.
     Only the sub-sections provided in input are changed.
     """
-    updateGlobalConfig(refInput: GlobalConfigRefInput!, input: GlobalConfigPartialInput!): GlobalConfigPayload!
+    updateGlobalConfig(refInput: GlobalConfigRefInput!, input: GlobalConfigPartialInput!): GlobalConfigPayload! @deprecated(reason: "Use 'updateGlobalConfigs' instead")
+
+    """
+    Partially update the global configurations.
+    """
+    updateGlobalConfigs(input: [GlobalConfigPartialInput!]!): GlobalConfigsPayload!
 
     """
     Delete global configuration — not permitted (protected singleton).
     Accepts an array of ref inputs; always returns NONE status with a warning for each.
     """
-    deleteGlobalConfigs(refInputs: [GlobalConfigRefInput!]!): GlobalConfigPayload!
+    deleteGlobalConfigs(input: [GlobalConfigPartialInput!], refInputs: [GlobalConfigRefInput!] @deprecated(reason: "Use 'input' instead")): GlobalConfigsPayload!
 }
 
 "Input for creating or updating Certificate Validation Options within GlobalConfig."
 input CertValidationOptionsInput {
-    "The internal entity unique identifier"
-    goid: ID
-    "Configuration name"
-    name: String!
-    "Ignored at mutation time but can be used to compare bundle with gateway state"
-    checksum: String
     "Certificate validation option for Identity Providers"
     identityProviders: CertValidationOption!
     "Certificate validation option for Routing"
@@ -2667,23 +2883,78 @@ input CertValidationOptionsInput {
 "Input for administrative user account options within GlobalConfig."
 input AdministrativeUserAccountOptionsInput {
     "Maximum number of consecutive failed logon attempts before account lockout (1-20)"
-    logonMaxAllowableAttempts: String!
+    logonMaxAllowableAttempts: Int!
     "Duration in seconds an account remains locked after exceeding the attempt limit (1-86400)"
-    logonLockoutTime: String!
+    logonLockoutTime: Long!
     "Idle session expiry time in seconds (1-86400)"
-    logonSessionExpiry: String!
+    logonSessionExpiry: Int!
     "Number of days of inactivity before an account is disabled (1-365)"
-    logonInactivityPeriod: String!
+    logonInactivityPeriod: Int!
+}
+
+"Input for default HTTP proxy options within GlobalConfig."
+input DefaultHttpProxyOptionsInput {
+    "The proxy host"
+    host: String
+    "The proxy port"
+    port: Int
+    "The proxy username"
+    username: String
+    "The name of the Secret (stored password) used for proxy authentication"
+    securePasswordName: String
+}
+
+"Input for service resolution options within GlobalConfig."
+input ServiceResolutionOptionsInput {
+    "Whether a resolution path is required"
+    resolutionPathRequired: Boolean!
+    "Whether the resolution path is case sensitive"
+    resolutionPathCaseSensitive: Boolean!
+    "Whether to use the original URL for resolution"
+    useL7OriginalUrl: Boolean!
+    "Whether to use the service GOID for resolution"
+    useServiceGoid: Boolean!
+    "Whether to use the SOAPAction header for resolution"
+    useSoapAction: Boolean!
+    "Whether to use the SOAP body child namespace for resolution"
+    useSoapBodyChildNamespace: Boolean!
+}
+
+"Input for audit sink configuration options within GlobalConfig."
+input AuditSinkOptionsInput {
+    "Whether to save the audit records always to the internal database"
+    alwaysSaveInternal: Boolean!
+    "Lookup Policy Name"
+    lookupPolicyName: String
+    "Sink Policy Name"
+    sinkPolicyName: String
+    "FTP Client Configuration for the audit archiver"
+    ftpConfig: AuditFtpConfigInput
+}
+
+input AuditFtpConfigInput {
+    "Host of FTP Server"
+    host: String!
+    "Port of FTP Server"
+    port: Int!
+    "FTP connection timeout"
+    timeout: Int!
+    "FTP user"
+    user: String!
+    "FTP password"
+    password: String
+    "Directory in FTP Server"
+    directory: String
+    "To verify server certification"
+    verifyServerCert: Boolean = false
+    "Security Type"
+    security: AuditFtpSecurityType!
+    "Whether this Audit Configuration is enabled"
+    enabled: Boolean!
 }
 
 "Partial input for Certificate Validation Options within GlobalConfig. All fields are optional; only supplied fields are applied."
 input CertValidationOptionsPartialInput {
-    "The internal entity unique identifier"
-    goid: ID
-    "Configuration name"
-    name: String
-    "Ignored at mutation time but can be used to compare bundle with gateway state"
-    checksum: String
     "Certificate validation option for Identity Providers"
     identityProviders: CertValidationOption
     "Certificate validation option for Routing"
@@ -2695,13 +2966,74 @@ input CertValidationOptionsPartialInput {
 "Partial input for administrative user account options within GlobalConfig. All fields are optional; only supplied fields are applied."
 input AdministrativeUserAccountOptionsPartialInput {
     "Maximum number of consecutive failed logon attempts before account lockout (1-20)"
-    logonMaxAllowableAttempts: String
+    logonMaxAllowableAttempts: Int
     "Duration in seconds an account remains locked after exceeding the attempt limit (1-86400)"
-    logonLockoutTime: String
+    logonLockoutTime: Long
     "Idle session expiry time in seconds (1-86400)"
-    logonSessionExpiry: String
+    logonSessionExpiry: Int
     "Number of days of inactivity before an account is disabled (1-365)"
-    logonInactivityPeriod: String
+    logonInactivityPeriod: Int
+}
+
+"Input for default HTTP proxy options within GlobalConfig. All fields are optional; only supplied fields are applied."
+input DefaultHttpProxyOptionsPartialInput {
+    "The proxy host"
+    host: String
+    "The proxy port"
+    port: Int
+    "The proxy username"
+    username: String
+    "The name of the Secret (stored password) used for proxy authentication"
+    securePasswordName: String
+}
+
+"Input for service resolution options within GlobalConfig. All fields are optional; only supplied fields are applied."
+input ServiceResolutionOptionsPartialInput {
+    "Whether a resolution path is required"
+    resolutionPathRequired: Boolean
+    "Whether the resolution path is case sensitive"
+    resolutionPathCaseSensitive: Boolean
+    "Whether to use the original URL for resolution"
+    useL7OriginalUrl: Boolean
+    "Whether to use the service GOID for resolution"
+    useServiceGoid: Boolean
+    "Whether to use the SOAPAction header for resolution"
+    useSoapAction: Boolean
+    "Whether to use the SOAP body child namespace for resolution"
+    useSoapBodyChildNamespace: Boolean
+}
+
+"Input for audit sink configuration options within GlobalConfig. All fields are optional; only supplied fields are applied. ftpConfig, if supplied, fully replaces the existing FTP archiver configuration."
+input AuditSinkOptionsPartialInput {
+    "Whether to save the audit records always to the internal database"
+    alwaysSaveInternal: Boolean
+    "Lookup Policy Name"
+    lookupPolicyName: String
+    "Sink Policy Name"
+    sinkPolicyName: String
+    "FTP Client Configuration for the audit archiver"
+    ftpConfig: AuditFtpConfigPartialInput
+}
+
+input AuditFtpConfigPartialInput {
+    "Host of FTP Server"
+    host: String
+    "Port of FTP Server"
+    port: Int
+    "FTP connection timeout"
+    timeout: Int
+    "FTP user"
+    user: String
+    "FTP password"
+    password: String
+    "Directory in FTP Server"
+    directory: String
+    "To verify server certification"
+    verifyServerCert: Boolean
+    "Security Type"
+    security: AuditFtpSecurityType
+    "Whether this Audit Configuration is enabled"
+    enabled: Boolean
 }
 
 "Input for creating or updating the full global configuration."
@@ -2716,26 +3048,52 @@ input GlobalConfigInput {
     certValidationOptions: CertValidationOptionsInput
     "Administrative user account options to set"
     administrativeUserAccountOptions: AdministrativeUserAccountOptionsInput
+    "Default cluster-wide HTTP proxy options to set"
+    defaultHttpProxyOptions: DefaultHttpProxyOptionsInput
+    "Service resolution options to set"
+    serviceResolutionOptions: ServiceResolutionOptionsInput
+    "Audit sink configuration options to set"
+    auditSinkOptions: AuditSinkOptionsInput
 }
 
 "Partial input for updateGlobalConfig — only supplied sub-sections are applied."
 input GlobalConfigPartialInput {
+    "The reference input"
+    ref: GlobalConfigRefInput
+    "The internal entity unique identifier"
+    goid: ID
+    "Configuration name"
+    name: String
     "Certificate validation options to update"
     certValidationOptions: CertValidationOptionsPartialInput
     "Administrative user account options to update"
     administrativeUserAccountOptions: AdministrativeUserAccountOptionsPartialInput
+    "Default cluster-wide HTTP proxy options to update"
+    defaultHttpProxyOptions: DefaultHttpProxyOptionsPartialInput
+    "Service resolution options to update"
+    serviceResolutionOptions: ServiceResolutionOptionsPartialInput
+    "Audit sink configuration options to update"
+    auditSinkOptions: AuditSinkOptionsPartialInput
 }
 
-"Reference input to identify the GlobalConfig singleton."
+"Reference input to identify the GlobalConfig singleton. At least one of goid or name must be supplied."
 input GlobalConfigRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "The configuration name"
-    name: String!
+    name: String
 }
 
-type GlobalConfigPayload implements EntityMutationsPayload {
+type GlobalConfigPayload implements EntityMutationPayload {
+    status: EntityMutationStatus!
+    detailedStatus: EntityMutationDetailedStatus!
+    globalConfig: GlobalConfig
+}
+
+type GlobalConfigsPayload implements EntityMutationsPayload {
     status: [EntityMutationStatus!]!
     detailedStatus: [EntityMutationDetailedStatus!]!
-    globalConfig: [GlobalConfig]!
+    globalConfigs: [GlobalConfig]!
 }
 #
 # AI assistance has been used to generate some or all contents of this file. That includes, but is not limited to, new code, modifying existing code, stylistic edits.
@@ -2790,9 +3148,11 @@ extend type Mutation {
     Update an existing global resource. Match is carried by refInput.
     Only the fields provided in the input will be updated; omitted fields retain their current values.
     """
-    updateGlobalResource(refInput: GlobalResourceRefInput!, input: GlobalResourcePartialInput!) : GlobalResourcePayload!
+    updateGlobalResource(refInput: GlobalResourceRefInput!, input: GlobalResourcePartialInput!) : GlobalResourcePayload! @deprecated(reason: "Use 'updateGlobalResources' instead")
+    "Update global resources"
+    updateGlobalResources(input: [GlobalResourcePartialInput!]!) : GlobalResourcesPayload
     "Delete multiple global resources"
-    deleteGlobalResources(refInputs: [GlobalResourceRefInput!]!) : GlobalResourcesPayload
+    deleteGlobalResources(input: [GlobalResourcePartialInput!], refInputs: [GlobalResourceRefInput!] @deprecated(reason: "Use 'input' instead")) : GlobalResourcesPayload
 }
 
 """
@@ -2802,6 +3162,7 @@ An XML Schema which can be referred to in policy, for example in the validate xm
 > @l7-summary-fields goid,systemId,checksum
 > @l7-display-summary-fields systemId,targetNs
 > @l7-name-fields systemId
+> @l7-deprecated Use 'GlobalResource' instead.
 """
 type Schema @deprecated(reason: "Use GlobalResource type with resourceType XML_SCHEMA instead.") {
     "Internal goid for this schema"
@@ -2826,6 +3187,7 @@ A Document Type Definition (DTD) which can be referred to in policy.
 > @l7-summary-fields goid,systemId,checksum
 > @l7-display-summary-fields systemId,publicId
 > @l7-name-fields systemId
+> @l7-deprecated Use 'GlobalResource' instead.
 """
 type Dtd @deprecated(reason: "Use GlobalResource type with resourceType DTD instead.") {
     "Internal goid for this DTD"
@@ -2972,6 +3334,8 @@ input GlobalResourceInput {
 
 "Partial update for a global resource. All fields are optional; omitted fields retain their current values."
 input GlobalResourcePartialInput {
+    "The reference input"
+    ref: GlobalResourceRefInput
     "The internal entity unique identifier"
     goid: ID
     "A reference URI for this resource"
@@ -2992,9 +3356,12 @@ input GlobalResourcePartialInput {
     checksum : String
 }
 
+"At least one of goid or systemId must be supplied."
 input GlobalResourceRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "A reference URI identifying the resource"
-    systemId : String!
+    systemId : String
     "The resource type"
     resourceType : ResourceType
 }
@@ -3037,6 +3404,7 @@ extend type Query {
 
     "Default HTTP proxy used when an HTTP configuration has proxyUse DEFAULT (cluster-wide)."
     defaultHttpProxyConfigurations : [DefaultHttpProxyConfiguration!]!
+        @deprecated(reason: "Use defaultHttpProxyOptions inside GlobalConfig instead.")
 }
 
 extend type Mutation {
@@ -3045,24 +3413,29 @@ extend type Mutation {
     """
     Update an existing http configuration. Match is carried by refInput.
     """
-    updateHttpConfiguration(refInput: HttpConfigurationRefInput!, input: HttpConfigurationPartialInput!): HttpConfigurationsPayload!
+    updateHttpConfiguration(refInput: HttpConfigurationRefInput!, input: HttpConfigurationPartialInput!): HttpConfigurationsPayload! @deprecated(reason: "Use 'updateHttpConfigurations' instead")
+    "Update http configurations"
+    updateHttpConfigurations(input: [HttpConfigurationPartialInput!]!): HttpConfigurationsPayload!
     """
     Delete existing http configurations.
     Matching is done using refInputs: Array of HttpConfigurationRefInput (host, port, protocol, path).
     """
-    deleteHttpConfigurations(refInputs: [HttpConfigurationRefInput!]!): HttpConfigurationsPayload!
+    deleteHttpConfigurations(input: [HttpConfigurationPartialInput!], refInputs: [HttpConfigurationRefInput!] @deprecated(reason: "Use 'input' instead")): HttpConfigurationsPayload!
     "Set the default HTTP proxy (cluster-wide). Stored as cluster property ioHttpProxy."
     setDefaultHttpProxyConfigurations(input: [DefaultHttpProxyConfigurationInput!]!): DefaultHttpProxyConfigurationsPayload!
+        @deprecated(reason: "Use setGlobalConfigs or updateGlobalConfigs with defaultHttpProxyOptions instead.")
     """
     Partial update of the default HTTP proxy configuration (only provided fields are updated). Match is carried by refInput.
     """
     updateDefaultHttpProxyConfigurations(refInput: DefaultHttpProxyConfigurationRefInput!, input: DefaultHttpProxyConfigurationInput!): DefaultHttpProxyConfigurationsPayload!
+        @deprecated(reason: "Use updateGlobalConfigs with defaultHttpProxyOptions instead.")
 
     """
     Delete the default HTTP proxy configuration (cluster-wide).
     refInputs: Array of DefaultHttpProxyConfigurationRefInput (name) - for consistency with other manageable entities.
     """
-    deleteDefaultHttpProxyConfigurations(refInputs: [DefaultHttpProxyConfigurationRefInput!]): DefaultHttpProxyConfigurationsPayload!
+    deleteDefaultHttpProxyConfigurations(input: [DefaultHttpProxyConfigurationPartialInput!], refInputs: [DefaultHttpProxyConfigurationRefInput!] @deprecated(reason: "Use 'input' instead")): DefaultHttpProxyConfigurationsPayload!
+        @deprecated(reason: "Use GlobalConfig instead; the default HTTP proxy sub-config is a protected singleton and cannot be deleted independently.")
 }
 
 """
@@ -3132,6 +3505,7 @@ Default HTTP proxy configuration (cluster-wide, manageable entity backed by clus
 > @l7-name-fields name
 > @l7-display-summary-fields name,host,port
 > @l7-foreign-fields securePasswordName|name|Secret
+> @l7-deprecated Use 'GlobalConfig' instead.
 """
 type DefaultHttpProxyConfiguration {
     "The goid of the cluster property backing this configuration"
@@ -3238,10 +3612,32 @@ input DefaultHttpProxyConfigurationInput {
     securePasswordName : String
 }
 
-"Reference input to identify the default HTTP proxy configuration."
+"Reference input to identify the default HTTP proxy configuration. At least one of goid or name must be supplied."
 input DefaultHttpProxyConfigurationRefInput {
+    "The goid of the backing cluster property"
+    goid: ID
     "The name of the cluster property (e.g. ioHttpProxy)"
-    name: String!
+    name: String
+}
+
+"Partial input for updating default HTTP proxy configuration"
+input DefaultHttpProxyConfigurationPartialInput {
+    "The reference input"
+    ref: DefaultHttpProxyConfigurationRefInput
+    "The goid of the backing cluster property"
+    goid: ID
+    "The name of the cluster property (e.g. ioHttpProxy)"
+    name: String
+    "The proxyHost of the http proxy configuration"
+    host: String
+    "The proxyPort of the http proxy configuration"
+    port: Int
+    "The configuration checksum"
+    checksum: String
+    "The proxyUsername of the http proxy configuration"
+    username: String
+    "The securePasswordName of the http proxy configuration"
+    securePasswordName: String
 }
 
 input HttpProxyConfigurationInput {
@@ -3256,6 +3652,8 @@ input HttpProxyConfigurationInput {
 }
 
  input HttpConfigurationPartialInput {
+     "The reference input"
+     ref: HttpConfigurationRefInput
      "The goid for the http configuration"
      goid : ID
      "The host of the http configuration"
@@ -3308,9 +3706,12 @@ input HttpProxyConfigurationInput {
      source: HttpConfigurationRefInput
  }
 
+"At least one of goid or host must be supplied."
 input HttpConfigurationRefInput {
+     "The goid for the http configuration"
+     goid: ID
      "The host of the http configuration"
-     host: String!
+     host: String
      "The port of the http configuration"
      port: Int
      "The protocol of the http configuration"
@@ -3335,22 +3736,26 @@ extend type Query {
     "Get filtered identity providers"
     identityProvidersByFilters(filters: [EntityFilterInput!]!): [IdentityProvider!]!
 
-    "Get all users belonging to a given Internal or Federated identity provider"
+    "Get all identity users across every identity provider. For LDAP providers, LDAP users are excluded unless the includeLdapUsers query option is set to true, since LDAP directories can contain a very large number of entries. Fetching for LDAP users is restricted by the ldapUserCount query option (default 100; <= 0 fetches all)."
+    identityUsers: [IdentityUser!]!
+    "Get all users belonging to a given identity provider, including LDAP providers. Fetching for LDAP users is restricted by the ldapUserCount query option (default 100; <= 0 fetches all)."
     identityUsersByProvider(providerName: String!): [IdentityUser!]!
     "Get a single user by name within a given Internal or Federated identity provider"
     identityUserByName(providerName: String!, name: String!): IdentityUser
     "Get a single user by GOID within a given Internal or Federated identity provider"
     identityUserByGoid(providerName: String!, goid: ID!): IdentityUser
-    "Get users belonging to a provider, filtered by field criteria"
+    "Get users belonging to a provider, filtered by field criteria, including LDAP providers."
     identityUsersByFilters(providerName: String!, filters: [EntityFilterInput!]!): [IdentityUser!]!
 
-    "Get all groups belonging to a given Internal or Federated identity provider"
+    "Get all identity groups across every identity provider. For LDAP providers, LDAP groups are excluded unless the includeLdapGroups query option is set to true, since LDAP directories can contain a very large number of entries. Fetching for LDAP groups is restricted by the ldapGroupCount query option (default 100; <= 0 fetches all)."
+    identityGroups: [IdentityGroup!]!
+    "Get all groups belonging to a given identity provider, including LDAP providers. Fetching for LDAP groups is restricted by the ldapGroupCount query option (default 100; <= 0 fetches all)."
     identityGroupsByProvider(providerName: String!): [IdentityGroup!]!
     "Get a single group by name within a given Internal or Federated identity provider"
     identityGroupByName(providerName: String!, name: String!): IdentityGroup
     "Get a single group by GOID within a given Internal or Federated identity provider"
     identityGroupByGoid(providerName: String!, goid: ID!): IdentityGroup
-    "Get groups belonging to a provider, filtered by field criteria"
+    "Get groups belonging to a provider, filtered by field criteria, including LDAP providers."
     identityGroupsByFilters(providerName: String!, filters: [EntityFilterInput!]!): [IdentityGroup!]!
 }
 
@@ -3358,25 +3763,31 @@ extend type Mutation {
     "Creates or updates one or more identity providers"
     setIdentityProviders(input: [IdentityProviderInput!]!): IdentityProvidersPayload
     "Deletes one or more existing identity providers"
-    deleteIdentityProviders(refInputs: [IdentityProviderRefInput!]!): IdentityProvidersPayload
+    deleteIdentityProviders(input: [IdentityProviderPartialInput!], refInputs: [IdentityProviderRefInput!] @deprecated(reason: "Use 'input' instead")): IdentityProvidersPayload
     "Partially updates an existing identity provider. Only fields included in the input are applied; omitted fields retain their current values."
-    updateIdentityProvider(refInput: IdentityProviderRefInput!, input: IdentityProviderPartialInput!): IdentityProviderPayload
+    updateIdentityProvider(refInput: IdentityProviderRefInput!, input: IdentityProviderPartialInput!): IdentityProviderPayload @deprecated(reason: "Use 'updateIdentityProviders' instead")
+    "Partially updates identity providers."
+    updateIdentityProviders(input: [IdentityProviderPartialInput!]!): IdentityProvidersPayload
 
     "Creates or updates one or more users in an Internal or Federated identity provider"
     setIdentityUsers(input: [IdentityUserInput!]!): IdentityUsersPayload
     "Partially updates an existing identity user. Only supplied fields are applied."
-    updateIdentityUser(refInput: IdentityUserRefInput!, input: IdentityUserPartialInput!): IdentityUserPayload
+    updateIdentityUser(refInput: IdentityUserRefInput!, input: IdentityUserPartialInput!): IdentityUserPayload @deprecated(reason: "Use 'updateIdentityUsers' instead")
+    "Partially updates identity users."
+    updateIdentityUsers(input: [IdentityUserPartialInput!]!): IdentityUsersPayload
     "Deletes one or more identity users"
-    deleteIdentityUsers(refInputs: [IdentityUserRefInput!]!): IdentityUsersPayload
-    "Updates the password for an Internal identity user. The new password is validated against the provider's password policy."
-    updateIdentityUserPassword(refInput: IdentityUserRefInput!, newPassword: String!): IdentityUserPayload
+    deleteIdentityUsers(input: [IdentityUserPartialInput!], refInputs: [IdentityUserRefInput!] @deprecated(reason: "Use 'input' instead")): IdentityUsersPayload
+    "Updates the password for an Internal identity user. The new password is validated against the provider's password policy. If the caller is changing their own password, oldPassword must be supplied and verified against the current password; it is ignored when an admin changes another user's password."
+    updateIdentityUserPassword(refInput: IdentityUserRefInput!, newPassword: String!, oldPassword: String): IdentityUserPayload
 
     "Creates or updates one or more groups in an Internal or Federated identity provider"
     setIdentityGroups(input: [IdentityGroupInput!]!): IdentityGroupsPayload
     "Partially updates an existing identity group. Only supplied fields are applied."
-    updateIdentityGroup(refInput: IdentityGroupRefInput!, input: IdentityGroupPartialInput!): IdentityGroupPayload
+    updateIdentityGroup(refInput: IdentityGroupRefInput!, input: IdentityGroupPartialInput!): IdentityGroupPayload @deprecated(reason: "Use 'updateIdentityGroups' instead")
+    "Partially updates identity groups."
+    updateIdentityGroups(input: [IdentityGroupPartialInput!]!): IdentityGroupsPayload
     "Deletes one or more identity groups"
-    deleteIdentityGroups(refInputs: [IdentityGroupRefInput!]!): IdentityGroupsPayload
+    deleteIdentityGroups(input: [IdentityGroupPartialInput!], refInputs: [IdentityGroupRefInput!] @deprecated(reason: "Use 'input' instead")): IdentityGroupsPayload
 
 }
 
@@ -3552,13 +3963,20 @@ input PolicyBackedIdpDetailsInput {
     properties: [EntityPropertyInput!]
 }
 
+"At least one of goid or name must be supplied."
 input IdentityProviderRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "Name of the identity provider"
-    name: String!
+    name: String
 }
 
 "Partial input for updating an identity provider. Only supplied fields are applied; omitted fields retain their current values."
 input IdentityProviderPartialInput {
+    "The reference input"
+    ref: IdentityProviderRefInput
+    "The internal entity unique identifier"
+    goid: ID
     "New name for the identity provider"
     name: String
     checksum: String
@@ -3697,6 +4115,12 @@ input IdentityUserInput {
 }
 
 input IdentityUserPartialInput {
+    "The reference input"
+    ref: IdentityUserRefInput
+    "The internal entity unique identifier"
+    goid: ID
+    "Name of the identity provider"
+    providerName: String
     "Updated identity key; maps to login for Internal providers and entity display name for Federated providers"
     name: String
     checksum: String
@@ -3710,11 +4134,14 @@ input IdentityUserPartialInput {
     roleNames: [String!]
 }
 
+"At least one of goid, or both providerName and name, must be supplied."
 input IdentityUserRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "Name of the identity provider"
-    providerName: String!
+    providerName: String
     "Universal identity key; maps to login for Internal providers and entity display name for Federated providers"
-    name: String!
+    name: String
 }
 
 input IdentityUserInternalDetailsInput {
@@ -3855,6 +4282,12 @@ input IdentityGroupInput {
 
 "Partial update input for an identity group."
 input IdentityGroupPartialInput {
+    "The reference input"
+    ref: IdentityGroupRefInput
+    "The internal entity unique identifier"
+    goid: ID
+    "Name of the identity provider"
+    providerName: String
     "Rename the group; omit to keep the current name"
     name: String
     "Updated group description"
@@ -3898,11 +4331,14 @@ type VirtualGroupDetails {
     useRegex: Boolean
 }
 
+"At least one of goid, or both providerName and name, must be supplied."
 input IdentityGroupRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "Name of the identity provider"
-    providerName: String!
+    providerName: String
     "Group name"
-    name: String!
+    name: String
 }
 
 type IdentityGroupsPayload implements EntityMutationsPayload {
@@ -3918,8 +4354,9 @@ type IdentityGroupPayload implements EntityMutationPayload {
 }
 
 #
-# Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
+# Copyright (c) 2024-2026. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
+# AI assistance has been used to generate some or all contents of this file. That includes, but is not limited to, new code, modifying existing code, stylistic edits.
 
 extend type Query {
     "Get all fips configurations"
@@ -4009,7 +4446,7 @@ A group defined in a federated identity provider.
 > @l7-identity-fields name
 > @l7-summary-fields goid,name,providerName,checksum
 > @l7-excluded-fields members
-> @l7-deprecated Use 'FederatedGroup' instead.
+> @l7-deprecated Use 'IdentityGroup' instead.
 """
 type FipGroup {
     "The goid of the group"
@@ -4034,7 +4471,7 @@ A user defined in a federated identity provider..
 > @l7-summary-fields goid,name,login,providerName,checksum
 > @l7-excluded-fields memberOf.*
 > @l7-included-fields memberOf.providerName,memberOf.name
-> @l7-deprecated Use 'FederatedUser' instead.
+> @l7-deprecated Use 'IdentityUser' instead.
 """
 type FipUser {
     "The goid of the user"
@@ -4068,7 +4505,7 @@ A federated identity provider.
 > @l7-summary-fields goid,name,checksum
 > @l7-excluded-fields certificateReferences.*
 > @l7-included-fields certificateReferences.name,certificateReferences.subjectDn,certificateReferences.thumbprintSha1
-> @l7-deprecated Use 'FederatedIdp' instead.
+> @l7-deprecated Use 'IdentityProvider' instead.
 """
 type Fip {
     "The goid of the federated identity provider"
@@ -4185,7 +4622,7 @@ interpreted by the ldap directory itself.
 > @l7-identity-fields name
 > @l7-summary-fields goid,name,checksum
 > @l7-excluded-fields
-> @l7-deprecated Use 'LdapIdp' instead.
+> @l7-deprecated Use 'IdentityProvider' instead.
 """
 type Ldap {
     "The goid of the LDAP identity provider"
@@ -4326,6 +4763,7 @@ input FipUserRefInput {
 #
 # Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
+# AI assistance has been used to generate some or all contents of this file. That includes, but is not limited to, new code, modifying existing code, stylistic edits.
 
 extend type Query {
     "Get internal IDPs."
@@ -4487,6 +4925,7 @@ An internal identity provider.
 > @l7-summary-fields goid,name,checksum
 > @l7-display-summary-fields name
 > @l7-name-fields name
+> @l7-deprecated Use 'IdentityProvider' instead.
 """
 type InternalIdp {
     "The goid of the Internal IDP"
@@ -4505,6 +4944,7 @@ A group of users defined in the internal identity provider.
 > @l7-identity-fields name
 > @l7-summary-fields goid,name,checksum
 > @l7-excluded-fields members
+> @l7-deprecated Use 'IdentityGroup' instead.
 """
 type InternalGroup {
     "The goid of the Internal Group"
@@ -4529,6 +4969,7 @@ A user in the internal identity provider.
 > @l7-encrypted-fields password
 > @l7-foreign-fields groupNames|name|InternalGroup
 > @l7-deprecated-fields memberOf
+> @l7-deprecated Use 'IdentityUser' instead.
 """
 type InternalUser {
     "The goid of the Internal User"
@@ -4646,6 +5087,7 @@ A federated identity provider.
 > @l7-display-summary-fields name,supportsSAML,supportsX509
 > @l7-foreign-fields trustedCertNames|name|TrustedCert,trustedCerts.thumbprintSha1|thumbprintSha1|TrustedCert
 > @l7-deprecated-fields trustedCerts
+> @l7-deprecated Use 'IdentityProvider' instead.
 """
 type FederatedIdp {
     "The goid of the federated identity provider"
@@ -4672,6 +5114,7 @@ A group defined in a federated identity provider.
 > @l7-identity-fields name
 > @l7-summary-fields goid,name,providerName,checksum
 > @l7-excluded-fields members
+> @l7-deprecated Use 'IdentityGroup' instead.
 """
 type FederatedGroup {
     "The goid of the federated group"
@@ -4699,6 +5142,7 @@ A user defined in a federated identity provider..
 > @l7-included-fields memberOf.providerName,memberOf.name
 > @l7-foreign-fields groupNames|name|FederatedGroup
 > @l7-deprecated-fields memberOf
+> @l7-deprecated Use 'IdentityUser' instead.
 """
 type FederatedUser {
     "The goid of the federated user"
@@ -4812,6 +5256,7 @@ A simple LDAP based identity provider.
 > @l7-name-fields name
 > @l7-display-summary-fields name
 > @l7-foreign-fields sslClientKeyAlias|alias|Key
+> @l7-deprecated Use 'IdentityProvider' instead.
 """
 type SimpleLdapIdp {
     "The internal entity unique identifier"
@@ -4869,6 +5314,7 @@ A policy backed identity provider.
 > @l7-name-fields name
 > @l7-display-summary-fields name,properties[name=adminEnabled].value
 > @l7-foreign-fields authPolicyName|name|L7Policy
+> @l7-deprecated Use 'IdentityProvider' instead.
 """
 type PolicyBackedIdp {
     "The internal entity unique identifier"
@@ -4919,6 +5365,7 @@ interpreted by the ldap directory itself.
 > @l7-display-summary-fields name,ldapType,properties[name=adminEnabled].value
 > @l7-encrypted-fields bindPassword
 > @l7-foreign-fields sslClientKeyAlias|alias|Key
+> @l7-deprecated Use 'IdentityProvider' instead.
 """
 type LdapIdp {
     "The goid of the LDAP IDP"
@@ -5057,10 +5504,15 @@ extend type Mutation {
   """
   Update an existing interface tag. Match is carried by refInput
   """
-  updateInterfaceTag(refInput: InterfaceTagRefInput!, input: InterfaceTagPartialInput!): InterfaceTagPayload!
+  updateInterfaceTag(refInput: InterfaceTagRefInput!, input: InterfaceTagPartialInput!): InterfaceTagPayload! @deprecated(reason: "Use 'updateInterfaceTags' instead")
+
+  """
+  Update interface tags.
+  """
+  updateInterfaceTags(input: [InterfaceTagPartialInput!]!): InterfaceTagsPayload!
 
   "Delete existing interface tags"
-  deleteInterfaceTags(refInputs: [InterfaceTagRefInput!]!): InterfaceTagsPayload!
+  deleteInterfaceTags(input: [InterfaceTagPartialInput!], refInputs: [InterfaceTagRefInput!] @deprecated(reason: "Use 'input' instead")): InterfaceTagsPayload!
 }
 
 """
@@ -5097,12 +5549,18 @@ input InterfaceTagInput {
 
 "Reference input to identify the entity"
 input InterfaceTagRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "The name of the interface tag"
     name: String!
 }
 
 "The inputs for partial update of interface tag"
 input InterfaceTagPartialInput {
+    "The reference input"
+    ref: InterfaceTagRefInput
+    "The internal entity unique identifier"
+    goid: ID
     "The name of the interface tag"
     name: String
     "The set of IP address patterns"
@@ -5148,7 +5606,10 @@ extend type Mutation {
     """
     Update an existing JDBC connection. Match is carried by refInput
     """
-    updateJdbcConnection(refInput: JdbcConnectionRefInput!, input: JdbcConnectionPartialInput!): JdbcConnectionPayload!
+    updateJdbcConnection(refInput: JdbcConnectionRefInput!, input: JdbcConnectionPartialInput!): JdbcConnectionPayload! @deprecated(reason: "Use 'updateJdbcConnections' instead")
+
+    "Update JDBC connections."
+    updateJdbcConnections(input: [JdbcConnectionPartialInput!]!): JdbcConnectionsPayload!
 
     """
     Update an existing JDBC connection with new properties. Match is carried by refInput.
@@ -5174,7 +5635,7 @@ extend type Mutation {
     At least one of the parameters must be provided. If both are provided, refInputs takes precedence.
     The operation returns the status of each deletion attempt.
     """
-    deleteJdbcConnections(refInputs: [JdbcConnectionRefInput!], names: [String!]): JdbcConnectionsPayload
+    deleteJdbcConnections(input: [JdbcConnectionPartialInput!], refInputs: [JdbcConnectionRefInput!] @deprecated(reason: "Use 'input' instead"), names: [String!] @deprecated(reason: "Use 'input' instead")): JdbcConnectionsPayload
 }
 
 """
@@ -5240,6 +5701,8 @@ input JdbcConnectionInput {
 }
 
 input JdbcConnectionPartialInput {
+    "The reference input"
+    ref: JdbcConnectionRefInput
     "The internal entity unique identifier"
     goid: ID
     "The JDBC Connection name"
@@ -5262,10 +5725,12 @@ input JdbcConnectionPartialInput {
     properties: [EntityPropertyInput!]
 }
 
-"Reference input to identify the entity"
+"Reference input to identify the entity. At least one of goid or name must be supplied."
 input JdbcConnectionRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "The JDBC Connection name"
-    name: String!
+    name: String
 }
 
 type JdbcConnectionPayload implements EntityMutationPayload {
@@ -5283,6 +5748,7 @@ type JdbcConnectionsPayload implements EntityMutationsPayload {
 }
 #
 # Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
+# AI assistance has been used to generate some or all contents of this file. That includes, but is not limited to, new code, modifying existing code, stylistic edits.
 #
 
 extend type Query {
@@ -5317,7 +5783,10 @@ extend type Mutation {
     """
     Update an existing JMS destination. Match is carried by refInput (name, direction, providerType).
     """
-    updateJmsDestination(refInput: JmsDestinationRefInput!, input: JmsDestinationPartialInput!): JmsDestinationPayload!
+    updateJmsDestination(refInput: JmsDestinationRefInput!, input: JmsDestinationPartialInput!): JmsDestinationPayload! @deprecated(reason: "Use 'updateJmsDestinations' instead")
+
+    "Update JMS destinations."
+    updateJmsDestinations(input: [JmsDestinationPartialInput!]!): JmsDestinationsPayload!
 
     """
     Update an existing JMS destination with new properties. Match is carried by refInput.
@@ -5337,7 +5806,7 @@ extend type Mutation {
     At least one of the parameters must be provided. If both are provided, refInputs takes precedence.
     The operation returns the status of each deletion attempt.
     """
-    deleteJmsDestinations(refInputs: [JmsDestinationRefInput!], names: [String!]): JmsDestinationsPayload
+    deleteJmsDestinations(input: [JmsDestinationPartialInput!], refInputs: [JmsDestinationRefInput!] @deprecated(reason: "Use 'input' instead"), names: [String!] @deprecated(reason: "Use 'input' instead")): JmsDestinationsPayload
 }
 
 """
@@ -5453,6 +5922,8 @@ input JmsDestinationInput {
 }
 
 input JmsDestinationPartialInput {
+    "The reference input"
+    ref: JmsDestinationRefInput
     "The internal entity unique identifier"
     goid: ID
     connectionGoid: ID
@@ -5529,13 +6000,16 @@ input JmsDestinationMappingInstructionInput{
     source: JmsDestinationRefInput
 }
 
+"At least one of goid, or all of name, direction and providerType, must be supplied."
 input JmsDestinationRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "The JMS Destination name"
-    name: String!
+    name: String
     "The JMS Destination direction (inbound or outbound)"
-    direction: String!
+    direction: String
     "The JMS provider type"
-    providerType: String!
+    providerType: String
 }
 #
 # Copyright (c) 2026 Broadcom Inc. and its subsidiaries. All Rights Reserved.
@@ -5561,7 +6035,7 @@ extend type Mutation {
     """
     Delete the Kerberos keytab. The config files "krb5.conf" and "login.config" are not deleted.
     """
-    deleteKerberosConfigs(refInputs: [KerberosConfigRefInput!], names: [String]): KerberosConfigPayload
+    deleteKerberosConfigs(input: [KerberosConfigPartialInput!], refInputs: [KerberosConfigRefInput!] @deprecated(reason: "Use 'input' instead"), names: [String] @deprecated(reason: "Use 'input' instead")): KerberosConfigPayload
 }
 
 """
@@ -5638,8 +6112,29 @@ type KerberosConfigPayload {
 }
 
 input KerberosConfigRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "The name of keytab"
     name: String
+}
+
+input KerberosConfigPartialInput {
+    "The reference input"
+    ref: KerberosConfigRefInput
+    "The goid for this keytab"
+    goid : ID
+    "The name of keytab"
+    name: String
+    "The configuration checksum of this keytab"
+    checksum: String
+    "The encrypted Kerberos keytab."
+    keytab: String
+    "The Kerberos configuration, krb5.conf."
+    conf: String
+    "The Kerberos configuration, krb5.conf."
+    krb5Conf: String
+    "The Kerberos login configuration, login.config."
+    loginConf: String
 }
 
 input KerberosConfigInput {
@@ -5804,7 +6299,7 @@ extend type Mutation {
     Delete license documents. When goid is set on a ref, removes that single row. When only licenseId is set,
     removes all stored documents whose parsed license id matches (same behavior as deleteLicenses).
     """
-    deleteLicenseDocuments(refInputs: [LicenseDocumentRefInput!]!): LicenseDocumentsPayload!
+    deleteLicenseDocuments(input: [LicenseDocumentPartialInput!], refInputs: [LicenseDocumentRefInput!] @deprecated(reason: "Use 'input' instead")): LicenseDocumentsPayload!
 }
 
 """
@@ -5841,9 +6336,23 @@ input LicenseDocumentInput {
     content: String!
 }
 
+"At least one of goid or licenseId must be supplied."
 input LicenseDocumentRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "The license identifier"
-    licenseId: String!
+    licenseId: String
+}
+
+input LicenseDocumentPartialInput {
+    "The reference input"
+    ref: LicenseDocumentRefInput
+    "The internal entity unique identifier"
+    goid: ID
+    "The license identifier"
+    licenseId: String
+    "The license XML content"
+    content: String
 }
 
 type LicenseDocumentsPayload implements EntityMutationsPayload {
@@ -5890,12 +6399,15 @@ extend type Mutation {
     At least one of the parameters must be provided. If both are provided, refInputs takes precedence.
     The operation returns the status of each deletion attempt.
     """
-    deleteListenPorts(refInputs: [ListenPortRefInput!], names: [String!]): ListenPortsPayload!
+    deleteListenPorts(input: [ListenPortPartialInput!], refInputs: [ListenPortRefInput!] @deprecated(reason: "Use 'input' instead"), names: [String!] @deprecated(reason: "Use 'input' instead")): ListenPortsPayload!
 
     """
     Update an existing ListenPort. Match is carried by refInput.
     """
-    updateListenPort(refInput: ListenPortRefInput!, input: ListenPortPartialInput!): ListenPortPayload!
+    updateListenPort(refInput: ListenPortRefInput!, input: ListenPortPartialInput!): ListenPortPayload! @deprecated(reason: "Use 'updateListenPorts' instead")
+
+    "Update ListenPorts."
+    updateListenPorts(input: [ListenPortPartialInput!]!): ListenPortsPayload!
 
     """
     Update an existing ListenPort with new properties. Match is carried by refInput.
@@ -6041,13 +6553,17 @@ input ListenPortInput {
     checksum : String
 }
 
-"Reference input to identify the entity"
+"Reference input to identify the entity. At least one of goid or name must be supplied."
 input ListenPortRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "The listen port configuration name"
-    name: String!
+    name: String
 }
 
 input ListenPortPartialInput {
+    "The reference input"
+    ref: ListenPortRefInput
     "The internal entity unique identifier"
     goid: ID
     "The listen port configuration name"
@@ -6140,7 +6656,10 @@ extend type Mutation {
     """
     Update an existing log sink. Match is carried by refInput.
     """
-    updateLogSink(refInput: LogSinkRefInput!, input: LogSinkPartialInput!): LogSinkPayload!
+    updateLogSink(refInput: LogSinkRefInput!, input: LogSinkPartialInput!): LogSinkPayload! @deprecated(reason: "Use 'updateLogSinks' instead")
+
+    "Update log sinks."
+    updateLogSinks(input: [LogSinkPartialInput!]!): LogSinksPayload!
 
     """
     Update an existing log sink with new properties. Match is carried by refInput.
@@ -6160,7 +6679,7 @@ extend type Mutation {
     At least one of the parameters must be provided. If both are provided, refInputs takes precedence.
     The operation returns the status of each deletion attempt.
     """
-    deleteLogSinks(refInputs: [LogSinkRefInput!], names: [String!]): LogSinksPayload!
+    deleteLogSinks(input: [LogSinkPartialInput!], refInputs: [LogSinkRefInput!] @deprecated(reason: "Use 'input' instead"), names: [String!] @deprecated(reason: "Use 'input' instead")): LogSinksPayload!
 }
 
 """
@@ -6222,6 +6741,8 @@ input LogSinkInput {
 }
 
 input LogSinkPartialInput {
+    "The reference input"
+    ref: LogSinkRefInput
     "The internal entity unique identifier"
     goid : ID
     "log sink unique name"
@@ -6246,10 +6767,12 @@ input LogSinkPartialInput {
     checksum : String
 }
 
-"Reference input to identify the log sink"
+"Reference input to identify the log sink. At least one of goid or name must be supplied."
 input LogSinkRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "log sink unique name"
-    name: String!
+    name: String
 }
 
 "Indicates severity threshold of the log sink"
@@ -6454,13 +6977,13 @@ extend type Mutation {
     "Create or update policies"
     setPolicies(input: [L7PolicyInput!]!) : L7PoliciesPayload!
 
-    """"
+    """
     Set active revision for the policies.
     By default, it chooses the latest revision as active. If the latest revision available is already active, does nothing.
     """
     setPolicyRevisions(input: [L7PolicyPartialInput!]!) : L7PoliciesPayload!
 
-    """"
+    """
     Delete policies.
     
     This mutation supports two ways to identify policies for deletion:
@@ -6470,10 +6993,13 @@ extend type Mutation {
     When both arguments are provided, refInputs takes precedence and names is ignored.
     At least one argument must be provided with a non-empty list.
     """
-    deletePolicies(refInputs: [PolicyRefInput!], names: [String!] @deprecated(reason: "Use 'refInputs' instead for more precise policy identification")) : L7PoliciesPayload!
+    deletePolicies(input: [L7PolicyPartialInput!], refInputs: [PolicyRefInput!] @deprecated(reason: "Use 'input' instead"), names: [String!] @deprecated(reason: "Use 'input' instead")) : L7PoliciesPayload!
 
     "Update an existing policy. Match is carried by refInput"
-    updatePolicy(refInput: PolicyRefInput!,  input: L7PolicyPartialInput!) : L7PolicyPayload!
+    updatePolicy(refInput: PolicyRefInput!,  input: L7PolicyPartialInput!) : L7PolicyPayload! @deprecated(reason: "Use 'updatePolicies' instead")
+
+    "Update policies."
+    updatePolicies(input: [L7PolicyPartialInput!]!) : L7PoliciesPayload!
 
     "Update existing revision (comment and/or active) for the specified policy"
     updatePolicyRevision(refInput: PolicyRefInput!, revision: Long!, activate: Boolean, comment: String) : L7PolicyPayload!
@@ -6633,23 +7159,30 @@ extend type Mutation {
     encassConfigs : [EncassConfig]
 
     "Federated identity provider configurations"
-    fips : [Fip]
+    fips : [Fip] @deprecated(reason: "Use the unified identityProviders list instead.")
     "Federated identity provider groups"
-    fipGroups : [FipGroup]
+    fipGroups : [FipGroup] @deprecated(reason: "Use the unified identityGroups list instead.")
     "Federated identity provider users"
-    fipUsers : [FipUser]
+    fipUsers : [FipUser] @deprecated(reason: "Use the unified identityUsers list instead.")
     "Federated identity provider configurations"
-    federatedIdps : [FederatedIdp]
+    federatedIdps : [FederatedIdp] @deprecated(reason: "Use the unified identityProviders list instead.")
     "Federated identity provider groups"
-    federatedGroups : [FederatedGroup]
+    federatedGroups : [FederatedGroup] @deprecated(reason: "Use the unified identityGroups list instead.")
     "Federated identity provider users"
-    federatedUsers : [FederatedUser]
+    federatedUsers : [FederatedUser] @deprecated(reason: "Use the unified identityUsers list instead.")
     "Internal IDP providers"
-    internalIdps: [InternalIdp]
+    internalIdps: [InternalIdp] @deprecated(reason: "Use the unified identityProviders list instead.")
     "Internal idp groups"
-    internalGroups : [InternalGroup]
+    internalGroups : [InternalGroup] @deprecated(reason: "Use the unified identityGroups list instead.")
     "Internal idp users"
-    internalUsers : [InternalUser]
+    internalUsers : [InternalUser] @deprecated(reason: "Use the unified identityUsers list instead.")
+
+    "Identity providers (provider-type agnostic)"
+    identityProviders : [IdentityProvider]
+    "Identity users (provider-type agnostic)"
+    identityUsers : [IdentityUser]
+    "Identity groups (provider-type agnostic)"
+    identityGroups : [IdentityGroup]
 
     "JDBC connections"
     jdbcConnections: [JdbcConnection]
@@ -6658,9 +7191,9 @@ extend type Mutation {
     "Private Keys"
     keys : [Key]
     "Ldap identity provider configurations"
-    ldaps : [Ldap]
+    ldaps : [Ldap] @deprecated(reason: "Use the unified identityProviders list instead.")
     "Ldap identity provider configurations"
-    ldapIdps : [LdapIdp]
+    ldapIdps : [LdapIdp] @deprecated(reason: "Use the unified identityProviders list instead.")
     "Listen Ports"
     listenPorts: [ListenPort]
     "Layer7 Services"
@@ -6681,9 +7214,9 @@ extend type Mutation {
     "Trusted certificates"
     trustedCerts : [Certificate]
     "Simple Ldaps"
-    simpleLdapIdps : [SimpleLdapIdp]
+    simpleLdapIdps : [SimpleLdapIdp] @deprecated(reason: "Use the unified identityProviders list instead.")
     "Policy Backed Idps"
-    policyBackedIdps : [PolicyBackedIdp]
+    policyBackedIdps : [PolicyBackedIdp] @deprecated(reason: "Use the unified identityProviders list instead.")
     "Generic Entities"
     genericEntities : [GenericEntity]
     "Policy Backed Services"
@@ -6735,6 +7268,8 @@ extend type Mutation {
  }
 
   input L7PolicyPartialInput {
+    "The reference input"
+    ref: PolicyRefInput
     "The internal entity unique identifier"
     goid: ID
     "The folder path where to create this policy.  If the path does not exist, it will be created"
@@ -6792,10 +7327,13 @@ input PolicyMappingInstructionInput{
     source: PolicyRefInput
 }
 
+"At least one of goid, or both name and policyType, must be supplied."
 input PolicyRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "The name of the policy. Policies are unique by name."
-    name: String!
-    policyType: L7PolicyType!
+    name: String
+    policyType: L7PolicyType
     tag: String
     subTag: String
 }
@@ -6825,7 +7363,12 @@ extend type Mutation {
   """
   Update an existing policy-backed service. Match is carried by refInput
   """
-  updatePolicyBackedService(refInput: PolicyBackedServiceRefInput!, input: PolicyBackedServicePartialInput!): PolicyBackedServicePayload!
+  updatePolicyBackedService(refInput: PolicyBackedServiceRefInput!, input: PolicyBackedServicePartialInput!): PolicyBackedServicePayload! @deprecated(reason: "Use 'updatePolicyBackedServices' instead")
+
+  """
+  Update policy-backed services.
+  """
+  updatePolicyBackedServices(input: [PolicyBackedServicePartialInput!]!): PolicyBackedServicesPayload!
 
   """
   Delete one or more existing policy-backed services.
@@ -6837,7 +7380,7 @@ extend type Mutation {
   At least one of the parameters must be provided. If both are provided, refInputs takes precedence.
   The operation returns the status of each deletion attempt.
   """
-  deletePolicyBackedServices(refInputs: [PolicyBackedServiceRefInput!], names: [String!]): PolicyBackedServicesPayload!
+  deletePolicyBackedServices(input: [PolicyBackedServicePartialInput!], refInputs: [PolicyBackedServiceRefInput!] @deprecated(reason: "Use 'input' instead"), names: [String!] @deprecated(reason: "Use 'input' instead")): PolicyBackedServicesPayload!
 }
 
 """
@@ -6889,6 +7432,8 @@ input PolicyBackedServiceInput {
 }
 
 input PolicyBackedServicePartialInput {
+    "The reference input"
+    ref: PolicyBackedServiceRefInput
     "The internal entity unique identifier"
     goid: ID
     "The policy-backed service name"
@@ -6906,10 +7451,12 @@ input PolicyBackedServiceOperationInput {
     policyName: String!
 }
 
-"Reference input to identify the entity"
+"Reference input to identify the entity. At least one of goid or name must be supplied."
 input PolicyBackedServiceRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "The policy-backed service name"
-    name: String!
+    name: String
 }
 
 type PolicyBackedServicePayload implements EntityMutationPayload {
@@ -7096,16 +7643,20 @@ input GlobalPolicyRefInput {
     tag: String!
 }
 #
+# AI assistance has been used to generate some or all contents of this file. That includes, but is not limited to, new code, modifying existing code, stylistic edits.
 # Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
 
 extend type Query {
     "Get Service Resolution Config"
     serviceResolutionConfig : ServiceResolutionConfig!
+        @deprecated(reason: "Use serviceResolutionOptions inside GlobalConfig instead.")
     "Get Service Resolution Configs"
     serviceResolutionConfigs : [ServiceResolutionConfig!]!
+        @deprecated(reason: "Use serviceResolutionOptions inside GlobalConfig instead.")
     "Get filtered Service Resolution Configs"
     serviceResolutionConfigsByFilters(filters: [EntityFilterInput!]!) : [ServiceResolutionConfig!]!
+        @deprecated(reason: "Use serviceResolutionOptions inside GlobalConfig instead.")
 }
 
 input ServiceResolutionConfigInput {
@@ -7130,6 +7681,7 @@ input ServiceResolutionConfigInput {
 extend type Mutation {
     "Update Service Resolution Configs"
     setServiceResolutionConfigs(input : [ServiceResolutionConfigInput!]!) : ServiceResolutionConfigsPayLoad!
+        @deprecated(reason: "Use setGlobalConfigs or updateGlobalConfigs with serviceResolutionOptions instead.")
 }
 
 type ServiceResolutionConfigsPayLoad {
@@ -7144,6 +7696,7 @@ A Layer7 service resolution configuration.
 > @l7-identity-fields goid
 > @l7-summary-fields goid,checksum
 > @l7-display-summary-fields goid
+> @l7-deprecated Use 'GlobalConfig' instead.
 """
 type ServiceResolutionConfig {
     "The internal entity unique identifier"
@@ -7204,7 +7757,10 @@ extend type Mutation {
     """
     Update an existing revocation check policy. Match is carried by refInput
     """
-    updateRevocationCheckPolicy(refInput: RevocationCheckPolicyRefInput!, input: RevocationCheckPolicyPartialInput!): RevocationCheckPolicyPayload!
+    updateRevocationCheckPolicy(refInput: RevocationCheckPolicyRefInput!, input: RevocationCheckPolicyPartialInput!): RevocationCheckPolicyPayload! @deprecated(reason: "Use 'updateRevocationCheckPolicies' instead")
+
+    "Update revocation check policies."
+    updateRevocationCheckPolicies(input: [RevocationCheckPolicyPartialInput!]!): RevocationCheckPoliciesPayload!
 
     """
     Delete one or more existing revocation check policies.
@@ -7216,7 +7772,7 @@ extend type Mutation {
     At least one of the parameters must be provided. If both are provided, refInputs takes precedence.
     The operation returns the status of each deletion attempt.
     """
-    deleteRevocationCheckPolicies(refInputs: [RevocationCheckPolicyRefInput!], names: [String!]): RevocationCheckPoliciesPayload!
+    deleteRevocationCheckPolicies(input: [RevocationCheckPolicyPartialInput!], refInputs: [RevocationCheckPolicyRefInput!] @deprecated(reason: "Use 'input' instead"), names: [String!] @deprecated(reason: "Use 'input' instead")): RevocationCheckPoliciesPayload!
 }
 
 enum CertRevocationCheckPropertyType {
@@ -7334,6 +7890,8 @@ input RevocationCheckPolicyInput {
 }
 
 input RevocationCheckPolicyPartialInput {
+    "The reference input"
+    ref: RevocationCheckPolicyRefInput
     "The goid for this revocation check policy"
     goid : ID
     "Name that describes the revocation checking policy"
@@ -7350,14 +7908,17 @@ input RevocationCheckPolicyPartialInput {
     revocationCheckPolicyItems: [RevocationCheckPolicyItemInput!]
 }
 
-"Reference input to identify the revocation check policy"
+"Reference input to identify the revocation check policy. At least one of goid or name must be supplied."
 input RevocationCheckPolicyRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "Name that describes the revocation checking policy"
-    name: String!
+    name: String
 }
 #
 # Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
+# AI assistance has been used to generate some or all contents of this file. That includes, but is not limited to, new code, modifying existing code, stylistic edits.
 
 extend type Query {
     "Get all roles"
@@ -7513,6 +8074,7 @@ A IDP reference.
 > @l7-summary-fields goid,name,providerType,checksum
 > @l7-display-summary-fields name,providerType
 > @l7-name-fields name
+> @l7-deprecated Use 'IdentityProvider' instead.
 """
 type IdpRef {
     "The goid of identity provider"
@@ -7527,7 +8089,10 @@ type IdpRef {
     adminEnabled: Boolean!
 }
 
-"IDP User Reference"
+"""
+IDP User Reference.
+> @l7-deprecated Use 'IdentityUser' instead.
+"""
 type UserRef {
     "The goid of user"
     goid: ID
@@ -7545,7 +8110,10 @@ type UserRef {
     description : String
 }
 
-"IDP Group Reference"
+"""
+IDP Group Reference.
+> @l7-deprecated Use 'IdentityGroup' instead.
+"""
 type GroupRef {
     "The goid of group"
     goid: ID
@@ -7891,7 +8459,7 @@ extend type Mutation {
     At least one of the parameters must be provided. If both are provided, refInputs takes precedence.
     The operation returns the status of each deletion attempt.
     """
-    deleteSampleMessages(refInputs: [SampleMessageRefInput!], sampleMessages: [String!]): SampleMessagesPayload
+    deleteSampleMessages(input: [SampleMessagePartialInput!], refInputs: [SampleMessageRefInput!] @deprecated(reason: "Use 'input' instead"), sampleMessages: [String!] @deprecated(reason: "Use 'input' instead")): SampleMessagesPayload
 }
 
 """
@@ -7932,10 +8500,27 @@ input SampleMessageInput {
     serviceName: String
 }
 
-"Reference input to identify the sample message"
+"Reference input to identify the sample message. At least one of goid or name must be supplied."
 input SampleMessageRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "Name of a SampleMessage"
-    name: String!
+    name: String
+}
+
+input SampleMessagePartialInput {
+    "The reference input"
+    ref: SampleMessageRefInput
+    "The goid for the SampleMessage"
+    goid : ID
+    "Name of a SampleMessage"
+    name : String
+    "sample message content"
+    content: String
+    "Operation name"
+    operationName: String
+    "The name of the service belongs to the sample message"
+    serviceName: String
 }
 
 type SampleMessagesPayload implements EntityMutationsPayload {
@@ -7995,7 +8580,10 @@ extend type Mutation {
     """
     Update an existing scheduled task. Match is carried by refInput
     """
-    updateScheduledTask(refInput: ScheduledTaskRefInput!, input: ScheduledTaskPartialInput!): ScheduledTaskPayload!
+    updateScheduledTask(refInput: ScheduledTaskRefInput!, input: ScheduledTaskPartialInput!): ScheduledTaskPayload! @deprecated(reason: "Use 'updateScheduledTasks' instead")
+
+    "Update scheduled tasks."
+    updateScheduledTasks(input: [ScheduledTaskPartialInput!]!): ScheduledTasksPayload!
 
     """
     Delete one or more existing scheduled tasks.
@@ -8007,7 +8595,7 @@ extend type Mutation {
     At least one of the parameters must be provided. If both are provided, refInputs takes precedence.
     The operation returns the status of each deletion attempt.
     """
-    deleteScheduledTasks(refInputs: [ScheduledTaskRefInput!], names: [String!]): ScheduledTasksPayload!
+    deleteScheduledTasks(input: [ScheduledTaskPartialInput!], refInputs: [ScheduledTaskRefInput!] @deprecated(reason: "Use 'input' instead"), names: [String!] @deprecated(reason: "Use 'input' instead")): ScheduledTasksPayload!
     
     "Deletes an existing background task policy"
     deleteBackgroundTaskPolicies(names: [String!]!) : BackgroundTaskPoliciesPayload! @deprecated(reason: "Use 'deletePolicies' instead.")
@@ -8114,6 +8702,8 @@ input ScheduledTaskInput {
 }
 
 input ScheduledTaskPartialInput {
+  "The reference input"
+  ref: ScheduledTaskRefInput
   "The internal entity unique identifier"
   goid: ID
   "The name of the scheduled task"
@@ -8135,10 +8725,12 @@ input ScheduledTaskPartialInput {
   runAsUserProviderName: String
 }
 
-"Reference input to identify the entity"
+"Reference input to identify the entity. At least one of goid or name must be supplied."
 input ScheduledTaskRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "The name of the scheduled task"
-    name: String!
+    name: String
 }
 
 input BackgroundTaskPolicyInput {
@@ -8204,13 +8796,17 @@ extend type Mutation {
     setSecrets(input: [SecretInput!]!) : SecretsPayload
 
     "Updating the secret"
-    updateSecret(refInput: SecretRefInput!, input: SecretPartialInput!) : SecretPayload
+    updateSecret(refInput: SecretRefInput!, input: SecretPartialInput!) : SecretPayload @deprecated(reason: "Use 'updateSecrets' instead")
+    "Updating secrets"
+    updateSecrets(input: [SecretPartialInput!]!) : SecretsPayload
 
     "Creates or updates one or more keys"
     setKeys(input: [KeyInput!]!) : KeysPayload
 
     "Update an existing key. Match is carried by refInput"
-    updateKey(refInput: KeyRefInput!, input: KeyPartialInput!) : KeyPayload
+    updateKey(refInput: KeyRefInput!, input: KeyPartialInput!) : KeyPayload @deprecated(reason: "Use 'updateKeys' instead")
+    "Update keys"
+    updateKeys(input: [KeyPartialInput!]!) : KeysPayload
 
     """
     Delete one or more existing secrets.
@@ -8222,7 +8818,7 @@ extend type Mutation {
     At least one of the parameters must be provided. If both are provided, refInputs takes precedence.
     The operation returns the status of each deletion attempt.
     """
-    deleteSecrets(refInputs: [SecretRefInput!], names: [String!]) : SecretsPayload
+    deleteSecrets(input: [SecretPartialInput!], refInputs: [SecretRefInput!] @deprecated(reason: "Use 'input' instead"), names: [String!] @deprecated(reason: "Use 'input' instead")) : SecretsPayload
     """
     Delete one or more existing keys.
     
@@ -8233,7 +8829,7 @@ extend type Mutation {
     At least one of the parameters must be provided. If both are provided, refInputs takes precedence.
     The operation returns the status of each deletion attempt.
     """
-    deleteKeys(refInputs: [KeyRefInput!], aliases: [String!]) : KeysPayload
+    deleteKeys(input: [KeyPartialInput!], refInputs: [KeyRefInput!] @deprecated(reason: "Use 'input' instead"), aliases: [String!] @deprecated(reason: "Use 'input' instead")) : KeysPayload
 }
 
 """
@@ -8407,6 +9003,14 @@ input KeyInput {
 }
 
 input KeyPartialInput {
+    "The reference input"
+    ref: KeyRefInput
+    "The internal entity unique identifier"
+    goid: ID
+    "The gateway keystore identifier"
+    keystoreId: ID
+    "The name assigned to the key"
+    alias: String
     """
     The certificate chain in PEM format.
     IMPORTANT: The certificate must match the existing private key.
@@ -8437,13 +9041,19 @@ input KeyGenerateOptions {
     certCACapable: Boolean
 }
 
-"Reference input to identify the entity"
+"Reference input to identify the entity. At least one of goid or name must be supplied."
 input SecretRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "The name of the secret"
-    name: String!
+    name: String
 }
 
 input SecretPartialInput {
+    "The reference input"
+    ref: SecretRefInput
+    "The goid for the Secret"
+    goid: ID
     """
     Identify the password being stored. You may use letters, numbers, dashes, and underscores.
     Names that contain spaces or periods are valid, but the resulting stored password cannot be referenced via context variable.
@@ -8490,11 +9100,14 @@ type KeysPayload implements EntityMutationsPayload {
     keys : [Key]!
 }
 
+"At least one of goid or alias must be supplied."
 input KeyRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "The gateway keystore identifier"
     keystoreId: ID  = "00000000000000000000000000000002"
     "The name assigned to the key"
-    alias: String!
+    alias: String
 }
 
 input KeyMappingInstructionInput{
@@ -8603,7 +9216,10 @@ extend type Mutation {
     """
     Update an existing security zone. Match is carried by refInput.
     """
-    updateSecurityZone(refInput: SecurityZoneRefInput!, input: SecurityZonePartialInput!): SecurityZonePayload!
+    updateSecurityZone(refInput: SecurityZoneRefInput!, input: SecurityZonePartialInput!): SecurityZonePayload! @deprecated(reason: "Use 'updateSecurityZones' instead")
+
+    "Update security zones."
+    updateSecurityZones(input: [SecurityZonePartialInput!]!): SecurityZonesPayload!
 
     """
     Delete one or more existing security zones.
@@ -8616,10 +9232,12 @@ extend type Mutation {
     The operation returns the status of each deletion attempt.
     """
     deleteSecurityZones(
+        "Partial inputs identifying the security zones to delete"
+        input: [SecurityZonePartialInput!],
         "Reference inputs identifying the security zones to delete"
-        refInputs: [SecurityZoneRefInput!],
+        refInputs: [SecurityZoneRefInput!] @deprecated(reason: "Use 'input' instead"),
         "The names of the security zones to delete"
-        names: [String!]): SecurityZonesPayload!
+        names: [String!] @deprecated(reason: "Use 'input' instead")): SecurityZonesPayload!
 }
 
 """
@@ -8660,14 +9278,18 @@ input SecurityZoneInput {
     checksum: String
 }
 
-"Reference input to identify an existing security zone entity"
+"Reference input to identify an existing security zone entity. At least one of goid or name must be supplied."
 input SecurityZoneRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "The security zone name"
-    name: String!
+    name: String
 }
 
 "Partial update input for a security zone"
 input SecurityZonePartialInput {
+    "The reference input"
+    ref: SecurityZoneRefInput
     "The internal entity unique identifier"
     goid: ID
     "The security zone name"
@@ -8718,7 +9340,11 @@ extend type Mutation {
     """
     updateServerModuleFile(
         refInput: ServerModuleFileRefInput!,
-        input: ServerModuleFilePartialInput!): ServerModuleFilePayload!
+        input: ServerModuleFilePartialInput!): ServerModuleFilePayload! @deprecated(reason: "Use 'updateServerModuleFiles' instead")
+
+    "Updates Server module files."
+    updateServerModuleFiles(
+        input: [ServerModuleFilePartialInput!]!): ServerModuleFilesPayload
 
     """
     Deletes Server module files.
@@ -8730,10 +9356,12 @@ extend type Mutation {
     At least one of the parameters must be provided. If both are provided, refInputs takes precedence.
     """
     deleteServerModuleFiles(
+        "Partial inputs identifying the Server module files to delete"
+        input: [ServerModuleFilePartialInput!],
         "Reference inputs identifying the Server module files to delete"
-        refInputs: [ServerModuleFileRefInput!],
+        refInputs: [ServerModuleFileRefInput!] @deprecated(reason: "Use 'input' instead"),
         "The names of the Server module files to delete"
-        names: [String!]): ServerModuleFilesPayload
+        names: [String!] @deprecated(reason: "Use 'input' instead")): ServerModuleFilesPayload
 }
 
 enum ModuleType {
@@ -8825,14 +9453,20 @@ input ServerModuleFileInput {
     checksum: String
 }
 
-"Reference input to identify an existing Server module file entity"
+"Reference input to identify an existing Server module file entity. At least one of goid or name must be supplied."
 input ServerModuleFileRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "The Server module name"
-    name: String!
+    name: String
 }
 
 "Partial update input for a Server module file. Only the name can be updated."
 input ServerModuleFilePartialInput {
+    "The reference input"
+    ref: ServerModuleFileRefInput
+    "The internal entity unique identifier"
+    goid: ID
     "The new Server module name"
     name: String
 }
@@ -8900,14 +9534,17 @@ extend type Mutation {
     "Create or update services"
     setServices(input: [L7ServiceInput!]!) : L7ServicesPayload!
 
-    """"
+    """
     Set active revision for the services.
     By default, it chooses the latest revision as active. If the latest revision available is already active, does nothing.
     """
     setServiceRevisions(input: [L7ServicePartialInput!]!) : L7ServicesPayload!
 
     "Update an existing service. Match is carried by refInput"
-    updateService(refInput: ServiceRefInput!,  input: L7ServicePartialInput!) : L7ServicePayload!
+    updateService(refInput: ServiceRefInput!,  input: L7ServicePartialInput!) : L7ServicePayload! @deprecated(reason: "Use 'updateServices' instead")
+
+    "Update services."
+    updateServices(input: [L7ServicePartialInput!]!) : L7ServicesPayload!
 
     """
     Update an existing Service with new properties. Match is carried by refInput.
@@ -8917,7 +9554,7 @@ extend type Mutation {
     """
     updateServiceProperties(refInput: ServiceRefInput!, properties: [EntityPropertyPartialInput!]!) : L7ServicePayload!
 
-    """"
+    """
     Delete services.
     
     This mutation supports two ways to identify services for deletion:
@@ -8927,7 +9564,7 @@ extend type Mutation {
     When both arguments are provided, refInputs takes precedence and resolvers is ignored.
     At least one argument must be provided with a non-empty list.
     """
-    deleteServices(refInputs: [ServiceRefInput!], resolvers: [ServiceResolversInput!] @deprecated(reason: "Use 'refInputs' instead for more precise service identification")) : L7ServicesPayload!
+    deleteServices(input: [L7ServicePartialInput!], refInputs: [ServiceRefInput!] @deprecated(reason: "Use 'input' instead"), resolvers: [ServiceResolversInput!] @deprecated(reason: "Use 'input' instead")) : L7ServicesPayload!
 
     "Update existing revision (comment and/or active) for the specified service"
     updateServiceRevision(refInput: ServiceRefInput!, revision: Long!, activate: Boolean, comment: String) : L7ServicePayload!
@@ -9104,6 +9741,8 @@ input L7ServiceInput {
 }
 
 input L7ServicePartialInput {
+    "The reference input"
+    ref: ServiceRefInput
     "The goid for this service"
     goid : ID
     "The guid for this service"
@@ -9172,6 +9811,8 @@ Supported identifier fields (in order of precedence):
 - goid: The internal entity unique identifier
 
 NOTE: Only one of the extra identifiers will be used in combination with the primary identifier.
+
+At least one of goid, or both resolutionPath and serviceType, must be supplied.
 """
 input ServiceRefInput {
     "The goid for this service"
@@ -9179,9 +9820,9 @@ input ServiceRefInput {
     "Name of the service"
     name: String
     "The resolution path to the service"
-    resolutionPath: String!
+    resolutionPath: String
     "The type of service"
-    serviceType: L7ServiceType!
+    serviceType: L7ServiceType
     "The service resolvers. They can be used to identify services."
     resolvers: ServiceResolversInput
 }
@@ -9210,7 +9851,10 @@ extend type Mutation {
     """
     Update an existing siteminder configuration. Match is carried by refInput
     """
-    updateSMConfig(refInput: SMConfigRefInput!, input: SMConfigPartialInput!): SMConfigPayload!
+    updateSMConfig(refInput: SMConfigRefInput!, input: SMConfigPartialInput!): SMConfigPayload! @deprecated(reason: "Use 'updateSMConfigs' instead")
+
+    "Update siteminder configurations."
+    updateSMConfigs(input: [SMConfigPartialInput!]!): SMConfigsPayload!
 
     """
     Update an existing siteminder configuration with new properties. Match is carried by refInput.
@@ -9230,7 +9874,7 @@ extend type Mutation {
     At least one of the parameters must be provided. If both are provided, refInputs takes precedence.
     The operation returns the status of each deletion attempt.
     """
-    deleteSMConfigs(refInputs: [SMConfigRefInput!], names: [String!]): SMConfigsPayload!
+    deleteSMConfigs(input: [SMConfigPartialInput!], refInputs: [SMConfigRefInput!] @deprecated(reason: "Use 'input' instead"), names: [String!] @deprecated(reason: "Use 'input' instead")): SMConfigsPayload!
 }
 
 enum SMCryptoMode {
@@ -9320,6 +9964,8 @@ input SMConfigInput {
 }
 
 input SMConfigPartialInput {
+    "The reference input"
+    ref: SMConfigRefInput
     "The goid for the CA SSO connection"
     goid: ID
     "Name of the CA SSO configuration"
@@ -9353,10 +9999,12 @@ input SMConfigPartialInput {
     checksum : String
 }
 
-"Reference input to identify the siteminder configuration"
+"Reference input to identify the siteminder configuration. At least one of goid or name must be supplied."
 input SMConfigRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "Name of the CA SSO configuration"
-    name: String!
+    name: String
 }
 
 type SMConfigsPayload implements EntityMutationsPayload {
@@ -9397,7 +10045,10 @@ extend type Mutation {
     """
     Update an existing SNI configuration. Match is carried by refInput
     """
-    updateSniConfiguration(refInput: SniConfigurationRefInput!, input: SniConfigurationPartialInput!): SniConfigurationPayload!
+    updateSniConfiguration(refInput: SniConfigurationRefInput!, input: SniConfigurationPartialInput!): SniConfigurationPayload! @deprecated(reason: "Use 'updateSniConfigurations' instead")
+
+    "Update SNI configurations."
+    updateSniConfigurations(input: [SniConfigurationPartialInput!]!): SniConfigurationsPayload!
 
     """
     Delete existing SNI configurations.
@@ -9409,7 +10060,7 @@ extend type Mutation {
     At least one of the parameters must be provided. If both are provided, refInputs takes precedence.
     The operation returns the status of each deletion attempt.
     """
-    deleteSniConfigurations(refInputs: [SniConfigurationRefInput!], names: [String!]): SniConfigurationsPayload!
+    deleteSniConfigurations(input: [SniConfigurationPartialInput!], refInputs: [SniConfigurationRefInput!] @deprecated(reason: "Use 'input' instead"), names: [String!] @deprecated(reason: "Use 'input' instead")): SniConfigurationsPayload!
 }
 
 """
@@ -9476,6 +10127,8 @@ input SniConfigurationInput {
 }
 
 input SniConfigurationPartialInput {
+    "The reference input"
+    ref: SniConfigurationRefInput
     "The internal entity unique identifier"
     goid: ID
     "The SNI configuration name"
@@ -9490,10 +10143,12 @@ input SniConfigurationPartialInput {
     checksum: String
 }
 
-"Reference input to identify the SNI configuration entity"
+"Reference input to identify the SNI configuration entity. At least one of goid or name must be supplied."
 input SniConfigurationRefInput {
+    "The internal entity unique identifier"
+    goid: ID
     "The SNI configuration name"
-    name: String!
+    name: String
 }
 
 type SniConfigurationsPayload implements EntityMutationsPayload {
@@ -9811,7 +10466,10 @@ extend type Mutation {
     """
     Update an existing trusted certificate. Match is carried by refInput
     """
-    updateTrustedCert(refInput: TrustedCertRefInput!, input: TrustedCertPartialInput!): TrustedCertPayload!
+    updateTrustedCert(refInput: TrustedCertRefInput!, input: TrustedCertPartialInput!): TrustedCertPayload! @deprecated(reason: "Use 'updateTrustedCerts' instead")
+
+    "Update trusted certificates."
+    updateTrustedCerts(input: [TrustedCertPartialInput!]!): TrustedCertsPayload!
 
     """
     Delete one or more existing trusted certificates.
@@ -9823,7 +10481,7 @@ extend type Mutation {
     At least one of the parameters must be provided. If both are provided, refInputs takes precedence.
     The operation returns the status of each deletion attempt.
     """
-    deleteTrustedCerts(refInputs: [TrustedCertRefInput!], thumbprintSha1s: [String!]): TrustedCertsPayload!
+    deleteTrustedCerts(input: [TrustedCertPartialInput!], refInputs: [TrustedCertRefInput!] @deprecated(reason: "Use 'input' instead"), thumbprintSha1s: [String!] @deprecated(reason: "Use 'input' instead")): TrustedCertsPayload!
 }
 
 "Input sent with createTrustedCert mutation"
@@ -9860,6 +10518,8 @@ input TrustedCertInput {
 
 "Partial TrustedCert input for updates"
 input TrustedCertPartialInput {
+    "The reference input"
+    ref: TrustedCertRefInput
     "The internal entity unique identifier"
     goid: ID
     "The name of the trusted certificate"

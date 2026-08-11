@@ -97,6 +97,7 @@
         }
       ],
       "isL7Entity": true,
+      "deprecated": true,
       "singularName": "administrativeUserAccountProperty",
       "pluralName": "administrativeUserAccountProperties",
       "summaryFields": [
@@ -241,6 +242,7 @@
         }
       ],
       "isL7Entity": true,
+      "deprecated": true,
       "singularName": "auditConfiguration",
       "pluralName": "auditConfigurations",
       "summaryFields": [
@@ -796,12 +798,24 @@
           "dataType": "String"
         },
         {
+          "name": "administrativeUserAccountOptions",
+          "dataType": "AdministrativeUserAccountOptions"
+        },
+        {
           "name": "certValidationOptions",
           "dataType": "CertValidationOptions"
         },
         {
-          "name": "administrativeUserAccountOptions",
-          "dataType": "AdministrativeUserAccountOptions"
+          "name": "defaultHttpProxyOptions",
+          "dataType": "DefaultHttpProxyOptions"
+        },
+        {
+          "name": "serviceResolutionOptions",
+          "dataType": "ServiceResolutionOptions"
+        },
+        {
+          "name": "auditSinkOptions",
+          "dataType": "AuditSinkOptions"
         }
       ],
       "isL7Entity": true,
@@ -849,6 +863,7 @@
         }
       ],
       "isL7Entity": true,
+      "deprecated": true,
       "singularName": "schema",
       "pluralName": "schemas",
       "summaryFields": [
@@ -893,6 +908,7 @@
         }
       ],
       "isL7Entity": true,
+      "deprecated": true,
       "singularName": "dtd",
       "pluralName": "dtds",
       "summaryFields": [
@@ -1110,6 +1126,7 @@
         }
       ],
       "isL7Entity": true,
+      "deprecated": true,
       "singularName": "defaultHttpProxyConfiguration",
       "pluralName": "defaultHttpProxyConfigurations",
       "summaryFields": [
@@ -1573,6 +1590,7 @@
         }
       ],
       "isL7Entity": true,
+      "deprecated": true,
       "singularName": "internalIdp",
       "pluralName": "internalIdps",
       "summaryFields": [
@@ -1614,6 +1632,7 @@
         }
       ],
       "isL7Entity": true,
+      "deprecated": true,
       "singularName": "internalGroup",
       "pluralName": "internalGroups",
       "summaryFields": [
@@ -1698,6 +1717,7 @@
         }
       ],
       "isL7Entity": true,
+      "deprecated": true,
       "singularName": "internalUser",
       "pluralName": "internalUsers",
       "summaryFields": [
@@ -1754,6 +1774,7 @@
         }
       ],
       "isL7Entity": true,
+      "deprecated": true,
       "singularName": "federatedIdp",
       "pluralName": "federatedIdps",
       "summaryFields": [
@@ -1801,6 +1822,7 @@
         }
       ],
       "isL7Entity": true,
+      "deprecated": true,
       "singularName": "federatedGroup",
       "pluralName": "federatedGroups",
       "summaryFields": [
@@ -1882,6 +1904,7 @@
         }
       ],
       "isL7Entity": true,
+      "deprecated": true,
       "singularName": "federatedUser",
       "pluralName": "federatedUsers",
       "summaryFields": [
@@ -1946,6 +1969,7 @@
         }
       ],
       "isL7Entity": true,
+      "deprecated": true,
       "singularName": "simpleLdapIdp",
       "pluralName": "simpleLdapIdps",
       "summaryFields": [
@@ -1990,6 +2014,7 @@
         }
       ],
       "isL7Entity": true,
+      "deprecated": true,
       "singularName": "policyBackedIdp",
       "pluralName": "policyBackedIdps",
       "summaryFields": [
@@ -2078,6 +2103,7 @@
         }
       ],
       "isL7Entity": true,
+      "deprecated": true,
       "singularName": "ldapIdp",
       "pluralName": "ldapIdps",
       "summaryFields": [
@@ -2914,6 +2940,7 @@
         }
       ],
       "isL7Entity": true,
+      "deprecated": true,
       "singularName": "serviceResolutionConfig",
       "pluralName": "serviceResolutionConfigs",
       "summaryFields": [
@@ -3062,6 +3089,7 @@
         }
       ],
       "isL7Entity": true,
+      "deprecated": true,
       "singularName": "idpRef",
       "pluralName": "idpRefs",
       "summaryFields": [
@@ -5057,6 +5085,16 @@
           "dataType": "GlobalConfig"
         },
         {
+          "name": "globalConfigsByFilters",
+          "dataType": "GlobalConfig",
+          "args": [
+            {
+              "name": "filters",
+              "dataType": "[EntityFilterInput!]!"
+            }
+          ]
+        },
+        {
           "name": "globalPolicies",
           "dataType": "GlobalPolicy"
         },
@@ -5177,6 +5215,10 @@
           ]
         },
         {
+          "name": "identityGroups",
+          "dataType": "IdentityGroup"
+        },
+        {
           "name": "identityGroupsByFilters",
           "dataType": "IdentityGroup",
           "args": [
@@ -5271,6 +5313,10 @@
               "dataType": "String!"
             }
           ]
+        },
+        {
+          "name": "identityUsers",
+          "dataType": "IdentityUser"
         },
         {
           "name": "identityUsersByFilters",
@@ -7331,18 +7377,6 @@
       "typeName": "CertValidationOptions",
       "fields": [
         {
-          "name": "goid",
-          "dataType": "ID"
-        },
-        {
-          "name": "name",
-          "dataType": "String"
-        },
-        {
-          "name": "checksum",
-          "dataType": "String"
-        },
-        {
           "name": "identityProviders",
           "dataType": "CertValidationOption"
         },
@@ -7369,23 +7403,167 @@
       "fields": [
         {
           "name": "logonMaxAllowableAttempts",
-          "dataType": "String"
+          "dataType": "Int"
         },
         {
           "name": "logonLockoutTime",
-          "dataType": "String"
+          "dataType": "Long"
         },
         {
           "name": "logonSessionExpiry",
-          "dataType": "String"
+          "dataType": "Int"
         },
         {
           "name": "logonInactivityPeriod",
-          "dataType": "String"
+          "dataType": "Int"
         }
       ],
       "singularName": "administrativeUserAccountOptions",
       "pluralName": "administrativeUserAccountOptionss",
+      "summaryFields": [],
+      "excludedFields": [],
+      "includedFields": [],
+      "identityFields": [],
+      "deprecatedFields": []
+    },
+    "DefaultHttpProxyOptions": {
+      "category": "type",
+      "typeName": "DefaultHttpProxyOptions",
+      "fields": [
+        {
+          "name": "host",
+          "dataType": "String"
+        },
+        {
+          "name": "port",
+          "dataType": "Int"
+        },
+        {
+          "name": "username",
+          "dataType": "String"
+        },
+        {
+          "name": "securePasswordName",
+          "dataType": "String"
+        }
+      ],
+      "singularName": "defaultHttpProxyOptions",
+      "pluralName": "defaultHttpProxyOptionss",
+      "summaryFields": [],
+      "excludedFields": [],
+      "includedFields": [],
+      "identityFields": [],
+      "deprecatedFields": []
+    },
+    "ServiceResolutionOptions": {
+      "category": "type",
+      "typeName": "ServiceResolutionOptions",
+      "fields": [
+        {
+          "name": "resolutionPathRequired",
+          "dataType": "Boolean"
+        },
+        {
+          "name": "resolutionPathCaseSensitive",
+          "dataType": "Boolean"
+        },
+        {
+          "name": "useL7OriginalUrl",
+          "dataType": "Boolean"
+        },
+        {
+          "name": "useServiceGoid",
+          "dataType": "Boolean"
+        },
+        {
+          "name": "useSoapAction",
+          "dataType": "Boolean"
+        },
+        {
+          "name": "useSoapBodyChildNamespace",
+          "dataType": "Boolean"
+        }
+      ],
+      "singularName": "serviceResolutionOptions",
+      "pluralName": "serviceResolutionOptionss",
+      "summaryFields": [],
+      "excludedFields": [],
+      "includedFields": [],
+      "identityFields": [],
+      "deprecatedFields": []
+    },
+    "AuditSinkOptions": {
+      "category": "type",
+      "typeName": "AuditSinkOptions",
+      "fields": [
+        {
+          "name": "alwaysSaveInternal",
+          "dataType": "Boolean"
+        },
+        {
+          "name": "lookupPolicyName",
+          "dataType": "String"
+        },
+        {
+          "name": "sinkPolicyName",
+          "dataType": "String"
+        },
+        {
+          "name": "ftpConfig",
+          "dataType": "AuditFtpConfig"
+        }
+      ],
+      "singularName": "auditSinkOptions",
+      "pluralName": "auditSinkOptionss",
+      "summaryFields": [],
+      "excludedFields": [],
+      "includedFields": [],
+      "identityFields": [],
+      "deprecatedFields": []
+    },
+    "AuditFtpConfig": {
+      "category": "type",
+      "typeName": "AuditFtpConfig",
+      "fields": [
+        {
+          "name": "host",
+          "dataType": "String"
+        },
+        {
+          "name": "port",
+          "dataType": "Int"
+        },
+        {
+          "name": "timeout",
+          "dataType": "Int"
+        },
+        {
+          "name": "user",
+          "dataType": "String"
+        },
+        {
+          "name": "password",
+          "dataType": "String"
+        },
+        {
+          "name": "directory",
+          "dataType": "String"
+        },
+        {
+          "name": "verifyServerCert",
+          "dataType": "Boolean"
+        },
+        {
+          "name": "security",
+          "dataType": "AuditFtpSecurityType"
+        },
+        {
+          "name": "enabled",
+          "dataType": "Boolean"
+        }
+      ],
+      "singularName": "auditFtpConfig",
+      "pluralName": "auditFtpConfigs",
       "summaryFields": [],
       "excludedFields": [],
       "includedFields": [],
@@ -8150,6 +8328,18 @@
           "dataType": "InternalUser"
         },
         {
+          "name": "identityProviders",
+          "dataType": "IdentityProvider"
+        },
+        {
+          "name": "identityUsers",
+          "dataType": "IdentityUser"
+        },
+        {
+          "name": "identityGroups",
+          "dataType": "IdentityGroup"
+        },
+        {
           "name": "jdbcConnections",
           "dataType": "JdbcConnection"
         },
@@ -8333,6 +8523,7 @@
           "dataType": "String"
         }
       ],
+      "deprecated": true,
       "singularName": "userRef",
       "pluralName": "userRefs",
       "summaryFields": [],
@@ -8370,6 +8561,7 @@
           "dataType": "String"
         }
       ],
+      "deprecated": true,
       "singularName": "groupRef",
       "pluralName": "groupRefs",
       "summaryFields": [],
