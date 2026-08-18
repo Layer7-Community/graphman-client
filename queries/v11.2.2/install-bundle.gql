@@ -70,7 +70,6 @@ mutation installBundle (
     setServiceResolutionConfigs (input: $serviceResolutionConfigs){detailedStatus {action status description source {name value} target {name value}}}
     setPasswordPolicies (input: $passwordPolicies){detailedStatus {action status description source {name value} target {name value}}}
     setAdministrativeUserAccountProperties (input: $administrativeUserAccountProperties){detailedStatus {action status description source {name value} target {name value}}}
-    setGlobalConfigs(input: $globalConfigs) {detailedStatus {action status description source {name value} target { name value}}}
     setInterfaceTags (input: $interfaceTags){detailedStatus {action status description source {name value} target {name value}}}
     setFirewallRules (input: $firewallRules){detailedStatus {action status description source {name value} target {name value}}}
 
@@ -78,6 +77,7 @@ mutation installBundle (
     setRevocationCheckPolicies (input: $revocationCheckPolicies){detailedStatus {action status description source {name value} target {name value}}}
     setTrustedCerts (input: $trustedCerts){detailedStatus {action status description source {name value} target {name value}}}
     setSecrets (input: $secrets){detailedStatus {action status description source {name value} target {name value}}}
+    setGlobalConfigs(input: $globalConfigs) {detailedStatus {action status description source {name value} target { name value}}}
     setHttpConfigurations(input: $httpConfigurations){detailedStatus {action status description source {name value} target {name value}}}
     setCustomKeyValues(input: $customKeyValues){detailedStatus {action status description source {name value} target {name value}}}
     setGlobalResources (input: $globalResources){detailedStatus {action status description source {name value} target {name value}}}
