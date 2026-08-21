@@ -609,6 +609,10 @@ type AuditFtpConfiguration {
     verifyServerCert: Boolean!
     "Security Type"
     security: AuditFtpSecurityType!
+    "Allowed TLS protocol versions for the FTPS connection"
+    tlsVersions: [String!]
+    "Allowed TLS cipher suites for the FTPS connection"
+    tlsCipherSuites: [String!]
     "Whether this Audit Configuration is enabled"
     enabled: Boolean!
 }
@@ -630,6 +634,10 @@ input AuditFtpConfigurationInput {
     verifyServerCert: Boolean = false
     "Security Type"
     security: AuditFtpSecurityType!
+    "Allowed TLS protocol versions for the FTPS connection"
+    tlsVersions: [String!]
+    "Allowed TLS cipher suites for the FTPS connection"
+    tlsCipherSuites: [String!]
     "Whether this Audit Configuration is enabled"
     enabled: Boolean!
 }
@@ -647,7 +655,8 @@ type AuditConfigurationsPayload implements EntityMutationsPayload {
     auditConfigurations: [AuditConfiguration]!
 }
 #
-# Copyright (c) 2025. Broadcom Inc. and its subsidiaries. All Rights Reserved.
+# AI assistance has been used to generate some or all contents of this file. That includes, but is not limited to, new code, modifying existing code, stylistic edits.
+# Copyright (c) 2026 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
 
 extend type Query {
@@ -675,6 +684,8 @@ type AuthenticatedUser {
     providerType: IdpType!
     "The roles assigned for this user"
     roles: [Role]
+    "Names of the roles this user holds via group membership (not direct assignment)"
+    inheritedRoleNames: [String!]
 }#
 # AI assistance has been used to generate some or all contents of this file. That includes, but is not limited to, new code, modifying existing code, stylistic edits.
 # Copyright (c) 2025-2026. Broadcom Inc. and its subsidiaries. All Rights Reserved.
@@ -992,6 +1003,8 @@ extend type Query {
     clientCertByGoid(goid: ID!): ClientCert
     "Retrieves the client certificate for a specific user in a given identity provider"
     clientCertByUser(providerName: String!, username: String!): ClientCert
+    "Retrieves filtered client certificates"
+    clientCertsByFilters(filters: [EntityFilterInput!]!): [ClientCert!]!
 }
 
 extend type Mutation {
@@ -2804,6 +2817,10 @@ type AuditFtpConfig {
     verifyServerCert: Boolean!
     "Security Type"
     security: AuditFtpSecurityType!
+    "Allowed TLS protocol versions for the FTPS connection"
+    tlsVersions: [String!]
+    "Allowed TLS cipher suites for the FTPS connection"
+    tlsCipherSuites: [String!]
     "Whether this Audit Configuration is enabled"
     enabled: Boolean!
 }
@@ -2949,6 +2966,10 @@ input AuditFtpConfigInput {
     verifyServerCert: Boolean = false
     "Security Type"
     security: AuditFtpSecurityType!
+    "Allowed TLS protocol versions for the FTPS connection"
+    tlsVersions: [String!]
+    "Allowed TLS cipher suites for the FTPS connection"
+    tlsCipherSuites: [String!]
     "Whether this Audit Configuration is enabled"
     enabled: Boolean!
 }
@@ -3032,6 +3053,10 @@ input AuditFtpConfigPartialInput {
     verifyServerCert: Boolean
     "Security Type"
     security: AuditFtpSecurityType
+    "Allowed TLS protocol versions for the FTPS connection"
+    tlsVersions: [String!]
+    "Allowed TLS cipher suites for the FTPS connection"
+    tlsCipherSuites: [String!]
     "Whether this Audit Configuration is enabled"
     enabled: Boolean
 }
@@ -3745,7 +3770,7 @@ extend type Query {
     "Get a single user by GOID within a given Internal or Federated identity provider"
     identityUserByGoid(providerName: String!, goid: ID!): IdentityUser
     "Get users belonging to a provider, filtered by field criteria, including LDAP providers."
-    identityUsersByFilters(providerName: String!, filters: [EntityFilterInput!]!): [IdentityUser!]!
+    identityUsersByFilters(providerName: String, filters: [EntityFilterInput!]!): [IdentityUser!]!
 
     "Get all identity groups across every identity provider. For LDAP providers, LDAP groups are excluded unless the includeLdapGroups query option is set to true, since LDAP directories can contain a very large number of entries. Fetching for LDAP groups is restricted by the ldapGroupCount query option (default 100; <= 0 fetches all)."
     identityGroups: [IdentityGroup!]!
@@ -3756,7 +3781,7 @@ extend type Query {
     "Get a single group by GOID within a given Internal or Federated identity provider"
     identityGroupByGoid(providerName: String!, goid: ID!): IdentityGroup
     "Get groups belonging to a provider, filtered by field criteria, including LDAP providers."
-    identityGroupsByFilters(providerName: String!, filters: [EntityFilterInput!]!): [IdentityGroup!]!
+    identityGroupsByFilters(providerName: String, filters: [EntityFilterInput!]!): [IdentityGroup!]!
 }
 
 extend type Mutation {
@@ -3828,7 +3853,10 @@ type InternalIdpDetails {
     certValidation: CertValidationType!
 }
 
-"Details specific to a Federated identity provider."
+"""
+Details specific to a Federated identity provider.
+> @l7-excluded-fields trustedCerts
+"""
 type FederatedIdpDetails {
     "Supports SAML credential"
     supportsSAML: Boolean!
@@ -4020,19 +4048,21 @@ type IdentityProviderPayload implements EntityMutationPayload {
 # --- Identity User ------------------------------------------------------------
 
 """
-A provider-agnostic view of an identity user (Internal or Federated).
-Common fields are at the top level; provider-specific fields are in the
-matching detail sub-object (only one is populated per instance).
-For Internal providers, name is the login; for Federated providers, name is the entity display name.
+A provider-agnostic view of an identity user (Internal, Federated, or LDAP).
+Common fields are at the top level or in basicDetails (always populated); provider-specific
+fields are in the matching detail sub-object (only one of internalDetails/federatedDetails/
+ldapDetails is populated per instance).
+For Internal providers, name is the login; for Federated and LDAP providers, name is the
+subjectDn, falling back to the entity display name when subjectDn is empty or null.
 > @l7-entity
 > @l7-identity-fields name,providerName
 > @l7-summary-fields goid,name,providerName,providerType,checksum
 > @l7-foreign-fields groupNames|name|IdentityGroup,roleNames|name|Role
 """
 type IdentityUser {
-    "The goid of the user"
+    "The goid of the user; LDAP identities have no persisted Goid, so this holds their subjectDn instead"
     goid: ID!
-    "The universal identity key; for Internal providers this is the login, for Federated providers this is the entity display name"
+    "The universal identity key; for Internal providers this is the login, for Federated and LDAP providers this is the subjectDn (falling back to the entity display name when subjectDn is empty or null)"
     name: String!
     "The name of the identity provider this user belongs to"
     providerName: String!
@@ -4046,22 +4076,32 @@ type IdentityUser {
     roleNames: [String!]
     "Names of the roles this user holds via group membership (not direct assignment)"
     inheritedRoleNames: [String!]
+    "Attributes common to every provider type"
+    basicDetails: IdentityUserBasicDetails!
     "Populated when providerType is INTERNAL"
     internalDetails: IdentityUserInternalDetails
     "Populated when providerType is FEDERATED"
     federatedDetails: IdentityUserFederatedDetails
+    "Populated when providerType is LDAP"
+    ldapDetails: IdentityUserLdapDetails
 }
 
-"Internal-user-specific attributes for IdentityUser."
-type IdentityUserInternalDetails {
+"Attributes common to every IdentityUser regardless of provider type."
+type IdentityUserBasicDetails {
     "Login"
     login: String
+    "Common name / display name"
+    cn: String
     "First name"
     firstName: String
     "Last name"
     lastName: String
     "Email address"
     email: String
+}
+
+"Internal-user-specific attributes for IdentityUser."
+type IdentityUserInternalDetails {
     "Description"
     description: String
     "Department"
@@ -4070,40 +4110,40 @@ type IdentityUserInternalDetails {
     enabled: Boolean!
     "Account expiration time in milliseconds since epoch; -1 means never expires"
     expiration: Long
-    "Whether the user must change their password on next login"
-    changePassword: Boolean!
-    "Client certificate in Base64"
-    certBase64: String
+    "Hashed or plain-text password"
+    password: String
     "SSH public key"
     sshPublicKey: String
 }
 
 "Federated-user-specific attributes for IdentityUser."
 type IdentityUserFederatedDetails {
-    "Login"
-    login: String
     "Subject DN"
     subjectDn: String
-    "First name"
-    firstName: String
-    "Last name"
-    lastName: String
-    "Email address"
-    email: String
     "Description"
     description: String
-    "Client certificate in Base64"
-    certBase64: String
+}
+
+"LDAP-user-specific attributes for IdentityUser."
+type IdentityUserLdapDetails {
+    "Subject DN"
+    subjectDn: String
+    "Department"
+    department: String
 }
 
 input IdentityUserInput {
     "Name of the identity provider"
     providerName: String!
-    "Universal identity key; maps to login for Internal providers and entity display name for Federated providers"
+    "The type of the identity provider"
+    providerType: IdpType
+    "Identification key only; never written into the entity. Maps to login for Internal providers and subjectDn (falling back to display name) for Federated/LDAP providers. On create, used as a bootstrap value for login/display name only if basicDetails omits it."
     name: String!
     "If provided, will try to honour at creation time"
     goid: ID
     checksum: String
+    "Attributes common to every provider type"
+    basicDetails: IdentityUserBasicDetailsInput
     "Details required when the target provider is Internal"
     internalDetails: IdentityUserInternalDetailsInput
     "Details required when the target provider is Federated"
@@ -4112,6 +4152,8 @@ input IdentityUserInput {
     groupNames: [String!]
     "Role names to assign this user to"
     roleNames: [String!]
+    "Names of the roles this user holds via group membership (not direct assignment)"
+    inheritedRoleNames: [String!]
 }
 
 input IdentityUserPartialInput {
@@ -4121,9 +4163,11 @@ input IdentityUserPartialInput {
     goid: ID
     "Name of the identity provider"
     providerName: String
-    "Updated identity key; maps to login for Internal providers and entity display name for Federated providers"
+    "Identification key only; never written into the entity. Maps to login for Internal providers and subjectDn (falling back to display name) for Federated/LDAP providers."
     name: String
     checksum: String
+    "Attributes common to every provider type; only non-null fields are applied"
+    basicDetails: IdentityUserBasicDetailsInput
     "Partial Internal-user details; only non-null fields are applied"
     internalDetails: IdentityUserInternalDetailsPartialInput
     "Partial Federated-user details; only non-null fields are applied"
@@ -4140,19 +4184,24 @@ input IdentityUserRefInput {
     goid: ID
     "Name of the identity provider"
     providerName: String
-    "Universal identity key; maps to login for Internal providers and entity display name for Federated providers"
+    "Identification key only; maps to login for Internal providers and subjectDn (falling back to display name) for Federated/LDAP providers"
     name: String
 }
 
-input IdentityUserInternalDetailsInput {
-    "Login; if omitted on create, the name field is used as the login"
+input IdentityUserBasicDetailsInput {
+    "Login; if omitted on create, the name field is used as the login (Internal only)"
     login: String
+    "Common name / display name; if omitted on create, the name field is used as the display name (Federated only)"
+    cn: String
     "First name"
     firstName: String
     "Last name"
     lastName: String
     "Email address"
     email: String
+}
+
+input IdentityUserInternalDetailsInput {
     "Description"
     description: String
     "Department"
@@ -4165,22 +4214,12 @@ input IdentityUserInternalDetailsInput {
     changePassword: Boolean
     "Hashed or plain-text password"
     password: String
-    "Client certificate in Base64 to assign to this user"
-    certBase64: String
     "SSH public key to assign to this user"
     sshPublicKey: String
 }
 
 "Partial update input for Internal-user details. All fields are optional; omit to retain current value."
 input IdentityUserInternalDetailsPartialInput {
-    "Updated login"
-    login: String
-    "First name"
-    firstName: String
-    "Last name"
-    lastName: String
-    "Email address"
-    email: String
     "Description"
     description: String
     "Department"
@@ -4193,27 +4232,15 @@ input IdentityUserInternalDetailsPartialInput {
     changePassword: Boolean
     "Hashed or plain-text password"
     password: String
-    "Client certificate in Base64 to assign; omit to retain the current certificate"
-    certBase64: String
     "SSH public key to assign; omit to retain the current key"
     sshPublicKey: String
 }
 
 input IdentityUserFederatedDetailsInput {
-    "Login"
-    login: String
     "Subject DN"
     subjectDn: String
-    "First name"
-    firstName: String
-    "Last name"
-    lastName: String
-    "Email address"
-    email: String
     "Description"
     description: String
-    "Client certificate in Base64 to assign to this user"
-    certBase64: String
 }
 
 type IdentityUsersPayload implements EntityMutationsPayload {
@@ -4265,6 +4292,8 @@ type IdentityGroup {
 input IdentityGroupInput {
     "Name of the identity provider"
     providerName: String!
+    "The type of the identity provider"
+    providerType: IdpType
     "Group name"
     name: String!
     "If provided, will try to honour at creation time"
@@ -4761,13 +4790,15 @@ input FipUserRefInput {
     providerName: String!
 }
 #
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
+# Copyright (c) 2026 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
 # AI assistance has been used to generate some or all contents of this file. That includes, but is not limited to, new code, modifying existing code, stylistic edits.
 
 extend type Query {
     "Get internal IDPs."
     internalIdps: [InternalIdp!]!
+    "Get internal IDP configuration by goid"
+    internalIdpByGoid(goid: ID!) : InternalIdp
     "Get all internal users"
     internalUsers : [InternalUser!]!
     "Get all internal groups"
@@ -4806,12 +4837,12 @@ extend type Query {
     "Get federated user by name"
     federatedUserByName(providerName: String!, name: String!) : FederatedUser
     "Get federated user by goid"
-    federatedUserByGoid(providerName: String!, goid: ID!) : FederatedUser
+    federatedUserByGoid(providerName: String, goid: ID!) : FederatedUser
 
     "Get federated group by name"
     federatedGroupByName(providerName: String!, name: String!) : FederatedGroup
     "Get federated group by goid"
-    federatedGroupByGoid(providerName: String!, goid: ID!) : FederatedGroup
+    federatedGroupByGoid(providerName: String, goid: ID!) : FederatedGroup
 
     "Get federated users and groups"
     searchFederatedIdp(filter: IdpFilter!) : FederatedSearchResult!
@@ -5519,7 +5550,7 @@ extend type Mutation {
 Interface tags are named sets of IP address patterns used for network interface configuration.
 > @l7-entity
 > @l7-identity-fields name
-> @l7-summary-fields name,checksum
+> @l7-summary-fields goid,name,checksum
 > @l7-excluded-fields
 > @l7-name-fields name
 > @l7-display-summary-fields name,ipPatterns
@@ -7916,7 +7947,8 @@ input RevocationCheckPolicyRefInput {
     name: String
 }
 #
-# Copyright (c) 2025 Broadcom Inc. and its subsidiaries. All Rights Reserved.
+# AI assistance has been used to generate some or all contents of this file. That includes, but is not limited to, new code, modifying existing code, stylistic edits.
+# Copyright (c) 2026 Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
 # AI assistance has been used to generate some or all contents of this file. That includes, but is not limited to, new code, modifying existing code, stylistic edits.
 
@@ -8449,6 +8481,12 @@ extend type Mutation {
     "Create/Update Sample Messages."
     setSampleMessages(input: [SampleMessageInput!]!): SampleMessagesPayload
 
+    "Update an existing sample message. Match is carried by refInput"
+    updateSampleMessage(refInput: SampleMessageRefInput!, input: SampleMessagePartialInput!) : SampleMessagePayload! @deprecated(reason: "Use 'updateSampleMessages' instead")
+
+    "Update sample messages."
+    updateSampleMessages(input: [SampleMessagePartialInput!]!) : SampleMessagesPayload!
+
     """
     Delete one or more existing sample messages.
     
@@ -8527,6 +8565,15 @@ type SampleMessagesPayload implements EntityMutationsPayload {
     status: [EntityMutationStatus!]!
     detailedStatus: [EntityMutationDetailedStatus!]!
     sampleMessages: [SampleMessage]!
+}
+
+"""
+Payload for single sample message mutation result.
+"""
+type SampleMessagePayload implements EntityMutationPayload {
+    status: EntityMutationStatus!
+    detailedStatus: EntityMutationDetailedStatus!
+    sampleMessage: SampleMessage
 }#
 # Copyright © 2024. Broadcom Inc. and its subsidiaries. All Rights Reserved.
 #
@@ -8901,7 +8948,7 @@ key and associated certificate and are used for example by listener ports.
 > @l7-entity key|keys
 > @l7-identity-fields alias,keystoreId
 > @l7-summary-fields goid,keystoreId,alias,checksum
-> @l7-excluded-fields pem,certProperties
+> @l7-excluded-fields pem,certProperties,validationStatus,validationStatusDescription
 > @l7-encrypted-fields p12,pem
 > @l7-alternative-fields p12|pem,pem|p12
 > @l7-name-fields alias
@@ -9121,7 +9168,7 @@ input KeyMappingInstructionInput{
 }
 # AI assistance has been used to generate some or all contents of this file. That includes, but is not limited to, new code, modifying existing code, stylistic edits.
 
-# Extends all 17 zoneable entities to expose securityZoneName as a readable field
+# Extends zoneable entities to expose securityZoneName as a readable field
 # and as an optional input on full-replace (setXxx) and partial-update (updateXxx) mutations.
 # Using 'extend type/input' keeps the individual entity schema files untouched.
 
@@ -9151,6 +9198,7 @@ extend input LogSinkPartialInput { securityZoneName: String }
 
 extend type SampleMessage { securityZoneName: String }
 extend input SampleMessageInput { securityZoneName: String }
+extend input SampleMessagePartialInput { securityZoneName: String }
 
 extend type EmailListener { securityZoneName: String }
 extend input EmailListenerInput { securityZoneName: String }
@@ -9170,6 +9218,7 @@ extend input ListenPortPartialInput { securityZoneName: String }
 
 extend type HttpConfiguration { securityZoneName: String }
 extend input HttpConfigurationInput { securityZoneName: String }
+extend input HttpConfigurationPartialInput { securityZoneName: String }
 
 extend type EncassConfig { securityZoneName: String }
 extend input EncassConfigInput { securityZoneName: String }
@@ -9190,6 +9239,40 @@ extend input FolderPartialInput { securityZoneName: String }
 extend type GlobalResource { securityZoneName: String }
 extend input GlobalResourceInput { securityZoneName: String }
 extend input GlobalResourcePartialInput { securityZoneName: String }
+
+extend type IdentityProvider { securityZoneName: String }
+extend input IdentityProviderInput { securityZoneName: String }
+extend input IdentityProviderPartialInput { securityZoneName: String }
+
+extend type L7Service { securityZoneName: String }
+extend input L7ServiceInput { securityZoneName: String }
+extend input L7ServicePartialInput { securityZoneName: String }
+
+extend type WebApiService { securityZoneName: String }
+extend input WebApiServiceInput { securityZoneName: String }
+
+extend type SoapService { securityZoneName: String }
+extend input SoapServiceInput { securityZoneName: String }
+
+extend type Certificate { securityZoneName: String }
+extend input TrustedCertInput { securityZoneName: String }
+extend input TrustedCertPartialInput { securityZoneName: String }
+
+extend type Key { securityZoneName: String }
+extend input KeyInput { securityZoneName: String }
+extend input KeyPartialInput { securityZoneName: String }
+
+extend type L7Policy { securityZoneName: String }
+extend input L7PolicyInput { securityZoneName: String }
+extend input L7PolicyPartialInput { securityZoneName: String }
+
+extend type L7PolicyAlias { securityZoneName: String }
+extend input L7PolicyAliasInput { securityZoneName: String }
+extend input L7PolicyAliasPartialInput { securityZoneName: String }
+
+extend type L7ServiceAlias { securityZoneName: String }
+extend input L7ServiceAliasInput { securityZoneName: String }
+extend input L7ServiceAliasPartialInput { securityZoneName: String }
 # AI assistance has been used to generate some or all contents of this file. That includes, but is not limited to, new code, modifying existing code, stylistic edits.
 #
 # Copyright © 2026. Broadcom Inc. and its subsidiaries. All Rights Reserved.
@@ -10565,7 +10648,7 @@ A trusted certificate in the gateway truststore.
 > @l7-entity trustedCert|trustedCerts
 > @l7-identity-fields thumbprint
 > @l7-summary-fields goid,name,subjectDn,thumbprint,checksum
-> @l7-excluded-fields revocationCheckPolicy
+> @l7-excluded-fields revocationCheckPolicy,validationStatus,validationStatusDescription
 > @l7-name-fields name,subjectDn
 > @l7-display-summary-fields name,notAfter,thumbprint,trustedFor,subjectDn
 > @l7-foreign-fields revocationCheckPolicyName|name|RevocationCheckPolicy

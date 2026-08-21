@@ -139,6 +139,10 @@
         {
           "name": "aliasedPolicy",
           "dataType": "AliasedPolicy"
+        },
+        {
+          "name": "securityZoneName",
+          "dataType": "String"
         }
       ],
       "isL7Entity": true,
@@ -187,6 +191,10 @@
         {
           "name": "aliasedService",
           "dataType": "AliasedService"
+        },
+        {
+          "name": "securityZoneName",
+          "dataType": "String"
         }
       ],
       "isL7Entity": true,
@@ -711,6 +719,10 @@
         {
           "name": "checksum",
           "dataType": "String"
+        },
+        {
+          "name": "securityZoneName",
+          "dataType": "String"
         }
       ],
       "isL7Entity": true,
@@ -1068,6 +1080,10 @@
         {
           "name": "proxyConfiguration",
           "dataType": "HttpProxyConfiguration"
+        },
+        {
+          "name": "securityZoneName",
+          "dataType": "String"
         }
       ],
       "isL7Entity": true,
@@ -1180,6 +1196,10 @@
         {
           "name": "policyBackedDetails",
           "dataType": "PolicyBackedIdpDetails"
+        },
+        {
+          "name": "securityZoneName",
+          "dataType": "String"
         }
       ],
       "isL7Entity": true,
@@ -1235,12 +1255,20 @@
           "dataType": "String"
         },
         {
+          "name": "basicDetails",
+          "dataType": "IdentityUserBasicDetails"
+        },
+        {
           "name": "internalDetails",
           "dataType": "IdentityUserInternalDetails"
         },
         {
           "name": "federatedDetails",
           "dataType": "IdentityUserFederatedDetails"
+        },
+        {
+          "name": "ldapDetails",
+          "dataType": "IdentityUserLdapDetails"
         }
       ],
       "isL7Entity": true,
@@ -2145,6 +2173,7 @@
       "singularName": "interfaceTag",
       "pluralName": "interfaceTags",
       "summaryFields": [
+        "goid",
         "name",
         "checksum"
       ],
@@ -2557,6 +2586,10 @@
         {
           "name": "properties",
           "dataType": "EntityProperty"
+        },
+        {
+          "name": "securityZoneName",
+          "dataType": "String"
         }
       ],
       "isL7Entity": true,
@@ -2730,6 +2763,10 @@
               "dataType": "[Long!]"
             }
           ]
+        },
+        {
+          "name": "securityZoneName",
+          "dataType": "String"
         }
       ],
       "isL7Entity": true,
@@ -3132,6 +3169,10 @@
         {
           "name": "serviceName",
           "dataType": "String"
+        },
+        {
+          "name": "securityZoneName",
+          "dataType": "String"
         }
       ],
       "isL7Entity": true,
@@ -3199,6 +3240,10 @@
         },
         {
           "name": "runAsUserProviderName",
+          "dataType": "String"
+        },
+        {
+          "name": "securityZoneName",
           "dataType": "String"
         }
       ],
@@ -3386,6 +3431,10 @@
         {
           "name": "validationStatusDescription",
           "dataType": "String"
+        },
+        {
+          "name": "securityZoneName",
+          "dataType": "String"
         }
       ],
       "isL7Entity": true,
@@ -3399,7 +3448,9 @@
       ],
       "excludedFields": [
         "pem",
-        "certProperties"
+        "certProperties",
+        "validationStatus",
+        "validationStatusDescription"
       ],
       "includedFields": [],
       "identityFields": [
@@ -3624,6 +3675,10 @@
               "dataType": "[Long!]"
             }
           ]
+        },
+        {
+          "name": "securityZoneName",
+          "dataType": "String"
         }
       ],
       "isL7Entity": true,
@@ -3859,6 +3914,10 @@
         {
           "name": "policy",
           "dataType": "Policy"
+        },
+        {
+          "name": "securityZoneName",
+          "dataType": "String"
         }
       ],
       "isL7Entity": true,
@@ -4117,6 +4176,10 @@
         {
           "name": "validationStatusDescription",
           "dataType": "String"
+        },
+        {
+          "name": "securityZoneName",
+          "dataType": "String"
         }
       ],
       "isL7Entity": true,
@@ -4130,7 +4193,9 @@
         "checksum"
       ],
       "excludedFields": [
-        "revocationCheckPolicy"
+        "revocationCheckPolicy",
+        "validationStatus",
+        "validationStatusDescription"
       ],
       "includedFields": [],
       "identityFields": [
@@ -4193,6 +4258,10 @@
         {
           "name": "policy",
           "dataType": "Policy"
+        },
+        {
+          "name": "securityZoneName",
+          "dataType": "String"
         }
       ],
       "isL7Entity": true,
@@ -4517,6 +4586,16 @@
           "dataType": "ClientCert"
         },
         {
+          "name": "clientCertsByFilters",
+          "dataType": "ClientCert",
+          "args": [
+            {
+              "name": "filters",
+              "dataType": "[EntityFilterInput!]!"
+            }
+          ]
+        },
+        {
           "name": "clientCertsBySubjectDn",
           "dataType": "ClientCert",
           "args": [
@@ -4796,7 +4875,7 @@
           "args": [
             {
               "name": "providerName",
-              "dataType": "String!"
+              "dataType": "String"
             },
             {
               "name": "goid",
@@ -4872,7 +4951,7 @@
           "args": [
             {
               "name": "providerName",
-              "dataType": "String!"
+              "dataType": "String"
             },
             {
               "name": "goid",
@@ -5224,7 +5303,7 @@
           "args": [
             {
               "name": "providerName",
-              "dataType": "String!"
+              "dataType": "String"
             },
             {
               "name": "filters",
@@ -5324,7 +5403,7 @@
           "args": [
             {
               "name": "providerName",
-              "dataType": "String!"
+              "dataType": "String"
             },
             {
               "name": "filters",
@@ -5561,6 +5640,16 @@
             {
               "name": "filters",
               "dataType": "[EntityFilterInput!]!"
+            }
+          ]
+        },
+        {
+          "name": "internalIdpByGoid",
+          "dataType": "InternalIdp",
+          "args": [
+            {
+              "name": "goid",
+              "dataType": "ID!"
             }
           ]
         },
@@ -7170,6 +7259,14 @@
           "dataType": "AuditFtpSecurityType"
         },
         {
+          "name": "tlsVersions",
+          "dataType": "String"
+        },
+        {
+          "name": "tlsCipherSuites",
+          "dataType": "String"
+        },
+        {
           "name": "enabled",
           "dataType": "Boolean"
         }
@@ -7558,6 +7655,14 @@
           "dataType": "AuditFtpSecurityType"
         },
         {
+          "name": "tlsVersions",
+          "dataType": "String"
+        },
+        {
+          "name": "tlsCipherSuites",
+          "dataType": "String"
+        },
+        {
           "name": "enabled",
           "dataType": "Boolean"
         }
@@ -7644,7 +7749,9 @@
       "singularName": "federatedIdpDetails",
       "pluralName": "federatedIdpDetailss",
       "summaryFields": [],
-      "excludedFields": [],
+      "excludedFields": [
+        "trustedCerts"
+      ],
       "includedFields": [],
       "identityFields": [],
       "deprecatedFields": []
@@ -7780,12 +7887,16 @@
       "identityFields": [],
       "deprecatedFields": []
     },
-    "IdentityUserInternalDetails": {
+    "IdentityUserBasicDetails": {
       "category": "type",
-      "typeName": "IdentityUserInternalDetails",
+      "typeName": "IdentityUserBasicDetails",
       "fields": [
         {
           "name": "login",
+          "dataType": "String"
+        },
+        {
+          "name": "cn",
           "dataType": "String"
         },
         {
@@ -7799,7 +7910,20 @@
         {
           "name": "email",
           "dataType": "String"
-        },
+        }
+      ],
+      "singularName": "identityUserBasicDetails",
+      "pluralName": "identityUserBasicDetailss",
+      "summaryFields": [],
+      "excludedFields": [],
+      "includedFields": [],
+      "identityFields": [],
+      "deprecatedFields": []
+    },
+    "IdentityUserInternalDetails": {
+      "category": "type",
+      "typeName": "IdentityUserInternalDetails",
+      "fields": [
         {
           "name": "description",
           "dataType": "String"
@@ -7817,11 +7941,7 @@
           "dataType": "Long"
         },
         {
-          "name": "changePassword",
-          "dataType": "Boolean"
-        },
-        {
-          "name": "certBase64",
+          "name": "password",
           "dataType": "String"
         },
         {
@@ -7842,36 +7962,37 @@
       "typeName": "IdentityUserFederatedDetails",
       "fields": [
         {
-          "name": "login",
-          "dataType": "String"
-        },
-        {
           "name": "subjectDn",
-          "dataType": "String"
-        },
-        {
-          "name": "firstName",
-          "dataType": "String"
-        },
-        {
-          "name": "lastName",
-          "dataType": "String"
-        },
-        {
-          "name": "email",
           "dataType": "String"
         },
         {
           "name": "description",
           "dataType": "String"
-        },
-        {
-          "name": "certBase64",
-          "dataType": "String"
         }
       ],
       "singularName": "identityUserFederatedDetails",
       "pluralName": "identityUserFederatedDetailss",
+      "summaryFields": [],
+      "excludedFields": [],
+      "includedFields": [],
+      "identityFields": [],
+      "deprecatedFields": []
+    },
+    "IdentityUserLdapDetails": {
+      "category": "type",
+      "typeName": "IdentityUserLdapDetails",
+      "fields": [
+        {
+          "name": "subjectDn",
+          "dataType": "String"
+        },
+        {
+          "name": "department",
+          "dataType": "String"
+        }
+      ],
+      "singularName": "identityUserLdapDetails",
+      "pluralName": "identityUserLdapDetailss",
       "summaryFields": [],
       "excludedFields": [],
       "includedFields": [],
