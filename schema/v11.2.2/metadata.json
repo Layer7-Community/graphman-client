@@ -1314,12 +1314,20 @@
           "dataType": "String"
         },
         {
-          "name": "description",
-          "dataType": "String"
+          "name": "basicDetails",
+          "dataType": "IdentityGroupBasicDetails"
         },
         {
-          "name": "virtualDetails",
-          "dataType": "VirtualGroupDetails"
+          "name": "internalDetails",
+          "dataType": "IdentityGroupInternalDetails"
+        },
+        {
+          "name": "ldapDetails",
+          "dataType": "IdentityGroupLdapDetails"
+        },
+        {
+          "name": "federatedDetails",
+          "dataType": "IdentityGroupFederatedDetails"
         },
         {
           "name": "memberNames",
@@ -1341,7 +1349,7 @@
         "checksum"
       ],
       "excludedFields": [
-        "members"
+        "memberNames"
       ],
       "includedFields": [],
       "identityFields": [
@@ -7999,9 +8007,64 @@
       "identityFields": [],
       "deprecatedFields": []
     },
-    "VirtualGroupDetails": {
+    "IdentityGroupBasicDetails": {
       "category": "type",
-      "typeName": "VirtualGroupDetails",
+      "typeName": "IdentityGroupBasicDetails",
+      "fields": [
+        {
+          "name": "cn",
+          "dataType": "String"
+        },
+        {
+          "name": "description",
+          "dataType": "String"
+        }
+      ],
+      "singularName": "identityGroupBasicDetails",
+      "pluralName": "identityGroupBasicDetailss",
+      "summaryFields": [],
+      "excludedFields": [],
+      "includedFields": [],
+      "identityFields": [],
+      "deprecatedFields": []
+    },
+    "IdentityGroupInternalDetails": {
+      "category": "type",
+      "typeName": "IdentityGroupInternalDetails",
+      "fields": [
+        {
+          "name": "enabled",
+          "dataType": "Boolean"
+        }
+      ],
+      "singularName": "identityGroupInternalDetails",
+      "pluralName": "identityGroupInternalDetailss",
+      "summaryFields": [],
+      "excludedFields": [],
+      "includedFields": [],
+      "identityFields": [],
+      "deprecatedFields": []
+    },
+    "IdentityGroupLdapDetails": {
+      "category": "type",
+      "typeName": "IdentityGroupLdapDetails",
+      "fields": [
+        {
+          "name": "subjectDn",
+          "dataType": "String"
+        }
+      ],
+      "singularName": "identityGroupLdapDetails",
+      "pluralName": "identityGroupLdapDetailss",
+      "summaryFields": [],
+      "excludedFields": [],
+      "includedFields": [],
+      "identityFields": [],
+      "deprecatedFields": []
+    },
+    "IdentityGroupFederatedDetails": {
+      "category": "type",
+      "typeName": "IdentityGroupFederatedDetails",
       "fields": [
         {
           "name": "samlEmailPattern",
@@ -8012,12 +8075,12 @@
           "dataType": "String"
         },
         {
-          "name": "useRegex",
-          "dataType": "Boolean"
+          "name": "patternStyle",
+          "dataType": "PatternStyle"
         }
       ],
-      "singularName": "virtualGroupDetails",
-      "pluralName": "virtualGroupDetailss",
+      "singularName": "identityGroupFederatedDetails",
+      "pluralName": "identityGroupFederatedDetailss",
       "summaryFields": [],
       "excludedFields": [],
       "includedFields": [],
@@ -8913,6 +8976,7 @@
     "CertValidationOption",
     "ResourceType",
     "HttpScheme",
+    "PatternStyle",
     "IdpType",
     "HashAlgorithm",
     "SignatureAlgorithm",

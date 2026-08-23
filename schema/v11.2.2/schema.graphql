@@ -684,7 +684,7 @@ type AuthenticatedUser {
     providerType: IdpType!
     "The roles assigned for this user"
     roles: [Role]
-    "Names of the roles this user holds via group membership (not direct assignment)"
+    "Names of the roles this user holds via group membership; a role can also appear in roles if it is additionally assigned directly"
     inheritedRoleNames: [String!]
 }#
 # AI assistance has been used to generate some or all contents of this file. That includes, but is not limited to, new code, modifying existing code, stylistic edits.
@@ -4052,8 +4052,9 @@ A provider-agnostic view of an identity user (Internal, Federated, or LDAP).
 Common fields are at the top level or in basicDetails (always populated); provider-specific
 fields are in the matching detail sub-object (only one of internalDetails/federatedDetails/
 ldapDetails is populated per instance).
-For Internal providers, name is the login; for Federated and LDAP providers, name is the
-subjectDn, falling back to the entity display name when subjectDn is empty or null.
+For Internal providers, name is the login; for Federated providers, name is the entity name;
+for LDAP providers, name is the subjectDn, falling back to the entity display name when
+subjectDn is empty or null.
 > @l7-entity
 > @l7-identity-fields name,providerName
 > @l7-summary-fields goid,name,providerName,providerType,checksum
@@ -4062,7 +4063,7 @@ subjectDn, falling back to the entity display name when subjectDn is empty or nu
 type IdentityUser {
     "The goid of the user; LDAP identities have no persisted Goid, so this holds their subjectDn instead"
     goid: ID!
-    "The universal identity key; for Internal providers this is the login, for Federated and LDAP providers this is the subjectDn (falling back to the entity display name when subjectDn is empty or null)"
+    "The universal identity key; for Internal providers this is the login, for Federated providers this is the entity name, for LDAP providers this is the subjectDn (falling back to the entity display name when subjectDn is empty or null)"
     name: String!
     "The name of the identity provider this user belongs to"
     providerName: String!
@@ -4074,7 +4075,7 @@ type IdentityUser {
     groupNames: [String!]
     "Names of the roles this user is directly assigned to"
     roleNames: [String!]
-    "Names of the roles this user holds via group membership (not direct assignment)"
+    "Names of the roles this user holds via group membership; a role can also appear in roleNames if it is additionally assigned directly"
     inheritedRoleNames: [String!]
     "Attributes common to every provider type"
     basicDetails: IdentityUserBasicDetails!
@@ -4137,7 +4138,7 @@ input IdentityUserInput {
     providerName: String!
     "The type of the identity provider"
     providerType: IdpType
-    "Identification key only; never written into the entity. Maps to login for Internal providers and subjectDn (falling back to display name) for Federated/LDAP providers. On create, used as a bootstrap value for login/display name only if basicDetails omits it."
+    "Identification key only; never written into the entity. Maps to login for Internal providers, the entity name for Federated providers, and subjectDn (falling back to display name) for LDAP providers. On create, used as a bootstrap value for login/display name only if basicDetails omits it."
     name: String!
     "If provided, will try to honour at creation time"
     goid: ID
@@ -4152,7 +4153,7 @@ input IdentityUserInput {
     groupNames: [String!]
     "Role names to assign this user to"
     roleNames: [String!]
-    "Names of the roles this user holds via group membership (not direct assignment)"
+    "Names of the roles this user holds via group membership; a role can also appear in roleNames if it is additionally assigned directly"
     inheritedRoleNames: [String!]
 }
 
@@ -4163,7 +4164,7 @@ input IdentityUserPartialInput {
     goid: ID
     "Name of the identity provider"
     providerName: String
-    "Identification key only; never written into the entity. Maps to login for Internal providers and subjectDn (falling back to display name) for Federated/LDAP providers."
+    "Identification key only; never written into the entity. Maps to login for Internal providers, the entity name for Federated providers, and subjectDn (falling back to display name) for LDAP providers."
     name: String
     checksum: String
     "Attributes common to every provider type; only non-null fields are applied"
@@ -4184,7 +4185,7 @@ input IdentityUserRefInput {
     goid: ID
     "Name of the identity provider"
     providerName: String
-    "Identification key only; maps to login for Internal providers and subjectDn (falling back to display name) for Federated/LDAP providers"
+    "Identification key only; maps to login for Internal providers, the entity name for Federated providers, and subjectDn (falling back to display name) for LDAP providers"
     name: String
 }
 
@@ -4258,20 +4259,23 @@ type IdentityUserPayload implements EntityMutationPayload {
 # --- Identity Group -----------------------------------------------------------
 
 """
-A provider-agnostic view of an identity group (Internal or Federated, physical or virtual).
-Virtual groups match users by pattern rather than explicit membership; they are only
-supported on Federated identity providers. The presence of {@code virtualDetails} (non-null)
-indicates a virtual group; a null value indicates a physical group.
+A provider-agnostic view of an identity group (Internal, Federated, or LDAP; physical or
+virtual). Virtual groups match users by pattern rather than explicit membership; they are
+only supported on Federated identity providers, and are identified by
+{@code federatedDetails.patternStyle} being {@code WILDCARD} or {@code REGEX} (as opposed to
+{@code NONE} for a physical Federated group).
+For Internal and Federated providers, name is the group's name; for LDAP providers, name is
+the DN, falling back to the entity display name when the DN is empty or null.
 > @l7-entity
 > @l7-identity-fields name,providerName
 > @l7-summary-fields goid,name,providerName,providerType,checksum
 > @l7-foreign-fields roleNames|name|Role
-> @l7-excluded-fields members
+> @l7-excluded-fields memberNames
 """
 type IdentityGroup {
-    "The goid of the group"
+    "The goid of the group; LDAP groups have no persisted Goid, so this holds their DN instead"
     goid: ID!
-    "The name of the group"
+    "The universal identity key; for Internal and Federated providers this is the group's name, for LDAP providers this is the DN (falling back to the entity display name when the DN is empty or null)"
     name: String!
     "The name of the identity provider this group belongs to"
     providerName: String!
@@ -4279,14 +4283,55 @@ type IdentityGroup {
     providerType: IdpType!
     "A checksum of properties"
     checksum: String!
-    "Description"
-    description: String
-    "Virtual group pattern configuration. Non-null only for virtual groups (Federated providers). Null indicates a physical group."
-    virtualDetails: VirtualGroupDetails
+    "Attributes common to every provider type"
+    basicDetails: IdentityGroupBasicDetails!
+    "Populated when providerType is INTERNAL"
+    internalDetails: IdentityGroupInternalDetails
+    "Populated when providerType is LDAP"
+    ldapDetails: IdentityGroupLdapDetails
+    "Populated when providerType is FEDERATED, including virtual group pattern matching"
+    federatedDetails: IdentityGroupFederatedDetails
     "Names of the users that are members of this group"
     memberNames: [String!]
     "Names of the roles this group is directly assigned to"
     roleNames: [String!]
+}
+
+"Attributes common to every IdentityGroup regardless of provider type."
+type IdentityGroupBasicDetails {
+    "Common name / display name"
+    cn: String
+    "Description"
+    description: String
+}
+
+"Internal-group-specific attributes for IdentityGroup."
+type IdentityGroupInternalDetails {
+    "Whether the group is enabled"
+    enabled: Boolean!
+}
+
+"LDAP-group-specific attributes for IdentityGroup."
+type IdentityGroupLdapDetails {
+    "Subject DN"
+    subjectDn: String
+}
+
+"Federated-group-specific attributes for IdentityGroup, including virtual group pattern matching. Physical Federated groups have patternStyle NONE and null patterns."
+type IdentityGroupFederatedDetails {
+    "SAML email pattern for virtual group matching; null for physical groups"
+    samlEmailPattern: String
+    "X.509 subject DN pattern for virtual group matching; null for physical groups"
+    x509SubjectDnPattern: String
+    "NONE for a physical group; WILDCARD or REGEX for a virtual group, describing how the patterns are interpreted"
+    patternStyle: PatternStyle!
+}
+
+"How a virtual group's patterns are interpreted; NONE indicates a physical (non-virtual) group."
+enum PatternStyle {
+    NONE
+    WILDCARD
+    REGEX
 }
 
 input IdentityGroupInput {
@@ -4298,11 +4343,13 @@ input IdentityGroupInput {
     name: String!
     "If provided, will try to honour at creation time"
     goid: ID
-    "Description"
-    description: String
     checksum: String
-    "Provide to create or update a virtual group. Only valid for Federated identity providers."
-    virtualDetails: VirtualGroupDetailsInput
+    "Attributes common to every provider type"
+    basicDetails: IdentityGroupBasicDetailsInput
+    "Details applied when the target provider is Internal"
+    internalDetails: IdentityGroupInternalDetailsInput
+    "Provide with patternStyle WILDCARD or REGEX to create or update a virtual group. Only valid for Federated identity providers."
+    federatedDetails: IdentityGroupFederatedDetailsInput
     "User names (login for Internal, display name for Federated) to assign as members of this group"
     memberNames: [String!]
     "Role names to assign this group to"
@@ -4319,45 +4366,39 @@ input IdentityGroupPartialInput {
     providerName: String
     "Rename the group; omit to keep the current name"
     name: String
-    "Updated group description"
-    description: String
     checksum: String
+    "Attributes common to every provider type; only non-null fields are applied"
+    basicDetails: IdentityGroupBasicDetailsInput
+    "Partial Internal-group details; only non-null fields are applied"
+    internalDetails: IdentityGroupInternalDetailsInput
     "Provide to update virtual group pattern details; omit to leave patterns unchanged"
-    virtualDetails: VirtualGroupDetailsPartialInput
+    federatedDetails: IdentityGroupFederatedDetailsInput
     "User names to assign as members; omit to leave membership unchanged"
     memberNames: [String!]
     "Role names to assign this group to"
     roleNames: [String!]
 }
 
-"Virtual group configuration. Presence in IdentityGroupInput signals virtual group creation. Only valid for Federated identity providers."
-input VirtualGroupDetailsInput {
+input IdentityGroupBasicDetailsInput {
+    "Common name / display name"
+    cn: String
+    "Description"
+    description: String
+}
+
+input IdentityGroupInternalDetailsInput {
+    "Whether the group is enabled (default: true)"
+    enabled: Boolean = true
+}
+
+"Provide with patternStyle WILDCARD or REGEX (plus at least one pattern) to create/update a virtual group; only valid for Federated identity providers. Omit, or use NONE, for a physical group."
+input IdentityGroupFederatedDetailsInput {
     "SAML email pattern for virtual group matching"
     samlEmailPattern: String
     "X.509 subject DN pattern for virtual group matching"
     x509SubjectDnPattern: String
-    "Whether patterns are treated as regular expressions"
-    useRegex: Boolean
-}
-
-"Partial update for virtual group pattern configuration. Only supplied fields are applied."
-input VirtualGroupDetailsPartialInput {
-    "Updated SAML email pattern"
-    samlEmailPattern: String
-    "Updated X.509 subject DN pattern"
-    x509SubjectDnPattern: String
-    "Updated regex flag"
-    useRegex: Boolean
-}
-
-"Virtual group pattern details returned on an IdentityGroup. Present only when the group is virtual; null for physical groups."
-type VirtualGroupDetails {
-    "SAML email pattern for virtual group matching"
-    samlEmailPattern: String
-    "X.509 subject DN pattern for virtual group matching"
-    x509SubjectDnPattern: String
-    "Whether patterns are treated as regular expressions"
-    useRegex: Boolean
+    "NONE (or omitted) for a physical group; WILDCARD or REGEX to create/keep this a virtual group"
+    patternStyle: PatternStyle
 }
 
 "At least one of goid, or both providerName and name, must be supplied."
