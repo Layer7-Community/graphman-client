@@ -996,6 +996,8 @@ extend type Query {
     "Retrieves all client certificates"
     clientCerts: [ClientCert!]!
     "Retrieves a client certificate by its thumbprint"
+    clientCertsByThumbprint(thumbprint: String!): [ClientCert!]!
+    "Retrieves a client certificate by its thumbprint"
     clientCertByThumbprint(thumbprint: String!): ClientCert
     "Retrieves client certificates matching the given subject DN"
     clientCertsBySubjectDn(subjectDn: String!): [ClientCert!]!
@@ -1029,7 +1031,7 @@ input ClientCertInput {
     "The name of identity provider that the user belongs to"
     providerName: String!
     "The username as resolved from the identity provider"
-    username: String
+    username: String!
     "Ignored at creation time but can be used to compare bundle with gw state"
     checksum: String
     "A client-side certificate in base64 encoding"
@@ -1058,7 +1060,7 @@ type ClientCert {
     "The name of identity provider that the user belongs to"
     providerName: String!
     "The username as resolved from the identity provider"
-    username: String
+    username: String!
     "The configuration checksum"
     checksum: String!
     "A client-side certificate associated with this user to use for pki type authentication"
@@ -4269,7 +4271,7 @@ the DN, falling back to the entity display name when the DN is empty or null.
 > @l7-entity
 > @l7-identity-fields name,providerName
 > @l7-summary-fields goid,name,providerName,providerType,checksum
-> @l7-foreign-fields roleNames|name|Role
+> @l7-foreign-fields memberNames|name|IdentityUser,roleNames|name|Role
 > @l7-excluded-fields memberNames
 """
 type IdentityGroup {
@@ -4287,10 +4289,10 @@ type IdentityGroup {
     basicDetails: IdentityGroupBasicDetails!
     "Populated when providerType is INTERNAL"
     internalDetails: IdentityGroupInternalDetails
-    "Populated when providerType is LDAP"
-    ldapDetails: IdentityGroupLdapDetails
     "Populated when providerType is FEDERATED, including virtual group pattern matching"
     federatedDetails: IdentityGroupFederatedDetails
+    "Populated when providerType is LDAP"
+    ldapDetails: IdentityGroupLdapDetails
     "Names of the users that are members of this group"
     memberNames: [String!]
     "Names of the roles this group is directly assigned to"

@@ -1322,12 +1322,12 @@
           "dataType": "IdentityGroupInternalDetails"
         },
         {
-          "name": "ldapDetails",
-          "dataType": "IdentityGroupLdapDetails"
-        },
-        {
           "name": "federatedDetails",
           "dataType": "IdentityGroupFederatedDetails"
+        },
+        {
+          "name": "ldapDetails",
+          "dataType": "IdentityGroupLdapDetails"
         },
         {
           "name": "memberNames",
@@ -4609,6 +4609,16 @@
           "args": [
             {
               "name": "subjectDn",
+              "dataType": "String!"
+            }
+          ]
+        },
+        {
+          "name": "clientCertsByThumbprint",
+          "dataType": "ClientCert",
+          "args": [
+            {
+              "name": "thumbprint",
               "dataType": "String!"
             }
           ]
