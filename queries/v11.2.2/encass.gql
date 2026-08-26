@@ -1,0 +1,20 @@
+query encassByName ($name: String!, $policyName: String!, $includeAllDependencies: Boolean = false, $includePolicyRevision: Boolean = false, $includePolicyRevisions: Boolean = false) {
+    encassConfigByName (name: $name) {
+        {{EncassConfig}}
+    }
+    policyByName(name: $policyName) {
+        {{L7Policy:-policy}}
+        policy {
+            xml
+            allDependencies @include (if: $includeAllDependencies) {
+                {{PolicyDependency:-policyFragments,-dtds,-schemas,-internalIdps,-internalUsers,-internalGroups,-fips,-fipUsers,-fipGroups,-federatedIdps,-federatedUsers,-federatedGroups,-ldaps,-ldapIdps,-simpleLdapIdps,-policyBackedIdps}}
+            }
+        }
+        policyRevision @include (if: $includePolicyRevision) {
+            {{PolicyRevision}}
+        }
+        policyRevisions @include (if: $includePolicyRevisions) {
+            {{PolicyRevision}}
+        }
+    }
+}

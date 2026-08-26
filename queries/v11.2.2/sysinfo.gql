@@ -1,0 +1,8 @@
+query systemAdministration {
+    globalConfigs {
+        {{GlobalConfig}}
+    }
+    passwordPolicies {
+        {{PasswordPolicy}}
+    }
+}
