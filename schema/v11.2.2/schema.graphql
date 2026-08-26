@@ -2630,6 +2630,8 @@ Generic entity details.
 > @l7-summary-fields goid,name,checksum
 > @l7-name-fields name
 > @l7-display-summary-fields name,entityClassName,enabled
+ > @l7-excluded-fields valueJson
+ > @l7-alternative-fields valueXml|valueJson,valueJson|valueXml
 """
 type GenericEntity {
     "The goid of the entity"

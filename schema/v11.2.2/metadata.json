@@ -786,7 +786,9 @@
         "name",
         "checksum"
       ],
-      "excludedFields": [],
+      "excludedFields": [
+        "valueJson"
+      ],
       "includedFields": [],
       "identityFields": [
         "name"
