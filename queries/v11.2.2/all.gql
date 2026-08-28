@@ -1,0 +1,122 @@
+query all($includePolicyRevisions: Boolean = false, $includeRoles: Boolean = false) {
+    services {
+        {{L7Service}}
+        policyRevisions @include (if: $includePolicyRevisions) {
+            {{PolicyRevision}}
+        }
+    }
+    serviceAliases {
+        {{L7ServiceAlias}}
+    }
+    encassConfigs {
+        {{EncassConfig}}
+    }
+    policies {
+        {{L7Policy}}
+        policyRevisions @include (if: $includePolicyRevisions) {
+            {{PolicyRevision}}
+        }
+    }
+    policyAliases {
+        {{L7PolicyAlias}}
+    }
+    activeConnectors {
+        {{ActiveConnector}}
+    }
+    cassandraConnections {
+        {{CassandraConnection}}
+    }
+    clientCerts {
+        {{ClientCert}}
+    }
+    clusterProperties {
+        {{ClusterProperty}}
+    }
+    customKeyValues {
+        {{CustomKeyValue}}
+    }
+    emailListeners {
+        {{EmailListener}}
+    }
+    firewallRules {
+        {{FirewallRule}}
+    }
+    genericEntities {
+        {{GenericEntity}}
+    }
+    globalConfigs {
+        {{GlobalConfig}}
+    }
+    globalResources {
+        {{GlobalResource}}
+    }
+    httpConfigurations {
+        {{HttpConfiguration}}
+    }
+    interfaceTags {
+        {{InterfaceTag}}
+    }
+    identityProviders {
+        {{IdentityProvider}}
+    }
+    identityGroups {
+        {{IdentityGroup}}
+    }
+    identityUsers {
+        {{IdentityUser}}
+    }
+    jdbcConnections {
+        {{JdbcConnection}}
+    }
+    jmsDestinations {
+        {{JmsDestination}}
+    }
+    kerberosConfigs {
+        {{KerberosConfig}}
+    }
+    keys {
+        {{Key}}
+    }
+    listenPorts {
+        {{ListenPort}}
+    }
+    logSinks {
+        {{LogSink}}
+    }
+    passwordPolicies {
+        {{PasswordPolicy}}
+    }
+    policyBackedServices {
+        {{PolicyBackedService}}
+    }
+    revocationCheckPolicies {
+        {{RevocationCheckPolicy}}
+    }
+    roles @include (if: $includeRoles){
+        {{Role}}
+    }
+    sampleMessages {
+        {{SampleMessage}}
+    }
+    scheduledTasks {
+        {{ScheduledTask}}
+    }
+    secrets {
+        {{Secret}}
+    }
+    securityZones {
+        {{SecurityZone}}
+    }
+    serverModuleFiles {
+        {{ServerModuleFile}}
+    }
+    smConfigs {
+        {{SMConfig}}
+    }
+    sniConfigurations {
+        {{SniConfiguration}}
+    }
+    trustedCerts {
+        {{Certificate}}
+    }
+}

@@ -1,0 +1,131 @@
+query all($includePolicyRevisions: Boolean = false, $includeRoles: Boolean = false) {
+    services {
+        {{L7Service}}
+        policyRevisions @include (if: $includePolicyRevisions) {
+            {{PolicyRevision}}
+        }
+    }
+    serviceAliases {
+        {{L7ServiceAlias}}
+    }
+    encassConfigs {
+        {{EncassConfig}}
+    }
+    policies {
+        {{L7Policy}}
+        policyRevisions @include (if: $includePolicyRevisions) {
+            {{PolicyRevision}}
+        }
+    }
+    policyAliases {
+        {{L7PolicyAlias}}
+    }
+    activeConnectors {
+        {{ActiveConnector}}
+    }
+    auditConfigurations {
+        {{AuditConfiguration}}
+    }
+    cassandraConnections {
+        {{CassandraConnection}}
+    }
+    clusterProperties {
+        {{ClusterProperty}}
+    }
+    customKeyValues {
+        {{CustomKeyValue}}
+    }
+    dtds {
+        {{Dtd}}
+    }
+    emailListeners {
+        {{EmailListener}}
+    }
+    federatedIdps {
+        {{FederatedIdp}}
+    }
+    federatedGroups {
+        {{FederatedGroup}}
+    }
+    federatedUsers {
+        {{FederatedUser}}
+    }
+    firewallRules {
+        {{FirewallRule}}
+    }
+    genericEntities {
+        {{GenericEntity}}
+    }
+    httpConfigurations {
+        {{HttpConfiguration}}
+    }
+    interfaceTags {
+        {{InterfaceTag}}
+    }
+    internalIdps {
+        {{InternalIdp}}
+    }
+    internalGroups {
+        {{InternalGroup}}
+    }
+    internalUsers {
+        {{InternalUser}}
+    }
+    jdbcConnections {
+        {{JdbcConnection}}
+    }
+    jmsDestinations {
+        {{JmsDestination}}
+    }
+    kerberosConfigs {
+        {{KerberosConfig}}
+    }
+    keys {
+        {{Key}}
+    }
+    ldapIdps {
+        {{LdapIdp}}
+    }
+    listenPorts {
+        {{ListenPort}}
+    }
+    logSinks {
+        {{LogSink}}
+    }
+    policyBackedIdps {
+        {{PolicyBackedIdp}}
+    }
+    policyBackedServices {
+        {{PolicyBackedService}}
+    }
+    revocationCheckPolicies {
+        {{RevocationCheckPolicy}}
+    }
+    roles @include (if: $includeRoles){
+        {{Role}}
+    }
+    sampleMessages {
+        {{SampleMessage}}
+    }
+    scheduledTasks {
+        {{ScheduledTask}}
+    }
+    schemas {
+        {{Schema}}
+    }
+    secrets {
+        {{Secret}}
+    }
+    serverModuleFiles {
+        {{ServerModuleFile}}
+    }
+    simpleLdapIdps {
+        {{SimpleLdapIdp}}
+    }
+    smConfigs {
+        {{SMConfig}}
+    }
+    trustedCerts {
+        {{Certificate}}
+    }
+}

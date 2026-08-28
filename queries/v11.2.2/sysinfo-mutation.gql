@@ -1,0 +1,6 @@
+mutation applyBundle (
+    $globalConfigs: [GlobalConfigInput!]!=[],
+    $passwordPolicies: [PasswordPolicyInput!]!=[]) {
+        setGlobalConfigs(input: $globalConfigs) {detailedStatus {status description source{name value} target{name value}}}
+        setPasswordPolicies(input: $passwordPolicies) {detailedStatus {status description source{name value} target{name value}}}
+}

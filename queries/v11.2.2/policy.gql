@@ -1,0 +1,14 @@
+query policyByName ($name: String!, $includeAllDependencies: Boolean = false, $includePolicyRevisions: Boolean = false) {
+    policyByName (name: $name) {
+        {{L7Policy:-policy}}
+         policy {
+            xml
+            allDependencies @include (if: $includeAllDependencies) {
+                {{PolicyDependency:-policyFragments,-dtds,-schemas,-internalIdps,-internalUsers,-internalGroups,-fips,-fipUsers,-fipGroups,-federatedIdps,-federatedUsers,-federatedGroups,-ldaps,-ldapIdps,-simpleLdapIdps,-policyBackedIdps}}
+            }
+        }
+        policyRevisions @include (if: $includePolicyRevisions) {
+            {{PolicyRevision}}
+        }
+    }
+}

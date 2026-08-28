@@ -67,7 +67,7 @@ function init() {
         home,
         execFile: process.env.GRAPHMAN_ENTRYPOINT || "./graphman.sh",
         workspace: path.join(home, "build", "tests"),
-        schemaVersion: process.env.GRAPHMAN_SCHEMA || "v11.2.1"
+        schemaVersion: process.env.GRAPHMAN_SCHEMA || "v11.2.2"
     };
 
     const modulePath = path.join(tConfig.home, "modules", "graphman.js");

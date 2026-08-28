@@ -89,15 +89,13 @@ function buildV1(metadata, version, schemaVersion) {
                     metadata.primitiveTypes.push(typeInfo.typeName);
                 } else {
                     utils.fine("  capturing sub-type: " + typeInfo.typeName);
-
-                    if (typeInfo.typeName === "Query" || typeInfo.typeName === "Mutation") {
-                        const existing = metadata.subTypes[typeInfo.typeName];
-                        if (existing) {
-                            typeInfo.fields = existing.fields.concat(typeInfo.fields);
-                        }
+                    const existing = metadata.subTypes[typeInfo.typeName];
+                    if (existing) {
+                        utils.fine("  extending sub-type: " + typeInfo.typeName);
+                        existing.fields = existing.fields.concat(typeInfo.fields);
+                    } else {
+                        metadata.subTypes[typeInfo.typeName] = typeInfo;
                     }
-
-                    metadata.subTypes[typeInfo.typeName] = typeInfo;
                 }
             });
         }
@@ -123,9 +121,14 @@ function buildV1(metadata, version, schemaVersion) {
         });
     });
 
-    // promote the required sub-types as main types
+    // promote the required sub-types as main types, and merge extend-style
+    // sub-types (e.g. "extend type X { ... }") into any already known main type
     Object.entries(metadata.subTypes).forEach(([key, typeInfo]) => {
-        if (!reqSubTypes[key]) {
+        const existing = metadata.types[key];
+        if (existing) {
+            utils.fine("  extending type: " + typeInfo.typeName);
+            existing.fields = existing.fields.concat(typeInfo.fields);
+        } else if (!reqSubTypes[key]) {
             utils.fine("  ignoring sub-type: " + typeInfo.typeName);
         } else {
             utils.fine("  promoting sub-type: " + typeInfo.typeName);
@@ -201,20 +204,28 @@ function parseSchemaFile(file, onTypeCallback) {
 
         if (!ref.tInfo) {
             captureTypeInfoIfMatches(line, ref);
-        } else {
-            captureFieldInfoIfMatches(line, ref);
+        }
 
-            if (line.indexOf('}') !== -1) { // type definition ends
-                if (ref.tInfo) {
-                    ref.tInfo.excludedFields = normalizeFilteredFields(ref.tInfo.excludedFields, "-", ref.tInfo);
-                    ref.tInfo.includedFields = normalizeFilteredFields(ref.tInfo.includedFields, "+", ref.tInfo);
-                    onTypeCallback(ref.tInfo);
-                    ref.tInfo = null;
-                    ref.mlcInfo = {};
-                }
-            }
+        if (ref.tInfo) { // covers both multi-line blocks and ones that fit on a single line
+            captureFieldInfoIfMatches(line, ref);
+            finalizeTypeInfoIfClosed(line, ref, onTypeCallback);
         }
     }
+}
+
+function finalizeTypeInfoIfClosed(line, ref, onTypeCallback) {
+    if (stripTrailingComment(line).indexOf('}') === -1) return; // type definition doesn't end on this line
+
+    ref.tInfo.excludedFields = normalizeFilteredFields(ref.tInfo.excludedFields, "-", ref.tInfo);
+    ref.tInfo.includedFields = normalizeFilteredFields(ref.tInfo.includedFields, "+", ref.tInfo);
+    onTypeCallback(ref.tInfo);
+    ref.tInfo = null;
+    ref.mlcInfo = {};
+}
+
+function stripTrailingComment(line) {
+    const index = line.indexOf('#');
+    return index === -1 ? line : line.substring(0, index);
 }
 
 function isMultiLineComment(line) {
@@ -260,10 +271,11 @@ function captureTypeInfoIfMatches(line, ref) {
 }
 
 function captureFieldInfoIfMatches(line, ref) {
-    const match = line.match(/\s+(\w+)\s*([(][^)]+[)])?\s*[:]\s*[\[]?(\w+)/); // field declaration, <field-name>: <field-type>
-    if (match) {
+    const content = stripTrailingComment(line);
+    const fieldPattern = /\s+(\w+)\s*([(][^)]+[)])?\s*[:]\s*[\[]?(\w+)/g; // field declaration, <field-name>: <field-type>
+    Array.from(content.matchAll(fieldPattern)).forEach(match => {
         ref.tInfo.fields.push({name: match[1], dataType: match[3].trim(), args: match[2] ? extractFieldArgs(match[2]) : undefined});
-    }
+    });
 }
 
 function extractFieldArgs(text) {
