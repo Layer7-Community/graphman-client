@@ -208,10 +208,14 @@ function readBundleFromGateway(gateway) {
 
 function diffReport(leftBundle, rightBundle, mappings, report, options) {
     const multiLineTextDiffExtension = utils.extension("multiline-text-diff");
+    const extOptions = {
+        multiLineTextDiffExtension: multiLineTextDiffExtension,
+        summary: isSummaryBundle(leftBundle) || isSummaryBundle(rightBundle)
+    };
 
     butils.forEach(leftBundle, (key, leftEntities, typeInfo) => {
         utils.info("inspecting " + key);
-        diffEntities(leftEntities, rightBundle[key], mappings[key], report, typeInfo, options, multiLineTextDiffExtension);
+        diffEntities(leftEntities, rightBundle[key], mappings[key], report, typeInfo, options, extOptions);
     });
 
     butils.forEach(rightBundle, (key, rightEntities, typeInfo) => {
@@ -236,10 +240,14 @@ function sortReport(report) {
     return report;
 }
 
+function isSummaryBundle(bundle) {
+    return bundle.properties && bundle.properties.meta && bundle.properties.meta.summary;
+}
+
 function diffRenewReport(leftBundle, rightBundle, mappings, report, options, callback) {
     let promises = [];
 
-    if (leftBundle.properties.meta.summary) {
+    if (isSummaryBundle(leftBundle)) {
         const gateway = graphman.gatewayConfiguration(leftBundle.properties.meta.gateway);
 
         // renew inserts section using the source gateway
@@ -261,7 +269,7 @@ function diffRenewReport(leftBundle, rightBundle, mappings, report, options, cal
         }));
     }
 
-    if (rightBundle.properties.meta.summary) {
+    if (isSummaryBundle(rightBundle)) {
         const gateway = graphman.gatewayConfiguration(rightBundle.properties.meta.gateway);
 
         // renew updates section using the target gateway
@@ -280,10 +288,13 @@ function diffRenewReport(leftBundle, rightBundle, mappings, report, options, cal
             const multiLineTextDiffExtension = utils.extension("multiline-text-diff");
             const leftUpdateBundle = results[1];
             const rightUpdateBundle = results[2];
-
+            const extOptions = {
+                multiLineTextDiffExtension: multiLineTextDiffExtension,
+                summary: isSummaryBundle(leftUpdateBundle) || isSummaryBundle(rightUpdateBundle)
+            };
             butils.forEach(leftUpdateBundle, (key, leftEntities, typeInfo) => {
                 utils.info("re-inspecting " + key);
-                diffEntities(leftEntities, rightUpdateBundle[key], mappings[key], renewedReport, typeInfo, options, multiLineTextDiffExtension);
+                diffEntities(leftEntities, rightUpdateBundle[key], mappings[key], renewedReport, typeInfo, options, extOptions);
             });
 
             callback(renewedReport);
@@ -314,9 +325,9 @@ function renewBundle(gateway, bundle, sections, options, resolve, reject) {
  * @param report diff report
  * @param typeInfo type-info about class
  * @param options
- * @param multiLineTextDiffExtension multiline text diff extension
+ * @param extOptions extended options
  */
-function diffEntities(leftEntities, rightEntities, sectionMappings, report, typeInfo, options, multiLineTextDiffExtension) {
+function diffEntities(leftEntities, rightEntities, sectionMappings, report, typeInfo, options, extOptions) {
     // iterate through the left entities,
     // bucket it into diff-report, depending on the match in the right entities
     leftEntities.forEach(leftEntity => {
@@ -335,7 +346,7 @@ function diffEntities(leftEntities, rightEntities, sectionMappings, report, type
 
             // compare objects
             const equals = butils.isObjectEquals(leftEntity, rightEntity, "$", item => {
-                details.push(multiLineTextDiffExtension.apply({
+                details.push(extOptions.multiLineTextDiffExtension.apply({
                     path: item.path,
                     source: item.left,
                     target: item.right
@@ -346,7 +357,7 @@ function diffEntities(leftEntities, rightEntities, sectionMappings, report, type
             diffEntitiesAfterEqualityCheck(leftEntity, rightEntity, diffEntitiesEqContext);
 
             if (!equals) {
-                if (details.length === 1 && details[0].path === "$.checksum") {
+                if (details.length === 1 && details[0].path === "$.checksum" && !extOptions.summary) {
                     utils.info("  not selecting " + butils.entityName(leftEntity, typeInfo) + ", only the checksum is different");
                 } else {
                     utils.info("  selecting " + butils.entityName(leftEntity, typeInfo) + ", category=updates");
