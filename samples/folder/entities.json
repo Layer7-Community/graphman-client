@@ -1,0 +1,16 @@
+{
+    "folders": [
+        {
+            "name" : "GrandParentUsingGQL",
+            "path" : "/GrandParentUsingGQL"
+        },
+        {
+            "name" : "ParentUsingGQL",
+            "path" : "/GrandParentUsingGQL/ParentUsingGQL"
+        },
+        {
+            "name" : "ChildUsingGQL",
+            "path" : "/GrandParentUsingGQL/ParentUsingGQL/ChildUsingGQL"
+        }
+    ]
+}

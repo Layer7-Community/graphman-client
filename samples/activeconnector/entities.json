@@ -1,0 +1,335 @@
+{
+  "activeConnectors": [
+    {
+      "goid": "c73c9a1bee64808dc0f7fc52aa0a8ae5",
+      "name": "some-kafka-producer",
+      "checksum": "3a3310651d33695585d3d4241cb67ec2ec1bd2a8",
+      "enabled": true,
+      "connectorType": "KAFKA",
+      "properties": [
+        {
+          "name": "privateKeyAlias",
+          "value": "some-kafka-key"
+        },
+        {
+          "name": "producer.idempotence",
+          "value": "false"
+        },
+        {
+          "name": "securePasswordName",
+          "value": "some-kafka-pwd"
+        },
+        {
+          "name": "bootstrapServers",
+          "value": "apim-kafka-01.lvn.broadcom.net:9095,apim-kafka-02.lvn.broadcom.net:9092,kafka-03.apim.broadcom.net:9093"
+        },
+        {
+          "name": "role",
+          "value": "producer"
+        },
+        {
+          "name": "producer.retries",
+          "value": "123"
+        },
+        {
+          "name": "enableTls",
+          "value": "true"
+        },
+        {
+          "name": "keyStoreGoid",
+          "value": "00000000000000000000000000000002"
+        },
+        {
+          "name": "producer.acknowledgement",
+          "value": "1"
+        },
+        {
+          "name": "tlsVersion",
+          "value": "TLSv1.2"
+        },
+        {
+          "name": "tlsCipherSuites",
+          "value": "TLS_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384"
+        },
+        {
+          "name": "username",
+          "value": "some-kafka-user"
+        },
+        {
+          "name": "authType",
+          "value": "SCRAM-SHA-256"
+        }
+      ],
+      "advancedProperties": [
+        {
+          "name": "some-other-producer-adv-prop",
+          "value": "some-other-producer-adv-prop-value"
+        },
+        {
+          "name": "some-producer-adv-prop",
+          "value": "some-producer-adv-prop-value"
+        }
+      ]
+    },
+    {
+      "goid": "861c30489c47114e500f68032d712612",
+      "name": "some-kafka-consumer",
+      "checksum": "6f4a8d1bd673a02458da193bbcba5fca2b612574",
+      "enabled": false,
+      "connectorType": "KAFKA",
+      "hardwiredServiceName": "some-kafka-consumer",
+      "properties": [
+        {
+          "name": "consumer.topicNames",
+          "value": "some-topic,some-other-topic"
+        },
+        {
+          "name": "consumer.commitBatchSize",
+          "value": "100"
+        },
+        {
+          "name": "privateKeyAlias",
+          "value": "some-kafka-key"
+        },
+        {
+          "name": "consumer.resetPosition",
+          "value": "NONE"
+        },
+        {
+          "name": "securePasswordName",
+          "value": "some-kafka-pwd"
+        },
+        {
+          "name": "consumer.processMessagesMaxConcurrency",
+          "value": "10"
+        },
+        {
+          "name": "consumer.commitInterval",
+          "value": "5000"
+        },
+        {
+          "name": "consumer.pollTimeout",
+          "value": "1234"
+        },
+        {
+          "name": "enableTls",
+          "value": "true"
+        },
+        {
+          "name": "consumer.consumerGroup",
+          "value": "some-consumer-group"
+        },
+        {
+          "name": "keyStoreGoid",
+          "value": "00000000000000000000000000000002"
+        },
+        {
+          "name": "consumer.pollMaxInterval",
+          "value": "300000"
+        },
+        {
+          "name": "tlsCipherSuites",
+          "value": "TLS_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384"
+        },
+        {
+          "name": "username",
+          "value": "some-kafka-user"
+        },
+        {
+          "name": "consumer.contentType",
+          "value": "application/octet-stream"
+        },
+        {
+          "name": "lastModifiedTimestamp",
+          "value": "2023-07-05T10:11:45.647135400+05:30[Asia/Calcutta]"
+        },
+        {
+          "name": "bootstrapServers",
+          "value": "apim-kafka-01.lvn.broadcom.net:9095,apim-kafka-02.lvn.broadcom.net:9092,kafka-03.apim.broadcom.net:9093"
+        },
+        {
+          "name": "role",
+          "value": "consumer"
+        },
+        {
+          "name": "consumer.processMessagesConcurrently",
+          "value": "true"
+        },
+        {
+          "name": "producer.role",
+          "value": "false"
+        },
+        {
+          "name": "consumer.pollMaxRecords",
+          "value": "123"
+        },
+        {
+          "name": "tlsVersion",
+          "value": "TLSv1.2"
+        },
+        {
+          "name": "consumer.role",
+          "value": "true"
+        },
+        {
+          "name": "consumer.commitAsync",
+          "value": "true"
+        },
+        {
+          "name": "authType",
+          "value": "SCRAM-SHA-256"
+        }
+      ],
+      "advancedProperties": [
+        {
+          "name": "some-other-consumer-adv-prop",
+          "value": "some-other-consumer-adv-prop-value"
+        },
+        {
+          "name": "some-consumer-adv-prop",
+          "value": "some-consumer-adv-prop-value"
+        }
+      ]
+    },
+    {
+      "goid": "861c30489c47114e500f68032d712610",
+      "name": "some-kafka-producer-consumer",
+      "checksum": "2eab40ce834f90c3e76146b1b429d767aca33041",
+      "enabled": false,
+      "connectorType": "KAFKA",
+      "hardwiredServiceName": "some-kafka-consumer",
+      "properties": [
+        {
+          "name": "consumer.topicNames",
+          "value": "some-topic,some-other-topic"
+        },
+        {
+          "name": "consumer.commitBatchSize",
+          "value": "100"
+        },
+        {
+          "name": "privateKeyAlias",
+          "value": "some-kafka-key"
+        },
+        {
+          "name": "consumer.resetPosition",
+          "value": "NONE"
+        },
+        {
+          "name": "securePasswordName",
+          "value": "some-kafka-pwd"
+        },
+        {
+          "name": "producer.retries",
+          "value": "123"
+        },
+        {
+          "name": "consumer.processMessagesMaxConcurrency",
+          "value": "10"
+        },
+        {
+          "name": "consumer.commitInterval",
+          "value": "5000"
+        },
+        {
+          "name": "consumer.pollTimeout",
+          "value": "1234"
+        },
+        {
+          "name": "enableTls",
+          "value": "true"
+        },
+        {
+          "name": "consumer.consumerGroup",
+          "value": "some-consumer-group"
+        },
+        {
+          "name": "keyStoreGoid",
+          "value": "00000000000000000000000000000002"
+        },
+        {
+          "name": "consumer.pollMaxInterval",
+          "value": "300000"
+        },
+        {
+          "name": "tlsCipherSuites",
+          "value": "TLS_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384"
+        },
+        {
+          "name": "username",
+          "value": "some-kafka-user"
+        },
+        {
+          "name": "consumer.contentType",
+          "value": "application/octet-stream"
+        },
+        {
+          "name": "producer.idempotence",
+          "value": "false"
+        },
+        {
+          "name": "lastModifiedTimestamp",
+          "value": "2023-07-05T10:11:52.132257+05:30[Asia/Calcutta]"
+        },
+        {
+          "name": "bootstrapServers",
+          "value": "apim-kafka-01.lvn.broadcom.net:9095,apim-kafka-02.lvn.broadcom.net:9092,kafka-03.apim.broadcom.net:9093"
+        },
+        {
+          "name": "role",
+          "value": "producer|consumer"
+        },
+        {
+          "name": "consumer.processMessagesConcurrently",
+          "value": "true"
+        },
+        {
+          "name": "producer.role",
+          "value": "true"
+        },
+        {
+          "name": "consumer.pollMaxRecords",
+          "value": "123"
+        },
+        {
+          "name": "producer.acknowledgement",
+          "value": "1"
+        },
+        {
+          "name": "tlsVersion",
+          "value": "TLSv1.2"
+        },
+        {
+          "name": "consumer.role",
+          "value": "true"
+        },
+        {
+          "name": "consumer.commitAsync",
+          "value": "true"
+        },
+        {
+          "name": "authType",
+          "value": "SCRAM-SHA-256"
+        }
+      ],
+      "advancedProperties": [
+        {
+          "name": "producer.some-other-producer-adv-prop",
+          "value": "some-other-producer-adv-prop-value"
+        },
+        {
+          "name": "consumer.some-other-consumer-adv-prop",
+          "value": "some-other-consumer-adv-prop-value"
+        },
+        {
+          "name": "producer.some-producer-adv-prop",
+          "value": "some-producer-adv-prop-value"
+        },
+        {
+          "name": "consumer.some-consumer-adv-prop",
+          "value": "some-consumer-adv-prop-value"
+        }
+      ]
+    }
+  ]
+}

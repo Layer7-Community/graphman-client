@@ -1,0 +1,35 @@
+{
+  "services": [
+    {
+      "name": "some-web-api",
+      "resolutionPath": "/some-web-api",
+      "serviceType": "WEB_API",
+      "enabled": true,
+      "folderPath": "/",
+      "methodsAllowed": [
+        "GET",
+        "POST",
+        "PUT"
+      ],
+      "properties": [
+        {
+          "name": "enableWebSocket",
+          "value": "true"
+        },
+        {
+          "name": "overrideContentType",
+          "value": "application/json; charset=utf-8"
+        },
+        {
+          "name": "requestSizeLimit",
+          "value": "2048"
+        }
+      ],
+      "tracingEnabled": false,
+      "wssProcessingEnabled": false,
+      "policy": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsp:Policy xmlns:L7p=\"http://www.layer7tech.com/ws/policy\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\">\n    <wsp:All wsp:Usage=\"Required\">\n        <L7p:HardcodedResponse>\n            <L7p:Base64ResponseBody stringValue=\"SGVsbG8sIFdvcmxkIQo=\"/>\n            <L7p:ResponseContentType stringValue=\"text/plain; charset=UTF-8\"/>\n        </L7p:HardcodedResponse>\n    </wsp:All>\n</wsp:Policy>\n"
+      }
+    }
+  ]
+}
