@@ -103,6 +103,8 @@ module.exports = {
         console.log();
         console.log("  --using <mutation>");
         console.log("    specify the name of mutation-based query");
+        console.log("    this can also be an in-built plural-based mutation captured from the schema");
+        console.log("    (e.g. setXxx, updateXxx, deleteXxx), without requiring a hand-authored query file");
         console.log();
         console.log("  --input <input-file>");
         console.log("    specify the name of input bundle file that contains gateway configuration");

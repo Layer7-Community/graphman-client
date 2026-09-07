@@ -158,7 +158,24 @@ module.exports = {
             }
         });
 
+        this.mutationFieldNamesByPattern(pattern).forEach(item => {
+            if (!result.includes(item)) {
+                result.push(item);
+            }
+        });
+
         return result;
+    },
+
+    mutationFieldInfo: function (name) {
+        const mutationInfo = this.metadata.types["Mutation"];
+        return mutationInfo.fields.find(x => x.name === name);
+    },
+
+    mutationFieldNamesByPattern: function (pattern) {
+        const mutationInfo = this.metadata.types["Mutation"];
+        const regex = "^" + pattern.replaceAll("*", ".*") + "$";
+        return mutationInfo.fields.filter(x => x.name.match(regex)).map(x => x.name);
     },
 
     typeInfoByTypeName: function (name) {
