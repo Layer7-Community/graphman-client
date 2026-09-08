@@ -1,6 +1,7 @@
 {
   "policies": [
     {
+      "goid": "b6abffb903683651588606c0b1641835",
       "name": "global-pre-service",
       "policyType": "GLOBAL",
       "tag": "pre-service",
@@ -12,6 +13,7 @@
       }
     },
     {
+      "goid": "1c3358eb80e60ae6663b138c7841d3f2",
       "name": "internal-use-policy",
       "policyType": "INTERNAL",
       "tag": "audit-message-filter",
@@ -23,6 +25,7 @@
       }
     },
     {
+      "goid": "86357036360a453d0f5125a643c490bf",
       "name": "pbip-fragment",
       "policyType": "POLICY_BACKED_IDP",
       "tag": "password-auth",
@@ -34,6 +37,7 @@
       }
     },
     {
+      "goid": "a803bd073e4cccc1561256179748d168",
       "name": "pbso-fragment-background",
       "policyType": "POLICY_BACKED_BACKGROUND_TASK",
       "checksum": "39f979067d28a860f4466f603ae244efe69d58bd",
@@ -44,6 +48,7 @@
       }
     },
     {
+      "goid": "077429a00bbc73a6667e8b1bc5e836a8",
       "name": "pbso-fragment-background-2",
       "policyType": "POLICY_BACKED_OPERATION",
       "tag": "com.l7tech.objectmodel.polback.BackgroundTask",
@@ -56,6 +61,7 @@
       }
     },
     {
+      "goid": "8b3c66fdf21eafaa37ed2335b373b85a",
       "name": "pbso-fragment-entity-change-listener",
       "policyType": "POLICY_BACKED_OPERATION",
       "tag": "com.l7tech.external.assertions.entitychangelistener.server.EntityChangeEventProcessor",
@@ -68,6 +74,7 @@
       }
     },
     {
+      "goid": "31e69f5d8a58d7ab352afa38529e7ee0",
       "name": "pbso-fragment-service-metrics",
       "policyType": "POLICY_BACKED_SERVICE_METRICS",
       "tag": "com.l7tech.external.assertions.pbsmel.server.ServiceMetricsProcessor",
@@ -80,6 +87,7 @@
       }
     },
     {
+      "goid": "5e66724bbbb3981c9566ab0069033807",
       "name": "pbso-fragment-service-metrics-2",
       "policyType": "POLICY_BACKED_SERVICE_METRICS",
       "checksum": "8d54b0c22d6f7bb62ca64b6e60e325cdc475df27",
@@ -90,6 +98,7 @@
       }
     },
     {
+      "goid": "06d39004d0166218805a04fc254183c7",
       "name": "some-fragment",
       "policyType": "FRAGMENT",
       "checksum": "0264fba328e6509735b73e6f754a27a56340025a",

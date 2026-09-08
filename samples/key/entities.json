@@ -28,7 +28,7 @@
     {
       "goid": "00000000000000000000000000000002:ec-signer",
       "keystoreId": "00000000000000000000000000000002",
-      "alias": "ec-signer2",
+      "alias": "ec-signer",
       "checksum": "773f05ed517521aa95098cc183fb6e15334fcf51",
       "keyType": "EC",
       "subjectDn": "CN=ec-signer",

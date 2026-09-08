@@ -102,7 +102,7 @@ test("delete cluster property fails when required name field is missing", () => 
 
     expect(output.data.deleteClusterProperties.detailedStatus).toEqual(expect.arrayContaining([
         expect.objectContaining({
-            status: expect.stringMatching(/^(NONE|ERROR)$/),
+            status: 'ERROR',
             description: expect.stringContaining("At least one identifying field (goid or a natural key) must be supplied for")
         })
     ]));

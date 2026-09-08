@@ -58,6 +58,20 @@ module.exports = {
     
     readFileAsJson: function (path) {
         return JSON.parse(fs.readFileSync(path));
+    },
+
+    lookupEntityGoid: function (pluralName, matchFields) {
+        const listing = module.exports.graphman("export", "--using", `${pluralName}:summary`, "--gateway", "target-gateway");
+        const match = (listing[pluralName] || []).find(item =>
+            Object.keys(matchFields).every(k => item[k] === matchFields[k]));
+        return match && match.goid;
+    },
+
+    expectEntityDeleted: function (pluralName, matchFields) {
+        const listing = module.exports.graphman("export", "--using", `${pluralName}:summary`, "--gateway", "target-gateway");
+        expect(listing[pluralName]).not.toEqual(expect.arrayContaining([
+            expect.objectContaining(matchFields)
+        ]));
     }
 };
 
